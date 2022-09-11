@@ -9,33 +9,44 @@
 
 echo "🐇  Starting Speedtest Tracker..."
 
-# Check for appdata directory
-if [ ! -d /appdata ]; then
+# Check for app data directory
+if [ ! -d /app ]; then
     # make the directory
     echo "🙄  App data directory not found, creating..."
 
-    su - webuser -c "mkdir /appdata"
-    chown -R webuser:webgroup /appdata
-    chmod -R 750 /appdata
+    su - webuser -c "mkdir /app"
+    chown -R webuser:webgroup /app
+    chmod -R 750 /app
 else
     # just update the permissions
     echo "✅  App data directiory exists"
 
-    chown -R webuser:webgroup /appdata
-    chmod -R 750 /appdata
+    chown -R webuser:webgroup /app
+    chmod -R 750 /app
 fi
 
 if [ ${DB_CONNECTIONS:="sqlite"} == "sqlite" ]; then
     # Check for database
-    if [ ! -f /appdata/database.sqlite ]; then
+    if [ ! -f /app/database.sqlite ]; then
         echo "🙄  Database file not found, creating..."
 
-        su - webuser -c "touch /appdata/database.sqlite"
-        chmod 750 /appdata/database.sqlite
+        su - webuser -c "touch /app/database.sqlite"
+        chmod 750 /app/database.sqlite
     else
         echo "✅  Database exists"
-        chmod 750 /appdata/database.sqlite
+        chmod 750 /app/database.sqlite
     fi
+fi
+
+# Check for config yaml file
+if [ ! -f /app/config.yml ]; then
+    echo "🙄  Config file not found, creating..."
+
+    su - webuser -c "cp /var/www/html/config.example.yml /app/config.yml"
+    chmod 750 /app/config.yml
+else
+    echo "✅  Config file exists"
+    chmod 750 /app/config.yml
 fi
 
 # Check for app key
