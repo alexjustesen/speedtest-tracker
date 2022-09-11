@@ -1,0 +1,53 @@
+#!/usr/bin/with-contenv bash
+# This needs to run before docker-php 50-laravel-automations
+# so that everything is setup correctly.
+
+# START FOR DEBUGGING ONLY
+# echo "Working directory:" $(pwd)
+# echo "Script running as user:" $(whoami)
+# END FOR DEBIGGING ONLY
+
+echo "🐇  Starting Speedtest Tracker..."
+
+# Check for appdata directory
+if [ ! -d /appdata ]; then
+    # make the directory
+    echo "🙄  App data directory not found, creating..."
+
+    su - webuser -c "mkdir /appdata"
+    chown -R webuser:webgroup /appdata
+    chmod -R 750 /appdata
+else
+    # just update the permissions
+    echo "✅  App data directiory exists"
+
+    chown -R webuser:webgroup /appdata
+    chmod -R 750 /appdata
+fi
+
+if [ ${DB_CONNECTIONS:="sqlite"} == "sqlite" ]; then
+    # Check for database
+    if [ ! -f /appdata/database.sqlite ]; then
+        echo "🙄  Database file not found, creating..."
+
+        su - webuser -c "touch /appdata/database.sqlite"
+        chmod 750 /appdata/database.sqlite
+    else
+        echo "✅  Database exists"
+        chmod 750 /appdata/database.sqlite
+    fi
+fi
+
+# Check for app key
+if grep -E "APP_KEY=[0-9A-Za-z:+\/=]{1,}" /var/www/html/.env > /dev/null; then
+    echo "✅  App key exists"
+else
+    echo "⏳  Generating app key"
+    su - webuser -c "php $WEBUSER_HOME/artisan key:generate"
+fi
+
+# Link storage
+echo "📦  Linking storage..."
+su - webuser -c "php $WEBUSER_HOME/artisan storage:link"
+
+echo "✅  All set, off to the races!"

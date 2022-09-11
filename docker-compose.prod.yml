@@ -1,0 +1,33 @@
+version: '3'
+services:
+  php:
+    image: speedtest-tracker:latest
+    environment:
+      PHP_POOL_NAME: "speedtest-tracker_php"
+    ports:
+      - '8080:80'
+    restart: unless-stopped
+    volumes:
+      - 'speedtest-tracker-app:/data'
+
+  # task:
+  #   image: speedtest-tracker:latest
+  #   command: [ "su", "webuser", "-c", "php artisan schedule:work" ]
+  #   environment:
+  #     PHP_POOL_NAME: "speedtest-tracker_task"
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - php
+
+  # queue:
+  #   image: speedtest-tracker:latest
+  #   command: ["su", "webuser", "-c", "php artisan queue:work --tries=3"]
+  #   environment:
+  #     PHP_POOL_NAME: "speedtest-tracker_queue"
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - php
+
+# volumes:
+    speedtest-tracker-app:
+        driver: local

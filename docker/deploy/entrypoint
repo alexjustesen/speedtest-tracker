@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+php /var/www/html/artisan optimize
+php /var/www/html/artisan migrate --force
+
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
