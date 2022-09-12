@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Models\Speedtest;
 use Cron\CronExpression;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
+use Symfony\Component\Yaml\Yaml;
 
 class SearchForSpeedtests implements ShouldQueue
 {
@@ -33,19 +32,16 @@ class SearchForSpeedtests implements ShouldQueue
      */
     public function handle()
     {
-        $tests = Speedtest::query()
-            ->where('next_run_at', now()->format('Y-m-d H:i'))
-            ->get();
+        $config = Yaml::parseFile(
+            base_path().'/config.yml'
+        );
 
-        foreach ($tests as $item) {
-            ExecSpeedtest::dispatch(speedtest: $item);
+        $speedtest = $config['speedtest'];
 
-            $cron = new CronExpression($item->schedule);
+        $cron = new CronExpression($speedtest['schedule']);
 
-            $item->next_run_at = $cron->getNextRunDate()->format('Y-m-d H:i');
-            $item->save();
+        if ($cron->isDue() && $speedtest['enabled']) {
+            ExecSpeedtest::dispatch(speedtest: $speedtest);
         }
-
-        Log::info($tests);
     }
 }

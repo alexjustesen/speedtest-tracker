@@ -2,7 +2,7 @@
 authentication: true # Set to false to disable authentication
 influxdb:
   enabled: true
-  host_tag: 'speedtest'
+  host_tag: 'speedtest-tracker'
   retention: '30d'
 notifications:
   channels:
@@ -11,6 +11,7 @@ notifications:
     slack:
       webhook_url: null # Set as null to disable
 speedtest:
+  enabled: true
   schedule: '*/60 * * * *' # every hour
   ookla_server_id: null # specify a server ID to use a sepecific server
-tz: 'America/New_York'
+tz: 'UTC'

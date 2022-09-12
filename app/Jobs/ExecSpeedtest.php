@@ -23,7 +23,7 @@ class ExecSpeedtest implements ShouldQueue
      * @return void
      */
     public function __construct(
-        public Speedtest|null $speedtest = null
+        public array|null $speedtest = null
     ) {}
 
     /**
@@ -44,15 +44,9 @@ class ExecSpeedtest implements ShouldQueue
 
         $output = $process->getOutput();
 
-        if (! blank($this->speedtest)) {
-            $this->speedtest->results()->create([
-                'data' => $output,
-            ]);
-        } else {
-            Result::create([
-                'data' => $output,
-            ]);
-        }
+        Result::create([
+            'data' => $output,
+        ]);
 
         return 0;
     }
