@@ -33,7 +33,19 @@ class ExecSpeedtest implements ShouldQueue
      */
     public function handle()
     {
-        $process = new Process(['speedtest', '--accept-license', '--format=json']);
+        $args = [
+            'speedtest',
+            '--accept-license',
+            '--format=json',
+        ];
+
+        if (! blank($this->speedtest)) {
+            if (! blank($this->speedtest['ookla_server_id'])) {
+                $args = array_merge($args, ['--server-id='.$this->speedtest['ookla_server_id']]);
+            }
+        }
+
+        $process = new Process($args);
         $process->run();
 
         if (! $process->isSuccessful()) {
