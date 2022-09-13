@@ -29,7 +29,13 @@ class RunSpeedtest extends Command
      */
     public function handle()
     {
-        ExecSpeedtest::dispatch();
+        $speedtest = [];
+
+        if ($this->argument('server')) {
+            $speedtest = array_merge($speedtest, ['ookla_server_id' => $this->argument('server')]);
+        }
+
+        ExecSpeedtest::dispatch(speedtest: $speedtest);
 
         $this->info('✅  added manual speedtest to the queue');
 
