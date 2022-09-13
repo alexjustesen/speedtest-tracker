@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Yaml\Yaml;
 
 class SearchForSpeedtests implements ShouldQueue
@@ -32,9 +33,15 @@ class SearchForSpeedtests implements ShouldQueue
      */
     public function handle()
     {
-        $config = Yaml::parseFile(
-            base_path().'/config.yml'
-        );
+        if (File::exists(base_path().'/config.yml')) {
+            $config = Yaml::parseFile(
+                base_path().'/config.yml'
+            );
+        }
+
+        if (File::exists('/app/config.yml')) {
+            $config = Yaml::parseFile('/app/config.yml');
+        }
 
         $speedtest = $config['speedtest'];
 

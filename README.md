@@ -16,8 +16,8 @@ docker run -itd --name speedtest-tracker \
     -p 8080:80 \
     -e "PHP_POOL_NAME=speedtest-tracker_php" \
     -e "DB_CONNECTION=sqlite" \
-    -e "DB_DATABASE=/appdata/database.sqlite" \
-    -v speedtest-tracker_app:/appdata \
+    -e "DB_DATABASE=/app/database.sqlite" \
+    -v speedtest-tracker_app:/app \
     speedtest-tracker
 ```
 
