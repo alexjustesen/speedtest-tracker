@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('server_host')->nullable();
             $table->string('server_name')->nullable();
             $table->string('url')->nullable();
-            $table->boolean('scheduled')->default(true);
+            $table->boolean('scheduled')->default(false);
             $table->json('data'); // is a dump of the cli output in case we want more fields later
-            $table->timestampTz('created_at')
+            $table->timestamp('created_at')
                 ->useCurrent();
         });
     }

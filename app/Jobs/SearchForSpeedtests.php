@@ -48,7 +48,7 @@ class SearchForSpeedtests implements ShouldQueue
         $cron = new CronExpression($speedtest['schedule']);
 
         if ($cron->isDue() && $speedtest['enabled']) {
-            ExecSpeedtest::dispatch(speedtest: $speedtest);
+            ExecSpeedtest::dispatch(speedtest: $speedtest, scheduled: true);
         }
     }
 }
