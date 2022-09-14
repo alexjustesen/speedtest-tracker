@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -23,7 +24,8 @@ class ExecSpeedtest implements ShouldQueue
      * @return void
      */
     public function __construct(
-        public array|null $speedtest = null
+        public array|null $speedtest = null,
+        public bool $scheduled = false
     ) {}
 
     /**
@@ -54,11 +56,24 @@ class ExecSpeedtest implements ShouldQueue
             return 0;
         }
 
-        $output = $process->getOutput();
+        try {
+            $output = $process->getOutput();
+            $results = json_decode($output, true);
 
-        Result::create([
-            'data' => $output,
-        ]);
+            Result::create([
+                'ping' => $results['ping']['latency'],
+                'download' => $results['download']['bandwidth'],
+                'upload' => $results['upload']['bandwidth'],
+                'server_id' => $results['server']['id'],
+                'server_name' => $results['server']['name'],
+                'server_host' => $results['server']['host'] . ':' . $results['server']['port'],
+                'url' => $results['result']['url'],
+                'scheduled' => $this->scheduled,
+                'data' => $output,
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
 
         return 0;
     }
