@@ -15,8 +15,16 @@ return new class extends Migration
     {
         Schema::create('results', function (Blueprint $table) {
             $table->id();
-            $table->json('data');
-            $table->timestamp('created_at')
+            $table->float('ping', 8, 3);
+            $table->unsignedBigInteger('download'); // will be stored in bytes
+            $table->unsignedBigInteger('upload'); // will be stored in bytes
+            $table->integer('server_id')->nullable();
+            $table->string('server_host')->nullable();
+            $table->string('server_name')->nullable();
+            $table->string('url')->nullable();
+            $table->boolean('scheduled')->default(true);
+            $table->json('data'); // is a dump of the cli output in case we want more fields later
+            $table->timestampTz('created_at')
                 ->useCurrent();
         });
     }

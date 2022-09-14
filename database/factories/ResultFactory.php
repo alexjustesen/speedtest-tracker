@@ -17,7 +17,14 @@ class ResultFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'ping' => fake()->randomFloat(2, 0, 100),
+            'download' => fake()->randomNumber(),
+            'upload' => fake()->randomNumber(),
+            'server_id' => fake()->randomNumber(5, true),
+            'server_host' => fake()->url(),
+            'server_name' => fake()->word(),
+            'url' => fake()->url(),
+            'data' => json_encode(fake()->words()),
         ];
     }
 }
