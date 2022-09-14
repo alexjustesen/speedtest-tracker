@@ -28,6 +28,37 @@ class ExecSpeedtest implements ShouldQueue
         public bool $scheduled = false
     ) {}
 
+    private function isNotInBlacklist($val) 
+    {
+        return !(in_array($val['id'], $this->speedtest['exclude_ids']));
+    }
+
+    private function filterServers()
+    {
+        $args = [
+            'speedtest',
+            '--accept-license',
+            '--format=json',
+            '-L'
+        ];
+
+        $process = new Process($args);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            $output = $process->getOutput();
+            $results = json_decode($output, true);
+
+            $allServers = $results['servers'];
+
+            $filtered = array_filter($allServers, "isNotInBlacklist");
+
+            if (!empty($filtered)) {
+                $this->speedtest['ookla_server_id'] = $filtered[0]['id'];
+            }
+        }
+    }
+
     /**
      * Execute the job.
      *
@@ -42,6 +73,10 @@ class ExecSpeedtest implements ShouldQueue
         ];
 
         if (! blank($this->speedtest)) {
+            if (! blank($this->speedtest['exclude_ids'])) {
+                $this->filterServers();
+            }
+
             if (! blank($this->speedtest['ookla_server_id'])) {
                 $args = array_merge($args, ['--server-id='.$this->speedtest['ookla_server_id']]);
             }
