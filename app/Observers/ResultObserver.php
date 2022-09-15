@@ -43,7 +43,7 @@ class ResultObserver
                 'token' => $influxdb['token'],
                 'bucket' => $influxdb['bucket'],
                 'org' => $influxdb['org'],
-                'precision' => \InfluxDB2\Model\WritePrecision::S
+                'precision' => \InfluxDB2\Model\WritePrecision::S,
             ]);
 
             $writeApi = $client->createWriteApi();
