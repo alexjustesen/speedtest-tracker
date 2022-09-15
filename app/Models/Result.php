@@ -42,4 +42,21 @@ class Result extends Model
         'scheduled' => 'boolean',
         'created_at' => 'datetime',
     ];
+
+    /**
+     * The attributes to be passed to influxdb
+     */
+    public function formatForInfluxDB2()
+    {
+        return [
+            'id' => (int) $this->id,
+            'ping' => (float) $this->ping,
+            'download' => (int) $this->download,
+            'upload' => (int) $this->upload,
+            'server_id' => (int) $this->server_id,
+            'server_host' => $this->server_host,
+            'server_name' => $this->server_name,
+            'scheduled' => $this->scheduled,
+        ];
+    }
 }

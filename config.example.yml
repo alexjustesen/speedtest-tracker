@@ -1,9 +1,12 @@
 ---
-authentication: true # Set to false to disable authentication
+authentication: true
 influxdb:
-  enabled: true
-  host_tag: 'speedtest-tracker'
-  retention: '30d'
+  enabled: false
+  version: 2 # Only InfluxDB2 is supported right now
+  url: 'http://your-influxdb-instance' # Full url to your InfluxDB instance, sometimes this includes a port number
+  org: '' # Organization name, usually created when you installed InfluxDB
+  bucket: 'speedtest-tracker' # A name location to store the speedtest data in
+  token: '' # This is your API token
 notifications:
   channels:
     discord:
