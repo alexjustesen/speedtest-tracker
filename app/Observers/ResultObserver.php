@@ -3,6 +3,10 @@
 namespace App\Observers;
 
 use App\Models\Result;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use InfluxDB2\Client;
+use Symfony\Component\Yaml\Yaml;
 
 class ResultObserver
 {
@@ -21,7 +25,44 @@ class ResultObserver
      */
     public function created(Result $result)
     {
-        //
+        if (File::exists(base_path().'/config.yml')) {
+            $config = Yaml::parseFile(
+                base_path().'/config.yml'
+            );
+        }
+
+        if (File::exists('/app/config.yml')) {
+            $config = Yaml::parseFile('/app/config.yml');
+        }
+
+        $influxdb = $config['influxdb'];
+
+        if ($influxdb['enabled'] == true) {
+            $client = new Client([
+                'url' => $influxdb['url'],
+                'token' => $influxdb['token'],
+                'bucket' => $influxdb['bucket'],
+                'org' => $influxdb['org'],
+                'precision' => \InfluxDB2\Model\WritePrecision::S
+            ]);
+
+            $writeApi = $client->createWriteApi();
+
+            $dataArray = [
+                'name' => 'speedtest',
+                'tags' => null,
+                'fields' => $result->formatForInfluxDB2(),
+                'time' => strtotime($result->created_at),
+            ];
+
+            try {
+                $writeApi->write($dataArray);
+            } catch (\Exception $e) {
+                Log::error($e);
+            }
+
+            $writeApi->close();
+        }
     }
 
     /**
