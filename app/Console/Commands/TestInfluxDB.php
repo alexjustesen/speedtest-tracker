@@ -5,8 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Result;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
-use InfluxDB2\Client;
 use Symfony\Component\Yaml\Yaml;
 
 class TestInfluxDB extends Command

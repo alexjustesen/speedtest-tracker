@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Result;
-use App\Models\Speedtest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class ExecSpeedtest implements ShouldQueue
+class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -26,7 +25,8 @@ class ExecSpeedtest implements ShouldQueue
     public function __construct(
         public array|null $speedtest = null,
         public bool $scheduled = false
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
@@ -66,7 +66,7 @@ class ExecSpeedtest implements ShouldQueue
                 'upload' => $results['upload']['bandwidth'],
                 'server_id' => $results['server']['id'],
                 'server_name' => $results['server']['name'],
-                'server_host' => $results['server']['host'] . ':' . $results['server']['port'],
+                'server_host' => $results['server']['host'].':'.$results['server']['port'],
                 'url' => $results['result']['url'],
                 'scheduled' => $this->scheduled,
                 'data' => $output,
