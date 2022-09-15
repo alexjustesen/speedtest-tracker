@@ -38,6 +38,7 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
         $args = [
             'speedtest',
             '--accept-license',
+            '--accept-gdpr',
             '--format=json',
         ];
 
