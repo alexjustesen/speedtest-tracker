@@ -16,5 +16,5 @@ notifications:
 speedtest:
   enabled: true
   schedule: '*/60 * * * *' # every hour
-  ookla_server_id: null # specify a server ID to use a sepecific server
+  ookla_server_id: null # specify a server ID to use a specific server
 tz: 'UTC'
