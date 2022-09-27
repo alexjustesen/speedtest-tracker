@@ -5023,25 +5023,14 @@
                         return $instance->macroCall($method, $parameters);
         }
                     /**
-         * Determine if the connected database is a MariaDB database.
-         *
-         * @return bool 
-         * @static 
-         */ 
-        public static function isMaria()
-        {
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
-                        return $instance->isMaria();
-        }
-                    /**
          * Get a schema builder instance for the connection.
          *
-         * @return \Illuminate\Database\Schema\MySqlBuilder 
+         * @return \Illuminate\Database\Schema\PostgresBuilder 
          * @static 
          */ 
         public static function getSchemaBuilder()
         {
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getSchemaBuilder();
         }
                     /**
@@ -5049,12 +5038,12 @@
          *
          * @param \Illuminate\Filesystem\Filesystem|null $files
          * @param callable|null $processFactory
-         * @return \Illuminate\Database\Schema\MySqlSchemaState 
+         * @return \Illuminate\Database\Schema\PostgresSchemaState 
          * @static 
          */ 
         public static function getSchemaState($files = null, $processFactory = null)
         {
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getSchemaState($files, $processFactory);
         }
                     /**
@@ -5065,7 +5054,7 @@
          */ 
         public static function useDefaultQueryGrammar()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->useDefaultQueryGrammar();
         }
                     /**
@@ -5076,7 +5065,7 @@
          */ 
         public static function useDefaultSchemaGrammar()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->useDefaultSchemaGrammar();
         }
                     /**
@@ -5087,7 +5076,7 @@
          */ 
         public static function useDefaultPostProcessor()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->useDefaultPostProcessor();
         }
                     /**
@@ -5100,7 +5089,7 @@
          */ 
         public static function table($table, $as = null)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->table($table, $as);
         }
                     /**
@@ -5111,7 +5100,7 @@
          */ 
         public static function query()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->query();
         }
                     /**
@@ -5125,7 +5114,7 @@
          */ 
         public static function selectOne($query, $bindings = [], $useReadPdo = true)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->selectOne($query, $bindings, $useReadPdo);
         }
                     /**
@@ -5140,7 +5129,7 @@
          */ 
         public static function scalar($query, $bindings = [], $useReadPdo = true)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->scalar($query, $bindings, $useReadPdo);
         }
                     /**
@@ -5153,7 +5142,7 @@
          */ 
         public static function selectFromWriteConnection($query, $bindings = [])
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->selectFromWriteConnection($query, $bindings);
         }
                     /**
@@ -5167,7 +5156,7 @@
          */ 
         public static function select($query, $bindings = [], $useReadPdo = true)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->select($query, $bindings, $useReadPdo);
         }
                     /**
@@ -5181,7 +5170,7 @@
          */ 
         public static function cursor($query, $bindings = [], $useReadPdo = true)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->cursor($query, $bindings, $useReadPdo);
         }
                     /**
@@ -5194,7 +5183,7 @@
          */ 
         public static function insert($query, $bindings = [])
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->insert($query, $bindings);
         }
                     /**
@@ -5207,7 +5196,7 @@
          */ 
         public static function update($query, $bindings = [])
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->update($query, $bindings);
         }
                     /**
@@ -5220,7 +5209,7 @@
          */ 
         public static function delete($query, $bindings = [])
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->delete($query, $bindings);
         }
                     /**
@@ -5233,7 +5222,7 @@
          */ 
         public static function statement($query, $bindings = [])
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->statement($query, $bindings);
         }
                     /**
@@ -5246,7 +5235,7 @@
          */ 
         public static function affectingStatement($query, $bindings = [])
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->affectingStatement($query, $bindings);
         }
                     /**
@@ -5258,7 +5247,7 @@
          */ 
         public static function unprepared($query)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->unprepared($query);
         }
                     /**
@@ -5270,7 +5259,7 @@
          */ 
         public static function pretend($callback)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->pretend($callback);
         }
                     /**
@@ -5283,7 +5272,7 @@
          */ 
         public static function bindValues($statement, $bindings)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->bindValues($statement, $bindings);
         }
                     /**
@@ -5295,7 +5284,7 @@
          */ 
         public static function prepareBindings($bindings)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->prepareBindings($bindings);
         }
                     /**
@@ -5309,7 +5298,7 @@
          */ 
         public static function logQuery($query, $bindings, $time = null)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->logQuery($query, $bindings, $time);
         }
                     /**
@@ -5322,7 +5311,7 @@
          */ 
         public static function whenQueryingForLongerThan($threshold, $handler)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->whenQueryingForLongerThan($threshold, $handler);
         }
                     /**
@@ -5333,7 +5322,7 @@
          */ 
         public static function allowQueryDurationHandlersToRunAgain()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->allowQueryDurationHandlersToRunAgain();
         }
                     /**
@@ -5344,7 +5333,7 @@
          */ 
         public static function totalQueryDuration()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->totalQueryDuration();
         }
                     /**
@@ -5355,19 +5344,19 @@
          */ 
         public static function resetTotalQueryDuration()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->resetTotalQueryDuration();
         }
                     /**
          * Register a hook to be run just before a database query is executed.
          *
          * @param \Closure $callback
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function beforeExecuting($callback)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->beforeExecuting($callback);
         }
                     /**
@@ -5379,7 +5368,7 @@
          */ 
         public static function listen($callback)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->listen($callback);
         }
                     /**
@@ -5391,7 +5380,7 @@
          */ 
         public static function raw($value)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->raw($value);
         }
                     /**
@@ -5402,7 +5391,7 @@
          */ 
         public static function hasModifiedRecords()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->hasModifiedRecords();
         }
                     /**
@@ -5414,19 +5403,19 @@
          */ 
         public static function recordsHaveBeenModified($value = true)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->recordsHaveBeenModified($value);
         }
                     /**
          * Set the record modification state.
          *
          * @param bool $value
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setRecordModificationState($value)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setRecordModificationState($value);
         }
                     /**
@@ -5437,19 +5426,19 @@
          */ 
         public static function forgetRecordModificationState()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->forgetRecordModificationState();
         }
                     /**
          * Indicate that the connection should use the write PDO connection for reads.
          *
          * @param bool $value
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function useWriteConnectionWhenReading($value = true)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->useWriteConnectionWhenReading($value);
         }
                     /**
@@ -5460,7 +5449,7 @@
          */ 
         public static function isDoctrineAvailable()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->isDoctrineAvailable();
         }
                     /**
@@ -5473,7 +5462,7 @@
          */ 
         public static function getDoctrineColumn($table, $column)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getDoctrineColumn($table, $column);
         }
                     /**
@@ -5484,7 +5473,7 @@
          */ 
         public static function getDoctrineSchemaManager()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getDoctrineSchemaManager();
         }
                     /**
@@ -5495,7 +5484,7 @@
          */ 
         public static function getDoctrineConnection()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getDoctrineConnection();
         }
                     /**
@@ -5506,7 +5495,7 @@
          */ 
         public static function getPdo()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getPdo();
         }
                     /**
@@ -5517,7 +5506,7 @@
          */ 
         public static function getRawPdo()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getRawPdo();
         }
                     /**
@@ -5528,7 +5517,7 @@
          */ 
         public static function getReadPdo()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getReadPdo();
         }
                     /**
@@ -5539,31 +5528,31 @@
          */ 
         public static function getRawReadPdo()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getRawReadPdo();
         }
                     /**
          * Set the PDO connection.
          *
          * @param \PDO|\Closure|null $pdo
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setPdo($pdo)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setPdo($pdo);
         }
                     /**
          * Set the PDO connection used for reading.
          *
          * @param \PDO|\Closure|null $pdo
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setReadPdo($pdo)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setReadPdo($pdo);
         }
                     /**
@@ -5574,7 +5563,7 @@
          */ 
         public static function getName()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getName();
         }
                     /**
@@ -5585,7 +5574,7 @@
          */ 
         public static function getNameWithReadWriteType()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getNameWithReadWriteType();
         }
                     /**
@@ -5597,7 +5586,7 @@
          */ 
         public static function getConfig($option = null)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getConfig($option);
         }
                     /**
@@ -5608,7 +5597,7 @@
          */ 
         public static function getDriverName()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getDriverName();
         }
                     /**
@@ -5619,19 +5608,19 @@
          */ 
         public static function getQueryGrammar()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getQueryGrammar();
         }
                     /**
          * Set the query grammar used by the connection.
          *
          * @param \Illuminate\Database\Query\Grammars\Grammar $grammar
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setQueryGrammar($grammar)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setQueryGrammar($grammar);
         }
                     /**
@@ -5642,19 +5631,19 @@
          */ 
         public static function getSchemaGrammar()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getSchemaGrammar();
         }
                     /**
          * Set the schema grammar used by the connection.
          *
          * @param \Illuminate\Database\Schema\Grammars\Grammar $grammar
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setSchemaGrammar($grammar)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setSchemaGrammar($grammar);
         }
                     /**
@@ -5665,19 +5654,19 @@
          */ 
         public static function getPostProcessor()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getPostProcessor();
         }
                     /**
          * Set the query post processor used by the connection.
          *
          * @param \Illuminate\Database\Query\Processors\Processor $processor
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setPostProcessor($processor)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setPostProcessor($processor);
         }
                     /**
@@ -5688,19 +5677,19 @@
          */ 
         public static function getEventDispatcher()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getEventDispatcher();
         }
                     /**
          * Set the event dispatcher instance on the connection.
          *
          * @param \Illuminate\Contracts\Events\Dispatcher $events
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setEventDispatcher($events)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setEventDispatcher($events);
         }
                     /**
@@ -5711,19 +5700,19 @@
          */ 
         public static function unsetEventDispatcher()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->unsetEventDispatcher();
         }
                     /**
          * Set the transaction manager instance on the connection.
          *
          * @param \Illuminate\Database\DatabaseTransactionsManager $manager
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setTransactionManager($manager)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setTransactionManager($manager);
         }
                     /**
@@ -5734,7 +5723,7 @@
          */ 
         public static function unsetTransactionManager()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->unsetTransactionManager();
         }
                     /**
@@ -5745,7 +5734,7 @@
          */ 
         public static function pretending()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->pretending();
         }
                     /**
@@ -5756,7 +5745,7 @@
          */ 
         public static function getQueryLog()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getQueryLog();
         }
                     /**
@@ -5767,7 +5756,7 @@
          */ 
         public static function flushQueryLog()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->flushQueryLog();
         }
                     /**
@@ -5778,7 +5767,7 @@
          */ 
         public static function enableQueryLog()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->enableQueryLog();
         }
                     /**
@@ -5789,7 +5778,7 @@
          */ 
         public static function disableQueryLog()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->disableQueryLog();
         }
                     /**
@@ -5800,7 +5789,7 @@
          */ 
         public static function logging()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->logging();
         }
                     /**
@@ -5811,31 +5800,31 @@
          */ 
         public static function getDatabaseName()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getDatabaseName();
         }
                     /**
          * Set the name of the connected database.
          *
          * @param string $database
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setDatabaseName($database)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setDatabaseName($database);
         }
                     /**
          * Set the read / write type of the connection.
          *
          * @param string|null $readWriteType
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setReadWriteType($readWriteType)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setReadWriteType($readWriteType);
         }
                     /**
@@ -5846,19 +5835,19 @@
          */ 
         public static function getTablePrefix()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->getTablePrefix();
         }
                     /**
          * Set the table prefix in use by the connection.
          *
          * @param string $prefix
-         * @return \Illuminate\Database\MySqlConnection 
+         * @return \Illuminate\Database\PostgresConnection 
          * @static 
          */ 
         public static function setTablePrefix($prefix)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->setTablePrefix($prefix);
         }
                     /**
@@ -5870,7 +5859,7 @@
          */ 
         public static function withTablePrefix($grammar)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->withTablePrefix($grammar);
         }
                     /**
@@ -5883,7 +5872,7 @@
          */ 
         public static function resolverFor($driver, $callback)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        \Illuminate\Database\MySqlConnection::resolverFor($driver, $callback);
+                        \Illuminate\Database\PostgresConnection::resolverFor($driver, $callback);
         }
                     /**
          * Get the connection resolver for the given driver.
@@ -5894,7 +5883,7 @@
          */ 
         public static function getResolver($driver)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        return \Illuminate\Database\MySqlConnection::getResolver($driver);
+                        return \Illuminate\Database\PostgresConnection::getResolver($driver);
         }
                     /**
          * Execute a Closure within a transaction.
@@ -5907,7 +5896,7 @@
          */ 
         public static function transaction($callback, $attempts = 1)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->transaction($callback, $attempts);
         }
                     /**
@@ -5919,7 +5908,7 @@
          */ 
         public static function beginTransaction()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->beginTransaction();
         }
                     /**
@@ -5931,7 +5920,7 @@
          */ 
         public static function commit()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->commit();
         }
                     /**
@@ -5944,7 +5933,7 @@
          */ 
         public static function rollBack($toLevel = null)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->rollBack($toLevel);
         }
                     /**
@@ -5955,7 +5944,7 @@
          */ 
         public static function transactionLevel()
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         return $instance->transactionLevel();
         }
                     /**
@@ -5968,7 +5957,7 @@
          */ 
         public static function afterCommit($callback)
         {            //Method inherited from \Illuminate\Database\Connection         
-                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        /** @var \Illuminate\Database\PostgresConnection $instance */
                         $instance->afterCommit($callback);
         }
          
@@ -13516,7 +13505,7 @@
          */ 
         public static function createDatabase($name)
         {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->createDatabase($name);
         }
                     /**
@@ -13528,7 +13517,7 @@
          */ 
         public static function dropDatabaseIfExists($name)
         {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->dropDatabaseIfExists($name);
         }
                     /**
@@ -13540,20 +13529,8 @@
          */ 
         public static function hasTable($table)
         {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->hasTable($table);
-        }
-                    /**
-         * Get the column listing for a given table.
-         *
-         * @param string $table
-         * @return array 
-         * @static 
-         */ 
-        public static function getColumnListing($table)
-        {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        return $instance->getColumnListing($table);
         }
                     /**
          * Drop all tables from the database.
@@ -13563,7 +13540,7 @@
          */ 
         public static function dropAllTables()
         {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->dropAllTables();
         }
                     /**
@@ -13574,8 +13551,19 @@
          */ 
         public static function dropAllViews()
         {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->dropAllViews();
+        }
+                    /**
+         * Drop all types from the database.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function dropAllTypes()
+        {
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        $instance->dropAllTypes();
         }
                     /**
          * Get all of the table names for the database.
@@ -13585,7 +13573,7 @@
          */ 
         public static function getAllTables()
         {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->getAllTables();
         }
                     /**
@@ -13596,8 +13584,31 @@
          */ 
         public static function getAllViews()
         {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->getAllViews();
+        }
+                    /**
+         * Get all of the type names for the database.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getAllTypes()
+        {
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        return $instance->getAllTypes();
+        }
+                    /**
+         * Get the column listing for a given table.
+         *
+         * @param string $table
+         * @return array 
+         * @static 
+         */ 
+        public static function getColumnListing($table)
+        {
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
+                        return $instance->getColumnListing($table);
         }
                     /**
          * Set the default string length for migrations.
@@ -13608,7 +13619,7 @@
          */ 
         public static function defaultStringLength($length)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        \Illuminate\Database\Schema\MySqlBuilder::defaultStringLength($length);
+                        \Illuminate\Database\Schema\PostgresBuilder::defaultStringLength($length);
         }
                     /**
          * Set the default morph key type for migrations.
@@ -13620,7 +13631,7 @@
          */ 
         public static function defaultMorphKeyType($type)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        \Illuminate\Database\Schema\MySqlBuilder::defaultMorphKeyType($type);
+                        \Illuminate\Database\Schema\PostgresBuilder::defaultMorphKeyType($type);
         }
                     /**
          * Set the default morph key type for migrations to UUIDs.
@@ -13630,7 +13641,7 @@
          */ 
         public static function morphUsingUuids()
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        \Illuminate\Database\Schema\MySqlBuilder::morphUsingUuids();
+                        \Illuminate\Database\Schema\PostgresBuilder::morphUsingUuids();
         }
                     /**
          * Determine if the given table has a given column.
@@ -13642,7 +13653,7 @@
          */ 
         public static function hasColumn($table, $column)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->hasColumn($table, $column);
         }
                     /**
@@ -13655,7 +13666,7 @@
          */ 
         public static function hasColumns($table, $columns)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->hasColumns($table, $columns);
         }
                     /**
@@ -13669,7 +13680,7 @@
          */ 
         public static function whenTableHasColumn($table, $column, $callback)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->whenTableHasColumn($table, $column, $callback);
         }
                     /**
@@ -13683,7 +13694,7 @@
          */ 
         public static function whenTableDoesntHaveColumn($table, $column, $callback)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->whenTableDoesntHaveColumn($table, $column, $callback);
         }
                     /**
@@ -13696,7 +13707,7 @@
          */ 
         public static function getColumnType($table, $column)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->getColumnType($table, $column);
         }
                     /**
@@ -13709,7 +13720,7 @@
          */ 
         public static function table($table, $callback)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->table($table, $callback);
         }
                     /**
@@ -13722,7 +13733,7 @@
          */ 
         public static function create($table, $callback)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->create($table, $callback);
         }
                     /**
@@ -13734,7 +13745,7 @@
          */ 
         public static function drop($table)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->drop($table);
         }
                     /**
@@ -13746,7 +13757,7 @@
          */ 
         public static function dropIfExists($table)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->dropIfExists($table);
         }
                     /**
@@ -13759,20 +13770,8 @@
          */ 
         public static function dropColumns($table, $columns)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->dropColumns($table, $columns);
-        }
-                    /**
-         * Drop all types from the database.
-         *
-         * @return void 
-         * @throws \LogicException
-         * @static 
-         */ 
-        public static function dropAllTypes()
-        {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        $instance->dropAllTypes();
         }
                     /**
          * Rename a table on the schema.
@@ -13784,7 +13783,7 @@
          */ 
         public static function rename($from, $to)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->rename($from, $to);
         }
                     /**
@@ -13795,7 +13794,7 @@
          */ 
         public static function enableForeignKeyConstraints()
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->enableForeignKeyConstraints();
         }
                     /**
@@ -13806,7 +13805,7 @@
          */ 
         public static function disableForeignKeyConstraints()
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->disableForeignKeyConstraints();
         }
                     /**
@@ -13817,19 +13816,19 @@
          */ 
         public static function getConnection()
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->getConnection();
         }
                     /**
          * Set the database connection instance.
          *
          * @param \Illuminate\Database\Connection $connection
-         * @return \Illuminate\Database\Schema\MySqlBuilder 
+         * @return \Illuminate\Database\Schema\PostgresBuilder 
          * @static 
          */ 
         public static function setConnection($connection)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         return $instance->setConnection($connection);
         }
                     /**
@@ -13841,7 +13840,7 @@
          */ 
         public static function blueprintResolver($resolver)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        /** @var \Illuminate\Database\Schema\PostgresBuilder $instance */
                         $instance->blueprintResolver($resolver);
         }
          
@@ -17064,12 +17063,374 @@
      *
      */ 
         class Str {
+                    /**
+         * 
+         *
+         * @see \Filament\Support\SupportServiceProvider::packageBooted()
+         * @param string $html
+         * @return string 
+         * @static 
+         */ 
+        public static function sanitizeHtml($html)
+        {
+                        return \Illuminate\Support\Str::sanitizeHtml($html);
+        }
+         
+    }
+            /**
+     * 
+     *
+     */ 
+        class Stringable {
+                    /**
+         * 
+         *
+         * @see \Filament\Support\SupportServiceProvider::packageBooted()
+         * @return \Illuminate\Support\Stringable 
+         * @static 
+         */ 
+        public static function sanitizeHtml()
+        {
+                        return \Illuminate\Support\Stringable::sanitizeHtml();
+        }
          
     }
      
 }
 
-        namespace Spatie\LaravelIgnition\Facades { 
+        namespace Livewire { 
+            /**
+     * 
+     *
+     * @see \Livewire\LivewireManager
+     */ 
+        class Livewire {
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function component($alias, $viewClass = null)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->component($alias, $viewClass);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getAlias($class, $default = null)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->getAlias($class, $default);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getComponentAliases()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->getComponentAliases();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getClass($alias)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->getClass($alias);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getInstance($component, $id)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->getInstance($component, $id);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function mount($name, $params = [])
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->mount($name, $params);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function dummyMount($id, $tagName)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->dummyMount($id, $tagName);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function test($name, $params = [])
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->test($name, $params);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function visit($browser, $class, $queryString = '')
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->visit($browser, $class, $queryString);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function actingAs($user, $driver = null)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->actingAs($user, $driver);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function addPersistentMiddleware($middleware)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->addPersistentMiddleware($middleware);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function setPersistentMiddleware($middleware)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->setPersistentMiddleware($middleware);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getPersistentMiddleware()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->getPersistentMiddleware();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function styles($options = [])
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->styles($options);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function scripts($options = [])
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->scripts($options);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function isLivewireRequest()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->isLivewireRequest();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function isDefinitelyLivewireRequest()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->isDefinitelyLivewireRequest();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function isProbablyLivewireRequest()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->isProbablyLivewireRequest();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function originalUrl()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->originalUrl();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function originalPath()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->originalPath();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function originalMethod()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->originalMethod();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getRootElementTagName($dom)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->getRootElementTagName($dom);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function dispatch($event, ...$params)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->dispatch($event, ...$params);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function listen($event, $callback)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->listen($event, $callback);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function isOnVapor()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->isOnVapor();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function isRunningServerless()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->isRunningServerless();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function withQueryParams($queryParams)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->withQueryParams($queryParams);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function setBackButtonCache()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->setBackButtonCache();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function disableBackButtonCache()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->disableBackButtonCache();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function enableBackButtonCache()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->enableBackButtonCache();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function shouldDisableBackButtonCache()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->shouldDisableBackButtonCache();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function flushState()
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->flushState();
+        }
+         
+    }
+     
+}
+
+    namespace Spatie\LaravelIgnition\Facades { 
             /**
      * 
      *
@@ -17520,6 +17881,1417 @@
         public static function hasValidSignatureWhileIgnoring($ignoreQuery = [], $absolute = true)
         {
                         return \Illuminate\Http\Request::hasValidSignatureWhileIgnoring($ignoreQuery, $absolute);
+        }
+         
+    }
+     
+}
+
+    namespace Livewire\Testing { 
+            /**
+     * 
+     *
+     * @mixin \Illuminate\Testing\TestResponse
+     */ 
+        class TestableLivewire {
+                    /**
+         * 
+         *
+         * @see \Filament\Support\Testing\TestsActions::parseActionName()
+         * @param string $name
+         * @return string 
+         * @static 
+         */ 
+        public static function parseActionName($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::parseActionName($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::mountPageAction()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function mountPageAction($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::mountPageAction($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::setPageActionData()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function setPageActionData($data)
+        {
+                        return \Livewire\Testing\TestableLivewire::setPageActionData($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionDataSet()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionDataSet($data)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionDataSet($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::callPageAction()
+         * @param string $name
+         * @param array $data
+         * @param array $arguments
+         * @return static 
+         * @static 
+         */ 
+        public static function callPageAction($name, $data = [], $arguments = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::callPageAction($name, $data, $arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::callMountedPageAction()
+         * @param array $arguments
+         * @return static 
+         * @static 
+         */ 
+        public static function callMountedPageAction($arguments = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::callMountedPageAction($arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionExists()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionExists($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionExists($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionDoesNotExist()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionDoesNotExist($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionDoesNotExist($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionVisible()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionVisible($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionVisible($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionHidden()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionHidden($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionHidden($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionEnabled()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionEnabled($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionEnabled($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionDisabled()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionDisabled($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionDisabled($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionHasIcon()
+         * @param string $name
+         * @param string $icon
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionHasIcon($name, $icon, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionHasIcon($name, $icon, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionDoesNotHaveIcon()
+         * @param string $name
+         * @param string $icon
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionDoesNotHaveIcon($name, $icon, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionDoesNotHaveIcon($name, $icon, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionHasLabel()
+         * @param string $name
+         * @param string $label
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionHasLabel($name, $label, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionHasLabel($name, $label, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionDoesNotHaveLabel()
+         * @param string $name
+         * @param string $label
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionDoesNotHaveLabel($name, $label, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionDoesNotHaveLabel($name, $label, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionHasColor()
+         * @param string $name
+         * @param string $color
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionHasColor($name, $color, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionHasColor($name, $color, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionDoesNotHaveColor()
+         * @param string $name
+         * @param string $color
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionDoesNotHaveColor($name, $color, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionDoesNotHaveColor($name, $color, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionHasUrl()
+         * @param string $name
+         * @param string $url
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionHasUrl($name, $url, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionHasUrl($name, $url, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionDoesNotHaveUrl()
+         * @param string $name
+         * @param string $url
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionDoesNotHaveUrl($name, $url, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionDoesNotHaveUrl($name, $url, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionShouldOpenUrlInNewTab()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionShouldOpenUrlInNewTab($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionShouldOpenUrlInNewTab($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionShouldNotOpenUrlInNewTab()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionShouldNotOpenUrlInNewTab($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionShouldNotOpenUrlInNewTab($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertPageActionHeld()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertPageActionHeld($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertPageActionHeld($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertHasPageActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasPageActionErrors($keys = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::assertHasPageActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPageActions::assertHasNoPageActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasNoPageActionErrors($keys = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::assertHasNoPageActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPages::fillForm()
+         * @param array $state
+         * @return static 
+         * @static 
+         */ 
+        public static function fillForm($state = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::fillForm($state);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPages::assertFormSet()
+         * @param array $state
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormSet($state)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertFormSet($state);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPages::assertHasFormErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasFormErrors($keys = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::assertHasFormErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Testing\TestsPages::assertHasNoFormErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasNoFormErrors($keys = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::assertHasNoFormErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsForms::assertFormExists()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormExists($name = 'form')
+        {
+                        return \Livewire\Testing\TestableLivewire::assertFormExists($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsForms::assertFormFieldExists()
+         * @param string $fieldName
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormFieldExists($fieldName, $formName = 'form')
+        {
+                        return \Livewire\Testing\TestableLivewire::assertFormFieldExists($fieldName, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsForms::assertFormFieldIsDisabled()
+         * @param string $fieldName
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormFieldIsDisabled($fieldName, $formName = 'form')
+        {
+                        return \Livewire\Testing\TestableLivewire::assertFormFieldIsDisabled($fieldName, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsForms::assertFormFieldIsEnabled()
+         * @param string $fieldName
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormFieldIsEnabled($fieldName, $formName = 'form')
+        {
+                        return \Livewire\Testing\TestableLivewire::assertFormFieldIsEnabled($fieldName, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsForms::assertFormFieldIsHidden()
+         * @param string $fieldName
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormFieldIsHidden($fieldName, $formName = 'form')
+        {
+                        return \Livewire\Testing\TestableLivewire::assertFormFieldIsHidden($fieldName, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Forms\Testing\TestsForms::assertFormFieldIsVisible()
+         * @param string $fieldName
+         * @param string $formName
+         * @return static 
+         * @static 
+         */ 
+        public static function assertFormFieldIsVisible($fieldName, $formName = 'form')
+        {
+                        return \Livewire\Testing\TestableLivewire::assertFormFieldIsVisible($fieldName, $formName);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Notifications\Testing\TestsNotifications::assertNotified()
+         * @param \Filament\Notifications\Notification|string|null $notification
+         * @return static 
+         * @static 
+         */ 
+        public static function assertNotified($notification = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertNotified($notification);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::mountTableAction()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function mountTableAction($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::mountTableAction($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::setTableActionData()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function setTableActionData($data)
+        {
+                        return \Livewire\Testing\TestableLivewire::setTableActionData($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionDataSet()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionDataSet($data)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionDataSet($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::callTableAction()
+         * @param string $name
+         * @param mixed $record
+         * @param array $data
+         * @param array $arguments
+         * @return static 
+         * @static 
+         */ 
+        public static function callTableAction($name, $record = null, $data = [], $arguments = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::callTableAction($name, $record, $data, $arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::callMountedTableAction()
+         * @param array $arguments
+         * @return static 
+         * @static 
+         */ 
+        public static function callMountedTableAction($arguments = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::callMountedTableAction($arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionExists()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionExists($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionExists($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionDoesNotExist()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionDoesNotExist($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionDoesNotExist($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionVisible()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionVisible($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionVisible($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionHidden()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionHidden($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionHidden($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionEnabled()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionEnabled($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionEnabled($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionDisabled()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionDisabled($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionDisabled($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionHasIcon()
+         * @param string $name
+         * @param string $icon
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionHasIcon($name, $icon, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionHasIcon($name, $icon, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionDoesNotHaveIcon()
+         * @param string $name
+         * @param string $icon
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionDoesNotHaveIcon($name, $icon, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionDoesNotHaveIcon($name, $icon, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionHasLabel()
+         * @param string $name
+         * @param string $label
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionHasLabel($name, $label, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionHasLabel($name, $label, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionDoesNotHaveLabel()
+         * @param string $name
+         * @param string $label
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionDoesNotHaveLabel($name, $label, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionDoesNotHaveLabel($name, $label, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionHasColor()
+         * @param string $name
+         * @param string $color
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionHasColor($name, $color, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionHasColor($name, $color, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionDoesNotHaveColor()
+         * @param string $name
+         * @param string $color
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionDoesNotHaveColor($name, $color, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionDoesNotHaveColor($name, $color, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionHasUrl()
+         * @param string $name
+         * @param string $url
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionHasUrl($name, $url, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionHasUrl($name, $url, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionDoesNotHaveUrl()
+         * @param string $name
+         * @param string $url
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionDoesNotHaveUrl($name, $url, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionDoesNotHaveUrl($name, $url, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionShouldOpenUrlInNewTab()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionShouldOpenUrlInNewTab($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionShouldOpenUrlInNewTab($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionShouldNotOpenUrlInNewTab()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionShouldNotOpenUrlInNewTab($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionShouldNotOpenUrlInNewTab($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertTableActionHeld()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableActionHeld($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableActionHeld($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertHasTableActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasTableActionErrors($keys = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::assertHasTableActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsActions::assertHasNoTableActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasNoTableActionErrors($keys = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::assertHasNoTableActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::mountTableBulkAction()
+         * @param string $name
+         * @param \Illuminate\Support\Collection|array $records
+         * @return static 
+         * @static 
+         */ 
+        public static function mountTableBulkAction($name, $records)
+        {
+                        return \Livewire\Testing\TestableLivewire::mountTableBulkAction($name, $records);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::setTableBulkActionData()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function setTableBulkActionData($data)
+        {
+                        return \Livewire\Testing\TestableLivewire::setTableBulkActionData($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionDataSet()
+         * @param array $data
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionDataSet($data)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionDataSet($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::callTableBulkAction()
+         * @param string $name
+         * @param \Illuminate\Support\Collection|array $records
+         * @param array $data
+         * @param array $arguments
+         * @return static 
+         * @static 
+         */ 
+        public static function callTableBulkAction($name, $records, $data = [], $arguments = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::callTableBulkAction($name, $records, $data, $arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::callMountedTableBulkAction()
+         * @param array $arguments
+         * @return static 
+         * @static 
+         */ 
+        public static function callMountedTableBulkAction($arguments = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::callMountedTableBulkAction($arguments);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionExists()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionExists($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionExists($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionDoesNotExist()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionDoesNotExist($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionDoesNotExist($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionVisible()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionVisible($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionVisible($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionHidden()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionHidden($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionHidden($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionEnabled()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionEnabled($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionEnabled($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionDisabled()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionDisabled($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionDisabled($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionHasIcon()
+         * @param string $name
+         * @param string $icon
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionHasIcon($name, $icon, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionHasIcon($name, $icon, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionDoesNotHaveIcon()
+         * @param string $name
+         * @param string $icon
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionDoesNotHaveIcon($name, $icon, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionDoesNotHaveIcon($name, $icon, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionHasLabel()
+         * @param string $name
+         * @param string $label
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionHasLabel($name, $label, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionHasLabel($name, $label, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionDoesNotHaveLabel()
+         * @param string $name
+         * @param string $label
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionDoesNotHaveLabel($name, $label, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionDoesNotHaveLabel($name, $label, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionHasColor()
+         * @param string $name
+         * @param string $color
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionHasColor($name, $color, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionHasColor($name, $color, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionDoesNotHaveColor()
+         * @param string $name
+         * @param string $color
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionDoesNotHaveColor($name, $color, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionDoesNotHaveColor($name, $color, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertTableBulkActionHeld()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableBulkActionHeld($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableBulkActionHeld($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertHasTableBulkActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasTableBulkActionErrors($keys = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::assertHasTableBulkActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsBulkActions::assertHasNoTableBulkActionErrors()
+         * @param array $keys
+         * @return static 
+         * @static 
+         */ 
+        public static function assertHasNoTableBulkActionErrors($keys = [])
+        {
+                        return \Livewire\Testing\TestableLivewire::assertHasNoTableBulkActionErrors($keys);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertCanRenderTableColumn()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertCanRenderTableColumn($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertCanRenderTableColumn($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertCanNotRenderTableColumn()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertCanNotRenderTableColumn($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertCanNotRenderTableColumn($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnExists()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableColumnExists($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnExists($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnVisible()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableColumnVisible($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnVisible($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnHidden()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableColumnHidden($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnHidden($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnStateSet()
+         * @param string $name
+         * @param mixed $value
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableColumnStateSet($name, $value, $record)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnStateSet($name, $value, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnStateNotSet()
+         * @param string $name
+         * @param mixed $value
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableColumnStateNotSet($name, $value, $record)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnStateNotSet($name, $value, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::callTableColumnAction()
+         * @param string $name
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function callTableColumnAction($name, $record = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::callTableColumnAction($name, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::sortTable()
+         * @param string|null $name
+         * @param string|null $direction
+         * @return static 
+         * @static 
+         */ 
+        public static function sortTable($name = null, $direction = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::sortTable($name, $direction);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::searchTable()
+         * @param string|null $search
+         * @return static 
+         * @static 
+         */ 
+        public static function searchTable($search = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::searchTable($search);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsFilters::filterTable()
+         * @param string $name
+         * @param mixed $data
+         * @return static 
+         * @static 
+         */ 
+        public static function filterTable($name, $data = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::filterTable($name, $data);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsFilters::resetTableFilters()
+         * @return static 
+         * @static 
+         */ 
+        public static function resetTableFilters()
+        {
+                        return \Livewire\Testing\TestableLivewire::resetTableFilters();
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsFilters::removeTableFilter()
+         * @param string $filter
+         * @param string|null $field
+         * @return static 
+         * @static 
+         */ 
+        public static function removeTableFilter($filter, $field = null)
+        {
+                        return \Livewire\Testing\TestableLivewire::removeTableFilter($filter, $field);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsFilters::removeTableFilters()
+         * @return static 
+         * @static 
+         */ 
+        public static function removeTableFilters()
+        {
+                        return \Livewire\Testing\TestableLivewire::removeTableFilters();
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsFilters::assertTableFilterExists()
+         * @param string $name
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableFilterExists($name)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableFilterExists($name);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsRecords::assertCanSeeTableRecords()
+         * @param \Illuminate\Support\Collection|array $records
+         * @param bool $inOrder
+         * @return static 
+         * @static 
+         */ 
+        public static function assertCanSeeTableRecords($records, $inOrder = false)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertCanSeeTableRecords($records, $inOrder);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsRecords::assertCanNotSeeTableRecords()
+         * @param \Illuminate\Support\Collection|array $records
+         * @return static 
+         * @static 
+         */ 
+        public static function assertCanNotSeeTableRecords($records)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertCanNotSeeTableRecords($records);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsRecords::assertCountTableRecords()
+         * @param int $count
+         * @return static 
+         * @static 
+         */ 
+        public static function assertCountTableRecords($count)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertCountTableRecords($count);
+        }
+         
+    }
+     
+}
+
+    namespace Illuminate\Testing { 
+            /**
+     * 
+     *
+     * @mixin \Illuminate\Http\Response
+     */ 
+        class TestResponse {
+                    /**
+         * 
+         *
+         * @see \Livewire\LivewireServiceProvider::registerTestMacros()
+         * @param mixed $component
+         * @static 
+         */ 
+        public static function assertSeeLivewire($component)
+        {
+                        return \Illuminate\Testing\TestResponse::assertSeeLivewire($component);
+        }
+                    /**
+         * 
+         *
+         * @see \Livewire\LivewireServiceProvider::registerTestMacros()
+         * @param mixed $component
+         * @static 
+         */ 
+        public static function assertDontSeeLivewire($component)
+        {
+                        return \Illuminate\Testing\TestResponse::assertDontSeeLivewire($component);
+        }
+         
+    }
+            /**
+     * 
+     *
+     */ 
+        class TestView {
+                    /**
+         * 
+         *
+         * @see \Livewire\LivewireServiceProvider::registerTestMacros()
+         * @param mixed $component
+         * @static 
+         */ 
+        public static function assertSeeLivewire($component)
+        {
+                        return \Illuminate\Testing\TestView::assertSeeLivewire($component);
+        }
+                    /**
+         * 
+         *
+         * @see \Livewire\LivewireServiceProvider::registerTestMacros()
+         * @param mixed $component
+         * @static 
+         */ 
+        public static function assertDontSeeLivewire($component)
+        {
+                        return \Illuminate\Testing\TestView::assertDontSeeLivewire($component);
+        }
+         
+    }
+     
+}
+
+    namespace Illuminate\View { 
+            /**
+     * 
+     *
+     */ 
+        class ComponentAttributeBag {
+                    /**
+         * 
+         *
+         * @see \Livewire\LivewireServiceProvider::registerViewMacros()
+         * @param mixed $name
+         * @static 
+         */ 
+        public static function wire($name)
+        {
+                        return \Illuminate\View\ComponentAttributeBag::wire($name);
+        }
+         
+    }
+            /**
+     * 
+     *
+     */ 
+        class View {
+                    /**
+         * 
+         *
+         * @see \Livewire\Macros\ViewMacros::extends()
+         * @param mixed $view
+         * @param mixed $params
+         * @static 
+         */ 
+        public static function extends($view, $params = [])
+        {
+                        return \Illuminate\View\View::extends($view, $params);
+        }
+                    /**
+         * 
+         *
+         * @see \Livewire\Macros\ViewMacros::layout()
+         * @param mixed $view
+         * @param mixed $params
+         * @static 
+         */ 
+        public static function layout($view, $params = [])
+        {
+                        return \Illuminate\View\View::layout($view, $params);
+        }
+                    /**
+         * 
+         *
+         * @see \Livewire\Macros\ViewMacros::layoutData()
+         * @param mixed $data
+         * @static 
+         */ 
+        public static function layoutData($data = [])
+        {
+                        return \Illuminate\View\View::layoutData($data);
+        }
+                    /**
+         * 
+         *
+         * @see \Livewire\Macros\ViewMacros::section()
+         * @param mixed $section
+         * @static 
+         */ 
+        public static function section($section)
+        {
+                        return \Illuminate\View\View::section($section);
+        }
+                    /**
+         * 
+         *
+         * @see \Livewire\Macros\ViewMacros::slot()
+         * @param mixed $slot
+         * @static 
+         */ 
+        public static function slot($slot)
+        {
+                        return \Illuminate\View\View::slot($slot);
         }
          
     }
@@ -21278,6 +23050,7 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Vite extends \Illuminate\Support\Facades\Vite {}
+            class Livewire extends \Livewire\Livewire {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
      
 }
