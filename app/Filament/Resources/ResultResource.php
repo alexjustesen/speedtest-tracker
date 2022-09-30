@@ -32,6 +32,9 @@ class ResultResource extends Resource
                 ViewColumn::make('upload')
                     ->view('tables.columns.bytes-column'),
                 TextColumn::make('ping'),
+                ViewColumn::make('server_id')
+                    ->label('Server ID')
+                    ->view('tables.columns.server-column'),
                 TextColumn::make('created_at')
                     ->dateTime(),
             ])
