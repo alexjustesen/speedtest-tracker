@@ -1,0 +1,12 @@
+#!/command/with-contenv bash
+
+# Exit on error
+set -e
+
+############################################################################
+# Automated storage linking
+############################################################################
+echo "💪 Starting the queue worker..."
+su - webuser -c "php $WEBUSER_HOME/artisan queue:work --tries=3 --no-ansi -q"
+
+exit 0

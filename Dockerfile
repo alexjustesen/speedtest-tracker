@@ -1,9 +1,13 @@
-FROM serversideup/php:8.1-fpm-nginx
+FROM serversideup/php:beta-8.1-fpm-nginx
+
+ENV PHP_POOL_NAME=speedtest-tracker_php
+ENV PHP_POST_MAX_SIZE=1G
+ENV PHP_UPLOAD_MAX_FILE_SIZE=1G
 
 # Install addition packages
 RUN apt-get update && apt-get install -y \
     cron \
-    php8.1-bcmath \
+    gnupg \
     php8.1-pgsql \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
@@ -13,8 +17,8 @@ RUN curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/scr
     && apt-get install -y speedtest
 
 # Copy package configs
-COPY docker/deploy/cron/scheduler /etc/cron.d/scheduler
-COPY docker/deploy/etc/services.d/ /etc/services.d/
+COPY --chmod=644 docker/deploy/cron/scheduler /etc/cron.d/scheduler
+COPY --chmod=755 docker/deploy/etc/s6-overlay/ /etc/s6-overlay/
 
 # Copy app
 COPY . /var/www/html
@@ -26,10 +30,4 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-d
     && mkdir -p storage/logs \
     && php artisan optimize:clear \
     && chown -R webuser:webgroup /var/www/html \
-    && rm -rf /etc/cont-init.d/50-laravel-automations \
-    && chmod 0644 /etc/cron.d/scheduler \
-    && crontab /etc/cron.d/scheduler \
-    && cp docker/deploy/entrypoint.sh /entrypoint \
-    && chmod +x /entrypoint
-
-ENTRYPOINT ["/entrypoint"]
+    && crontab /etc/cron.d/scheduler

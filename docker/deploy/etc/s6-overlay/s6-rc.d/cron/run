@@ -1,0 +1,3 @@
+#!/command/execlineb -P
+echo "⏰  Starting the cron service..."
+cron -f -l 8
