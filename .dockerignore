@@ -8,6 +8,7 @@
 /storage/*.key
 /storage/logs
 /vendor
+/.git
 _ide_helper.php
 .env
 .env.backup
