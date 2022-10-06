@@ -1,0 +1,2 @@
+#!/command/execlineb -P
+s6-setuidgid webuser php /var/www/html/artisan queue:work --tries=3 --no-ansi -q
