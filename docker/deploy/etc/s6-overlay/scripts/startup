@@ -18,7 +18,7 @@ fi
 # Check for config yaml file
 if [ ! -f /app/config.yml ]; then
     echo "🙄  Config file not found, creating..."
-    s6-setuidgid webuser cp $WEBUSER_HOME/config.example.yml /app/config.yml
+    cp $WEBUSER_HOME/config.example.yml /app/config.yml
 else
     echo "✅  Config file exists"
 fi
