@@ -14,7 +14,7 @@ RUN curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/scr
 
 # Copy package configs
 COPY docker/deploy/cron/scheduler /etc/cron.d/scheduler
-COPY docker/deploy/etc/services.d/ /etc/services.d/
+COPY --chmod=755 docker/deploy/etc/s6-overlay/ /etc/s6-overlay//
 
 # Copy app
 COPY . /var/www/html
