@@ -21,7 +21,7 @@ COPY --chmod=644 docker/deploy/cron/scheduler /etc/cron.d/scheduler
 COPY --chmod=755 docker/deploy/etc/s6-overlay/ /etc/s6-overlay/
 
 # Copy app
-COPY . /var/www/html
+COPY --chown=webuser:webgroup . /var/www/html
 COPY .env.docker .env
 
 # Install app dependencies
