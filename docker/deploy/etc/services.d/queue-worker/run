@@ -1,7 +1,0 @@
-#!/usr/bin/with-contenv bash
-
-# Switch to web user
-su webuser
-
-# Bring up PHP queue worker
-exec php /var/www/html/artisan queue:work --tries=3 --no-ansi -q

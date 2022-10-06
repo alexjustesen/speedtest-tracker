@@ -1,0 +1,46 @@
+#!/command/with-contenv bash
+
+# Exit on error
+set -e
+
+echo "🐇  Configuring Speedtest Tracker..."
+
+if [ ${DB_CONNECTION:="sqlite"} == "sqlite" ]; then
+    # Check for database
+    if [ ! -f /app/database.sqlite ]; then
+        echo "🙄  Database file not found, creating..."
+        s6-setuidgid webuser touch /app/database.sqlite
+    else
+        echo "✅  Database exists"
+    fi
+fi
+
+# Check for config yaml file
+if [ ! -f /app/config.yml ]; then
+    echo "🙄  Config file not found, creating..."
+    cp $WEBUSER_HOME/config.example.yml /app/config.yml
+else
+    echo "✅  Config file exists"
+fi
+
+# Check for app key
+if grep -E "APP_KEY=[0-9A-Za-z:+\/=]{1,}" $WEBUSER_HOME/.env > /dev/null; then
+    echo "✅  App key exists"
+else
+    echo "⏳  Generating app key..."
+    s6-setuidgid webuser php $WEBUSER_HOME/artisan key:generate --no-ansi -q
+fi
+
+# Build cache
+echo "💰  Building the cache..."
+s6-setuidgid webuser php $WEBUSER_HOME/artisan config:cache --no-ansi -q
+s6-setuidgid webuser php $WEBUSER_HOME/artisan route:cache --no-ansi -q
+
+# Migrate database
+echo "🚛  Migrating the database..."
+s6-setuidgid webuser php $WEBUSER_HOME/artisan migrate --force --no-ansi -q
+
+# App install done, show a message
+echo "✅  All set, starting Speedtest Tracker container..."
+
+exit 0
