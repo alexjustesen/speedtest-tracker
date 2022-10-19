@@ -1,8 +1,6 @@
 FROM serversideup/php:beta-8.1-fpm-nginx
 
 ENV PHP_POOL_NAME=speedtest-tracker_php
-ENV PHP_POST_MAX_SIZE=1G
-ENV PHP_UPLOAD_MAX_FILE_SIZE=1G
 
 # Install addition packages
 RUN apt-get update && apt-get install -y \

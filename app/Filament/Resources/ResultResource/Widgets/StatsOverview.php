@@ -13,8 +13,8 @@ class StatsOverview extends BaseWidget
     protected function getCards(): array
     {
         return [
-            Card::make('Latest download', formatBytes(Result::latest()->first()?->download ?: 0)),
-            Card::make('Latest upload', formatBytes(Result::latest()->first()?->upload ?: 0)),
+            Card::make('Latest download', formatBits(formatBytesToBits(Result::latest()->first()?->download ?: 0)).'ps'),
+            Card::make('Latest upload', formatBits(formatBytesToBits(Result::latest()->first()?->upload ?: 0)).'ps'),
             Card::make('Latest ping', round(Result::latest()->first()?->ping ?: 0, 2)),
         ];
     }

@@ -28,9 +28,9 @@ class ResultResource extends Resource
                 TextColumn::make('id')
                     ->label('ID'),
                 ViewColumn::make('download')
-                    ->view('tables.columns.bytes-column'),
+                    ->view('tables.columns.bits-column'),
                 ViewColumn::make('upload')
-                    ->view('tables.columns.bytes-column'),
+                    ->view('tables.columns.bits-column'),
                 TextColumn::make('ping'),
                 ViewColumn::make('server_id')
                     ->label('Server ID')
