@@ -27,7 +27,6 @@ class FilamentServiceProvider extends ServiceProvider
     {
         Filament::serving(function () {
             Filament::registerNavigationGroups([
-                'Data',
                 'Links',
             ]);
 

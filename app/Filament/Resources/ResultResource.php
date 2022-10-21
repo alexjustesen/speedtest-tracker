@@ -14,11 +14,9 @@ class ResultResource extends Resource
 {
     protected static ?string $model = Result::class;
 
-    protected static ?string $navigationGroup = 'Data';
-
     protected static ?string $navigationIcon = 'heroicon-o-table';
 
-    protected static ?string $navigationLabel = 'Speedtest Results';
+    protected static ?string $navigationLabel = 'Results';
 
     public static function table(Table $table): Table
     {
