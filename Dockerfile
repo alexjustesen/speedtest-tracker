@@ -1,6 +1,7 @@
 FROM serversideup/php:beta-8.1-fpm-nginx
 
-ENV PHP_POOL_NAME=speedtest-tracker_php
+# Add /config to allowed directory tree
+ENV PHP_OPEN_BASEDIR=$WEBUSER_HOME:/config/:/dev/stdout:/tmp
 
 # Install addition packages
 RUN apt-get update && apt-get install -y \
