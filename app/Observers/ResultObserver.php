@@ -16,20 +16,27 @@ class ResultObserver
      */
     public $afterCommit = true;
 
+    public $settings;
+
+    public function __construct(InfluxDbSettings $settings)
+    {
+        $this->settings = $settings;
+    }
+
     /**
      * Handle the Result "created" event.
      *
      * @param  \App\Models\Result  $result
      * @return void
      */
-    public function created(InfluxDbSettings $settings, Result $result)
+    public function created(Result $result)
     {
         $influxdb = [
-            'enabled' => $settings->v2_enabled,
-            'url' => optional($settings)->v2_url,
-            'org' => optional($settings)->v2_org,
-            'bucket' => optional($settings)->v2_bucket,
-            'token' => optional($settings)->v2_token,
+            'enabled' => $this->settings->v2_enabled,
+            'url' => optional($this->settings)->v2_url,
+            'org' => optional($this->settings)->v2_org,
+            'bucket' => optional($this->settings)->v2_bucket,
+            'token' => optional($this->settings)->v2_token,
         ];
 
         if ($influxdb['enabled'] == true) {
