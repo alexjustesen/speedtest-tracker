@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\StatsOverview;
 use App\Jobs\ExecSpeedtest;
 use Filament\Notifications\Notification;
 use Filament\Pages\Actions\Action;
@@ -17,6 +18,13 @@ class Dashboard extends BasePage
             Action::make('speedtest')
                 ->label('Queue Speedtest')
                 ->action('queueSpeedtest'),
+        ];
+    }
+
+    public function getHeaderWidgets(): array
+    {
+        return [
+            StatsOverview::class,
         ];
     }
 
