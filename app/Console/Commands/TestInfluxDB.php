@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Result;
+use App\Settings\InfluxDbSettings;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
-use Symfony\Component\Yaml\Yaml;
 
 class TestInfluxDB extends Command
 {
@@ -28,19 +27,15 @@ class TestInfluxDB extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(InfluxDbSettings $settings)
     {
-        if (File::exists(base_path().'/config.yml')) {
-            $config = Yaml::parseFile(
-                base_path().'/config.yml'
-            );
-        }
-
-        if (File::exists('/app/config.yml')) {
-            $config = Yaml::parseFile('/app/config.yml');
-        }
-
-        $influxdb = $config['influxdb'];
+        $influxdb = [
+            'enabled' => $settings->v2_enabled,
+            'url' => optional($settings)->v2_url,
+            'org' => optional($settings)->v2_org,
+            'bucket' => optional($settings)->v2_bucket,
+            'token' => optional($settings)->v2_token,
+        ];
 
         if ($influxdb['enabled'] == true) {
             $result = Result::factory()->create();

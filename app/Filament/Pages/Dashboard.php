@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Filament\Widgets\StatsOverview;
 use App\Jobs\ExecSpeedtest;
+use App\Settings\GeneralSettings;
 use Filament\Notifications\Notification;
 use Filament\Pages\Actions\Action;
 use Filament\Pages\Dashboard as BasePage;
@@ -28,9 +29,15 @@ class Dashboard extends BasePage
         ];
     }
 
-    public function queueSpeedtest()
+    public function queueSpeedtest(GeneralSettings $settings)
     {
-        ExecSpeedtest::dispatch();
+        $speedtest = [
+            'enabled' => ! blank($settings->speedtest_schedule),
+            'schedule' => optional($settings)->speedtest_schedule,
+            'ookla_server_id' => optional($settings)->speedtest_server,
+        ];
+
+        ExecSpeedtest::dispatch(speedtest: $speedtest, scheduled: false);
 
         Notification::make()
             ->title('Speedtest added to the queue')

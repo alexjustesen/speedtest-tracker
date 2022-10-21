@@ -3,10 +3,9 @@
 namespace App\Observers;
 
 use App\Models\Result;
-use Illuminate\Support\Facades\File;
+use App\Settings\InfluxDbSettings;
 use Illuminate\Support\Facades\Log;
 use InfluxDB2\Client;
-use Symfony\Component\Yaml\Yaml;
 
 class ResultObserver
 {
@@ -17,6 +16,13 @@ class ResultObserver
      */
     public $afterCommit = true;
 
+    public $settings;
+
+    public function __construct(InfluxDbSettings $settings)
+    {
+        $this->settings = $settings;
+    }
+
     /**
      * Handle the Result "created" event.
      *
@@ -25,17 +31,13 @@ class ResultObserver
      */
     public function created(Result $result)
     {
-        if (File::exists(base_path().'/config.yml')) {
-            $config = Yaml::parseFile(
-                base_path().'/config.yml'
-            );
-        }
-
-        if (File::exists('/app/config.yml')) {
-            $config = Yaml::parseFile('/app/config.yml');
-        }
-
-        $influxdb = $config['influxdb'];
+        $influxdb = [
+            'enabled' => $this->settings->v2_enabled,
+            'url' => optional($this->settings)->v2_url,
+            'org' => optional($this->settings)->v2_org,
+            'bucket' => optional($this->settings)->v2_bucket,
+            'token' => optional($this->settings)->v2_token,
+        ];
 
         if ($influxdb['enabled'] == true) {
             $client = new Client([

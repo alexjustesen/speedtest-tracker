@@ -9,12 +9,14 @@
         "doctrine/dbal": "^3.4",
         "dragonmantank/cron-expression": "^3.3",
         "filament/filament": "^2.0",
+        "filament/spatie-laravel-settings-plugin": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "influxdata/influxdb-client-php": "^2.9",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "symfony/yaml": "^6.1"
+        "spatie/laravel-settings": "^2.4",
+        "squirephp/timezones-en": "^3.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",

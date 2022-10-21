@@ -11,6 +11,8 @@ namespace PHPSTORM_META {
     */
     override(new \Illuminate\Contracts\Container\Container, map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -148,6 +150,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -198,6 +204,8 @@ namespace PHPSTORM_META {
         ]));
     override(\Illuminate\Container\Container::makeWith(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -335,6 +343,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -385,6 +397,8 @@ namespace PHPSTORM_META {
         ]));
     override(\Illuminate\Contracts\Container\Container::get(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -522,6 +536,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -572,6 +590,8 @@ namespace PHPSTORM_META {
         ]));
     override(\Illuminate\Contracts\Container\Container::make(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -709,6 +729,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -759,6 +783,8 @@ namespace PHPSTORM_META {
         ]));
     override(\Illuminate\Contracts\Container\Container::makeWith(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -896,6 +922,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -946,6 +976,8 @@ namespace PHPSTORM_META {
         ]));
     override(\App::get(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -1083,6 +1115,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -1133,6 +1169,8 @@ namespace PHPSTORM_META {
         ]));
     override(\App::make(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -1270,6 +1308,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -1320,6 +1362,8 @@ namespace PHPSTORM_META {
         ]));
     override(\App::makeWith(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -1457,6 +1501,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -1507,6 +1555,8 @@ namespace PHPSTORM_META {
         ]));
     override(\app(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -1644,6 +1694,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -1694,6 +1748,8 @@ namespace PHPSTORM_META {
         ]));
     override(\resolve(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -1831,6 +1887,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
@@ -1881,6 +1941,8 @@ namespace PHPSTORM_META {
         ]));
     override(\Psr\Container\ContainerInterface::get(0), map([
         '' => '@',
+            'App\Settings\GeneralSettings' => \App\Settings\GeneralSettings::class,
+            'App\Settings\InfluxDbSettings' => \App\Settings\InfluxDbSettings::class,
             'BladeUI\Icons\Factory' => \BladeUI\Icons\Factory::class,
             'BladeUI\Icons\IconsManifest' => \BladeUI\Icons\IconsManifest::class,
             'Filament\Http\Responses\Auth\Contracts\LoginResponse' => \Filament\Http\Responses\Auth\LoginResponse::class,
@@ -2018,6 +2080,10 @@ namespace PHPSTORM_META {
             'Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder' => \Spatie\LaravelIgnition\Recorders\LogRecorder\LogRecorder::class,
             'Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder' => \Spatie\LaravelIgnition\Recorders\QueryRecorder\QueryRecorder::class,
             'Spatie\LaravelIgnition\Support\SentReports' => \Spatie\LaravelIgnition\Support\SentReports::class,
+            'Spatie\LaravelSettings\SettingsCache' => \Spatie\LaravelSettings\SettingsCache::class,
+            'Spatie\LaravelSettings\SettingsMapper' => \Spatie\LaravelSettings\SettingsMapper::class,
+            'Spatie\LaravelSettings\SettingsRepositories\SettingsRepository' => \Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository::class,
+            'Squire\RepositoryManager' => \Squire\RepositoryManager::class,
             'Whoops\Handler\HandlerInterface' => \Spatie\LaravelIgnition\Renderers\IgnitionWhoopsHandler::class,
             'auth' => \Illuminate\Auth\AuthManager::class,
             'auth.password' => \Illuminate\Auth\Passwords\PasswordBrokerManager::class,
