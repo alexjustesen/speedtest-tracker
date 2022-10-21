@@ -16,7 +16,6 @@ _ide_helper.php
 .env.backup
 .phpstorm.meta.php
 .phpunit.result.cache
-config.yml
 auth.json
 docker-compose.yml
 Homestead.json
