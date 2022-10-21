@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ResultResource\Pages;
-use App\Filament\Resources\ResultResource\Widgets\StatsOverview;
 use App\Models\Result;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -15,11 +14,9 @@ class ResultResource extends Resource
 {
     protected static ?string $model = Result::class;
 
-    protected static ?string $navigationGroup = 'Data';
-
     protected static ?string $navigationIcon = 'heroicon-o-table';
 
-    protected static ?string $navigationLabel = 'Speedtest Results';
+    protected static ?string $navigationLabel = 'Results';
 
     public static function table(Table $table): Table
     {
@@ -61,13 +58,6 @@ class ResultResource extends Resource
     {
         return [
             'index' => Pages\ListResults::route('/'),
-        ];
-    }
-
-    public static function getWidgets(): array
-    {
-        return [
-            StatsOverview::class,
         ];
     }
 }
