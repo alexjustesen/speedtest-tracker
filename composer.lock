@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "014a602e72040b43da1b35704f796390",
+    "content-hash": "01f8953578f096fdfe8f259c2682fc0b",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -7156,80 +7156,6 @@
             ],
             "support": {
                 "source": "https://github.com/symfony/var-dumper/tree/v6.1.6"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2022-10-07T08:04:03+00:00"
-        },
-        {
-            "name": "symfony/yaml",
-            "version": "v6.1.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "66c6b0cf52b00f74614a2cf7ae7db08ea1095931"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/66c6b0cf52b00f74614a2cf7ae7db08ea1095931",
-                "reference": "66c6b0cf52b00f74614a2cf7ae7db08ea1095931",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "symfony/polyfill-ctype": "^1.8"
-            },
-            "conflict": {
-                "symfony/console": "<5.4"
-            },
-            "require-dev": {
-                "symfony/console": "^5.4|^6.0"
-            },
-            "suggest": {
-                "symfony/console": "For validating YAML files using the lint command"
-            },
-            "bin": [
-                "Resources/bin/yaml-lint"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Yaml\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Loads and dumps YAML files",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/yaml/tree/v6.1.6"
             },
             "funding": [
                 {
