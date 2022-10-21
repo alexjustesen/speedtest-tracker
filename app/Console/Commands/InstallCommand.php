@@ -49,7 +49,7 @@ class InstallCommand extends Command
 
         $this->line('⏳ Optimizing the cache...');
 
-        Artisan::call('optimize:clear');
+        Artisan::call('optimize');
 
         $this->line('✅ Optimized cache');
 
