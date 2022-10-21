@@ -26,9 +26,9 @@ class General extends SettingsPage
     {
         return [
             Grid::make([
-                    'default' => 1,
-                    'md' => 3,
-                ])
+                'default' => 1,
+                'md' => 3,
+            ])
                 ->schema([
                     Grid::make([
                         'default' => 1,

@@ -26,9 +26,9 @@ class InfluxDb extends SettingsPage
     {
         return [
             Grid::make([
-                    'default' => 1,
-                    'md' => 3,
-                ])
+                'default' => 1,
+                'md' => 3,
+            ])
                 ->schema([
                     Grid::make([
                         'default' => 1,
@@ -71,7 +71,7 @@ class InfluxDb extends SettingsPage
                         ->schema([
                             Toggle::make('v2_enabled')
                                 ->label('v2 enabled')
-                                ->helperText("NOTE: At this time only InfluxDB v2 is supported"),
+                                ->helperText('NOTE: At this time only InfluxDB v2 is supported'),
                         ])
                         ->columnSpan([
                             'md' => 1,
