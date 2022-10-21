@@ -18,14 +18,16 @@ RUN curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/scr
 COPY --chmod=644 docker/deploy/cron/scheduler /etc/cron.d/scheduler
 COPY --chmod=755 docker/deploy/etc/s6-overlay/ /etc/s6-overlay/
 
+WORKDIR /var/www/html
+
 # Copy app
 COPY --chown=webuser:webgroup . /var/www/html
-COPY .env.docker .env
 
 # Install app dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev \
-    && mkdir -p /app \
     && mkdir -p storage/logs \
     && php artisan optimize:clear \
     && chown -R webuser:webgroup /var/www/html \
     && crontab /etc/cron.d/scheduler
+
+VOLUME /config
