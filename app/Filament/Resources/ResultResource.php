@@ -8,6 +8,7 @@ use App\Settings\GeneralSettings;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 
@@ -27,6 +28,8 @@ class ResultResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->label('ID'),
+                IconColumn::make('scheduled')
+                    ->boolean(),
                 ViewColumn::make('download')
                     ->view('tables.columns.bits-column'),
                 ViewColumn::make('upload')
