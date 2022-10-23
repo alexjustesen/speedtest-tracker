@@ -4,11 +4,11 @@ if (! function_exists('formatBits')) {
     function formatBits(int $bits, $precision = 2)
     {
         if ($bits > 0) {
-            $i = floor(log($bits) / log(1024));
+            $i = floor(log($bits) / log(1000));
 
             $sizes = ['B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
 
-            return sprintf('%.02F', round($bits / pow(1024, $i), $precision)) * 1 .' '.@$sizes[$i];
+            return sprintf('%.02F', round($bits / pow(1000, $i), $precision)) * 1 .' '.@$sizes[$i];
         }
 
         return 0;
