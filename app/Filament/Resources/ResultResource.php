@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ResultResource\Pages;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
@@ -20,6 +21,8 @@ class ResultResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $settings = new GeneralSettings();
+
         return $table
             ->columns([
                 TextColumn::make('id')
@@ -33,7 +36,8 @@ class ResultResource extends Resource
                     ->label('Server ID')
                     ->view('tables.columns.server-column'),
                 TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->dateTime('M j, Y g:ia')
+                    ->timezone($settings->timezone ?? 'UTC'),
             ])
             ->filters([
                 //
