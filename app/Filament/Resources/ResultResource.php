@@ -8,6 +8,7 @@ use App\Settings\GeneralSettings;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
@@ -47,6 +48,10 @@ class ResultResource extends Resource
             ])
             ->actions([
                 // Tables\Actions\ViewAction::make(),
+                Action::make('view result')
+                    ->label('View on Speedtest.net')
+                    ->url(fn (Result $record): string => $record->url)
+                    ->openUrlInNewTab(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
