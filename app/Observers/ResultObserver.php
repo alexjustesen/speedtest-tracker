@@ -2,10 +2,9 @@
 
 namespace App\Observers;
 
+use App\Jobs\SendDataToInfluxDbV2;
 use App\Models\Result;
 use App\Settings\InfluxDbSettings;
-use Illuminate\Support\Facades\Log;
-use InfluxDB2\Client;
 
 class ResultObserver
 {
@@ -16,11 +15,11 @@ class ResultObserver
      */
     public $afterCommit = true;
 
-    public $settings;
+    public $influxDbSettings;
 
-    public function __construct(InfluxDbSettings $settings)
+    public function __construct(InfluxDbSettings $influxDbSettings)
     {
-        $this->settings = $settings;
+        $this->influxDbSettings = $influxDbSettings;
     }
 
     /**
@@ -31,39 +30,12 @@ class ResultObserver
      */
     public function created(Result $result)
     {
-        $influxdb = [
-            'enabled' => $this->settings->v2_enabled,
-            'url' => optional($this->settings)->v2_url,
-            'org' => optional($this->settings)->v2_org,
-            'bucket' => optional($this->settings)->v2_bucket,
-            'token' => optional($this->settings)->v2_token,
-        ];
+        // Notifications
 
-        if ($influxdb['enabled'] == true) {
-            $client = new Client([
-                'url' => $influxdb['url'],
-                'token' => $influxdb['token'],
-                'bucket' => $influxdb['bucket'],
-                'org' => $influxdb['org'],
-                'precision' => \InfluxDB2\Model\WritePrecision::S,
-            ]);
 
-            $writeApi = $client->createWriteApi();
-
-            $dataArray = [
-                'name' => 'speedtest',
-                'tags' => null,
-                'fields' => $result->formatForInfluxDB2(),
-                'time' => strtotime($result->created_at),
-            ];
-
-            try {
-                $writeApi->write($dataArray);
-            } catch (\Exception $e) {
-                Log::error($e);
-            }
-
-            $writeApi->close();
+        // Send data to time series databases
+        if ($this->influxDbSettings->v2_enabled) {
+            SendDataToInfluxDbV2::dispatch($result);
         }
     }
 
