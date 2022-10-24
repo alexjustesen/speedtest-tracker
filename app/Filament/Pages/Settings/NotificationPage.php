@@ -44,8 +44,7 @@ class NotificationPage extends SettingsPage
                             ->description('Notifications sent to this channel will show up under the 🔔 icon in the header.')
                             ->schema([
                                 Toggle::make('database_enabled')
-                                    ->label('Database notifications enabled')
-                                    ->inline(false)
+                                    ->label('Enable database notifications')
                                     ->reactive()
                                     ->columnSpan(2),
                                 Grid::make([
