@@ -7,5 +7,17 @@ This project replaces https://github.com/henrywhitaker3/Speedtest-Tracker as it 
 ### Docs
 The docs can be found here https://docs.speedtest-tracker.dev to help you get started.
 
-### Roadmap
-To suggest features please use the roadmap. You can also follow development progress there as well: https://speedtest-tracker-roadmap.alexjustesen.dev/
+### Screenshots
+
+#### Login page
+![Login page](.github/screenshots/login_screenshot.png)
+
+#### Dashboard
+![Dashboard](.github/screenshots/dashboard_screenshot.png)
+
+#### Results page
+![Results page](.github/screenshots/results_screenshot.png)
+
+#### General Settings page
+![General Settings page](.github/screenshots/general_settings_screenshot.png)
+
