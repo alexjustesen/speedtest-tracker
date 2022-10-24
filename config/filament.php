@@ -262,7 +262,7 @@ return [
     |
     */
 
-    'favicon' => null,
+    'favicon' => asset('img/speedtest-tracker-icon.png'),
 
     /*
     |--------------------------------------------------------------------------
