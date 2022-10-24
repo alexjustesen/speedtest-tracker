@@ -3,22 +3,23 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Settings\InfluxDbSettings;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
 
-class InfluxDb extends SettingsPage
+class InfluxDbPage extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-database';
-
-    protected static ?string $navigationLabel = 'InfluxDB';
 
     protected static ?string $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 3;
+
+    protected static ?string $title = 'InfluxDB';
+
+    protected static ?string $navigationLabel = 'InfluxDB';
 
     protected static string $settings = InfluxDbSettings::class;
 
@@ -35,8 +36,11 @@ class InfluxDb extends SettingsPage
                     ])
                     ->schema([
                         Section::make('InfluxDB v2 Settings')
-                            ->collapsible()
                             ->schema([
+                                Toggle::make('v2_enabled')
+                                    ->label('Enabled')
+                                    ->inline(false)
+                                    ->columnSpan(2),
                                 TextInput::make('v2_url')
                                     ->label('URL')
                                     ->placeholder('http://your-influxdb-instance')
@@ -58,6 +62,7 @@ class InfluxDb extends SettingsPage
                                     ->disableAutocomplete()
                                     ->columnSpan(['md' => 2]),
                             ])
+                            ->compact()
                             ->columns([
                                 'default' => 1,
                                 'md' => 2,
@@ -66,16 +71,6 @@ class InfluxDb extends SettingsPage
                     ->columnSpan([
                         'md' => 2,
                     ]),
-
-                    Card::make()
-                        ->schema([
-                            Toggle::make('v2_enabled')
-                                ->label('v2 enabled')
-                                ->helperText('NOTE: At this time only InfluxDB v2 is supported'),
-                        ])
-                        ->columnSpan([
-                            'md' => 1,
-                        ]),
                 ]),
         ];
     }

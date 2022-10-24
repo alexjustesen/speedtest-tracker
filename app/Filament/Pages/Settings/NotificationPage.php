@@ -65,6 +65,7 @@ class NotificationPage extends SettingsPage
                                     TestDatabaseNotification::make('test channel'),
                                 ])
                             ])
+                            ->compact()
                             ->columns([
                                 'default' => 1,
                                 'md' => 2,

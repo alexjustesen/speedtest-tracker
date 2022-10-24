@@ -12,13 +12,17 @@ use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
 use Squire\Models\Timezone;
 
-class General extends SettingsPage
+class GeneralPage extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-cog';
 
     protected static ?string $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 1;
+
+    protected static ?string $title = 'General';
+
+    protected static ?string $navigationLabel = 'General';
 
     protected static string $settings = GeneralSettings::class;
 
@@ -35,7 +39,6 @@ class General extends SettingsPage
                     ])
                     ->schema([
                         Section::make('Site Settings')
-                            ->collapsible()
                             ->schema([
                                 TextInput::make('site_name')
                                     ->maxLength(50)
@@ -51,13 +54,13 @@ class General extends SettingsPage
                                     ->maxLength(25)
                                     ->required(),
                             ])
+                            ->compact()
                             ->columns([
                                 'default' => 1,
                                 'md' => 2,
                             ]),
 
                         Section::make('Speedtest Settings')
-                            ->collapsible()
                             ->schema([
                                 TextInput::make('speedtest_schedule')
                                     ->helperText('Leave empty to disable the schedule. You can also use the cron expression generator [HERE](https://crontab.cronhub.io/) to help you make schedules.')
@@ -68,6 +71,7 @@ class General extends SettingsPage
                                     ->nullable()
                                     ->columnSpan(1),
                             ])
+                            ->compact()
                             ->columns([
                                 'default' => 1,
                                 'md' => 2,
