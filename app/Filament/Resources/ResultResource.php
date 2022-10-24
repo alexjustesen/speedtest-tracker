@@ -39,7 +39,7 @@ class ResultResource extends Resource
                     ->label('Server ID')
                     ->view('tables.columns.server-column'),
                 TextColumn::make('created_at')
-                    ->dateTime('M j, Y g:ia')
+                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
                     ->timezone($settings->timezone ?? 'UTC'),
             ])
             ->filters([
