@@ -44,8 +44,12 @@ class General extends SettingsPage
                                 Select::make('timezone')
                                     ->options(Timezone::all()->pluck('code', 'code'))
                                     ->searchable()
-                                    ->required()
-                                    ->columnSpan(1),
+                                    ->required(),
+                                TextInput::make('time_format')
+                                    ->helperText('Use [DateTime Format](https://www.php.net/manual/en/datetime.format.php) options to change the format of the datetime in views.')
+                                    ->placeholder('M j, Y G:i:s')
+                                    ->maxLength(25)
+                                    ->required(),
                             ])
                             ->columns([
                                 'default' => 1,

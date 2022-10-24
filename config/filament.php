@@ -262,7 +262,7 @@ return [
     |
     */
 
-    'favicon' => null,
+    'favicon' => public_path('img/speedtest-tracker-icon.png'),
 
     /*
     |--------------------------------------------------------------------------
