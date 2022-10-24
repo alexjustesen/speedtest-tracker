@@ -240,7 +240,7 @@ return [
         ],
         'max_content_width' => null,
         'notifications' => [
-            'vertical_alignment' => 'top',
+            'vertical_alignment' => 'bottom',
             'alignment' => 'right',
         ],
         'sidebar' => [
