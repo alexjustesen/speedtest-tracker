@@ -183,7 +183,7 @@ return [
 
     'database_notifications' => [
         'enabled' => true,
-        'polling_interval' => '10s',
+        'polling_interval' => '5s',
     ],
 
     /*
@@ -240,7 +240,7 @@ return [
         ],
         'max_content_width' => null,
         'notifications' => [
-            'vertical_alignment' => 'top',
+            'vertical_alignment' => 'bottom',
             'alignment' => 'right',
         ],
         'sidebar' => [

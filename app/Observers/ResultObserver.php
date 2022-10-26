@@ -2,10 +2,13 @@
 
 namespace App\Observers;
 
+use App\Jobs\SendDataToInfluxDbV2;
 use App\Models\Result;
+use App\Models\User;
 use App\Settings\InfluxDbSettings;
-use Illuminate\Support\Facades\Log;
-use InfluxDB2\Client;
+use App\Settings\NotificationSettings;
+use App\Settings\ThresholdSettings;
+use Filament\Notifications\Notification;
 
 class ResultObserver
 {
@@ -16,11 +19,19 @@ class ResultObserver
      */
     public $afterCommit = true;
 
-    public $settings;
+    public $influxDbSettings;
 
-    public function __construct(InfluxDbSettings $settings)
+    public $notificationSettings;
+
+    public $thresholdSettings;
+
+    public function __construct()
     {
-        $this->settings = $settings;
+        $this->influxDbSettings = new (InfluxDbSettings::class);
+
+        $this->notificationSettings = new (NotificationSettings::class);
+
+        $this->thresholdSettings = new (ThresholdSettings::class);
     }
 
     /**
@@ -31,39 +42,28 @@ class ResultObserver
      */
     public function created(Result $result)
     {
-        $influxdb = [
-            'enabled' => $this->settings->v2_enabled,
-            'url' => optional($this->settings)->v2_url,
-            'org' => optional($this->settings)->v2_org,
-            'bucket' => optional($this->settings)->v2_bucket,
-            'token' => optional($this->settings)->v2_token,
-        ];
+        $user = User::find(1);
 
-        if ($influxdb['enabled'] == true) {
-            $client = new Client([
-                'url' => $influxdb['url'],
-                'token' => $influxdb['token'],
-                'bucket' => $influxdb['bucket'],
-                'org' => $influxdb['org'],
-                'precision' => \InfluxDB2\Model\WritePrecision::S,
-            ]);
-
-            $writeApi = $client->createWriteApi();
-
-            $dataArray = [
-                'name' => 'speedtest',
-                'tags' => null,
-                'fields' => $result->formatForInfluxDB2(),
-                'time' => strtotime($result->created_at),
-            ];
-
-            try {
-                $writeApi->write($dataArray);
-            } catch (\Exception $e) {
-                Log::error($e);
+        // Notifications
+        if ($this->notificationSettings->database_enabled) {
+            if ($this->notificationSettings->database_on_speedtest_run) {
+                Notification::make()
+                    ->title('Speedtest Completed')
+                    ->success()
+                    ->sendToDatabase($user);
             }
 
-            $writeApi->close();
+            if ($this->notificationSettings->database_on_threshold_failure && $this->thresholdSettings->absolute_enabled) {
+                Notification::make()
+                    ->title('Speedtest Threshold Breached: '.$result->id)
+                    ->warning()
+                    ->sendToDatabase($user);
+            }
+        }
+
+        // Send data to time series databases
+        if ($this->influxDbSettings->v2_enabled) {
+            SendDataToInfluxDbV2::dispatch($result);
         }
     }
 
