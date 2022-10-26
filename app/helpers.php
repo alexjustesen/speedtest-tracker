@@ -31,7 +31,6 @@ if (! function_exists('formatBits')) {
             $sizes = ['B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
 
             return sprintf('%.02F', round($bits / pow(1000, $i), $precision)) * 1 .' '.@$sizes[$i];
-
         }
 
         return 0;

@@ -73,7 +73,7 @@ class ThresholdsPage extends SettingsPage
                                             'default' => 1,
                                             'md' => 2,
                                         ]),
-                                ])
+                                ]),
                             ])
                             ->compact()
                             ->columns([

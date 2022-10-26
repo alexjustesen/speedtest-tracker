@@ -62,7 +62,7 @@ class NotificationPage extends SettingsPage
                                                 ->columnSpan(2),
                                         ]),
                                     TestDatabaseNotification::make('test channel'),
-                                ])
+                                ]),
                             ])
                             ->compact()
                             ->columns([
