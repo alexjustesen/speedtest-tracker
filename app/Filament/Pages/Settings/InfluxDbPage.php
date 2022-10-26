@@ -38,8 +38,7 @@ class InfluxDbPage extends SettingsPage
                         Section::make('InfluxDB v2 Settings')
                             ->schema([
                                 Toggle::make('v2_enabled')
-                                    ->label('Enabled')
-                                    ->inline(false)
+                                    ->label('Enable')
                                     ->columnSpan(2),
                                 TextInput::make('v2_url')
                                     ->label('URL')
