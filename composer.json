@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "amvisor/filament-failed-jobs": "^0.6.0",
         "doctrine/dbal": "^3.4",
         "dragonmantank/cron-expression": "^3.3",
         "filament/filament": "^2.0",
