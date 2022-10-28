@@ -15,6 +15,7 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "ryangjchandler/filament-log": "^0.2.0",
         "spatie/laravel-settings": "^2.4",
         "squirephp/timezones-en": "^3.3"
     },
