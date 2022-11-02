@@ -28,7 +28,7 @@ class FilamentServiceProvider extends ServiceProvider
     public function boot()
     {
         Logs::can(function (User $user) {
-            return env('APP_DEBUG');
+            return config('app.debug');
         });
 
         Filament::serving(function () {

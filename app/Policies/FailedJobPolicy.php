@@ -11,6 +11,6 @@ class FailedJobPolicy
 
     public function viewAny(User $user): bool
 	{
-		return env('APP_DEBUG');
+		return config('app.debug');
 	}
 }
