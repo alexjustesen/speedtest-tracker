@@ -15,6 +15,11 @@ class ListResults extends ListRecords
         return parent::getTableQuery()->orderBy('id', 'desc');
     }
 
+    protected function getTablePollingInterval(): ?string
+    {
+        return '5s';
+    }
+
     protected function getHeaderWidgets(): array
     {
         return ResultResource::getWidgets();
