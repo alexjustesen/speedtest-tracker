@@ -38,7 +38,7 @@ class FilamentServiceProvider extends ServiceProvider
             ]);
 
             Filament::registerNavigationItems([
-                NavigationItem::make('Documenation')
+                NavigationItem::make('Documentation')
                     ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-external-link')
                     ->group('Links')
