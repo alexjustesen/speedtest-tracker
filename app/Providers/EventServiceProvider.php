@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use App\Events\ResultCreated;
-use App\Models\Result;
-use App\Observers\ResultObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,7 +24,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\SpeedtestCompletedListener::class,
 
             // Data listeners
-            // TODO: add influxdb listener here after https://github.com/alexjustesen/speedtest-tracker/pull/136 is merged
+            \App\Listeners\Data\InfluxDb2Listener::class,
 
             // Threashold listeners
             \App\Listeners\Threshold\AbsoluteDownloadListener::class,
@@ -42,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Result::observe(ResultObserver::class);
+        //
     }
 
     /**
