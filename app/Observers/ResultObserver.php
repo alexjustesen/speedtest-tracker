@@ -4,11 +4,9 @@ namespace App\Observers;
 
 use App\Jobs\SendDataToInfluxDbV2;
 use App\Models\Result;
-use App\Models\User;
 use App\Settings\InfluxDbSettings;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
-use Filament\Notifications\Notification;
 
 class ResultObserver
 {
@@ -42,25 +40,6 @@ class ResultObserver
      */
     public function created(Result $result)
     {
-        $user = User::find(1);
-
-        // Notifications
-        if ($this->notificationSettings->database_enabled) {
-            if ($this->notificationSettings->database_on_speedtest_run) {
-                Notification::make()
-                    ->title('Speedtest Completed')
-                    ->success()
-                    ->sendToDatabase($user);
-            }
-
-            if ($this->notificationSettings->database_on_threshold_failure && $this->thresholdSettings->absolute_enabled) {
-                Notification::make()
-                    ->title('Speedtest Threshold Breached: '.$result->id)
-                    ->warning()
-                    ->sendToDatabase($user);
-            }
-        }
-
         // Send data to time series databases
         if ($this->influxDbSettings->v2_enabled) {
             SendDataToInfluxDbV2::dispatch($result, $this->influxDbSettings);
