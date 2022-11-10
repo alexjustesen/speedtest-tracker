@@ -41,7 +41,7 @@ class AbsolutePingListener implements ShouldQueue
         if ($event->result->ping > $this->thresholdSettings->absolute_ping) {
             Notification::make()
                 ->title('Threshold breached')
-                ->body('Speedtest #'.$event->result->id.' breached the ping threshold of '.$this->thresholdSettings->absolute_ping.'Ms at '.$event->result->ping.'Ms.')
+                ->body('Speedtest #'.$event->result->id.' breached the ping threshold of '.$this->thresholdSettings->absolute_ping.'ms at '.$event->result->ping.'ms.')
                 ->warning()
                 ->sendToDatabase($event->user);
         }
