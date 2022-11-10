@@ -8,11 +8,11 @@ class ThresholdSettings extends Settings
 {
     public bool $absolute_enabled;
 
-    public ?string $absolute_download;
+    public ?float $absolute_download;
 
-    public ?string $absolute_upload;
+    public ?float $absolute_upload;
 
-    public ?string $absolute_ping;
+    public ?float $absolute_ping;
 
     public static function group(): string
     {
