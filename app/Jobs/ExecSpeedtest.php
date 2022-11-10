@@ -63,8 +63,11 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
 
             Result::create([
                 'ping' => $results['ping']['latency'],
+                'jitter' => $results['ping']['jitter'],
                 'download' => $results['download']['bandwidth'],
+                'download_jitter' => $results['download']['latency']['jitter'],
                 'upload' => $results['upload']['bandwidth'],
+                'upload_jitter'  => $results['upload']['latency']['jitter'],
                 'server_id' => $results['server']['id'],
                 'server_name' => $results['server']['name'],
                 'server_host' => $results['server']['host'].':'.$results['server']['port'],
