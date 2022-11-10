@@ -40,6 +40,7 @@ class Result extends Model
      */
     protected $casts = [
         'scheduled' => 'boolean',
+        'data' => 'array',
         'created_at' => 'datetime',
     ];
 
@@ -55,14 +56,14 @@ class Result extends Model
             'upload' => (int) $this->upload,
             'download_bits' => (int) $this->download * 8,
             'upload_bits' => (int) $this->upload * 8,
-            'ping_jitter' => (float) $this->jitter,
-            'download_jitter' => (float) $this->download_jitter,
-            'upload_jitter' => (float) $this->upload_jitter,
+            'ping_jitter' => (float) $this->data['ping']['jitter'],
+            'download_jitter' => (float) $this->data['download']['latency']['jitter'],
+            'upload_jitter' => (float) $this->data['upload']['latency']['jitter'],
             'server_id' => (int) $this->server_id,
             'server_host' => $this->server_host,
             'server_name' => $this->server_name,
             'scheduled' => $this->scheduled,
-            'packet_loss' => $this->packet_loss,
+            'packet_loss' => $this->data['packetLoss'],
         ];
     }
 }
