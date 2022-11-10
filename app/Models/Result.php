@@ -53,6 +53,8 @@ class Result extends Model
             'ping' => (float) $this->ping,
             'download' => (int) $this->download,
             'upload' => (int) $this->upload,
+            'download_bits' => (int) $this->download * 8,
+            'upload_bits' => (int) $this->upload * 8,
             'server_id' => (int) $this->server_id,
             'server_host' => $this->server_host,
             'server_name' => $this->server_name,
