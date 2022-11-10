@@ -7,9 +7,8 @@ use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class AbsoluteDownloadListener
+class AbsoluteDownloadListener implements ShouldQueue
 {
     public $notificationSettings;
 
