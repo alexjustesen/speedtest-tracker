@@ -24,6 +24,14 @@ class EventServiceProvider extends ServiceProvider
 
         ResultCreated::class => [
             \App\Listeners\SpeedtestCompletedListener::class,
+
+            // Data listeners
+            // TODO: add influxdb listener here
+
+            // Threashold listeners
+            \App\Listeners\Threshold\AbsoluteDownloadListener::class,
+            \App\Listeners\Threshold\AbsoluteUploadListener::class,
+            \App\Listeners\Threshold\AbsolutePingListener::class,
         ]
     ];
 
