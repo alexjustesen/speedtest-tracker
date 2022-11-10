@@ -51,20 +51,24 @@ class InfluxDbPage extends SettingsPage
                                             ->label('URL')
                                             ->placeholder('http://your-influxdb-instance')
                                             ->maxLength(255)
+                                            ->required(fn (Closure $get) => $get('v2_enabled') == true)
                                             ->columnSpan(['md' => 2]),
                                         TextInput::make('v2_org')
                                             ->label('Org')
                                             ->maxLength(255)
+                                            ->required(fn (Closure $get) => $get('v2_enabled') == true)
                                             ->columnSpan(1),
                                         TextInput::make('v2_bucket')
                                             ->placeholder('speedtest-tracker')
                                             ->label('Bucket')
                                             ->maxLength(255)
+                                            ->required(fn (Closure $get) => $get('v2_enabled') == true)
                                             ->columnSpan(1),
                                         TextInput::make('v2_token')
                                             ->label('Token')
                                             ->maxLength(255)
                                             ->password()
+                                            ->required(fn (Closure $get) => $get('v2_enabled') == true)
                                             ->disableAutocomplete()
                                             ->columnSpan(['md' => 2]),
                                     ]),
