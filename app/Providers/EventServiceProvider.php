@@ -26,7 +26,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\SpeedtestCompletedListener::class,
 
             // Data listeners
-            // TODO: add influxdb listener here
+            // TODO: add influxdb listener here after https://github.com/alexjustesen/speedtest-tracker/pull/136 is merged
 
             // Threashold listeners
             \App\Listeners\Threshold\AbsoluteDownloadListener::class,
