@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ResultCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -41,6 +42,15 @@ class Result extends Model
     protected $casts = [
         'scheduled' => 'boolean',
         'created_at' => 'datetime',
+    ];
+
+    /**
+     * Event mapping for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => ResultCreated::class,
     ];
 
     /**
