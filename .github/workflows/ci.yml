@@ -42,6 +42,7 @@ jobs:
 
       - name: Install the application
         run: |
+          touch database/database.sqlite
           php -r "file_exists('.env') || copy('.env.example', '.env');"
           php artisan app:install --force
 
