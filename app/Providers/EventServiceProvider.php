@@ -32,7 +32,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Threshold\AbsoluteDownloadListener::class,
             \App\Listeners\Threshold\AbsoluteUploadListener::class,
             \App\Listeners\Threshold\AbsolutePingListener::class,
-        ]
+        ],
     ];
 
     /**
