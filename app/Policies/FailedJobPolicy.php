@@ -10,7 +10,7 @@ class FailedJobPolicy
     use HandlesAuthorization;
 
     public function viewAny(User $user): bool
-	{
-		return config('app.debug');
-	}
+    {
+        return config('app.debug');
+    }
 }

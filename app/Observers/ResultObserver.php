@@ -63,7 +63,7 @@ class ResultObserver
 
         // Send data to time series databases
         if ($this->influxDbSettings->v2_enabled) {
-            SendDataToInfluxDbV2::dispatch($result,$this->influxDbSettings);
+            SendDataToInfluxDbV2::dispatch($result, $this->influxDbSettings);
         }
     }
 
