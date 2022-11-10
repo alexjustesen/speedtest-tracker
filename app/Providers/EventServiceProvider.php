@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\ResultCreated;
 use App\Models\Result;
 use App\Observers\ResultObserver;
 use Illuminate\Auth\Events\Registered;
@@ -20,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        ResultCreated::class => [
+            \App\Listeners\SpeedtestCompletedListener::class,
+        ]
     ];
 
     /**
