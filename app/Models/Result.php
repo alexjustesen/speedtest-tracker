@@ -62,6 +62,7 @@ class Result extends Model
             'server_host' => $this->server_host,
             'server_name' => $this->server_name,
             'scheduled' => $this->scheduled,
+            'packet_loss' => $this->packet_loss,
         ];
     }
 }

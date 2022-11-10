@@ -73,6 +73,7 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
                 'server_host' => $results['server']['host'].':'.$results['server']['port'],
                 'url' => $results['result']['url'],
                 'scheduled' => $this->scheduled,
+                'packet_loss' => $this->packetLoss,
                 'data' => $output,
             ]);
         } catch (\Exception $e) {
