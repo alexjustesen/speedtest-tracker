@@ -18,7 +18,7 @@ class NotificationSettings extends Settings
 
     public bool $mail_on_threshold_failure;
 
-    public ?string $mail_recipients;
+    public ?array $mail_recipients;
 
     public static function group(): string
     {

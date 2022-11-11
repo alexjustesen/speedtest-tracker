@@ -9,6 +9,6 @@ class CreateMailNotificationSettings extends SettingsMigration
         $this->migrator->add('notification.mail_enabled', false);
         $this->migrator->add('notification.mail_on_speedtest_run', false);
         $this->migrator->add('notification.mail_on_threshold_failure', false);
-        $this->migrator->add('notification.mail_recipients', '');
+        $this->migrator->add('notification.mail_recipients', null);
     }
 }
