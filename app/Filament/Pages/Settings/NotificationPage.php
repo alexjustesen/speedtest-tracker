@@ -3,16 +3,21 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Forms\Components\TestDatabaseNotification;
+use App\Forms\Components\TestMailNotification;
+use App\Mail\Test;
 use App\Settings\NotificationSettings;
 use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\View;
 use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
+use Illuminate\Support\Facades\Mail;
 
 class NotificationPage extends SettingsPage
 {
@@ -69,6 +74,45 @@ class NotificationPage extends SettingsPage
                                 'default' => 1,
                                 'md' => 2,
                             ]),
+
+                        Section::make('Mail')
+                            ->schema([
+                                Toggle::make('mail_enabled')
+                                    ->label('Enable mail notifications')
+                                    ->reactive()
+                                    ->columnSpan(2),
+                                Grid::make([
+                                    'default' => 1,
+                                ])
+                                ->hidden(fn (Closure $get) => $get('mail_enabled') !== true)
+                                ->schema([
+                                    Fieldset::make('Triggers')
+                                        ->schema([
+                                            Toggle::make('mail_on_speedtest_run')
+                                                ->label('Notify on every speetest run')
+                                                ->columnSpan(2),
+                                            Toggle::make('mail_on_threshold_failure')
+                                                ->label('Notify on threshold failures')
+                                                ->columnSpan(2),
+                                        ]),
+                                ]),
+                                Repeater::make('mail_recipients')
+                                    ->label('Recipients')
+                                    ->schema([
+                                        TextInput::make('email_address')
+                                            ->email()
+                                            ->required(fn (Closure $get) => $get('mail_enabled') == true),
+                                    ])
+                                    ->hidden(fn (Closure $get) => $get('mail_enabled') !== true)
+                                    ->columnSpan(['md' => 2]),
+                                TestMailNotification::make('test channel')
+                                    ->hidden(fn (Closure $get) => $get('mail_enabled') !== true),
+                            ])
+                            ->compact()
+                            ->columns([
+                                'default' => 1,
+                                'md' => 2,
+                            ]),
                     ])
                     ->columnSpan([
                         'md' => 2,
@@ -100,6 +144,21 @@ class NotificationPage extends SettingsPage
         Notification::make()
             ->title('Test database notification sent.')
             ->body('I say ping')
+            ->success()
+            ->send();
+    }
+
+    public function sendTestMailNotification()
+    {
+        $notificationSettings = new (NotificationSettings::class);
+
+        foreach ($notificationSettings->mail_recipients as $recipient) {
+            Mail::to($recipient)
+                ->send(new Test());
+        }
+
+        Notification::make()
+            ->title('Test mail notification sent.')
             ->success()
             ->send();
     }
