@@ -34,7 +34,7 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
     public function envelope()
     {
         return new Envelope(
-            subject: 'Speedtest #'.$this->result->id.' completed',
+            subject: 'Speedtest Result #'.$this->result->id.' - Completed',
         );
     }
 

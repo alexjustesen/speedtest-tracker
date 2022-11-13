@@ -1,5 +1,5 @@
 <x-mail::message>
-# Speedtest #{{ $id }} completed
+# Speedtest Result #{{ $id }} - Completed
 
 A speedtest was successfully run, click the button below to view the results.
 
