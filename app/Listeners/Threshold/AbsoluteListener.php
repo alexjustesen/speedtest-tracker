@@ -3,11 +3,13 @@
 namespace App\Listeners\Threshold;
 
 use App\Events\ResultCreated;
+use App\Mail\Threshold\AbsoluteMail;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AbsoluteListener implements ShouldQueue
 {
@@ -102,6 +104,50 @@ class AbsoluteListener implements ShouldQueue
      */
     protected function mailChannel(ResultCreated $event)
     {
+        $failedThresholds = [];
 
+        if (! count($this->notificationSettings->mail_recipients) > 0) {
+            Log::info('Skipping sending mail notification, no recipients.');
+        }
+
+        // Download threshold
+        if ($this->thresholdSettings->absolute_download > 0) {
+            if (absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->download)) {
+                array_push($failedThresholds, [
+                    'name' => 'Download',
+                    'threshold' => $this->thresholdSettings->absolute_download.' Mbps',
+                    'value' => formatBits(formatBytesToBits($event->result->download)).'ps',
+                ]);
+            }
+        }
+
+        // Upload threshold
+        if ($this->thresholdSettings->absolute_upload > 0) {
+            if (absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->upload)) {
+                array_push($failedThresholds, [
+                    'name' => 'Upload',
+                    'threshold' => $this->thresholdSettings->absolute_upload.' Mbps',
+                    'value' => formatBits(formatBytesToBits($event->result->upload)).'ps',
+                ]);
+            }
+        }
+
+        // Ping threshold
+        if ($this->thresholdSettings->absolute_ping > 0) {
+            if (absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
+                array_push($failedThresholds, [
+                    'name' => 'Ping',
+                    'threshold' => $this->thresholdSettings->absolute_ping.' Ms',
+                    'value' => round($event->result->ping, 2).' Ms',
+                ]);
+            }
+        }
+
+        if (count($failedThresholds)) {
+            foreach ($this->notificationSettings->mail_recipients as $recipient) {
+                Mail::to($recipient)
+                    ->send(new AbsoluteMail($event->result, $failedThresholds));
+            }
+        }
     }
 }
