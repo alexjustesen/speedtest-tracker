@@ -1,23 +1,5 @@
 <?php
 
-use App\Models\Result;
-use App\Settings\ThresholdSettings;
-
-if (! function_exists('absoluteThresholdPassed')) {
-    function absoluteThresholdPassed(Result $result): bool
-    {
-        $thresholds = new (ThresholdSettings::class);
-
-        if (! $thresholds->absolute_enabled) {
-            return true;
-        }
-
-        return formatBits(formatBytesToBits($result->download), 2, false) > $thresholds->absolute_download
-            && formatBits(formatBytesToBits($result->upload), 2, false) > $thresholds->absolute_upload
-            && $result->ping < $thresholds->absolute_ping;
-    }
-}
-
 if (! function_exists('formatBits')) {
     function formatBits(int $bits, $precision = 2, $suffix = true)
     {
@@ -60,5 +42,26 @@ if (! function_exists('formatBytesToBits')) {
         }
 
         return 0;
+    }
+}
+
+if (! function_exists('absoluteDownloadThresholdFailed')) {
+    function absoluteDownloadThresholdFailed(float $threshold, float $download): bool
+    {
+        return formatBits(formatBytesToBits($download), 2, false) < $threshold;
+    }
+}
+
+if (! function_exists('absoluteUploadThresholdFailed')) {
+    function absoluteUploadThresholdFailed(float $threshold, float $upload): bool
+    {
+        return formatBits(formatBytesToBits($upload), 2, false) < $threshold;
+    }
+}
+
+if (! function_exists('absolutePingThresholdFailed')) {
+    function absolutePingThresholdFailed(float $threshold, float $ping): bool
+    {
+        return $ping > $threshold;
     }
 }

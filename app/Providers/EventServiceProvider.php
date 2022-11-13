@@ -27,9 +27,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Data\InfluxDb2Listener::class,
 
             // Threashold listeners
-            \App\Listeners\Threshold\AbsoluteDownloadListener::class,
-            \App\Listeners\Threshold\AbsoluteUploadListener::class,
-            \App\Listeners\Threshold\AbsolutePingListener::class,
+            \App\Listeners\Threshold\AbsoluteListener::class,
         ],
     ];
 
