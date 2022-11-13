@@ -45,6 +45,11 @@ class AbsoluteListener implements ShouldQueue
         if ($this->notificationSettings->database_enabled == true && $this->notificationSettings->database_on_threshold_failure == true) {
             $this->databaseChannel($event);
         }
+
+        // Mail notification channel
+        if ($this->notificationSettings->mail_enabled == true && $this->notificationSettings->mail_on_threshold_failure == true) {
+            $this->mailChannel($event);
+        }
     }
 
     /**
@@ -57,41 +62,46 @@ class AbsoluteListener implements ShouldQueue
     {
         // Download threshold
         if ($this->thresholdSettings->absolute_download > 0) {
-            if (formatBits(formatBytesToBits($event->result->download), 2, false) < $this->thresholdSettings->absolute_download) {
+            if (absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->download)) {
                 Notification::make()
                     ->title('Threshold breached')
                     ->body('Speedtest #'.$event->result->id.' breached the download threshold of '.$this->thresholdSettings->absolute_download.'Mbps at '.formatBits(formatBytesToBits($event->result->download), 2, false).'Mbps.')
                     ->warning()
                     ->sendToDatabase($event->user);
             }
-        } else {
-            Log::info('Database absolute download threshold notification disabled.');
         }
 
         // Upload threshold
         if ($this->thresholdSettings->absolute_upload > 0) {
-            if (formatBits(formatBytesToBits($event->result->upload), 2, false) < $this->thresholdSettings->absolute_upload) {
+            if (absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->upload)) {
                 Notification::make()
                     ->title('Threshold breached')
                     ->body('Speedtest #'.$event->result->id.' breached the upload threshold of '.$this->thresholdSettings->absolute_upload.'Mbps at '.formatBits(formatBytesToBits($event->result->upload), 2, false).'Mbps.')
                     ->warning()
                     ->sendToDatabase($event->user);
             }
-        } else {
-            Log::info('Database absolute upload threshold notification disabled.');
         }
 
         // Ping threshold
         if ($this->thresholdSettings->absolute_ping > 0) {
-            if ($event->result->ping > $this->thresholdSettings->absolute_ping) {
+            if (absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
                 Notification::make()
                     ->title('Threshold breached')
                     ->body('Speedtest #'.$event->result->id.' breached the ping threshold of '.$this->thresholdSettings->absolute_ping.'ms at '.$event->result->ping.'ms.')
                     ->warning()
                     ->sendToDatabase($event->user);
             }
-        } else {
-            Log::info('Database absolute ping threshold notification disabled.');
         }
+    }
+
+    /**
+     * Handle database notifications.
+     *
+     * @param  \App\Events\ResultCreated  $event
+     * @return void
+     */
+    protected function mailChannel(ResultCreated $event)
+    {
+
     }
 }
