@@ -1,8 +1,5 @@
 <?php
 
-use App\Models\Result;
-use App\Settings\ThresholdSettings;
-
 if (! function_exists('formatBits')) {
     function formatBits(int $bits, $precision = 2, $suffix = true)
     {
