@@ -2625,16 +2625,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "3.10.2",
+            "version": "3.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "b9bd194b016114d6ff6765c09d40c7d427e4e3f6"
+                "reference": "8013fb046c6a244b2b1b75cc95d732ed6bcdeb8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/b9bd194b016114d6ff6765c09d40c7d427e4e3f6",
-                "reference": "b9bd194b016114d6ff6765c09d40c7d427e4e3f6",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/8013fb046c6a244b2b1b75cc95d732ed6bcdeb8a",
+                "reference": "8013fb046c6a244b2b1b75cc95d732ed6bcdeb8a",
                 "shasum": ""
             },
             "require": {
@@ -2696,7 +2696,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/3.10.2"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.10.3"
             },
             "funding": [
                 {
@@ -2712,7 +2712,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-25T07:01:47+00:00"
+            "time": "2022-11-14T10:42:43+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -4441,16 +4441,16 @@
         },
         {
             "name": "ryangjchandler/filament-log",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ryangjchandler/filament-log.git",
-                "reference": "1f7ecda4eed214e9b1bb2895e7188e56dc23770d"
+                "reference": "9019b4fb3de524d03bfd07e227809a92e43807f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ryangjchandler/filament-log/zipball/1f7ecda4eed214e9b1bb2895e7188e56dc23770d",
-                "reference": "1f7ecda4eed214e9b1bb2895e7188e56dc23770d",
+                "url": "https://api.github.com/repos/ryangjchandler/filament-log/zipball/9019b4fb3de524d03bfd07e227809a92e43807f6",
+                "reference": "9019b4fb3de524d03bfd07e227809a92e43807f6",
                 "shasum": ""
             },
             "require": {
@@ -4508,7 +4508,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ryangjchandler/filament-log/issues",
-                "source": "https://github.com/ryangjchandler/filament-log/tree/v0.2.0"
+                "source": "https://github.com/ryangjchandler/filament-log/tree/v0.2.1"
             },
             "funding": [
                 {
@@ -4516,7 +4516,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-09T08:17:56+00:00"
+            "time": "2022-11-10T18:09:52+00:00"
         },
         {
             "name": "spatie/invade",
