@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 9.39.0.
+ * Generated for Laravel 9.41.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -9213,7 +9213,7 @@
      *
      * @method static mixed reset(array $credentials, \Closure $callback)
      * @method static string sendResetLink(array $credentials, \Closure $callback = null)
-     * @method static \Illuminate\Contracts\Auth\CanResetPassword getUser(array $credentials)
+     * @method static \Illuminate\Contracts\Auth\CanResetPassword|null getUser(array $credentials)
      * @method static string createToken(\Illuminate\Contracts\Auth\CanResetPassword $user)
      * @method static void deleteToken(\Illuminate\Contracts\Auth\CanResetPassword $user)
      * @method static bool tokenExists(\Illuminate\Contracts\Auth\CanResetPassword $user, string $token)
@@ -12109,6 +12109,20 @@
         {
                         /** @var \Illuminate\Http\Request $instance */
                         return $instance->missing($key);
+        }
+                    /**
+         * Apply the callback if the request is missing the given input item key.
+         *
+         * @param string $key
+         * @param callable $callback
+         * @param callable|null $default
+         * @return $this|mixed 
+         * @static 
+         */ 
+        public static function whenMissing($key, $callback, $default = null)
+        {
+                        /** @var \Illuminate\Http\Request $instance */
+                        return $instance->whenMissing($key, $callback, $default);
         }
                     /**
          * Get the keys for all of the input and files.
@@ -17255,6 +17269,18 @@
                         return $instance->withEntryPoints($entryPoints);
         }
                     /**
+         * Set the filename for the manifest file.
+         *
+         * @param string $filename
+         * @return \Illuminate\Foundation\Vite 
+         * @static 
+         */ 
+        public static function useManifestFilename($filename)
+        {
+                        /** @var \Illuminate\Foundation\Vite $instance */
+                        return $instance->useManifestFilename($filename);
+        }
+                    /**
          * Get the Vite "hot" file path.
          *
          * @return string 
@@ -17359,6 +17385,17 @@
         {
                         /** @var \Illuminate\Foundation\Vite $instance */
                         return $instance->manifestHash($buildDirectory);
+        }
+                    /**
+         * Determine if the HMR server is running.
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function isRunningHot()
+        {
+                        /** @var \Illuminate\Foundation\Vite $instance */
+                        return $instance->isRunningHot();
         }
                     /**
          * Get the Vite tag content as a string of HTML.
@@ -19427,6 +19464,114 @@
         public static function assertTableColumnStateNotSet($name, $value, $record)
         {
                         return \Livewire\Testing\TestableLivewire::assertTableColumnStateNotSet($name, $value, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnFormattedStateSet()
+         * @param string $name
+         * @param mixed $value
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableColumnFormattedStateSet($name, $value, $record)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnFormattedStateSet($name, $value, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnFormattedStateNotSet()
+         * @param string $name
+         * @param mixed $value
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */ 
+        public static function assertTableColumnFormattedStateNotSet($name, $value, $record)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnFormattedStateNotSet($name, $value, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnHasExtraAttributes()
+         * @param string $name
+         * @param array $attributes
+         * @param mixed $record
+         * @static 
+         */ 
+        public static function assertTableColumnHasExtraAttributes($name, $attributes, $record)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnHasExtraAttributes($name, $attributes, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnDoesNotHaveExtraAttributes()
+         * @param string $name
+         * @param array $attributes
+         * @param mixed $record
+         * @static 
+         */ 
+        public static function assertTableColumnDoesNotHaveExtraAttributes($name, $attributes, $record)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnDoesNotHaveExtraAttributes($name, $attributes, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnHasDescription()
+         * @param string $name
+         * @param mixed $description
+         * @param mixed $record
+         * @param string $position
+         * @static 
+         */ 
+        public static function assertTableColumnHasDescription($name, $description, $record, $position = 'below')
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnHasDescription($name, $description, $record, $position);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnDoesNotHaveDescription()
+         * @param string $name
+         * @param mixed $description
+         * @param mixed $record
+         * @param string $position
+         * @static 
+         */ 
+        public static function assertTableColumnDoesNotHaveDescription($name, $description, $record, $position = 'below')
+        {
+                        return \Livewire\Testing\TestableLivewire::assertTableColumnDoesNotHaveDescription($name, $description, $record, $position);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertSelectColumnHasOptions()
+         * @param string $name
+         * @param array $options
+         * @param mixed $record
+         * @static 
+         */ 
+        public static function assertSelectColumnHasOptions($name, $options, $record)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertSelectColumnHasOptions($name, $options, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertSelectColumnDoesNotHaveOptions()
+         * @param string $name
+         * @param array $options
+         * @param mixed $record
+         * @static 
+         */ 
+        public static function assertSelectColumnDoesNotHaveOptions($name, $options, $record)
+        {
+                        return \Livewire\Testing\TestableLivewire::assertSelectColumnDoesNotHaveOptions($name, $options, $record);
         }
                     /**
          * 
