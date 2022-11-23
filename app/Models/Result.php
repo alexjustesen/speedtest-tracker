@@ -68,14 +68,14 @@ class Result extends Model
             'upload' => (int) $this->upload,
             'download_bits' => (int) $this->download * 8,
             'upload_bits' => (int) $this->upload * 8,
-            'ping_jitter' => (float) $data['ping']['jitter'],
-            'download_jitter' => (float) $data['download']['latency']['jitter'],
-            'upload_jitter' => (float) $data['upload']['latency']['jitter'],
+            'ping_jitter' => (float) $data['ping']['jitter'] ?? null,
+            'download_jitter' => (float) $data['download']['latency']['jitter'] ?? null,
+            'upload_jitter' => (float) $data['upload']['latency']['jitter'] ?? null,
             'server_id' => (int) $this->server_id,
             'server_host' => $this->server_host,
             'server_name' => $this->server_name,
             'scheduled' => $this->scheduled,
-            'packet_loss' => optional($data)['packetLoss'], // optional, because apparently the cli doesn't always have this metric
+            'packet_loss' => (float) $data['packetLoss'] ?? null, // optional, because apparently the cli doesn't always have this metric
         ];
     }
 }
