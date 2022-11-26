@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationItem;
 use Illuminate\Support\ServiceProvider;
+use RyanChandler\FilamentLog\Logs;
 
 class FilamentServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,10 @@ class FilamentServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Logs::can(function (User $user) {
+            return true;
+        });
+
         Filament::serving(function () {
             Filament::registerNavigationGroups([
                 'Settings',
