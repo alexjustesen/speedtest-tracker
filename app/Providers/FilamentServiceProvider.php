@@ -35,17 +35,17 @@ class FilamentServiceProvider extends ServiceProvider
             Filament::registerNavigationItems([
                 NavigationItem::make('Documentation')
                     ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
-                    ->icon('heroicon-o-external-link')
+                    ->icon('heroicon-o-book-open')
                     ->group('Links')
                     ->sort(0),
                 NavigationItem::make('Donate')
                     ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
-                    ->icon('heroicon-o-external-link')
+                    ->icon('heroicon-o-cash')
                     ->group('Links')
                     ->sort(1),
                 NavigationItem::make('Source Code')
                     ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
-                    ->icon('heroicon-o-external-link')
+                    ->icon('heroicon-o-code')
                     ->group('Links')
                     ->sort(2),
             ]);
