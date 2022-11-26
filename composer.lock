@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "67d47af73396f1919490e24b9367ce0b",
+    "content-hash": "0584afc1f7ba6574c9b8496afbdfcdf0",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -126,6 +126,63 @@
                 "laravel"
             ],
             "time": "2022-10-06T09:21:49+00:00"
+        },
+        {
+            "name": "awcodes/filament-versions",
+            "version": "v1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/awcodes/filament-versions.git",
+                "reference": "3c8e0b5141a265e39a6911c58e735d1b985ffae4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/awcodes/filament-versions/zipball/3c8e0b5141a265e39a6911c58e735d1b985ffae4",
+                "reference": "3c8e0b5141a265e39a6911c58e735d1b985ffae4",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^2.0",
+                "php": "^8.0.2",
+                "spatie/laravel-package-tools": "^1.9.2"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "FilamentVersions\\FilamentVersionsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FilamentVersions\\": "src/",
+                    "FilamentVersions\\Database\\Seeders\\": "database/seeders/",
+                    "FilamentVersions\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Weston",
+                    "email": "awcodes1@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A mostly useless package to display framework versions at the bottom of the navigation panel.",
+            "keywords": [
+                "filament",
+                "framework",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/awcodes/filament-versions/issues",
+                "source": "https://github.com/awcodes/filament-versions/tree/v1.0.6"
+            },
+            "time": "2022-08-24T16:09:51+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
