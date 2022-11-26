@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationItem;
+use FilamentVersions\Facades\FilamentVersions;
 use Illuminate\Support\ServiceProvider;
 use RyanChandler\FilamentLog\Logs;
 
@@ -30,6 +31,8 @@ class FilamentServiceProvider extends ServiceProvider
         Logs::can(function (User $user) {
             return true;
         });
+
+        FilamentVersions::addItem('Speedtest Tracker', 'v0.4.2');
 
         Filament::serving(function () {
             Filament::registerNavigationGroups([
