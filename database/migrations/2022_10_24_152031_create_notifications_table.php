@@ -17,7 +17,18 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('type');
             $table->morphs('notifiable');
-            $table->text('data');
+
+            /**
+             * PostgreSQL doesn't support "text" column type so we need to use the 'json' type instead.
+             *
+             * Docs: https://filamentphp.com/docs/2.x/notifications/database-notifications
+             */
+            if (env('DB_CONNECTION') == 'pgsql') {
+                $table->json('data');
+            } else {
+                $table->text('data');
+            }
+
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
