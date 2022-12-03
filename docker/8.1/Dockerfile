@@ -3,7 +3,7 @@ FROM ubuntu:22.04
 LABEL maintainer="Alexander Justesen"
 
 ARG WWWGROUP
-ARG NODE_VERSION=16
+ARG NODE_VERSION=18
 ARG POSTGRES_VERSION=14
 
 WORKDIR /var/www/html
