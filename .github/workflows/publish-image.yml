@@ -23,7 +23,7 @@ env:
 jobs:
   build_and_push_image:
     name: Build and push Docker image
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write
