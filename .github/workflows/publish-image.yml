@@ -66,6 +66,12 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ajustesen/${{ env.IMAGE_NAME }}
+
       - name: Build and push image to Docker Hub
         uses: docker/build-push-action@v3
         with:
