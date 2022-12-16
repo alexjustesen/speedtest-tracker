@@ -78,4 +78,15 @@ class Result extends Model
             'packet_loss' => (float) $data['packetLoss'] ?? null, // optional, because apparently the cli doesn't always have this metric
         ];
     }
+
+    public function getJitterData(): array
+    {
+        $data = json_decode($this->data, true);
+
+        return [
+            'download' => $data['download']['latency']['jitter'] ?? null,
+            'upload' => $data['upload']['latency']['jitter'] ?? null,
+            'ping' => $data['ping']['jitter'] ?? null,
+        ];
+    }
 }

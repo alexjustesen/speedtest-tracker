@@ -64,19 +64,19 @@ class RecentJitterChart extends LineChartWidget
             'datasets' => [
                 [
                     'label' => 'Download',
-                    'data' => $results->map(fn ($item) => json_decode($item->data)->download->latency->jitter),
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['download']),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                 ],
                 [
                     'label' => 'Upload',
-                    'data' => $results->map(fn ($item) => json_decode($item->data)->upload->latency->jitter),
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['upload']),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                 ],
                 [
                     'label' => 'Ping',
-                    'data' => $results->map(fn ($item) => json_decode($item->data)->ping->jitter),
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['ping']),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                 ],
