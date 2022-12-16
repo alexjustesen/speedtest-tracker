@@ -8,7 +8,7 @@ use Filament\Widgets\LineChartWidget;
 
 class RecentJitterChart extends LineChartWidget
 {
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '300px';
 
