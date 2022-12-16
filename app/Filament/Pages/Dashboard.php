@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\RecentPingChart;
+use App\Filament\Widgets\RecentSpeedChart;
 use App\Filament\Widgets\StatsOverview;
 use App\Jobs\ExecSpeedtest;
 use App\Settings\GeneralSettings;
@@ -26,6 +28,8 @@ class Dashboard extends BasePage
     {
         return [
             StatsOverview::class,
+            RecentSpeedChart::class,
+            RecentPingChart::class,
         ];
     }
 
