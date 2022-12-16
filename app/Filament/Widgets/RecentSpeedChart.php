@@ -14,7 +14,7 @@ class RecentSpeedChart extends LineChartWidget
 
     protected function getHeading(): string
     {
-        return 'Speed';
+        return 'Download / Upload (mbps)';
     }
 
     protected function getFilters(): ?array
@@ -63,13 +63,13 @@ class RecentSpeedChart extends LineChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download (mbps)',
+                    'label' => 'Download',
                     'data' => $results->map(fn ($item) => formatBits(formatBytesToBits($item->download), 2, false)),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                 ],
                 [
-                    'label' => 'Upload (mbps)',
+                    'label' => 'Upload',
                     'data' => $results->map(fn ($item) => formatBits(formatBytesToBits($item->upload), 2, false)),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',

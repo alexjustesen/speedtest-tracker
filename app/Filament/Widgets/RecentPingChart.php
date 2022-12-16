@@ -14,7 +14,7 @@ class RecentPingChart extends LineChartWidget
 
     protected function getHeading(): string
     {
-        return 'Ping';
+        return 'Ping (ms)';
     }
 
     protected function getFilters(): ?array
@@ -63,10 +63,10 @@ class RecentPingChart extends LineChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Ping (ms)',
+                    'label' => 'Ping',
                     'data' => $results->map(fn ($item) => $item->ping),
-                    'borderColor' => '#0ea5e9',
-                    'backgroundColor' => '#0ea5e9',
+                    'borderColor' => '#10b981',
+                    'backgroundColor' => '#10b981',
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone($settings->timezone)->format('M d - G:i')),
