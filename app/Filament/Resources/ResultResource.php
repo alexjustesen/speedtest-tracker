@@ -39,6 +39,24 @@ class ResultResource extends Resource
                     ->view('tables.columns.bits-column'),
                 TextColumn::make('ping')
                     ->toggleable(),
+                TextColumn::make('download_jitter')
+                    ->getStateUsing(function (Result $record): string|null {
+                        return json_decode($record->data, true)['download']['latency']['jitter'] ?? null;
+                    })
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+                TextColumn::make('upload_jitter')
+                    ->getStateUsing(function (Result $record): string|null {
+                        return json_decode($record->data, true)['upload']['latency']['jitter'] ?? null;
+                    })
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+                TextColumn::make('ping_jitter')
+                    ->getStateUsing(function (Result $record): string|null {
+                        return json_decode($record->data, true)['ping']['jitter'] ?? null;
+                    })
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 ViewColumn::make('server_id')
                     ->label('Server ID')
                     ->view('tables.columns.server-column')
