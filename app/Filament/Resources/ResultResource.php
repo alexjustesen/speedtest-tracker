@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ResultResource\Pages;
-use App\Filament\Widgets\StatsOverview;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Filament\Resources\Resource;
