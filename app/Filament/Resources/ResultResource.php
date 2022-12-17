@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ResultResource\Pages;
+use App\Filament\Widgets\StatsOverview;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Filament\Resources\Resource;
@@ -30,15 +31,19 @@ class ResultResource extends Resource
                 TextColumn::make('id')
                     ->label('ID'),
                 IconColumn::make('scheduled')
-                    ->boolean(),
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 ViewColumn::make('download')
                     ->view('tables.columns.bits-column'),
                 ViewColumn::make('upload')
                     ->view('tables.columns.bits-column'),
-                TextColumn::make('ping'),
+                TextColumn::make('ping')
+                    ->toggleable(),
                 ViewColumn::make('server_id')
                     ->label('Server ID')
-                    ->view('tables.columns.server-column'),
+                    ->view('tables.columns.server-column')
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
                     ->timezone($settings->timezone ?? 'UTC'),
@@ -47,12 +52,15 @@ class ResultResource extends Resource
                 //
             ])
             ->actions([
-                // Tables\Actions\ViewAction::make(),
-                Action::make('view result')
-                    ->label('View on Speedtest.net')
-                    ->url(fn (Result $record): string => $record->url)
-                    ->openUrlInNewTab(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Action::make('view result')
+                        ->label('View on Speedtest.net')
+                        ->icon('heroicon-o-link')
+                        ->url(fn (Result $record): string => $record->url)
+                        ->openUrlInNewTab(),
+                    // Tables\Actions\ViewAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
