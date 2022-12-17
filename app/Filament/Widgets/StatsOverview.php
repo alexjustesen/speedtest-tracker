@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
 
@@ -12,8 +13,11 @@ class StatsOverview extends BaseWidget
     {
         $result = Result::latest()->first();
 
+        $settings = new GeneralSettings();
+
         return [
             Card::make('Latest download', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->download)).'ps' : 'n/a')
+                ->description('Tested at: '.optional($result)->created_at->timezone($settings->timezone)->format($settings->time_format))
                 ->icon('heroicon-o-download'),
             Card::make('Latest upload', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->upload)).'ps' : 'n/a')
                 ->icon('heroicon-o-upload'),
