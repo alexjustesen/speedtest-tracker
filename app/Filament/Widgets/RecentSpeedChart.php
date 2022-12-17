@@ -78,15 +78,4 @@ class RecentSpeedChart extends LineChartWidget
             'labels' => $results->map(fn ($item) => $item->created_at->timezone($settings->timezone)->format('M d - G:i')),
         ];
     }
-
-    protected static ?array $options = [
-        'plugins' => [
-            //
-        ],
-        'scales' => [
-            'y' => [
-                'min' => 0,
-            ],
-        ],
-    ];
 }
