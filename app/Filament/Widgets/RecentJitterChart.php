@@ -12,6 +12,8 @@ class RecentJitterChart extends LineChartWidget
 
     protected static ?string $maxHeight = '300px';
 
+    public ?string $filter = '24h';
+
     protected function getHeading(): string
     {
         return 'Jitter (ms)';
@@ -20,7 +22,7 @@ class RecentJitterChart extends LineChartWidget
     protected function getFilters(): ?array
     {
         return [
-            'today' => 'Today',
+            '24h' => 'Last 24h',
             'week' => 'Last week',
             'month' => 'Last month',
         ];
@@ -28,36 +30,19 @@ class RecentJitterChart extends LineChartWidget
 
     protected function getData(): array
     {
-        $range = [];
-
         $settings = new GeneralSettings();
-
-        switch ($this->filter) {
-            case 'today':
-                $range = [
-                    ['created_at', '>=', now()->startOfDay()],
-                    ['created_at', '<=', now()],
-                ];
-                break;
-
-            case 'week':
-                $range = [
-                    ['created_at', '>=', now()->subWeek()],
-                    ['created_at', '<=', now()],
-                ];
-                break;
-
-            case 'month':
-                $range = [
-                    ['created_at', '>=', now()->subMonth()],
-                    ['created_at', '<=', now()],
-                ];
-                break;
-        }
 
         $results = Result::query()
             ->select(['data', 'created_at'])
-            ->where($range)
+            ->when($this->filter == '24h', function ($query) {
+                $query->where('created_at', '>=', now()->subDay());
+            })
+            ->when($this->filter == 'week', function ($query) {
+                $query->where('created_at', '>=', now()->subWeek());
+            })
+            ->when($this->filter == 'month', function ($query) {
+                $query->where('created_at', '>=', now()->subMonth());
+            })
             ->get();
 
         return [
