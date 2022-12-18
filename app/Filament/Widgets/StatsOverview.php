@@ -17,7 +17,7 @@ class StatsOverview extends BaseWidget
 
         return [
             Card::make('Latest download', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->download)).'ps' : 'n/a')
-                ->description('Tested at: '.optional($result)->created_at->timezone($settings->timezone)->format($settings->time_format))
+                ->description(! blank($result) ? 'Tested at: '.$result->created_at->timezone($settings->timezone)->format($settings->time_format) : 'No tests')
                 ->icon('heroicon-o-download'),
             Card::make('Latest upload', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->upload)).'ps' : 'n/a')
                 ->icon('heroicon-o-upload'),
