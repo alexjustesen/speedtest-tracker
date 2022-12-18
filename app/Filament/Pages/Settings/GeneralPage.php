@@ -72,6 +72,7 @@ class GeneralPage extends SettingsPage
                                     ->helperText('Leave empty to let the system pick the best server.')
                                     ->nullable()
                                     ->multiple()
+                                    ->maxItems(10)
                                     ->searchable()
                                     ->getSearchResultsUsing(function (string $search) {
                                         $url = "https://www.speedtest.net/api/js/servers?engine=js&search={$search}&https_functional=true&limit=10";
