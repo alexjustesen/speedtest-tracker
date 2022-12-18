@@ -30,15 +30,37 @@ class ResultResource extends Resource
                 TextColumn::make('id')
                     ->label('ID'),
                 IconColumn::make('scheduled')
-                    ->boolean(),
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 ViewColumn::make('download')
                     ->view('tables.columns.bits-column'),
                 ViewColumn::make('upload')
                     ->view('tables.columns.bits-column'),
-                TextColumn::make('ping'),
+                TextColumn::make('ping')
+                    ->toggleable(),
+                TextColumn::make('download_jitter')
+                    ->getStateUsing(function (Result $record): string|null {
+                        return json_decode($record->data, true)['download']['latency']['jitter'] ?? null;
+                    })
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+                TextColumn::make('upload_jitter')
+                    ->getStateUsing(function (Result $record): string|null {
+                        return json_decode($record->data, true)['upload']['latency']['jitter'] ?? null;
+                    })
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+                TextColumn::make('ping_jitter')
+                    ->getStateUsing(function (Result $record): string|null {
+                        return json_decode($record->data, true)['ping']['jitter'] ?? null;
+                    })
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 ViewColumn::make('server_id')
                     ->label('Server ID')
-                    ->view('tables.columns.server-column'),
+                    ->view('tables.columns.server-column')
+                    ->toggleable(),
                 TextColumn::make('created_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
                     ->timezone($settings->timezone ?? 'UTC'),
@@ -47,12 +69,15 @@ class ResultResource extends Resource
                 //
             ])
             ->actions([
-                // Tables\Actions\ViewAction::make(),
-                Action::make('view result')
-                    ->label('View on Speedtest.net')
-                    ->url(fn (Result $record): string => $record->url)
-                    ->openUrlInNewTab(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Action::make('view result')
+                        ->label('View on Speedtest.net')
+                        ->icon('heroicon-o-link')
+                        ->url(fn (Result $record): string => $record->url)
+                        ->openUrlInNewTab(),
+                    // Tables\Actions\ViewAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
