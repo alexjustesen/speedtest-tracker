@@ -25,7 +25,8 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
     public function __construct(
         public array|null $speedtest = null,
         public bool $scheduled = false
-    ) {}
+    ) {
+    }
 
     /**
      * Execute the job.
