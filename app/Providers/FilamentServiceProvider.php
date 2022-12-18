@@ -32,7 +32,7 @@ class FilamentServiceProvider extends ServiceProvider
             return true;
         });
 
-        FilamentVersions::addItem('Speedtest Tracker', 'v0.8.0');
+        FilamentVersions::addItem('Speedtest Tracker', 'v0.8.1');
 
         Filament::serving(function () {
             Filament::registerNavigationGroups([
