@@ -262,7 +262,7 @@ return [
     |
     */
 
-    'favicon' => '/img/speedtest-tracker-icon.png',
+    'favicon' => env('app.url').'/img/speedtest-tracker-icon.png',
 
     /*
     |--------------------------------------------------------------------------
