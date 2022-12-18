@@ -10,7 +10,7 @@ class GeneralSettings extends Settings
 
     public ?string $speedtest_schedule;
 
-    /** @var string[]|null */
+    /** @var string[] */
     public $speedtest_server;
 
     public string $site_name;
