@@ -45,6 +45,15 @@ if (! function_exists('formatBytesToBits')) {
     }
 }
 
+if (! function_exists('percentChange')) {
+    function percentChange(float $dividend, float $divisor, int $precision = 0): float
+    {
+        $quotient = ($dividend - $divisor) / $divisor;
+
+        return number_format(round($quotient * 100, $precision), $precision);
+    }
+}
+
 if (! function_exists('absoluteDownloadThresholdFailed')) {
     function absoluteDownloadThresholdFailed(float $threshold, float $download): bool
     {
