@@ -7,6 +7,7 @@ use App\Filament\Widgets\RecentPingChart;
 use App\Filament\Widgets\RecentSpeedChart;
 use App\Filament\Widgets\StatsOverview;
 use App\Jobs\ExecSpeedtest;
+use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Filament\Notifications\Notification;
 use Filament\Pages\Actions\Action;
@@ -14,7 +15,28 @@ use Filament\Pages\Dashboard as BasePage;
 
 class Dashboard extends BasePage
 {
+    public string $lastResult = 'never';
+
+    public int $resultsCount;
+
     protected static string $view = 'filament.pages.dashboard';
+
+    public function mount()
+    {
+        $this->resultsCount = Result::count();
+
+        if ($this->resultsCount) {
+            $result = Result::latest()
+                ->first();
+
+            $settings = new GeneralSettings();
+
+            $this->lastResult = $result->created_at
+                    ->timezone($settings->timezone)
+                    ->format($settings->time_format);
+        }
+
+    }
 
     protected function getActions(): array
     {
@@ -27,8 +49,22 @@ class Dashboard extends BasePage
 
     public function getHeaderWidgets(): array
     {
+        if (! $this->resultsCount) {
+            return [];
+        }
+
         return [
             StatsOverview::class,
+        ];
+    }
+
+    public function getFooterWidgets(): array
+    {
+        if (! $this->resultsCount) {
+            return [];
+        }
+
+        return [
             RecentSpeedChart::class,
             RecentPingChart::class,
             RecentJitterChart::class,
