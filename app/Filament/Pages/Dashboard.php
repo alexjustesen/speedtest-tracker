@@ -15,20 +15,27 @@ use Filament\Pages\Dashboard as BasePage;
 
 class Dashboard extends BasePage
 {
-    public string $lastResult;
+    public string $lastResult = 'never';
+
+    public int $resultsCount;
 
     protected static string $view = 'filament.pages.dashboard';
 
     public function mount()
     {
-        $result = Result::latest()
-            ->first();
+        $this->resultsCount = Result::count();
 
-        $settings = new GeneralSettings();
+        if ($this->resultsCount) {
+            $result = Result::latest()
+                ->first();
 
-        $this->lastResult = $result
-            ? $result->created_at->timezone($settings->timezone)->format($settings->time_format)
-            : 'never';
+            $settings = new GeneralSettings();
+
+            $this->lastResult = $result->created_at
+                    ->timezone($settings->timezone)
+                    ->format($settings->time_format);
+        }
+
     }
 
     protected function getActions(): array
@@ -42,6 +49,10 @@ class Dashboard extends BasePage
 
     public function getHeaderWidgets(): array
     {
+        if (! $this->resultsCount) {
+            return [];
+        }
+
         return [
             StatsOverview::class,
         ];
@@ -49,6 +60,10 @@ class Dashboard extends BasePage
 
     public function getFooterWidgets(): array
     {
+        if (! $this->resultsCount) {
+            return [];
+        }
+
         return [
             RecentSpeedChart::class,
             RecentPingChart::class,
