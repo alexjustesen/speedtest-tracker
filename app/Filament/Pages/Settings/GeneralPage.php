@@ -10,6 +10,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
+use Illuminate\Support\Facades\Http;
 use Squire\Models\Timezone;
 
 class GeneralPage extends SettingsPage
@@ -66,10 +67,28 @@ class GeneralPage extends SettingsPage
                                     ->helperText('Leave empty to disable the schedule. You can also use the cron expression generator [HERE](https://crontab.cronhub.io/) to help you make schedules.')
                                     ->nullable()
                                     ->columnSpan(1),
-                                TextInput::make('speedtest_server')
+                                Select::make('speedtest_server')
+                                    ->label('Speedtest server ID')
                                     ->helperText('Leave empty to let the system pick the best server.')
                                     ->nullable()
-                                    ->columnSpan(1),
+                                    ->multiple()
+                                    ->maxItems(10)
+                                    ->searchable()
+                                    ->getSearchResultsUsing(function (string $search) {
+                                        $url = "https://www.speedtest.net/api/js/servers?engine=js&search={$search}&https_functional=true&limit=10";
+
+                                        $response = Http::get($url);
+
+                                        $options = $response->collect()->map(function ($item) {
+                                            return [
+                                                'id' => $item['id'],
+                                                'name' => $item['id'].': '.$item['name'].' ('.$item['sponsor'].')',
+                                            ];
+                                        });
+
+                                        return $options->pluck('name', 'id');
+                                    })
+                                    ->columnSpan(2),
                             ])
                             ->compact()
                             ->columns([

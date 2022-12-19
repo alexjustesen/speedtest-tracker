@@ -37,10 +37,18 @@ class Dashboard extends BasePage
 
     public function queueSpeedtest(GeneralSettings $settings)
     {
+        $ookla_server_id = null;
+
+        if (! blank($settings->speedtest_server)) {
+            $item = array_rand($settings->speedtest_server);
+
+            $ookla_server_id = $settings->speedtest_server[$item];
+        }
+
         $speedtest = [
             'enabled' => ! blank($settings->speedtest_schedule),
             'schedule' => optional($settings)->speedtest_schedule,
-            'ookla_server_id' => optional($settings)->speedtest_server,
+            'ookla_server_id' => $ookla_server_id,
         ];
 
         ExecSpeedtest::dispatch(speedtest: $speedtest, scheduled: false);
