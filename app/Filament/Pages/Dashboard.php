@@ -28,7 +28,7 @@ class Dashboard extends BasePage
 
         $this->lastResult = $result
             ? $result->created_at->timezone($settings->timezone)->format($settings->time_format)
-            :'never';
+            : 'never';
     }
 
     protected function getActions(): array
