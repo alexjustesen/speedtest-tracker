@@ -12,6 +12,7 @@ use App\Settings\GeneralSettings;
 use Filament\Notifications\Notification;
 use Filament\Pages\Actions\Action;
 use Filament\Pages\Dashboard as BasePage;
+use Illuminate\Contracts\View\View;
 
 class Dashboard extends BasePage
 {
@@ -21,7 +22,7 @@ class Dashboard extends BasePage
 
     protected static string $view = 'filament.pages.dashboard';
 
-    public function mount()
+    public function render(): View
     {
         $this->resultsCount = Result::count();
 
@@ -36,6 +37,8 @@ class Dashboard extends BasePage
                     ->format($settings->time_format);
         }
 
+        return view(static::$view, $this->getViewData())
+            ->layout(static::$layout, $this->getLayoutData());
     }
 
     protected function getActions(): array
