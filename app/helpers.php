@@ -46,7 +46,7 @@ if (! function_exists('formatBytesToBits')) {
 }
 
 if (! function_exists('percentChange')) {
-    function percentChange(float $dividend, float $divisor, int $precision = 0): float
+    function percentChange(float $dividend, float $divisor, int $precision = 0): string
     {
         $quotient = ($dividend - $divisor) / $divisor;
 
