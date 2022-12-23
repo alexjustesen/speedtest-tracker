@@ -1,3 +1,6 @@
+> **Warning**
+> Wow what a couple of months it's been, thank you everyone for the support on my little side project. It's the holidays and I'm planning on taking a little time off from Dec. 23 - Jan 2nd so support will likely be slow or non-existent. I hope everyone has a happy holidays, see you all in 2023!
+
 ## Speedtest Tracker
 
 Speedtest Tracker is a self-hosted internet performance tracking application that runs speedtest checks against Ookla's Speedtest service.
