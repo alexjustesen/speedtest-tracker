@@ -45,6 +45,21 @@ if (! function_exists('formatBytesToBits')) {
     }
 }
 
+if (! function_exists('roundBytesToMegabits')) {
+    function roundBytesToMegabits(int $bytes)
+    {
+        if ($bytes > 0) {
+            $bits = formatBytesToBits($bytes);
+            $megabit_exponent = 2;
+            $precision = 2;
+
+            return round($bits / pow(1000, $megabit_exponent), $precision);
+        }
+
+        return 0;
+    }
+}
+
 if (! function_exists('percentChange')) {
     function percentChange(float $dividend, float $divisor, int $precision = 0): string
     {
