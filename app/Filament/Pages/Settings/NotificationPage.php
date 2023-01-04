@@ -100,7 +100,8 @@ class NotificationPage extends SettingsPage
                                     ->label('Recipients')
                                     ->schema([
                                         TextInput::make('email_address')
-                                            ->email(),
+                                            ->email()
+                                            ->required(),
                                     ])
                                     ->hidden(fn (Closure $get) => $get('mail_enabled') !== true)
                                     ->columnSpan(['md' => 2]),
@@ -151,7 +152,7 @@ class NotificationPage extends SettingsPage
     {
         $notificationSettings = new (NotificationSettings::class);
 
-        if (count($notificationSettings->mail_recipients)) {
+        if (! empty($notificationSettings->mail_recipients)) {
             foreach ($notificationSettings->mail_recipients as $recipient) {
                 Mail::to($recipient)
                     ->send(new Test());
