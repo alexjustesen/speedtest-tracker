@@ -2,8 +2,8 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\InvokableRule;
 use Cron\CronExpression;
+use Illuminate\Contracts\Validation\InvokableRule;
 
 class ValidCronExpression implements InvokableRule
 {
@@ -19,8 +19,8 @@ class ValidCronExpression implements InvokableRule
     {
         $is_valid = CronExpression::isValidExpression($value);
 
-        if (!$is_valid) {
-            $fail("Cron expression is not valid");
+        if (! $is_valid) {
+            $fail('Cron expression is not valid');
         }
     }
 }
