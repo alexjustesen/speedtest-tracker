@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 9.44.0.
+ * Generated for Laravel 9.46.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -2577,6 +2577,19 @@
                         return $instance->getClassComponentAliases();
         }
                     /**
+         * Register a new anonymous component path.
+         *
+         * @param string $path
+         * @param string|null $prefix
+         * @return void 
+         * @static 
+         */ 
+        public static function anonymousComponentPath($path, $prefix = null)
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
+                        $instance->anonymousComponentPath($path, $prefix);
+        }
+                    /**
          * Register an anonymous component namespace.
          *
          * @param string $directory
@@ -2601,6 +2614,17 @@
         {
                         /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         $instance->componentNamespace($namespace, $prefix);
+        }
+                    /**
+         * Get the registered anonymous component paths.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getAnonymousComponentPaths()
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
+                        return $instance->getAnonymousComponentPaths();
         }
                     /**
          * Get the registered anonymous component namespaces.
@@ -3559,6 +3583,7 @@
      * 
      *
      * @see \Illuminate\Cache\CacheManager
+     * @mixin \Illuminate\Cache\Repository
      */ 
         class Cache {
                     /**
@@ -3671,7 +3696,7 @@
                     /**
          * Determine if an item exists in the cache.
          *
-         * @param string $key
+         * @param array|string $key
          * @return bool 
          * @static 
          */ 
@@ -3695,9 +3720,10 @@
                     /**
          * Retrieve an item from the cache by key.
          *
+         * @template TCacheValue
          * @param array|string $key
-         * @param mixed $default
-         * @return mixed 
+         * @param \Illuminate\Cache\TCacheValue|\Illuminate\Cache\(\Closure():  TCacheValue)  $default
+         * @return \Illuminate\Cache\(TCacheValue is null ? mixed : TCacheValue)
          * @static 
          */ 
         public static function get($key, $default = null)
@@ -3739,9 +3765,10 @@
                     /**
          * Retrieve an item from the cache and delete it.
          *
-         * @param string $key
-         * @param mixed $default
-         * @return mixed 
+         * @template TCacheValue
+         * @param array|string $key
+         * @param \Illuminate\Cache\TCacheValue|\Illuminate\Cache\(\Closure():  TCacheValue)  $default
+         * @return \Illuminate\Cache\(TCacheValue is null ? mixed : TCacheValue)
          * @static 
          */ 
         public static function pull($key, $default = null)
@@ -3870,10 +3897,11 @@
                     /**
          * Get an item from the cache, or execute the given Closure and store the result.
          *
+         * @template TCacheValue
          * @param string $key
          * @param \Closure|\DateTimeInterface|\DateInterval|int|null $ttl
-         * @param \Closure $callback
-         * @return mixed 
+         * @param \Closure():  TCacheValue  $callback
+         * @return \Illuminate\Cache\TCacheValue 
          * @static 
          */ 
         public static function remember($key, $ttl, $callback)
@@ -3884,9 +3912,10 @@
                     /**
          * Get an item from the cache, or execute the given Closure and store the result forever.
          *
+         * @template TCacheValue
          * @param string $key
-         * @param \Closure $callback
-         * @return mixed 
+         * @param \Closure():  TCacheValue  $callback
+         * @return \Illuminate\Cache\TCacheValue 
          * @static 
          */ 
         public static function sear($key, $callback)
@@ -3897,9 +3926,10 @@
                     /**
          * Get an item from the cache, or execute the given Closure and store the result forever.
          *
+         * @template TCacheValue
          * @param string $key
-         * @param \Closure $callback
-         * @return mixed 
+         * @param \Closure():  TCacheValue  $callback
+         * @return \Illuminate\Cache\TCacheValue 
          * @static 
          */ 
         public static function rememberForever($key, $callback)
@@ -7610,18 +7640,18 @@
      * @method static \Illuminate\Http\Client\PendingRequest withMiddleware(callable $middleware)
      * @method static \Illuminate\Http\Client\PendingRequest beforeSending(callable $callback)
      * @method static \Illuminate\Http\Client\PendingRequest throw(callable|null $callback = null)
-     * @method static \Illuminate\Http\Client\PendingRequest throwIf(callable|bool $condition)
+     * @method static \Illuminate\Http\Client\PendingRequest throwIf(callable|bool $condition, callable|null $throwCallback = null)
      * @method static \Illuminate\Http\Client\PendingRequest throwUnless(bool $condition)
      * @method static \Illuminate\Http\Client\PendingRequest dump()
      * @method static \Illuminate\Http\Client\PendingRequest dd()
-     * @method static \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface get(string $url, array|string|null $query = null)
-     * @method static \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface head(string $url, array|string|null $query = null)
-     * @method static \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface post(string $url, array $data = [])
-     * @method static \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface patch(string $url, array $data = [])
-     * @method static \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface put(string $url, array $data = [])
-     * @method static \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface delete(string $url, array $data = [])
+     * @method static \Illuminate\Http\Client\Response get(string $url, array|string|null $query = null)
+     * @method static \Illuminate\Http\Client\Response head(string $url, array|string|null $query = null)
+     * @method static \Illuminate\Http\Client\Response post(string $url, array $data = [])
+     * @method static \Illuminate\Http\Client\Response patch(string $url, array $data = [])
+     * @method static \Illuminate\Http\Client\Response put(string $url, array $data = [])
+     * @method static \Illuminate\Http\Client\Response delete(string $url, array $data = [])
      * @method static array pool(callable $callback)
-     * @method static \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface send(string $method, string $url, array $options = [])
+     * @method static \Illuminate\Http\Client\Response send(string $method, string $url, array $options = [])
      * @method static \GuzzleHttp\Client buildClient()
      * @method static \GuzzleHttp\Client createClient(\GuzzleHttp\HandlerStack $handlerStack)
      * @method static \GuzzleHttp\HandlerStack buildHandlerStack()
@@ -12863,6 +12893,7 @@
      * @method static \Illuminate\Routing\RouteRegistrar whereAlpha(array|string $parameters)
      * @method static \Illuminate\Routing\RouteRegistrar whereAlphaNumeric(array|string $parameters)
      * @method static \Illuminate\Routing\RouteRegistrar whereNumber(array|string $parameters)
+     * @method static \Illuminate\Routing\RouteRegistrar whereUlid(array|string $parameters)
      * @method static \Illuminate\Routing\RouteRegistrar whereUuid(array|string $parameters)
      * @method static \Illuminate\Routing\RouteRegistrar whereIn(array|string $parameters, array $values)
      * @method static \Illuminate\Routing\RouteRegistrar as(string $value)
@@ -17535,7 +17566,7 @@
                     /**
          * Use the given callback to resolve attributes for preload tags.
          *
-         * @param \Illuminate\Foundation\(callable(string,  string, ?array, ?array): array)|array  $attributes
+         * @param \Illuminate\Foundation\(callable(string,  string, ?array, ?array): array|false)|array|false  $attributes
          * @return \Illuminate\Foundation\Vite 
          * @static 
          */ 
@@ -23015,7 +23046,7 @@ namespace  {
                 /**
              * Put the query's results in random order.
              *
-             * @param string $seed
+             * @param string|int $seed
              * @return \Illuminate\Database\Query\Builder 
              * @static 
              */ 
