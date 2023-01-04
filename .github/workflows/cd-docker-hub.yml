@@ -52,5 +52,5 @@ jobs:
           context: .
           push: true
           platforms: ${{ env.PLATFORMS }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ajustesen/speedtest-tracker:latest
           labels: ${{ steps.meta.outputs.labels }}
