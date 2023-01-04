@@ -23,9 +23,6 @@ env:
 jobs:
   build_and_push_image:
     runs-on: ubuntu-22.04
-    permissions:
-      contents: read
-      packages: write
 
     steps:
       - name: Checkout repository
