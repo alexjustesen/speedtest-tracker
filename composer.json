@@ -6,7 +6,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "amvisor/filament-failed-jobs": "^0.6.0",
         "awcodes/filament-versions": "^1.0",
         "doctrine/dbal": "^3.4",
         "dragonmantank/cron-expression": "^3.3",
@@ -17,7 +16,6 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "ryangjchandler/filament-log": "^0.2.0",
         "spatie/laravel-settings": "^2.4",
         "squirephp/timezones-en": "^3.3"
     },

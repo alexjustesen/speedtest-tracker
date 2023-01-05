@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0584afc1f7ba6574c9b8496afbdfcdf0",
+    "content-hash": "70d6d15dfcf2270a421d9b861479fc3c",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -73,59 +73,6 @@
                 "source": "https://github.com/akaunting/laravel-money/tree/3.1.2"
             },
             "time": "2022-07-27T08:16:36+00:00"
-        },
-        {
-            "name": "amvisor/filament-failed-jobs",
-            "version": "0.6.1",
-            "source": {
-                "type": "git",
-                "url": "git@gitlab.com:amvisor/filament-failed-jobs.git",
-                "reference": "73907325f5be98e5117f302c7790ecc32218dc40"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/amvisor%2Ffilament-failed-jobs/repository/archive.zip?sha=73907325f5be98e5117f302c7790ecc32218dc40",
-                "reference": "73907325f5be98e5117f302c7790ecc32218dc40",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^2.0",
-                "invaders-xx/filament-jsoneditor": "^0.4.6",
-                "php": "^8.0.2",
-                "spatie/laravel-package-tools": "^1.9.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Amvisor\\FilamentFailedJobs\\FilamentFailedJobsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Amvisor\\FilamentFailedJobs\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Herbert Maschke",
-                    "email": "thyseus@pm.me",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A simplistics failed jobs viewer for your Filament apps.",
-            "homepage": "https://gitlab.com/amvisor/filament-failed-jobs",
-            "keywords": [
-                "filament",
-                "filament-failed-jobs",
-                "laravel"
-            ],
-            "time": "2022-12-08T11:57:26+00:00"
         },
         {
             "name": "awcodes/filament-versions",
@@ -1207,16 +1154,16 @@
         },
         {
             "name": "filament/filament",
-            "version": "v2.16.59",
+            "version": "v2.16.60",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/admin.git",
-                "reference": "3b3e6cff81aa34900b78f1fd1ee7b9f52f146c6d"
+                "reference": "438770837a4cd3dc894041a615ae2b14003105ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/admin/zipball/3b3e6cff81aa34900b78f1fd1ee7b9f52f146c6d",
-                "reference": "3b3e6cff81aa34900b78f1fd1ee7b9f52f146c6d",
+                "url": "https://api.github.com/repos/filamentphp/admin/zipball/438770837a4cd3dc894041a615ae2b14003105ee",
+                "reference": "438770837a4cd3dc894041a615ae2b14003105ee",
                 "shasum": ""
             },
             "require": {
@@ -1266,20 +1213,20 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2022-12-31T11:48:02+00:00"
+            "time": "2023-01-05T14:32:19+00:00"
         },
         {
             "name": "filament/forms",
-            "version": "v2.16.59",
+            "version": "v2.16.60",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/forms.git",
-                "reference": "5b419b4377547a670c046d0414c29764beb6f433"
+                "reference": "cda07e7df26d076f7814c8c1812ccf893bcbbe99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/forms/zipball/5b419b4377547a670c046d0414c29764beb6f433",
-                "reference": "5b419b4377547a670c046d0414c29764beb6f433",
+                "url": "https://api.github.com/repos/filamentphp/forms/zipball/cda07e7df26d076f7814c8c1812ccf893bcbbe99",
+                "reference": "cda07e7df26d076f7814c8c1812ccf893bcbbe99",
                 "shasum": ""
             },
             "require": {
@@ -1324,11 +1271,11 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2022-12-31T11:47:56+00:00"
+            "time": "2023-01-05T14:32:14+00:00"
         },
         {
             "name": "filament/notifications",
-            "version": "v2.16.59",
+            "version": "v2.16.60",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/notifications.git",
@@ -1381,7 +1328,7 @@
         },
         {
             "name": "filament/spatie-laravel-settings-plugin",
-            "version": "v2.16.59",
+            "version": "v2.16.60",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/spatie-laravel-settings-plugin.git",
@@ -1428,7 +1375,7 @@
         },
         {
             "name": "filament/support",
-            "version": "v2.16.59",
+            "version": "v2.16.60",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/support.git",
@@ -1478,16 +1425,16 @@
         },
         {
             "name": "filament/tables",
-            "version": "v2.16.59",
+            "version": "v2.16.60",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/tables.git",
-                "reference": "2f381dff811c9be55ef1bee2434e542121b58c41"
+                "reference": "83b0ff91531c67a925e39cf362b12f83b5714a1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/tables/zipball/2f381dff811c9be55ef1bee2434e542121b58c41",
-                "reference": "2f381dff811c9be55ef1bee2434e542121b58c41",
+                "url": "https://api.github.com/repos/filamentphp/tables/zipball/83b0ff91531c67a925e39cf362b12f83b5714a1d",
+                "reference": "83b0ff91531c67a925e39cf362b12f83b5714a1d",
                 "shasum": ""
             },
             "require": {
@@ -1530,7 +1477,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2022-12-31T11:47:55+00:00"
+            "time": "2023-01-05T14:32:13+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -2042,80 +1989,6 @@
                 "source": "https://github.com/influxdata/influxdb-client-php/tree/2.9.0"
             },
             "time": "2022-07-29T17:08:15+00:00"
-        },
-        {
-            "name": "invaders-xx/filament-jsoneditor",
-            "version": "0.4.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/invaders-xx/filament-jsoneditor.git",
-                "reference": "8677aac557d40a247bf556a9ff60357ef37e169f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/invaders-xx/filament-jsoneditor/zipball/8677aac557d40a247bf556a9ff60357ef37e169f",
-                "reference": "8677aac557d40a247bf556a9ff60357ef37e169f",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^2.0",
-                "illuminate/contracts": "^8.74|^9.0",
-                "php": "^8.0",
-                "spatie/laravel-package-tools": "^1.9.2"
-            },
-            "require-dev": {
-                "nunomaduro/collision": "^6.0",
-                "nunomaduro/larastan": "^2.0.1",
-                "orchestra/testbench": "^7.0",
-                "pestphp/pest": "^1.21",
-                "pestphp/pest-plugin-laravel": "^1.1",
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.5",
-                "spatie/laravel-ray": "^1.26"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "InvadersXX\\FilamentJsoneditor\\FilamentJsoneditorServiceProvider"
-                    ],
-                    "aliases": {
-                        "FilamentJsoneditor": "InvadersXX\\FilamentJsoneditor\\Facades\\FilamentJsoneditor"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "InvadersXX\\FilamentJsoneditor\\": "src",
-                    "InvadersXX\\FilamentJsoneditor\\Database\\Factories\\": "database/factories"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "David Vincent",
-                    "email": "envahisseur@gmail.com",
-                    "role": "Owner"
-                }
-            ],
-            "description": "Filament's JSON Editor input",
-            "homepage": "https://github.com/invaders-xx/filament-jsoneditor",
-            "keywords": [
-                "filament-jsoneditor",
-                "invaders-xx",
-                "jsoneditor",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/invaders-xx/filament-jsoneditor/issues",
-                "source": "https://github.com/invaders-xx/filament-jsoneditor/tree/0.4.6"
-            },
-            "time": "2022-09-08T07:25:37+00:00"
         },
         {
             "name": "laravel/framework",
@@ -4510,85 +4383,6 @@
                 }
             ],
             "time": "2022-09-02T11:04:28+00:00"
-        },
-        {
-            "name": "ryangjchandler/filament-log",
-            "version": "v0.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ryangjchandler/filament-log.git",
-                "reference": "9019b4fb3de524d03bfd07e227809a92e43807f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ryangjchandler/filament-log/zipball/9019b4fb3de524d03bfd07e227809a92e43807f6",
-                "reference": "9019b4fb3de524d03bfd07e227809a92e43807f6",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^2.0",
-                "illuminate/contracts": "^9.0",
-                "php": "^8.0.2",
-                "spatie/laravel-package-tools": "^1.9.2"
-            },
-            "require-dev": {
-                "nunomaduro/collision": "^6.0",
-                "nunomaduro/larastan": "^2.0.1",
-                "orchestra/testbench": "^7.0",
-                "pestphp/pest": "^1.21",
-                "pestphp/pest-plugin-laravel": "^1.1",
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.5",
-                "spatie/laravel-ray": "^1.26"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "RyanChandler\\FilamentLog\\FilamentLogServiceProvider"
-                    ],
-                    "aliases": {
-                        "FilamentLog": "RyanChandler\\FilamentLog\\Facades\\FilamentLog"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "RyanChandler\\FilamentLog\\": "src",
-                    "RyanChandler\\FilamentLog\\Database\\Factories\\": "database/factories"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ryan Chandler",
-                    "email": "support@ryangjchandler.co.uk",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A simplistics log viewer for your Filament apps.",
-            "homepage": "https://github.com/ryangjchandler/filament-log",
-            "keywords": [
-                "filament-log",
-                "laravel",
-                "ryangjchandler"
-            ],
-            "support": {
-                "issues": "https://github.com/ryangjchandler/filament-log/issues",
-                "source": "https://github.com/ryangjchandler/filament-log/tree/v0.2.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/ryangjchandler",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-11-10T18:09:52+00:00"
         },
         {
             "name": "spatie/invade",
