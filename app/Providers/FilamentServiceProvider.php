@@ -39,7 +39,6 @@ class FilamentServiceProvider extends ServiceProvider
             // if this fails it's because the migration doesn't exist so it can be skipped
         }
 
-
         FilamentVersions::addItem('Speedtest Tracker', 'v'.config('speedtest.build_version'));
 
         Filament::serving(function () {
