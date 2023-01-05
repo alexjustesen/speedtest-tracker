@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0584afc1f7ba6574c9b8496afbdfcdf0",
+    "content-hash": "a3a5170b9411bacc50496f723aaf4c6c",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -4510,85 +4510,6 @@
                 }
             ],
             "time": "2022-09-02T11:04:28+00:00"
-        },
-        {
-            "name": "ryangjchandler/filament-log",
-            "version": "v0.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ryangjchandler/filament-log.git",
-                "reference": "9019b4fb3de524d03bfd07e227809a92e43807f6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ryangjchandler/filament-log/zipball/9019b4fb3de524d03bfd07e227809a92e43807f6",
-                "reference": "9019b4fb3de524d03bfd07e227809a92e43807f6",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^2.0",
-                "illuminate/contracts": "^9.0",
-                "php": "^8.0.2",
-                "spatie/laravel-package-tools": "^1.9.2"
-            },
-            "require-dev": {
-                "nunomaduro/collision": "^6.0",
-                "nunomaduro/larastan": "^2.0.1",
-                "orchestra/testbench": "^7.0",
-                "pestphp/pest": "^1.21",
-                "pestphp/pest-plugin-laravel": "^1.1",
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.5",
-                "spatie/laravel-ray": "^1.26"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "RyanChandler\\FilamentLog\\FilamentLogServiceProvider"
-                    ],
-                    "aliases": {
-                        "FilamentLog": "RyanChandler\\FilamentLog\\Facades\\FilamentLog"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "RyanChandler\\FilamentLog\\": "src",
-                    "RyanChandler\\FilamentLog\\Database\\Factories\\": "database/factories"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ryan Chandler",
-                    "email": "support@ryangjchandler.co.uk",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A simplistics log viewer for your Filament apps.",
-            "homepage": "https://github.com/ryangjchandler/filament-log",
-            "keywords": [
-                "filament-log",
-                "laravel",
-                "ryangjchandler"
-            ],
-            "support": {
-                "issues": "https://github.com/ryangjchandler/filament-log/issues",
-                "source": "https://github.com/ryangjchandler/filament-log/tree/v0.2.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/ryangjchandler",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-11-10T18:09:52+00:00"
         },
         {
             "name": "spatie/invade",
