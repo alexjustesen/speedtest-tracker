@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Settings\GeneralSettings;
 use Filament\Facades\Filament;
 use Filament\Navigation\NavigationItem;
 use FilamentVersions\Facades\FilamentVersions;
@@ -31,6 +32,12 @@ class FilamentServiceProvider extends ServiceProvider
         Logs::can(function (User $user) {
             return true;
         });
+
+        try {
+            config(['filament.brand' => app(GeneralSettings::class)->site_name ?? env('APP_NAME')]);
+        } catch (\Throwable $th) {
+            // if this fails it's because the migration doesn't exist so it can be skipped
+        }
 
         FilamentVersions::addItem('Speedtest Tracker', 'v'.config('speedtest.build_version'));
 
