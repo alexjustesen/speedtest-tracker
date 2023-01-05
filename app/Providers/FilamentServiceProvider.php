@@ -33,7 +33,7 @@ class FilamentServiceProvider extends ServiceProvider
             return true;
         });
 
-        config(['filament.brand' => app(GeneralSettings::class)->site_name]);
+        config(['filament.brand' => app(GeneralSettings::class)->site_name ?? env('APP_NAME')]);
 
         FilamentVersions::addItem('Speedtest Tracker', 'v'.config('speedtest.build_version'));
 
