@@ -59,7 +59,7 @@ class SendDataToInfluxDbV2 implements ShouldQueue
 
         $dataArray = [
             'name' => 'speedtest',
-            'tags' => null,
+            'tags' => $this->result->formatTagsForInfluxDB2(),
             'fields' => $this->result->formatForInfluxDB2(),
             'time' => strtotime($this->result->created_at),
         ];
