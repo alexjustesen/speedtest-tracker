@@ -55,6 +55,18 @@ class Result extends Model
     ];
 
     /**
+     * The tag attributes to be passed to influxdb
+     */
+    public function formatTagsForInfluxDB2(): array
+    {
+        return [
+            'server_id' => (int) $this->server_id,
+            'server_host' => $this->server_host,
+            'server_name' => $this->server_name,
+        ];
+    }
+
+    /**
      * The attributes to be passed to influxdb
      */
     public function formatForInfluxDB2()
