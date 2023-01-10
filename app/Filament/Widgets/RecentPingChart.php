@@ -57,7 +57,7 @@ class RecentPingChart extends LineChartWidget
                     'tension' => 0.4,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone($settings->timezone)->format('M d - G:i')),
+            'labels' => $results->map(fn ($item) => $item->created_at->format('M d - G:i')),
         ];
     }
 }

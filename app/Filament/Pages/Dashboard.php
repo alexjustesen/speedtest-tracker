@@ -26,6 +26,8 @@ class Dashboard extends BasePage
     {
         $this->resultsCount = Result::count();
 
+        // dd(date_default_timezone_get());
+
         if ($this->resultsCount) {
             $result = Result::latest()
                 ->first();
@@ -33,7 +35,7 @@ class Dashboard extends BasePage
             $settings = new GeneralSettings();
 
             $this->lastResult = $result->created_at
-                    ->timezone($settings->timezone)
+                    ->timezone(config('app.timezone'))
                     ->format($settings->time_format);
         }
 

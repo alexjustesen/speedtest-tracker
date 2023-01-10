@@ -17,8 +17,6 @@ class GeneralSettings extends Settings
 
     public string $time_format;
 
-    public string $timezone;
-
     public static function group(): string
     {
         return 'general';

@@ -12,7 +12,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Http;
-use Squire\Models\Timezone;
 
 class GeneralPage extends SettingsPage
 {
@@ -46,10 +45,6 @@ class GeneralPage extends SettingsPage
                                     ->maxLength(50)
                                     ->required()
                                     ->columnSpan(['md' => 2]),
-                                Select::make('timezone')
-                                    ->options(Timezone::all()->pluck('code', 'code'))
-                                    ->searchable()
-                                    ->required(),
                                 TextInput::make('time_format')
                                     ->helperText('Use [DateTime Format](https://www.php.net/manual/en/datetime.format.php) options to change the format of the datetime in views.')
                                     ->placeholder('M j, Y G:i:s')

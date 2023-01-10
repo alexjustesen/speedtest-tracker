@@ -16,8 +16,7 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "spatie/laravel-settings": "^2.4",
-        "squirephp/timezones-en": "^3.3"
+        "spatie/laravel-settings": "^2.4"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
