@@ -88,6 +88,15 @@ class GeneralPage extends SettingsPage
                                             ];
                                         });
 
+                                        if (! $options->count() && is_numeric($search)) {
+                                            $options = collect([
+                                                [
+                                                    'id' => $search,
+                                                    'name' => $search.': No server found, manually add this ID.',
+                                                ],
+                                            ]);
+                                        }
+
                                         return $options->pluck('name', 'id');
                                     })
                                     ->columnSpan(2),
