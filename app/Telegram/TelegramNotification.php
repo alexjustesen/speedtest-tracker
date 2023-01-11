@@ -45,17 +45,4 @@ class TelegramNotification extends Notification
                 ->to($notifiable->routes['telegram_chat_id'])
                 ->content($this->message);
     }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
 }
