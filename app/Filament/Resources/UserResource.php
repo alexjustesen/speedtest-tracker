@@ -41,8 +41,8 @@ class UserResource extends Resource
                     'password' => TextInput::make('password')
                         ->required()
                         ->password()
-                        ->dehydrateStateUsing(fn($state) => Hash::make($state))
-                        ->visible(fn($livewire) => $livewire instanceof CreateUser)
+                        ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                        ->visible(fn ($livewire) => $livewire instanceof CreateUser)
                         ->rule(Password::default()),
                     'new_password_group' => Group::make([
                         'new_password' => TextInput::make('new_password')
@@ -50,20 +50,20 @@ class UserResource extends Resource
                             ->label('New Password')
                             ->nullable()
                             ->rule(Password::default())
-                            ->visible(fn($livewire) => $livewire instanceof EditUser)
+                            ->visible(fn ($livewire) => $livewire instanceof EditUser)
                             ->dehydrated(false),
                         'new_password_confirmation' => TextInput::make('new_password_confirmation')
                             ->password()
                             ->label('Confirm New Password')
-                            ->rule('required', fn($get) => !!$get('new_password'))
+                            ->rule('required', fn ($get) => (bool) $get('new_password'))
                             ->same('new_password')
-                            ->visible(fn($livewire) => $livewire instanceof EditUser)
+                            ->visible(fn ($livewire) => $livewire instanceof EditUser)
                             ->dehydrated(false),
-                    ])
+                    ]),
                 ])->columnSpan(8),
                 'right' => Card::make([
                     'created_at' => Placeholder::make('created_at')
-                        ->content(fn($record) => $record?->created_at?->diffForHumans() ?? new HtmlString('&mdash;'))
+                        ->content(fn ($record) => $record?->created_at?->diffForHumans() ?? new HtmlString('&mdash;')),
                 ])->columnSpan(4),
             ])
             ->columns(12);
