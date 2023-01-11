@@ -4,8 +4,10 @@ namespace App\Filament\Pages\Settings;
 
 use App\Forms\Components\TestDatabaseNotification;
 use App\Forms\Components\TestMailNotification;
+use App\Forms\Components\TestTelegramNotification;
 use App\Mail\Test;
 use App\Settings\NotificationSettings;
+use App\Telegram\TelegramNotification;
 use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
@@ -113,6 +115,44 @@ class NotificationPage extends SettingsPage
                                 'default' => 1,
                                 'md' => 2,
                             ]),
+                        Section::make('Telegram')
+                            ->schema([
+                                Toggle::make('telegram_enabled')
+                                    ->label('Enable telegram notifications')
+                                    ->reactive()
+                                    ->columnSpan(2),
+                                Grid::make([
+                                    'default' => 1, ])
+                                ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true)
+                                ->schema([
+                                    Fieldset::make('Triggers')
+                                        ->schema([
+                                            Toggle::make('telegram_on_speedtest_run')
+                                                ->label('Notify on every speetest run')
+                                                ->columnSpan(2),
+                                            Toggle::make('telegram_on_threshold_failure')
+                                                ->label('Notify on threshold failures')
+                                                ->columnSpan(2),
+                                        ]),
+                                ]),
+                                Repeater::make('telegram_recipients')
+                                    ->label('Recipients')
+                                    ->schema([
+                                        TextInput::make('telegram_chat_id')
+                                        ->maxLength(50)
+                                        ->required()
+                                        ->columnSpan(['md' => 2]),
+                                    ])
+                                    ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true)
+                                    ->columnSpan(['md' => 2]),
+                                TestTelegramNotification::make('test channel')
+                                    ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true),
+                            ])
+                            ->compact()
+                            ->columns([
+                                'default' => 1,
+                                'md' => 2,
+                            ]),
                     ])
                     ->columnSpan([
                         'md' => 2,
@@ -165,6 +205,28 @@ class NotificationPage extends SettingsPage
         } else {
             Notification::make()
                 ->title('You need to add recipients to receive mail notifications.')
+                ->warning()
+                ->send();
+        }
+    }
+
+    public function sendTestTelegramNotification()
+    {
+        $notificationSettings = new (NotificationSettings::class);
+
+        if (count($notificationSettings->telegram_recipients)) {
+            foreach ($notificationSettings->telegram_recipients as $recipient) {
+                \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
+                ->notify(new TelegramNotification('Test notification channel *telegram*'));
+            }
+
+            Notification::make()
+                ->title('Test telegram notification sent.')
+                ->success()
+                ->send();
+        } else {
+            Notification::make()
+                ->title('You need to add recipients to receive telegram notifications.')
                 ->warning()
                 ->send();
         }
