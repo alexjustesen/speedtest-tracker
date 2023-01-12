@@ -15,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Database\Eloquent\Builder;
 
 class ResultResource extends Resource
 {
@@ -100,7 +101,7 @@ class ResultResource extends Resource
                 TextColumn::make('server')
                     ->getStateUsing(fn (Result $record): string|null => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
                     ->toggleable(),
-                IconColumn::make('is_successful')
+                IconColumn::make('successful')
                     ->boolean()
                     ->toggleable(),
                 IconColumn::make('scheduled')
@@ -134,7 +135,24 @@ class ResultResource extends Resource
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('scheduled')
+                    ->placeholder('-')
+                    ->trueLabel('Only scheduled speedtests')
+                    ->falseLabel('Only manual speedtests')
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('scheduled', true),
+                        false: fn (Builder $query) => $query->where('scheduled', false),
+                        blank: fn (Builder $query) => $query,
+                    ),
+                Tables\Filters\TernaryFilter::make('successful')
+                    ->placeholder('-')
+                    ->trueLabel('Only successful speedtests')
+                    ->falseLabel('Only failed speedtests')
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('successful', true),
+                        false: fn (Builder $query) => $query->where('successful', false),
+                        blank: fn (Builder $query) => $query,
+                    ),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
