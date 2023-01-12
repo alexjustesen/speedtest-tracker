@@ -101,7 +101,6 @@ class ResultResource extends Resource
                     ->getStateUsing(fn (Result $record): string|null => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
                     ->toggleable(),
                 IconColumn::make('is_successful')
-                    ->label('Successful')
                     ->boolean()
                     ->toggleable(),
                 IconColumn::make('scheduled')
