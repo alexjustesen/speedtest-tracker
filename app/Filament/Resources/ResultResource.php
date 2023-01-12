@@ -57,9 +57,8 @@ class ResultResource extends Resource
                     ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['ping']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault(),
-                ViewColumn::make('server_id')
-                    ->label('Server ID')
-                    ->view('tables.columns.server-column')
+                TextColumn::make('server')
+                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
                     ->toggleable(),
                 TextColumn::make('created_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
