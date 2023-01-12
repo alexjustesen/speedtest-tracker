@@ -49,7 +49,7 @@ class RecentSpeedChart extends LineChartWidget
             'datasets' => [
                 [
                     'label' => 'Download',
-                    'data' => $results->map(fn ($item) => roundBytesToMegabits($item->download)),
+                    'data' => $results->map(fn ($item) => ! blank($item->download) ? roundBytesToMegabits($item->download) : 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                     'fill' => false,
@@ -58,7 +58,7 @@ class RecentSpeedChart extends LineChartWidget
                 ],
                 [
                     'label' => 'Upload',
-                    'data' => $results->map(fn ($item) => roundBytesToMegabits($item->upload)),
+                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? roundBytesToMegabits($item->upload) : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                     'fill' => false,

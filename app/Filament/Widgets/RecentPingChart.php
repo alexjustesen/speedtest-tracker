@@ -49,7 +49,7 @@ class RecentPingChart extends LineChartWidget
             'datasets' => [
                 [
                     'label' => 'Ping',
-                    'data' => $results->map(fn ($item) => $item->ping),
+                    'data' => $results->map(fn ($item) => $item->ping ?? 0),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'fill' => false,
