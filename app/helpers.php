@@ -89,3 +89,25 @@ if (! function_exists('absolutePingThresholdFailed')) {
         return $ping > $threshold;
     }
 }
+
+/**
+ * Determine if the string provided is valid json.
+ *
+ * This function will be overwritten in php 8.3 https://wiki.php.net/rfc/json_validate
+ *
+ * @deprecated
+ *
+ * @param  string  $data
+ * @return  bool
+ */
+if (! function_exists('json_validate')) {
+    function json_validate($data)
+    {
+        if (! empty($data)) {
+            return is_string($data) &&
+              is_array(json_decode($data, true)) ? true : false;
+        }
+
+        return false;
+    }
+}
