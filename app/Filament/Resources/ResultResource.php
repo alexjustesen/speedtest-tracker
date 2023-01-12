@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
+use Filament\Forms\Components\Textarea;
+use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
@@ -29,32 +31,30 @@ class ResultResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->label('ID'),
+                IconColumn::make('is_successful')
+                    ->label('Successful')
+                    ->boolean()
+                    ->toggleable(),
                 IconColumn::make('scheduled')
                     ->boolean()
                     ->toggleable()
                     ->toggledHiddenByDefault(),
-                ViewColumn::make('download')
-                    ->view('tables.columns.bits-column'),
-                ViewColumn::make('upload')
-                    ->view('tables.columns.bits-column'),
+                TextColumn::make('download')
+                    ->getStateUsing(fn (Result $record): string|null => blank($record->download) ? null : formatBits(formatBytestoBits($record->download), 3).'ps'),
+                TextColumn::make('upload')
+                    ->getStateUsing(fn (Result $record): string|null => blank($record->upload) ? null : formatBits(formatBytestoBits($record->upload), 3).'ps'),
                 TextColumn::make('ping')
                     ->toggleable(),
                 TextColumn::make('download_jitter')
-                    ->getStateUsing(function (Result $record): string|null {
-                        return json_decode($record->data, true)['download']['latency']['jitter'] ?? null;
-                    })
+                    ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['download']['latency']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault(),
                 TextColumn::make('upload_jitter')
-                    ->getStateUsing(function (Result $record): string|null {
-                        return json_decode($record->data, true)['upload']['latency']['jitter'] ?? null;
-                    })
+                    ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['upload']['latency']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault(),
                 TextColumn::make('ping_jitter')
-                    ->getStateUsing(function (Result $record): string|null {
-                        return json_decode($record->data, true)['ping']['jitter'] ?? null;
-                    })
+                    ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['ping']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault(),
                 ViewColumn::make('server_id')
@@ -73,7 +73,8 @@ class ResultResource extends Resource
                     Action::make('view result')
                         ->label('View on Speedtest.net')
                         ->icon('heroicon-o-link')
-                        ->url(fn (Result $record): string => $record->url)
+                        ->url(fn (Result $record): string|null => optional($record)->url)
+                        ->hidden(fn (Result $record): bool => ! $record->is_successful)
                         ->openUrlInNewTab(),
                     // Tables\Actions\ViewAction::make(),
                     Tables\Actions\DeleteAction::make(),
