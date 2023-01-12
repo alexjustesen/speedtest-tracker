@@ -96,6 +96,7 @@ if (! function_exists('absolutePingThresholdFailed')) {
  * This function will be overwritten in php 8.3 https://wiki.php.net/rfc/json_validate
  *
  * @deprecated
+ *
  * @param  string  $data
  * @return  bool
  */

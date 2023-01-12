@@ -5,15 +5,12 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
-use Filament\Forms\Components\Textarea;
-use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ViewColumn;
 
 class ResultResource extends Resource
 {
