@@ -62,8 +62,7 @@ class ResultResource extends Resource
                     ->view('tables.columns.server-column')
                     ->toggleable(),
                 TextColumn::make('created_at')
-                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone($settings->timezone ?? 'UTC'),
+                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s'),
             ])
             ->filters([
                 //
