@@ -10,11 +10,6 @@ class ListResults extends ListRecords
 {
     protected static string $resource = ResultResource::class;
 
-    protected function getTableQuery(): Builder
-    {
-        return parent::getTableQuery()->orderBy('id', 'desc');
-    }
-
     protected function getTablePollingInterval(): ?string
     {
         return '5s';

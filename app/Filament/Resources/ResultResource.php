@@ -28,19 +28,24 @@ class ResultResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->label('ID'),
+                TextColumn::make('server')
+                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
+                    ->toggleable(),
                 IconColumn::make('is_successful')
                     ->label('Successful')
                     ->boolean()
                     ->toggleable(),
                 IconColumn::make('scheduled')
                     ->boolean()
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->toggleable(),
                 TextColumn::make('download')
-                    ->getStateUsing(fn (Result $record): string|null => blank($record->download) ? null : formatBits(formatBytestoBits($record->download), 3).'ps'),
+                    ->label('Download (Mbps)')
+                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->download) ? formatBits(formatBytestoBits($record->download), 3, false) : null),
                 TextColumn::make('upload')
-                    ->getStateUsing(fn (Result $record): string|null => blank($record->upload) ? null : formatBits(formatBytestoBits($record->upload), 3).'ps'),
+                    ->label('Upload (Mbps)')
+                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->upload) ? formatBits(formatBytestoBits($record->upload), 3, false) : null),
                 TextColumn::make('ping')
+                    ->label('Ping (Ms)')
                     ->toggleable(),
                 TextColumn::make('download_jitter')
                     ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['download']['latency']['jitter'] ?? null)
@@ -54,12 +59,11 @@ class ResultResource extends Resource
                     ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['ping']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault(),
-                TextColumn::make('server')
-                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
-                    ->toggleable(),
                 TextColumn::make('created_at')
+                    ->label('Created')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone($settings->timezone ?? 'UTC'),
+                    ->timezone($settings->timezone ?? 'UTC')
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -78,7 +82,8 @@ class ResultResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
