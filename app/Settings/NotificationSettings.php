@@ -20,6 +20,14 @@ class NotificationSettings extends Settings
 
     public ?array $mail_recipients;
 
+    public bool $telegram_enabled;
+
+    public bool $telegram_on_speedtest_run;
+
+    public bool $telegram_on_threshold_failure;
+
+    public ?array $telegram_recipients;
+
     public static function group(): string
     {
         return 'notification';
