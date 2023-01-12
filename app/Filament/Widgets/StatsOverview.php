@@ -28,7 +28,7 @@ class StatsOverview extends BaseWidget
 
         $previous = $result->previous();
 
-        if (! $previous) {
+        if (! $previous || ! $previous->successful) {
             return [
                 Card::make('Latest download', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->download)).'ps' : 'n/a')
                     ->icon('heroicon-o-download'),

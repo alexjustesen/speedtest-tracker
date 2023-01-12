@@ -74,8 +74,7 @@ class ResultResource extends Resource
                         ->columnSpan(2),
                     Forms\Components\Card::make()
                         ->schema([
-                            Forms\Components\Checkbox::make('is_successful')
-                                ->label('Successful'),
+                            Forms\Components\Checkbox::make('successful'),
                             Forms\Components\Checkbox::make('scheduled'),
                         ])
                         ->columns(1)

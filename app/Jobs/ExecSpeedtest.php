@@ -52,12 +52,10 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
 
             $message = collect(array_filter($messages, 'json_validate'))->last();
 
-            Log::info($message);
-
             Result::create([
                 'scheduled' => $this->scheduled,
-                'is_successful' => false,
-                'data' => $message, // TODO get the json from the last line of the output
+                'successful' => false,
+                'data' => $message,
             ]);
 
             return 0;

@@ -17,8 +17,9 @@ return new class extends Migration
             $table->float('ping', 8, 3)->nullable()->change();
             $table->unsignedBigInteger('download')->nullable()->change();
             $table->unsignedBigInteger('upload')->nullable()->change();
-            $table->boolean('is_successful')->default(true)->after('scheduled');
             $table->json('data')->nullable()->change();
+
+            $table->boolean('successful')->default(true)->after('scheduled');
         });
     }
 

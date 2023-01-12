@@ -31,7 +31,7 @@ class Result extends Model
         'server_name',
         'url',
         'scheduled',
-        'is_successful',
+        'successful',
         'data',
     ];
 
@@ -42,7 +42,7 @@ class Result extends Model
      */
     protected $casts = [
         'scheduled' => 'boolean',
-        'is_successful' => 'boolean',
+        'successful' => 'boolean',
         'data' => 'array',
         'created_at' => 'datetime',
     ];
