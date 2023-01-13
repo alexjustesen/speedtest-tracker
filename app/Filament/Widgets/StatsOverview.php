@@ -15,13 +15,20 @@ class StatsOverview extends BaseWidget
 
         $settings = new GeneralSettings();
 
-        if (! $result) {
-            return [];
+        if (! $result || ! $result->successful) {
+            return [
+                Card::make('Latest download', '-')
+                    ->icon('heroicon-o-download'),
+                Card::make('Latest upload', '-')
+                    ->icon('heroicon-o-upload'),
+                Card::make('Latest ping', '-')
+                    ->icon('heroicon-o-clock'),
+            ];
         }
 
         $previous = $result->previous();
 
-        if (! $previous) {
+        if (! $previous || ! $previous->successful) {
             return [
                 Card::make('Latest download', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->download)).'ps' : 'n/a')
                     ->icon('heroicon-o-download'),

@@ -49,7 +49,7 @@ class RecentJitterChart extends LineChartWidget
             'datasets' => [
                 [
                     'label' => 'Download',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['download']),
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['download'] ?? 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                     'fill' => false,
@@ -58,7 +58,7 @@ class RecentJitterChart extends LineChartWidget
                 ],
                 [
                     'label' => 'Upload',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['upload']),
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['upload'] ?? 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                     'fill' => false,
@@ -67,7 +67,7 @@ class RecentJitterChart extends LineChartWidget
                 ],
                 [
                     'label' => 'Ping',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['ping']),
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['ping'] ?? 0),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'fill' => false,

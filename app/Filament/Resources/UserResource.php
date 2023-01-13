@@ -24,9 +24,13 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
+    protected static ?string $navigationGroup = 'System';
+
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static ?string $navigationGroup = 'System';
+    protected static ?int $navigationSort = 0;
+
+    protected static ?string $slug = 'system/users';
 
     public static function form(Form $form): Form
     {

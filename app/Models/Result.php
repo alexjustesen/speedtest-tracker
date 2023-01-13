@@ -31,6 +31,7 @@ class Result extends Model
         'server_name',
         'url',
         'scheduled',
+        'successful',
         'data',
     ];
 
@@ -41,6 +42,7 @@ class Result extends Model
      */
     protected $casts = [
         'scheduled' => 'boolean',
+        'successful' => 'boolean',
         'data' => 'array',
         'created_at' => 'datetime',
     ];
@@ -103,7 +105,7 @@ class Result extends Model
     }
 
     /**
-     * Return the previous test result .
+     * Return the previous test result.
      *
      * @return  self|null
      */

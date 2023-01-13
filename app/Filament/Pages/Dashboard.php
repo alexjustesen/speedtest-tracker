@@ -52,10 +52,6 @@ class Dashboard extends BasePage
 
     public function getHeaderWidgets(): array
     {
-        if (! $this->resultsCount) {
-            return [];
-        }
-
         return [
             StatsOverview::class,
         ];
@@ -85,8 +81,6 @@ class Dashboard extends BasePage
         }
 
         $speedtest = [
-            'enabled' => ! blank($settings->speedtest_schedule),
-            'schedule' => optional($settings)->speedtest_schedule,
             'ookla_server_id' => $ookla_server_id,
         ];
 
