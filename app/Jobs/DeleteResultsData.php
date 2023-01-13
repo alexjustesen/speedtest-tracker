@@ -43,7 +43,7 @@ class DeleteResultsData implements ShouldQueue, ShouldBeUnique
             Notification::make()
                 ->title('There was a problem deleting speedtest results data')
                 ->body('Check the logs.')
-                ->success()
+                ->danger()
                 ->sendToDatabase($recipient);
 
             return 0;
