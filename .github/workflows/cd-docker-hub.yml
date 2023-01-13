@@ -47,6 +47,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=semver,pattern={{version}}
+            latest
 
       - name: Build and push image to Docker Hub
         uses: docker/build-push-action@v3
@@ -54,5 +57,5 @@ jobs:
           context: .
           push: true
           platforms: ${{ env.PLATFORMS }}
-          tags: ${{ env.DOCKER_IMAGE }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
