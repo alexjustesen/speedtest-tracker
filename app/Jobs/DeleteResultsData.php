@@ -35,15 +35,19 @@ class DeleteResultsData implements ShouldQueue, ShouldBeUnique
     {
         $count = Result::count();
 
+        $recipient = User::first();
+
         try {
             DB::table('results')->truncate();
         } catch (\Throwable $th) {
-            //throw $th;
+            Notification::make()
+                ->title('There was a problem deleting speedtest results data')
+                ->body('Check the logs.')
+                ->success()
+                ->sendToDatabase($recipient);
 
             return 0;
         }
-
-        $recipient = User::first();
 
         Notification::make()
             ->title('Speedtest results deleted')
