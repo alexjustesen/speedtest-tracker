@@ -214,30 +214,29 @@ class NotificationPage extends SettingsPage
     {
         $notificationSettings = new (NotificationSettings::class);
 
-        $bot = \Config::get('telegram.bot');
+        $bot = config('telegram.bot');
 
-        if (! empty($bot)) {
-            if (! empty($notificationSettings->telegram_recipients)) {
-                foreach ($notificationSettings->telegram_recipients as $recipient) {
-                    \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
-                    ->notify(new TelegramNotification('Test notification channel *telegram*'));
-                }
-
-                Notification::make()
-                    ->title('Test telegram notification sent.')
-                    ->success()
-                    ->send();
-            } else {
-                Notification::make()
-                    ->title('You need to add recipients to receive telegram notifications.')
-                    ->warning()
-                    ->send();
+        if (blank($bot)) {
+            Notification::make()
+                ->title('First you need to add \'TELEGRAM_BOT_TOKEN\' on your .env file or add it as environment variable')
+                ->warning()
+                ->send();
+        }
+        if (! empty($notificationSettings->telegram_recipients)) {
+            foreach ($notificationSettings->telegram_recipients as $recipient) {
+                \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
+                ->notify(new TelegramNotification('Test notification channel *telegram*'));
             }
+
+            Notification::make()
+                ->title('Test Telegram notification sent.')
+                ->success()
+                ->send();
         } else {
             Notification::make()
-                        ->title('First you need to add your \'TELEGRAM_BOT_TOKEN\' on your .env file')
-                        ->warning()
-                        ->send();
+                ->title('You need to add recipients to receive Telegram notifications.')
+                ->warning()
+                ->send();
         }
     }
 }
