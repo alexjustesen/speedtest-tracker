@@ -214,21 +214,30 @@ class NotificationPage extends SettingsPage
     {
         $notificationSettings = new (NotificationSettings::class);
 
-        if (count($notificationSettings->telegram_recipients)) {
-            foreach ($notificationSettings->telegram_recipients as $recipient) {
-                \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
-                ->notify(new TelegramNotification('Test notification channel *telegram*'));
-            }
+        $bot = \Config::get('telegram.bot');
 
-            Notification::make()
-                ->title('Test telegram notification sent.')
-                ->success()
-                ->send();
+        if (! empty($bot)) {
+            if (! empty($notificationSettings->telegram_recipients)) {
+                foreach ($notificationSettings->telegram_recipients as $recipient) {
+                    \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
+                    ->notify(new TelegramNotification('Test notification channel *telegram*'));
+                }
+
+                Notification::make()
+                    ->title('Test telegram notification sent.')
+                    ->success()
+                    ->send();
+            } else {
+                Notification::make()
+                    ->title('You need to add recipients to receive telegram notifications.')
+                    ->warning()
+                    ->send();
+            }
         } else {
             Notification::make()
-                ->title('You need to add recipients to receive telegram notifications.')
-                ->warning()
-                ->send();
+                        ->title('First you need to add your \'TELEGRAM_BOT_TOKEN\' on your .env file')
+                        ->warning()
+                        ->send();
         }
     }
 }
