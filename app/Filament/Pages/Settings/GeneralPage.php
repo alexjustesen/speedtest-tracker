@@ -110,17 +110,6 @@ class GeneralPage extends SettingsPage
                     ->columnSpan([
                         'md' => 2,
                     ]),
-
-                    Card::make()
-                        ->schema([
-                            Toggle::make('auth_enabled')
-                                ->label('Authentication enabled')
-                                ->helperText("NOTE: Authentication is currently required. It's on the roadmap to be able to disable it though.")
-                                ->disabled(),
-                        ])
-                        ->columnSpan([
-                            'md' => 1,
-                        ]),
                 ]),
         ];
     }
