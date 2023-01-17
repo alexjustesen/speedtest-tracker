@@ -4,12 +4,10 @@ namespace App\Filament\Pages\Settings;
 
 use App\Rules\ValidCronExpression;
 use App\Settings\GeneralSettings;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Http;
 use Squire\Models\Timezone;
