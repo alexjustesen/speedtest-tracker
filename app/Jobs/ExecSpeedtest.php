@@ -35,24 +35,28 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
      */
     public function handle()
     {
-        $args = [
-            'speedtest',
-            '--accept-license',
-            '--accept-gdpr',
-            '--format=json',
-        ];
+        $process = new Process(
+            array_filter([
+                'speedtest',
+                '--accept-license',
+                '--accept-gdpr',
+                '--format=json',
+                optional($this->speedtest)['ookla_server_id'] ? '--server-id='.$this->speedtest['ookla_server_id'] : false,
+            ])
+        );
 
-        if (! blank($this->speedtest)) {
-            if (! blank($this->speedtest['ookla_server_id'])) {
-                $args = array_merge($args, ['--server-id='.$this->speedtest['ookla_server_id']]);
-            }
-        }
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $exception) {
+            $messages = explode(PHP_EOL, $exception->getMessage());
 
-        $process = new Process($args);
-        $process->run();
+            $message = collect(array_filter($messages, 'json_validate'))->last();
 
-        if (! $process->isSuccessful()) {
-            throw new ProcessFailedException($process);
+            Result::create([
+                'scheduled' => $this->scheduled,
+                'successful' => false,
+                'data' => $message,
+            ]);
 
             return 0;
         }

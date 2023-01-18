@@ -1,3 +1,5 @@
+/.git
+/.github
 /.idea
 /.vscode
 /docker/8.1
@@ -9,11 +11,11 @@
 /storage/logs
 /vendor
 _ide_helper.php
+.editorconfig
 .env
 .env.backup
 .phpstorm.meta.php
 .phpunit.result.cache
-config.yml
 auth.json
 docker-compose.yml
 Homestead.json

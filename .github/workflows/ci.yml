@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-app:
+    name: Test Speedtest Tracker (PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }})
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: ['ubuntu-22.04']
+        php-versions: ['8.1']
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, dom, fileinfo
+          coverage: xdebug
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Install the application
+        run: |
+          touch database/database.sqlite
+          php -r "file_exists('.env') || copy('.env.example', '.env');"
+          php artisan app:install --force
+
+      - name: Evaluate code quality
+        run: vendor/bin/pint --test
+
+      - name: Test with phpunit including coverage
+        run: vendor/bin/phpunit --coverage-text

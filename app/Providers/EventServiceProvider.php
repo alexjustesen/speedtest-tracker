@@ -2,8 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\Result;
-use App\Observers\ResultObserver;
+use App\Events\ResultCreated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -20,6 +19,16 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        ResultCreated::class => [
+            \App\Listeners\SpeedtestCompletedListener::class,
+
+            // Data listeners
+            \App\Listeners\Data\InfluxDb2Listener::class,
+
+            // Threashold listeners
+            \App\Listeners\Threshold\AbsoluteListener::class,
+        ],
     ];
 
     /**
@@ -29,7 +38,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Result::observe(ResultObserver::class);
+        //
     }
 
     /**

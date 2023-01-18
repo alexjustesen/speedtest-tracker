@@ -47,15 +47,15 @@ class InstallCommand extends Command
 
         $this->checkAppKey();
 
-        $this->line('⏳ Optimizing the cache');
+        $this->line('⏳ Optimizing the cache...');
 
-        Artisan::call('optimize:clear');
+        Artisan::call('optimize');
 
         $this->line('✅ Optimized cache');
 
         $this->newLine();
 
-        $this->line('⏳ Migrating the database');
+        $this->line('⏳ Migrating the database...');
 
         try {
             Artisan::call('migrate:fresh', [

@@ -1,0 +1,3 @@
+#!/command/with-contenv bash
+echo "💪  Starting the queue worker..."
+s6-setuidgid webuser php $WEBUSER_HOME/artisan queue:work --tries=3 --no-ansi -q
