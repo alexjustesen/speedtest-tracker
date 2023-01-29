@@ -17,6 +17,7 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "livewire/livewire": "^2.11",
         "maatwebsite/excel": "^3.1",
         "spatie/laravel-settings": "^2.4",
         "squirephp/timezones-en": "^3.3"
