@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Exports\ResultsSelectedBulkExport;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
@@ -16,6 +17,8 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ResultResource extends Resource
 {
@@ -167,6 +170,14 @@ class ResultResource extends Resource
                 ]),
             ])
             ->bulkActions([
+                Tables\Actions\BulkAction::make('export')
+                    ->label('Export selected')
+                    ->icon('heroicon-o-download')
+                    ->action(function (Collection $records) {
+                        $export = new ResultsSelectedBulkExport($records->toArray());
+
+                        return Excel::download($export, 'results_'.now()->timestamp.'.csv', \Maatwebsite\Excel\Excel::CSV);
+                    }),
                 Tables\Actions\DeleteBulkAction::make(),
             ])
             ->defaultSort('created_at', 'desc');
