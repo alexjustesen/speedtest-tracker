@@ -52,7 +52,7 @@ jobs:
             latest
 
       - name: Build and push image to Docker Hub
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           push: true
