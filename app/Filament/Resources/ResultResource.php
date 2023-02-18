@@ -168,7 +168,7 @@ class ResultResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\Action::make('updateComments')
                         ->icon('heroicon-o-annotation')
-                        ->mountUsing(fn(Forms\ComponentContainer $form, Result $record) => $form->fill([
+                        ->mountUsing(fn (Forms\ComponentContainer $form, Result $record) => $form->fill([
                             'comments' => $record->comments,
                         ]))
                         ->action(function (Result $record, array $data): void {
