@@ -1,4 +1,3 @@
-# For more information: https://laravel.com/docs/sail
 version: '3'
 services:
     laravel.test:
@@ -23,59 +22,42 @@ services:
         networks:
             - sail
         depends_on:
-            # - mysql
-            # - pgsql
-            - mailhog
-    # mysql:
-    #     image: 'mysql/mysql-server:8.0'
-    #     ports:
-    #         - '${FORWARD_DB_PORT:-3306}:3306'
-    #     environment:
-    #         MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-    #         MYSQL_ROOT_HOST: "%"
-    #         MYSQL_DATABASE: '${DB_DATABASE}'
-    #         MYSQL_USER: '${DB_USERNAME}'
-    #         MYSQL_PASSWORD: '${DB_PASSWORD}'
-    #         MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    #     volumes:
-    #         - 'sail-mysql:/var/lib/mysql'
-    #         - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
-    #     networks:
-    #         - sail
-    #     healthcheck:
-    #         test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
-    #         retries: 3
-    #         timeout: 5s
-    # pgsql:
-    #     image: 'postgres:14'
-    #     ports:
-    #         - '${FORWARD_DB_PORT:-5432}:5432'
-    #     environment:
-    #         PGPASSWORD: '${DB_PASSWORD:-secret}'
-    #         POSTGRES_DB: '${DB_DATABASE}'
-    #         POSTGRES_USER: '${DB_USERNAME}'
-    #         POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
-    #     volumes:
-    #         - 'sail-pgsql:/var/lib/postgresql/data'
-    #         - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
-    #     networks:
-    #         - sail
-    #     healthcheck:
-    #         test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
-    #         retries: 3
-    #         timeout: 5s
-    mailhog:
-        image: 'mailhog/mailhog:latest'
+            - mysql
+            - mailpit
+    mysql:
+        image: 'mysql/mysql-server:8.0'
         ports:
-            - '${FORWARD_MAILHOG_PORT:-1025}:1025'
-            - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
+            - '${FORWARD_DB_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ROOT_HOST: '%'
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 1
+        volumes:
+            - 'sail-mysql:/var/lib/mysql'
+            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - mysqladmin
+                - ping
+                - '-p${DB_PASSWORD}'
+            retries: 3
+            timeout: 5s
+    mailpit:
+        image: 'axllent/mailpit:latest'
+        ports:
+            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
+            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
 networks:
     sail:
         driver: bridge
-# volumes:
-    # sail-mysql:
-    #     driver: local
-    # sail-pgsql:
-    #     driver: local
+volumes:
+    sail-mysql:
+        driver: local
