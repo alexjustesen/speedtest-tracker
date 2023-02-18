@@ -166,6 +166,21 @@ class ResultResource extends Resource
                         ->hidden(fn (Result $record): bool => ! $record->is_successful)
                         ->openUrlInNewTab(),
                     Tables\Actions\ViewAction::make(),
+                    Tables\Actions\Action::make('updateComments')
+                        ->icon('heroicon-o-annotation')
+                        ->mountUsing(fn (Forms\ComponentContainer $form, Result $record) => $form->fill([
+                            'comments' => $record->comments,
+                        ]))
+                        ->action(function (Result $record, array $data): void {
+                            $record->comments = $data['comments'];
+                            $record->save();
+                        })
+                        ->form([
+                            Forms\Components\Textarea::make('comments')
+                                ->rows(6)
+                                ->maxLength(500),
+                        ])
+                        ->modalButton('Save'),
                     Tables\Actions\DeleteAction::make(),
                 ]),
             ])

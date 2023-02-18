@@ -33,7 +33,6 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  \App\Events\ResultCreated  $event
      * @return void
      */
     public function handle(ResultCreated $event)
@@ -63,7 +62,6 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle database notifications.
      *
-     * @param  \App\Events\ResultCreated  $event
      * @return void
      */
     protected function databaseChannel(ResultCreated $event)
@@ -105,7 +103,6 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle database notifications.
      *
-     * @param  \App\Events\ResultCreated  $event
      * @return void
      */
     protected function mailChannel(ResultCreated $event)
@@ -160,7 +157,6 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle telegram notifications.
      *
-     * @param  \App\Events\ResultCreated  $event
      * @return void
      */
     protected function telegramChannel(ResultCreated $event)

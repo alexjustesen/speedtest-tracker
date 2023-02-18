@@ -30,6 +30,7 @@ class Result extends Model
         'server_host',
         'server_name',
         'url',
+        'comments',
         'scheduled',
         'successful',
         'data',
