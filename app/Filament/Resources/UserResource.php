@@ -41,6 +41,7 @@ class UserResource extends Resource
                         ->required(),
                     'email' => TextInput::make('email')
                         ->required()
+                        ->email()
                         ->unique(ignoreRecord: true),
                     'password' => TextInput::make('password')
                         ->required()
