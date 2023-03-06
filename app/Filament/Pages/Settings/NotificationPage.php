@@ -6,6 +6,7 @@ use App\Forms\Components\TestDatabaseNotification;
 use App\Forms\Components\TestMailNotification;
 use App\Forms\Components\TestTelegramNotification;
 use App\Mail\Test;
+use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Telegram\TelegramNotification;
 use Closure;
@@ -34,6 +35,13 @@ class NotificationPage extends SettingsPage
     protected static ?string $navigationLabel = 'Notifications';
 
     protected static string $settings = NotificationSettings::class;
+
+    protected function getMaxContentWidth(): string
+    {
+        $settings = new GeneralSettings();
+
+        return $settings->content_width;
+    }
 
     protected function getFormSchema(): array
     {
