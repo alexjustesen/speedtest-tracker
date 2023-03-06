@@ -2,7 +2,6 @@
 
 use App\Settings\GeneralSettings;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Log;
 
 return new class extends Migration
 {
