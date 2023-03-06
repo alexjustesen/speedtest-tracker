@@ -5,6 +5,7 @@ namespace App\Filament\Pages\Settings;
 use App\Settings\GeneralSettings;
 use App\Settings\InfluxDbSettings;
 use Closure;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -60,6 +61,9 @@ class InfluxDbPage extends SettingsPage
                                             ->placeholder('http://your-influxdb-instance')
                                             ->maxLength(255)
                                             ->required(fn (Closure $get) => $get('v2_enabled') == true)
+                                            ->columnSpan(['md' => 2]),
+                                        Checkbox::make('v2_verify_ssl')
+                                            ->label('Verify SSL')
                                             ->columnSpan(['md' => 2]),
                                         TextInput::make('v2_org')
                                             ->label('Org')

@@ -16,6 +16,8 @@ class InfluxDbSettings extends Settings
 
     public ?string $v2_token;
 
+    public bool $v2_verify_ssl;
+
     public static function group(): string
     {
         return 'influxdb';
