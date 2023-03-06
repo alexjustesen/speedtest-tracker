@@ -45,6 +45,7 @@ class SendDataToInfluxDbV2 implements ShouldQueue
             'org' => optional($this->settings)->v2_org,
             'bucket' => optional($this->settings)->v2_bucket,
             'token' => optional($this->settings)->v2_token,
+            'verifySSL' => $this->settings->v2_verify_ssl,
         ];
 
         $client = new Client([
