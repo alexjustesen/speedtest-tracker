@@ -1,3 +1,2 @@
 #!/command/with-contenv bash
-echo "⏰  Starting the cron service..."
 s6-setuidgid root /usr/sbin/cron -f -l 8
