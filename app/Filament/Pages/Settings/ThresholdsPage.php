@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Settings\GeneralSettings;
 use App\Settings\ThresholdSettings;
 use Closure;
 use Filament\Forms\Components\Card;
