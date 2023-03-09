@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "cec84a4a-2422-4c13-bc49-3a2ee2729f62",
+		"name": "🐇 Speedtest Tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13492307"
+	},
+	"item": [
+		{
+			"name": "Speedtest (legacy)",
+			"item": [
+				{
+					"name": "Get latest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APP_URL}}/api/speedtest/latest",
+							"host": [
+								"{{APP_URL}}"
+							],
+							"path": [
+								"api",
+								"speedtest",
+								"latest"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "The `/speedtest` route is to provide legacy support for dashboards like Homepage and Organizr.\n\nThe endpoint should be considered deprecated and will be replaced in a future release."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "APP_URL",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
