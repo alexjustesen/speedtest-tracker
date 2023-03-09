@@ -17,6 +17,10 @@ class GetLatestSpeedtestData implements ActionInterface
     public function run()
     {
         $data = SpeedtestHelper::latest();
+        
+        // Homepage expects this to in Mbps.  This calculation matches the results shown in the UI.
+        $data['download'] /= 125000;
+        $data['upload'] /= 125000;
 
         $response = [
             'data' => $data,
