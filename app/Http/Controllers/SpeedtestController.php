@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\GetLatestSpeedtestData;
-use App\Actions\QueueSpeedtest;
-use App\Jobs\SpeedtestJob;
+use App\Helpers\SpeedtestHelper;
 use App\Models\Speedtest;
-use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class SpeedtestController extends Controller
 {
-  
+
     /**
      * Return latest speedtest
      *
@@ -21,8 +17,8 @@ class SpeedtestController extends Controller
      */
     public function latest()
     {
-        $data = run(GetLatestSpeedtestData::class);
-        
+        $data = SpeedtestController::getData();
+
         if ($data['data']) {
             return response()->json($data, 200);
         } else {
@@ -34,25 +30,27 @@ class SpeedtestController extends Controller
     }
 
     /**
-     * Queue a new speedtest
+     * Return latest speedtest
      *
-     * @return JsonResponse
+     * @return mixed
      */
-    public function run()
+    private function getData()
     {
-        try {
-            run(QueueSpeedtest::class);
+        $data = SpeedtestHelper::latest();
 
-            return response()->json([
-                'method' => 'run speedtest',
-                'data' => 'a new speedtest has been added to the queue'
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'method' => 'run speedtest',
-                'error' => $e
-            ], 500);
+        // Homepage expects this to in Mbps.  This calculation matches the results shown in the UI.
+        if ($data['download']) {
+            $data['download'] /= 125000;
         }
+        if ($data['upload']) {
+            $data['upload'] /= 125000;
+        }
+
+        $response = [
+            'data' => $data,
+        ];
+
+        return $response;
     }
 
 }
