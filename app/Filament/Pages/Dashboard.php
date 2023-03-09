@@ -41,6 +41,13 @@ class Dashboard extends BasePage
             ->layout(static::$layout, $this->getLayoutData());
     }
 
+    protected function getMaxContentWidth(): string
+    {
+        $settings = new GeneralSettings();
+
+        return $settings->content_width;
+    }
+
     protected function getActions(): array
     {
         return [
