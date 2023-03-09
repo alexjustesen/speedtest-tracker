@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Speedtest;
+use App\Models\Result;
 
 class SpeedtestHelper
 {
@@ -14,7 +14,7 @@ class SpeedtestHelper
      */
     public static function latest()
     {
-        $data = Speedtest::latest()->get();
+        $data = Result::latest()->get();
 
         if ($data->isEmpty()) {
             return false;
