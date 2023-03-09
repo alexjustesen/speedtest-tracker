@@ -2184,7 +2184,7 @@
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "~7|~8"
+                "illuminate/support": "~7|~8|~9|~10"
             },
             "require-dev": {
                 "orchestra/testbench": "~5|~6",
