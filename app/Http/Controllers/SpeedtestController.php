@@ -21,9 +21,8 @@ class SpeedtestController extends Controller
      */
     public function latest()
     {
-        //$data = run(GetLatestSpeedtestData::class);
-        $data = GetLatestSpeedtestData::run();
-
+        $data = run(GetLatestSpeedtestData::class);
+        
         if ($data['data']) {
             return response()->json($data, 200);
         } else {
