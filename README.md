@@ -20,6 +20,10 @@ Speedtest Tracker is containerized so you can run it anywhere you run your Docke
 
 [FAQs](https://docs.speedtest-tracker.dev/faqs) and a full list of planned and completed [features](https://docs.speedtest-tracker.dev/getting-started/features) can be found in the [documentation](https://docs.speedtest-tracker.dev).
 
+## API
+
+A robust API is planned for a later release but `v0.11.8` includes a legacy endpoint `/api/speedtest/latest` which is used by home lab dashboards like [Homepage](https://github.com/benphelps/homepage) and [Organizr](https://github.com/causefx/Organizr/tree/v2-master).
+
 ## Screenshots
 
 ![Dashboard](.github/screenshots/dashboard_screenshot.png)
