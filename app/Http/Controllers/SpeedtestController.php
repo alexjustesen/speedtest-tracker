@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\SpeedtestHelper;
+use App\Models\Result;
 use App\Models\Speedtest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
