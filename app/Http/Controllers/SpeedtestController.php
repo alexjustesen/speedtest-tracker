@@ -36,7 +36,7 @@ class SpeedtestController extends Controller
      */
     private function getData()
     {
-        $data = SpeedtestHelper::latest();
+        $data = SpeedtestController::getLatest();
 
         // Homepage expects this to in Mbps.  This calculation matches the results shown in the UI.
         if ($data['download']) {
@@ -51,6 +51,22 @@ class SpeedtestController extends Controller
         ];
 
         return $response;
+    }
+    
+    /**
+     * Returns the latest speedtest object.
+     *
+     * @return boolean|\App\Speedtest
+     */
+    public static function getLatest()
+    {
+        $data = Result::latest()->get();
+
+        if ($data->isEmpty()) {
+            return false;
+        }
+
+        return $data->first();
     }
 
 }
