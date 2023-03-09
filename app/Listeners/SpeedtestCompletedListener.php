@@ -26,7 +26,6 @@ class SpeedtestCompletedListener
     /**
      * Handle the event.
      *
-     * @param  \App\Events\ResultCreated  $event
      * @return void
      */
     public function handle(ResultCreated $event)

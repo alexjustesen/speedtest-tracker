@@ -3,19 +3,23 @@
 # Exit on error
 set -e
 
+echo ""
 echo "🐇  Configuring Speedtest Tracker..."
+echo ""
 
 if [ ${DB_CONNECTION:="sqlite"} == "sqlite" ]; then
     # Check for database
     if [ ! -f /config/database.sqlite ]; then
-        echo "🙄  Database file not found, creating..."
-        touch /config/database.sqlite
+        echo "🙄  SQLite database not found, creating..."
+        s6-setuidgid webuser touch /config/database.sqlite
+        echo "✅  SQLite database created."
     else
-        echo "✅  Database exists"
+        echo "✅  Database already exists."
     fi
+    echo ""
 
     # create symlinks
-    echo "🔗  Creating database symlink"
+    echo "🔗  Creating database symlink..."
     symlinks=( \
     /var/www/html/database/database.sqlite \
     )
@@ -29,18 +33,24 @@ if [ ${DB_CONNECTION:="sqlite"} == "sqlite" ]; then
             ln -s /config/"$(basename "$i")" "$i"
         fi
     done
+
+    echo "✅  Database symlink created."
+    echo ""
 fi
 
 # Check for env file
 if [ ! -f /config/.env ]; then
     echo "🙄  Environment file not found, creating..."
-    cp $WEBUSER_HOME/.env.example /config/.env
+    s6-setuidgid webuser cp $WEBUSER_HOME/.env.example /config/.env
+    echo "✅  Environment file created."
 else
-    echo "✅  Environment file exists"
+    echo "✅  Environment file exists."
 fi
 
+echo ""
+
 # create symlinks
-echo "🔗  Creating symlinks to config and log files"
+echo "🔗  Creating symlinks for config and log files..."
 symlinks=( \
 /var/www/html/.env \
 /var/www/html/storage/logs/laravel.log
@@ -56,29 +66,48 @@ do
     fi
 done
 
+echo "✅  Symlinks created."
+echo ""
+
 # Check for app key
 if grep -E "APP_KEY=[0-9A-Za-z:+\/=]{1,}" $WEBUSER_HOME/.env > /dev/null; then
     echo "✅  App key exists"
 else
     echo "⏳  Generating app key..."
-    php $WEBUSER_HOME/artisan key:generate --no-ansi -q
+    s6-setuidgid webuser php $WEBUSER_HOME/artisan key:generate --no-ansi -q
+    echo "✅  App key generated."
 fi
 
+echo ""
+
 # Fix permissions
-echo "🔒  Fixing app path file permissions"
+echo "🔒  Fixing app path file permissions..."
 chmod -R 755 /config
 chown -R webuser:webgroup /config
+chown -R webuser:webgroup $WEBUSER_HOME
+echo "✅  Permissions fixed."
+echo ""
+
+# create storage symlink
+echo "🔐  Linking the storage..."
+s6-setuidgid webuser php $WEBUSER_HOME/artisan storage:link --no-ansi -q
+echo "✅  Storage linked."
+echo ""
 
 # Build cache
 echo "💰  Building the cache..."
 s6-setuidgid webuser php $WEBUSER_HOME/artisan config:cache --no-ansi -q
 s6-setuidgid webuser php $WEBUSER_HOME/artisan route:cache --no-ansi -q
+s6-setuidgid webuser php $WEBUSER_HOME/artisan view:cache --no-ansi -q
+echo "✅  Cache set."
+echo ""
 
 # Migrate database
 echo "🚛  Migrating the database..."
 s6-setuidgid webuser php $WEBUSER_HOME/artisan migrate --force --no-ansi -q
+echo "✅  Database migrated."
+echo ""
 
 # App install done, show a message
-echo "✅  All set, starting Speedtest Tracker container..."
-
-exit 0
+echo "✅  All set, Speedtest Tracker started."
+echo ""
