@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\SpeedtestController;
+use App\Http\Controllers\API\Speedtest\GetLatestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,10 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group([
-    'middleware' => ['api'],
-    'prefix' => 'speedtest'
-], function ($router) {
-    Route::get('latest', [SpeedtestController::class, 'latest'])
-        ->name('speedtest.latest');
-});
+Route::get('/speedtest/latest', GetLatestController::class)
+    ->name('speedtest.latest');
