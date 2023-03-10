@@ -16,7 +16,7 @@ class RecentJitterChart extends LineChartWidget
 
     protected function getHeading(): string
     {
-        return 'Jitter (ms)';
+        return 'Jitter';
     }
 
     protected function getFilters(): ?array
@@ -48,8 +48,8 @@ class RecentJitterChart extends LineChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['download'] ?? 0),
+                    'label' => 'Download (ms)',
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['download'] ? number_format($item->getJitterData()['download'], 2) : 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                     'fill' => false,
@@ -57,8 +57,8 @@ class RecentJitterChart extends LineChartWidget
                     'tension' => 0.4,
                 ],
                 [
-                    'label' => 'Upload',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['upload'] ?? 0),
+                    'label' => 'Upload (ms)',
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['upload'] ? number_format($item->getJitterData()['upload'], 2) : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                     'fill' => false,
@@ -66,8 +66,8 @@ class RecentJitterChart extends LineChartWidget
                     'tension' => 0.4,
                 ],
                 [
-                    'label' => 'Ping',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['ping'] ?? 0),
+                    'label' => 'Ping (ms)',
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['ping'] ? number_format($item->getJitterData()['ping'], 2) : 0),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'fill' => false,
