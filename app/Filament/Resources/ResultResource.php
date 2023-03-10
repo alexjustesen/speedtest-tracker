@@ -65,12 +65,12 @@ class ResultResource extends Resource
                             Forms\Components\TextInput::make('download')
                                 ->label('Download (Mbps)')
                                 ->afterStateHydrated(function (TextInput $component, $state) {
-                                    $component->state(! blank($state) ? formatBits(formatBytestoBits($state), 3, false) : '');
+                                    $component->state(! blank($state) ? toBits(convertSize($state), 4) : '');
                                 }),
                             Forms\Components\TextInput::make('upload')
                                 ->label('Upload (Mbps)')
                                 ->afterStateHydrated(function (TextInput $component, $state) {
-                                    $component->state(! blank($state) ? formatBits(formatBytestoBits($state), 3, false) : '');
+                                    $component->state(! blank($state) ? toBits(convertSize($state), 4,) : '');
                                 }),
                             Forms\Components\TextInput::make('ping')
                                 ->label('Ping (Ms)'),
@@ -112,10 +112,10 @@ class ResultResource extends Resource
                     ->toggleable(),
                 TextColumn::make('download')
                     ->label('Download (Mbps)')
-                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->download) ? formatBits(formatBytestoBits($record->download), 3, false) : null),
+                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->download) ? toBits(convertSize($record->download), 2) : null),
                 TextColumn::make('upload')
                     ->label('Upload (Mbps)')
-                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->upload) ? formatBits(formatBytestoBits($record->upload), 3, false) : null),
+                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->upload) ? toBits(convertSize($record->upload), 2) : null),
                 TextColumn::make('ping')
                     ->label('Ping (Ms)')
                     ->toggleable(),
