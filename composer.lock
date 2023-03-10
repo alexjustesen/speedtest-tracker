@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c07c343563ba01500927699850ed59f",
+    "content-hash": "3d980453a334bc9b20c1fab5141e778f",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -336,6 +336,55 @@
                 }
             ],
             "time": "2023-01-15T23:15:59+00:00"
+        },
+        {
+            "name": "chrisullyott/php-filesize",
+            "version": "v4.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chrisullyott/php-filesize.git",
+                "reference": "967ea3365c00974b50b608ffc045a267ab92ef43"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chrisullyott/php-filesize/zipball/967ea3365c00974b50b608ffc045a267ab92ef43",
+                "reference": "967ea3365c00974b50b608ffc045a267ab92ef43",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ChrisUllyott\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Ullyott",
+                    "email": "contact@chrisullyott.com",
+                    "homepage": "http://www.chrisullyott.com"
+                }
+            ],
+            "description": "Easily calculate file sizes and convert between units.",
+            "homepage": "https://github.com/chrisullyott/php-filesize",
+            "keywords": [
+                "php",
+                "size-calculation"
+            ],
+            "support": {
+                "issues": "https://github.com/chrisullyott/php-filesize/issues",
+                "source": "https://github.com/chrisullyott/php-filesize"
+            },
+            "time": "2021-10-17T22:52:23+00:00"
         },
         {
             "name": "composer/semver",
