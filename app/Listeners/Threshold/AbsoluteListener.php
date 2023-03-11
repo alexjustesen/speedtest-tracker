@@ -71,7 +71,7 @@ class AbsoluteListener implements ShouldQueue
             if (absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->download)) {
                 Notification::make()
                     ->title('Threshold breached')
-                    ->body('Speedtest #'.$event->result->id.' breached the download threshold of '.$this->thresholdSettings->absolute_download.'Mbps at '.formatBits(formatBytesToBits($event->result->download), 2, false).'Mbps.')
+                    ->body('Speedtest #'.$event->result->id.' breached the download threshold of '.$this->thresholdSettings->absolute_download.'Mbps at '.toBits(convertSize($event->result->download), 2).'Mbps.')
                     ->warning()
                     ->sendToDatabase($event->user);
             }
@@ -82,7 +82,7 @@ class AbsoluteListener implements ShouldQueue
             if (absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->upload)) {
                 Notification::make()
                     ->title('Threshold breached')
-                    ->body('Speedtest #'.$event->result->id.' breached the upload threshold of '.$this->thresholdSettings->absolute_upload.'Mbps at '.formatBits(formatBytesToBits($event->result->upload), 2, false).'Mbps.')
+                    ->body('Speedtest #'.$event->result->id.' breached the upload threshold of '.$this->thresholdSettings->absolute_upload.'Mbps at '.toBits(convertSize($event->result->upload), 2).'Mbps.')
                     ->warning()
                     ->sendToDatabase($event->user);
             }
@@ -119,7 +119,7 @@ class AbsoluteListener implements ShouldQueue
                 array_push($failedThresholds, [
                     'name' => 'Download',
                     'threshold' => $this->thresholdSettings->absolute_download.' Mbps',
-                    'value' => formatBits(formatBytesToBits($event->result->download)).'ps',
+                    'value' => toBits(convertSize($event->result->download), 2).' Mbps',
                 ]);
             }
         }
@@ -130,7 +130,7 @@ class AbsoluteListener implements ShouldQueue
                 array_push($failedThresholds, [
                     'name' => 'Upload',
                     'threshold' => $this->thresholdSettings->absolute_upload.' Mbps',
-                    'value' => formatBits(formatBytesToBits($event->result->upload)).'ps',
+                    'value' => toBits(convertSize($event->result->upload), 2).'Mbps',
                 ]);
             }
         }
@@ -173,7 +173,7 @@ class AbsoluteListener implements ShouldQueue
                 array_push($failedThresholds, [
                     'name' => 'Download',
                     'threshold' => $this->thresholdSettings->absolute_download.' Mbps',
-                    'value' => formatBits(formatBytesToBits($event->result->download)).'ps',
+                    'value' => toBits(convertSize($event->result->download), 2).'Mbps',
                 ]);
             }
         }
@@ -184,7 +184,7 @@ class AbsoluteListener implements ShouldQueue
                 array_push($failedThresholds, [
                     'name' => 'Upload',
                     'threshold' => $this->thresholdSettings->absolute_upload.' Mbps',
-                    'value' => formatBits(formatBytesToBits($event->result->upload)).'ps',
+                    'value' => toBits(convertSize($event->result->upload), 2).'Mbps',
                 ]);
             }
         }
