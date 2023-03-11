@@ -70,7 +70,7 @@ class ResultResource extends Resource
                             Forms\Components\TextInput::make('upload')
                                 ->label('Upload (Mbps)')
                                 ->afterStateHydrated(function (TextInput $component, $state) {
-                                    $component->state(! blank($state) ? toBits(convertSize($state), 4,) : '');
+                                    $component->state(! blank($state) ? toBits(convertSize($state), 4) : '');
                                 }),
                             Forms\Components\TextInput::make('ping')
                                 ->label('Ping (Ms)'),
