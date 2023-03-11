@@ -51,9 +51,11 @@ class SpeedtestCompletedListener
         if ($this->notificationSettings->telegram_enabled) {
             if ($this->notificationSettings->telegram_on_speedtest_run && count($this->notificationSettings->telegram_recipients)) {
                 foreach ($this->notificationSettings->telegram_recipients as $recipient) {
-                    $download_value = formatBits(formatBytesToBits($event->result->download)).'ps';
-                    $upload_value = formatBits(formatBytesToBits($event->result->upload)).'ps';
-                    $ping_value = round($event->result->ping, 2);
+                    $download_value = toBits(convertSize($event->result->download), 2).' (Mbps)';
+
+                    $upload_value = toBits(convertSize($event->result->upload), 2).' (Mbps)';
+
+                    $ping_value = number_format($event->result->ping, 2).' (ms)';
 
                     $message = view('telegram.speedtest-completed', [
                         'id' => $event->result->id,
