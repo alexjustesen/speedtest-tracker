@@ -5,13 +5,8 @@ use ChrisUllyott\FileSize;
 if (! function_exists('convertSize')) {
     /**
      * Using FileSize convert bytes to the output format with precision.
-     *
-     * @param  float  $input
-     * @param  string  $output
-     * @param  int  $precision
-     * @return  float
      */
-    function convertSize(float $input, string $output = 'MB', int $precision = 4)
+    function convertSize(float $input, string $output = 'MB', int $precision = 4): float
     {
         $size = new FileSize($input, 10);
 
@@ -22,12 +17,8 @@ if (! function_exists('convertSize')) {
 if (! function_exists('toBits')) {
     /**
      * Takes a byte based float and transforms it into bits with precision.
-     *
-     * @param  float  $size
-     * @param  int  $precision
-     * @return  float
      */
-    function toBits(float $size, int $precision = 4)
+    function toBits(float $size, int $precision = 4): float
     {
         if (! $size > 0) {
             return 0;
