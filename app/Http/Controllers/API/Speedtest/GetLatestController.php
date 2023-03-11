@@ -16,11 +16,13 @@ class GetLatestController extends Controller
     {
         $latest = Result::query()
             ->latest()
-            ->firstOr(function () {
-                return response()->json([
-                    'message' => 'No results found.',
-                ], 404);
-            });
+            ->first();
+
+        if (! $latest) {
+            return response()->json([
+                'message' => 'No results found.',
+            ], 404);
+        }
 
         return response()->json([
             'message' => 'ok',
