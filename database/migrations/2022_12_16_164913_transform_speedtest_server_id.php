@@ -12,9 +12,13 @@ return new class extends Migration
      */
     public function up()
     {
-        $settings = new GeneralSettings();
+        try {
+            $settings = new GeneralSettings();
 
-        $settings->speedtest_server = [$settings->speedtest_server];
-        $settings->save();
+            $settings->speedtest_server = [$settings->speedtest_server];
+            $settings->save();
+        } catch (\Throwable $th) {
+            // This code is short lived as it'll be replaced with a jobs table...
+        }
     }
 };

@@ -26,6 +26,13 @@ class GeneralPage extends SettingsPage
 
     protected static string $settings = GeneralSettings::class;
 
+    protected function getMaxContentWidth(): string
+    {
+        $settings = new GeneralSettings();
+
+        return $settings->content_width;
+    }
+
     protected function getFormSchema(): array
     {
         return [
@@ -53,6 +60,11 @@ class GeneralPage extends SettingsPage
                                     ->placeholder('M j, Y G:i:s')
                                     ->maxLength(25)
                                     ->required(),
+                                Select::make('content_width')
+                                    ->options([
+                                        '7xl' => 'Default width',
+                                        'full' => 'Full width',
+                                    ]),
                             ])
                             ->compact()
                             ->columns([
@@ -74,20 +86,48 @@ class GeneralPage extends SettingsPage
                                     ->multiple()
                                     ->maxItems(10)
                                     ->searchable()
-                                    ->getSearchResultsUsing(function (string $search) {
-                                        $url = "https://www.speedtest.net/api/js/servers?engine=js&search={$search}&https_functional=true&limit=10";
+                                    ->options(function () {
+                                        $response = Http::get(
+                                            url: 'https://www.speedtest.net/api/js/servers',
+                                            query: [
+                                                'engine' => 'js',
+                                                'https_functional' => true,
+                                                'limit' => 10,
+                                            ]
+                                        );
 
-                                        $response = Http::get($url);
+                                        if ($response->failed()) {
+                                            return [
+                                                '' => 'There was an error retrieving Speedtest servers',
+                                            ];
+                                        }
 
-                                        $options = $response->collect()->map(function ($item) {
+                                        return $response->collect()->map(function ($item) {
                                             return [
                                                 'id' => $item['id'],
                                                 'name' => $item['id'].': '.$item['name'].' ('.$item['sponsor'].')',
                                             ];
-                                        });
+                                        })->pluck('name', 'id');
+                                    })
+                                    ->getSearchResultsUsing(function (string $search) {
+                                        $response = Http::get(
+                                            url: 'https://www.speedtest.net/api/js/servers',
+                                            query: [
+                                                'engine' => 'js',
+                                                'search' => $search,
+                                                'https_functional' => true,
+                                                'limit' => 10,
+                                            ]
+                                        );
 
-                                        if (! $options->count() && is_numeric($search)) {
-                                            $options = collect([
+                                        if ($response->failed()) {
+                                            return [
+                                                '' => 'There was an error retrieving Speedtest servers',
+                                            ];
+                                        }
+
+                                        if (! $response->collect()->count() && is_numeric($search)) {
+                                            return collect([
                                                 [
                                                     'id' => $search,
                                                     'name' => $search.': No server found, manually add this ID.',
@@ -95,7 +135,12 @@ class GeneralPage extends SettingsPage
                                             ]);
                                         }
 
-                                        return $options->pluck('name', 'id');
+                                        return $response->collect()->map(function ($item) {
+                                            return [
+                                                'id' => $item['id'],
+                                                'name' => $item['id'].': '.$item['name'].' ('.$item['sponsor'].')',
+                                            ];
+                                        })->pluck('name', 'id');
                                     })
                                     ->columnSpan(2),
                             ])

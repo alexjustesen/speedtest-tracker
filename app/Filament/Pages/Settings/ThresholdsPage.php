@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Settings\GeneralSettings;
 use App\Settings\ThresholdSettings;
 use Closure;
 use Filament\Forms\Components\Card;
@@ -26,6 +27,13 @@ class ThresholdsPage extends SettingsPage
     protected static ?string $navigationLabel = 'Thresholds';
 
     protected static string $settings = ThresholdSettings::class;
+
+    protected function getMaxContentWidth(): string
+    {
+        $settings = new GeneralSettings();
+
+        return $settings->content_width;
+    }
 
     protected function getFormSchema(): array
     {

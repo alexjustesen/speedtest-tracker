@@ -30,11 +30,11 @@ class StatsOverview extends BaseWidget
 
         if (! $previous || ! $previous->successful) {
             return [
-                Card::make('Latest download', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->download)).'ps' : 'n/a')
+                Card::make('Latest download', fn (): string => ! blank($result) ? toBits(convertSize($result->download), 2).' (Mbps)' : 'n/a')
                     ->icon('heroicon-o-download'),
-                Card::make('Latest upload', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->upload)).'ps' : 'n/a')
+                Card::make('Latest upload', fn (): string => ! blank($result) ? toBits(convertSize($result->upload), 2).' (Mbps)' : 'n/a')
                     ->icon('heroicon-o-upload'),
-                Card::make('Latest ping', fn (): string => ! blank($result) ? round($result->ping, 2).'ms' : 'n/a')
+                Card::make('Latest ping', fn (): string => ! blank($result) ? number_format($result->ping, 2).' (ms)' : 'n/a')
                     ->icon('heroicon-o-clock'),
             ];
         }
@@ -44,17 +44,17 @@ class StatsOverview extends BaseWidget
         $pingChange = percentChange($result->ping, $previous->ping, 2);
 
         return [
-            Card::make('Latest download', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->download)).'ps' : 'n/a')
+            Card::make('Latest download', fn (): string => ! blank($result) ? toBits(convertSize($result->download), 2).' (Mbps)' : 'n/a')
                 ->icon('heroicon-o-download')
                 ->description($downloadChange > 0 ? $downloadChange.'% faster' : abs($downloadChange).'% slower')
                 ->descriptionIcon($downloadChange > 0 ? 'heroicon-s-trending-up' : 'heroicon-s-trending-down')
                 ->color($downloadChange > 0 ? 'success' : 'danger'),
-            Card::make('Latest upload', fn (): string => ! blank($result) ? formatBits(formatBytesToBits($result->upload)).'ps' : 'n/a')
+            Card::make('Latest upload', fn (): string => ! blank($result) ? toBits(convertSize($result->upload), 2).' (Mbps)' : 'n/a')
                 ->icon('heroicon-o-upload')
                 ->description($uploadChange > 0 ? $uploadChange.'% faster' : abs($uploadChange).'% slower')
                 ->descriptionIcon($uploadChange > 0 ? 'heroicon-s-trending-up' : 'heroicon-s-trending-down')
                 ->color($uploadChange > 0 ? 'success' : 'danger'),
-            Card::make('Latest ping', fn (): string => ! blank($result) ? round($result->ping, 2).'ms' : 'n/a')
+            Card::make('Latest ping', fn (): string => ! blank($result) ? number_format($result->ping, 2).' (ms)' : 'n/a')
                 ->icon('heroicon-o-clock')
                 ->description($pingChange > 0 ? $pingChange.'% slower' : abs($pingChange).'% faster')
                 ->descriptionIcon($pingChange > 0 ? 'heroicon-s-trending-up' : 'heroicon-s-trending-down')

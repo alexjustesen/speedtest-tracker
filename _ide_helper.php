@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 9.52.0.
+ * Generated for Laravel 9.52.4.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -10780,12 +10780,12 @@
          * Clones a request and overrides some of its parameters.
          *
          * @return static 
-         * @param array $query The GET parameters
-         * @param array $request The POST parameters
-         * @param array $attributes The request attributes (parameters parsed from the PATH_INFO, ...)
-         * @param array $cookies The COOKIE parameters
-         * @param array $files The FILES parameters
-         * @param array $server The SERVER parameters
+         * @param array|null $query The GET parameters
+         * @param array|null $request The POST parameters
+         * @param array|null $attributes The request attributes (parameters parsed from the PATH_INFO, ...)
+         * @param array|null $cookies The COOKIE parameters
+         * @param array|null $files The FILES parameters
+         * @param array|null $server The SERVER parameters
          * @static 
          */ 
         public static function duplicate($query = null, $request = null, $attributes = null, $cookies = null, $files = null, $server = null)
@@ -17869,6 +17869,16 @@
          *
          * @static 
          */ 
+        public static function resolveMissingComponent($resolver)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->resolveMissingComponent($resolver);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
         public static function getClass($alias)
         {
                         /** @var \Livewire\LivewireManager $instance */
@@ -20171,6 +20181,18 @@
                     /**
          * 
          *
+         * @see \Filament\Tables\Testing\TestsColumns::searchTableColumns()
+         * @param array $searches
+         * @return static 
+         * @static 
+         */ 
+        public static function searchTableColumns($searches)
+        {
+                        return \Livewire\Testing\TestableLivewire::searchTableColumns($searches);
+        }
+                    /**
+         * 
+         *
          * @see \Filament\Tables\Testing\TestsFilters::filterTable()
          * @param string $name
          * @param mixed $data
@@ -20264,6 +20286,17 @@
         public static function assertCountTableRecords($count)
         {
                         return \Livewire\Testing\TestableLivewire::assertCountTableRecords($count);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsRecords::loadTable()
+         * @return static 
+         * @static 
+         */ 
+        public static function loadTable()
+        {
+                        return \Livewire\Testing\TestableLivewire::loadTable();
         }
          
     }
