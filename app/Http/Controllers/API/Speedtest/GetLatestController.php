@@ -30,7 +30,7 @@ class GetLatestController extends Controller
                 'id' => $latest->id,
                 'ping' => $latest->ping,
                 'download' => ! blank($latest->download) ? toBits(convertSize($latest->download)) : null,
-                'upload' => ! blank($latest->download) ? toBits(convertSize($latest->download)) : null,
+                'upload' => ! blank($latest->upload) ? toBits(convertSize($latest->upload)) : null,
                 'server_id' => $latest->server_id,
                 'server_host' => $latest->server_host,
                 'server_name' => $latest->server_name,
