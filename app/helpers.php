@@ -6,7 +6,7 @@ if (! function_exists('convertSize')) {
     /**
      * Using FileSize convert bytes to the output format with precision.
      */
-    function convertSize(float $input, string $output = 'MB', int $precision = 4): float
+    function convertSize(string $input, string $output = 'MB', int $precision = 4): float
     {
         $size = new FileSize($input, 10);
 
@@ -20,11 +20,7 @@ if (! function_exists('toBits')) {
      */
     function toBits(float $size, int $precision = 4): float
     {
-        if (! $size > 0) {
-            return 0;
-        }
-
-        return (float) number_format(($size * 8), $precision);
+        return (float) number_format(($size * 8), $precision, '.', '');
     }
 }
 
