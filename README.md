@@ -33,4 +33,4 @@ A robust API is planned for a later release but `v0.11.8` includes a legacy endp
 **Results page**
 
 ![General Settings page](.github/screenshots/general_settings_screenshot.png)
-** General Settings page**
+**General Settings page**

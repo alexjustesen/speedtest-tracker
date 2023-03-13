@@ -8,5 +8,5 @@ return [
      */
     'build_date' => Carbon::parse('2023-03-13'),
 
-    'build_version' => '0.11.9',
+    'build_version' => '0.11.10',
 ];
