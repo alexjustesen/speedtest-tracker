@@ -90,7 +90,7 @@ class Result extends Model
             'server_host' => $this->server_host,
             'server_name' => $this->server_name,
             'scheduled' => $this->scheduled,
-            'packet_loss' => (float) $data['packetLoss'] ?? null, // optional, because apparently the cli doesn't always have this metric
+            'packet_loss' => array_key_exists('packetLoss', $data) ? (float) $data['packetLoss'] : null, // optional, because apparently the cli doesn't always have this metric
         ];
     }
 
