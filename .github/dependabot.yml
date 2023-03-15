@@ -4,11 +4,20 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    labels:
+      - "😑 dependencies"
+      - "🐋 docker"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    labels:
+      - "😑 dependencies"
+      - "🧑‍💻 github actions"
   - package-ecosystem: "composer"
     directory: "/"
     schedule:
       interval: "weekly"
+    labels:
+      - "😑 dependencies"
+      - "🐘 php"
