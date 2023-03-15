@@ -1344,16 +1344,16 @@
         },
         {
             "name": "filament/filament",
-            "version": "v2.17.15",
+            "version": "v2.17.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/app.git",
-                "reference": "9d09faa556c6ab18e33cac7c55d0b015e17ec9d3"
+                "reference": "666416d335c6039c564ba846615d85a94f30f600"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/app/zipball/9d09faa556c6ab18e33cac7c55d0b015e17ec9d3",
-                "reference": "9d09faa556c6ab18e33cac7c55d0b015e17ec9d3",
+                "url": "https://api.github.com/repos/filamentphp/app/zipball/666416d335c6039c564ba846615d85a94f30f600",
+                "reference": "666416d335c6039c564ba846615d85a94f30f600",
                 "shasum": ""
             },
             "require": {
@@ -1403,20 +1403,20 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2023-03-12T12:20:31+00:00"
+            "time": "2023-03-15T10:55:01+00:00"
         },
         {
             "name": "filament/forms",
-            "version": "v2.17.15",
+            "version": "v2.17.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/forms.git",
-                "reference": "d6f2a810e47381d6cf8ebb5547bfce7c95e02ef4"
+                "reference": "61548f9b9866ddce69f4446dddc4f4dc33af70e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/forms/zipball/d6f2a810e47381d6cf8ebb5547bfce7c95e02ef4",
-                "reference": "d6f2a810e47381d6cf8ebb5547bfce7c95e02ef4",
+                "url": "https://api.github.com/repos/filamentphp/forms/zipball/61548f9b9866ddce69f4446dddc4f4dc33af70e3",
+                "reference": "61548f9b9866ddce69f4446dddc4f4dc33af70e3",
                 "shasum": ""
             },
             "require": {
@@ -1461,11 +1461,11 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2023-03-12T12:20:28+00:00"
+            "time": "2023-03-15T10:54:47+00:00"
         },
         {
             "name": "filament/notifications",
-            "version": "v2.17.15",
+            "version": "v2.17.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/notifications.git",
@@ -1518,7 +1518,7 @@
         },
         {
             "name": "filament/spatie-laravel-settings-plugin",
-            "version": "v2.17.15",
+            "version": "v2.17.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/spatie-laravel-settings-plugin.git",
@@ -1565,7 +1565,7 @@
         },
         {
             "name": "filament/support",
-            "version": "v2.17.15",
+            "version": "v2.17.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/support.git",
@@ -1615,16 +1615,16 @@
         },
         {
             "name": "filament/tables",
-            "version": "v2.17.15",
+            "version": "v2.17.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/tables.git",
-                "reference": "8c27563b3e2e0e23e9b4586c4eef4eccd34b6691"
+                "reference": "d82c31b7ffea220d6223707977bc6ae7f9cdf287"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/tables/zipball/8c27563b3e2e0e23e9b4586c4eef4eccd34b6691",
-                "reference": "8c27563b3e2e0e23e9b4586c4eef4eccd34b6691",
+                "url": "https://api.github.com/repos/filamentphp/tables/zipball/d82c31b7ffea220d6223707977bc6ae7f9cdf287",
+                "reference": "d82c31b7ffea220d6223707977bc6ae7f9cdf287",
                 "shasum": ""
             },
             "require": {
@@ -1667,7 +1667,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2023-03-12T12:20:31+00:00"
+            "time": "2023-03-15T10:55:08+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -5247,16 +5247,16 @@
         },
         {
             "name": "spatie/laravel-package-tools",
-            "version": "1.14.1",
+            "version": "1.14.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-package-tools.git",
-                "reference": "b477dd2f89d0751f0e51ffb3a70181f0bc7ab8df"
+                "reference": "bab62023a4745a61170ad5424184533685e73c2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/b477dd2f89d0751f0e51ffb3a70181f0bc7ab8df",
-                "reference": "b477dd2f89d0751f0e51ffb3a70181f0bc7ab8df",
+                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/bab62023a4745a61170ad5424184533685e73c2d",
+                "reference": "bab62023a4745a61170ad5424184533685e73c2d",
                 "shasum": ""
             },
             "require": {
@@ -5295,7 +5295,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-package-tools/issues",
-                "source": "https://github.com/spatie/laravel-package-tools/tree/1.14.1"
+                "source": "https://github.com/spatie/laravel-package-tools/tree/1.14.2"
             },
             "funding": [
                 {
@@ -5303,7 +5303,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-01-27T15:33:45+00:00"
+            "time": "2023-03-14T16:41:21+00:00"
         },
         {
             "name": "spatie/laravel-settings",
