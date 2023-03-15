@@ -4,6 +4,7 @@ namespace App\Listeners\Threshold;
 
 use App\Events\ResultCreated;
 use App\Mail\Threshold\AbsoluteMail;
+use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use App\Telegram\TelegramNotification;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 
 class AbsoluteListener implements ShouldQueue
 {
+    public $generalSettings;
+
     public $notificationSettings;
 
     public $thresholdSettings;
@@ -25,6 +28,8 @@ class AbsoluteListener implements ShouldQueue
      */
     public function __construct()
     {
+        $this->generalSettings = new (GeneralSettings::class);
+
         $this->notificationSettings = new (NotificationSettings::class);
 
         $this->thresholdSettings = new (ThresholdSettings::class);
@@ -205,6 +210,7 @@ class AbsoluteListener implements ShouldQueue
                 $message = view('telegram.threshold.absolute', [
                     'id' => $event->result->id,
                     'url' => url('/admin/results'),
+                    'site_name' => $this->generalSettings->site_name,
                     'metrics' => $failedThresholds,
                 ])->render();
 
