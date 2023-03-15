@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\ResultCreated;
 use App\Mail\SpeedtestCompletedMail;
+use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Telegram\TelegramNotification;
 use Filament\Notifications\Notification;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Mail;
 
 class SpeedtestCompletedListener
 {
+    public $generalSettings;
+
     public $notificationSettings;
 
     /**
@@ -20,6 +23,8 @@ class SpeedtestCompletedListener
      */
     public function __construct()
     {
+        $this->generalSettings = new (GeneralSettings::class);
+
         $this->notificationSettings = new (NotificationSettings::class);
     }
 
@@ -59,6 +64,7 @@ class SpeedtestCompletedListener
 
                     $message = view('telegram.speedtest-completed', [
                         'id' => $event->result->id,
+                        'site_name' => $this->generalSettings->site_name,
                         'ping' => $ping_value,
                         'download' => $download_value,
                         'upload' => $upload_value,
