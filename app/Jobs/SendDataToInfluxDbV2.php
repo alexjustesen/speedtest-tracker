@@ -53,6 +53,7 @@ class SendDataToInfluxDbV2 implements ShouldQueue
             'token' => $influxdb['token'],
             'bucket' => $influxdb['bucket'],
             'org' => $influxdb['org'],
+            'verifySSL' => $influxdb['verifySSL'],
             'precision' => \InfluxDB2\Model\WritePrecision::S,
         ]);
 
