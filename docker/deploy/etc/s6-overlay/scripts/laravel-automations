@@ -7,6 +7,14 @@ echo ""
 echo "🐇  Configuring Speedtest Tracker..."
 echo ""
 
+# Fix permissions
+echo "🔒  Fixing app path file permissions..."
+chmod -R 755 /config
+chown -R webuser:webgroup /config
+chown -R webuser:webgroup $WEBUSER_HOME
+echo "✅  Permissions fixed."
+echo ""
+
 if [ ${DB_CONNECTION:="sqlite"} == "sqlite" ]; then
     # Check for database
     if [ ! -f /config/database.sqlite ]; then
@@ -78,14 +86,6 @@ else
     echo "✅  App key generated."
 fi
 
-echo ""
-
-# Fix permissions
-echo "🔒  Fixing app path file permissions..."
-chmod -R 755 /config
-chown -R webuser:webgroup /config
-chown -R webuser:webgroup $WEBUSER_HOME
-echo "✅  Permissions fixed."
 echo ""
 
 # create storage symlink
