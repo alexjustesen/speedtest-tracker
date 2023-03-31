@@ -15,7 +15,7 @@ chown -R webuser:webgroup $WEBUSER_HOME
 echo "✅  Permissions fixed."
 echo ""
 
-if [ ${DB_CONNECTION:="sqlite"} == "sqlite" ]; then
+if [ ${DB_CONNECTION:="sqlite"} = "sqlite" ]; then
     # Check for database
     if [ ! -f /config/database.sqlite ]; then
         echo "🙄  SQLite database not found, creating..."
