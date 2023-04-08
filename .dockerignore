@@ -2,7 +2,8 @@
 /.github
 /.idea
 /.vscode
-/docker/8.1
+/docker/*
+!/docker/deploy
 /node_modules
 /public/build
 /public/hot
