@@ -9,14 +9,14 @@ ENV SSL_MODE="mixed"
 # Install addition packages and cron file
 RUN apt-get update \
     && apt-get install -y --no-install-recommends cron gnupg php8.1-gd php8.1-pgsql \
-    && echo "MAILTO=\"\"\n* * * * * webuser /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel
-
+    && echo "MAILTO=\"\"\n* * * * * webuser /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
+    \
 # Install Speedtest cli
-RUN curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash \
-    && apt-get install -y speedtest
-
+    && curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash \
+    && apt-get install -y --no-install-recommends speedtest \
+    \
 # Clean up package lists
-RUN apt-get clean \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Copy package configs
@@ -28,7 +28,7 @@ WORKDIR /var/www/html
 COPY --chown=webuser:webgroup . /var/www/html
 
 # Install app dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev \
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev --no-cache \
     && mkdir -p storage/logs \
     && php artisan optimize:clear \
     && chown -R webuser:webgroup /var/www/html
