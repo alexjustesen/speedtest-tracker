@@ -47,7 +47,7 @@ class ResultPolicy
      */
     public function update(User $user, Result $result)
     {
-        //
+        return true;
     }
 
     /**
@@ -56,6 +56,16 @@ class ResultPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, Result $result)
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can delete multiple models.
+     *
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function deleteAny(User $user)
     {
         return true;
     }

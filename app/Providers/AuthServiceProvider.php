@@ -4,8 +4,11 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+// TODO: remove package and policy as FailedJob is no longer included
 use Amvisor\FilamentFailedJobs\Models\FailedJob;
+use App\Models\Result;
 use App\Policies\FailedJobPolicy;
+use App\Policies\ResultPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -17,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         FailedJob::class => FailedJobPolicy::class,
+        Result::class => ResultPolicy::class,
     ];
 
     /**
