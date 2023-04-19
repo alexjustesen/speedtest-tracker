@@ -215,7 +215,7 @@ class AbsoluteListener implements ShouldQueue
                 ])->render();
 
                 \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
-                        ->notify(new TelegramNotification($message));
+                    ->notify(new TelegramNotification($message));
             }
         }
     }

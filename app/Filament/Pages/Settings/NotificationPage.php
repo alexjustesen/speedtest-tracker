@@ -54,117 +54,119 @@ class NotificationPage extends SettingsPage
                     Grid::make([
                         'default' => 1,
                     ])
-                    ->schema([
-                        Section::make('Database')
-                            ->description('Notifications sent to this channel will show up under the 🔔 icon in the header.')
-                            ->schema([
-                                Toggle::make('database_enabled')
-                                    ->label('Enable database notifications')
-                                    ->reactive()
-                                    ->columnSpan(2),
-                                Grid::make([
-                                    'default' => 1,
-                                ])
-                                ->hidden(fn (Closure $get) => $get('database_enabled') !== true)
+                        ->schema([
+                            Section::make('Database')
+                                ->description('Notifications sent to this channel will show up under the 🔔 icon in the header.')
                                 ->schema([
-                                    Fieldset::make('Triggers')
+                                    Toggle::make('database_enabled')
+                                        ->label('Enable database notifications')
+                                        ->reactive()
+                                        ->columnSpan(2),
+                                    Grid::make([
+                                        'default' => 1,
+                                    ])
+                                        ->hidden(fn (Closure $get) => $get('database_enabled') !== true)
                                         ->schema([
-                                            Toggle::make('database_on_speedtest_run')
-                                                ->label('Notify on every speetest run')
-                                                ->columnSpan(2),
-                                            Toggle::make('database_on_threshold_failure')
-                                                ->label('Notify on threshold failures')
-                                                ->columnSpan(2),
+                                            Fieldset::make('Triggers')
+                                                ->schema([
+                                                    Toggle::make('database_on_speedtest_run')
+                                                        ->label('Notify on every speetest run')
+                                                        ->columnSpan(2),
+                                                    Toggle::make('database_on_threshold_failure')
+                                                        ->label('Notify on threshold failures')
+                                                        ->columnSpan(2),
+                                                ]),
+                                            TestDatabaseNotification::make('test channel'),
                                         ]),
-                                    TestDatabaseNotification::make('test channel'),
+                                ])
+                                ->compact()
+                                ->columns([
+                                    'default' => 1,
+                                    'md' => 2,
                                 ]),
-                            ])
-                            ->compact()
-                            ->columns([
-                                'default' => 1,
-                                'md' => 2,
-                            ]),
 
-                        Section::make('Mail')
-                            ->schema([
-                                Toggle::make('mail_enabled')
-                                    ->label('Enable mail notifications')
-                                    ->reactive()
-                                    ->columnSpan(2),
-                                Grid::make([
-                                    'default' => 1,
-                                ])
-                                ->hidden(fn (Closure $get) => $get('mail_enabled') !== true)
+                            Section::make('Mail')
                                 ->schema([
-                                    Fieldset::make('Triggers')
-                                        ->schema([
-                                            Toggle::make('mail_on_speedtest_run')
-                                                ->label('Notify on every speetest run')
-                                                ->columnSpan(2),
-                                            Toggle::make('mail_on_threshold_failure')
-                                                ->label('Notify on threshold failures')
-                                                ->columnSpan(2),
-                                        ]),
-                                ]),
-                                Repeater::make('mail_recipients')
-                                    ->label('Recipients')
-                                    ->schema([
-                                        TextInput::make('email_address')
-                                            ->email()
-                                            ->required(),
+                                    Toggle::make('mail_enabled')
+                                        ->label('Enable mail notifications')
+                                        ->reactive()
+                                        ->columnSpan(2),
+                                    Grid::make([
+                                        'default' => 1,
                                     ])
-                                    ->hidden(fn (Closure $get) => $get('mail_enabled') !== true)
-                                    ->columnSpan(['md' => 2]),
-                                TestMailNotification::make('test channel')
-                                    ->hidden(fn (Closure $get) => $get('mail_enabled') !== true),
-                            ])
-                            ->compact()
-                            ->columns([
-                                'default' => 1,
-                                'md' => 2,
-                            ]),
-                        Section::make('Telegram')
-                            ->schema([
-                                Toggle::make('telegram_enabled')
-                                    ->label('Enable telegram notifications')
-                                    ->reactive()
-                                    ->columnSpan(2),
-                                Grid::make([
-                                    'default' => 1, ])
-                                ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true)
-                                ->schema([
-                                    Fieldset::make('Triggers')
                                         ->schema([
-                                            Toggle::make('telegram_on_speedtest_run')
-                                                ->label('Notify on every speetest run')
-                                                ->columnSpan(2),
-                                            Toggle::make('telegram_on_threshold_failure')
-                                                ->label('Notify on threshold failures')
-                                                ->columnSpan(2),
-                                        ]),
-                                ]),
-                                Repeater::make('telegram_recipients')
-                                    ->label('Recipients')
-                                    ->schema([
-                                        TextInput::make('telegram_chat_id')
-                                        ->maxLength(50)
-                                        ->required()
+                                            Fieldset::make('Triggers')
+                                                ->schema([
+                                                    Toggle::make('mail_on_speedtest_run')
+                                                        ->label('Notify on every speetest run')
+                                                        ->columnSpan(2),
+                                                    Toggle::make('mail_on_threshold_failure')
+                                                        ->label('Notify on threshold failures')
+                                                        ->columnSpan(2),
+                                                ]),
+                                        ])
+                                        ->hidden(fn (Closure $get) => $get('mail_enabled') !== true),
+
+                                    Repeater::make('mail_recipients')
+                                        ->label('Recipients')
+                                        ->schema([
+                                            TextInput::make('email_address')
+                                                ->email()
+                                                ->required(),
+                                        ])
+                                        ->hidden(fn (Closure $get) => $get('mail_enabled') !== true)
                                         ->columnSpan(['md' => 2]),
-                                    ])
-                                    ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true)
-                                    ->columnSpan(['md' => 2]),
-                                TestTelegramNotification::make('test channel')
-                                    ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true),
-                            ])
-                            ->compact()
-                            ->columns([
-                                'default' => 1,
-                                'md' => 2,
-                            ]),
-                    ])
-                    ->columnSpan([
-                        'md' => 2,
-                    ]),
+                                    TestMailNotification::make('test channel')
+                                        ->hidden(fn (Closure $get) => $get('mail_enabled') !== true),
+                                ])
+                                ->compact()
+                                ->columns([
+                                    'default' => 1,
+                                    'md' => 2,
+                                ]),
+
+                            Section::make('Telegram')
+                                ->schema([
+                                    Toggle::make('telegram_enabled')
+                                        ->label('Enable telegram notifications')
+                                        ->reactive()
+                                        ->columnSpan(2),
+                                    Grid::make([
+                                        'default' => 1, ])
+                                        ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true)
+                                        ->schema([
+                                            Fieldset::make('Triggers')
+                                                ->schema([
+                                                    Toggle::make('telegram_on_speedtest_run')
+                                                        ->label('Notify on every speetest run')
+                                                        ->columnSpan(2),
+                                                    Toggle::make('telegram_on_threshold_failure')
+                                                        ->label('Notify on threshold failures')
+                                                        ->columnSpan(2),
+                                                ]),
+                                        ]),
+                                    Repeater::make('telegram_recipients')
+                                        ->label('Recipients')
+                                        ->schema([
+                                            TextInput::make('telegram_chat_id')
+                                                ->maxLength(50)
+                                                ->required()
+                                                ->columnSpan(['md' => 2]),
+                                        ])
+                                        ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true)
+                                        ->columnSpan(['md' => 2]),
+                                    TestTelegramNotification::make('test channel')
+                                        ->hidden(fn (Closure $get) => $get('telegram_enabled') !== true),
+                                ])
+                                ->compact()
+                                ->columns([
+                                    'default' => 1,
+                                    'md' => 2,
+                                ]),
+                        ])
+                        ->columnSpan([
+                            'md' => 2,
+                        ]),
 
                     Card::make()
                         ->schema([
@@ -233,7 +235,7 @@ class NotificationPage extends SettingsPage
         if (! empty($notificationSettings->telegram_recipients)) {
             foreach ($notificationSettings->telegram_recipients as $recipient) {
                 \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
-                ->notify(new TelegramNotification('Test notification channel *telegram*'));
+                    ->notify(new TelegramNotification('Test notification channel *telegram*'));
             }
 
             Notification::make()
