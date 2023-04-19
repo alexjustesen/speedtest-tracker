@@ -33,8 +33,8 @@ class Dashboard extends BasePage
             $settings = new GeneralSettings();
 
             $this->lastResult = $result->created_at
-                    ->timezone($settings->timezone)
-                    ->format($settings->time_format);
+                ->timezone($settings->timezone)
+                ->format($settings->time_format);
         }
 
         return view(static::$view, $this->getViewData())

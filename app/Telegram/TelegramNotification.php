@@ -42,7 +42,7 @@ class TelegramNotification extends Notification
     public function toTelegram($notifiable)
     {
         return TelegramMessage::create()
-                ->to($notifiable->routes['telegram_chat_id'])
-                ->content($this->message);
+            ->to($notifiable->routes['telegram_chat_id'])
+            ->content($this->message);
     }
 }
