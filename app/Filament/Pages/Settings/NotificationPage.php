@@ -70,7 +70,7 @@ class NotificationPage extends SettingsPage
                                             Fieldset::make('Triggers')
                                                 ->schema([
                                                     Toggle::make('database_on_speedtest_run')
-                                                        ->label('Notify on every speetest run')
+                                                        ->label('Notify on every speedtest run')
                                                         ->columnSpan(2),
                                                     Toggle::make('database_on_threshold_failure')
                                                         ->label('Notify on threshold failures')
@@ -98,7 +98,7 @@ class NotificationPage extends SettingsPage
                                             Fieldset::make('Triggers')
                                                 ->schema([
                                                     Toggle::make('mail_on_speedtest_run')
-                                                        ->label('Notify on every speetest run')
+                                                        ->label('Notify on every speedtest run')
                                                         ->columnSpan(2),
                                                     Toggle::make('mail_on_threshold_failure')
                                                         ->label('Notify on threshold failures')
@@ -138,7 +138,7 @@ class NotificationPage extends SettingsPage
                                             Fieldset::make('Triggers')
                                                 ->schema([
                                                     Toggle::make('telegram_on_speedtest_run')
-                                                        ->label('Notify on every speetest run')
+                                                        ->label('Notify on every speedtest run')
                                                         ->columnSpan(2),
                                                     Toggle::make('telegram_on_threshold_failure')
                                                         ->label('Notify on threshold failures')
