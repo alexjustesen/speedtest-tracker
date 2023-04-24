@@ -13,7 +13,7 @@
         "filament/filament": "^2.0",
         "filament/spatie-laravel-settings-plugin": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
-        "influxdata/influxdb-client-php": "^2.9",
+        "influxdata/influxdb-client-php": "^3.3",
         "laravel-notification-channels/telegram": "^3.0",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
