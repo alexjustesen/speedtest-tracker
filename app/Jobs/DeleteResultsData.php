@@ -44,7 +44,7 @@ class DeleteResultsData implements ShouldQueue, ShouldBeUnique
                 ->danger()
                 ->sendToDatabase($recipient);
 
-            return 0;
+            return;
         }
 
         Notification::make()

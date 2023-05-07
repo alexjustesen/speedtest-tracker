@@ -56,7 +56,7 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
                 'data' => $message,
             ]);
 
-            return 0;
+            return;
         }
 
         try {
@@ -78,6 +78,6 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
             Log::error($e->getMessage());
         }
 
-        return 0;
+        return;
     }
 }
