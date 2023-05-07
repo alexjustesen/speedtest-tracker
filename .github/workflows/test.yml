@@ -1,6 +1,9 @@
 name: Test
 on:
-  - push
+  pull_request:
+      branches: [main]
+  push:
+  workflow_dispatch:
 jobs:
   test:
     strategy:
