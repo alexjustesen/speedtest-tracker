@@ -6,9 +6,9 @@ use App\Forms\Components\TestDatabaseNotification;
 use App\Forms\Components\TestMailNotification;
 use App\Forms\Components\TestTelegramNotification;
 use App\Mail\Test;
+use App\Notifications\Telegram\TestNotification as TelegramTestNotification;
 use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
-use App\Telegram\TelegramNotification;
 use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
@@ -21,6 +21,7 @@ use Filament\Forms\Components\View;
 use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class NotificationPage extends SettingsPage
 {
@@ -249,10 +250,9 @@ class NotificationPage extends SettingsPage
             return;
         }
 
-        // TODO: this is broken
         foreach ($notificationSettings->telegram_recipients as $recipient) {
-            \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
-                ->notify(new TelegramNotification('Test notification channel *telegram*'));
+            FacadesNotification::route('telegram_chat_id', $recipient['telegram_chat_id'])
+                ->notify(new TelegramTestNotification);
         }
 
         Notification::make()
