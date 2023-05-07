@@ -45,14 +45,20 @@ jobs:
         env:
           COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Generate application key
-        run: php artisan key:generate
       - name: Install application
         run: php artisan app:install --force
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: mysql
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_USERNAME: root
+          DB_DATABASE: test
+          DB_PASSWORD: null
       - name: Run tests
         run: php artisan test
         env:
           DB_CONNECTION: mysql
+          DB_HOST: mysql
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           DB_USERNAME: root
           DB_DATABASE: test
