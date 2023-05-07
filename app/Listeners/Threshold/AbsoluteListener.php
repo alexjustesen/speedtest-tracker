@@ -37,8 +37,6 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @return void
      */
     public function handle(ResultCreated $event): void
     {
@@ -66,8 +64,6 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle database notifications.
-     *
-     * @return void
      */
     protected function databaseChannel(ResultCreated $event): void
     {
@@ -107,8 +103,6 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle database notifications.
-     *
-     * @return void
      */
     protected function mailChannel(ResultCreated $event): void
     {
@@ -161,8 +155,6 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle telegram notifications.
-     *
-     * @return void
      */
     protected function telegramChannel(ResultCreated $event): void
     {

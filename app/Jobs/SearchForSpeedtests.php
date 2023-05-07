@@ -16,8 +16,6 @@ class SearchForSpeedtests implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle(GeneralSettings $settings): void
     {

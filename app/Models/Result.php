@@ -107,8 +107,6 @@ class Result extends Model
 
     /**
      * Return the previous test result.
-     *
-     * @return  self|null
      */
     public function previous(): ?self
     {

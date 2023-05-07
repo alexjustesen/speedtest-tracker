@@ -23,8 +23,6 @@ class InfluxDb2Listener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @return void
      */
     public function handle(ResultCreated $event): void
     {

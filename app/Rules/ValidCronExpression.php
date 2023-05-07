@@ -11,10 +11,7 @@ class ValidCronExpression implements InvokableRule
     /**
      * Validates a string cron expression is correct
      *
-     * @param  string  $attribute
-     * @param  mixed  $value
      * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
-     * @return void
      */
     public function __invoke(string $attribute, mixed $value, Closure $fail): void
     {

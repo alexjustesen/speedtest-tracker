@@ -30,8 +30,6 @@ class SpeedtestCompletedListener
 
     /**
      * Handle the event.
-     *
-     * @return void
      */
     public function handle(ResultCreated $event): void
     {
