@@ -78,6 +78,5 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
             Log::error($e->getMessage());
         }
 
-        return;
     }
 }
