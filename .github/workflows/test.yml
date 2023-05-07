@@ -47,6 +47,8 @@ jobs:
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Generate application key
         run: php artisan key:generate
+      - name: Install application
+        run: php artisan app:install --force
       - name: Run tests
         run: php artisan test
         env:
