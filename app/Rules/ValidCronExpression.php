@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use Closure;
 use Cron\CronExpression;
 use Illuminate\Contracts\Validation\InvokableRule;
 
@@ -15,7 +16,7 @@ class ValidCronExpression implements InvokableRule
      * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      * @return void
      */
-    public function __invoke($attribute, $value, $fail)
+    public function __invoke(string $attribute, mixed $value, Closure $fail)
     {
         $is_valid = CronExpression::isValidExpression($value);
 
