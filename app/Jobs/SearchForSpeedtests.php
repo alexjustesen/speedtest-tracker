@@ -31,7 +31,7 @@ class SearchForSpeedtests implements ShouldQueue
 
         $speedtest = [
             'enabled' => ! blank($settings->speedtest_schedule),
-            'schedule' => optional($settings)->speedtest_schedule,
+            'schedule' => $settings?->speedtest_schedule,
             'ookla_server_id' => $ookla_server_id,
         ];
 

@@ -31,10 +31,10 @@ class TestInfluxDB extends Command
     {
         $influxdb = [
             'enabled' => $settings->v2_enabled,
-            'url' => optional($settings)->v2_url,
-            'org' => optional($settings)->v2_org,
-            'bucket' => optional($settings)->v2_bucket,
-            'token' => optional($settings)->v2_token,
+            'url' => $settings?->v2_url,
+            'org' => $settings?->v2_org,
+            'bucket' => $settings?->v2_bucket,
+            'token' => $settings?->v2_token,
         ];
 
         if ($influxdb['enabled'] == true) {
