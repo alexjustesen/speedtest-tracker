@@ -2,11 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(
-    [
-        'prefix' => 'test',
-    ],
-    function () {
+Route::prefix('test')->group(function () {
         // silence is golden
     }
 );
