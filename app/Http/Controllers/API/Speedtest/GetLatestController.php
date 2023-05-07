@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API\Speedtest;
 
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Result;
+use Illuminate\Http\JsonResponse;
 
 class GetLatestController extends Controller
 {
