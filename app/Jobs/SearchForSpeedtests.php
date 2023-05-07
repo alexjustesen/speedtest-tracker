@@ -16,10 +16,8 @@ class SearchForSpeedtests implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
-    public function handle(GeneralSettings $settings)
+    public function handle(GeneralSettings $settings): void
     {
         $ookla_server_id = null;
 
@@ -31,7 +29,7 @@ class SearchForSpeedtests implements ShouldQueue
 
         $speedtest = [
             'enabled' => ! blank($settings->speedtest_schedule),
-            'schedule' => optional($settings)->speedtest_schedule,
+            'schedule' => $settings?->speedtest_schedule,
             'ookla_server_id' => $ookla_server_id,
         ];
 

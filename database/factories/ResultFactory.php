@@ -14,7 +14,7 @@ class ResultFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'ping' => fake()->randomFloat(2, 0, 100),

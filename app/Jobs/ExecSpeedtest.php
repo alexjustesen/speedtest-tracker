@@ -30,10 +30,8 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $process = new Process(
             array_filter([
@@ -58,7 +56,7 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
                 'data' => $message,
             ]);
 
-            return 0;
+            return;
         }
 
         try {
@@ -80,6 +78,5 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
             Log::error($e->getMessage());
         }
 
-        return 0;
     }
 }

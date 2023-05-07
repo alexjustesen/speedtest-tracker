@@ -28,10 +28,8 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
 
     /**
      * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
+    public function envelope(): Envelope
     {
         return new Envelope(
             subject: 'Speedtest Result #'.$this->result->id.' - Completed',
@@ -40,10 +38,8 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
 
     /**
      * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
+    public function content(): Content
     {
         return new Content(
             markdown: 'emails.speedtest-completed',
@@ -56,10 +52,8 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array
      */
-    public function attachments()
+    public function attachments(): array
     {
         return [];
     }

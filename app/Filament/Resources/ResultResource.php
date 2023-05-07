@@ -162,7 +162,7 @@ class ResultResource extends Resource
                     Action::make('view result')
                         ->label('View on Speedtest.net')
                         ->icon('heroicon-o-link')
-                        ->url(fn (Result $record): string|null => optional($record)->url)
+                        ->url(fn (Result $record): string|null => $record?->url)
                         ->hidden(fn (Result $record): bool => ! $record->is_successful)
                         ->openUrlInNewTab(),
                     Tables\Actions\ViewAction::make(),

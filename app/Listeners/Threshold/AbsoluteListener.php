@@ -37,10 +37,8 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @return void
      */
-    public function handle(ResultCreated $event)
+    public function handle(ResultCreated $event): void
     {
         if ($this->thresholdSettings->absolute_enabled !== true) {
             Log::info('Absolute threshold notifications disabled.');
@@ -66,10 +64,8 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle database notifications.
-     *
-     * @return void
      */
-    protected function databaseChannel(ResultCreated $event)
+    protected function databaseChannel(ResultCreated $event): void
     {
         // Download threshold
         if ($this->thresholdSettings->absolute_download > 0) {
@@ -107,10 +103,8 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle database notifications.
-     *
-     * @return void
      */
-    protected function mailChannel(ResultCreated $event)
+    protected function mailChannel(ResultCreated $event): void
     {
         $failedThresholds = [];
 
@@ -161,10 +155,8 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle telegram notifications.
-     *
-     * @return void
      */
-    protected function telegramChannel(ResultCreated $event)
+    protected function telegramChannel(ResultCreated $event): void
     {
         $failedThresholds = [];
 

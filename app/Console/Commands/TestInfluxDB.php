@@ -24,17 +24,15 @@ class TestInfluxDB extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(InfluxDbSettings $settings)
+    public function handle(InfluxDbSettings $settings): int
     {
         $influxdb = [
             'enabled' => $settings->v2_enabled,
-            'url' => optional($settings)->v2_url,
-            'org' => optional($settings)->v2_org,
-            'bucket' => optional($settings)->v2_bucket,
-            'token' => optional($settings)->v2_token,
+            'url' => $settings?->v2_url,
+            'org' => $settings?->v2_org,
+            'bucket' => $settings?->v2_bucket,
+            'token' => $settings?->v2_token,
         ];
 
         if ($influxdb['enabled'] == true) {

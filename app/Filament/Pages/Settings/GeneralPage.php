@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
-use App\Rules\ValidCronExpression;
+use App\Rules\Cron;
 use App\Settings\GeneralSettings;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
@@ -75,7 +75,7 @@ class GeneralPage extends SettingsPage
                             Section::make('Speedtest Settings')
                                 ->schema([
                                     TextInput::make('speedtest_schedule')
-                                        ->rules([new ValidCronExpression()])
+                                        ->rules([new Cron()])
                                         ->helperText('Leave empty to disable the schedule. You can also use the cron expression generator [HERE](https://crontab.cronhub.io/) to help you make schedules.')
                                         ->nullable()
                                         ->columnSpan(1),

@@ -23,10 +23,8 @@ class InstallCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         if (! $this->option('force')) {
             $this->newLine(2);

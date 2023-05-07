@@ -6,9 +6,9 @@ use App\Forms\Components\TestDatabaseNotification;
 use App\Forms\Components\TestMailNotification;
 use App\Forms\Components\TestTelegramNotification;
 use App\Mail\Test;
+use App\Notifications\Telegram\TestNotification as TelegramTestNotification;
 use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
-use App\Telegram\TelegramNotification;
 use Closure;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
@@ -21,6 +21,7 @@ use Filament\Forms\Components\View;
 use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class NotificationPage extends SettingsPage
 {
@@ -179,7 +180,7 @@ class NotificationPage extends SettingsPage
         ];
     }
 
-    public function sendTestDatabaseNotification()
+    public function sendTestDatabaseNotification(): void
     {
         $recipient = auth()->user();
 
@@ -198,29 +199,32 @@ class NotificationPage extends SettingsPage
             ->send();
     }
 
-    public function sendTestMailNotification()
+    public function sendTestMailNotification(): void
     {
         $notificationSettings = new (NotificationSettings::class);
 
-        if (! empty($notificationSettings->mail_recipients)) {
-            foreach ($notificationSettings->mail_recipients as $recipient) {
-                Mail::to($recipient)
-                    ->send(new Test());
-            }
-
+        if (blank($notificationSettings->mail_recipients)) {
             Notification::make()
-                ->title('Test mail notification sent.')
-                ->success()
-                ->send();
-        } else {
-            Notification::make()
-                ->title('You need to add recipients to receive mail notifications.')
+                ->title('You need to add mail recipients.')
+                ->body('Make sure to click "Save changes" before testing mail notifications.')
                 ->warning()
                 ->send();
+
+            return;
         }
+
+        foreach ($notificationSettings->mail_recipients as $recipient) {
+            Mail::to($recipient)
+                ->send(new Test());
+        }
+
+        Notification::make()
+            ->title('Test mail notification sent.')
+            ->success()
+            ->send();
     }
 
-    public function sendTestTelegramNotification()
+    public function sendTestTelegramNotification(): void
     {
         $notificationSettings = new (NotificationSettings::class);
 
@@ -228,25 +232,32 @@ class NotificationPage extends SettingsPage
 
         if (blank($bot)) {
             Notification::make()
-                ->title('First you need to add \'TELEGRAM_BOT_TOKEN\' on your .env file or add it as environment variable')
-                ->warning()
+                ->title('No Telegram bot provided.')
+                ->body('You need to add "TELEGRAM_BOT_TOKEN" in your .env file or add it as environment variable')
+                ->danger()
                 ->send();
-        }
-        if (! empty($notificationSettings->telegram_recipients)) {
-            foreach ($notificationSettings->telegram_recipients as $recipient) {
-                \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
-                    ->notify(new TelegramNotification('Test notification channel *telegram*'));
-            }
 
+            return;
+        }
+
+        if (blank($notificationSettings->telegram_recipients)) {
             Notification::make()
-                ->title('Test Telegram notification sent.')
-                ->success()
-                ->send();
-        } else {
-            Notification::make()
-                ->title('You need to add recipients to receive Telegram notifications.')
+                ->title('You need to add Telegram recipients.')
+                ->body('Make sure to click "Save changes" before testing Telegram notifications.')
                 ->warning()
                 ->send();
+
+            return;
         }
+
+        foreach ($notificationSettings->telegram_recipients as $recipient) {
+            FacadesNotification::route('telegram_chat_id', $recipient['telegram_chat_id'])
+                ->notify(new TelegramTestNotification);
+        }
+
+        Notification::make()
+            ->title('Test Telegram notification sent.')
+            ->success()
+            ->send();
     }
 }

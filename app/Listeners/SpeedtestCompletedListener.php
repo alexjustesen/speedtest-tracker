@@ -30,10 +30,8 @@ class SpeedtestCompletedListener
 
     /**
      * Handle the event.
-     *
-     * @return void
      */
-    public function handle(ResultCreated $event)
+    public function handle(ResultCreated $event): void
     {
         if ($this->notificationSettings->database_enabled) {
             if ($this->notificationSettings->database_on_speedtest_run) {

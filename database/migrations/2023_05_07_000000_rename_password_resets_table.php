@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -11,9 +10,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('results', function (Blueprint $table) {
-            $table->text('comments')->nullable()->after('url');
-        });
+        Schema::rename('password_resets', 'password_reset_tokens');
     }
 
     /**
@@ -21,6 +18,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::rename('password_reset_tokens', 'password_resets');
     }
 };

@@ -107,10 +107,8 @@ class Result extends Model
 
     /**
      * Return the previous test result.
-     *
-     * @return  self|null
      */
-    public function previous()
+    public function previous(): ?self
     {
         return static::orderBy('id', 'desc')
             ->where('id', '<', $this->id)

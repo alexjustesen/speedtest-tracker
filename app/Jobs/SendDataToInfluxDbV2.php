@@ -34,17 +34,15 @@ class SendDataToInfluxDbV2 implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $influxdb = [
             'enabled' => $this->settings->v2_enabled,
-            'url' => optional($this->settings)->v2_url,
-            'org' => optional($this->settings)->v2_org,
-            'bucket' => optional($this->settings)->v2_bucket,
-            'token' => optional($this->settings)->v2_token,
+            'url' => $this->settings?->v2_url,
+            'org' => $this->settings?->v2_org,
+            'bucket' => $this->settings?->v2_bucket,
+            'token' => $this->settings?->v2_token,
             'verifySSL' => $this->settings->v2_verify_ssl,
         ];
 
