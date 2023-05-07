@@ -69,7 +69,7 @@ class AbsoluteListener implements ShouldQueue
      *
      * @return void
      */
-    protected function databaseChannel(ResultCreated $event)
+    protected function databaseChannel(ResultCreated $event): void
     {
         // Download threshold
         if ($this->thresholdSettings->absolute_download > 0) {
@@ -110,7 +110,7 @@ class AbsoluteListener implements ShouldQueue
      *
      * @return void
      */
-    protected function mailChannel(ResultCreated $event)
+    protected function mailChannel(ResultCreated $event): void
     {
         $failedThresholds = [];
 
@@ -164,7 +164,7 @@ class AbsoluteListener implements ShouldQueue
      *
      * @return void
      */
-    protected function telegramChannel(ResultCreated $event)
+    protected function telegramChannel(ResultCreated $event): void
     {
         $failedThresholds = [];
 

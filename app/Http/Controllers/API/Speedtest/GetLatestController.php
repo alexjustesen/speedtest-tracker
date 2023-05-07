@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Speedtest;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Result;
 
@@ -12,7 +13,7 @@ class GetLatestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke()
+    public function __invoke(): JsonResponse
     {
         $latest = Result::query()
             ->latest()
