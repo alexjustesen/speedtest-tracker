@@ -27,7 +27,7 @@ class TestInfluxDB extends Command
      *
      * @return int
      */
-    public function handle(InfluxDbSettings $settings)
+    public function handle(InfluxDbSettings $settings): int
     {
         $influxdb = [
             'enabled' => $settings->v2_enabled,

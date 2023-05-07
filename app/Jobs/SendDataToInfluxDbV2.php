@@ -37,7 +37,7 @@ class SendDataToInfluxDbV2 implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $influxdb = [
             'enabled' => $this->settings->v2_enabled,

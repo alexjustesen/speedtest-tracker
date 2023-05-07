@@ -19,7 +19,7 @@ class SearchForSpeedtests implements ShouldQueue
      *
      * @return void
      */
-    public function handle(GeneralSettings $settings)
+    public function handle(GeneralSettings $settings): void
     {
         $ookla_server_id = null;
 

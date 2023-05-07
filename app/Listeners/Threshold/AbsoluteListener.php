@@ -40,7 +40,7 @@ class AbsoluteListener implements ShouldQueue
      *
      * @return void
      */
-    public function handle(ResultCreated $event)
+    public function handle(ResultCreated $event): void
     {
         if ($this->thresholdSettings->absolute_enabled !== true) {
             Log::info('Absolute threshold notifications disabled.');

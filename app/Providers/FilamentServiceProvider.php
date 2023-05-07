@@ -15,7 +15,7 @@ class FilamentServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
@@ -25,7 +25,7 @@ class FilamentServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         try {
             config(['filament.brand' => app(GeneralSettings::class)->site_name ?? env('APP_NAME')]);

@@ -26,7 +26,7 @@ class InfluxDb2Listener implements ShouldQueue
      *
      * @return void
      */
-    public function handle(ResultCreated $event)
+    public function handle(ResultCreated $event): void
     {
         if ($this->influxDbSettings->v2_enabled) {
             SendDataToInfluxDbV2::dispatch($event->result, $this->influxDbSettings);
