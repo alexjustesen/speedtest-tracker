@@ -77,16 +77,16 @@
         },
         {
             "name": "awcodes/filament-versions",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/awcodes/filament-versions.git",
-                "reference": "693ea3941c5bbc7fba37c48405653b1a84b85b3d"
+                "reference": "390040fca42fea98ca8e963b27647a62d041038a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/awcodes/filament-versions/zipball/693ea3941c5bbc7fba37c48405653b1a84b85b3d",
-                "reference": "693ea3941c5bbc7fba37c48405653b1a84b85b3d",
+                "url": "https://api.github.com/repos/awcodes/filament-versions/zipball/390040fca42fea98ca8e963b27647a62d041038a",
+                "reference": "390040fca42fea98ca8e963b27647a62d041038a",
                 "shasum": ""
             },
             "require": {
@@ -126,9 +126,9 @@
             ],
             "support": {
                 "issues": "https://github.com/awcodes/filament-versions/issues",
-                "source": "https://github.com/awcodes/filament-versions/tree/v1.1.0"
+                "source": "https://github.com/awcodes/filament-versions/tree/v1.1.1"
             },
-            "time": "2023-03-31T14:58:01+00:00"
+            "time": "2023-05-08T12:49:27+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
