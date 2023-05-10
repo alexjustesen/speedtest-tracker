@@ -81,7 +81,7 @@ return [
              * For a complete list of available customization options, see https://github.com/spatie/db-dumper
              */
             'databases' => [
-                'mysql',
+                env('DB_CONNECTION', 'mysql'),
             ],
         ],
 
@@ -111,7 +111,7 @@ return [
             /*
              * The filename prefix used for the backup zip file.
              */
-            'filename_prefix' => '',
+            'filename_prefix' => 'speedtest-tracker_'.env('DB_CONNECTION', '').'_',
 
             /*
              * The disk names on which the backups will be stored.
