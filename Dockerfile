@@ -8,7 +8,7 @@ ENV SSL_MODE="mixed"
 
 # Install addition packages and cron file
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends cron gnupg php8.1-gd php8.1-pgsql \
+    && apt-get install -y --no-install-recommends cron gnupg gzip php8.1-gd php8.1-pgsql \
     && echo "MAILTO=\"\"\n* * * * * webuser /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
     \
 # Install Speedtest cli
