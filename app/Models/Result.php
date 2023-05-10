@@ -110,7 +110,7 @@ class Result extends Model
      */
     public function previous(): ?self
     {
-        return static::orderBy('id', 'desc')
+        return static::orderByDesc('id')
             ->where('id', '<', $this->id)
             ->first();
     }
