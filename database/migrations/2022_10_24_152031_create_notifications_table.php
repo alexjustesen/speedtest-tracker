@@ -21,7 +21,7 @@ return new class extends Migration
              *
              * Docs: https://filamentphp.com/docs/2.x/notifications/database-notifications
              */
-            if (env('DB_CONNECTION') == 'pgsql') {
+            if (config('database.default') == 'pgsql') {
                 $table->json('data');
             } else {
                 $table->text('data');

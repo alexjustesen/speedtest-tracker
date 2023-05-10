@@ -24,7 +24,7 @@ class FilamentServiceProvider extends ServiceProvider
     public function boot(): void
     {
         try {
-            config(['filament.brand' => app(GeneralSettings::class)->site_name ?? env('APP_NAME')]);
+            config(['filament.brand' => app(GeneralSettings::class)->site_name ?? config('app.name')]);
         } catch (\Throwable $th) {
             // if this fails it's because the migration doesn't exist so it can be skipped
         }
