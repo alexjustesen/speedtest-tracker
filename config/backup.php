@@ -19,6 +19,7 @@ return [
                  */
                 'include' => [
                     base_path('.env'),
+                    base_path('config/speedtest.php'),
                 ],
 
                 /*
