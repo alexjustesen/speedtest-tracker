@@ -3,7 +3,6 @@
 namespace App\Telegram;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
@@ -34,11 +33,11 @@ class TelegramNotification extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Get the Telegram message representation of the notification.
      *
      * @param  mixed  $notifiable
      */
-    public function toTelegram($notifiable): MailMessage
+    public function toTelegram($notifiable): TelegramMessage
     {
         return TelegramMessage::create()
             ->to($notifiable->routes['telegram_chat_id'])
