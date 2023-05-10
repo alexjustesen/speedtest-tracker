@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->to('/admin');
-});
+Route::redirect('/', '/admin');
 
 if (app()->isLocal()) {
     require __DIR__.'/test.php';
