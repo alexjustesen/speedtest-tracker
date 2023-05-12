@@ -170,7 +170,7 @@ class NotificationPage extends SettingsPage
 
                     Card::make()
                         ->schema([
-                            view('filament.forms.notifications-helptext'),
+                            View::make('filament.forms.notifications-helptext'),
                         ])
                         ->columnSpan([
                             'md' => 1,

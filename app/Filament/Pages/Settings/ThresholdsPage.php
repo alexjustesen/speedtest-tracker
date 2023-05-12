@@ -103,7 +103,7 @@ class ThresholdsPage extends SettingsPage
 
                     Card::make()
                         ->schema([
-                            view('filament.forms.thresholds-helptext'),
+                            View::make('filament.forms.thresholds-helptext'),
                         ])
                         ->columnSpan([
                             'md' => 1,
