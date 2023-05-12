@@ -26,20 +26,18 @@ class TelegramNotification extends Notification
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
-     * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['telegram'];
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Get the Telegram message representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toTelegram($notifiable)
+    public function toTelegram($notifiable): TelegramMessage
     {
         return TelegramMessage::create()
             ->to($notifiable->routes['telegram_chat_id'])

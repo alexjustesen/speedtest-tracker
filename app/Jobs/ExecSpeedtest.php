@@ -77,6 +77,5 @@ class ExecSpeedtest implements ShouldQueue, ShouldBeUnique
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
-
     }
 }
