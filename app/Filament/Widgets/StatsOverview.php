@@ -9,6 +9,11 @@ use Filament\Widgets\StatsOverviewWidget\Card;
 
 class StatsOverview extends BaseWidget
 {
+    protected function getPollingInterval(): ?string
+    {
+        return config('speedtest.dashboard_polling');
+    }
+
     protected function getCards(): array
     {
         $result = Result::latest()->first();

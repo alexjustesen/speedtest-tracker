@@ -14,6 +14,11 @@ class RecentSpeedChart extends LineChartWidget
 
     public ?string $filter = '24h';
 
+    protected function getPollingInterval(): ?string
+    {
+        return config('speedtest.dashboard_polling');
+    }
+
     protected function getHeading(): string
     {
         return 'Download / Upload';
