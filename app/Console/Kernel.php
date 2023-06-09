@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
-use App\Jobs\SearchForSpeedtests;
+use App\Jobs\ExecSpeedtest;
+use App\Settings\GeneralSettings;
+use Cron\CronExpression;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,11 +15,41 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->job(new SearchForSpeedtests())->everyMinute();
+        $settings = new GeneralSettings();
 
-        // $schedule->command('inspire')
-        //     ->everyMinute()
-        //     ->appendOutputTo(storage_path('logs/inspire.log'));
+        /**
+         * Check for speedtests that need to run.
+         */
+        $schedule->call(function () use ($settings) {
+            $ooklaServerId = null;
+
+            if (! blank($settings->speedtest_server)) {
+                $item = array_rand($settings->speedtest_server);
+
+                $ooklaServerId = $settings->speedtest_server[$item];
+            }
+
+            $speedtest = [
+                'ookla_server_id' => $ooklaServerId,
+            ];
+
+            ExecSpeedtest::dispatch(
+                speedtest: $speedtest,
+                scheduled: true
+            );
+        })
+            ->everyMinute()
+            ->when(function () use ($settings) {
+                // Don't run if the schedule is missing (aka disabled)
+                if (blank($settings->speedtest_schedule)) {
+                    return false;
+                }
+
+                // Evaluate if a run is needed based on the schedule
+                $cron = new CronExpression($settings->speedtest_schedule);
+
+                return $cron->isDue();
+            });
     }
 
     /**
