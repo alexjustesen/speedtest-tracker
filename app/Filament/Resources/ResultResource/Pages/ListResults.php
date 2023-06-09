@@ -12,7 +12,7 @@ class ListResults extends ListRecords
 
     protected function getTablePollingInterval(): ?string
     {
-        return '5s';
+        return config('speedtest.results_polling');
     }
 
     protected function getMaxContentWidth(): string
