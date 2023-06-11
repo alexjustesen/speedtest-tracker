@@ -13,7 +13,7 @@ return [
     /**
      * Polling
      */
-    'dashboard_polling' => env('DASHBOARD_POLLING', '5s'),
+    'dashboard_polling' => env('DASHBOARD_POLLING', '60s'),
 
-    'results_polling' => env('RESULTS_POLLING', '5s'),
+    'results_polling' => env('RESULTS_POLLING', null),
 ];

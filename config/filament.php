@@ -3,7 +3,6 @@
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Http\Middleware\MirrorConfigToSubpackages;
-use Filament\Pages;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -183,7 +182,7 @@ return [
 
     'database_notifications' => [
         'enabled' => true,
-        'polling_interval' => '5s',
+        'polling_interval' => env('NOTIFICATION_POLLING', '60s'),
     ],
 
     /*
