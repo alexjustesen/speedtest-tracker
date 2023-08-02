@@ -15,41 +15,10 @@ chown -R webuser:webgroup $WEBUSER_HOME
 echo "✅  Permissions fixed."
 echo ""
 
-if [ ${DB_CONNECTION:="sqlite"} = "sqlite" ]; then
-    # Check for database
-    if [ ! -f /config/database.sqlite ]; then
-        echo "🙄  SQLite database not found, creating..."
-        s6-setuidgid webuser touch /config/database.sqlite
-        echo "✅  SQLite database created."
-    else
-        echo "✅  Database already exists."
-    fi
-    echo ""
-
-    # create symlinks
-    echo "🔗  Creating database symlink..."
-    symlinks=( \
-    /var/www/html/database/database.sqlite \
-    )
-
-    for i in "${symlinks[@]}"
-    do
-        if [[ -e "$i" && ! -L "$i" ]]; then
-            rm -rf "$i"
-        fi
-        if [[ ! -L "$i" ]]; then
-            ln -s /config/"$(basename "$i")" "$i"
-        fi
-    done
-
-    echo "✅  Database symlink created."
-    echo ""
-fi
-
 # Check for env file
 if [ ! -f /config/.env ]; then
     echo "🙄  Environment file not found, creating..."
-    s6-setuidgid webuser cp $WEBUSER_HOME/.env.example /config/.env
+    s6-setuidgid webuser cp $WEBUSER_HOME/.env.production /config/.env
     echo "✅  Environment file created."
 else
     echo "✅  Environment file exists."
