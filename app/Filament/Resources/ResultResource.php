@@ -102,7 +102,7 @@ class ResultResource extends Resource
                 TextColumn::make('id')
                     ->label('ID'),
                 TextColumn::make('server')
-                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
                     ->toggleable(),
                 IconColumn::make('successful')
                     ->boolean()
@@ -112,23 +112,23 @@ class ResultResource extends Resource
                     ->toggleable(),
                 TextColumn::make('download')
                     ->label('Download (Mbps)')
-                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->download) ? toBits(convertSize($record->download), 2) : null),
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? toBits(convertSize($record->download), 2) : null),
                 TextColumn::make('upload')
                     ->label('Upload (Mbps)')
-                    ->getStateUsing(fn (Result $record): string|null => ! blank($record->upload) ? toBits(convertSize($record->upload), 2) : null),
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? toBits(convertSize($record->upload), 2) : null),
                 TextColumn::make('ping')
                     ->label('Ping (Ms)')
                     ->toggleable(),
                 TextColumn::make('download_jitter')
-                    ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['download']['latency']['jitter'] ?? null)
+                    ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['download']['latency']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault(),
                 TextColumn::make('upload_jitter')
-                    ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['upload']['latency']['jitter'] ?? null)
+                    ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['upload']['latency']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault(),
                 TextColumn::make('ping_jitter')
-                    ->getStateUsing(fn (Result $record): string|null => json_decode($record->data, true)['ping']['jitter'] ?? null)
+                    ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['ping']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault(),
                 TextColumn::make('created_at')
@@ -162,7 +162,7 @@ class ResultResource extends Resource
                     Action::make('view result')
                         ->label('View on Speedtest.net')
                         ->icon('heroicon-o-link')
-                        ->url(fn (Result $record): string|null => $record?->url)
+                        ->url(fn (Result $record): ?string => $record?->url)
                         ->hidden(fn (Result $record): bool => ! $record->is_successful)
                         ->openUrlInNewTab(),
                     Tables\Actions\ViewAction::make(),
