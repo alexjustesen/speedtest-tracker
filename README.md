@@ -14,7 +14,7 @@ As far as I can tell https://github.com/henrywhitaker3/Speedtest-Tracker was aba
 
 ## Getting Started
 
-Speedtest Tracker is containerized so you can run it anywhere you run your Docker containers. The [install](https://docs.speedtest-tracker.dev/getting-started/installation) documentation will get you up and running with using Docker or Docker Composer along with choosing a database (SQLite, MySQL/MariaDB or Postgresql).
+Speedtest Tracker is containerized so you can run it anywhere you run your Docker containers. The [install](https://docs.speedtest-tracker.dev/getting-started/installation) documentation will get you up and running with using Docker or Docker Composer along with choosing a database (MySQL/MariaDB or Postgresql).
 
 ### FAQs and Features
 
