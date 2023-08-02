@@ -17,4 +17,4 @@ jobs:
       - name: Check syntax
         run: phplint .
       - name: Check code style
-        run: pint --test
+        run: pint --test --config ./pint.json
