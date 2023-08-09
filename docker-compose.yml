@@ -2,11 +2,11 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./docker/8.1
+            context: ./docker/8.2
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: speedtest-tracker-8.1/app
+        image: speedtest-tracker-8.2/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -38,7 +38,7 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
             - 'sail-mysql:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - './docker/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
         healthcheck:
@@ -67,7 +67,7 @@ services:
     #         POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
     #     volumes:
     #         - 'sail-pgsql:/var/lib/postgresql/data'
-    #         - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+    #         - './docker/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
     #     networks:
     #         - sail
     #     healthcheck:
