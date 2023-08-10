@@ -8,12 +8,13 @@ echo "🐇  Configuring Speedtest Tracker..."
 echo ""
 
 # Fix permissions
-echo "🔒  Fixing app path file permissions..."
+# echo "🔒  Fixing app path file permissions..."
 chmod -R 755 /config
 chown -R webuser:webgroup /config
-chown -R webuser:webgroup $WEBUSER_HOME
+chmod -R 755 $WEBUSER_HOME/storage
+chown -R webuser:webgroup $WEBUSER_HOME/storage
 echo "✅  Permissions fixed."
-echo ""
+# echo ""
 
 # Check for env file
 if [ ! -f /config/.env ]; then
@@ -30,7 +31,6 @@ echo ""
 echo "🔗  Creating symlinks for config and log files..."
 symlinks=( \
 /var/www/html/.env \
-/var/www/html/storage/logs/laravel.log
 )
 
 for i in "${symlinks[@]}"
@@ -55,20 +55,6 @@ else
     echo "✅  App key generated."
 fi
 
-echo ""
-
-# create storage symlink
-echo "🔐  Linking the storage..."
-s6-setuidgid webuser php $WEBUSER_HOME/artisan storage:link --no-ansi -q
-echo "✅  Storage linked."
-echo ""
-
-# Build cache
-echo "💰  Building the cache..."
-s6-setuidgid webuser php $WEBUSER_HOME/artisan config:cache --no-ansi -q
-s6-setuidgid webuser php $WEBUSER_HOME/artisan route:cache --no-ansi -q
-s6-setuidgid webuser php $WEBUSER_HOME/artisan view:cache --no-ansi -q
-echo "✅  Cache set."
 echo ""
 
 # Migrate database
