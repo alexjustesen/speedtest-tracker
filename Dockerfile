@@ -18,19 +18,24 @@ RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash \
     && apt-get install -y --no-install-recommends speedtest \
     \
-# Clean up package lists
+# Clean up package lists and create cron file
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Copy package configs
 COPY --chmod=755 docker/deploy/etc/s6-overlay/ /etc/s6-overlay/
 
-WORKDIR /var/www/html
-
 # Copy app
-COPY . /var/www/html
+COPY --chown=webuser:webgroup . $WEBUSER_HOME
+
+WORKDIR $WEBUSER_HOME
 
 # Install app dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev --no-cache
+RUN composer install \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-dev \
+    --no-cache
 
 VOLUME /config
