@@ -8,13 +8,13 @@ echo "🐇  Configuring Speedtest Tracker..."
 echo ""
 
 # Fix permissions
-# echo "🔒  Fixing app path file permissions..."
+echo "🔒  Fixing app path file permissions..."
 chmod -R 755 /config
 chown -R webuser:webgroup /config
 chmod -R 755 $WEBUSER_HOME/storage
 chown -R webuser:webgroup $WEBUSER_HOME/storage
 echo "✅  Permissions fixed."
-# echo ""
+echo ""
 
 # Check for env file
 if [ ! -f /config/.env ]; then
