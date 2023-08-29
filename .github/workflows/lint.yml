@@ -1,20 +1,12 @@
 name: Lint
 on:
   - push
-  - workflow_dispatch
 jobs:
-  lint:
-    name: Lint
+  duster:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v3
+      - name: "duster"
+        uses: tighten/duster-action@v2
         with:
-          php-version: '8.1'
-          tools: phplint, laravel/pint
-      - name: Check syntax
-        run: phplint .
-      - name: Check code style
-        run: pint --test -v
+          args: lint --using=pint
