@@ -11,16 +11,16 @@
         "php": "^8.1",
         "awcodes/filament-versions": "^1.1.1",
         "chrisullyott/php-filesize": "^4.2.1",
-        "doctrine/dbal": "^3.6.5",
-        "dragonmantank/cron-expression": "^3.3.2",
+        "doctrine/dbal": "^3.6.6",
+        "dragonmantank/cron-expression": "^3.3.3",
         "filament/filament": "^2.17.52",
         "filament/spatie-laravel-settings-plugin": "^2.17.52",
-        "guzzlehttp/guzzle": "^7.7",
+        "guzzlehttp/guzzle": "^7.8",
         "influxdata/influxdb-client-php": "^2.9",
         "laravel-notification-channels/telegram": "^4.0",
-        "laravel/framework": "^10.18",
-        "laravel/sanctum": "^3.2.5",
-        "laravel/tinker": "^2.8.1",
+        "laravel/framework": "^10.21",
+        "laravel/sanctum": "^3.2.6",
+        "laravel/tinker": "^2.8.2",
         "maatwebsite/excel": "^3.1.48",
         "spatie/laravel-settings": "^2.8.3",
         "squirephp/timezones-en": "^3.4.2"
@@ -28,12 +28,12 @@
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
         "fakerphp/faker": "^1.23.0",
-        "laravel/pint": "^1.10.6",
-        "laravel/sail": "^1.23.2",
+        "laravel/pint": "^1.11.0",
+        "laravel/sail": "^1.24.0",
         "mockery/mockery": "^1.6.6",
         "nunomaduro/collision": "^7.8.1",
-        "phpunit/phpunit": "^10.3.1",
-        "spatie/laravel-ignition": "^2.2"
+        "phpunit/phpunit": "^10.3.2",
+        "spatie/laravel-ignition": "^2.3"
     },
     "autoload": {
         "files": [
