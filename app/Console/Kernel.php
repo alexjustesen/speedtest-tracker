@@ -7,6 +7,7 @@ use App\Settings\GeneralSettings;
 use Cron\CronExpression;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -50,6 +51,10 @@ class Kernel extends ConsoleKernel
 
                 return $cron->isDue();
             });
+
+        $schedule->call(function () {
+            Log::info('The scheduler ran.');
+        });
     }
 
     /**
