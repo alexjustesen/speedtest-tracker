@@ -35,7 +35,7 @@ class GetLatestController extends Controller
                 'server_name' => $latest->server_name,
                 'url' => $latest->url,
                 'scheduled' => $latest->scheduled,
-                'failed' => $latest->successful,
+                'failed' => ! $latest->successful,
                 'created_at' => $latest->created_at->toISOString(),
                 'updated_at' => $latest->created_at->toISOString(), // faking updated at to match legacy api payload
             ],
