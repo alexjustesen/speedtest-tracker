@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/admin');
 
-Route::redirect('/login', '/admin/login');
+Route::get('/login', function () {
+    return redirect('/admin/login');
+})->name('login');
 
 if (app()->isLocal()) {
     require __DIR__.'/test.php';
