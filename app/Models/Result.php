@@ -77,7 +77,6 @@ class Result extends Model
     {
         $data = json_decode($this->data, true);
 
-        // New hotness
         return [
             'id' => $this->id,
             'ping' => $this?->ping,
@@ -93,7 +92,7 @@ class Result extends Model
             'server_name' => $this?->server_name,
             'scheduled' => $this->scheduled,
             'successful' => $this->successful,
-            'packet_loss'=> Arr::get($data, 'packetLoss'),
+            'packet_loss' => Arr::get($data, 'packetLoss'),
         ];
     }
 
