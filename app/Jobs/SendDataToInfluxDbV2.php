@@ -67,7 +67,9 @@ class SendDataToInfluxDbV2 implements ShouldQueue
         try {
             $writeApi->write($dataArray);
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::info($e);
+
+            $this->fail();
         }
 
         $writeApi->close();
