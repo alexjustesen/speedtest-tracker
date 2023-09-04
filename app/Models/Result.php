@@ -92,7 +92,7 @@ class Result extends Model
             'server_name' => $this?->server_name,
             'scheduled' => $this->scheduled,
             'successful' => $this->successful,
-            'packet_loss' => Arr::get($data, 'packetLoss'),
+            'packet_loss' => (float) Arr::get($data, 'packetLoss', 0),
         ];
     }
 
