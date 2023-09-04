@@ -16,7 +16,7 @@
         "filament/filament": "^2.17.52",
         "filament/spatie-laravel-settings-plugin": "^2.17.52",
         "guzzlehttp/guzzle": "^7.8",
-        "influxdata/influxdb-client-php": "^2.9",
+        "influxdata/influxdb-client-php": "^3.4",
         "laravel-notification-channels/telegram": "^4.0",
         "laravel/framework": "^10.21",
         "laravel/sanctum": "^3.2.6",
@@ -81,7 +81,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "stable",
