@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\ResultCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Result extends Model
 {
@@ -77,20 +78,21 @@ class Result extends Model
         $data = json_decode($this->data, true);
 
         return [
-            'id' => (int) $this->id,
-            'ping' => (float) $this->ping,
-            'download' => (int) $this->download,
-            'upload' => (int) $this->upload,
-            'download_bits' => (int) $this->download * 8,
-            'upload_bits' => (int) $this->upload * 8,
-            'ping_jitter' => (float) $data['ping']['jitter'] ?? null,
-            'download_jitter' => (float) $data['download']['latency']['jitter'] ?? null,
-            'upload_jitter' => (float) $data['upload']['latency']['jitter'] ?? null,
-            'server_id' => (int) $this->server_id,
-            'server_host' => $this->server_host,
-            'server_name' => $this->server_name,
+            'id' => $this->id,
+            'ping' => $this?->ping,
+            'download' => $this?->download,
+            'upload' => $this?->upload,
+            'download_bits' => $this->download ? $this->download * 8 : null,
+            'upload_bits' => $this->upload ? $this->upload * 8 : null,
+            'ping_jitter' => Arr::get($data, 'ping.jitter'),
+            'download_jitter' => Arr::get($data, 'download.latency.jitter'),
+            'upload_jitter' => Arr::get($data, 'upload.latency.jitter'),
+            'server_id' => $this?->server_id,
+            'server_host' => $this?->server_host,
+            'server_name' => $this?->server_name,
             'scheduled' => $this->scheduled,
-            'packet_loss' => array_key_exists('packetLoss', $data) ? (float) $data['packetLoss'] : null, // optional, because apparently the cli doesn't always have this metric
+            'successful' => $this->successful,
+            'packet_loss' => Arr::get($data, 'packetLoss'),
         ];
     }
 

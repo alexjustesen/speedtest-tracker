@@ -1,3 +1,9 @@
 {
-    "preset": "laravel"
+    "preset": "laravel",
+    "exclude": [
+        "config"
+    ],
+    "notName": [
+        "server.php"
+    ]
 }
