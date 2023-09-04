@@ -8,7 +8,7 @@ return [
      */
     'build_date' => Carbon::parse('2023-09-04'),
 
-    'build_version' => '0.11.21',
+    'build_version' => '0.11.22',
 
     /**
      * Polling
