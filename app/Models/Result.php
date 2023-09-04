@@ -83,7 +83,7 @@ class Result extends Model
             'ping' => $this?->ping,
             'download' => $this?->download,
             'upload' => $this?->upload,
-            'download_bits' => $this->download ? $this->download * 8: null,
+            'download_bits' => $this->download ? $this->download * 8 : null,
             'upload_bits' => $this->upload ? $this->upload * 8 : null,
             'ping_jitter' => Arr::get($data, 'ping.jitter'),
             'download_jitter' => Arr::get($data, 'download.latency.jitter'),
