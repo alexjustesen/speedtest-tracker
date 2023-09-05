@@ -78,6 +78,13 @@ fi
 
 echo ""
 
+# Build cache
+echo "💰  Building the cache..."
+s6-setuidgid webuser php $WEBUSER_HOME/artisan view:clear --no-ansi -q
+s6-setuidgid webuser php $WEBUSER_HOME/artisan optimize --no-ansi -q
+echo "✅  Cache set."
+echo ""
+
 # Migrate database
 echo "🚛  Migrating the database..."
 s6-setuidgid webuser php $WEBUSER_HOME/artisan migrate --force --no-ansi -q
