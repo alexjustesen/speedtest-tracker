@@ -18,7 +18,7 @@ RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | bash \
     && apt-get install -y --no-install-recommends speedtest \
     \
-# Clean up package lists and create cron file
+# Clean up package lists
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
