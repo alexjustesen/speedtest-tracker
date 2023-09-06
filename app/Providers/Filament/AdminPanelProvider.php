@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Providers\Filament;
+
+use Awcodes\FilamentVersions\VersionsPlugin;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
+use Filament\Panel;
+use Filament\PanelProvider;
+use Filament\Support\Colors\Color;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
+use SpeedtestTrackerVersionProvider;
+
+class AdminPanelProvider extends PanelProvider
+{
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->default()
+            ->id('admin')
+            ->path('admin')
+            ->login()
+            ->colors([
+                'primary' => Color::Amber,
+            ])
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->pages([])
+            // ->plugins([
+            //     VersionsPlugin::make()
+            //         ->hasDefaults(false)
+            //         ->items([
+            //             new SpeedtestTrackerVersionProvider(),
+            //         ]),
+            // ])
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->widgets([])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling(env('NOTIFICATION_POLLING', '60s'))
+            ->middleware([
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                AuthenticateSession::class,
+                ShareErrorsFromSession::class,
+                VerifyCsrfToken::class,
+                SubstituteBindings::class,
+                DisableBladeIconComponents::class,
+                DispatchServingFilamentEvent::class,
+            ])
+            ->authMiddleware([
+                Authenticate::class,
+            ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                     ->label('Settings'),
+                NavigationGroup::make()
+                    ->label('System'),
+                NavigationGroup::make()
+                    ->label('Links')
+                    ->collapsible(false),
+            ])
+            ->navigationItems([
+                NavigationItem::make('Documentation')
+                    ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-book-open')
+                    ->group('Links'),
+                NavigationItem::make('Donate')
+                    ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-banknotes')
+                    ->group('Links'),
+                NavigationItem::make('Source Code')
+                    ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
+                    ->icon('heroicon-o-code-bracket')
+                    ->group('Links'),
+            ]);
+    }
+}
