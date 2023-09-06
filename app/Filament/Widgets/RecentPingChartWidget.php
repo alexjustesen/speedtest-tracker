@@ -4,9 +4,9 @@ namespace App\Filament\Widgets;
 
 use App\Models\Result;
 use App\Settings\GeneralSettings;
-use Filament\Widgets\LineChartWidget;
+use Filament\Widgets\ChartWidget;
 
-class RecentPingChart extends LineChartWidget
+class RecentPingChartWidget extends ChartWidget
 {
     protected int|string|array $columnSpan = 'full';
 
@@ -19,7 +19,7 @@ class RecentPingChart extends LineChartWidget
         return config('speedtest.dashboard_polling');
     }
 
-    protected function getHeading(): string
+    public function getHeading(): string
     {
         return 'Ping (ms)';
     }
@@ -64,5 +64,10 @@ class RecentPingChart extends LineChartWidget
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone($settings->timezone)->format('M d - G:i')),
         ];
+    }
+
+    protected function getType(): string
+    {
+        return 'line';
     }
 }

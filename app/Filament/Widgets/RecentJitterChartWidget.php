@@ -4,9 +4,9 @@ namespace App\Filament\Widgets;
 
 use App\Models\Result;
 use App\Settings\GeneralSettings;
-use Filament\Widgets\LineChartWidget;
+use Filament\Widgets\ChartWidget;
 
-class RecentSpeedChart extends LineChartWidget
+class RecentJitterChartWidget extends ChartWidget
 {
     protected int|string|array $columnSpan = 'full';
 
@@ -19,9 +19,9 @@ class RecentSpeedChart extends LineChartWidget
         return config('speedtest.dashboard_polling');
     }
 
-    protected function getHeading(): string
+    public function getHeading(): string
     {
-        return 'Download / Upload';
+        return 'Jitter';
     }
 
     protected function getFilters(): ?array
@@ -38,7 +38,7 @@ class RecentSpeedChart extends LineChartWidget
         $settings = new GeneralSettings();
 
         $results = Result::query()
-            ->select(['id', 'download', 'upload', 'created_at'])
+            ->select(['data', 'created_at'])
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
             })
@@ -53,8 +53,8 @@ class RecentSpeedChart extends LineChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download (Mbps)',
-                    'data' => $results->map(fn ($item) => ! blank($item->download) ? toBits(convertSize($item->download), 2) : 0),
+                    'label' => 'Download (ms)',
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['download'] ? number_format($item->getJitterData()['download'], 2) : 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                     'fill' => false,
@@ -62,10 +62,19 @@ class RecentSpeedChart extends LineChartWidget
                     'tension' => 0.4,
                 ],
                 [
-                    'label' => 'Upload (Mbps)',
-                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? toBits(convertSize($item->upload), 2) : 0),
+                    'label' => 'Upload (ms)',
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['upload'] ? number_format($item->getJitterData()['upload'], 2) : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
+                    'fill' => false,
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                ],
+                [
+                    'label' => 'Ping (ms)',
+                    'data' => $results->map(fn ($item) => $item->getJitterData()['ping'] ? number_format($item->getJitterData()['ping'], 2) : 0),
+                    'borderColor' => '#10b981',
+                    'backgroundColor' => '#10b981',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
@@ -73,5 +82,10 @@ class RecentSpeedChart extends LineChartWidget
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone($settings->timezone)->format('M d - G:i')),
         ];
+    }
+
+    protected function getType(): string
+    {
+        return 'line';
     }
 }
