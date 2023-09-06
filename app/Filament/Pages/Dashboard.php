@@ -2,53 +2,48 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\RecentJitterChart;
-use App\Filament\Widgets\RecentPingChart;
-use App\Filament\Widgets\RecentSpeedChart;
-use App\Filament\Widgets\StatsOverview;
+use App\Filament\Widgets\RecentJitterChartWidget;
+use App\Filament\Widgets\RecentPingChartWidget;
+use App\Filament\Widgets\RecentSpeedChartWidget;
+use App\Filament\Widgets\StatsOverviewWidget;
 use App\Jobs\ExecSpeedtest;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Filament\Notifications\Notification;
-use Filament\Pages\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Pages\Dashboard as BasePage;
-use Illuminate\Contracts\View\View;
 
 class Dashboard extends BasePage
 {
-    public string $lastResult = 'never';
+    public ?Result $latestResult = null;
 
-    public int $resultsCount;
+    public string $lastResult = 'never';
 
     protected static string $view = 'filament.pages.dashboard';
 
-    public function render(): View
+    public function mount()
     {
-        $this->resultsCount = Result::count();
+        $this->latestResult = Result::query()
+            ->latest()
+            ->first();
 
-        if ($this->resultsCount) {
-            $result = Result::latest()
-                ->first();
-
+        if ($this->latestResult) {
             $settings = new GeneralSettings();
 
-            $this->lastResult = $result->created_at
+            $this->lastResult = $this->latestResult->created_at
                 ->timezone($settings->timezone)
                 ->format($settings->time_format);
         }
-
-        return view(static::$view, $this->getViewData())
-            ->layout(static::$layout, $this->getLayoutData());
     }
 
-    protected function getMaxContentWidth(): string
+    public function getMaxContentWidth(): string
     {
         $settings = new GeneralSettings();
 
         return $settings->content_width;
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Action::make('speedtest')
@@ -57,23 +52,25 @@ class Dashboard extends BasePage
         ];
     }
 
-    public function getHeaderWidgets(): array
+    protected function getHeaderWidgets(): array
     {
         return [
-            StatsOverview::class,
+            StatsOverviewWidget::make([
+                'result' => $this->latestResult,
+            ]),
         ];
     }
 
-    public function getFooterWidgets(): array
+    protected function getFooterWidgets(): array
     {
-        if (! $this->resultsCount) {
+        if (! $this->latestResult) {
             return [];
         }
 
         return [
-            RecentSpeedChart::class,
-            RecentPingChart::class,
-            RecentJitterChart::class,
+            RecentSpeedChartWidget::make(),
+            RecentPingChartWidget::make(),
+            RecentJitterChartWidget::make(),
         ];
     }
 
