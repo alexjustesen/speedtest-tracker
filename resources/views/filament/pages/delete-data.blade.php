@@ -1,4 +1,4 @@
-<x-filament::page>
+<x-filament-panels::page>
     <x-filament::card>
         <x-slot name="header">
             <h2 class="text-lg font-bold -tracking-tight">Results Data</h2>
@@ -19,4 +19,4 @@
             </div>
         </div>
     </x-filament::card>
-</x-filament::page>
+</x-filament-panels::page>
