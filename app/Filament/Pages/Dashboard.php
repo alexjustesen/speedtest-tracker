@@ -36,13 +36,6 @@ class Dashboard extends BasePage
         }
     }
 
-    public function getMaxContentWidth(): string
-    {
-        $settings = new GeneralSettings();
-
-        return $settings->content_width;
-    }
-
     protected function getHeaderActions(): array
     {
         return [

@@ -7,7 +7,6 @@ use App\Forms\Components\TestMailNotification;
 use App\Forms\Components\TestTelegramNotification;
 use App\Mail\Test;
 use App\Notifications\Telegram\TestNotification as TelegramTestNotification;
-use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -29,13 +28,6 @@ class NotificationPage extends SettingsPage
     protected static ?string $navigationLabel = 'Notifications';
 
     protected static string $settings = NotificationSettings::class;
-
-    public function getMaxContentWidth(): string
-    {
-        $settings = new GeneralSettings();
-
-        return $settings->content_width;
-    }
 
     public function form(Form $form): Form
     {

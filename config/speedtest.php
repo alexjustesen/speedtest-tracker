@@ -11,6 +11,11 @@ return [
     'build_version' => '0.12.0-beta.1',
 
     /**
+     * General
+     */
+    'content_width' => env('CONTENT_WIDTH', '7xl'),
+
+    /**
      * Polling
      */
     'dashboard_polling' => env('DASHBOARD_POLLING', '60s'),

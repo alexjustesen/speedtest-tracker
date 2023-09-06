@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages\Settings;
 
-use App\Settings\GeneralSettings;
 use App\Settings\InfluxDbSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -21,13 +20,6 @@ class InfluxDbPage extends SettingsPage
     protected static ?string $navigationLabel = 'InfluxDB';
 
     protected static string $settings = InfluxDbSettings::class;
-
-    public function getMaxContentWidth(): string
-    {
-        $settings = new GeneralSettings();
-
-        return $settings->content_width;
-    }
 
     public function form(Form $form): Form
     {

@@ -24,13 +24,6 @@ class GeneralPage extends SettingsPage
 
     protected static string $settings = GeneralSettings::class;
 
-    public function getMaxContentWidth(): string
-    {
-        $settings = new GeneralSettings();
-
-        return $settings->content_width;
-    }
-
     public function form(Form $form): Form
     {
         return $form
@@ -54,11 +47,6 @@ class GeneralPage extends SettingsPage
                                     ->placeholder('M j, Y G:i:s')
                                     ->maxLength(25)
                                     ->required(),
-                                Forms\Components\Select::make('content_width')
-                                    ->options([
-                                        '7xl' => 'Default width',
-                                        'full' => 'Full width',
-                                    ]),
                             ])
                             ->compact()
                             ->columns([
