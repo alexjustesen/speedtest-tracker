@@ -10,7 +10,7 @@ class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
 
-    protected function getMaxContentWidth(): string
+    public function getMaxContentWidth(): string
     {
         $settings = new GeneralSettings();
 

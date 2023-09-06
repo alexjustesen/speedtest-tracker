@@ -4,7 +4,7 @@ namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
 use App\Settings\GeneralSettings;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Hash;
 
@@ -12,14 +12,14 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
-    protected function getMaxContentWidth(): string
+    public function getMaxContentWidth(): string
     {
         $settings = new GeneralSettings();
 
         return $settings->content_width;
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\DeleteAction::make(),

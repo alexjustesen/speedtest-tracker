@@ -15,7 +15,7 @@ class ListResults extends ListRecords
         return config('speedtest.results_polling');
     }
 
-    protected function getMaxContentWidth(): string
+    public function getMaxContentWidth(): string
     {
         $settings = new GeneralSettings();
 
