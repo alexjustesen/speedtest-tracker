@@ -46,6 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([])
             ->databaseNotifications()
             ->databaseNotificationsPolling(config('speedtest.notification_polling'))
+            ->maxContentWidth(config('speedtest.content_width'))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -62,7 +63,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                     ->label('Settings'),
+                    ->label('Settings'),
                 NavigationGroup::make()
                     ->label('System'),
                 NavigationGroup::make()
