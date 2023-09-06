@@ -8,6 +8,8 @@ use Filament\Widgets\ChartWidget;
 
 class RecentJitterChartWidget extends ChartWidget
 {
+    protected static ?string $heading = 'Jitter';
+
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '300px';
@@ -17,11 +19,6 @@ class RecentJitterChartWidget extends ChartWidget
     protected function getPollingInterval(): ?string
     {
         return config('speedtest.dashboard_polling');
-    }
-
-    public function getHeading(): string
-    {
-        return 'Jitter';
     }
 
     protected function getFilters(): ?array

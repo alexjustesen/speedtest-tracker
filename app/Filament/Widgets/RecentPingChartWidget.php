@@ -8,6 +8,8 @@ use Filament\Widgets\ChartWidget;
 
 class RecentPingChartWidget extends ChartWidget
 {
+    protected static ?string $heading = 'Ping (ms)';
+
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '300px';
@@ -17,11 +19,6 @@ class RecentPingChartWidget extends ChartWidget
     protected function getPollingInterval(): ?string
     {
         return config('speedtest.dashboard_polling');
-    }
-
-    public function getHeading(): string
-    {
-        return 'Ping (ms)';
     }
 
     protected function getFilters(): ?array

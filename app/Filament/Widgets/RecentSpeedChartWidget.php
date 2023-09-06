@@ -8,6 +8,8 @@ use Filament\Widgets\ChartWidget;
 
 class RecentSpeedChartWidget extends ChartWidget
 {
+    protected static ?string $heading = 'Download / Upload';
+
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '300px';
@@ -16,14 +18,7 @@ class RecentSpeedChartWidget extends ChartWidget
 
     protected function getPollingInterval(): ?string
     {
-        return null;
-
         return config('speedtest.dashboard_polling');
-    }
-
-    public function getHeading(): string
-    {
-        return 'Download / Upload';
     }
 
     protected function getFilters(): ?array
