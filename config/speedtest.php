@@ -15,5 +15,7 @@ return [
      */
     'dashboard_polling' => env('DASHBOARD_POLLING', '60s'),
 
+    'notification_polling' => env('NOTIFICATION_POLLING', '60s'),
+
     'results_polling' => env('RESULTS_POLLING', null),
 ];

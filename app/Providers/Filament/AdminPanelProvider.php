@@ -45,7 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([])
             ->databaseNotifications()
-            ->databaseNotificationsPolling(env('NOTIFICATION_POLLING', '60s'))
+            ->databaseNotificationsPolling(config('speedtest.notification_polling'))
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
