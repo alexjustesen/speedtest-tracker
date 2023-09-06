@@ -105,6 +105,6 @@ class ThresholdsPage extends SettingsPage
                                 'md' => 1,
                             ]),
                     ]),
-        ]);
+            ]);
     }
 }

@@ -9,8 +9,8 @@ use App\Filament\Widgets\StatsOverviewWidget;
 use App\Jobs\ExecSpeedtest;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
-use Filament\Notifications\Notification;
 use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BasePage;
 
 class Dashboard extends BasePage

@@ -17,7 +17,7 @@ class StatsOverviewWidget extends BaseWidget
 
     protected function getCards(): array
     {
-        if ( blank($this->result) || ! $this->result->successful) {
+        if (blank($this->result) || ! $this->result->successful) {
             return [
                 Stat::make('Latest download', '-')
                     ->icon('heroicon-o-arrow-down-tray'),

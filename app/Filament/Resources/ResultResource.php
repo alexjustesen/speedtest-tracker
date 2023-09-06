@@ -9,13 +9,13 @@ use App\Settings\GeneralSettings;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,7 +24,7 @@ class ResultResource extends Resource
 {
     protected static ?string $model = Result::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-table';
+    protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
     protected static ?string $navigationLabel = 'Results';
 
@@ -76,7 +76,7 @@ class ResultResource extends Resource
                                 ->label('Ping (Ms)'),
                         ])
                         ->columnSpan(2),
-                    Forms\Components\Card::make()
+                    Forms\Components\Section::make()
                         ->schema([
                             Forms\Components\Checkbox::make('successful'),
                             Forms\Components\Checkbox::make('scheduled'),
@@ -167,7 +167,7 @@ class ResultResource extends Resource
                         ->openUrlInNewTab(),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\Action::make('updateComments')
-                        ->icon('heroicon-o-annotation')
+                        ->icon('heroicon-o-chat-bubble-bottom-center-text')
                         ->mountUsing(fn (Forms\ComponentContainer $form, Result $record) => $form->fill([
                             'comments' => $record->comments,
                         ]))
@@ -187,7 +187,7 @@ class ResultResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkAction::make('export')
                     ->label('Export selected')
-                    ->icon('heroicon-o-download')
+                    ->icon('heroicon-o-arrow-down-tray')
                     ->action(function (Collection $records) {
                         $export = new ResultsSelectedBulkExport($records->toArray());
 
