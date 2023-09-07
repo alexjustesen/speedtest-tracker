@@ -2,6 +2,8 @@ name: Build and test Docker images
 
 on:
   push:
+    branches:
+      - 'release-**'
   workflow_dispatch:
 
 env:
