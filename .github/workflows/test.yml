@@ -1,7 +1,12 @@
 name: Test
+
 on:
-  - push
-  - workflow_dispatch
+  push:
+    branches:
+      - '!main'
+      - '!release-**'
+  workflow_dispatch:
+
 jobs:
   test:
     strategy:
