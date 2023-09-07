@@ -51,19 +51,22 @@ class Dashboard extends BasePage
             StatsOverviewWidget::make([
                 'result' => $this->latestResult,
             ]),
+            // RecentSpeedChartWidget::make(),
+            // RecentPingChartWidget::make(),
+            // RecentJitterChartWidget::make(),
         ];
     }
 
     protected function getFooterWidgets(): array
     {
-        if (! $this->latestResult) {
-            return [];
-        }
+        // if (! $this->latestResult) {
+        //     return [];
+        // }
 
         return [
             RecentSpeedChartWidget::make(),
-            RecentPingChartWidget::make(),
-            RecentJitterChartWidget::make(),
+            // RecentPingChartWidget::make(),
+            // RecentJitterChartWidget::make(),
         ];
     }
 
