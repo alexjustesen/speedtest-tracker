@@ -2,8 +2,8 @@ name: Build and test Docker images
 
 on:
   push:
-    # branches:
-    #   - 'release-**'
+    branches:
+      - 'release-**'
   workflow_dispatch:
 
 env:
@@ -58,6 +58,6 @@ jobs:
         with:
           context: .
           push: false
-          # platforms: ${{ env.PLATFORMS }}
+          platforms: ${{ env.PLATFORMS }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
