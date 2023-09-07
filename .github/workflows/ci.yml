@@ -2,8 +2,8 @@ name: Build and test Docker images
 
 on:
   push:
-    branches:
-      - 'release-**'
+    # branches:
+    #   - 'release-**'
   workflow_dispatch:
 
 env:
@@ -51,14 +51,13 @@ jobs:
             ${{ env.DOCKER_IMAGE }}
             ghcr.io/${{ github.repository }}
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{version}},prefix=v
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v3
         with:
           context: .
           push: false
-          platforms: ${{ env.PLATFORMS }}
+          # platforms: ${{ env.PLATFORMS }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
