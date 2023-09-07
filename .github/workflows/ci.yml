@@ -1,4 +1,4 @@
-name: Test build Docker images
+name: Build and test Docker images
 
 on:
   push:
@@ -8,7 +8,7 @@ env:
   PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
 
 jobs:
-  build_and_push_image:
+  build_and_test_images:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
