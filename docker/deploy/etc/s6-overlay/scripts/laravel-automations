@@ -68,12 +68,17 @@ echo "✅  Symlinks created."
 echo ""
 
 # Check for app key
-if grep -E "APP_KEY=[0-9A-Za-z:+\/=]{1,}" $WEBUSER_HOME/.env > /dev/null; then
-    echo "✅  App key exists"
+if [ ! ${APP_KEY} ]; then
+    if grep -E "APP_KEY=[0-9A-Za-z:+\/=]{1,}" $WEBUSER_HOME/.env > /dev/null; then
+        echo "✅  An application key exists."
+    else
+        echo "⏳  Generating an application key..."
+        export APP_KEY=$(s6-setuidgid webuser php $WEBUSER_HOME/artisan key:generate --show)
+        echo "⚠️  An application key was generated at start up, no environment variable was set."
+        echo "👀  To set an application key that persists, read the docs: https://docs.speedtest-tracker.dev/"
+    fi
 else
-    echo "⏳  Generating app key..."
-    s6-setuidgid webuser php $WEBUSER_HOME/artisan key:generate --no-ansi -q
-    echo "✅  App key generated."
+    echo "✅  An application key environment variable exists."
 fi
 
 echo ""
