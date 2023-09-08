@@ -7,7 +7,6 @@ use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentSpeedChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use App\Jobs\ExecSpeedtest;
-use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -15,25 +14,13 @@ use Filament\Pages\Dashboard as BasePage;
 
 class Dashboard extends BasePage
 {
-    public ?Result $latestResult = null;
-
-    public string $lastResult = 'never';
+    protected static ?string $pollingInterval = null;
 
     protected static string $view = 'filament.pages.dashboard';
 
-    public function mount()
+    protected function getPollingInterval(): ?string
     {
-        $this->latestResult = Result::query()
-            ->latest()
-            ->first();
-
-        if ($this->latestResult) {
-            $settings = new GeneralSettings();
-
-            $this->lastResult = $this->latestResult->created_at
-                ->timezone($settings->timezone)
-                ->format($settings->time_format);
-        }
+        return null;
     }
 
     protected function getHeaderActions(): array
@@ -48,25 +35,10 @@ class Dashboard extends BasePage
     protected function getHeaderWidgets(): array
     {
         return [
-            StatsOverviewWidget::make([
-                'result' => $this->latestResult,
-            ]),
-            // RecentSpeedChartWidget::make(),
-            // RecentPingChartWidget::make(),
-            // RecentJitterChartWidget::make(),
-        ];
-    }
-
-    protected function getFooterWidgets(): array
-    {
-        // if (! $this->latestResult) {
-        //     return [];
-        // }
-
-        return [
+            StatsOverviewWidget::make(),
             RecentSpeedChartWidget::make(),
-            // RecentPingChartWidget::make(),
-            // RecentJitterChartWidget::make(),
+            RecentPingChartWidget::make(),
+            RecentJitterChartWidget::make(),
         ];
     }
 

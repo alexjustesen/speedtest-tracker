@@ -17,6 +17,10 @@ class StatsOverviewWidget extends BaseWidget
 
     protected function getCards(): array
     {
+        $this->result = Result::query()
+            ->latest()
+            ->first();
+
         if (blank($this->result) || ! $this->result->successful) {
             return [
                 Stat::make('Latest download', '-')
