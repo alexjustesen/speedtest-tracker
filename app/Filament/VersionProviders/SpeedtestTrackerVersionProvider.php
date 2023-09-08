@@ -6,11 +6,11 @@ class SpeedtestTrackerVersionProvider implements VersionProvider
 {
     public function getName(): string
     {
-        return 'Speedtest Tracker';
+        return 'App';
     }
 
     public function getVersion(): string
     {
-        return 'v'.config('speedtest.build_version');
+        return config('speedtest.build_version');
     }
 }
