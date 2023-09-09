@@ -86,7 +86,7 @@ class AdminPanelProvider extends PanelProvider
                     ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-banknotes')
                     ->group('Links'),
-                NavigationItem::make('Source Code')
+                NavigationItem::make('GitHub')
                     ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-code-bracket')
                     ->group('Links'),
