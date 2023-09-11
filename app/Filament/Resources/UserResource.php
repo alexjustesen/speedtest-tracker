@@ -82,6 +82,7 @@ class UserResource extends Resource
                                                 'guest' => 'Guest',
                                             ])
                                             ->default('guest')
+                                            ->disabled(fn (): bool => ! auth()->user()->is_admin)
                                             ->required(),
                                     ])
                                     ->columns(1)
