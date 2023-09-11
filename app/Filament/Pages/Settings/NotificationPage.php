@@ -162,6 +162,45 @@ class NotificationPage extends SettingsPage
                                         'default' => 1,
                                         'md' => 2,
                                     ]),
+
+                                Forms\Components\Section::make('Webhook')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('webhook_enabled')
+                                            ->label('Enable webhook notifications')
+                                            ->reactive()
+                                            ->columnSpan(2),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1, ])
+                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('webhook_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpan(2),
+                                                        Forms\Components\Toggle::make('webhook_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpan(2),
+                                                    ]),
+                                            ]),
+                                        Forms\Components\Repeater::make('webhook_urls')
+                                            ->label('Recipients')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('url')
+                                                    ->maxLength(100)
+                                                    ->required()
+                                                    ->columnSpan(['md' => 2]),
+                                            ])
+                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
+                                            ->columnSpan(['md' => 2]),
+                                        TestTelegramNotification::make('test channel')
+                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
                             ])
                             ->columnSpan([
                                 'md' => 2,

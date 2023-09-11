@@ -28,6 +28,14 @@ class NotificationSettings extends Settings
 
     public ?array $telegram_recipients;
 
+    public bool $webhook_enabled;
+
+    public bool $webhook_on_speedtest_run;
+
+    public bool $webhook_on_threshold_failure;
+
+    public ?array $webhook_urls;
+
     public static function group(): string
     {
         return 'notification';
