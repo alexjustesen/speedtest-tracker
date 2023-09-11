@@ -8,6 +8,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\HtmlString;
 use Squire\Models\Timezone;
 
 class GeneralPage extends SettingsPage
@@ -44,7 +45,8 @@ class GeneralPage extends SettingsPage
                                     ->searchable()
                                     ->required(),
                                 Forms\Components\TextInput::make('time_format')
-                                    ->helperText('Use [DateTime Format](https://www.php.net/manual/en/datetime.format.php) options to change the format of the datetime in views.')
+                                    ->hint(new HtmlString('<a href="https://www.php.net/manual/en/datetime.format.php" target="_blank" rel="nofollow">DateTime Format</a>'))
+                                    ->hintIcon('heroicon-o-book-open')
                                     ->placeholder('M j, Y G:i:s')
                                     ->maxLength(25)
                                     ->required(),
@@ -59,7 +61,9 @@ class GeneralPage extends SettingsPage
                             ->schema([
                                 Forms\Components\TextInput::make('speedtest_schedule')
                                     ->rules([new Cron()])
-                                    ->helperText('Leave empty to disable the schedule. You can also use the cron expression generator [HERE](https://crontab.cronhub.io/) to help you make schedules.')
+                                    ->helperText('Leave empty to disable scheduled tests.')
+                                    ->hint(new HtmlString('<a href="https://crontab.cronhub.io/" target="_blank" rel="nofollow">Cron Generator</a>'))
+                                    ->hintIcon('heroicon-o-book-open')
                                     ->nullable()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('speedtest_server')
