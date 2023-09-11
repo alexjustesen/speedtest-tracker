@@ -72,7 +72,7 @@ class User extends Authenticatable implements FilamentUser
     protected function isGuest(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes): bool => $attributes['role'] == 'guest',
+            get: fn (mixed $value, array $attributes): bool => $attributes['role'] == 'guest' || blank($attributes['role']),
         );
     }
 }
