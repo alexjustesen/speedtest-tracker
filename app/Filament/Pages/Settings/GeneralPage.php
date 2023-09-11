@@ -39,6 +39,7 @@ class GeneralPage extends SettingsPage
                                     ->required()
                                     ->columnSpan(['md' => 2]),
                                 Forms\Components\Select::make('timezone')
+                                    ->label('Time zone')
                                     ->options(Timezone::all()->pluck('code', 'code'))
                                     ->searchable()
                                     ->required(),
@@ -62,69 +63,16 @@ class GeneralPage extends SettingsPage
                                     ->nullable()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('speedtest_server')
-                                    ->label('Speedtest server ID')
+                                    ->label('Speedtest servers')
                                     ->helperText('Leave empty to let the system pick the best server.')
                                     ->nullable()
                                     ->multiple()
                                     ->maxItems(10)
+                                    ->preload()
                                     ->searchable()
-                                    ->options(function () {
-                                        $response = Http::get(
-                                            url: 'https://www.speedtest.net/api/js/servers',
-                                            query: [
-                                                'engine' => 'js',
-                                                'https_functional' => true,
-                                                'limit' => 10,
-                                            ]
-                                        );
-
-                                        if ($response->failed()) {
-                                            return [
-                                                '' => 'There was an error retrieving Speedtest servers',
-                                            ];
-                                        }
-
-                                        return $response->collect()->map(function ($item) {
-                                            return [
-                                                'id' => $item['id'],
-                                                'name' => $item['id'].': '.$item['name'].' ('.$item['sponsor'].')',
-                                            ];
-                                        })->pluck('name', 'id');
-                                    })
-                                    ->getSearchResultsUsing(function (string $search) {
-                                        $response = Http::get(
-                                            url: 'https://www.speedtest.net/api/js/servers',
-                                            query: [
-                                                'engine' => 'js',
-                                                'search' => $search,
-                                                'https_functional' => true,
-                                                'limit' => 10,
-                                            ]
-                                        );
-
-                                        if ($response->failed()) {
-                                            return [
-                                                '' => 'There was an error retrieving Speedtest servers',
-                                            ];
-                                        }
-
-                                        if (! $response->collect()->count() && is_numeric($search)) {
-                                            return collect([
-                                                [
-                                                    'id' => $search,
-                                                    'name' => $search.': No server found, manually add this ID.',
-                                                ],
-                                            ]);
-                                        }
-
-                                        return $response->collect()->map(function ($item) {
-                                            return [
-                                                'id' => $item['id'],
-                                                'name' => $item['id'].': '.$item['name'].' ('.$item['sponsor'].')',
-                                            ];
-                                        })->pluck('name', 'id');
-                                    })
-                                    ->columnSpan(2),
+                                    ->getSearchResultsUsing(fn (string $search): array => $this->getServerSearchOptions($search))
+                                    ->getOptionLabelsUsing(fn (array $values): array => $this->getServerLabels($values))
+                                    ->columnSpan('full'),
                             ])
                             ->compact()
                             ->columns([
@@ -134,5 +82,44 @@ class GeneralPage extends SettingsPage
                     ])
                     ->columnSpan('full'),
             ]);
+    }
+
+    protected function getServerLabels(array $values): array
+    {
+        return collect($values)->mapWithKeys(function (string $item, int $key) {
+            return [$item => $item];
+        })->toArray();
+    }
+
+    protected function getServerSearchOptions(string $search): array
+    {
+        $response = Http::get(
+            url: 'https://www.speedtest.net/api/js/servers',
+            query: [
+                'engine' => 'js',
+                'search' => $search,
+                'https_functional' => true,
+                'limit' => 10,
+            ]
+        );
+
+        if ($response->failed()) {
+            return [
+                '' => 'There was an error retrieving Speedtest servers',
+            ];
+        }
+
+        if (! $response->collect()->count() && is_numeric($search)) {
+            return collect([
+                [
+                    'id' => $search,
+                    'name' => "Unknown server",
+                ],
+            ])->pluck('name', 'id')->toArray();
+        }
+
+        return $response->collect()->mapWithKeys(function (array $item, int $key) {
+            return [$item['id'] => $item['id'].': '.$item['name'].' ('.$item['sponsor'].')'];
+        })->toArray();
     }
 }
