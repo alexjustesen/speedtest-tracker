@@ -36,6 +36,10 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
+        if ($user->id == $model->id) {
+            return true;
+        }
+
         return $user->is_admin;
     }
 
