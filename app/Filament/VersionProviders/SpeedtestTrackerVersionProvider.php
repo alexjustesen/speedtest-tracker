@@ -11,6 +11,8 @@ class SpeedtestTrackerVersionProvider implements VersionProvider
 
     public function getVersion(): string
     {
-        return config('speedtest.build_version');
+        return app()->isProduction()
+            ? config('speedtest.build_version')
+            : config('app.env');
     }
 }
