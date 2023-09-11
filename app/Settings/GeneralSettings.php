@@ -8,8 +8,6 @@ class GeneralSettings extends Settings
 {
     public bool $auth_enabled;
 
-    public string $content_width;
-
     public ?string $speedtest_schedule;
 
     /** @var string[] */

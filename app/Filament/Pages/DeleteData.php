@@ -3,8 +3,8 @@
 namespace App\Filament\Pages;
 
 use App\Jobs\DeleteResultsData;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Pages\Actions\Action;
 use Filament\Pages\Page;
 
 class DeleteData extends Page
@@ -21,7 +21,7 @@ class DeleteData extends Page
 
     protected ?string $maxContentWidth = '3xl';
 
-    public function getActions(): array
+    public function getHeaderActions(): array
     {
         return [
             Action::make('delete')
@@ -30,9 +30,8 @@ class DeleteData extends Page
                 ->action(fn () => $this->deleteData())
                 ->requiresConfirmation()
                 ->modalHeading('Confirmation')
-                ->modalSubheading('Are you really-really-really sure you want to do this?')
-                ->modalContent(view('filament.pages.modals.delete-results-data-confirmation'))
-                ->modalButton('Yes, I\'m sure'),
+                ->modalDescription('This will delete all results data from the database, this cannot be undone. You have been warned!')
+                ->modalSubmitActionLabel('Yes, I am sure'),
         ];
     }
 
@@ -41,7 +40,7 @@ class DeleteData extends Page
         DeleteResultsData::dispatch();
 
         Notification::make()
-            ->title('Deleting speedtest results data')
+            ->title('Deleting results data')
             ->body('The job has been added to the queue and will be completed shortly.')
             ->warning()
             ->send();

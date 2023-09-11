@@ -22,15 +22,15 @@ Speedtest Tracker is containerized so you can run it anywhere you run your Docke
 
 ## API
 
-A robust API is planned for a later release but `v0.11.8` includes a legacy endpoint `/api/speedtest/latest` which is used by home lab dashboards like [Homepage](https://github.com/benphelps/homepage) and [Organizr](https://github.com/causefx/Organizr/tree/v2-master).
+A robust API is planned for a later release but as of `v0.11.8` a legacy endpoint `/api/speedtest/latest` which is used by home lab dashboards like [Homepage](https://github.com/benphelps/homepage) and [Organizr](https://github.com/causefx/Organizr/tree/v2-master).
 
 ## Screenshots
 
-![Dashboard](.github/screenshots/dashboard_screenshot.png)
+![Dashboard](.github/screenshots/dashboard_screenshot.jpg)
 **Dashboard**
 
-![Results page](.github/screenshots/results_screenshot.png)
+![Results page](.github/screenshots/results_screenshot.jpg)
 **Results page**
 
-![General Settings page](.github/screenshots/general_settings_screenshot.png)
+![General Settings page](.github/screenshots/general_settings_screenshot.jpg)
 **General Settings page**

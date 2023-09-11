@@ -106,14 +106,4 @@ class Result extends Model
             'ping' => $data['ping']['jitter'] ?? null,
         ];
     }
-
-    /**
-     * Return the previous test result.
-     */
-    public function previous(): ?self
-    {
-        return static::orderByDesc('id')
-            ->where('id', '<', $this->id)
-            ->first();
-    }
 }
