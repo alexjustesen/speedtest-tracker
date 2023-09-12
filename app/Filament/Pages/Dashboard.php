@@ -28,7 +28,8 @@ class Dashboard extends BasePage
         return [
             Action::make('speedtest')
                 ->label('Queue Speedtest')
-                ->action('queueSpeedtest'),
+                ->action('queueSpeedtest')
+                ->hidden(fn (): bool => ! auth()->user()->is_admin),
         ];
     }
 
