@@ -18,18 +18,13 @@ class Dashboard extends BasePage
 
     protected static string $view = 'filament.pages.dashboard';
 
-    protected function getPollingInterval(): ?string
-    {
-        return null;
-    }
-
     protected function getHeaderActions(): array
     {
         return [
             Action::make('speedtest')
                 ->label('Queue Speedtest')
                 ->action('queueSpeedtest')
-                ->hidden(fn (): bool => ! auth()->user()->is_admin),
+                ->hidden(fn (): bool => ! auth()->user()->is_admin && ! auth()->user()->is_user),
         ];
     }
 

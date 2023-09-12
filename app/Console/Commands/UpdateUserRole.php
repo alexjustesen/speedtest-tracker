@@ -45,6 +45,7 @@ class UpdateUserRole extends Command
             options: [
                 'admin' => 'Admin',
                 'guest' => 'Guest',
+                'user' => 'User',
             ],
             default: 'guest'
         );

@@ -19,13 +19,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = 'System';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    protected static ?int $navigationSort = 0;
-
-    protected static ?string $slug = 'system/users';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
@@ -80,9 +74,10 @@ class UserResource extends Resource
                                             ->options([
                                                 'admin' => 'Admin',
                                                 'guest' => 'Guest',
+                                                'user' => 'User',
                                             ])
                                             ->default('guest')
-                                            ->disabled(fn (): bool => ! auth()->user()->is_admin)
+                                            ->disabled(fn (): bool => ! auth()->user()->is_admin || auth()->user()->is_user)
                                             ->required(),
                                     ])
                                     ->columns(1)
@@ -125,6 +120,7 @@ class UserResource extends Resource
                     ->color(fn (string $state): string => match ($state) {
                         'admin' => 'success',
                         'guest' => 'gray',
+                        'user' => 'info',
                     }),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Last updated')
@@ -135,6 +131,7 @@ class UserResource extends Resource
                     ->options([
                         'admin' => 'Admin',
                         'guest' => 'Guest',
+                        'user' => 'User',
                     ]),
             ])
             ->actions([

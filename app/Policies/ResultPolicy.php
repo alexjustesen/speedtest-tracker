@@ -36,7 +36,8 @@ class ResultPolicy
      */
     public function update(User $user, Result $result): bool
     {
-        return $user->is_admin;
+        return $user->is_admin
+            || $user->is_user;
     }
 
     /**
