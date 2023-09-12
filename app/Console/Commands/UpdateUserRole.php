@@ -34,7 +34,7 @@ class UpdateUserRole extends Command
         $email = text(
             label: 'What is the email address?',
             required: true,
-            validate: fn(string $value) => match (true) {
+            validate: fn (string $value) => match (true) {
                 ! User::firstWhere('email', $value) => 'User not found.',
                 default => null
             }
