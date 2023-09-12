@@ -57,7 +57,7 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Determine if the user is an admin.
+     * Determine if the user has an admin role.
      */
     protected function isAdmin(): Attribute
     {
@@ -67,12 +67,22 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Determine if the user is a guest.
+     * Determine if the user has a guest role.
      */
     protected function isGuest(): Attribute
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes): bool => $attributes['role'] == 'guest' || blank($attributes['role']),
+        );
+    }
+
+    /**
+     * Determine if the user has a user role.
+     */
+    protected function isUser(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes): bool => $attributes['role'] == 'user',
         );
     }
 }
