@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
@@ -15,7 +18,7 @@
         "guzzlehttp/guzzle": "^7.8",
         "influxdata/influxdb-client-php": "^3.4",
         "laravel-notification-channels/telegram": "^4.0",
-        "laravel/framework": "^10.22.0",
+        "laravel/framework": "^10.23",
         "laravel/sanctum": "^3.3.0",
         "laravel/tinker": "^2.8.2",
         "livewire/livewire": "^3.0.2",
