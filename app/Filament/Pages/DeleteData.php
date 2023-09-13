@@ -21,6 +21,16 @@ class DeleteData extends Page
 
     protected ?string $maxContentWidth = '3xl';
 
+    public function mount(): void
+    {
+        abort_unless(auth()->user()->is_admin, 403);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->is_admin;
+    }
+
     public function getHeaderActions(): array
     {
         return [

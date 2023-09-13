@@ -21,6 +21,16 @@ class ThresholdsPage extends SettingsPage
 
     protected static string $settings = ThresholdSettings::class;
 
+    public function mount(): void
+    {
+        abort_unless(auth()->user()->is_admin, 403);
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->is_admin;
+    }
+
     public function form(Form $form): Form
     {
         return $form

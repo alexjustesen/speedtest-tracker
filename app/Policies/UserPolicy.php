@@ -2,25 +2,24 @@
 
 namespace App\Policies;
 
-use App\Models\Result;
 use App\Models\User;
 
-class ResultPolicy
+class UserPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->is_admin;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Result $result): bool
+    public function view(User $user, User $model): bool
     {
-        return true;
+        return $user->is_admin;
     }
 
     /**
@@ -28,38 +27,42 @@ class ResultPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->is_admin;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Result $result): bool
+    public function update(User $user, User $model): bool
     {
-        return $user->is_admin
-            || $user->is_user;
+        if ($user->id == $model->id) {
+            return true;
+        }
+
+        return $user->is_admin;
     }
 
     /**
      * Determine whether the user can bulk delete any model.
      */
-    public function deleteAny(User $user)
+    public function deleteAny(User $user): bool
     {
-        return $user->is_admin;
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Result $result): bool
+    public function delete(User $user, User $model): bool
     {
-        return $user->is_admin;
+        return $user->is_admin
+            && ! $model->is_admin;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Result $result): bool
+    public function restore(User $user, User $model): bool
     {
         return false; // soft deletes not used
     }
@@ -67,7 +70,7 @@ class ResultPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Result $result): bool
+    public function forceDelete(User $user, User $model): bool
     {
         return false; // soft deletes not used
     }
