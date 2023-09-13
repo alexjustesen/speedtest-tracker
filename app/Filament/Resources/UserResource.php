@@ -19,13 +19,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = 'System';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    protected static ?int $navigationSort = 0;
-
-    protected static ?string $slug = 'system/users';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
@@ -65,20 +59,48 @@ class UserResource extends Resource
                                     ->visible(fn ($livewire) => $livewire instanceof EditUser)
                                     ->dehydrated(false),
                             ])
-                            ->columns('full')
+                            ->columns(1)
                             ->columnSpan([
                                 'md' => 2,
                             ]),
 
-                        Forms\Components\Section::make()
+                        Forms\Components\Grid::make([
+                            'default' => 1,
+                        ])
                             ->schema([
-                                Forms\Components\Placeholder::make('created_at')
-                                    ->content(fn ($record) => $record?->created_at?->diffForHumans() ?? new HtmlString('&mdash;')),
-                                Forms\Components\Placeholder::make('updated_at')
-                                    ->content(fn ($record) => $record?->updated_at?->diffForHumans() ?? new HtmlString('&mdash;')),
+                                Forms\Components\Section::make()
+                                    ->schema([
+                                        Forms\Components\Select::make('role')
+                                            ->options([
+                                                'admin' => 'Admin',
+                                                'guest' => 'Guest',
+                                                'user' => 'User',
+                                            ])
+                                            ->default('guest')
+                                            ->disabled(fn (): bool => ! auth()->user()->is_admin || auth()->user()->is_user)
+                                            ->required(),
+                                    ])
+                                    ->columns(1)
+                                    ->columnSpan([
+                                        'md' => 1,
+                                    ]),
+
+                                Forms\Components\Section::make()
+                                    ->schema([
+                                        Forms\Components\Placeholder::make('created_at')
+                                            ->content(fn ($record) => $record?->created_at?->diffForHumans() ?? new HtmlString('&mdash;')),
+                                        Forms\Components\Placeholder::make('updated_at')
+                                            ->content(fn ($record) => $record?->updated_at?->diffForHumans() ?? new HtmlString('&mdash;')),
+                                    ])
+                                    ->columns(1)
+                                    ->columnSpan([
+                                        'md' => 1,
+                                    ]),
                             ])
-                            ->columns('full')
-                            ->columnSpan(1),
+                            ->columns(1)
+                            ->columnSpan([
+                                'md' => 1,
+                            ]),
                     ]),
             ]);
     }
@@ -87,27 +109,36 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                Tables\Columns\TextColumn::make('role')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'admin' => 'success',
+                        'guest' => 'gray',
+                        'user' => 'info',
+                    }),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Last updated')
                     ->dateTime(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('role')
+                    ->options([
+                        'admin' => 'Admin',
+                        'guest' => 'Guest',
+                        'user' => 'User',
+                    ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->requiresConfirmation(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ]),
             ]);
     }

@@ -26,8 +26,6 @@ class ResultResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
-    protected static ?string $navigationLabel = 'Results';
-
     public static function form(Form $form): Form
     {
         $settings = new GeneralSettings();
@@ -168,6 +166,7 @@ class ResultResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\Action::make('updateComments')
                         ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                        ->hidden(fn (): bool => ! auth()->user()->is_admin && ! auth()->user()->is_user)
                         ->mountUsing(fn (Forms\ComponentContainer $form, Result $record) => $form->fill([
                             'comments' => $record->comments,
                         ]))
@@ -188,6 +187,7 @@ class ResultResource extends Resource
                 Tables\Actions\BulkAction::make('export')
                     ->label('Export selected')
                     ->icon('heroicon-o-arrow-down-tray')
+                    ->hidden(fn (): bool => ! auth()->user()->is_admin)
                     ->action(function (Collection $records) {
                         $export = new ResultsSelectedBulkExport($records->toArray());
 
