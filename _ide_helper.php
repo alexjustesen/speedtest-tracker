@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.22.0.
+ * Generated for Laravel 10.23.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -13424,7 +13424,7 @@
                     /**
          * Create a new redirect response to a controller action.
          *
-         * @param string $action
+         * @param array|string $action
          * @param mixed $parameters
          * @param int $status
          * @param array $headers
