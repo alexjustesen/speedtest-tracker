@@ -38,6 +38,7 @@ class AdminPanelProvider extends PanelProvider
                 url: asset('fonts/inter/inter.css'),
                 provider: LocalFontProvider::class,
             )
+            ->sidebarCollapsibleOnDesktop()
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
