@@ -21,10 +21,12 @@ class InfluxDbPage extends SettingsPage
 
     protected static string $settings = InfluxDbSettings::class;
 
-    // public function mount(): void
-    // {
-    //     abort_unless(auth()->user()->is_admin, 403);
-    // }
+    public function mount(): void
+    {
+        abort_unless(auth()->user()->is_admin, 403);
+
+        $this->fillForm();
+    }
 
     public static function shouldRegisterNavigation(): bool
     {
