@@ -24,6 +24,8 @@ class InfluxDbPage extends SettingsPage
     public function mount(): void
     {
         abort_unless(auth()->user()->is_admin, 403);
+
+        $this->fillForm();
     }
 
     public static function shouldRegisterNavigation(): bool
