@@ -44,10 +44,9 @@ class UpdateUserRole extends Command
             label: 'What role should the user have?',
             options: [
                 'admin' => 'Admin',
-                'guest' => 'Guest',
                 'user' => 'User',
             ],
-            default: 'guest'
+            default: 'user'
         );
 
         $confirmed = confirm(
