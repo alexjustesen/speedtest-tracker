@@ -73,10 +73,9 @@ class UserResource extends Resource
                                         Forms\Components\Select::make('role')
                                             ->options([
                                                 'admin' => 'Admin',
-                                                'guest' => 'Guest',
                                                 'user' => 'User',
                                             ])
-                                            ->default('guest')
+                                            ->default('user')
                                             ->disabled(fn (): bool => ! auth()->user()->is_admin || auth()->user()->is_user)
                                             ->required(),
                                     ])
@@ -119,8 +118,7 @@ class UserResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'admin' => 'success',
-                        'guest' => 'gray',
-                        'user' => 'info',
+                        'user' => 'gray',
                     }),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Last updated')
@@ -130,7 +128,6 @@ class UserResource extends Resource
                 Tables\Filters\SelectFilter::make('role')
                     ->options([
                         'admin' => 'Admin',
-                        'guest' => 'Guest',
                         'user' => 'User',
                     ]),
             ])
