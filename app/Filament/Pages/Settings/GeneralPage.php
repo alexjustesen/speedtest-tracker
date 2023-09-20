@@ -102,6 +102,10 @@ class GeneralPage extends SettingsPage
 
     protected function getServerLabels(array $values): array
     {
+        if (count($values) && is_null($values[0])) {
+            return [];
+        }
+
         return collect($values)->mapWithKeys(function (string $item, int $key) {
             return [$item => $item];
         })->toArray();
