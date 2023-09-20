@@ -133,7 +133,7 @@ class GeneralPage extends SettingsPage
             return collect([
                 [
                     'id' => $search,
-                    'name' => 'Unknown server',
+                    'name' => $search.' (Manually entered server)',
                 ],
             ])->pluck('name', 'id')->toArray();
         }
