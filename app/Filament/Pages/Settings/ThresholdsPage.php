@@ -23,9 +23,9 @@ class ThresholdsPage extends SettingsPage
 
     public function mount(): void
     {
-        abort_unless(auth()->user()->is_admin, 403);
+        parent::mount();
 
-        $this->fillForm();
+        abort_unless(auth()->user()->is_admin, 403);
     }
 
     public static function shouldRegisterNavigation(): bool
