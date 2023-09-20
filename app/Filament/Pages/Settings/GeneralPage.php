@@ -102,6 +102,10 @@ class GeneralPage extends SettingsPage
 
     protected function getServerLabels(array $values): array
     {
+        if (count($values) && is_null($values[0])) {
+            return [];
+        }
+
         return collect($values)->mapWithKeys(function (string $item, int $key) {
             return [$item => $item];
         })->toArray();
@@ -129,7 +133,7 @@ class GeneralPage extends SettingsPage
             return collect([
                 [
                     'id' => $search,
-                    'name' => 'Unknown server',
+                    'name' => $search.' (Manually entered server)',
                 ],
             ])->pluck('name', 'id')->toArray();
         }
