@@ -52,13 +52,13 @@ class GeneralPage extends SettingsPage
                                     ->required()
                                     ->columnSpan(['md' => 2]),
                                 Forms\Components\Select::make('timezone')
-                                    ->label('Time zone')
+                                    ->label('Display time zone')
+                                    ->helperText(new HtmlString('Display time zone only changes the offset in views and <span class="underline">does not</span> effect the scheduler.'))
                                     ->options(Timezone::all()->pluck('code', 'code'))
                                     ->searchable()
                                     ->required(),
                                 Forms\Components\TextInput::make('time_format')
-                                    ->hint(new HtmlString('<a href="https://www.php.net/manual/en/datetime.format.php" target="_blank" rel="nofollow">DateTime Format</a>'))
-                                    ->hintIcon('heroicon-o-book-open')
+                                    ->hint(new HtmlString('&#x1f517;<a href="https://www.php.net/manual/en/datetime.format.php" target="_blank" rel="nofollow">DateTime Format</a>'))
                                     ->placeholder('M j, Y G:i:s')
                                     ->maxLength(25)
                                     ->required(),
@@ -74,8 +74,7 @@ class GeneralPage extends SettingsPage
                                 Forms\Components\TextInput::make('speedtest_schedule')
                                     ->rules([new Cron()])
                                     ->helperText('Leave empty to disable scheduled tests.')
-                                    ->hint(new HtmlString('<a href="https://crontab.cronhub.io/" target="_blank" rel="nofollow">Cron Generator</a>'))
-                                    ->hintIcon('heroicon-o-book-open')
+                                    ->hint(new HtmlString('&#x1f517;<a href="https://crontab.cronhub.io/" target="_blank" rel="nofollow">Cron Generator</a>'))
                                     ->nullable()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('speedtest_server')
