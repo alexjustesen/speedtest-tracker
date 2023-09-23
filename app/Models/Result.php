@@ -12,13 +12,6 @@ class Result extends Model
     use HasFactory;
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -46,7 +39,6 @@ class Result extends Model
         'scheduled' => 'boolean',
         'successful' => 'boolean',
         'data' => 'array',
-        'created_at' => 'datetime',
     ];
 
     /**
