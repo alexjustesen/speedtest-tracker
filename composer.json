@@ -18,7 +18,7 @@
         "guzzlehttp/guzzle": "^7.8",
         "influxdata/influxdb-client-php": "^3.4",
         "laravel-notification-channels/telegram": "^4.0",
-        "laravel/framework": "^10.24",
+        "laravel/framework": "^10.25",
         "laravel/prompts": "^0.1.8",
         "laravel/sanctum": "^3.3.1",
         "laravel/tinker": "^2.8.2",
