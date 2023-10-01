@@ -89,7 +89,7 @@ class RecentSpeedChartWidget extends ChartWidget
                         'text' => 'Mbps',
                     ],
                 ],
-            ]
+            ],
         ];
     }
 
