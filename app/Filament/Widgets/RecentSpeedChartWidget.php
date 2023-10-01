@@ -50,7 +50,7 @@ class RecentSpeedChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download (Mbps)',
+                    'label' => 'Download',
                     'data' => $results->map(fn ($item) => ! blank($item->download) ? toBits(convertSize($item->download), 2) : 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
@@ -59,7 +59,7 @@ class RecentSpeedChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
                 [
-                    'label' => 'Upload (Mbps)',
+                    'label' => 'Upload',
                     'data' => $results->map(fn ($item) => ! blank($item->upload) ? toBits(convertSize($item->upload), 2) : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
@@ -69,6 +69,27 @@ class RecentSpeedChartWidget extends ChartWidget
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone($settings->timezone)->format('M d - G:i')),
+        ];
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'scales' => [
+                'x' => [
+                    'display' => true,
+                    'title' => [
+                        'display' => true,
+                    ],
+                ],
+                'y' => [
+                    'display' => true,
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Mbps',
+                    ],
+                ],
+            ],
         ];
     }
 

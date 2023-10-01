@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/admin');
+Route::get('/', HomeController::class);
 
 Route::get('/login', function () {
     return redirect('/admin/login');
