@@ -12,10 +12,8 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view(
-            Result::count()
-                ? 'dashboard'
-                : 'get-started'
-        );
+        $hasResults = Result::count() > 0;
+
+        return view($hasResults ? 'dashboard' : 'get-started');
     }
 }
