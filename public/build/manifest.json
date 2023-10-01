@@ -1,4 +1,9 @@
 {
+  "resources/css/app.css": {
+    "file": "assets/app-d8cd240f.css",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
   "resources/css/filament/admin/theme.css": {
     "file": "assets/theme-182befaf.css",
     "isEntry": true,
