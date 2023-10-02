@@ -33,6 +33,7 @@
         "fakerphp/faker": "^1.23.0",
         "laravel/pint": "^1.13.2",
         "laravel/sail": "^1.25.0",
+        "laravel/telescope": "^4.16",
         "mockery/mockery": "^1.6.6",
         "nunomaduro/collision": "^7.9.0",
         "phpunit/phpunit": "^10.3.5",
@@ -75,7 +76,8 @@
     "extra": {
         "laravel": {
             "dont-discover": [
-                "barryvdh/laravel-ide-helper"
+                "barryvdh/laravel-ide-helper",
+                "laravel/telescope"
             ]
         }
     },
