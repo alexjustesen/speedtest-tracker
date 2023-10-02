@@ -30,7 +30,7 @@
         <main class="p-4 sm:p-6 lg:p-8 mx-auto max-w-{{ config('speedtest.content_width') }} space-y-4 sm:space-y-8">
             <header class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">{{ $title ?? 'Page Title' }}</h1>
+                    <h1 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">{{ $title ?? 'Page Title' }} - {{ config('app.name') }}</h1>
                 </div>
 
                 <div class="flex-shrink-0">
