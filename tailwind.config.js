@@ -8,8 +8,9 @@ export default {
     presets: [presets],
 
     content: [
+        './app/Filament/**/*.php',
         './resources/views/**/*.blade.php',
-        './storage/framework/views/*.php',
+        './vendor/filament/**/*.blade.php',
     ],
 
     darkMode: 'class',
