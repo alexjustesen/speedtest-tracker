@@ -8,7 +8,7 @@ return [
      */
     'build_date' => Carbon::parse('2023-10-02'),
 
-    'build_version' => '0.13.0-beta.2',
+    'build_version' => '0.13.0-beta.3',
 
     /**
      * General
