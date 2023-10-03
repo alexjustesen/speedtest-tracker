@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', HomeController::class);
+Route::get('/', HomeController::class)
+    ->name('home');
 
 Route::get('/login', function () {
     return redirect('/admin/login');
