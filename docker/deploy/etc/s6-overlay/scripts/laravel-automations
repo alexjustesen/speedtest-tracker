@@ -16,6 +16,12 @@ chown -R webuser:webgroup $WEBUSER_HOME/storage
 echo "✅  Permissions fixed."
 echo ""
 
+# Build cache
+echo "🧹  Clearing any previous caches..."
+s6-setuidgid webuser php $WEBUSER_HOME/artisan optimize:clear --no-ansi -q
+echo "✅  Cache cleared."
+echo ""
+
 if [ ${DB_CONNECTION:="sqlite"} = "sqlite" ]; then
     # create symlinks
     echo "🔗  Creating database symlink..."
