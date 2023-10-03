@@ -13,7 +13,7 @@ class HomeController extends Controller
     public function __invoke(Request $request)
     {
         $latestResult = Result::query()
-            ->select(['id', 'ping', 'download', 'upload', 'successful' ,'created_at'])
+            ->select(['id', 'ping', 'download', 'upload', 'successful', 'created_at'])
             ->latest()
             ->first();
 
