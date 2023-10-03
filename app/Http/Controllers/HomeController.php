@@ -12,8 +12,17 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $hasResults = Result::count() > 0;
+        $latestResult = Result::query()
+            ->select(['id', 'ping', 'download', 'upload', 'successful' ,'created_at'])
+            ->latest()
+            ->first();
 
-        return view($hasResults ? 'dashboard' : 'get-started');
+        if (! $latestResult) {
+            return view('get-started');
+        }
+
+        return view('dashboard', [
+            'latestResult' => $latestResult,
+        ]);
     }
 }
