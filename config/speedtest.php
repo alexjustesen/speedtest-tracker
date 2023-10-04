@@ -15,7 +15,7 @@ return [
      */
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
-    'timezone' => env('SPEEDTEST_TIMEZONE', 'UTC'),
+    'timezone' => env('TIMEZONE', 'UTC'),
 
     /**
      * Polling
