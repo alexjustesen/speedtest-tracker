@@ -49,15 +49,9 @@ class GeneralPage extends SettingsPage
                                 Forms\Components\TextInput::make('site_name')
                                     ->maxLength(50)
                                     ->required()
-                                    ->columnSpan(['md' => 2]),
-                                Forms\Components\TextInput::make('timezone')
-                                    ->label('Display timezone')
-                                    ->hint(new HtmlString('&#x1f517;<a href="https://www.php.net/manual/en/timezones.php" target="_blank" rel="nofollow">Supported Timezones</a>'))
-                                    ->afterStateHydrated(function (Forms\Components\TextInput $component, string $state) {
-                                        $component->state(config('speedtest.timezone'));
-                                    })
-                                    ->disabled(),
+                                    ->columnSpanFull(),
                                 Forms\Components\TextInput::make('time_format')
+                                    ->label('Datetime format')
                                     ->hint(new HtmlString('&#x1f517;<a href="https://www.php.net/manual/en/datetime.format.php" target="_blank" rel="nofollow">DateTime Format</a>'))
                                     ->placeholder('M j, Y G:i:s')
                                     ->maxLength(25)
