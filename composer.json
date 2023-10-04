@@ -25,8 +25,7 @@
         "livewire/livewire": "^3.0.5",
         "maatwebsite/excel": "^3.1.48",
         "maennchen/zipstream-php": "^2.4",
-        "spatie/laravel-settings": "^2.8.3",
-        "squirephp/timezones-en": "^3.4.2"
+        "spatie/laravel-settings": "^2.8.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
