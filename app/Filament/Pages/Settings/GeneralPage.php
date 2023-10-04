@@ -9,7 +9,6 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\HtmlString;
-use Squire\Models\Timezone;
 
 class GeneralPage extends SettingsPage
 {
@@ -51,12 +50,13 @@ class GeneralPage extends SettingsPage
                                     ->maxLength(50)
                                     ->required()
                                     ->columnSpan(['md' => 2]),
-                                Forms\Components\Select::make('timezone')
-                                    ->label('Display time zone')
-                                    ->helperText(new HtmlString('Display time zone only changes the offset in views and <span class="underline">does not</span> effect the scheduler.'))
-                                    ->options(Timezone::all()->pluck('code', 'code'))
-                                    ->searchable()
-                                    ->required(),
+                                Forms\Components\TextInput::make('timezone')
+                                    ->label('Display timezone')
+                                    ->hint(new HtmlString('&#x1f517;<a href="https://www.php.net/manual/en/timezones.php" target="_blank" rel="nofollow">Supported Timezones</a>'))
+                                    ->afterStateHydrated(function (Forms\Components\TextInput $component, string $state) {
+                                        $component->state(config('speedtest.display_timezone'));
+                                    })
+                                    ->disabled(),
                                 Forms\Components\TextInput::make('time_format')
                                     ->hint(new HtmlString('&#x1f517;<a href="https://www.php.net/manual/en/datetime.format.php" target="_blank" rel="nofollow">DateTime Format</a>'))
                                     ->placeholder('M j, Y G:i:s')

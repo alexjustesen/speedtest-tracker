@@ -15,6 +15,8 @@ return [
      */
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
+    'display_timezone' => env('PHP_DATE_TIMEZONE', 'UTC'),
+
     /**
      * Polling
      */

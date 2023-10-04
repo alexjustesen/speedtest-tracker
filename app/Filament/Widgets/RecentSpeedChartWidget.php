@@ -3,7 +3,6 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Result;
-use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentSpeedChartWidget extends ChartWidget
@@ -32,8 +31,6 @@ class RecentSpeedChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-        $settings = new GeneralSettings();
-
         $results = Result::query()
             ->select(['id', 'download', 'upload', 'created_at'])
             ->when($this->filter == '24h', function ($query) {
@@ -68,7 +65,7 @@ class RecentSpeedChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone($settings->timezone)->format('M d - G:i')),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('speedtest.display_timezone'))->format('M d - G:i')),
         ];
     }
 
