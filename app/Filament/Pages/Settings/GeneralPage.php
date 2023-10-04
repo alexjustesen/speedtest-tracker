@@ -54,7 +54,7 @@ class GeneralPage extends SettingsPage
                                     ->label('Display timezone')
                                     ->hint(new HtmlString('&#x1f517;<a href="https://www.php.net/manual/en/timezones.php" target="_blank" rel="nofollow">Supported Timezones</a>'))
                                     ->afterStateHydrated(function (Forms\Components\TextInput $component, string $state) {
-                                        $component->state(config('speedtest.display_timezone'));
+                                        $component->state(config('speedtest.timezone'));
                                     })
                                     ->disabled(),
                                 Forms\Components\TextInput::make('time_format')

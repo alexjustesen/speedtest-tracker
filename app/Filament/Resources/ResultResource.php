@@ -132,7 +132,7 @@ class ResultResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone(config('speedtest.display_timezone'))
+                    ->timezone(config('speedtest.timezone'))
                     ->sortable(),
             ])
             ->filters([

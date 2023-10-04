@@ -65,7 +65,7 @@ class RecentSpeedChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('speedtest.display_timezone'))->format('M d - G:i')),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('speedtest.timezone'))->format('M d - G:i')),
         ];
     }
 
