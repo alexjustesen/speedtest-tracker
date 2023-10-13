@@ -19,6 +19,8 @@ class GeneralSettings extends Settings
 
     public string $timezone;
 
+    public bool $public_dashboard_enabled;
+
     public static function group(): string
     {
         return 'general';
