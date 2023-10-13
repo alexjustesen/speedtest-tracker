@@ -114,6 +114,18 @@ class GeneralPage extends SettingsPage
                                 'default' => 1,
                                 'md' => 2,
                             ]),
+
+                        Forms\Components\Section::make('Public Dashboard Settings')
+                            ->schema([
+                                Forms\Components\Toggle::make('public_dashboard_enabled')
+                                    ->label('Enable')
+                                    ->columnSpan(2),
+                            ])
+                            ->compact()
+                            ->columns([
+                                'default' => 1,
+                                'md' => 2,
+                            ]),
                     ])
                     ->columnSpan('full'),
             ]);
