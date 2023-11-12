@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.28.0.
+ * Generated for Laravel 10.31.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -435,6 +435,18 @@
         {
                         /** @var \Illuminate\Foundation\Application $instance */
                         return $instance->runningInConsole();
+        }
+                    /**
+         * Determine if the application is running any of the given console commands.
+         *
+         * @param string|array $commands
+         * @return bool 
+         * @static 
+         */ 
+        public static function runningConsoleCommand(...$commands)
+        {
+                        /** @var \Illuminate\Foundation\Application $instance */
+                        return $instance->runningConsoleCommand(...$commands);
         }
                     /**
          * Determine if the application is running unit tests.
@@ -5527,6 +5539,18 @@
                         return $instance->pretend($callback);
         }
                     /**
+         * Execute the given callback without "pretending".
+         *
+         * @param \Closure $callback
+         * @return mixed 
+         * @static 
+         */ 
+        public static function withoutPretending($callback)
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        return $instance->withoutPretending($callback);
+        }
+                    /**
          * Bind values to their parameters in the given statement.
          *
          * @param \PDOStatement $statement
@@ -6452,6 +6476,18 @@
         {
                         /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->setQueueResolver($resolver);
+        }
+                    /**
+         * Set the database transaction manager resolver implementation.
+         *
+         * @param callable $resolver
+         * @return \Illuminate\Events\Dispatcher 
+         * @static 
+         */ 
+        public static function setTransactionManagerResolver($resolver)
+        {
+                        /** @var \Illuminate\Events\Dispatcher $instance */
+                        return $instance->setTransactionManagerResolver($resolver);
         }
                     /**
          * Gets the raw, unprepared listeners.
@@ -14536,16 +14572,16 @@
                         return $instance->hasTable($table);
         }
                     /**
-         * Get the column listing for a given table.
+         * Get the columns for a given table.
          *
          * @param string $table
          * @return array 
          * @static 
          */ 
-        public static function getColumnListing($table)
+        public static function getColumns($table)
         {
                         /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        return $instance->getColumnListing($table);
+                        return $instance->getColumns($table);
         }
                     /**
          * Drop all tables from the database.
@@ -14704,13 +14740,26 @@
          *
          * @param string $table
          * @param string $column
+         * @param bool $fullDefinition
          * @return string 
          * @static 
          */ 
-        public static function getColumnType($table, $column)
+        public static function getColumnType($table, $column, $fullDefinition = false)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
                         /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        return $instance->getColumnType($table, $column);
+                        return $instance->getColumnType($table, $column, $fullDefinition);
+        }
+                    /**
+         * Get the column listing for a given table.
+         *
+         * @param string $table
+         * @return array 
+         * @static 
+         */ 
+        public static function getColumnListing($table)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getColumnListing($table);
         }
                     /**
          * Modify a table on the schema.
@@ -14898,6 +14947,28 @@
         {
                         /** @var \Illuminate\Session\SessionManager $instance */
                         return $instance->blockDriver();
+        }
+                    /**
+         * Get the maximum number of seconds the session lock should be held for.
+         *
+         * @return int 
+         * @static 
+         */ 
+        public static function defaultRouteBlockLockSeconds()
+        {
+                        /** @var \Illuminate\Session\SessionManager $instance */
+                        return $instance->defaultRouteBlockLockSeconds();
+        }
+                    /**
+         * Get the maximum number of seconds to wait while attempting to acquire a route block session lock.
+         *
+         * @return int 
+         * @static 
+         */ 
+        public static function defaultRouteBlockWaitSeconds()
+        {
+                        /** @var \Illuminate\Session\SessionManager $instance */
+                        return $instance->defaultRouteBlockWaitSeconds();
         }
                     /**
          * Get the session configuration.
@@ -19650,11 +19721,12 @@
          * @param mixed $callback
          * @param mixed $alias
          * @param bool $disableExtraConditions
+         * @param string|null $morphable
          * @static 
          */ 
-        public static function performJoinForEloquentPowerJoins($builder, $joinType = 'leftJoin', $callback = null, $alias = null, $disableExtraConditions = false)
+        public static function performJoinForEloquentPowerJoins($builder, $joinType = 'leftJoin', $callback = null, $alias = null, $disableExtraConditions = false, $morphable = null)
         {
-                        return \Illuminate\Database\Eloquent\Relations\Relation::performJoinForEloquentPowerJoins($builder, $joinType, $callback, $alias, $disableExtraConditions);
+                        return \Illuminate\Database\Eloquent\Relations\Relation::performJoinForEloquentPowerJoins($builder, $joinType, $callback, $alias, $disableExtraConditions, $morphable);
         }
                     /**
          * 
@@ -19719,6 +19791,22 @@
                     /**
          * 
          *
+         * @see \Kirschbaum\PowerJoins\Mixins\RelationshipsExtraMethods::performJoinForEloquentPowerJoinsForMorphTo()
+         * @param mixed $builder
+         * @param mixed $joinType
+         * @param mixed $callback
+         * @param mixed $alias
+         * @param bool $disableExtraConditions
+         * @param string|null $morphable
+         * @static 
+         */ 
+        public static function performJoinForEloquentPowerJoinsForMorphTo($builder, $joinType, $callback = null, $alias = null, $disableExtraConditions = false, $morphable = null)
+        {
+                        return \Illuminate\Database\Eloquent\Relations\Relation::performJoinForEloquentPowerJoinsForMorphTo($builder, $joinType, $callback, $alias, $disableExtraConditions, $morphable);
+        }
+                    /**
+         * 
+         *
          * @see \Kirschbaum\PowerJoins\Mixins\RelationshipsExtraMethods::performJoinForEloquentPowerJoinsForHasMany()
          * @param mixed $builder
          * @param mixed $joinType
@@ -19753,11 +19841,12 @@
          * @param mixed $builder
          * @param mixed $operator
          * @param mixed $count
+         * @param string|null $morphable
          * @static 
          */ 
-        public static function performHavingForEloquentPowerJoins($builder, $operator, $count)
+        public static function performHavingForEloquentPowerJoins($builder, $operator, $count, $morphable = null)
         {
-                        return \Illuminate\Database\Eloquent\Relations\Relation::performHavingForEloquentPowerJoins($builder, $operator, $count);
+                        return \Illuminate\Database\Eloquent\Relations\Relation::performHavingForEloquentPowerJoins($builder, $operator, $count, $morphable);
         }
                     /**
          * 
@@ -20431,6 +20520,18 @@
         public static function assertNotified($notification = null)
         {
                         return \Livewire\Features\SupportTesting\Testable::assertNotified($notification);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Notifications\Testing\TestsNotifications::assertNotNotified()
+         * @param \Filament\Notifications\Notification|string|null $notification
+         * @return static 
+         * @static 
+         */ 
+        public static function assertNotNotified($notification = null)
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertNotNotified($notification);
         }
                     /**
          * 
@@ -21162,12 +21263,14 @@
          *
          * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnExists()
          * @param string $name
+         * @param \Closure|null $checkColumnUsing
+         * @param mixed $record
          * @return static 
          * @static 
          */ 
-        public static function assertTableColumnExists($name)
+        public static function assertTableColumnExists($name, $checkColumnUsing = null, $record = null)
         {
-                        return \Livewire\Features\SupportTesting\Testable::assertTableColumnExists($name);
+                        return \Livewire\Features\SupportTesting\Testable::assertTableColumnExists($name, $checkColumnUsing, $record);
         }
                     /**
          * 
@@ -23394,11 +23497,12 @@ namespace  {
              * @param mixed $joinType
              * @param mixed $useAlias
              * @param bool $disableExtraConditions
+             * @param string|null $morphable
              * @static 
              */ 
-            public static function joinRelationship($relationName, $callback = null, $joinType = 'join', $useAlias = false, $disableExtraConditions = false)
+            public static function joinRelationship($relationName, $callback = null, $joinType = 'join', $useAlias = false, $disableExtraConditions = false, $morphable = null)
             {
-                                return \Illuminate\Database\Eloquent\Builder::joinRelationship($relationName, $callback, $joinType, $useAlias, $disableExtraConditions);
+                                return \Illuminate\Database\Eloquent\Builder::joinRelationship($relationName, $callback, $joinType, $useAlias, $disableExtraConditions, $morphable);
             }
              
                 /**
@@ -23701,13 +23805,14 @@ namespace  {
              * @param mixed $operator
              * @param mixed $count
              * @param mixed $boolean
-             * @param mixed $callback
+             * @param \Closure|array|null $callback
+             * @param string|null $morphable
              * @return static 
              * @static 
              */ 
-            public static function powerJoinHas($relation, $operator = '>=', $count = 1, $boolean = 'and', $callback = null)
+            public static function powerJoinHas($relation, $operator = '>=', $count = 1, $boolean = 'and', $callback = null, $morphable = null)
             {
-                                return \Illuminate\Database\Eloquent\Builder::powerJoinHas($relation, $operator, $count, $boolean, $callback);
+                                return \Illuminate\Database\Eloquent\Builder::powerJoinHas($relation, $operator, $count, $boolean, $callback, $morphable);
             }
              
                 /**
@@ -23718,7 +23823,7 @@ namespace  {
              * @param mixed $operator
              * @param mixed $count
              * @param mixed $boolean
-             * @param \Closure|null $callback
+             * @param \Closure|array|null $callback
              * @return static 
              * @static 
              */ 
