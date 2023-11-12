@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', HomeController::class)
+    ->middleware('x-frame-allow')
     ->name('home');
 
 Route::get('/login', function () {
