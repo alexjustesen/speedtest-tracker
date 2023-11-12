@@ -27,5 +27,5 @@ return [
     /**
      * Security
      */
-    'allow_embeds' => env('ALLOW_EMBEDS', null),
+    'allow_embeds' => env('ALLOW_EMBEDS', 'SAMEORIGIN'),
 ];
