@@ -17,7 +17,9 @@ class FrameAllowOptions
     {
         $response = $next($request);
 
-        $response->header('X-Frame-Options', 'ALLOW-FROM '.config('speedtest.allow_embeds'));
+        if (! blank(config('speedtest.allow_embeds'))) {
+            $response->header('X-Frame-Options', 'ALLOW-FROM '.config('speedtest.allow_embeds'));
+        }
 
         return $response;
     }
