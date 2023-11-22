@@ -80,6 +80,10 @@ class AdminPanelProvider extends PanelProvider
                     ->collapsible(false),
             ])
             ->navigationItems([
+                NavigationItem::make('Home')
+                    ->url('/')
+                    ->icon('heroicon-o-home')
+                    ->sort(0),
                 NavigationItem::make('Documentation')
                     ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-book-open')
