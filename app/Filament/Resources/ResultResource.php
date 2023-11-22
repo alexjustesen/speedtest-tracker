@@ -26,6 +26,8 @@ class ResultResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
+    protected static ?int $navigationSort = 2;
+
     public static function form(Form $form): Form
     {
         $settings = new GeneralSettings();
