@@ -127,15 +127,18 @@ class ResultResource extends Resource
                 TextColumn::make('download_jitter')
                     ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['download']['latency']['jitter'] ?? null)
                     ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 TextColumn::make('upload_jitter')
                     ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['upload']['latency']['jitter'] ?? null)
                     ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 TextColumn::make('ping_jitter')
                     ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['ping']['jitter'] ?? null)
                     ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
