@@ -39,6 +39,7 @@ class Kernel extends ConsoleKernel
             );
         })
             ->everyMinute()
+            ->timezone($settings->timezone ?? 'UTC')
             ->when(function () use ($settings) {
                 // Don't run if the schedule is missing (aka disabled)
                 if (blank($settings->speedtest_schedule)) {
