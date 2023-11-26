@@ -49,7 +49,7 @@ class Kernel extends ConsoleKernel
                 // Evaluate if a run is needed based on the schedule
                 $cron = new CronExpression($settings->speedtest_schedule);
 
-                return $cron->isDue();
+                return $cron->isDue(now()->timezone($settings->timezone ?? 'UTC'));
             });
     }
 
