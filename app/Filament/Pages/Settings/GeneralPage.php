@@ -52,8 +52,7 @@ class GeneralPage extends SettingsPage
                                     ->required()
                                     ->columnSpan(['md' => 2]),
                                 Forms\Components\Select::make('timezone')
-                                    ->label('Display time zone')
-                                    ->helperText(new HtmlString('Display time zone only changes the offset in views and <span class="underline">does not</span> effect the scheduler.'))
+                                    ->label('Time zone')
                                     ->options(Timezone::all()->pluck('code', 'code'))
                                     ->searchable()
                                     ->required(),
