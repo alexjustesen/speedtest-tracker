@@ -14,6 +14,7 @@ class HomeController extends Controller
     public function __invoke(Request $request)
     {
         $settings = new GeneralSettings();
+
         if (! $settings->public_dashboard_enabled) {
             return redirect()->route('filament.admin.auth.login');
         }
