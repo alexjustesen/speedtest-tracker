@@ -42,7 +42,7 @@
                                 </div>
 
                                 <h2 class="min-w-0 text-sm font-semibold leading-6 text-white">
-                                    <a href="{{ url('/admin/login') }}" class="flex gap-x-2">
+                                    <a href="{{ url('/admin') }}" class="flex gap-x-2">
                                         <span class="truncate">Sign In</span>
                                         <span class="text-amber-400">/</span>
                                         <span class="whitespace-nowrap">Admin Panel</span>
