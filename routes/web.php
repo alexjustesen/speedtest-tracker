@@ -22,6 +22,8 @@ Route::get('/login', function () {
     return redirect('/admin/login');
 })->name('login');
 
+require __DIR__.'/debug.php';
+
 if (app()->isLocal()) {
     require __DIR__.'/test.php';
 }
