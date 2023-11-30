@@ -52,5 +52,25 @@
                 </li>
             </ul>
         </div>
+
+        @isset($latest)
+            <div class="overflow-hidden bg-white shadow sm:rounded-md">
+                <div class="p-4 bg-white border-b border-gray-200 sm:px-6">
+                    <h3 class="text-base font-semibold leading-6 text-gray-900">Latest result</h3>
+                </div>
+
+                <ul role="list" class="divide-y divide-gray-200">
+                    <li class="px-4 py-4 sm:px-6">
+                        <p class="text-sm font-medium text-gray-900">Latest result ran at</p>
+                        <p class="text-sm text-gray-500 truncate">{{ $latest->created_at->timezone($settings['timezone'] ?? 'UTC')->format('M. jS, Y h:i:s') }}</p>
+                    </li>
+
+                    <li class="px-4 py-4 sm:px-6">
+                        <p class="text-sm font-medium text-gray-900">Diff for humans</p>
+                        <p class="text-sm text-gray-500 truncate">{{ $latest->created_at->diffForHumans() }}</p>
+                    </li>
+                </ul>
+            </div>
+        @endisset
     </div>
 </div>
