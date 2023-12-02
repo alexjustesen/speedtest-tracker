@@ -42,18 +42,27 @@
                                 </div>
 
                                 <h2 class="min-w-0 text-sm font-semibold leading-6 text-white">
-                                    <a href="{{ url('/admin') }}" class="flex gap-x-2">
-                                        <span class="truncate">Sign In</span>
-                                        <span class="text-amber-400">/</span>
-                                        <span class="whitespace-nowrap">Admin Panel</span>
-                                        <span class="absolute inset-0"></span>
-                                    </a>
+                                    @auth
+                                        <a href="{{ url('/admin') }}" class="flex gap-x-2">
+                                            <span class="truncate">Dashboard</span>
+                                            <span class="text-amber-400">/</span>
+                                            <span class="whitespace-nowrap">Admin Panel</span>
+                                            <span class="absolute inset-0"></span>
+                                        </a>
+                                    @else
+                                        <a href="{{ url('/admin/login') }}" class="flex gap-x-2">
+                                            <span class="truncate">Sign In</span>
+                                            <span class="text-amber-400">/</span>
+                                            <span class="whitespace-nowrap">Admin Panel</span>
+                                            <span class="absolute inset-0"></span>
+                                        </a>
+                                    @endauth
                                 </h2>
                             </div>
 
                             <div class="mt-3 flex items-center gap-x-2.5 text-sm leading-5 dark:text-gray-400 text-gray-950">
                                 <p class="truncate">
-                                    Sign in to the admin panel to run your first speedtest or to setup scheduled tests.
+                                    Access the admin panel to run your first speedtest or to setup scheduled tests.
                                 </p>
                             </div>
                         </div>
