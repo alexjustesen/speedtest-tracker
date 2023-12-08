@@ -53,7 +53,7 @@ class GeneralPage extends SettingsPage
                                     ->columnSpan(['md' => 2]),
                                 Forms\Components\Select::make('timezone')
                                     ->label('Time zone')
-                                    ->options(TimeZoneHelper::list()->toArray())
+                                    ->options(TimeZoneHelper::list())
                                     ->searchable()
                                     ->required(),
                                 Forms\Components\TextInput::make('time_format')
