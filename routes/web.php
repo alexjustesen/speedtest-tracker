@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,9 +19,8 @@ Route::get('/', HomeController::class)
     ->middleware('x-frame-allow')
     ->name('home');
 
-Route::get('/login', function () {
-    return redirect('/admin/login');
-})->name('login');
+Route::redirect('/login', '/admin/login')
+    ->name('login');
 
 require __DIR__.'/debug.php';
 
