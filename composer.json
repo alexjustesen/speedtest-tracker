@@ -25,8 +25,7 @@
         "livewire/livewire": "^3.2.6",
         "maatwebsite/excel": "^3.1.50",
         "maennchen/zipstream-php": "^2.4",
-        "spatie/laravel-settings": "^2.8.3",
-        "squirephp/timezones-en": "^3.4.4"
+        "spatie/laravel-settings": "^2.8.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
@@ -41,7 +40,8 @@
     },
     "autoload": {
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/Helpers/TimeZoneHelper.php"
         ],
         "psr-4": {
             "App\\": "app/",

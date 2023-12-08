@@ -18665,7 +18665,18 @@
      
 }
 
-        namespace Livewire { 
+        namespace App\Helpers { 
+            /**
+     * 
+     *
+     */ 
+        class TimeZoneHelper {
+         
+    }
+     
+}
+
+    namespace Livewire { 
             /**
      * 
      *
@@ -26312,6 +26323,7 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Vite extends \Illuminate\Support\Facades\Vite {}
+            class TimeZoneHelper extends \App\Helpers\TimeZoneHelper {}
             class Livewire extends \Livewire\Livewire {}
             class Excel extends \Maatwebsite\Excel\Facades\Excel {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
