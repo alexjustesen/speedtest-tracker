@@ -16,7 +16,7 @@ class TimeZoneHelper
             foreach (timezone_identifiers_list() as $key => $value) {
                 date_default_timezone_set($value);
 
-                $timezone[$value] = $value . ' (UTC ' . date('P', $timestamp) . ')';
+                $timezone[$value] = $value.' (UTC '.date('P', $timestamp).')';
             }
 
             return collect($timezone)->sortKeys();
