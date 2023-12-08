@@ -74,8 +74,6 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                     ->label('Settings'),
                 NavigationGroup::make()
-                    ->label('System'),
-                NavigationGroup::make()
                     ->label('Links')
                     ->collapsible(false),
             ])
