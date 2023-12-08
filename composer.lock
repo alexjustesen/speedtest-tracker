@@ -1423,16 +1423,16 @@
         },
         {
             "name": "filament/actions",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/actions.git",
-                "reference": "14b89222a5de0c987fdde16797fa0cadf6b62d99"
+                "reference": "4da529f7638dbcc4bf5824e61d863790a8b86b37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/actions/zipball/14b89222a5de0c987fdde16797fa0cadf6b62d99",
-                "reference": "14b89222a5de0c987fdde16797fa0cadf6b62d99",
+                "url": "https://api.github.com/repos/filamentphp/actions/zipball/4da529f7638dbcc4bf5824e61d863790a8b86b37",
+                "reference": "4da529f7638dbcc4bf5824e61d863790a8b86b37",
                 "shasum": ""
             },
             "require": {
@@ -1470,20 +1470,20 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2023-12-07T12:32:28+00:00"
+            "time": "2023-12-08T13:52:58+00:00"
         },
         {
             "name": "filament/filament",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/panels.git",
-                "reference": "afe0c3316db11cdabfc2b12e201b7999d1146029"
+                "reference": "c978aff44795851f23f74a058d82a9d2f88317c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/panels/zipball/afe0c3316db11cdabfc2b12e201b7999d1146029",
-                "reference": "afe0c3316db11cdabfc2b12e201b7999d1146029",
+                "url": "https://api.github.com/repos/filamentphp/panels/zipball/c978aff44795851f23f74a058d82a9d2f88317c3",
+                "reference": "c978aff44795851f23f74a058d82a9d2f88317c3",
                 "shasum": ""
             },
             "require": {
@@ -1535,20 +1535,20 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2023-12-07T12:32:31+00:00"
+            "time": "2023-12-08T13:53:03+00:00"
         },
         {
             "name": "filament/forms",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/forms.git",
-                "reference": "56c3f923784b45f59b58ac76ce98ec044f4a106f"
+                "reference": "0776650652724090f607d3b18a8925af1701888e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/forms/zipball/56c3f923784b45f59b58ac76ce98ec044f4a106f",
-                "reference": "56c3f923784b45f59b58ac76ce98ec044f4a106f",
+                "url": "https://api.github.com/repos/filamentphp/forms/zipball/0776650652724090f607d3b18a8925af1701888e",
+                "reference": "0776650652724090f607d3b18a8925af1701888e",
                 "shasum": ""
             },
             "require": {
@@ -1591,11 +1591,11 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2023-12-07T12:32:31+00:00"
+            "time": "2023-12-08T13:53:04+00:00"
         },
         {
             "name": "filament/infolists",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/infolists.git",
@@ -1646,7 +1646,7 @@
         },
         {
             "name": "filament/notifications",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/notifications.git",
@@ -1698,7 +1698,7 @@
         },
         {
             "name": "filament/spatie-laravel-settings-plugin",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/spatie-laravel-settings-plugin.git",
@@ -1745,7 +1745,7 @@
         },
         {
             "name": "filament/support",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/support.git",
@@ -1802,16 +1802,16 @@
         },
         {
             "name": "filament/tables",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/tables.git",
-                "reference": "e595f934dcbc9c227c76f35a719291b94fd8fa28"
+                "reference": "9bc21de770982ede0024f12ff86ba69afc67e0f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/tables/zipball/e595f934dcbc9c227c76f35a719291b94fd8fa28",
-                "reference": "e595f934dcbc9c227c76f35a719291b94fd8fa28",
+                "url": "https://api.github.com/repos/filamentphp/tables/zipball/9bc21de770982ede0024f12ff86ba69afc67e0f9",
+                "reference": "9bc21de770982ede0024f12ff86ba69afc67e0f9",
                 "shasum": ""
             },
             "require": {
@@ -1851,11 +1851,11 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "time": "2023-12-07T12:32:45+00:00"
+            "time": "2023-12-08T13:53:04+00:00"
         },
         {
             "name": "filament/widgets",
-            "version": "v3.1.15",
+            "version": "v3.1.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filamentphp/widgets.git",
@@ -6632,20 +6632,20 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v6.4.0",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "d036c6c0d0b09e24a14a35f8292146a658f986e4"
+                "reference": "bb51d46e53ef8d50d523f0c5faedba056a27943e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/d036c6c0d0b09e24a14a35f8292146a658f986e4",
-                "reference": "d036c6c0d0b09e24a14a35f8292146a658f986e4",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/bb51d46e53ef8d50d523f0c5faedba056a27943e",
+                "reference": "bb51d46e53ef8d50d523f0c5faedba056a27943e",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.2"
             },
             "type": "library",
             "autoload": {
@@ -6677,7 +6677,7 @@
             "description": "Converts CSS selectors to XPath expressions",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/css-selector/tree/v6.4.0"
+                "source": "https://github.com/symfony/css-selector/tree/v7.0.0"
             },
             "funding": [
                 {
@@ -6693,7 +6693,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-31T08:40:20+00:00"
+            "time": "2023-10-31T17:59:56+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -8931,23 +8931,23 @@
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
-            "version": "2.2.6",
+            "version": "v2.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tijsverkoyen/CssToInlineStyles.git",
-                "reference": "c42125b83a4fa63b187fdf29f9c93cb7733da30c"
+                "reference": "83ee6f38df0a63106a9e4536e3060458b74ccedb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tijsverkoyen/CssToInlineStyles/zipball/c42125b83a4fa63b187fdf29f9c93cb7733da30c",
-                "reference": "c42125b83a4fa63b187fdf29f9c93cb7733da30c",
+                "url": "https://api.github.com/repos/tijsverkoyen/CssToInlineStyles/zipball/83ee6f38df0a63106a9e4536e3060458b74ccedb",
+                "reference": "83ee6f38df0a63106a9e4536e3060458b74ccedb",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-libxml": "*",
                 "php": "^5.5 || ^7.0 || ^8.0",
-                "symfony/css-selector": "^2.7 || ^3.0 || ^4.0 || ^5.0 || ^6.0"
+                "symfony/css-selector": "^2.7 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0 || ^7.5 || ^8.5.21 || ^9.5.10"
@@ -8978,9 +8978,9 @@
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "support": {
                 "issues": "https://github.com/tijsverkoyen/CssToInlineStyles/issues",
-                "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.6"
+                "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.2.7"
             },
-            "time": "2023-01-03T09:29:04+00:00"
+            "time": "2023-12-08T13:03:43+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
