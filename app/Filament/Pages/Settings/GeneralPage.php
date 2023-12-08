@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Helpers\TimeZoneHelper;
 use App\Rules\Cron;
 use App\Settings\GeneralSettings;
 use Filament\Forms;
@@ -9,7 +10,6 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\HtmlString;
-use Squire\Models\Timezone;
 
 class GeneralPage extends SettingsPage
 {
@@ -53,7 +53,7 @@ class GeneralPage extends SettingsPage
                                     ->columnSpan(['md' => 2]),
                                 Forms\Components\Select::make('timezone')
                                     ->label('Time zone')
-                                    ->options(Timezone::all()->pluck('code', 'code'))
+                                    ->options(TimeZoneHelper::list()->toArray())
                                     ->searchable()
                                     ->required(),
                                 Forms\Components\TextInput::make('time_format')

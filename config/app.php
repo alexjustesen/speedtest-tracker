@@ -186,6 +186,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'TimeZoneHelper' => App\Helpers\TimeZoneHelper::class,
     ])->toArray(),
 
 ];
