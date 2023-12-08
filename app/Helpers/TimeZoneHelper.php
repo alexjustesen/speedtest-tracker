@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Cache;
 
 class TimeZoneHelper
 {
+    /**
+     * Returns a collection of time zones with their offset from UTC.
+     */
     public static function list()
     {
         $seconds = 3600; // 1hr
