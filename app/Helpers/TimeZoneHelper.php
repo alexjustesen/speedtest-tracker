@@ -2,7 +2,9 @@
 
 namespace App\Helpers;
 
+use DateTimeZone;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class TimeZoneHelper
 {
@@ -24,5 +26,18 @@ class TimeZoneHelper
 
             return collect($timezone)->sortKeys();
         });
+    }
+
+    /**
+     * Validates the time zone string provided.
+     *
+     * Ref: https://github.com/laravel/framework/blob/10.x/src/Illuminate/Validation/Concerns/ValidatesAttributes.php#L2406-L2420
+     */
+    public static function validate($value, $parameters = [])
+    {
+        return in_array($value, timezone_identifiers_list(
+            constant(DateTimeZone::class.'::'.Str::upper($parameters[0] ?? 'ALL')),
+            isset($parameters[1]) ? Str::upper($parameters[1]) : null,
+        ), true);
     }
 }
