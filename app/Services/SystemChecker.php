@@ -40,6 +40,13 @@ class SystemChecker
         });
     }
 
+    public function isOutOfDate()
+    {
+        $this->getVersions();
+
+        return $this->localVersion < $this->remoteVersion || $this->localVersion != $this->remoteVersion;
+    }
+
     public function flushVersionData()
     {
         try {
