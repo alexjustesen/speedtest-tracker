@@ -7,6 +7,7 @@ use App\Settings\GeneralSettings;
 use Cron\CronExpression;
 use Illuminate\Console\Command;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\text;
 
 class UpdateGeneralSettings extends Command
@@ -35,11 +36,28 @@ class UpdateGeneralSettings extends Command
         $this->updateSiteName($settings);
         $this->updateTimeZone($settings);
         $this->updateSchedule($settings);
+        $this->resetSevers($settings);
 
         $this->line('✅  Settings updated!');
     }
 
-    protected function updateSchedule($settings)
+    protected function resetSevers($settings): void
+    {
+        $confirmed = confirm(
+            label: 'Do you want to reset the server list?',
+            default: false,
+            yes: 'Yes, reset it',
+            no: 'No, keep it'
+        );
+
+        if ($confirmed) {
+            $settings->speedtest_server = [];
+
+            $settings->save();
+        }
+    }
+
+    protected function updateSchedule($settings): void
     {
         $cron = text(
             label: 'What is the schedule?',
@@ -59,7 +77,7 @@ class UpdateGeneralSettings extends Command
         }
     }
 
-    protected function updateSiteName($settings)
+    protected function updateSiteName($settings): void
     {
         $name = text(
             label: 'What is the site name?',
@@ -80,7 +98,7 @@ class UpdateGeneralSettings extends Command
         }
     }
 
-    protected function updateTimeZone($settings)
+    protected function updateTimeZone($settings): void
     {
         $timezone = text(
             label: 'What is the time zone?',
