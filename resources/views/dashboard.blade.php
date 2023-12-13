@@ -4,11 +4,11 @@
             @livewire(\App\Filament\Widgets\StatsOverviewWidget::class)
         </div>
 
-        @if ($latestResult)
+        @isset($latestResult)
             <div class="text-sm font-semibold leading-6 text-center col-span-full sm:text-base">
-                Latest result: {{ $latestResult?->created_at->diffForHumans() }}
+                Latest result: <time datetime="{{ $latestResult->created_at }}">{{ $diff }}</time>
             </div>
-        @endif
+        @endisset
 
         <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentSpeedChartWidget::class)

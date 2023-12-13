@@ -28,7 +28,19 @@ class HomeController extends Controller
             return view('get-started');
         }
 
+        /**
+         * This jank needs to happen because some people like
+         * to watch the world burn by setting a time zone
+         * in their database instances.
+         */
+        if ($settings->db_has_timezone) {
+            date_default_timezone_set($settings->timezone ?? 'UTC');
+        }
+
+        $diff = $latestResult->created_at->diffForHumans();
+
         return view('dashboard', [
+            'diff' => $diff,
             'latestResult' => $latestResult,
         ]);
     }
