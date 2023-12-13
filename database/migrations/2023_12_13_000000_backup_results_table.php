@@ -12,11 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        $backupTableName = 'results_bak_'.time();
+
         if (Schema::hasTable('results')) {
             /**
              * Rename the existing table so that a backup copy exists.
              */
-            Schema::rename('results', 'results_bak_0-12-0');
+            Schema::rename('results', $backupTableName);
         }
 
         if (! Schema::hasTable('results')) {
@@ -44,7 +46,7 @@ return new class extends Migration
             /**
              * Copy backup data to the new results table and reformat it.
              */
-            DB::table('results_bak_0-12-0')->chunkById(100, function ($results) {
+            DB::table($backupTableName)->chunkById(100, function ($results) {
                 foreach ($results as $result) {
                     $result->data = json_decode($result->data);
                     $result->updated_at = now();
