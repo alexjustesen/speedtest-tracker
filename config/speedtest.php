@@ -6,9 +6,9 @@ return [
     /**
      * Build information
      */
-    'build_date' => Carbon::parse('2023-12-12'),
+    'build_date' => Carbon::parse('2023-12-13'),
 
-    'build_version' => '0.14.0-beta8',
+    'build_version' => '0.14.0',
 
     /**
      * General
