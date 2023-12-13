@@ -75,6 +75,12 @@ class ResultResource extends Resource
                                 }),
                             Forms\Components\TextInput::make('ping')
                                 ->label('Ping (Ms)'),
+                            Forms\Components\TextInput::make('data.download.latency.jitter')
+                                ->label('Download Jitter (Ms)'),
+                            Forms\Components\TextInput::make('data.upload.latency.jitter')
+                                ->label('Upload Jitter (Ms)'),
+                            Forms\Components\TextInput::make('data.ping.jitter')
+                                ->label('Ping Jitter (Ms)'),
                         ])
                         ->columnSpan(2),
                     Forms\Components\Section::make()
@@ -88,9 +94,6 @@ class ResultResource extends Resource
                             'md' => 1,
                         ]),
                 ]),
-                Forms\Components\Textarea::make('data')
-                    ->rows(10)
-                    ->columnSpan(2),
             ]);
     }
 
@@ -126,17 +129,14 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('download_jitter')
-                    ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['download']['latency']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(),
                 TextColumn::make('upload_jitter')
-                    ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['upload']['latency']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(),
                 TextColumn::make('ping_jitter')
-                    ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['ping']['jitter'] ?? null)
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(),

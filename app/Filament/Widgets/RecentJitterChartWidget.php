@@ -52,7 +52,7 @@ class RecentJitterChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Download (ms)',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['download'] ? number_format($item->getJitterData()['download'], 2) : 0),
+                    'data' => $results->map(fn ($item) => $item->download_jitter ? number_format($item->download_jitter, 2) : 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                     'fill' => false,
@@ -61,7 +61,7 @@ class RecentJitterChartWidget extends ChartWidget
                 ],
                 [
                     'label' => 'Upload (ms)',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['upload'] ? number_format($item->getJitterData()['upload'], 2) : 0),
+                    'data' => $results->map(fn ($item) => $item->upload_jitter ? number_format($item->upload_jitter, 2) : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                     'fill' => false,
@@ -70,7 +70,7 @@ class RecentJitterChartWidget extends ChartWidget
                 ],
                 [
                     'label' => 'Ping (ms)',
-                    'data' => $results->map(fn ($item) => $item->getJitterData()['ping'] ? number_format($item->getJitterData()['ping'], 2) : 0),
+                    'data' => $results->map(fn ($item) => $item->ping_jitter ? number_format($item->ping_jitter, 2) : 0),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'fill' => false,
