@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,11 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/admin');
+Route::get('/', HomeController::class)
+    ->middleware('x-frame-allow')
+    ->name('home');
 
-Route::get('/login', function () {
-    return redirect('/admin/login');
-})->name('login');
+Route::redirect('/login', '/admin/login')
+    ->name('login');
+
+require __DIR__.'/debug.php';
 
 if (app()->isLocal()) {
     require __DIR__.'/test.php';

@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.24.0.
+ * Generated for Laravel 10.37.1.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -435,6 +435,18 @@
         {
                         /** @var \Illuminate\Foundation\Application $instance */
                         return $instance->runningInConsole();
+        }
+                    /**
+         * Determine if the application is running any of the given console commands.
+         *
+         * @param string|array $commands
+         * @return bool 
+         * @static 
+         */ 
+        public static function runningConsoleCommand(...$commands)
+        {
+                        /** @var \Illuminate\Foundation\Application $instance */
+                        return $instance->runningConsoleCommand(...$commands);
         }
                     /**
          * Determine if the application is running unit tests.
@@ -3508,6 +3520,18 @@
                         $instance->assertDispatchedWithoutChain($command, $callback);
         }
                     /**
+         * Create a new assertion about a chained batch.
+         *
+         * @param \Closure $callback
+         * @return \Illuminate\Support\Testing\Fakes\ChainedBatchTruthTest 
+         * @static 
+         */ 
+        public static function chainedBatch($callback)
+        {
+                        /** @var \Illuminate\Support\Testing\Fakes\BusFake $instance */
+                        return $instance->chainedBatch($callback);
+        }
+                    /**
          * Assert if a batch was dispatched based on a truth-test callback.
          *
          * @param callable $callback
@@ -4318,7 +4342,7 @@
          */ 
         public static function lock($name, $seconds = 0, $owner = null)
         {
-                        /** @var \Illuminate\Cache\DatabaseStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->lock($name, $seconds, $owner);
         }
                     /**
@@ -4331,7 +4355,7 @@
          */ 
         public static function restoreLock($name, $owner)
         {
-                        /** @var \Illuminate\Cache\DatabaseStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->restoreLock($name, $owner);
         }
                     /**
@@ -4342,31 +4366,54 @@
          */ 
         public static function flush()
         {
-                        /** @var \Illuminate\Cache\DatabaseStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->flush();
         }
                     /**
-         * Get the underlying database connection.
+         * Get the full path for the given cache key.
          *
-         * @return \Illuminate\Database\MySqlConnection 
+         * @param string $key
+         * @return string 
          * @static 
          */ 
-        public static function getConnection()
+        public static function path($key)
         {
-                        /** @var \Illuminate\Cache\DatabaseStore $instance */
-                        return $instance->getConnection();
+                        /** @var \Illuminate\Cache\FileStore $instance */
+                        return $instance->path($key);
         }
                     /**
-         * Specify the name of the connection that should be used to manage locks.
+         * Get the Filesystem instance.
          *
-         * @param \Illuminate\Database\ConnectionInterface $connection
-         * @return \Illuminate\Cache\DatabaseStore 
+         * @return \Illuminate\Filesystem\Filesystem 
          * @static 
          */ 
-        public static function setLockConnection($connection)
+        public static function getFilesystem()
         {
-                        /** @var \Illuminate\Cache\DatabaseStore $instance */
-                        return $instance->setLockConnection($connection);
+                        /** @var \Illuminate\Cache\FileStore $instance */
+                        return $instance->getFilesystem();
+        }
+                    /**
+         * Get the working directory of the cache.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getDirectory()
+        {
+                        /** @var \Illuminate\Cache\FileStore $instance */
+                        return $instance->getDirectory();
+        }
+                    /**
+         * Set the cache directory where locks should be stored.
+         *
+         * @param string|null $lockDirectory
+         * @return \Illuminate\Cache\FileStore 
+         * @static 
+         */ 
+        public static function setLockDirectory($lockDirectory)
+        {
+                        /** @var \Illuminate\Cache\FileStore $instance */
+                        return $instance->setLockDirectory($lockDirectory);
         }
                     /**
          * Get the cache key prefix.
@@ -4376,7 +4423,7 @@
          */ 
         public static function getPrefix()
         {
-                        /** @var \Illuminate\Cache\DatabaseStore $instance */
+                        /** @var \Illuminate\Cache\FileStore $instance */
                         return $instance->getPrefix();
         }
          
@@ -5527,6 +5574,18 @@
                         return $instance->pretend($callback);
         }
                     /**
+         * Execute the given callback without "pretending".
+         *
+         * @param \Closure $callback
+         * @return mixed 
+         * @static 
+         */ 
+        public static function withoutPretending($callback)
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\MySqlConnection $instance */
+                        return $instance->withoutPretending($callback);
+        }
+                    /**
          * Bind values to their parameters in the given statement.
          *
          * @param \PDOStatement $statement
@@ -6454,6 +6513,18 @@
                         return $instance->setQueueResolver($resolver);
         }
                     /**
+         * Set the database transaction manager resolver implementation.
+         *
+         * @param callable $resolver
+         * @return \Illuminate\Events\Dispatcher 
+         * @static 
+         */ 
+        public static function setTransactionManagerResolver($resolver)
+        {
+                        /** @var \Illuminate\Events\Dispatcher $instance */
+                        return $instance->setTransactionManagerResolver($resolver);
+        }
+                    /**
          * Gets the raw, unprepared listeners.
          *
          * @return array 
@@ -6797,13 +6868,14 @@
          *
          * @param string $path
          * @param string $data
+         * @param bool $lock
          * @return int 
          * @static 
          */ 
-        public static function append($path, $data)
+        public static function append($path, $data, $lock = false)
         {
                         /** @var \Illuminate\Filesystem\Filesystem $instance */
-                        return $instance->append($path, $data);
+                        return $instance->append($path, $data, $lock);
         }
                     /**
          * Get or set UNIX mode of a file or directory.
@@ -8120,6 +8192,17 @@
                         return $instance->getDispatcher();
         }
                     /**
+         * Get the array of global middleware.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getGlobalMiddleware()
+        {
+                        /** @var \Illuminate\Http\Client\Factory $instance */
+                        return $instance->getGlobalMiddleware();
+        }
+                    /**
          * Register a custom macro.
          *
          * @param string $name
@@ -8271,6 +8354,18 @@
         {
                         /** @var \Illuminate\Translation\Translator $instance */
                         $instance->load($namespace, $group, $locale);
+        }
+                    /**
+         * Register a callback that is responsible for handling missing translation keys.
+         *
+         * @param callable|null $callback
+         * @return static 
+         * @static 
+         */ 
+        public static function handleMissingKeysUsing($callback)
+        {
+                        /** @var \Illuminate\Translation\Translator $instance */
+                        return $instance->handleMissingKeysUsing($callback);
         }
                     /**
          * Add a new namespace to the loader.
@@ -13529,6 +13624,7 @@
      * @method static \Illuminate\Routing\RouteRegistrar controller(string $controller)
      * @method static \Illuminate\Routing\RouteRegistrar domain(string $value)
      * @method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware)
+     * @method static \Illuminate\Routing\RouteRegistrar missing(\Closure $missing)
      * @method static \Illuminate\Routing\RouteRegistrar name(string $value)
      * @method static \Illuminate\Routing\RouteRegistrar namespace(string|null $value)
      * @method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix)
@@ -13985,6 +14081,18 @@
         {
                         /** @var \Illuminate\Routing\Router $instance */
                         $instance->substituteImplicitBindings($route);
+        }
+                    /**
+         * Register a callback to to run after implicit bindings are substituted.
+         *
+         * @param callable $callback
+         * @return \Illuminate\Routing\Router 
+         * @static 
+         */ 
+        public static function substituteImplicitBindingsUsing($callback)
+        {
+                        /** @var \Illuminate\Routing\Router $instance */
+                        return $instance->substituteImplicitBindingsUsing($callback);
         }
                     /**
          * Register a route matched event listener.
@@ -14524,28 +14632,86 @@
                         return $instance->dropDatabaseIfExists($name);
         }
                     /**
-         * Determine if the given table exists.
+         * Get the tables for the database.
          *
-         * @param string $table
-         * @return bool 
+         * @return array 
          * @static 
          */ 
-        public static function hasTable($table)
+        public static function getTables()
         {
                         /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        return $instance->hasTable($table);
+                        return $instance->getTables();
         }
                     /**
-         * Get the column listing for a given table.
+         * Get the views for the database.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getViews()
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getViews();
+        }
+                    /**
+         * Get all of the table names for the database.
+         *
+         * @deprecated Will be removed in a future Laravel version.
+         * @return array 
+         * @static 
+         */ 
+        public static function getAllTables()
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getAllTables();
+        }
+                    /**
+         * Get all of the view names for the database.
+         *
+         * @deprecated Will be removed in a future Laravel version.
+         * @return array 
+         * @static 
+         */ 
+        public static function getAllViews()
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getAllViews();
+        }
+                    /**
+         * Get the columns for a given table.
          *
          * @param string $table
          * @return array 
          * @static 
          */ 
-        public static function getColumnListing($table)
+        public static function getColumns($table)
         {
                         /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        return $instance->getColumnListing($table);
+                        return $instance->getColumns($table);
+        }
+                    /**
+         * Get the indexes for a given table.
+         *
+         * @param string $table
+         * @return array 
+         * @static 
+         */ 
+        public static function getIndexes($table)
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getIndexes($table);
+        }
+                    /**
+         * Get the foreign keys for a given table.
+         *
+         * @param string $table
+         * @return array 
+         * @static 
+         */ 
+        public static function getForeignKeys($table)
+        {
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getForeignKeys($table);
         }
                     /**
          * Drop all tables from the database.
@@ -14568,28 +14734,6 @@
         {
                         /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
                         $instance->dropAllViews();
-        }
-                    /**
-         * Get all of the table names for the database.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getAllTables()
-        {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        return $instance->getAllTables();
-        }
-                    /**
-         * Get all of the view names for the database.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getAllViews()
-        {
-                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        return $instance->getAllViews();
         }
                     /**
          * Set the default string length for migrations.
@@ -14644,6 +14788,41 @@
         public static function useNativeSchemaOperationsIfPossible($value = true)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
                         \Illuminate\Database\Schema\MySqlBuilder::useNativeSchemaOperationsIfPossible($value);
+        }
+                    /**
+         * Determine if the given table exists.
+         *
+         * @param string $table
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasTable($table)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->hasTable($table);
+        }
+                    /**
+         * Determine if the given view exists.
+         *
+         * @param string $view
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasView($view)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->hasView($view);
+        }
+                    /**
+         * Get the user-defined types that belong to the database.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getTypes()
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getTypes();
         }
                     /**
          * Determine if the given table has a given column.
@@ -14704,13 +14883,26 @@
          *
          * @param string $table
          * @param string $column
+         * @param bool $fullDefinition
          * @return string 
          * @static 
          */ 
-        public static function getColumnType($table, $column)
+        public static function getColumnType($table, $column, $fullDefinition = false)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
                         /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
-                        return $instance->getColumnType($table, $column);
+                        return $instance->getColumnType($table, $column, $fullDefinition);
+        }
+                    /**
+         * Get the column listing for a given table.
+         *
+         * @param string $table
+         * @return array 
+         * @static 
+         */ 
+        public static function getColumnListing($table)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\MySqlBuilder $instance */
+                        return $instance->getColumnListing($table);
         }
                     /**
          * Modify a table on the schema.
@@ -14898,6 +15090,28 @@
         {
                         /** @var \Illuminate\Session\SessionManager $instance */
                         return $instance->blockDriver();
+        }
+                    /**
+         * Get the maximum number of seconds the session lock should be held for.
+         *
+         * @return int 
+         * @static 
+         */ 
+        public static function defaultRouteBlockLockSeconds()
+        {
+                        /** @var \Illuminate\Session\SessionManager $instance */
+                        return $instance->defaultRouteBlockLockSeconds();
+        }
+                    /**
+         * Get the maximum number of seconds to wait while attempting to acquire a route block session lock.
+         *
+         * @return int 
+         * @static 
+         */ 
+        public static function defaultRouteBlockWaitSeconds()
+        {
+                        /** @var \Illuminate\Session\SessionManager $instance */
+                        return $instance->defaultRouteBlockWaitSeconds();
         }
                     /**
          * Get the session configuration.
@@ -18405,6 +18619,13 @@
      * 
      *
      */ 
+        class Number {
+         
+    }
+            /**
+     * 
+     *
+     */ 
         class Str {
                     /**
          * 
@@ -18417,6 +18638,18 @@
         public static function sanitizeHtml($html)
         {
                         return \Illuminate\Support\Str::sanitizeHtml($html);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Support\SupportServiceProvider::packageBooted()
+         * @param string $value
+         * @return string 
+         * @static 
+         */ 
+        public static function ucwords($value)
+        {
+                        return \Illuminate\Support\Str::ucwords($value);
         }
          
     }
@@ -18475,16 +18708,37 @@
         {
                         return \Illuminate\Support\Stringable::sanitizeHtml();
         }
+                    /**
+         * 
+         *
+         * @see \Filament\Support\SupportServiceProvider::packageBooted()
+         * @return \Illuminate\Support\Stringable 
+         * @static 
+         */ 
+        public static function ucwords()
+        {
+                        return \Illuminate\Support\Stringable::ucwords();
+        }
          
     }
      
 }
 
-        namespace Livewire { 
+        namespace App\Helpers { 
             /**
      * 
      *
-     * @method static void setUpdateUri()
+     */ 
+        class TimeZoneHelper {
+         
+    }
+     
+}
+
+    namespace Livewire { 
+            /**
+     * 
+     *
      * @see \Livewire\LivewireManager
      */ 
         class Livewire {
@@ -18747,6 +19001,36 @@
         {
                         /** @var \Livewire\LivewireManager $instance */
                         return $instance->withQueryParams($params);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function withCookie($name, $value)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->withCookie($name, $value);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function withCookies($cookies)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->withCookies($cookies);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function withHeaders($headers)
+        {
+                        /** @var \Livewire\LivewireManager $instance */
+                        return $instance->withHeaders($headers);
         }
                     /**
          * 
@@ -19631,11 +19915,12 @@
          * @param mixed $callback
          * @param mixed $alias
          * @param bool $disableExtraConditions
+         * @param string|null $morphable
          * @static 
          */ 
-        public static function performJoinForEloquentPowerJoins($builder, $joinType = 'leftJoin', $callback = null, $alias = null, $disableExtraConditions = false)
+        public static function performJoinForEloquentPowerJoins($builder, $joinType = 'leftJoin', $callback = null, $alias = null, $disableExtraConditions = false, $morphable = null)
         {
-                        return \Illuminate\Database\Eloquent\Relations\Relation::performJoinForEloquentPowerJoins($builder, $joinType, $callback, $alias, $disableExtraConditions);
+                        return \Illuminate\Database\Eloquent\Relations\Relation::performJoinForEloquentPowerJoins($builder, $joinType, $callback, $alias, $disableExtraConditions, $morphable);
         }
                     /**
          * 
@@ -19700,6 +19985,22 @@
                     /**
          * 
          *
+         * @see \Kirschbaum\PowerJoins\Mixins\RelationshipsExtraMethods::performJoinForEloquentPowerJoinsForMorphTo()
+         * @param mixed $builder
+         * @param mixed $joinType
+         * @param mixed $callback
+         * @param mixed $alias
+         * @param bool $disableExtraConditions
+         * @param string|null $morphable
+         * @static 
+         */ 
+        public static function performJoinForEloquentPowerJoinsForMorphTo($builder, $joinType, $callback = null, $alias = null, $disableExtraConditions = false, $morphable = null)
+        {
+                        return \Illuminate\Database\Eloquent\Relations\Relation::performJoinForEloquentPowerJoinsForMorphTo($builder, $joinType, $callback, $alias, $disableExtraConditions, $morphable);
+        }
+                    /**
+         * 
+         *
          * @see \Kirschbaum\PowerJoins\Mixins\RelationshipsExtraMethods::performJoinForEloquentPowerJoinsForHasMany()
          * @param mixed $builder
          * @param mixed $joinType
@@ -19734,11 +20035,12 @@
          * @param mixed $builder
          * @param mixed $operator
          * @param mixed $count
+         * @param string|null $morphable
          * @static 
          */ 
-        public static function performHavingForEloquentPowerJoins($builder, $operator, $count)
+        public static function performHavingForEloquentPowerJoins($builder, $operator, $count, $morphable = null)
         {
-                        return \Illuminate\Database\Eloquent\Relations\Relation::performHavingForEloquentPowerJoins($builder, $operator, $count);
+                        return \Illuminate\Database\Eloquent\Relations\Relation::performHavingForEloquentPowerJoins($builder, $operator, $count, $morphable);
         }
                     /**
          * 
@@ -19850,6 +20152,28 @@
         public static function getPowerJoinExistenceCompareKey()
         {
                         return \Illuminate\Database\Eloquent\Relations\Relation::getPowerJoinExistenceCompareKey();
+        }
+         
+    }
+     
+}
+
+    namespace Illuminate\Routing { 
+            /**
+     * 
+     *
+     */ 
+        class Route {
+                    /**
+         * 
+         *
+         * @see \Livewire\Features\SupportLazyLoading\SupportLazyLoading::registerRouteMacro()
+         * @param mixed $enabled
+         * @static 
+         */ 
+        public static function lazy($enabled = true)
+        {
+                        return \Illuminate\Routing\Route::lazy($enabled);
         }
          
     }
@@ -20412,6 +20736,18 @@
         public static function assertNotified($notification = null)
         {
                         return \Livewire\Features\SupportTesting\Testable::assertNotified($notification);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Notifications\Testing\TestsNotifications::assertNotNotified()
+         * @param \Filament\Notifications\Notification|string|null $notification
+         * @return static 
+         * @static 
+         */ 
+        public static function assertNotNotified($notification = null)
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertNotNotified($notification);
         }
                     /**
          * 
@@ -21143,12 +21479,14 @@
          *
          * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnExists()
          * @param string $name
+         * @param \Closure|null $checkColumnUsing
+         * @param mixed $record
          * @return static 
          * @static 
          */ 
-        public static function assertTableColumnExists($name)
+        public static function assertTableColumnExists($name, $checkColumnUsing = null, $record = null)
         {
-                        return \Livewire\Features\SupportTesting\Testable::assertTableColumnExists($name);
+                        return \Livewire\Features\SupportTesting\Testable::assertTableColumnExists($name, $checkColumnUsing, $record);
         }
                     /**
          * 
@@ -21516,28 +21854,6 @@
      
 }
 
-    namespace Illuminate\Routing { 
-            /**
-     * 
-     *
-     */ 
-        class Route {
-                    /**
-         * 
-         *
-         * @see \Livewire\Features\SupportLazyLoading\SupportLazyLoading::registerRouteMacro()
-         * @param mixed $enabled
-         * @static 
-         */ 
-        public static function lazy($enabled = true)
-        {
-                        return \Illuminate\Routing\Route::lazy($enabled);
-        }
-         
-    }
-     
-}
-
     namespace Illuminate\View { 
             /**
      * 
@@ -21629,6 +21945,17 @@
         public static function layout($view, $params = [])
         {
                         return \Illuminate\View\View::layout($view, $params);
+        }
+                    /**
+         * 
+         *
+         * @see \Livewire\Features\SupportPageComponents\SupportPageComponents::registerLayoutViewMacros()
+         * @param callable $callback
+         * @static 
+         */ 
+        public static function response($callback)
+        {
+                        return \Illuminate\View\View::response($callback);
         }
          
     }
@@ -22593,6 +22920,39 @@ namespace  {
             }
              
                 /**
+             * Chunk the results of a query by comparing IDs in descending order.
+             *
+             * @param int $count
+             * @param callable $callback
+             * @param string|null $column
+             * @param string|null $alias
+             * @return bool 
+             * @static 
+             */ 
+            public static function chunkByIdDesc($count, $callback, $column = null, $alias = null)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->chunkByIdDesc($count, $callback, $column, $alias);
+            }
+             
+                /**
+             * Chunk the results of a query by comparing IDs in a given order.
+             *
+             * @param int $count
+             * @param callable $callback
+             * @param string|null $column
+             * @param string|null $alias
+             * @param bool $descending
+             * @return bool 
+             * @static 
+             */ 
+            public static function orderedChunkById($count, $callback, $column = null, $alias = null, $descending = false)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->orderedChunkById($count, $callback, $column, $alias, $descending);
+            }
+             
+                /**
              * Execute a callback over each item while chunking by ID.
              *
              * @param callable $callback
@@ -23331,11 +23691,12 @@ namespace  {
              * @param mixed $joinType
              * @param mixed $useAlias
              * @param bool $disableExtraConditions
+             * @param string|null $morphable
              * @static 
              */ 
-            public static function joinRelationship($relationName, $callback = null, $joinType = 'join', $useAlias = false, $disableExtraConditions = false)
+            public static function joinRelationship($relationName, $callback = null, $joinType = 'join', $useAlias = false, $disableExtraConditions = false, $morphable = null)
             {
-                                return \Illuminate\Database\Eloquent\Builder::joinRelationship($relationName, $callback, $joinType, $useAlias, $disableExtraConditions);
+                                return \Illuminate\Database\Eloquent\Builder::joinRelationship($relationName, $callback, $joinType, $useAlias, $disableExtraConditions, $morphable);
             }
              
                 /**
@@ -23638,13 +23999,14 @@ namespace  {
              * @param mixed $operator
              * @param mixed $count
              * @param mixed $boolean
-             * @param mixed $callback
+             * @param \Closure|array|null $callback
+             * @param string|null $morphable
              * @return static 
              * @static 
              */ 
-            public static function powerJoinHas($relation, $operator = '>=', $count = 1, $boolean = 'and', $callback = null)
+            public static function powerJoinHas($relation, $operator = '>=', $count = 1, $boolean = 'and', $callback = null, $morphable = null)
             {
-                                return \Illuminate\Database\Eloquent\Builder::powerJoinHas($relation, $operator, $count, $boolean, $callback);
+                                return \Illuminate\Database\Eloquent\Builder::powerJoinHas($relation, $operator, $count, $boolean, $callback, $morphable);
             }
              
                 /**
@@ -23655,7 +24017,7 @@ namespace  {
              * @param mixed $operator
              * @param mixed $count
              * @param mixed $boolean
-             * @param \Closure|null $callback
+             * @param \Closure|array|null $callback
              * @return static 
              * @static 
              */ 
@@ -26013,6 +26375,7 @@ namespace  {
             class Log extends \Illuminate\Support\Facades\Log {}
             class Mail extends \Illuminate\Support\Facades\Mail {}
             class Notification extends \Illuminate\Support\Facades\Notification {}
+            class Number extends \Illuminate\Support\Number {}
             class Password extends \Illuminate\Support\Facades\Password {}
             class Process extends \Illuminate\Support\Facades\Process {}
             class Queue extends \Illuminate\Support\Facades\Queue {}
@@ -26029,6 +26392,7 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Vite extends \Illuminate\Support\Facades\Vite {}
+            class TimeZoneHelper extends \App\Helpers\TimeZoneHelper {}
             class Livewire extends \Livewire\Livewire {}
             class Excel extends \Maatwebsite\Excel\Facades\Excel {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}

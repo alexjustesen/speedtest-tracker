@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Helpers\TimeZoneHelper;
 use App\Rules\Cron;
 use App\Settings\GeneralSettings;
 use Filament\Forms;
@@ -9,7 +10,6 @@ use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\HtmlString;
-use Squire\Models\Timezone;
 
 class GeneralPage extends SettingsPage
 {
@@ -50,11 +50,22 @@ class GeneralPage extends SettingsPage
                                 Forms\Components\TextInput::make('site_name')
                                     ->maxLength(50)
                                     ->required()
-                                    ->columnSpan(['md' => 2]),
+                                    ->columnSpanFull(),
+                                Forms\Components\Toggle::make('public_dashboard_enabled')
+                                    ->label('Public dashboard'),
+                            ])
+                            ->compact()
+                            ->columns([
+                                'default' => 1,
+                                'md' => 2,
+                            ]),
+
+                        Forms\Components\Section::make('Time Zone Settings')
+                            ->schema([
                                 Forms\Components\Select::make('timezone')
-                                    ->label('Display time zone')
-                                    ->helperText(new HtmlString('Display time zone only changes the offset in views and <span class="underline">does not</span> effect the scheduler.'))
-                                    ->options(Timezone::all()->pluck('code', 'code'))
+                                    ->label('Time zone')
+                                    ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/" target="_blank" rel="nofollow">Docs</a>'))
+                                    ->options(TimeZoneHelper::list())
                                     ->searchable()
                                     ->required(),
                                 Forms\Components\TextInput::make('time_format')
@@ -62,6 +73,9 @@ class GeneralPage extends SettingsPage
                                     ->placeholder('M j, Y G:i:s')
                                     ->maxLength(25)
                                     ->required(),
+                                Forms\Components\Toggle::make('db_has_timezone')
+                                    ->label('Database has time zone')
+                                    ->helperText(new HtmlString('Enable if your database <strong>has</strong> a time zone already set.')),
                             ])
                             ->compact()
                             ->columns([

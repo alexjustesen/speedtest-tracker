@@ -14,15 +14,34 @@ use Filament\Pages\Dashboard as BasePage;
 
 class Dashboard extends BasePage
 {
+    public bool $publicDashboard = false;
+
     protected static ?string $pollingInterval = null;
 
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+
+    protected static ?int $navigationSort = 1;
+
     protected static string $view = 'filament.pages.dashboard';
+
+    public function mount()
+    {
+        $settings = new GeneralSettings();
+
+        $this->publicDashboard = $settings->public_dashboard_enabled;
+    }
 
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('home')
+                ->label('Public Dashboard')
+                ->color('gray')
+                ->hidden(! $this->publicDashboard)
+                ->url('/'),
             Action::make('speedtest')
                 ->label('Queue Speedtest')
+                ->color('primary')
                 ->action('queueSpeedtest')
                 ->hidden(fn (): bool => ! auth()->user()->is_admin && ! auth()->user()->is_user),
         ];

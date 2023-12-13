@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Exports\ResultsSelectedBulkExport;
 use App\Filament\Resources\ResultResource\Pages;
+use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Carbon\Carbon;
@@ -25,6 +26,8 @@ class ResultResource extends Resource
     protected static ?string $model = Result::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -98,10 +101,12 @@ class ResultResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label('ID'),
+                    ->label('ID')
+                    ->sortable(),
                 TextColumn::make('server')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
-                    ->toggleable(),
+                    ->toggleable()
+                    ->sortable(),
                 IconColumn::make('successful')
                     ->boolean()
                     ->toggleable(),
@@ -110,29 +115,35 @@ class ResultResource extends Resource
                     ->toggleable(),
                 TextColumn::make('download')
                     ->label('Download (Mbps)')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? toBits(convertSize($record->download), 2) : null),
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? toBits(convertSize($record->download), 2) : null)
+                    ->sortable(),
                 TextColumn::make('upload')
                     ->label('Upload (Mbps)')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? toBits(convertSize($record->upload), 2) : null),
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? toBits(convertSize($record->upload), 2) : null)
+                    ->sortable(),
                 TextColumn::make('ping')
                     ->label('Ping (Ms)')
-                    ->toggleable(),
+                    ->toggleable()
+                    ->sortable(),
                 TextColumn::make('download_jitter')
                     ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['download']['latency']['jitter'] ?? null)
                     ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 TextColumn::make('upload_jitter')
                     ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['upload']['latency']['jitter'] ?? null)
                     ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 TextColumn::make('ping_jitter')
                     ->getStateUsing(fn (Result $record): ?string => json_decode($record->data, true)['ping']['jitter'] ?? null)
                     ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone($settings->timezone ?? 'UTC')
+                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
                     ->sortable(),
             ])
             ->filters([
