@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
@@ -68,7 +69,7 @@ class RecentSpeedChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone($settings->timezone)->format('M d - G:i')),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(TimeZoneHelper::displayTimeZone($settings))->format('M d - G:i')),
         ];
     }
 
