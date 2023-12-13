@@ -62,7 +62,7 @@
                 <ul role="list" class="divide-y divide-gray-200">
                     <li class="px-4 py-4 sm:px-6">
                         <p class="text-sm font-medium text-gray-900">Latest result ran at</p>
-                        <p class="text-sm text-gray-500 truncate">{{ $latest->created_at->timezone($settings['timezone'] ?? 'UTC')->format('M. jS, Y h:i:s') }}</p>
+                        <p class="text-sm text-gray-500 truncate">{{ $latest->created_at->timezone($settings['db_has_timezone'] ? null : $settings['timezone'] ?? 'UTC')->format('M. jS, Y h:i:s') }}</p>
                     </li>
 
                     <li class="px-4 py-4 sm:px-6">

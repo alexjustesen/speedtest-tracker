@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Exports\ResultsSelectedBulkExport;
 use App\Filament\Resources\ResultResource\Pages;
+use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Carbon\Carbon;
@@ -142,7 +143,7 @@ class ResultResource extends Resource
                 TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone($settings->timezone ?? 'UTC')
+                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
                     ->sortable(),
             ])
             ->filters([

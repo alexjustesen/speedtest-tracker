@@ -2,12 +2,27 @@
 
 namespace App\Helpers;
 
+use App\Settings\GeneralSettings;
 use DateTimeZone;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class TimeZoneHelper
 {
+    /**
+     * Returns the display timezone
+     */
+    public static function displayTimeZone(GeneralSettings $settings): string
+    {
+        // Don't translate to local time if the database already returns it.
+        if ($settings->db_has_timezone) {
+            return 'UTC';
+        }
+
+        return $settings->timezone
+            ?? 'UTC';
+    }
+
     /**
      * Returns a collection of time zones with their offset from UTC.
      */
