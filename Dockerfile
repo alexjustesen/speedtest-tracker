@@ -23,7 +23,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Copy package configs
-COPY --chmod=755 docker/deploy/etc/s6-overlay/ /etc/s6-overlay/
+COPY --chmod=755 docker/deploy/etc /etc
 
 # Copy app
 COPY --chown=webuser:webgroup . $WEBUSER_HOME
