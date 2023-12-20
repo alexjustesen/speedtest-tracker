@@ -1,6 +1,10 @@
 name: Lint
+
 on:
-  - push
+  push:
+  pull_request:
+  workflow_dispatch:
+
 jobs:
   duster:
     runs-on: ubuntu-latest
