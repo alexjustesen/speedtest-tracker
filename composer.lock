@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26d50440928d9aa7e814a77c38cf1a2a",
+    "content-hash": "90fcd766828f1fb6d46064d9aab488be",
     "packages": [
         {
             "name": "awcodes/filament-versions",

@@ -13,17 +13,17 @@
         "chrisullyott/php-filesize": "^4.2.1",
         "doctrine/dbal": "^3.7.2",
         "dragonmantank/cron-expression": "^3.3.3",
-        "filament/filament": "^3.1.15",
-        "filament/spatie-laravel-settings-plugin": "^3.1.15",
+        "filament/filament": "^3.1.24",
+        "filament/spatie-laravel-settings-plugin": "^3.1.24",
         "guzzlehttp/guzzle": "^7.8.1",
         "influxdata/influxdb-client-php": "^3.4",
         "laravel-notification-channels/telegram": "^4.0",
-        "laravel/framework": "^10.38",
+        "laravel/framework": "^10.38.1",
         "laravel/prompts": "^0.1.13",
         "laravel/sanctum": "^3.3.2",
         "laravel/tinker": "^2.8.2",
-        "livewire/livewire": "^3.2.6",
-        "maatwebsite/excel": "^3.1.50",
+        "livewire/livewire": "^3.3.3",
+        "maatwebsite/excel": "^3.1.51",
         "maennchen/zipstream-php": "^2.4",
         "spatie/laravel-settings": "^2.8.3"
     },
@@ -32,11 +32,11 @@
         "fakerphp/faker": "^1.23.0",
         "laravel/pint": "^1.13.7",
         "laravel/sail": "^1.26.3",
-        "laravel/telescope": "^4.17.2",
-        "mockery/mockery": "^1.6.6",
+        "laravel/telescope": "^4.17.3",
+        "mockery/mockery": "^1.6.7",
         "nunomaduro/collision": "^7.10.0",
-        "phpunit/phpunit": "^10.5.2",
-        "spatie/laravel-ignition": "^2.3.1"
+        "phpunit/phpunit": "^10.5.3",
+        "spatie/laravel-ignition": "^2.3.2"
     },
     "autoload": {
         "files": [
