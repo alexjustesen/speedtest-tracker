@@ -2,8 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\RunOoklaSpeedtest;
 use App\Console\Commands\VersionChecker;
-use App\Jobs\ExecSpeedtest;
 use App\Settings\GeneralSettings;
 use Cron\CronExpression;
 use Illuminate\Console\Scheduling\Schedule;
@@ -26,38 +26,17 @@ class Kernel extends ConsoleKernel
             ->timezone($settings->timezone ?? 'UTC');
 
         /**
-         * Check for speedtests that need to run.
+         * Check if an Ookla Speedtest needs to run.
          */
-        $schedule->call(function () use ($settings) {
-            $ooklaServerId = null;
-
-            if (! blank($settings->speedtest_server)) {
-                $item = array_rand($settings->speedtest_server);
-
-                $ooklaServerId = $settings->speedtest_server[$item];
-            }
-
-            $speedtest = [
-                'ookla_server_id' => $ooklaServerId,
-            ];
-
-            ExecSpeedtest::dispatch(
-                speedtest: $speedtest,
-                scheduled: true
-            );
-        })
-            ->everyMinute()
+        $schedule->command(RunOoklaSpeedtest::class, ['--scheduled'])->everyMinute()
             ->timezone($settings->timezone ?? 'UTC')
             ->when(function () use ($settings) {
-                // Don't run if the schedule is missing (aka disabled)
                 if (blank($settings->speedtest_schedule)) {
                     return false;
                 }
 
-                // Evaluate if a run is needed based on the schedule
-                $cron = new CronExpression($settings->speedtest_schedule);
-
-                return $cron->isDue(now()->timezone($settings->timezone ?? 'UTC'));
+                return (new CronExpression($settings->speedtest_schedule))
+                    ->isDue(now()->timezone($settings->timezone ?? 'UTC'));
             });
     }
 
