@@ -42,8 +42,6 @@ class RunOoklaSpeedtest extends Command
         }
 
         if (! $this->option('scheduled')) {
-            Log::info('Running unscheduled speedtest...');
-
             if ($this->argument('server')) {
                 $config = array_merge($config, [
                     'ookla_server_id' => $this->argument('server'),
@@ -63,8 +61,6 @@ class RunOoklaSpeedtest extends Command
 
             return Command::SUCCESS;
         }
-
-        Log::info('Running scheduled speedtest...');
 
         try {
             ExecSpeedtest::dispatch(
