@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Console\Commands\RunOoklaSpeedtest;
 use App\Filament\Widgets\RecentJitterChartWidget;
 use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentSpeedChartWidget;
@@ -11,6 +12,7 @@ use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BasePage;
+use Illuminate\Support\Facades\Artisan;
 
 class Dashboard extends BasePage
 {
@@ -57,25 +59,25 @@ class Dashboard extends BasePage
         ];
     }
 
-    public function queueSpeedtest(GeneralSettings $settings)
+    public function queueSpeedtest(): void
     {
-        $ookla_server_id = null;
+        try {
+            Artisan::call(RunOoklaSpeedtest::class);
+        } catch (\Throwable $th) {
+            Notification::make()
+                ->title('Manual speedtest failed!')
+                ->body('The starting a manual speedtest failed, check the logs.')
+                ->warning()
+                ->sendToDatabase(auth()->user());
 
-        if (! blank($settings->speedtest_server)) {
-            $item = array_rand($settings->speedtest_server);
-
-            $ookla_server_id = $settings->speedtest_server[$item];
+            return;
         }
-
-        $speedtest = [
-            'ookla_server_id' => $ookla_server_id,
-        ];
-
-        ExecSpeedtest::dispatch(speedtest: $speedtest, scheduled: false);
 
         Notification::make()
             ->title('Speedtest added to the queue')
             ->success()
             ->send();
+
+        return;
     }
 }
