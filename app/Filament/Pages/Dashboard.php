@@ -7,7 +7,6 @@ use App\Filament\Widgets\RecentJitterChartWidget;
 use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentSpeedChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
-use App\Jobs\ExecSpeedtest;
 use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -77,7 +76,5 @@ class Dashboard extends BasePage
             ->title('Speedtest added to the queue')
             ->success()
             ->send();
-
-        return;
     }
 }
