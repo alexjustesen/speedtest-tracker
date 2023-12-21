@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\SystemChecker;
 use Awcodes\FilamentVersions\Providers\Contracts\VersionProvider;
 
 class SpeedtestTrackerVersionProvider implements VersionProvider
@@ -12,7 +13,7 @@ class SpeedtestTrackerVersionProvider implements VersionProvider
     public function getVersion(): string
     {
         return app()->isProduction()
-            ? config('speedtest.build_version')
+            ? app(new SystemChecker)->getLocalVersion()
             : config('app.env');
     }
 }
