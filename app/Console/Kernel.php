@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\RunOoklaSpeedtest;
+use App\Console\Commands\SystemMaintenance;
 use App\Console\Commands\VersionChecker;
 use App\Settings\GeneralSettings;
 use Cron\CronExpression;
@@ -17,6 +18,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $settings = new GeneralSettings();
+
+        /**
+         * Perform system maintenance weekly on Sunday morning,
+         * start off the week nice and fresh.
+         */
+        $schedule->command(SystemMaintenance::class)->weeklyOn(0)
+            ->timezone($settings->timezone ?? 'UTC');
 
         /**
          * Checked for new versions weekly on Thursday because
