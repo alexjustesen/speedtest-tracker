@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\VersionChecker;
 use App\Jobs\ExecSpeedtest;
 use App\Settings\GeneralSettings;
 use Cron\CronExpression;
@@ -16,6 +17,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $settings = new GeneralSettings();
+
+        /**
+         * Checked for new versions weekly on Thursday because
+         * I usually do releases on Thursday or Friday.
+         */
+        $schedule->command(VersionChecker::class)->weeklyOn(5)
+            ->timezone($settings->timezone ?? 'UTC');
 
         /**
          * Check for speedtests that need to run.
