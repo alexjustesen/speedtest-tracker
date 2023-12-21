@@ -4,13 +4,6 @@ use Carbon\Carbon;
 
 return [
     /**
-     * Build information
-     */
-    'build_date' => Carbon::parse('2023-12-20'),
-
-    'build_version' => '0.14.1',
-
-    /**
      * General
      */
     'content_width' => env('CONTENT_WIDTH', '7xl'),

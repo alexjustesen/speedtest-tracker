@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
-
 /**
  * 🤔 inspired by: https://github.com/ploi/roadmap/blob/main/app/Services/SystemChecker.php
  */
@@ -50,9 +48,9 @@ class SystemChecker
     public function flushVersionData()
     {
         try {
-            Cache::forget($this->cacheKeyLocal);
+            cache()->forget($this->cacheKeyLocal);
 
-            Cache::forget($this->cacheKeyRemote);
+            cache()->forget($this->cacheKeyRemote);
         } catch (\Exception $exception) {
             // fail silently, it's ok
         }
