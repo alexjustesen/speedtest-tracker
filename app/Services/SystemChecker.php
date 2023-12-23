@@ -26,9 +26,7 @@ class SystemChecker
 
     public function getLocalVersion()
     {
-        return cache()->remember($this->cacheKeyLocal, now()->addDay(), function () {
-            return shell_exec('git describe --tag --abbrev=0');
-        });
+        return config('speedtest.build_version');
     }
 
     public function getRemoteVersion()
@@ -42,7 +40,7 @@ class SystemChecker
     {
         $this->getVersions();
 
-        return $this->localVersion < $this->remoteVersion || $this->localVersion != $this->remoteVersion;
+        return 'v'.$this->localVersion != $this->remoteVersion;
     }
 
     public function flushVersionData()
