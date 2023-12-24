@@ -13,7 +13,7 @@ class SpeedtestTrackerVersionProvider implements VersionProvider
     public function getVersion(): string
     {
         return app()->isProduction()
-            ? app(new SystemChecker)->getLocalVersion()
+            ? (new SystemChecker)->getLocalVersion()
             : config('app.env');
     }
 }
