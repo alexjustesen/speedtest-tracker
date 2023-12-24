@@ -40,7 +40,7 @@ class SystemChecker
     {
         $this->getVersions();
 
-        return 'v'.$this->localVersion != $this->remoteVersion;
+        return $this->localVersion != $this->remoteVersion;
     }
 
     public function flushVersionData()
