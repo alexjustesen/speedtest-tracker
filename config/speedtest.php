@@ -23,9 +23,4 @@ return [
     'notification_polling' => env('NOTIFICATION_POLLING', '60s'),
 
     'results_polling' => env('RESULTS_POLLING', null),
-
-    /**
-     * Security
-     */
-    'allow_embeds' => env('ALLOW_EMBEDS', null),
 ];
