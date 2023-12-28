@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.38.2.
+ * Generated for Laravel 10.39.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -10605,6 +10605,18 @@
         {
                         /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         return $instance->getDatabase();
+        }
+                    /**
+         * Get the maximum number of attempts for an object-based queue handler.
+         *
+         * @param mixed $job
+         * @return mixed 
+         * @static 
+         */ 
+        public static function getJobTries($job)
+        {            //Method inherited from \Illuminate\Queue\Queue         
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->getJobTries($job);
         }
                     /**
          * Get the backoff for an object-based queue handler.
