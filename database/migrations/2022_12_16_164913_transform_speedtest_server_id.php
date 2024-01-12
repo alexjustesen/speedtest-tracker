@@ -15,7 +15,7 @@ return new class extends Migration
 
             $settings->speedtest_server = [$settings->speedtest_server];
             $settings->save();
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             // This code is short lived as it'll be replaced with a jobs table...
         }
     }
