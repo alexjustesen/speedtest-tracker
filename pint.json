@@ -3,7 +3,7 @@
     "exclude": [
         "config"
     ],
-    "notName": [
-        "server.php"
-    ]
+    "rules": {
+        "fully_qualified_strict_types": false
+    }
 }
