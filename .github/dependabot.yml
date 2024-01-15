@@ -4,20 +4,24 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "thursday"
     labels:
       - "😑 dependencies"
       - "🐋 docker"
+    reviewers:
+      - "alexjustesen"
+    commit-message:
+      prefix: "docker"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "thursday"
     labels:
       - "😑 dependencies"
       - "🧑‍💻 github actions"
-  # - package-ecosystem: "composer"
-  #   directory: "/"
-  #   schedule:
-  #     interval: "weekly"
-  #   labels:
-  #     - "😑 dependencies"
-  #     - "🐘 php"
+    reviewers:
+      - "alexjustesen"
+    commit-message:
+      prefix: "gh actions"
