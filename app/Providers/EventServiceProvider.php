@@ -3,10 +3,15 @@
 namespace App\Providers;
 
 use App\Events\ResultCreated;
+use App\Listeners\ClearApplicationCache;
+use App\Listeners\Data\InfluxDb2Listener;
+use App\Listeners\SpeedtestCompletedListener;
+use App\Listeners\Threshold\AbsoluteListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Spatie\LaravelSettings\Events\SettingsSaved;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,13 +26,17 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         ResultCreated::class => [
-            \App\Listeners\SpeedtestCompletedListener::class,
+            SpeedtestCompletedListener::class,
 
             // Data listeners
-            \App\Listeners\Data\InfluxDb2Listener::class,
+            InfluxDb2Listener::class,
 
-            // Threashold listeners
-            \App\Listeners\Threshold\AbsoluteListener::class,
+            // Threshold listeners
+            AbsoluteListener::class,
+        ],
+
+        SettingsSaved::class => [
+            ClearApplicationCache::class,
         ],
     ];
 
