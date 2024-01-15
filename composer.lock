@@ -11992,29 +11992,29 @@
         },
         {
             "name": "tightenco/duster",
-            "version": "v2.7.2",
+            "version": "v2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tighten/duster.git",
-                "reference": "84fcb71992b6a70c1741f056ed17ae14dd9c847f"
+                "reference": "6d1a598bd3cc13d61e7cda17b4ae4deffce0e0e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tighten/duster/zipball/84fcb71992b6a70c1741f056ed17ae14dd9c847f",
-                "reference": "84fcb71992b6a70c1741f056ed17ae14dd9c847f",
+                "url": "https://api.github.com/repos/tighten/duster/zipball/6d1a598bd3cc13d61e7cda17b4ae4deffce0e0e4",
+                "reference": "6d1a598bd3cc13d61e7cda17b4ae4deffce0e0e4",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.21.1",
-                "laravel-zero/framework": "^10.1.1",
-                "laravel/pint": "^v1.11.0",
-                "nunomaduro/termwind": "^1.15.1",
+                "friendsofphp/php-cs-fixer": "^3.46",
+                "laravel-zero/framework": "^10.3",
+                "laravel/pint": "^1.13",
+                "nunomaduro/termwind": "^1.15",
                 "spatie/invade": "^1.1",
-                "squizlabs/php_codesniffer": "^3.7.2",
-                "tightenco/tlint": "^9.0"
+                "squizlabs/php_codesniffer": "^3.8",
+                "tightenco/tlint": "^9.2"
             },
             "bin": [
                 "builds/duster"
@@ -12058,7 +12058,7 @@
                 "issues": "https://github.com/tighten/duster/issues",
                 "source": "https://github.com/tighten/duster"
             },
-            "time": "2024-01-05T20:30:54+00:00"
+            "time": "2024-01-12T23:26:01+00:00"
         }
     ],
     "aliases": [],
