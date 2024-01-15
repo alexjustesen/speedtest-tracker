@@ -1,70 +1,88 @@
-name: Test
+# .github/workflows/tests.yml
+name: Tests
 
 on:
   push:
     branches:
       - '!main'
       - '!release-**'
+  pull_request:
   workflow_dispatch:
 
 jobs:
+  lint:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: "duster"
+        uses: tighten/duster-action@v2
+        with:
+          args: lint --using=pint
+
   test:
-    strategy:
-      matrix:
-        operating-system:
-          - ubuntu-latest
-        php-version:
-          - '8.2'
-    name: php ${{ matrix.php-version }} on ${{ matrix.operating-system }}
+    needs: [lint] # needs lint job to pass first
+
+    runs-on: ubuntu-22.04
+
     services:
       mysql:
         image: mysql:8.0
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: test
+          MYSQL_DATABASE: testing
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-    runs-on: ${{ matrix.operating-system }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
-          extensions: bcmath, ctype, fileinfo, json, mbstring, openssl, pdo, tokenizer, xml
-          coverage: xdebug
+          php-version: '8.2'
+
       - name: Prepare the environment
-        run: cp .env.example .env
+        run: cp .env.testing .env
+
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
       - name: Setup composer cache
         uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
+
       - name: Install composer dependencies
-        env:
-          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Install application
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Install npm dependencies and build assets
+        run: npm ci && npm run build
+
+      - name: Directory permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Test application install
         run: php artisan app:install --force
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_DATABASE: testing
           DB_USERNAME: root
-          DB_DATABASE: test
           DB_PASSWORD: null
+
       - name: Run tests
         run: php artisan test
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_DATABASE: testing
           DB_USERNAME: root
-          DB_DATABASE: test
           DB_PASSWORD: null
