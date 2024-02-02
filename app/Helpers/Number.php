@@ -22,16 +22,4 @@ class Number extends SupportNumber
 
         return sprintf('%s %s', static::format($bits, $precision, $maxPrecision), $units[$i]);
     }
-
-    /**
-     * Compare the dividend and divisor to get the percent change.
-     */
-    public static function percentChange(float $dividend, float $divisor, int $precision = 0): string
-    {
-        $quotient = ($dividend - $divisor) / $divisor;
-
-        // TODO: determine if I want to return the full percentage (with %) or without.
-        // return SupportNumber::percentage(($quotient * 100), precision: $precision);
-        return number_format(round($quotient, $precision), $precision);
-    }
 }
