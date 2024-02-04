@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
-
 /**
  * 🤔 inspired by: https://github.com/ploi/roadmap/blob/main/app/Services/SystemChecker.php
  */
@@ -28,9 +26,7 @@ class SystemChecker
 
     public function getLocalVersion()
     {
-        return cache()->remember($this->cacheKeyLocal, now()->addDay(), function () {
-            return shell_exec('git describe --tag --abbrev=0');
-        });
+        return config('speedtest.build_version');
     }
 
     public function getRemoteVersion()
@@ -44,15 +40,15 @@ class SystemChecker
     {
         $this->getVersions();
 
-        return $this->localVersion < $this->remoteVersion || $this->localVersion != $this->remoteVersion;
+        return $this->localVersion != $this->remoteVersion;
     }
 
     public function flushVersionData()
     {
         try {
-            Cache::forget($this->cacheKeyLocal);
+            cache()->forget($this->cacheKeyLocal);
 
-            Cache::forget($this->cacheKeyRemote);
+            cache()->forget($this->cacheKeyRemote);
         } catch (\Exception $exception) {
             // fail silently, it's ok
         }

@@ -146,4 +146,28 @@ class Result extends Model
             get: fn () => Arr::get($this->data, 'upload.latency.jitter'),
         );
     }
+
+    /**
+     * Get the result's download in bits.
+     */
+    protected function downloadBits(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value): ?string => ! blank($this->download) && is_numeric($this->download)
+                ? number_format(num: $this->download * 8, decimals: 0, thousands_separator: '')
+                : null,
+        );
+    }
+
+    /**
+     * Get the result's upload in bits.
+     */
+    protected function uploadBits(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value): ?string => ! blank($this->upload) && is_numeric($this->upload)
+                ? number_format(num: $this->upload * 8, decimals: 0, thousands_separator: '')
+                : null,
+        );
+    }
 }

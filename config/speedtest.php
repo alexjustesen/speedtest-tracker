@@ -6,9 +6,9 @@ return [
     /**
      * Build information
      */
-    'build_date' => Carbon::parse('2023-12-13'),
+    'build_date' => Carbon::parse('2024-02-04'),
 
-    'build_version' => '0.14.0',
+    'build_version' => 'v0.14.7',
 
     /**
      * General
@@ -23,9 +23,4 @@ return [
     'notification_polling' => env('NOTIFICATION_POLLING', '60s'),
 
     'results_polling' => env('RESULTS_POLLING', null),
-
-    /**
-     * Security
-     */
-    'allow_embeds' => env('ALLOW_EMBEDS', null),
 ];

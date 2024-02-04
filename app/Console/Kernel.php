@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
-use App\Jobs\ExecSpeedtest;
+use App\Console\Commands\RunOoklaSpeedtest;
+use App\Console\Commands\SystemMaintenance;
+use App\Console\Commands\VersionChecker;
 use App\Settings\GeneralSettings;
 use Cron\CronExpression;
 use Illuminate\Console\Scheduling\Schedule;
@@ -18,38 +20,31 @@ class Kernel extends ConsoleKernel
         $settings = new GeneralSettings();
 
         /**
-         * Check for speedtests that need to run.
+         * Perform system maintenance weekly on Sunday morning,
+         * start off the week nice and fresh.
          */
-        $schedule->call(function () use ($settings) {
-            $ooklaServerId = null;
+        $schedule->command(SystemMaintenance::class)->weeklyOn(0)
+            ->timezone($settings->timezone ?? 'UTC');
 
-            if (! blank($settings->speedtest_server)) {
-                $item = array_rand($settings->speedtest_server);
+        /**
+         * Checked for new versions weekly on Thursday because
+         * I usually do releases on Thursday or Friday.
+         */
+        $schedule->command(VersionChecker::class)->weeklyOn(5)
+            ->timezone($settings->timezone ?? 'UTC');
 
-                $ooklaServerId = $settings->speedtest_server[$item];
-            }
-
-            $speedtest = [
-                'ookla_server_id' => $ooklaServerId,
-            ];
-
-            ExecSpeedtest::dispatch(
-                speedtest: $speedtest,
-                scheduled: true
-            );
-        })
-            ->everyMinute()
+        /**
+         * Check if an Ookla Speedtest needs to run.
+         */
+        $schedule->command(RunOoklaSpeedtest::class, ['--scheduled'])->everyMinute()
             ->timezone($settings->timezone ?? 'UTC')
             ->when(function () use ($settings) {
-                // Don't run if the schedule is missing (aka disabled)
                 if (blank($settings->speedtest_schedule)) {
                     return false;
                 }
 
-                // Evaluate if a run is needed based on the schedule
-                $cron = new CronExpression($settings->speedtest_schedule);
-
-                return $cron->isDue(now()->timezone($settings->timezone ?? 'UTC'));
+                return (new CronExpression($settings->speedtest_schedule))
+                    ->isDue(now()->timezone($settings->timezone ?? 'UTC'));
             });
     }
 
