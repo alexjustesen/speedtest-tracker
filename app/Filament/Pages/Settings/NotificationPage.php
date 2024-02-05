@@ -190,6 +190,7 @@ class NotificationPage extends SettingsPage
                                                 Forms\Components\TextInput::make('url')
                                                     ->maxLength(100)
                                                     ->required()
+                                                    ->url()
                                                     ->columnSpan(['md' => 2]),
                                             ])
                                             ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
