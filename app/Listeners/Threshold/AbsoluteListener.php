@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Spatie\WebhookServer\WebhookCall;
 
 class AbsoluteListener implements ShouldQueue
 {
@@ -220,6 +221,8 @@ class AbsoluteListener implements ShouldQueue
 
     /**
      * Handle webhook notifications.
+     *
+     * TODO: refactor
      */
     protected function webhookChannel(ResultCreated $event): void
     {
@@ -269,6 +272,16 @@ class AbsoluteListener implements ShouldQueue
                     'site_name' => $this->generalSettings->site_name,
                     'metrics' => $failedThresholds,
                 ]);
+
+                WebhookCall::create()
+                    ->url($url['url'])
+                    ->payload([
+                        'result_id' => $event->result->id,
+                        'site_name' => $this->generalSettings->site_name,
+                        'metrics' => $failedThresholds,
+                    ])
+                    ->doNotSign()
+                    ->dispatch();
             }
         }
     }
