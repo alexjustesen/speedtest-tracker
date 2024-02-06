@@ -14,6 +14,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
+use Spatie\WebhookServer\WebhookCall;
 
 class NotificationPage extends SettingsPage
 {
@@ -156,6 +157,75 @@ class NotificationPage extends SettingsPage
                                             ->columnSpan(['md' => 2]),
                                         TestTelegramNotification::make('test channel')
                                             ->hidden(fn (Forms\Get $get) => $get('telegram_enabled') !== true),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Webhook')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('webhook_enabled')
+                                            ->label('Enable webhook notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1, ])
+                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('webhook_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpan(2),
+                                                        Forms\Components\Toggle::make('webhook_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpan(2),
+                                                    ]),
+                                            ]),
+                                        Forms\Components\Repeater::make('webhook_urls')
+                                            ->label('Recipients')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('url')
+                                                    ->maxLength(2000)
+                                                    ->required()
+                                                    ->url()
+                                                    ->columnSpanFull(),
+                                            ])
+                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
+                                            ->columnSpanFull(),
+                                        Forms\Components\Actions::make([
+                                            Forms\Components\Actions\Action::make('test webhook')
+                                                ->label('Test webhook channel')
+                                                ->action(function (): void {
+                                                    $notificationSettings = new (NotificationSettings::class);
+
+                                                    if (blank($notificationSettings->webhook_urls)) {
+                                                        Notification::make()
+                                                            ->title('You need to add webhook urls.')
+                                                            ->body('Make sure to click "Save changes" before testing webhook notifications.')
+                                                            ->warning()
+                                                            ->send();
+
+                                                        return;
+                                                    }
+
+                                                    foreach ($notificationSettings->webhook_urls as $url) {
+                                                        WebhookCall::create()
+                                                            ->url($url['url'])
+                                                            ->payload(['message' => '👋 Testing the Webhook notification channel.'])
+                                                            ->doNotSign()
+                                                            ->dispatch();
+                                                    }
+
+                                                    Notification::make()
+                                                        ->title('Test webhook notification sent.')
+                                                        ->success()
+                                                        ->send();
+                                                })
+                                                ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true),
+                                        ]),
                                     ])
                                     ->compact()
                                     ->columns([
