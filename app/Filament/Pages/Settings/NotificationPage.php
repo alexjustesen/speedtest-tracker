@@ -214,7 +214,7 @@ class NotificationPage extends SettingsPage
                                                     foreach ($notificationSettings->webhook_urls as $url) {
                                                         WebhookCall::create()
                                                             ->url($url['url'])
-                                                            ->payload(['message' => '👋 Testing the Telegram notification channel.'])
+                                                            ->payload(['message' => '👋 Testing the Webhook notification channel.'])
                                                             ->doNotSign()
                                                             ->dispatch();
                                                     }
