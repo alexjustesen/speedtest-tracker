@@ -5,7 +5,6 @@ namespace App\Filament\Pages\Settings;
 use App\Forms\Components\TestDatabaseNotification;
 use App\Forms\Components\TestMailNotification;
 use App\Forms\Components\TestTelegramNotification;
-use App\Forms\Components\TestWebhookNotification;
 use App\Mail\Test;
 use App\Notifications\Telegram\TestNotification as TelegramTestNotification;
 use App\Settings\NotificationSettings;
@@ -15,6 +14,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
+use Spatie\WebhookServer\WebhookCall;
 
 class NotificationPage extends SettingsPage
 {
@@ -169,7 +169,7 @@ class NotificationPage extends SettingsPage
                                         Forms\Components\Toggle::make('webhook_enabled')
                                             ->label('Enable webhook notifications')
                                             ->reactive()
-                                            ->columnSpan(2),
+                                            ->columnSpanFull(),
                                         Forms\Components\Grid::make([
                                             'default' => 1, ])
                                             ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
@@ -191,12 +191,41 @@ class NotificationPage extends SettingsPage
                                                     ->maxLength(100)
                                                     ->required()
                                                     ->url()
-                                                    ->columnSpan(['md' => 2]),
+                                                    ->columnSpanFull(),
                                             ])
                                             ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
-                                            ->columnSpan(['md' => 2]),
-                                        TestWebhookNotification::make('test channel')
-                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true),
+                                            ->columnSpanFull(),
+                                        Forms\Components\Actions::make([
+                                            Forms\Components\Actions\Action::make('test webhook')
+                                                ->label('Test webhook channel')
+                                                ->action(function () {
+                                                    $notificationSettings = new (NotificationSettings::class);
+
+                                                    if (blank($notificationSettings->webhook_urls)) {
+                                                        Notification::make()
+                                                            ->title('You need to add webhook urls.')
+                                                            ->body('Make sure to click "Save changes" before testing webhook notifications.')
+                                                            ->warning()
+                                                            ->send();
+
+                                                        return;
+                                                    }
+
+                                                    foreach ($notificationSettings->webhook_urls as $url) {
+                                                        WebhookCall::create()
+                                                            ->url($url['url'])
+                                                            ->payload(['message' => '👋 Testing the Telegram notification channel.'])
+                                                            ->doNotSign()
+                                                            ->dispatch();
+                                                    }
+
+                                                    Notification::make()
+                                                        ->title('Test webhook notification sent.')
+                                                        ->success()
+                                                        ->send();
+                                                })
+                                                ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true),
+                                        ]),
                                     ])
                                     ->compact()
                                     ->columns([
