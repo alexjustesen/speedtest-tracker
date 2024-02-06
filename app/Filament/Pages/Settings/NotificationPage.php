@@ -188,7 +188,7 @@ class NotificationPage extends SettingsPage
                                             ->label('Recipients')
                                             ->schema([
                                                 Forms\Components\TextInput::make('url')
-                                                    ->maxLength(100)
+                                                    ->maxLength(2000)
                                                     ->required()
                                                     ->url()
                                                     ->columnSpanFull(),
@@ -198,7 +198,7 @@ class NotificationPage extends SettingsPage
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('test webhook')
                                                 ->label('Test webhook channel')
-                                                ->action(function () {
+                                                ->action(function (): void {
                                                     $notificationSettings = new (NotificationSettings::class);
 
                                                     if (blank($notificationSettings->webhook_urls)) {
