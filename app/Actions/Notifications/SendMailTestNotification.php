@@ -13,6 +13,15 @@ class SendMailTestNotification
 
     public function handle(array $recipients)
     {
+        if (! count($recipients)) {
+            Notification::make()
+                ->title('You need to add mail recipients!')
+                ->warning()
+                ->send();
+
+            return;
+        }
+
         foreach ($recipients as $recipient) {
             Mail::to($recipient)
                 ->send(new TestMail());
