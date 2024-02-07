@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
-use App\Forms\Components\TestDatabaseNotification;
+use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Forms\Components\TestMailNotification;
 use App\Forms\Components\TestTelegramNotification;
 use App\Mail\Test;
@@ -12,6 +12,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Spatie\WebhookServer\WebhookCall;
@@ -76,7 +77,12 @@ class NotificationPage extends SettingsPage
                                                             ->label('Notify on threshold failures')
                                                             ->columnSpan(2),
                                                     ]),
-                                                TestDatabaseNotification::make('test channel'),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test database')
+                                                        ->label('Test database channel')
+                                                        ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user()))
+                                                        ->hidden(fn (Forms\Get $get) => $get('database_enabled') !== true),
+                                                ]),
                                             ]),
                                     ])
                                     ->compact()
@@ -246,25 +252,6 @@ class NotificationPage extends SettingsPage
                             ]),
                     ]),
             ]);
-    }
-
-    public function sendTestDatabaseNotification(): void
-    {
-        $recipient = auth()->user();
-
-        $recipient->notify(
-            Notification::make()
-                ->title('Test database notification received!')
-                ->body('You say pong')
-                ->success()
-                ->toDatabase(),
-        );
-
-        Notification::make()
-            ->title('Test database notification sent.')
-            ->body('I say ping')
-            ->success()
-            ->send();
     }
 
     public function sendTestMailNotification(): void
