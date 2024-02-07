@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class SystemMaintenance extends Command
 {
@@ -36,8 +37,20 @@ class SystemMaintenance extends Command
      */
     protected function refreshCache(): void
     {
-        Artisan::call('optimize:clear');
+        try {
+            Artisan::call('optimize:clear');
+        } catch (\Throwable $th) {
+            Log::info('System maintenance failed to clear the cache.');
 
-        Artisan::call('optimize');
+            return;
+        }
+
+        try {
+            Artisan::call('optimize');
+        } catch (\Throwable $th) {
+            Log::info('System maintenance failed to fresh the cache.');
+
+            return;
+        }
     }
 }

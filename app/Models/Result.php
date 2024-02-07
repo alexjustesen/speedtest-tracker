@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\ResultCreated;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -101,9 +102,33 @@ class Result extends Model
         $data = json_decode($this->data, true);
 
         return [
-            'download' => $data['download']['latency']['jitter'] ?? null,
-            'upload' => $data['upload']['latency']['jitter'] ?? null,
-            'ping' => $data['ping']['jitter'] ?? null,
+            'download' => Arr::get($data, 'download.latency.jitter'),
+            'upload' => Arr::get($data, 'upload.latency.jitter'),
+            'ping' => Arr::get($data, 'ping.jitter'),
         ];
+    }
+
+    /**
+     * Get the result's download in bits.
+     */
+    protected function downloadBits(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value): ?string => ! blank($this->download) && is_numeric($this->download)
+                ? number_format(num: $this->download * 8, decimals: 0, thousands_separator: '')
+                : null,
+        );
+    }
+
+    /**
+     * Get the result's upload in bits.
+     */
+    protected function uploadBits(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value): ?string => ! blank($this->upload) && is_numeric($this->upload)
+                ? number_format(num: $this->upload * 8, decimals: 0, thousands_separator: '')
+                : null,
+        );
     }
 }
