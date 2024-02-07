@@ -9,6 +9,7 @@ use App\Settings\NotificationSettings;
 use App\Telegram\TelegramNotification;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
+use Spatie\WebhookServer\WebhookCall;
 
 class SpeedtestCompletedListener
 {
@@ -70,6 +71,24 @@ class SpeedtestCompletedListener
 
                     \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
                         ->notify(new TelegramNotification($message));
+                }
+            }
+        }
+
+        if ($this->notificationSettings->webhook_enabled) {
+            if ($this->notificationSettings->webhook_on_speedtest_run && count($this->notificationSettings->webhook_urls)) {
+                foreach ($this->notificationSettings->webhook_urls as $url) {
+                    WebhookCall::create()
+                        ->url($url['url'])
+                        ->payload([
+                            'result_id' => $event->result->id,
+                            'site_name' => $this->generalSettings->site_name,
+                            'ping' => $event->result->ping,
+                            'download' => $event->result->downloadBits,
+                            'upload' => $event->result->uploadBits,
+                        ])
+                        ->doNotSign()
+                        ->dispatch();
                 }
             }
         }

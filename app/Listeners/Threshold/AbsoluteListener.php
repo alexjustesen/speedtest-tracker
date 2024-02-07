@@ -10,8 +10,10 @@ use App\Settings\ThresholdSettings;
 use App\Telegram\TelegramNotification;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Spatie\WebhookServer\WebhookCall;
 
 class AbsoluteListener implements ShouldQueue
 {
@@ -59,6 +61,11 @@ class AbsoluteListener implements ShouldQueue
         // Telegram notification channel
         if ($this->notificationSettings->telegram_enabled == true && $this->notificationSettings->telegram_on_threshold_failure == true) {
             $this->telegramChannel($event);
+        }
+
+        // Webhook notification channel
+        if ($this->notificationSettings->webhook_enabled == true && $this->notificationSettings->webhook_on_threshold_failure == true) {
+            $this->webhookChannel($event);
         }
     }
 
@@ -208,6 +215,73 @@ class AbsoluteListener implements ShouldQueue
 
                 \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
                     ->notify(new TelegramNotification($message));
+            }
+        }
+    }
+
+    /**
+     * Handle webhook notifications.
+     *
+     * TODO: refactor
+     */
+    protected function webhookChannel(ResultCreated $event): void
+    {
+        $failedThresholds = [];
+
+        if (! count($this->notificationSettings->webhook_urls) > 0) {
+            Log::info('Skipping sending webhook notification, no urls.');
+        }
+
+        // Download threshold
+        if ($this->thresholdSettings->absolute_download > 0) {
+            if (absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->download)) {
+                array_push($failedThresholds, [
+                    'name' => 'Download',
+                    'threshold' => $this->thresholdSettings->absolute_download,
+                    'value' => toBits(convertSize($event->result->download), 2),
+                ]);
+            }
+        }
+
+        // Upload threshold
+        if ($this->thresholdSettings->absolute_upload > 0) {
+            if (absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->upload)) {
+                array_push($failedThresholds, [
+                    'name' => 'Upload',
+                    'threshold' => $this->thresholdSettings->absolute_upload,
+                    'value' => toBits(convertSize($event->result->upload), 2),
+                ]);
+            }
+        }
+
+        // Ping threshold
+        if ($this->thresholdSettings->absolute_ping > 0) {
+            if (absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
+                array_push($failedThresholds, [
+                    'name' => 'Ping',
+                    'threshold' => $this->thresholdSettings->absolute_ping,
+                    'value' => round($event->result->ping, 2),
+                ]);
+            }
+        }
+
+        if (count($failedThresholds)) {
+            foreach ($this->notificationSettings->webhook_urls as $url) {
+                Http::post($url['url'], [
+                    'result_id' => $event->result->id,
+                    'site_name' => $this->generalSettings->site_name,
+                    'metrics' => $failedThresholds,
+                ]);
+
+                WebhookCall::create()
+                    ->url($url['url'])
+                    ->payload([
+                        'result_id' => $event->result->id,
+                        'site_name' => $this->generalSettings->site_name,
+                        'metrics' => $failedThresholds,
+                    ])
+                    ->doNotSign()
+                    ->dispatch();
             }
         }
     }

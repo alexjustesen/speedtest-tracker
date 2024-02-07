@@ -23,9 +23,11 @@
         "laravel/sanctum": "^3.3.3",
         "laravel/tinker": "^2.9.0",
         "livewire/livewire": "^3.4.4",
+        "lorisleiva/laravel-actions": "^2.7",
         "maatwebsite/excel": "^3.1.52",
         "maennchen/zipstream-php": "^2.4",
         "spatie/laravel-settings": "^2.8.3",
+        "spatie/laravel-webhook-server": "^3.8",
         "timokoerber/laravel-one-time-operations": "^1.4"
     },
     "require-dev": {
