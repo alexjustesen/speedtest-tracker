@@ -10,6 +10,8 @@ class GetLatestController extends Controller
 {
     /**
      * Handle the incoming request.
+     *
+     * TODO: fix it
      */
     public function __invoke(): JsonResponse
     {

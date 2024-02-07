@@ -19,6 +19,9 @@ class ResultsSelectedBulkExport implements FromArray, WithHeadings
         return $this->results;
     }
 
+    /**
+     * TODO: fix it
+     */
     public function headings(): array
     {
         return [
