@@ -102,9 +102,9 @@ class Result extends Model
         $data = json_decode($this->data, true);
 
         return [
-            'download' => $data['download']['latency']['jitter'] ?? null,
-            'upload' => $data['upload']['latency']['jitter'] ?? null,
-            'ping' => $data['ping']['jitter'] ?? null,
+            'download' => Arr::get($data, 'download.latency.jitter'),
+            'upload' => Arr::get($data, 'upload.latency.jitter'),
+            'ping' => Arr::get($data, 'ping.jitter'),
         ];
     }
 
