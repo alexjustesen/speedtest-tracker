@@ -85,7 +85,6 @@ class ResultResource extends Resource
                         ->columnSpan(2),
                     Forms\Components\Section::make()
                         ->schema([
-                            Forms\Components\Checkbox::make('successful'),
                             Forms\Components\Checkbox::make('scheduled'),
                         ])
                         ->columns(1)
@@ -114,8 +113,6 @@ class ResultResource extends Resource
                     ->label('Server Name')
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->toggleable(),
                 Tables\Columns\TextColumn::make('download')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::fileSizeBits(bits: $record->download, precision: 2, perSecond: true) : null)
                     ->sortable(),
@@ -139,6 +136,8 @@ class ResultResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
                     ->boolean()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('status')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
@@ -170,8 +169,8 @@ class ResultResource extends Resource
                     Action::make('view result')
                         ->label('View on Speedtest.net')
                         ->icon('heroicon-o-link')
-                        ->url(fn (Result $record): ?string => $record?->url)
-                        ->hidden(fn (Result $record): bool => ! $record->is_successful)
+                        ->url(fn (Result $record): ?string => $record->result_url)
+                        ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Completed)
                         ->openUrlInNewTab(),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\Action::make('updateComments')
