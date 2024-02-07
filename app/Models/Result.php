@@ -145,6 +145,16 @@ class Result extends Model
     /**
      * Get the result's server ID.
      */
+    protected function resultUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'result.url'),
+        );
+    }
+
+    /**
+     * Get the result's server ID.
+     */
     protected function serverId(): Attribute
     {
         return Attribute::make(
