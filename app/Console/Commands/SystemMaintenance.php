@@ -27,30 +27,22 @@ class SystemMaintenance extends Command
      */
     public function handle()
     {
-        $this->refreshCache();
-
-        return Command::SUCCESS;
-    }
-
-    /**
-     * Clear and refresh the cache.
-     */
-    protected function refreshCache(): void
-    {
         try {
-            Artisan::call('optimize:clear');
+            Artisan::call('cache:clear');
         } catch (\Throwable $th) {
             Log::info('System maintenance failed to clear the cache.');
 
-            return;
+            return Command::FAILURE;
         }
 
         try {
-            Artisan::call('optimize');
+            Artisan::call('view:clear');
         } catch (\Throwable $th) {
-            Log::info('System maintenance failed to fresh the cache.');
+            Log::info('System maintenance failed to clear the view cache.');
 
-            return;
+            return Command::FAILURE;
         }
+
+        return Command::SUCCESS;
     }
 }
