@@ -1,7 +1,13 @@
 <?php
 
+use App\Models\Result;
+use App\Models\User;
+use App\Settings\GeneralSettings;
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -34,6 +40,37 @@ return new class extends Migration
                 $table->boolean('scheduled')->default(false);
                 $table->timestamps();
             });
+        }
+
+        /**
+         * Don't disable the schedule or send a notification if there are no records.
+         */
+        if (! DB::table('results_bak_bad_json')->count()) {
+            return;
+        }
+
+        $settings = new GeneralSettings();
+
+        $settings->speedtest_schedule = '';
+
+        $settings->save();
+
+        $admins = User::select(['id', 'name', 'email', 'role'])
+            ->where('role', 'admin')
+            ->get();
+
+        foreach ($admins as $user) {
+            Notification::make()
+                ->title('Breaking change, action required!')
+                ->body("v0.16.0 includes a breaking change to resolve a data quality issue. Read the docs below to migrate your data.")
+                ->danger()
+                ->actions([
+                    Action::make('docs')
+                        ->button()
+                        ->url('https://docs.speedtest-tracker.dev/')
+                        ->openUrlInNewTab(),
+                ])
+                ->sendToDatabase($user);
         }
     }
 
