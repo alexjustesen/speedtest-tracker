@@ -3,7 +3,7 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Actions\Notifications\SendDatabaseTestNotification;
-use App\Forms\Components\TestMailNotification;
+use App\Actions\Notifications\SendMailTestNotification;
 use App\Forms\Components\TestTelegramNotification;
 use App\Mail\Test;
 use App\Notifications\Telegram\TestNotification as TelegramTestNotification;
@@ -80,8 +80,7 @@ class NotificationPage extends SettingsPage
                                                 Forms\Components\Actions::make([
                                                     Forms\Components\Actions\Action::make('test database')
                                                         ->label('Test database channel')
-                                                        ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user()))
-                                                        ->hidden(fn (Forms\Get $get) => $get('database_enabled') !== true),
+                                                        ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
                                                 ]),
                                             ]),
                                     ])
@@ -100,6 +99,7 @@ class NotificationPage extends SettingsPage
                                         Forms\Components\Grid::make([
                                             'default' => 1,
                                         ])
+                                            ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true)
                                             ->schema([
                                                 Forms\Components\Fieldset::make('Triggers')
                                                     ->schema([
@@ -110,20 +110,21 @@ class NotificationPage extends SettingsPage
                                                             ->label('Notify on threshold failures')
                                                             ->columnSpan(2),
                                                     ]),
-                                            ])
-                                            ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true),
-
-                                        Forms\Components\Repeater::make('mail_recipients')
-                                            ->label('Recipients')
-                                            ->schema([
-                                                Forms\Components\TextInput::make('email_address')
-                                                    ->email()
-                                                    ->required(),
-                                            ])
-                                            ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true)
-                                            ->columnSpan(['md' => 2]),
-                                        TestMailNotification::make('test channel')
-                                            ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true),
+                                                Forms\Components\Repeater::make('mail_recipients')
+                                                    ->label('Recipients')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('email_address')
+                                                            ->email()
+                                                            ->required(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test mail')
+                                                        ->label('Test mail channel')
+                                                        ->action(fn (Forms\Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('mail_recipients'))),
+                                                ]),
+                                            ]),
                                     ])
                                     ->compact()
                                     ->columns([
@@ -252,31 +253,6 @@ class NotificationPage extends SettingsPage
                             ]),
                     ]),
             ]);
-    }
-
-    public function sendTestMailNotification(): void
-    {
-        $notificationSettings = new (NotificationSettings::class);
-
-        if (blank($notificationSettings->mail_recipients)) {
-            Notification::make()
-                ->title('You need to add mail recipients.')
-                ->body('Make sure to click "Save changes" before testing mail notifications.')
-                ->warning()
-                ->send();
-
-            return;
-        }
-
-        foreach ($notificationSettings->mail_recipients as $recipient) {
-            Mail::to($recipient)
-                ->send(new Test());
-        }
-
-        Notification::make()
-            ->title('Test mail notification sent.')
-            ->success()
-            ->send();
     }
 
     public function sendTestTelegramNotification(): void
