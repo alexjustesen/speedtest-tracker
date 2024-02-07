@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Actions\MigrateBadJsonResults;
 use App\Enums\ResultStatus;
 use App\Exports\ResultsSelectedBulkExport;
 use App\Filament\Resources\ResultResource\Pages;
@@ -13,12 +14,15 @@ use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ResultResource extends Resource
@@ -203,6 +207,22 @@ class ResultResource extends Resource
                         return Excel::download($export, 'results_'.now()->timestamp.'.csv', \Maatwebsite\Excel\Excel::CSV);
                     }),
                 Tables\Actions\DeleteBulkAction::make(),
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('migrate')
+                    ->action(function (): void {
+                        Notification::make()
+                            ->title('Starting data migration...')
+                            ->body('This can take a little bit depending how much data you have.')
+                            ->warning()
+                            ->sendToDatabase(Auth::user());
+
+                        MigrateBadJsonResults::dispatch(Auth::user());
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading('Migrate History')
+                    ->modalDescription(new HtmlString('<p>v0.16.0 archived the old <code>"results"</code> table, to migrate your history click the button below.</p><p>For more information read the <a href="#" target="_blank" rel="nofollow" class="underline">docs</a>.</p>'))
+                    ->modalSubmitActionLabel('Yes, migrate it'),
             ])
             ->defaultSort('created_at', 'desc');
     }

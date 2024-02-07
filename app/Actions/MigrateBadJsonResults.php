@@ -3,6 +3,8 @@
 namespace App\Actions;
 
 use App\Enums\ResultStatus;
+use App\Models\User;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
@@ -16,18 +18,26 @@ class MigrateBadJsonResults
 
     public int $jobTries = 1;
 
-    public function handle()
+    public function handle(User $user)
     {
         $tableName = 'results_bak_bad_json';
 
         if (! Schema::hasTable('results')) {
-            Log::info('❌ Could not migrate bad json results, "results" table is missing.');
+            Notification::make()
+                ->title('❌ Could not migrate bad json results!')
+                ->body('The "results" table is missing.')
+                ->danger()
+                ->sendToDatabase($user);
 
             return;
         }
 
         if (! Schema::hasTable('results_bak_bad_json')) {
-            Log::info('❌ Could not migrate bad json results, "results_bak_bad_json" table is missing.');
+            Notification::make()
+                ->title('❌ Could not migrate bad json results!')
+                ->body('The "results_bak_bad_json" table is missing.')
+                ->danger()
+                ->sendToDatabase($user);
 
             return;
         }
@@ -35,26 +45,44 @@ class MigrateBadJsonResults
         /**
          * Copy backup data to the new results table and reformat it.
          */
-        DB::table($tableName)->chunkById(100, function ($results) {
-            foreach ($results as $result) {
-                $record = [
-                    'service' => 'ookla',
-                    'ping' => $result->ping,
-                    'download' => $result->download,
-                    'upload' => $result->upload,
-                    'comments' => $result->comments,
-                    'data' => json_decode($result->data),
-                    'status' => match ($result->successful) {
-                        1 => ResultStatus::Completed,
-                        default => ResultStatus::Failed,
-                    },
-                    'scheduled' => $result->scheduled,
-                    'created_at' => $result->created_at,
-                    'updated_at' => now(),
-                ];
+        try {
+            DB::table($tableName)->chunkById(100, function ($results) {
+                foreach ($results as $result) {
+                    $record = [
+                        'service' => 'ookla',
+                        'ping' => $result->ping,
+                        'download' => $result->download,
+                        'upload' => $result->upload,
+                        'comments' => $result->comments,
+                        'data' => json_decode($result->data),
+                        'status' => match ($result->successful) {
+                            1 => ResultStatus::Completed,
+                            default => ResultStatus::Failed,
+                        },
+                        'scheduled' => $result->scheduled,
+                        'created_at' => $result->created_at,
+                        'updated_at' => now(),
+                    ];
 
-                DB::table('results')->insert($record);
-            }
-        });
+                    DB::table('results')->insert($record);
+                }
+            });
+        } catch (\Throwable $e) {
+            Log::error($e);
+
+            Notification::make()
+                ->title('There was an issue migrating the data!')
+                ->body('Check the logs for an output of the issue.')
+                ->danger()
+                ->sendToDatabase($user);
+
+            return;
+        }
+
+        Notification::make()
+            ->title('Data migration completed!')
+            ->body('Your history has been successfully migrated.')
+            ->success()
+            ->sendToDatabase($user);
     }
 }
