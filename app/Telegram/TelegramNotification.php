@@ -2,6 +2,7 @@
 
 namespace App\Telegram;
 
+use App\Settings\NotificationSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
@@ -12,6 +13,8 @@ class TelegramNotification extends Notification
 
     protected $message;
 
+    protected $settings;
+
     /**
      * Create a new notification instance.
      *
@@ -20,6 +23,8 @@ class TelegramNotification extends Notification
     public function __construct($message)
     {
         $this->message = $message;
+
+        $this->settings = new NotificationSettings();
     }
 
     /**
@@ -41,6 +46,7 @@ class TelegramNotification extends Notification
     {
         return TelegramMessage::create()
             ->to($notifiable->routes['telegram_chat_id'])
+            ->disableNotification($this->settings->telegram_disable_notification)
             ->content($this->message);
     }
 }
