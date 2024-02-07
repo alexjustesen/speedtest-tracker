@@ -20,7 +20,7 @@ class HomeController extends Controller
         }
 
         $latestResult = Result::query()
-            ->select(['id', 'ping', 'download', 'upload', 'successful', 'created_at'])
+            ->select(['id', 'ping', 'download', 'upload', 'status', 'created_at'])
             ->latest()
             ->first();
 
