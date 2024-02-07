@@ -3,10 +3,10 @@
 namespace App\Actions;
 
 use App\Enums\ResultStatus;
-use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
+use Lorisleiva\Actions\Concerns\AsAction;
 
 class MigrateBadJsonResults
 {

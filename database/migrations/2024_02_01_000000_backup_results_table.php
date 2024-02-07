@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Result;
 use App\Models\User;
 use App\Settings\GeneralSettings;
 use Filament\Notifications\Actions\Action;
@@ -62,7 +61,7 @@ return new class extends Migration
         foreach ($admins as $user) {
             Notification::make()
                 ->title('Breaking change, action required!')
-                ->body("v0.16.0 includes a breaking change to resolve a data quality issue. Read the docs below to migrate your data.")
+                ->body('v0.16.0 includes a breaking change to resolve a data quality issue. Read the docs below to migrate your data.')
                 ->danger()
                 ->actions([
                     Action::make('docs')
