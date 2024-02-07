@@ -22,6 +22,8 @@ class NotificationSettings extends Settings
 
     public bool $telegram_enabled;
 
+    public bool $telegram_disable_notification;
+
     public bool $telegram_on_speedtest_run;
 
     public bool $telegram_on_threshold_failure;

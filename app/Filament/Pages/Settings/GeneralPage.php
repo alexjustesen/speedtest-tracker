@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Actions\GetOoklaSpeedtestServers;
 use App\Helpers\TimeZoneHelper;
 use App\Rules\Cron;
 use App\Settings\GeneralSettings;
@@ -97,28 +98,8 @@ class GeneralPage extends SettingsPage
                                     ->maxItems(10)
                                     ->multiple()
                                     ->nullable()
-                                    ->preload(false)
                                     ->searchable()
-                                    ->options(function (): array {
-                                        $response = Http::get(
-                                            url: 'https://www.speedtest.net/api/js/servers',
-                                            query: [
-                                                'engine' => 'js',
-                                                'https_functional' => true,
-                                                'limit' => 20,
-                                            ]
-                                        );
-
-                                        if ($response->failed()) {
-                                            return [
-                                                '' => 'There was an error retrieving Speedtest servers',
-                                            ];
-                                        }
-
-                                        return $response->collect()->mapWithKeys(function (array $item, int $key) {
-                                            return [$item['id'] => $item['id'].': '.$item['name'].' ('.$item['sponsor'].')'];
-                                        })->toArray();
-                                    })
+                                    ->options(GetOoklaSpeedtestServers::run())
                                     ->getSearchResultsUsing(fn (string $search): array => $this->getServerSearchOptions($search))
                                     ->getOptionLabelsUsing(fn (array $values): array => $this->getServerLabels($values))
                                     ->columnSpan('full'),

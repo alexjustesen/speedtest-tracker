@@ -138,6 +138,12 @@ class NotificationPage extends SettingsPage
                                         ])
                                             ->hidden(fn (Forms\Get $get) => $get('telegram_enabled') !== true)
                                             ->schema([
+                                                Forms\Components\Fieldset::make('Options')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('telegram_disable_notification')
+                                                            ->label('Send the message silently to the user')
+                                                            ->columnSpanFull(),
+                                                    ]),
                                                 Forms\Components\Fieldset::make('Triggers')
                                                     ->schema([
                                                         Forms\Components\Toggle::make('telegram_on_speedtest_run')

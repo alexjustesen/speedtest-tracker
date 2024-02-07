@@ -38,8 +38,8 @@ class GetLatestController extends Controller
                 'url' => $latest->url,
                 'scheduled' => $latest->scheduled,
                 'failed' => ! $latest->successful,
-                'created_at' => $latest->created_at->toISOString(),
-                'updated_at' => $latest->created_at->toISOString(), // faking updated at to match legacy api payload
+                'created_at' => $latest->created_at->toISOString(true),
+                'updated_at' => $latest->created_at->toISOString(true), // faking updated at to match legacy api payload
             ],
         ]);
     }
