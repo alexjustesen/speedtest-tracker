@@ -16,6 +16,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
@@ -109,12 +110,16 @@ class ResultResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('ip_address')
+                    ->label('IP address')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('server_id')
                     ->label('Server ID')
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('server_name')
-                    ->label('Server Name')
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('download')
@@ -138,23 +143,40 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('scheduled')
-                    ->boolean()
-                    ->toggleable(),
                 Tables\Columns\TextColumn::make('status')
                     ->toggleable(),
+                Tables\Columns\IconColumn::make('scheduled')
+                    ->boolean()
+                    ->toggleable()
+                    ->alignment(Alignment::Center),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
                     ->timezone(TimeZoneHelper::displayTimeZone($settings))
-                    ->sortable(),
+                    ->sortable()
+                    ->alignment(Alignment::End),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
                     ->timezone(TimeZoneHelper::displayTimeZone($settings))
                     ->toggleable()
                     ->toggledHiddenByDefault()
-                    ->sortable(),
+                    ->sortable()
+                    ->alignment(Alignment::End),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('ip_address')
+                    ->label('IP address')
+                    ->multiple()
+                    ->options(function (): array {
+                        return Result::query()
+                            ->select('data->interface->externalIp AS public_ip_address')
+                            ->distinct()
+                            ->get()
+                            ->mapWithKeys(function (Result $item, int $key) {
+                                return [$item['public_ip_address'] => $item['public_ip_address']];
+                            })
+                            ->toArray();
+                    })
+                    ->attribute('data->interface->externalIp'),
                 Tables\Filters\TernaryFilter::make('scheduled')
                     ->placeholder('-')
                     ->trueLabel('Only scheduled speedtests')
