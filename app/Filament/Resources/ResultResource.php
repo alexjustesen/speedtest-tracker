@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ResultStatus;
 use App\Exports\ResultsSelectedBulkExport;
 use App\Filament\Resources\ResultResource\Pages;
+use App\Helpers\Number;
 use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
@@ -14,8 +16,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -103,47 +103,52 @@ class ResultResource extends Resource
 
         return $table
             ->columns([
-                TextColumn::make('id')
+                Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
-                TextColumn::make('server')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->server_id) ? $record->server_id.' ('.$record->server_name.')' : null)
+                Tables\Columns\TextColumn::make('server_id')
+                    ->label('Server ID')
                     ->toggleable()
                     ->sortable(),
-                IconColumn::make('successful')
+                Tables\Columns\TextColumn::make('server_name')
+                    ->label('Server Name')
+                    ->toggleable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('download')
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::fileSizeBits(bits: $record->download, precision: 2, perSecond: true) : null)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('upload')
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload, precision: 2, perSecond: true) : null)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('ping')
+                    ->toggleable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('download_jitter')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('upload_jitter')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('ping_jitter')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('scheduled')
                     ->boolean()
                     ->toggleable(),
-                IconColumn::make('scheduled')
-                    ->boolean()
-                    ->toggleable(),
-                TextColumn::make('download')
-                    ->label('Download (Mbps)')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? toBits(convertSize($record->download), 2) : null)
-                    ->sortable(),
-                TextColumn::make('upload')
-                    ->label('Upload (Mbps)')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? toBits(convertSize($record->upload), 2) : null)
-                    ->sortable(),
-                TextColumn::make('ping')
-                    ->label('Ping (Ms)')
-                    ->toggleable()
-                    ->sortable(),
-                TextColumn::make('download_jitter')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable(),
-                TextColumn::make('upload_jitter')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable(),
-                TextColumn::make('ping_jitter')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable(),
-                TextColumn::make('created_at')
-                    ->label('Created')
+                Tables\Columns\TextColumn::make('created_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
                     ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
+                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
                     ->sortable(),
             ])
             ->filters([
@@ -156,15 +161,9 @@ class ResultResource extends Resource
                         false: fn (Builder $query) => $query->where('scheduled', false),
                         blank: fn (Builder $query) => $query,
                     ),
-                Tables\Filters\TernaryFilter::make('successful')
-                    ->placeholder('-')
-                    ->trueLabel('Only successful speedtests')
-                    ->falseLabel('Only failed speedtests')
-                    ->queries(
-                        true: fn (Builder $query) => $query->where('successful', true),
-                        false: fn (Builder $query) => $query->where('successful', false),
-                        blank: fn (Builder $query) => $query,
-                    ),
+                Tables\Filters\SelectFilter::make('status')
+                    ->multiple()
+                    ->options(ResultStatus::class),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -207,13 +206,6 @@ class ResultResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ])
             ->defaultSort('created_at', 'desc');
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array
