@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <title>Timezone - {{ config('app.name') }}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
         {{-- Fonts --}}
         <link href="{{ asset('fonts/inter/inter.css') }}" rel="stylesheet" />
