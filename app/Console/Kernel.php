@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\ClearJobTrackingCommand;
 use App\Console\Commands\RunOoklaSpeedtest;
 use App\Console\Commands\SystemMaintenance;
 use App\Console\Commands\VersionChecker;
@@ -46,6 +47,8 @@ class Kernel extends ConsoleKernel
                 return (new CronExpression($settings->speedtest_schedule))
                     ->isDue(now()->timezone($settings->timezone ?? 'UTC'));
             });
+        $schedule->command(ClearJobTrackingCommand::class)->weeklyOn(5)
+            ->timezone($settings->timezone ?? 'UTC');
     }
 
     /**
