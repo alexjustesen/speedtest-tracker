@@ -33,7 +33,7 @@ class MeasurementController extends Controller
                 speedtest: $config,
                 tracking_key: $uuid,
                 scheduled: false,
-                triggered: true
+                tracked: true
             );
             $this->createTracking($uuid);
         } catch (\Throwable $th) {
