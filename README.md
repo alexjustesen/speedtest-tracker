@@ -1,5 +1,7 @@
 # Speedtest Tracker
 
+[![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
+
 ## Introduction
 
 Speedtest Tracker is a self-hosted internet performance tracking application that runs speedtest checks against Ookla's Speedtest service.
@@ -14,9 +16,19 @@ As far as I can tell https://github.com/henrywhitaker3/Speedtest-Tracker was aba
 
 ## Getting Started
 
-Speedtest Tracker is containerized so you can run it anywhere you run your Docker containers. The [install](https://docs.speedtest-tracker.dev/getting-started/installation) documentation will get you up and running with using Docker or Docker Composer along with choosing a database (MySQL/MariaDB or Postgresql).
+Speedtest Tracker is containerized so you can run it anywhere you run your Docker containers. The [install](https://docs.speedtest-tracker.dev/getting-started/installation) documentation will get you up and running with using Docker or Docker Composer along with choosing a database (SQLite, MySQL/MariaDB or Postgresql).
 
-[![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
+### Quick Start
+
+```dockerfile
+docker run -d --name speedtest-tracker --restart unless-stopped \
+    -p 8080:80 \
+    -e PUID=1000 \
+    -e PGID=1000 \
+    -e DB_CONNECTION=sqlite \
+    -v /path/to/data:/config \
+    lscr.io/linuxserver/speedtest-tracker:latest
+```
 
 ### FAQs and Features
 
@@ -30,9 +42,3 @@ A robust API is planned for a later release but as of `v0.11.8` a legacy endpoin
 
 ![Dashboard](.github/screenshots/dashboard_screenshot.jpg)
 **Dashboard**
-
-![Results page](.github/screenshots/results_screenshot.jpg)
-**Results page**
-
-![General Settings page](.github/screenshots/general_settings_screenshot.jpg)
-**General Settings page**
