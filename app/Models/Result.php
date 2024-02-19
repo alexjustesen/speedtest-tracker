@@ -4,14 +4,17 @@ namespace App\Models;
 
 use App\Enums\ResultStatus;
 use App\Events\ResultCreated;
+use App\Settings\GeneralSettings;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Support\Arr;
 
 class Result extends Model
 {
-    use HasFactory;
+    use HasFactory, Prunable;
 
     /**
      * The attributes that aren't mass assignable.
@@ -74,6 +77,20 @@ class Result extends Model
             'successful' => $this->status === ResultStatus::Completed,
             'packet_loss' => (float) $this->packet_loss,
         ];
+    }
+
+    /**
+     * Get the prunable model query.
+     */
+    public function prunable(): Builder
+    {
+        $settings = new GeneralSettings();
+
+        if ($settings->prune_results_older_than === 0) {
+            return static::query();
+        }
+
+        return static::where('created_at', '<=', now()->subDays($settings->prune_results_older_than));
     }
 
     /**

@@ -20,6 +20,11 @@ class Kernel extends ConsoleKernel
         $settings = new GeneralSettings();
 
         /**
+         * Trigger pruning of models.
+         */
+        $schedule->command('model:prune')->daily();
+
+        /**
          * Perform system maintenance weekly on Sunday morning,
          * start off the week nice and fresh.
          */
