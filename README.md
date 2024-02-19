@@ -1,5 +1,8 @@
 # Speedtest Tracker
 
+> [!IMPORTANT]
+> `v0.16.0` includes a breaking change that requires user action for existing installs. Read the [release](https://github.com/alexjustesen/speedtest-tracker/releases/tag/v0.16.0) notes regarding the data migration.
+
 [![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
 
 ## Introduction
