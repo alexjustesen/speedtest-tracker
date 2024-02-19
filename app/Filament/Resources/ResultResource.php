@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Actions\MigrateBadJsonResults;
 use App\Enums\ResultStatus;
-use App\Exports\ResultsSelectedBulkExport;
+use App\Filament\Exports\ResultExporter;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
 use App\Helpers\TimeZoneHelper;
@@ -22,10 +22,8 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ResultResource extends Resource
 {
@@ -160,6 +158,7 @@ class ResultResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
                     ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->toggleable()
                     ->sortable()
                     ->alignment(Alignment::End),
                 Tables\Columns\TextColumn::make('updated_at')
@@ -227,18 +226,12 @@ class ResultResource extends Resource
                 ]),
             ])
             ->bulkActions([
-                Tables\Actions\BulkAction::make('export')
-                    ->label('Export selected')
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->hidden(fn (): bool => ! auth()->user()->is_admin)
-                    ->action(function (Collection $records) {
-                        $export = new ResultsSelectedBulkExport($records->toArray());
-
-                        return Excel::download($export, 'results_'.now()->timestamp.'.csv', \Maatwebsite\Excel\Excel::CSV);
-                    }),
                 Tables\Actions\DeleteBulkAction::make(),
             ])
             ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    ->exporter(ResultExporter::class)
+                    ->fileName(fn (): string => 'results-'.now()->timestamp),
                 Tables\Actions\Action::make('migrate')
                     ->action(function (): void {
                         Notification::make()
