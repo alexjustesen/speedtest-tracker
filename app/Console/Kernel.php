@@ -46,6 +46,8 @@ class Kernel extends ConsoleKernel
                 return (new CronExpression($settings->speedtest_schedule))
                     ->isDue(now()->timezone($settings->timezone ?? 'UTC'));
             });
+        $schedule->command('model:prune')->daily()
+            ->timezone($settings->timezone ?? 'UTC');
     }
 
     /**
