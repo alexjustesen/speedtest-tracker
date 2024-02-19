@@ -86,10 +86,6 @@ class Result extends Model
     {
         $settings = new GeneralSettings();
 
-        if ($settings->prune_results_older_than === 0) {
-            return static::query();
-        }
-
         return static::where('created_at', '<=', now()->subDays($settings->prune_results_older_than));
     }
 
