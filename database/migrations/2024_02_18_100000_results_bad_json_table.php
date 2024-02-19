@@ -67,13 +67,13 @@ return new class extends Migration
 
         foreach ($admins as $user) {
             Notification::make()
-                ->title('Breaking change, action required!')
-                ->body('v0.16.0 includes a breaking change to resolve a data quality issue. Read the docs below to migrate your data.')
+                ->title('Breaking change, user action required!')
+                ->body('v0.16.0 includes a breaking change to resolve a data quality issue. Read the release notes regarding the data migration.')
                 ->danger()
                 ->actions([
-                    Action::make('docs')
+                    Action::make('Release notes')
                         ->button()
-                        ->url('https://docs.speedtest-tracker.dev/')
+                        ->url('https://github.com/alexjustesen/speedtest-tracker/releases/tag/v0.16.0')
                         ->openUrlInNewTab(),
                 ])
                 ->sendToDatabase($user);
