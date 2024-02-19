@@ -35,7 +35,7 @@ class MigrateBadJsonResults
         if (! Schema::hasTable($tableName)) {
             Notification::make()
                 ->title('❌ Could not migrate bad json results!')
-                ->body('The "results_bak_bad_json" table is missing.')
+                ->body('The "results_bad_json" table is missing.')
                 ->danger()
                 ->sendToDatabase($user);
 
