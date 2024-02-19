@@ -153,6 +153,16 @@ class Result extends Model
     }
 
     /**
+     * Get the result's server host.
+     */
+    protected function serverHost(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'server.host'),
+        );
+    }
+
+    /**
      * Get the result's server ID.
      */
     protected function serverId(): Attribute
