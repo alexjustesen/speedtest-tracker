@@ -95,7 +95,7 @@ class Result extends Model
     protected function downloadBits(): Attribute
     {
         return Attribute::make(
-            get: fn (): ?string => ! blank($this->download) && is_numeric($this->download)
+            get: fn (): ?int => ! blank($this->download) && is_numeric($this->download)
                 ? number_format(num: $this->download * 8, decimals: 0, thousands_separator: '')
                 : null,
         );
@@ -207,7 +207,7 @@ class Result extends Model
     protected function uploadBits(): Attribute
     {
         return Attribute::make(
-            get: fn (): ?string => ! blank($this->upload) && is_numeric($this->upload)
+            get: fn (): ?int => ! blank($this->upload) && is_numeric($this->upload)
                 ? number_format(num: $this->upload * 8, decimals: 0, thousands_separator: '')
                 : null,
         );
