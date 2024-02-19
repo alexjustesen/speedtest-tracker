@@ -251,7 +251,9 @@ class ResultResource extends Resource
                     ->modalDescription(new HtmlString('<p>v0.16.0 archived the old <code>"results"</code> table, to migrate your history click the button below.</p><p>For more information read the <a href="#" target="_blank" rel="nofollow" class="underline">docs</a>.</p>'))
                     ->modalSubmitActionLabel('Yes, migrate it'),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->paginated([5, 15, 25, 50, 100])
+            ->defaultPaginationPageOption(15);
     }
 
     public static function getPages(): array
