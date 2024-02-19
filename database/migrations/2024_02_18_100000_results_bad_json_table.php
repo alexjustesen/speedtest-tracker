@@ -17,7 +17,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (! Schema::hasTable('results') && ! Schema::hasTable('results_bad_json')) {
+        if (! Schema::hasTable('results_bad_json')) {
             if (Schema::hasTable('results')) {
                 /**
                  * Rename the existing table so that a backup copy exists.
@@ -25,7 +25,7 @@ return new class extends Migration
                 Schema::rename('results', 'results_bad_json');
             }
 
-            if (! Schema::hasTable('results')) {
+            if (! Schema::hasTable('results') && Schema::hasTable('results_bad_json')) {
                 /**
                  * Create a new results table based on a new DDL schema.
                  */
