@@ -2,12 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Enums\ResultStatus;
 use App\Models\Result;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -50,28 +52,25 @@ class ExecSpeedtest implements ShouldQueue
             $message = collect(array_filter($messages, 'json_validate'))->last();
 
             Result::create([
-                'scheduled' => $this->scheduled,
-                'successful' => false,
                 'data' => $message,
+                'status' => ResultStatus::Failed,
+                'scheduled' => $this->scheduled,
             ]);
 
             return;
         }
 
         try {
-            $output = $process->getOutput();
-            $results = json_decode($output, true);
+            $results = json_decode($process->getOutput(), true);
 
             Result::create([
-                'ping' => $results['ping']['latency'],
-                'download' => $results['download']['bandwidth'],
-                'upload' => $results['upload']['bandwidth'],
-                'server_id' => $results['server']['id'],
-                'server_name' => $results['server']['name'],
-                'server_host' => $results['server']['host'].':'.$results['server']['port'],
-                'url' => $results['result']['url'],
+                'service' => 'ookla',
+                'ping' => Arr::get($results, 'ping.latency'),
+                'download' => Arr::get($results, 'download.bandwidth'),
+                'upload' => Arr::get($results, 'upload.bandwidth'),
+                'data' => $results,
+                'status' => ResultStatus::Completed,
                 'scheduled' => $this->scheduled,
-                'data' => $output,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

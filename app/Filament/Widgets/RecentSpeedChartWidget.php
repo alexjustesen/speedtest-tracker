@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\ResultStatus;
 use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
@@ -37,6 +38,7 @@ class RecentSpeedChartWidget extends ChartWidget
 
         $results = Result::query()
             ->select(['id', 'download', 'upload', 'created_at'])
+            ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
             })

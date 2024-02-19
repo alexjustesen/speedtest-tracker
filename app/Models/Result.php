@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ResultStatus;
 use App\Events\ResultCreated;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,30 +14,11 @@ class Result extends Model
     use HasFactory;
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
-
-    /**
-     * The attributes that are mass assignable.
+     * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'ping',
-        'download',
-        'upload',
-        'server_id',
-        'server_host',
-        'server_name',
-        'url',
-        'comments',
-        'scheduled',
-        'successful',
-        'data',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be cast.
@@ -44,10 +26,9 @@ class Result extends Model
      * @var array
      */
     protected $casts = [
-        'scheduled' => 'boolean',
-        'successful' => 'boolean',
         'data' => 'array',
-        'created_at' => 'datetime',
+        'status' => ResultStatus::class,
+        'scheduled' => 'boolean',
     ];
 
     /**
@@ -76,35 +57,22 @@ class Result extends Model
      */
     public function formatForInfluxDB2()
     {
-        $data = json_decode($this->data, true);
-
         return [
             'id' => $this->id,
             'ping' => $this?->ping,
             'download' => $this?->download,
             'upload' => $this?->upload,
-            'download_bits' => $this->download ? $this->download * 8 : null,
-            'upload_bits' => $this->upload ? $this->upload * 8 : null,
-            'ping_jitter' => Arr::get($data, 'ping.jitter'),
-            'download_jitter' => Arr::get($data, 'download.latency.jitter'),
-            'upload_jitter' => Arr::get($data, 'upload.latency.jitter'),
+            'download_bits' => $this->download_bits,
+            'upload_bits' => $this->upload_bits,
+            'ping_jitter' => $this->ping_jitter,
+            'download_jitter' => $this->download_jitter,
+            'upload_jitter' => $this->upload_jitter,
             'server_id' => $this?->server_id,
             'server_host' => $this?->server_host,
             'server_name' => $this?->server_name,
             'scheduled' => $this->scheduled,
-            'successful' => $this->successful,
-            'packet_loss' => (float) Arr::get($data, 'packetLoss', 0),
-        ];
-    }
-
-    public function getJitterData(): array
-    {
-        $data = json_decode($this->data, true);
-
-        return [
-            'download' => Arr::get($data, 'download.latency.jitter'),
-            'upload' => Arr::get($data, 'upload.latency.jitter'),
-            'ping' => Arr::get($data, 'ping.jitter'),
+            'successful' => $this->status === ResultStatus::Completed,
+            'packet_loss' => (float) $this->packet_loss,
         ];
     }
 
@@ -114,9 +82,99 @@ class Result extends Model
     protected function downloadBits(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value): ?string => ! blank($this->download) && is_numeric($this->download)
+            get: fn (): ?string => ! blank($this->download) && is_numeric($this->download)
                 ? number_format(num: $this->download * 8, decimals: 0, thousands_separator: '')
                 : null,
+        );
+    }
+
+    /**
+     * Get the result's download jitter in milliseconds.
+     */
+    protected function downloadJitter(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'download.latency.jitter'),
+        );
+    }
+
+    /**
+     * Get the result's external ip address (yours).
+     */
+    protected function ipAddress(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'interface.externalIp'),
+        );
+    }
+
+    /**
+     * Get the result's isp tied to the external (yours) ip address.
+     */
+    protected function isp(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'isp'),
+        );
+    }
+
+    /**
+     * Get the result's packet loss as a percentage.
+     */
+    protected function packetLoss(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'packetLoss'),
+        );
+    }
+
+    /**
+     * Get the result's ping jitter in milliseconds.
+     */
+    protected function pingJitter(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'ping.jitter'),
+        );
+    }
+
+    /**
+     * Get the result's server ID.
+     */
+    protected function resultUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'result.url'),
+        );
+    }
+
+    /**
+     * Get the result's server host.
+     */
+    protected function serverHost(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'server.host'),
+        );
+    }
+
+    /**
+     * Get the result's server ID.
+     */
+    protected function serverId(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'server.id'),
+        );
+    }
+
+    /**
+     * Get the result's server name.
+     */
+    protected function serverName(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'server.name'),
         );
     }
 
@@ -126,9 +184,19 @@ class Result extends Model
     protected function uploadBits(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value): ?string => ! blank($this->upload) && is_numeric($this->upload)
+            get: fn (): ?string => ! blank($this->upload) && is_numeric($this->upload)
                 ? number_format(num: $this->upload * 8, decimals: 0, thousands_separator: '')
                 : null,
+        );
+    }
+
+    /**
+     * Get the result's upload jitter in milliseconds.
+     */
+    protected function uploadJitter(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'upload.latency.jitter'),
         );
     }
 }
