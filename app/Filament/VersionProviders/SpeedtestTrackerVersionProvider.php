@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Filament\VersionProviders;
+
 use App\Services\SystemChecker;
 use Awcodes\FilamentVersions\Providers\Contracts\VersionProvider;
 

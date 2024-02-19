@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\VersionProviders\SpeedtestTrackerVersionProvider;
 use Awcodes\FilamentVersions\VersionsPlugin;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -19,7 +20,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use SpeedtestTrackerVersionProvider;
 
 class AdminPanelProvider extends PanelProvider
 {
