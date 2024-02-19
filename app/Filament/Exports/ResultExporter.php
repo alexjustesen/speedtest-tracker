@@ -49,7 +49,7 @@ class ResultExporter extends Exporter
                 }),
             ExportColumn::make('upload')
                 ->state(function (Result $record): ?string {
-                    return $record->download_bits;
+                    return $record->upload_bits;
                 }),
             ExportColumn::make('ping'),
             ExportColumn::make('download_jitter')
