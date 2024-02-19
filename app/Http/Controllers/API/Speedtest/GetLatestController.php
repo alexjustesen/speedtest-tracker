@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Speedtest;
 
+use App\Enums\ResultStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Result;
 use Illuminate\Http\JsonResponse;
@@ -10,12 +11,11 @@ class GetLatestController extends Controller
 {
     /**
      * Handle the incoming request.
-     *
-     * TODO: fix it
      */
     public function __invoke(): JsonResponse
     {
         $latest = Result::query()
+            ->whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
             ->latest()
             ->first();
 
@@ -30,16 +30,16 @@ class GetLatestController extends Controller
             'data' => [
                 'id' => $latest->id,
                 'ping' => $latest->ping,
-                'download' => ! blank($latest->download) ? toBits(convertSize($latest->download)) : null,
-                'upload' => ! blank($latest->upload) ? toBits(convertSize($latest->upload)) : null,
+                'download' => $latest->download_bits,
+                'upload' => $latest->upload_bits,
                 'server_id' => $latest->server_id,
                 'server_host' => $latest->server_host,
                 'server_name' => $latest->server_name,
-                'url' => $latest->url,
+                'url' => $latest->result_url,
                 'scheduled' => $latest->scheduled,
-                'failed' => ! $latest->successful,
+                'failed' => $latest->status === ResultStatus::Failed,
                 'created_at' => $latest->created_at->toISOString(true),
-                'updated_at' => $latest->created_at->toISOString(true), // faking updated at to match legacy api payload
+                'updated_at' => $latest->updated_at->toISOString(true),
             ],
         ]);
     }
