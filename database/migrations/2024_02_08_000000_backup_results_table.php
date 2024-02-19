@@ -35,7 +35,7 @@ return new class extends Migration
                 $table->unsignedBigInteger('upload')->nullable();
                 $table->text('comments')->nullable();
                 $table->json('data')->nullable();
-                $table->string('status')->default('pending');
+                $table->string('status');
                 $table->boolean('scheduled')->default(false);
                 $table->timestamps();
             });
