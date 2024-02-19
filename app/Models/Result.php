@@ -112,6 +112,16 @@ class Result extends Model
     }
 
     /**
+     * Get the result's download jitter in milliseconds.
+     */
+    protected function errorMessage(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'message', ''),
+        );
+    }
+
+    /**
      * Get the result's external ip address (yours).
      */
     protected function ipAddress(): Attribute
