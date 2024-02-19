@@ -132,10 +132,10 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('download')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::fileSizeBits(bits: $record->download, precision: 2, perSecond: true) : null)
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::fileSizeBits(bits: $record->download_bits, precision: 2, perSecond: true) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('upload')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload, precision: 2, perSecond: true) : null)
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload_bits, precision: 2, perSecond: true) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ping')
                     ->toggleable()
