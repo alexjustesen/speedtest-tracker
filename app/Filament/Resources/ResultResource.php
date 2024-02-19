@@ -74,6 +74,11 @@ class ResultResource extends Resource
                                 ->label('Upload Jitter (Ms)'),
                             Forms\Components\TextInput::make('data.ping.jitter')
                                 ->label('Ping Jitter (Ms)'),
+                            Forms\Components\Textarea::make('data.message')
+                                ->label('Error Message')
+                                ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))
+                                ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Failed)
+                                ->columnSpanFull(),
                         ])
                         ->columnSpan(2),
                     Forms\Components\Section::make()
@@ -81,13 +86,13 @@ class ResultResource extends Resource
                             Forms\Components\Placeholder::make('service')
                                 ->content(fn (Result $result): string => $result->service),
                             Forms\Components\Placeholder::make('server_name')
-                                ->content(fn (Result $result): string => $result->server_name),
+                                ->content(fn (Result $result): ?string => $result->server_name),
                             Forms\Components\Placeholder::make('server_id')
                                 ->label('Server ID')
-                                ->content(fn (Result $result): string => $result->server_id),
+                                ->content(fn (Result $result): ?string => $result->server_id),
                             Forms\Components\Placeholder::make('server_host')
                                 ->label('Server ID')
-                                ->content(fn (Result $result): string => $result->server_id),
+                                ->content(fn (Result $result): ?string => $result->server_id),
                             Forms\Components\Checkbox::make('scheduled'),
                         ])
                         ->columns(1)
@@ -176,6 +181,7 @@ class ResultResource extends Resource
                     ->options(function (): array {
                         return Result::query()
                             ->select('data->interface->externalIp AS public_ip_address')
+                            ->where('status', '=', ResultStatus::Completed)
                             ->distinct()
                             ->get()
                             ->mapWithKeys(function (Result $item, int $key) {

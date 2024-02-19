@@ -52,7 +52,8 @@ class ExecSpeedtest implements ShouldQueue
             $message = collect(array_filter($messages, 'json_validate'))->last();
 
             Result::create([
-                'data' => $message,
+                'service' => 'ookla',
+                'data' => json_decode($message, true),
                 'status' => ResultStatus::Failed,
                 'scheduled' => $this->scheduled,
             ]);
