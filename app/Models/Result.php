@@ -42,8 +42,6 @@ class Result extends Model
 
     /**
      * The tag attributes to be passed to influxdb
-     *
-     * TODO: get values from data attribute
      */
     public function formatTagsForInfluxDB2(): array
     {
@@ -56,8 +54,6 @@ class Result extends Model
 
     /**
      * The attributes to be passed to influxdb
-     *
-     * TODO: get server values from data attribute
      */
     public function formatForInfluxDB2()
     {
@@ -66,8 +62,8 @@ class Result extends Model
             'ping' => $this?->ping,
             'download' => $this?->download,
             'upload' => $this?->upload,
-            'download_bits' => $this->download ? $this->download * 8 : null,
-            'upload_bits' => $this->upload ? $this->upload * 8 : null,
+            'download_bits' => $this->download_bits,
+            'upload_bits' => $this->upload_bits,
             'ping_jitter' => $this->ping_jitter,
             'download_jitter' => $this->download_jitter,
             'upload_jitter' => $this->upload_jitter,
@@ -75,7 +71,7 @@ class Result extends Model
             'server_host' => $this?->server_host,
             'server_name' => $this?->server_name,
             'scheduled' => $this->scheduled,
-            'successful' => $this->successful,
+            'successful' => $this->status === ResultStatus::Completed,
             'packet_loss' => (float) $this->packet_loss,
         ];
     }
