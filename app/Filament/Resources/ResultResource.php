@@ -57,17 +57,6 @@ class ResultResource extends Resource
                                     $component->state(Carbon::parse($state)->format($settings->time_format ?? 'M j, Y G:i:s'));
                                 })
                                 ->columnSpan(2),
-                            Forms\Components\TextInput::make('server_id')
-                                ->label('Server ID'),
-                            Forms\Components\TextInput::make('server_name')
-                                ->label('Server name')
-                                ->columnSpan(2),
-                            Forms\Components\TextInput::make('server_host')
-                                ->label('Server host')
-                                ->columnSpan([
-                                    'default' => 2,
-                                    'md' => 3,
-                                ]),
                             Forms\Components\TextInput::make('download')
                                 ->label('Download (Mbps)')
                                 ->afterStateHydrated(function (TextInput $component, $state) {
@@ -90,6 +79,16 @@ class ResultResource extends Resource
                         ->columnSpan(2),
                     Forms\Components\Section::make()
                         ->schema([
+                            Forms\Components\Placeholder::make('service')
+                                ->content(fn (Result $result): string => $result->service),
+                            Forms\Components\Placeholder::make('server_name')
+                                ->content(fn (Result $result): string => $result->server_name),
+                            Forms\Components\Placeholder::make('server_id')
+                                ->label('Server ID')
+                                ->content(fn (Result $result): string => $result->server_id),
+                            Forms\Components\Placeholder::make('server_host')
+                                ->label('Server ID')
+                                ->content(fn (Result $result): string => $result->server_id),
                             Forms\Components\Checkbox::make('scheduled'),
                         ])
                         ->columns(1)
@@ -112,6 +111,10 @@ class ResultResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ip_address')
                     ->label('IP address')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('service')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(),
@@ -144,10 +147,12 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
-                    ->toggleable(),
+                    ->toggleable()
+                    ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
                     ->boolean()
                     ->toggleable()
+                    ->toggledHiddenByDefault()
                     ->alignment(Alignment::Center),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
