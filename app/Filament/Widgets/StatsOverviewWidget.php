@@ -21,10 +21,11 @@ class StatsOverviewWidget extends BaseWidget
     {
         $this->result = Result::query()
             ->select(['id', 'ping', 'download', 'upload', 'status', 'created_at'])
+            ->where('status', '=', ResultStatus::Completed)
             ->latest()
             ->first();
 
-        if (blank($this->result) || $this->result->status !== ResultStatus::Completed) {
+        if (blank($this->result)) {
             return [
                 Stat::make('Latest download', '-')
                     ->icon('heroicon-o-arrow-down-tray'),
@@ -38,10 +39,11 @@ class StatsOverviewWidget extends BaseWidget
         $previous = Result::query()
             ->select(['id', 'ping', 'download', 'upload', 'status', 'created_at'])
             ->where('id', '<', $this->result->id)
+            ->where('status', '=', ResultStatus::Completed)
             ->latest()
             ->first();
 
-        if (! $previous || $previous->status !== ResultStatus::Completed) {
+        if (! $previous) {
             return [
                 Stat::make('Latest download', fn (): string => ! blank($this->result) ? Number::fileSizeBits(bits: $this->result->download_bits, precision: 2, perSecond: true) : 'n/a')
                     ->icon('heroicon-o-arrow-down-tray'),
