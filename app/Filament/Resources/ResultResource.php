@@ -9,6 +9,7 @@ use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
 use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
+use App\Settings\DataMigrationSettings;
 use App\Settings\GeneralSettings;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -102,6 +103,8 @@ class ResultResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $dataSettings = new DataMigrationSettings();
+
         $settings = new GeneralSettings();
 
         return $table
@@ -246,6 +249,7 @@ class ResultResource extends Resource
 
                         MigrateBadJsonResults::dispatch(Auth::user());
                     })
+                    ->hidden($dataSettings->bad_json_migrated)
                     ->requiresConfirmation()
                     ->modalHeading('Migrate History')
                     ->modalDescription(new HtmlString('<p>v0.16.0 archived the old <code>"results"</code> table, to migrate your history click the button below.</p><p>For more information read the <a href="#" target="_blank" rel="nofollow" class="underline">docs</a>.</p>'))

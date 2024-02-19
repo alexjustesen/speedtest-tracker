@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Enums\ResultStatus;
 use App\Models\User;
+use App\Settings\DataMigrationSettings;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +21,19 @@ class MigrateBadJsonResults
 
     public function handle(User $user)
     {
+        $dataSettings = new DataMigrationSettings();
+
         $tableName = 'results_bad_json';
+
+        if ($dataSettings->bad_json_migrated) {
+            Notification::make()
+                ->title('❌ Hmmm it seems someone has already migrated the data!')
+                ->body('Check your results table and make sure you\'re not triggering a duplicate data migration.')
+                ->danger()
+                ->sendToDatabase($user);
+
+            return;
+        }
 
         if (! Schema::hasTable('results')) {
             Notification::make()
@@ -78,6 +91,10 @@ class MigrateBadJsonResults
 
             return;
         }
+
+        $dataSettings->bad_json_migrated = true;
+
+        $dataSettings->save();
 
         Notification::make()
             ->title('Data migration completed!')

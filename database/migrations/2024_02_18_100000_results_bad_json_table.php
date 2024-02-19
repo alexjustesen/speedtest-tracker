@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Settings\DataMigrationSettings;
 use App\Settings\GeneralSettings;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
@@ -45,6 +46,12 @@ return new class extends Migration
          * Don't disable the schedule or send a notification if there are no records.
          */
         if (! DB::table('results_bad_json')->count()) {
+            $dataSettings = new DataMigrationSettings();
+
+            $dataSettings->bad_json_migrated = true;
+
+            $dataSettings->save();
+
             return;
         }
 
