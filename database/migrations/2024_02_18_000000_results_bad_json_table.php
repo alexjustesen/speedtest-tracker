@@ -20,7 +20,7 @@ return new class extends Migration
             /**
              * Rename the existing table so that a backup copy exists.
              */
-            Schema::rename('results', 'results_bak_bad_json');
+            Schema::rename('results', 'results_bad_json');
         }
 
         if (! Schema::hasTable('results')) {
@@ -44,7 +44,7 @@ return new class extends Migration
         /**
          * Don't disable the schedule or send a notification if there are no records.
          */
-        if (! DB::table('results_bak_bad_json')->count()) {
+        if (! DB::table('results_bad_json')->count()) {
             return;
         }
 
@@ -81,7 +81,7 @@ return new class extends Migration
         Schema::drop('results');
 
         if (! Schema::hasTable('results')) {
-            Schema::rename('results_bak_bad_json', 'results');
+            Schema::rename('results_bad_json', 'results');
         }
     }
 };

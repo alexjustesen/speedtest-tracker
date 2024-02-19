@@ -20,7 +20,7 @@ class MigrateBadJsonResults
 
     public function handle(User $user)
     {
-        $tableName = 'results_bak_bad_json';
+        $tableName = 'results_bad_json';
 
         if (! Schema::hasTable('results')) {
             Notification::make()
@@ -32,7 +32,7 @@ class MigrateBadJsonResults
             return;
         }
 
-        if (! Schema::hasTable('results_bak_bad_json')) {
+        if (! Schema::hasTable($tableName)) {
             Notification::make()
                 ->title('❌ Could not migrate bad json results!')
                 ->body('The "results_bak_bad_json" table is missing.')
