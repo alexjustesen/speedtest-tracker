@@ -33,6 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->favicon(asset('img/speedtest-tracker-icon.png'))
             ->font(
                 'Inter',
                 url: asset('fonts/inter/inter.css'),
