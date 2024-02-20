@@ -220,6 +220,55 @@ class AbsoluteListener implements ShouldQueue
     }
 
     /**
+     * Handle Discord notifications.
+     */
+
+    protected function sendDiscordNotification(ResultCreated $event): void
+    {
+    if ($this->notificationSettings->discord_enabled) {
+        $failedThresholds = []; // Initialize an array to keep track of failed thresholds
+    
+        // Check Download threshold
+        if ($this->thresholdSettings->absolute_download > 0 && absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->downloadBits)) {
+            $failedThresholds[] = 'Download';
+        }
+    
+        // Check Upload threshold
+        if ($this->thresholdSettings->absolute_upload > 0 && absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->uploadBits)) {
+            $failedThresholds[] = 'Upload';
+        }
+    
+        // Check Ping threshold
+        if ($this->thresholdSettings->absolute_ping > 0 && absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
+            $failedThresholds[] = 'Ping';
+        }
+    
+        // Proceed with sending notifications only if there are any failed thresholds
+        if (count($failedThresholds) > 0) {
+            if ($this->notificationSettings->discord_on_threshold_failure && count($this->notificationSettings->discord_webhooks)) {
+                foreach ($this->notificationSettings->discord_webhooks as $webhook) {
+                    // Construct the payload with the failed thresholds information
+                    $contentLines = [
+                        'There are new speedtest results for your network.',
+                        "Result ID: " . $event->result->id,
+                        "Site Name: " . $this->generalSettings->site_name
+                    ];
+                    foreach ($failedThresholds as $metric) {
+                        $contentLines[] = "{$metric} threshold failed.";
+                    }
+                    $payload = [
+                        'content' => 'Testing Threshold Run',
+                    ];
+    
+                    // Send the request using Laravel's HTTP client
+                    $response = Http::post($webhook['discord_webhook_url'], $payload);
+                }
+            }
+        }
+    }
+}
+
+    /**
      * Handle webhook notifications.
      *
      * TODO: refactor
