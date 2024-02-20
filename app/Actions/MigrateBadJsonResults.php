@@ -70,6 +70,7 @@ class MigrateBadJsonResults
                         'data' => json_decode($result->data),
                         'status' => match ($result->successful) {
                             1 => ResultStatus::Completed,
+                            true => ResultStatus::Completed,
                             default => ResultStatus::Failed,
                         },
                         'scheduled' => $result->scheduled,
