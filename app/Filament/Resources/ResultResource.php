@@ -64,7 +64,7 @@ class ResultResource extends Resource
                             Forms\Components\TextInput::make('upload')
                                 ->label('Upload')
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
-                                    $component->state(! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload_bits, precision: 2, perSecond: true): '');
+                                    $component->state(! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload_bits, precision: 2, perSecond: true) : '');
                                 }),
                             Forms\Components\TextInput::make('ping')
                                 ->label('Ping (Ms)'),
