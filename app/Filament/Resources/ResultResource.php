@@ -181,6 +181,7 @@ class ResultResource extends Resource
                     ->options(function (): array {
                         return Result::query()
                             ->select('data->interface->externalIp AS public_ip_address')
+                            ->whereNotNull('data->interface->externalIp')
                             ->where('status', '=', ResultStatus::Completed)
                             ->distinct()
                             ->get()
