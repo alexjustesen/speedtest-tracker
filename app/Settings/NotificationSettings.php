@@ -38,6 +38,14 @@ class NotificationSettings extends Settings
 
     public ?array $webhook_urls;
 
+    public bool $discord_enabled;
+
+    public bool $discord_on_speedtest_run;
+
+    public bool $discord_on_threshold_failure;
+
+    public ?array $discord_webhooks;
+
     public static function group(): string
     {
         return 'notification';

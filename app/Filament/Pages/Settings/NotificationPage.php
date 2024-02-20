@@ -6,6 +6,7 @@ use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
+use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Settings\NotificationSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -167,6 +168,48 @@ class NotificationPage extends SettingsPage
                                                         ->label('Test Telegram channel')
                                                         ->action(fn (Forms\Get $get) => SendTelegramTestNotification::run(recipients: $get('telegram_recipients')))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('telegram_recipients')) || blank(config('telegram.bot'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+                                
+                                Forms\Components\Section::make('Discord')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('discord_enabled')
+                                            ->label('Enable Discord webhook notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('discord_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('discord_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('discord_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('discord_webhooks')
+                                                    ->label('Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('discord_webhook_url')
+                                                            ->label('Webhook URL')
+                                                            ->required(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test discord')
+                                                        ->label('Test Discord webhook')
+                                                        ->action(fn (Forms\Get $get) => SendDiscordTestNotification::run(webhooks: $get('discord_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => !count($get('discord_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
