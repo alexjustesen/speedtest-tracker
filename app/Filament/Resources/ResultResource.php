@@ -57,14 +57,14 @@ class ResultResource extends Resource
                                 })
                                 ->columnSpan(2),
                             Forms\Components\TextInput::make('download')
-                                ->label('Download (Mbps)')
-                                ->afterStateHydrated(function (TextInput $component, $state) {
-                                    $component->state(! blank($state) ? toBits(convertSize($state), 4) : '');
+                                ->label('Download')
+                                ->afterStateHydrated(function (TextInput $component, Result $record) {
+                                    $component->state(! blank($record->download) ? Number::fileSizeBits(bits: $record->download_bits, precision: 2, perSecond: true) : '');
                                 }),
                             Forms\Components\TextInput::make('upload')
-                                ->label('Upload (Mbps)')
-                                ->afterStateHydrated(function (TextInput $component, $state) {
-                                    $component->state(! blank($state) ? toBits(convertSize($state), 4) : '');
+                                ->label('Upload')
+                                ->afterStateHydrated(function (TextInput $component, Result $record) {
+                                    $component->state(! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload_bits, precision: 2, perSecond: true) : '');
                                 }),
                             Forms\Components\TextInput::make('ping')
                                 ->label('Ping (Ms)'),
