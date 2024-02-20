@@ -85,8 +85,8 @@ class SpeedtestCompletedListener
                                      "\nResult ID: " . $event->result->id .
                                      "\nSite Name: " . $this->generalSettings->site_name .
                                      "\nPing: " . $event->result->ping . " ms" .
-                                     "\nDownload: " . ($event->result->downloadBits / 1000000) . " Mbits" .
-                                     "\nUpload: " . ($event->result->uploadBits / 1000000) . " Mbits",
+                                     "\nDownload: " . ($event->result->downloadBits / 1000000) . ' (Mbps)' .
+                                     "\nUpload: " . ($event->result->uploadBits / 1000000) . ' (Mbps)',
                     ];
         
                     // Send the request using Laravel's HTTP client
