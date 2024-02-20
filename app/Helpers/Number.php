@@ -16,8 +16,8 @@ class Number extends SupportNumber
             default => ['B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb']
         };
 
-        for ($i = 0; ($bits / 1024) > 0.9 && ($i < count($units) - 1); $i++) {
-            $bits /= 1024;
+        for ($i = 0; ($bits / 1000) > 0.9 && ($i < count($units) - 1); $i++) {
+            $bits /= 1000;
         }
 
         return sprintf('%s %s', static::format($bits, $precision, $maxPrecision), $units[$i]);
