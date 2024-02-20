@@ -78,7 +78,7 @@ class ThresholdsPage extends SettingsPage
                                                             ->required(),
                                                         Forms\Components\TextInput::make('absolute_ping')
                                                             ->label('Ping')
-                                                            ->hint('Ms')
+                                                            ->hint('ms')
                                                             ->helperText('Set to zero to disable this metric.')
                                                             ->default(0)
                                                             ->minValue(0)

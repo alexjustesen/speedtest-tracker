@@ -67,13 +67,13 @@ class ResultResource extends Resource
                                     $component->state(! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload_bits, precision: 2, perSecond: true) : '');
                                 }),
                             Forms\Components\TextInput::make('ping')
-                                ->label('Ping (Ms)'),
+                                ->label('Ping (ms)'),
                             Forms\Components\TextInput::make('data.download.latency.jitter')
-                                ->label('Download Jitter (Ms)'),
+                                ->label('Download Jitter (ms)'),
                             Forms\Components\TextInput::make('data.upload.latency.jitter')
-                                ->label('Upload Jitter (Ms)'),
+                                ->label('Upload Jitter (ms)'),
                             Forms\Components\TextInput::make('data.ping.jitter')
-                                ->label('Ping Jitter (Ms)'),
+                                ->label('Ping Jitter (ms)'),
                             Forms\Components\Textarea::make('data.message')
                                 ->label('Error Message')
                                 ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))

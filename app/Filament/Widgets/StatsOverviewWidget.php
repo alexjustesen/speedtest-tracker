@@ -49,7 +49,7 @@ class StatsOverviewWidget extends BaseWidget
                     ->icon('heroicon-o-arrow-down-tray'),
                 Stat::make('Latest upload', fn (): string => ! blank($this->result) ? Number::fileSizeBits(bits: $this->result->upload_bits, precision: 2, perSecond: true) : 'n/a')
                     ->icon('heroicon-o-arrow-up-tray'),
-                Stat::make('Latest ping', fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' Ms' : 'n/a')
+                Stat::make('Latest ping', fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
                     ->icon('heroicon-o-clock'),
             ];
         }
@@ -69,7 +69,7 @@ class StatsOverviewWidget extends BaseWidget
                 ->description($uploadChange > 0 ? $uploadChange.'% faster' : abs($uploadChange).'% slower')
                 ->descriptionIcon($uploadChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($uploadChange > 0 ? 'success' : 'danger'),
-            Stat::make('Latest ping', fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' Ms' : 'n/a')
+            Stat::make('Latest ping', fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
                 ->icon('heroicon-o-clock')
                 ->description($pingChange > 0 ? $pingChange.'% slower' : abs($pingChange).'% faster')
                 ->descriptionIcon($pingChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
