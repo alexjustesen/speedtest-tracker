@@ -67,6 +67,7 @@ class AbsoluteListener implements ShouldQueue
         if ($this->notificationSettings->discord_enabled == true && $this->notificationSettings->discord_on_threshold_failure == true) {
             $this->discordChannel($event);
         }
+
         // Webhook notification channel
         if ($this->notificationSettings->webhook_enabled == true && $this->notificationSettings->webhook_on_threshold_failure == true) {
             $this->webhookChannel($event);
@@ -226,50 +227,51 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle Discord notifications.
      */
-
     protected function discordChannel(ResultCreated $event): void
     {
-    if ($this->notificationSettings->discord_enabled) {
-        $failedThresholds = []; // Initialize an array to keep track of failed thresholds
-    
-        // Check Download threshold
-        if ($this->thresholdSettings->absolute_download > 0 && absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->downloadBits)) {
-            $failedThresholds['Download'] = ($event->result->downloadBits / 1000000) . ' (Mbps)';
-        }
-    
-        // Check Upload threshold
-        if ($this->thresholdSettings->absolute_upload > 0 && absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->uploadBits)) {
-            $failedThresholds['Upload'] = ($event->result->uploadBits / 1000000) . ' (Mbps)';
-        }
-    
-        // Check Ping threshold
-        if ($this->thresholdSettings->absolute_ping > 0 && absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
-            $failedThresholds['Ping'] = $event->result->ping . " ms";
-        }
-    
-        // Proceed with sending notifications only if there are any failed thresholds
-        if (count($failedThresholds) > 0) {
-            if ($this->notificationSettings->discord_on_threshold_failure && count($this->notificationSettings->discord_webhooks)) {
-                foreach ($this->notificationSettings->discord_webhooks as $webhook) {
-                    // Construct the payload with the failed thresholds information
-                    $contentLines = [
-                        "Result ID: " . $event->result->id,
-                        "Site Name: " . $this->generalSettings->site_name
-                    ];
-                    foreach ($failedThresholds as $metric => $result) {
-                        $contentLines[] = "{$metric} threshold failed with result: {$result}.";
+        if ($this->notificationSettings->discord_enabled) {
+            $failedThresholds = []; // Initialize an array to keep track of failed thresholds
+
+            // Check Download threshold
+            if ($this->thresholdSettings->absolute_download > 0 && absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->downloadBits)) {
+                $failedThresholds['Download'] = ($event->result->downloadBits / 1000000).' (Mbps)';
+            }
+
+            // Check Upload threshold
+            if ($this->thresholdSettings->absolute_upload > 0 && absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->uploadBits)) {
+                $failedThresholds['Upload'] = ($event->result->uploadBits / 1000000).' (Mbps)';
+            }
+
+            // Check Ping threshold
+            if ($this->thresholdSettings->absolute_ping > 0 && absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
+                $failedThresholds['Ping'] = $event->result->ping.' ms';
+            }
+
+            // Proceed with sending notifications only if there are any failed thresholds
+            if (count($failedThresholds) > 0) {
+                if ($this->notificationSettings->discord_on_threshold_failure && count($this->notificationSettings->discord_webhooks)) {
+                    foreach ($this->notificationSettings->discord_webhooks as $webhook) {
+                        // Construct the payload with the failed thresholds information
+                        $contentLines = [
+                            'Result ID: '.$event->result->id,
+                            'Site Name: '.$this->generalSettings->site_name,
+                        ];
+
+                        foreach ($failedThresholds as $metric => $result) {
+                            $contentLines[] = "{$metric} threshold failed with result: {$result}.";
+                        }
+
+                        $payload = [
+                            'content' => implode("\n", $contentLines),
+                        ];
+
+                        // Send the request using Laravel's HTTP client
+                        $response = Http::post($webhook['discord_webhook_url'], $payload);
                     }
-                    $payload = [
-                        'content' => implode("\n", $contentLines),
-                    ];
-    
-                    // Send the request using Laravel's HTTP client
-                    $response = Http::post($webhook['discord_webhook_url'], $payload);
                 }
             }
         }
     }
-}
 
     /**
      * Handle webhook notifications.

@@ -3,8 +3,8 @@
 namespace App\Actions\Notifications;
 
 use Filament\Notifications\Notification;
-use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Support\Facades\Http;
+use Lorisleiva\Actions\Concerns\AsAction;
 
 class SendDiscordTestNotification
 {
@@ -25,7 +25,6 @@ class SendDiscordTestNotification
             $payload = [
                 'content' => '👋 Testing the Webhook notification channel.',
             ];
-
             // Send the request using Laravel's HTTP client
             $response = Http::post($webhook['discord_webhook_url'], $payload);
         }
