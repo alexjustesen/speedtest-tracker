@@ -59,12 +59,12 @@ class ResultResource extends Resource
                             Forms\Components\TextInput::make('download')
                                 ->label('Download')
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
-                                    $component->state(! blank($record->download) ? Number::fileSizeBits(bits: $record->download_bits, precision: 2, perSecond: true) : '');
+                                    $component->state(! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : '');
                                 }),
                             Forms\Components\TextInput::make('upload')
                                 ->label('Upload')
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
-                                    $component->state(! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload_bits, precision: 2, perSecond: true) : '');
+                                    $component->state(! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : '');
                                 }),
                             Forms\Components\TextInput::make('ping')
                                 ->label('Ping (ms)'),
@@ -132,10 +132,10 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('download')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::fileSizeBits(bits: $record->download_bits, precision: 2, perSecond: true) : null)
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('upload')
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::fileSizeBits(bits: $record->upload_bits, precision: 2, perSecond: true) : null)
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ping')
                     ->toggleable()
