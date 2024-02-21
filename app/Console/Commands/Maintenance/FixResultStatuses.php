@@ -63,7 +63,7 @@ class FixResultStatuses extends Command
                 'status' => ResultStatus::Failed,
             ]);
 
-        $this->line("✅ finished!");
+        $this->line('✅ finished!');
 
         return Command::SUCCESS;
     }
