@@ -48,6 +48,7 @@ class RecentSpeedChartWidget extends ChartWidget
             ->when($this->filter == 'month', function ($query) {
                 $query->where('created_at', '>=', now()->subMonth());
             })
+            ->latest()
             ->get();
 
         return [
