@@ -48,7 +48,7 @@ class RecentJitterChartWidget extends ChartWidget
             ->when($this->filter == 'month', function ($query) {
                 $query->where('created_at', '>=', now()->subMonth());
             })
-            ->latest()
+            ->orderBy('created_at')
             ->get();
 
         return [
