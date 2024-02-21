@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 /**
- * This route provides backwards compatibility https://github.com/henrywhitaker3/Speedtest-Tracker
+ * This route provides backwards compatibility from https://github.com/henrywhitaker3/Speedtest-Tracker
  * for Homepage and Organizr dashboards which expects the returned
  * download and upload values in mbits.
  */
