@@ -18,7 +18,7 @@ jobs:
       - name: "duster"
         uses: tighten/duster-action@v2
         with:
-          args: lint --using=pint
+          args: lint --using=pint -v
 
   test:
     needs: [lint] # needs lint job to pass first
