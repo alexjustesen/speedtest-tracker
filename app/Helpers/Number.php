@@ -23,7 +23,7 @@ class Number extends SupportNumber
             default => $bits,
         };
 
-        return static::format($value, $precision);
+        return round(num: $value, precision: $precision);
     }
 
     /**
