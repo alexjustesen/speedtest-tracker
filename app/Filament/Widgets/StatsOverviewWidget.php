@@ -45,9 +45,9 @@ class StatsOverviewWidget extends BaseWidget
 
         if (! $previous) {
             return [
-                Stat::make('Latest download', fn (): string => ! blank($this->result) ? Number::fileSizeBits(bits: $this->result->download_bits, precision: 2, perSecond: true) : 'n/a')
+                Stat::make('Latest download', fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
                     ->icon('heroicon-o-arrow-down-tray'),
-                Stat::make('Latest upload', fn (): string => ! blank($this->result) ? Number::fileSizeBits(bits: $this->result->upload_bits, precision: 2, perSecond: true) : 'n/a')
+                Stat::make('Latest upload', fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
                     ->icon('heroicon-o-arrow-up-tray'),
                 Stat::make('Latest ping', fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
                     ->icon('heroicon-o-clock'),
@@ -59,12 +59,12 @@ class StatsOverviewWidget extends BaseWidget
         $pingChange = percentChange($this->result->ping, $previous->ping, 2);
 
         return [
-            Stat::make('Latest download', fn (): string => ! blank($this->result) ? Number::fileSizeBits(bits: $this->result->download_bits, precision: 2, perSecond: true) : 'n/a')
+            Stat::make('Latest download', fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->description($downloadChange > 0 ? $downloadChange.'% faster' : abs($downloadChange).'% slower')
                 ->descriptionIcon($downloadChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($downloadChange > 0 ? 'success' : 'danger'),
-            Stat::make('Latest upload', fn (): string => ! blank($this->result) ? Number::fileSizeBits(bits: $this->result->upload_bits, precision: 2, perSecond: true) : 'n/a')
+            Stat::make('Latest upload', fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->description($uploadChange > 0 ? $uploadChange.'% faster' : abs($uploadChange).'% slower')
                 ->descriptionIcon($uploadChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
