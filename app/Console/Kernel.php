@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\RunOoklaSpeedtest;
 use App\Console\Commands\SystemMaintenance;
 use App\Console\Commands\VersionChecker;
+use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Cron\CronExpression;
 use Illuminate\Console\Scheduling\Schedule;
@@ -18,6 +19,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $settings = new GeneralSettings();
+
+        /**
+         * Checks if Result model records should be pruned.
+         */
+        if ($settings->prune_results_older_than > 0) {
+            $schedule->command('model:prune', [
+                '--model' => [Result::class],
+            ])->daily();
+        }
 
         /**
          * Perform system maintenance weekly on Sunday morning,

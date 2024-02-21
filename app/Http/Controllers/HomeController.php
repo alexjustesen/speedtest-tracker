@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ResultStatus;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
@@ -20,7 +21,8 @@ class HomeController extends Controller
         }
 
         $latestResult = Result::query()
-            ->select(['id', 'ping', 'download', 'upload', 'successful', 'created_at'])
+            ->select(['id', 'ping', 'download', 'upload', 'status', 'created_at'])
+            ->where('status', '=', ResultStatus::Completed)
             ->latest()
             ->first();
 

@@ -150,8 +150,8 @@ class AbsoluteListener implements ShouldQueue
             if (absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
                 array_push($failedThresholds, [
                     'name' => 'Ping',
-                    'threshold' => $this->thresholdSettings->absolute_ping.' Ms',
-                    'value' => round($event->result->ping, 2).' Ms',
+                    'threshold' => $this->thresholdSettings->absolute_ping.' ms',
+                    'value' => round($event->result->ping, 2).' ms',
                 ]);
             }
         }
@@ -202,8 +202,8 @@ class AbsoluteListener implements ShouldQueue
             if (absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
                 array_push($failedThresholds, [
                     'name' => 'Ping',
-                    'threshold' => $this->thresholdSettings->absolute_ping.' Ms',
-                    'value' => round($event->result->ping, 2).' Ms',
+                    'threshold' => $this->thresholdSettings->absolute_ping.' ms',
+                    'value' => round($event->result->ping, 2).' ms',
                 ]);
             }
         }

@@ -92,6 +92,14 @@ class GeneralPage extends SettingsPage
                                     ->hint(new HtmlString('&#x1f517;<a href="https://crontab.cronhub.io/" target="_blank" rel="nofollow">Cron Generator</a>'))
                                     ->nullable()
                                     ->columnSpan(1),
+                                Forms\Components\TextInput::make('prune_results_older_than')
+                                    ->helperText('Set to zero to disable pruning.')
+                                    ->suffix('days')
+                                    ->numeric()
+                                    ->required()
+                                    ->minValue(0)
+                                    ->maxValue(9999)
+                                    ->columnSpan(1),
                                 Forms\Components\Select::make('speedtest_server')
                                     ->label('Speedtest servers')
                                     ->helperText('Leave empty to let the system pick the best server.')
@@ -102,7 +110,7 @@ class GeneralPage extends SettingsPage
                                     ->options(GetOoklaSpeedtestServers::run())
                                     ->getSearchResultsUsing(fn (string $search): array => $this->getServerSearchOptions($search))
                                     ->getOptionLabelsUsing(fn (array $values): array => $this->getServerLabels($values))
-                                    ->columnSpan('full'),
+                                    ->columnSpanFull(),
                             ])
                             ->compact()
                             ->columns([
