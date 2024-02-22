@@ -91,8 +91,7 @@ class ResultResource extends Resource
                                 ->label('Server ID')
                                 ->content(fn (Result $result): ?string => $result->server_id),
                             Forms\Components\Placeholder::make('server_host')
-                                ->label('Server ID')
-                                ->content(fn (Result $result): ?string => $result->server_id),
+                                ->content(fn (Result $result): ?string => $result->server_host),
                             Forms\Components\Checkbox::make('scheduled'),
                         ])
                         ->columns(1)
