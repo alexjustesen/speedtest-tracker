@@ -8,6 +8,7 @@ use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Telegram\TelegramNotification;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Spatie\WebhookServer\WebhookCall;
 
@@ -71,6 +72,24 @@ class SpeedtestCompletedListener
 
                     \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
                         ->notify(new TelegramNotification($message));
+                }
+            }
+        }
+
+        if ($this->notificationSettings->discord_enabled) {
+            if ($this->notificationSettings->discord_on_speedtest_run && count($this->notificationSettings->discord_webhooks)) {
+                foreach ($this->notificationSettings->discord_webhooks as $webhook) {
+                    // Construct the payload
+                    $payload = [
+                        'content' => 'There are new speedtest results for your network.'.
+                                        "\nResult ID: ".$event->result->id.
+                                        "\nSite Name: ".$this->generalSettings->site_name.
+                                        "\nPing: ".$event->result->ping.' ms'.
+                                        "\nDownload: ".($event->result->downloadBits / 1000000).' (Mbps)'.
+                                        "\nUpload: ".($event->result->uploadBits / 1000000).' (Mbps)',
+                    ];
+                    // Send the request using Laravel's HTTP client
+                    $response = Http::post($webhook['discord_webhook_url'], $payload);
                 }
             }
         }
