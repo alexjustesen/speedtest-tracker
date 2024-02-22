@@ -109,9 +109,10 @@ class NotificationPage extends SettingsPage
                                                 Forms\Components\Repeater::make('discord_webhooks')
                                                     ->label('Webhooks')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('discord_webhook_url')
-                                                            ->label('Webhook URL')
-                                                            ->required(),
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Forms\Components\Actions::make([
@@ -251,7 +252,7 @@ class NotificationPage extends SettingsPage
                                                 Forms\Components\Actions::make([
                                                     Forms\Components\Actions\Action::make('test webhook')
                                                         ->label('Test webhook channel')
-                                                        ->action(fn (Forms\Get $get) => SendWebhookTestNotification::run(urls: $get('webhook_urls')))
+                                                        ->action(fn (Forms\Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('webhook_urls'))),
                                                 ]),
                                             ]),
