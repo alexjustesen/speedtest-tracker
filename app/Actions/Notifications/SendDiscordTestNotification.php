@@ -3,8 +3,8 @@
 namespace App\Actions\Notifications;
 
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Http;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Spatie\WebhookServer\WebhookCall;
 
 class SendDiscordTestNotification
 {
@@ -14,7 +14,7 @@ class SendDiscordTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title('You need to add webhook urls!')
+                ->title('You need to add Discord urls!')
                 ->warning()
                 ->send();
 
@@ -22,12 +22,11 @@ class SendDiscordTestNotification
         }
 
         foreach ($webhooks as $webhook) {
-            $payload = [
-                'content' => '👋 Testing the Discord notification channel.',
-            ];
-
-            // Send the request using Laravel's HTTP client
-            $response = Http::post($webhook['discord_webhook_url'], $payload);
+            WebhookCall::create()
+                ->url($webhook['discord_webhook_url'])
+                ->payload(['content' => '👋 Testing the Discord notification channel.'])
+                ->doNotSign()
+                ->dispatch();
         }
 
         Notification::make()
