@@ -3,9 +3,10 @@
 namespace App\Filament\Pages;
 
 use App\Console\Commands\RunOoklaSpeedtest;
+use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
 use App\Filament\Widgets\RecentPingChartWidget;
-use App\Filament\Widgets\RecentSpeedChartWidget;
+use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
@@ -52,7 +53,8 @@ class Dashboard extends BasePage
     {
         return [
             StatsOverviewWidget::make(),
-            RecentSpeedChartWidget::make(),
+            RecentDownloadChartWidget::make(),
+            RecentUploadChartWidget::make(),
             RecentPingChartWidget::make(),
             RecentJitterChartWidget::make(),
         ];

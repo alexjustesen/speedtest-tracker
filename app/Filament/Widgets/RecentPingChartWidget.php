@@ -14,7 +14,7 @@ class RecentPingChartWidget extends ChartWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $maxHeight = '300px';
+    protected static ?string $maxHeight = '250px';
 
     public ?string $filter = '24h';
 
@@ -37,7 +37,7 @@ class RecentPingChartWidget extends ChartWidget
         $settings = new GeneralSettings();
 
         $results = Result::query()
-            ->select(['ping', 'created_at'])
+            ->select(['id', 'ping', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
@@ -64,6 +64,17 @@ class RecentPingChartWidget extends ChartWidget
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(TimeZoneHelper::displayTimeZone($settings))->format('M d - G:i')),
+        ];
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                ],
+            ],
         ];
     }
 

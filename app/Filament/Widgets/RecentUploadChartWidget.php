@@ -3,14 +3,15 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
+use App\Helpers\Number;
 use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
-class RecentJitterChartWidget extends ChartWidget
+class RecentUploadChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Jitter';
+    protected static ?string $heading = 'Upload (Mbps)';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -37,7 +38,7 @@ class RecentJitterChartWidget extends ChartWidget
         $settings = new GeneralSettings();
 
         $results = Result::query()
-            ->select(['id', 'data', 'created_at'])
+            ->select(['id', 'upload', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
@@ -54,28 +55,10 @@ class RecentJitterChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download (ms)',
-                    'data' => $results->map(fn ($item) => $item->download_jitter ? number_format($item->download_jitter, 2) : 0),
-                    'borderColor' => '#0ea5e9',
-                    'backgroundColor' => '#0ea5e9',
-                    'fill' => false,
-                    'cubicInterpolationMode' => 'monotone',
-                    'tension' => 0.4,
-                ],
-                [
-                    'label' => 'Upload (ms)',
-                    'data' => $results->map(fn ($item) => $item->upload_jitter ? number_format($item->upload_jitter, 2) : 0),
+                    'label' => 'Upload',
+                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
-                    'fill' => false,
-                    'cubicInterpolationMode' => 'monotone',
-                    'tension' => 0.4,
-                ],
-                [
-                    'label' => 'Ping (ms)',
-                    'data' => $results->map(fn ($item) => $item->ping_jitter ? number_format($item->ping_jitter, 2) : 0),
-                    'borderColor' => '#10b981',
-                    'backgroundColor' => '#10b981',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
@@ -88,6 +71,11 @@ class RecentJitterChartWidget extends ChartWidget
     protected function getOptions(): array
     {
         return [
+            'plugins' => [
+                'legend' => [
+                    'display' => false,
+                ],
+            ],
             'scales' => [
                 'y' => [
                     'beginAtZero' => true,
