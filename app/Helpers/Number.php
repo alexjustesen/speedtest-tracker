@@ -35,7 +35,7 @@ class Number extends SupportNumber
     {
         $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
 
-        for ($i = 0; ($bits / 1000) > 0.9 && ($i < count($units) - 1); $i++) {
+        for ($i = 0; ($bits / 1000) > 0.99 && ($i < count($units) - 1); $i++) {
             $bits /= 1000;
         }
 
@@ -51,7 +51,7 @@ class Number extends SupportNumber
     {
         $units = ['Bps', 'Kbps', 'Mbps', 'Gbps', 'Tbps', 'Pbps', 'Ebps', 'Zbps', 'Ybps'];
 
-        for ($i = 0; ($bits / 1000) > 0.9 && ($i < count($units) - 1); $i++) {
+        for ($i = 0; ($bits / 1000) > 0.99 && ($i < count($units) - 1); $i++) {
             $bits /= 1000;
         }
 
