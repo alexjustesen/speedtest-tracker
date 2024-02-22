@@ -11,7 +11,11 @@
         @endisset
 
         <div class="col-span-full">
-            @livewire(\App\Filament\Widgets\RecentSpeedChartWidget::class)
+            @livewire(\App\Filament\Widgets\RecentDownloadChartWidget::class)
+        </div>
+
+        <div class="col-span-full">
+            @livewire(\App\Filament\Widgets\RecentUploadChartWidget::class)
         </div>
 
         <div class="col-span-full">

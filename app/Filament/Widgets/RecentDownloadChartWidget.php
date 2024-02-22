@@ -3,18 +3,19 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
+use App\Helpers\Number;
 use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
-class RecentSpeedChartWidget extends ChartWidget
+class RecentDownloadChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Download / Upload';
+    protected static ?string $heading = 'Download (Mbps)';
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $maxHeight = '300px';
+    protected static ?string $maxHeight = '250px';
 
     public ?string $filter = '24h';
 
@@ -37,7 +38,7 @@ class RecentSpeedChartWidget extends ChartWidget
         $settings = new GeneralSettings();
 
         $results = Result::query()
-            ->select(['id', 'download', 'upload', 'created_at'])
+            ->select(['id', 'download', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
@@ -55,18 +56,9 @@ class RecentSpeedChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Download',
-                    'data' => $results->map(fn ($item) => ! blank($item->download) ? toBits(convertSize($item->download), 2) : 0),
+                    'data' => $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
-                    'fill' => false,
-                    'cubicInterpolationMode' => 'monotone',
-                    'tension' => 0.4,
-                ],
-                [
-                    'label' => 'Upload',
-                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? toBits(convertSize($item->upload), 2) : 0),
-                    'borderColor' => '#8b5cf6',
-                    'backgroundColor' => '#8b5cf6',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
@@ -79,19 +71,14 @@ class RecentSpeedChartWidget extends ChartWidget
     protected function getOptions(): array
     {
         return [
-            'scales' => [
-                'x' => [
-                    'display' => true,
-                    'title' => [
-                        'display' => true,
-                    ],
+            'plugins' => [
+                'legend' => [
+                    'display' => false,
                 ],
+            ],
+            'scales' => [
                 'y' => [
-                    'display' => true,
-                    'title' => [
-                        'display' => true,
-                        'text' => 'Mbps',
-                    ],
+                    'beginAtZero' => true,
                 ],
             ],
         ];
