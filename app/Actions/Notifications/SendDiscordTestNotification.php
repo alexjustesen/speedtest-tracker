@@ -23,7 +23,7 @@ class SendDiscordTestNotification
 
         foreach ($webhooks as $webhook) {
             WebhookCall::create()
-                ->url($webhook['discord_webhook_url'])
+                ->url($webhook['url'])
                 ->payload(['content' => '👋 Testing the Discord notification channel.'])
                 ->doNotSign()
                 ->dispatch();
