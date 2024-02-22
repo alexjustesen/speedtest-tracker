@@ -34,14 +34,14 @@ if (! function_exists('percentChange')) {
 }
 
 if (! function_exists('absoluteDownloadThresholdFailed')) {
-    function absoluteDownloadThresholdFailed(float $threshold, float $download): bool
+    function absoluteDownloadThresholdFailed(float $threshold, float $download = 0): bool
     {
         return toBits(convertSize($download), 2) < $threshold;
     }
 }
 
 if (! function_exists('absoluteUploadThresholdFailed')) {
-    function absoluteUploadThresholdFailed(float $threshold, float $upload): bool
+    function absoluteUploadThresholdFailed(float $threshold, float $upload = 0): bool
     {
         return toBits(convertSize($upload), 2) < $threshold;
     }
