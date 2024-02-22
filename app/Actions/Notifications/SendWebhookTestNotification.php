@@ -10,9 +10,9 @@ class SendWebhookTestNotification
 {
     use AsAction;
 
-    public function handle(array $urls)
+    public function handle(array $webhooks)
     {
-        if (! count($urls)) {
+        if (! count($webhooks)) {
             Notification::make()
                 ->title('You need to add webhook urls!')
                 ->warning()
@@ -21,9 +21,9 @@ class SendWebhookTestNotification
             return;
         }
 
-        foreach ($urls as $url) {
+        foreach ($webhooks as $webhook) {
             WebhookCall::create()
-                ->url($url['url'])
+                ->url($webhook['url'])
                 ->payload(['message' => '👋 Testing the Webhook notification channel.'])
                 ->doNotSign()
                 ->dispatch();
