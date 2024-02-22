@@ -23,14 +23,15 @@ class SendDiscordTestNotification
 
         foreach ($webhooks as $webhook) {
             $payload = [
-                'content' => '👋 Testing the Webhook notification channel.',
+                'content' => '👋 Testing the Discord notification channel.',
             ];
+
             // Send the request using Laravel's HTTP client
             $response = Http::post($webhook['discord_webhook_url'], $payload);
         }
 
         Notification::make()
-            ->title('Test webhook notification sent.')
+            ->title('Test Discord notification sent.')
             ->success()
             ->send();
     }
