@@ -8,7 +8,6 @@ use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Telegram\TelegramNotification;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Spatie\WebhookServer\WebhookCall;
 
@@ -88,8 +87,13 @@ class SpeedtestCompletedListener
                                         "\nDownload: ".($event->result->downloadBits / 1000000).' (Mbps)'.
                                         "\nUpload: ".($event->result->uploadBits / 1000000).' (Mbps)',
                     ];
-                    // Send the request using Laravel's HTTP client
-                    $response = Http::post($webhook['url'], $payload);
+                    // Send the payload using WebhookCall
+                    WebhookCall::create()
+                        ->url($webhook['url'])
+                        ->payload($payload)
+                        ->doNotSign()
+                        ->dispatch();
+
                 }
             }
         }
