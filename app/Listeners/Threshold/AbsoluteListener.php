@@ -265,8 +265,13 @@ class AbsoluteListener implements ShouldQueue
                             'content' => implode("\n", $contentLines),
                         ];
 
-                        // Send the request using Laravel's HTTP client
-                        $response = Http::post($webhook['url'], $payload);
+                        // Send the payload using WebhookCall
+                        WebhookCall::create()
+                            ->url($webhook['url'])
+                            ->payload($payload)
+                            ->doNotSign()
+                            ->dispatch();
+
                     }
                 }
             }
