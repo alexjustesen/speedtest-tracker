@@ -266,7 +266,7 @@ class AbsoluteListener implements ShouldQueue
                         ];
 
                         // Send the request using Laravel's HTTP client
-                        $response = Http::post($webhook['discord_webhook_url'], $payload);
+                        $response = Http::post($webhook['url'], $payload);
                     }
                 }
             }
