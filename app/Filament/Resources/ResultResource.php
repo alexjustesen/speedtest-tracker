@@ -186,8 +186,8 @@ class ResultResource extends Resource
                     ->alignment(Alignment::End),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('ip_address')
-                    ->label('IP address')
+                Tables\Filters\SelectFilter::make('public_ip')
+                    ->label('Public IP')
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
