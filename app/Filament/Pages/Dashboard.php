@@ -10,28 +10,21 @@ use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
+use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
-use Filament\Pages\Dashboard as BasePage;
+use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 
-class Dashboard extends BasePage
+class Dashboard extends BaseDashboard
 {
-    public bool $publicDashboard = false;
-
-    protected static ?string $pollingInterval = null;
+    use HasFiltersForm;
 
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
     protected static ?int $navigationSort = 1;
-
-    protected static string $view = 'filament.pages.dashboard';
-
-    public function mount()
-    {
-        $settings = new GeneralSettings();
-
-        $this->publicDashboard = $settings->public_dashboard_enabled;
-    }
 
     protected function getHeaderActions(): array
     {
@@ -39,20 +32,47 @@ class Dashboard extends BasePage
             Action::make('home')
                 ->label('Public Dashboard')
                 ->color('gray')
-                ->hidden(! $this->publicDashboard)
+                ->hidden(function (GeneralSettings $settings): bool {
+                    return ! $settings->public_dashboard_enabled;
+                })
                 ->url('/'),
             Action::make('speedtest')
                 ->label('Queue Speedtest')
                 ->color('primary')
                 ->action('queueSpeedtest')
-                ->hidden(fn (): bool => ! auth()->user()->is_admin && ! auth()->user()->is_user),
+                ->hidden(fn (): bool => ! Auth::user()->is_admin),
         ];
+    }
+
+    public function filtersForm(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\DateTimePicker::make('startDate')
+                            ->seconds(false),
+                        Forms\Components\DateTimePicker::make('endDate')
+                            ->seconds(false)
+                            ->maxDate(now()),
+                    ])
+                    ->columns([
+                        'default' => 1,
+                        'sm' => 2,
+                    ]),
+            ]);
     }
 
     protected function getHeaderWidgets(): array
     {
         return [
             StatsOverviewWidget::make(),
+        ];
+    }
+
+    public function getWidgets(): array
+    {
+        return [
             RecentDownloadChartWidget::make(),
             RecentUploadChartWidget::make(),
             RecentPingChartWidget::make(),
