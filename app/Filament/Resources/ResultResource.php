@@ -118,7 +118,9 @@ class ResultResource extends Resource
                     ->label('IP address')
                     ->toggleable()
                     ->toggledHiddenByDefault()
-                    ->sortable(),
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->interface->externalIp', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('service')
                     ->toggleable()
                     ->toggledHiddenByDefault()
@@ -126,10 +128,14 @@ class ResultResource extends Resource
                 Tables\Columns\TextColumn::make('server_id')
                     ->label('Server ID')
                     ->toggleable()
-                    ->sortable(),
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->server->id', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('server_name')
                     ->toggleable()
-                    ->sortable(),
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->server->name', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('download')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : null)
                     ->sortable(),
@@ -142,15 +148,21 @@ class ResultResource extends Resource
                 Tables\Columns\TextColumn::make('download_jitter')
                     ->toggleable()
                     ->toggledHiddenByDefault()
-                    ->sortable(),
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->download->latency->jitter', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('upload_jitter')
                     ->toggleable()
                     ->toggledHiddenByDefault()
-                    ->sortable(),
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->upload->latency->jitter', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('ping_jitter')
                     ->toggleable()
                     ->toggledHiddenByDefault()
-                    ->sortable(),
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->ping->jitter', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('status')
                     ->toggleable()
                     ->sortable(),
