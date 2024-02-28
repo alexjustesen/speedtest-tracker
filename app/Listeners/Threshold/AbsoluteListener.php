@@ -233,13 +233,13 @@ class AbsoluteListener implements ShouldQueue
             $failedThresholds = []; // Initialize an array to keep track of failed thresholds
 
             // Check Download threshold
-            if ($this->thresholdSettings->absolute_download > 0 && absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->downloadBits)) {
-                $failedThresholds['Download'] = ($event->result->downloadBits / 1000000).' (Mbps)';
+            if ($this->thresholdSettings->absolute_download > 0 && absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->download)) {
+                $failedThresholds['Download'] = toBits(convertSize($event->result->download), 2).' Mbps';
             }
 
             // Check Upload threshold
-            if ($this->thresholdSettings->absolute_upload > 0 && absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->uploadBits)) {
-                $failedThresholds['Upload'] = ($event->result->uploadBits / 1000000).' (Mbps)';
+            if ($this->thresholdSettings->absolute_upload > 0 && absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->upload)) {
+                $failedThresholds['Upload'] = toBits(convertSize($event->result->upload), 2).' Mbps';
             }
 
             // Check Ping threshold
