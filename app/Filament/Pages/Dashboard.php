@@ -51,7 +51,8 @@ class Dashboard extends BaseDashboard
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\DateTimePicker::make('startDate')
-                            ->seconds(false),
+                            ->seconds(false)
+                            ->maxDate(now()),
                         Forms\Components\DateTimePicker::make('endDate')
                             ->seconds(false)
                             ->maxDate(now()),
