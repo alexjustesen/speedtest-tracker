@@ -3,6 +3,8 @@
 namespace App\Jobs\Speedtests;
 
 use App\Enums\ResultStatus;
+use App\Events\SpeedtestCompleted;
+use App\Events\SpeedtestFailed;
 use App\Models\Result;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -53,6 +55,8 @@ class ExecuteOoklaSpeedtest implements ShouldQueue
                 'status' => ResultStatus::Failed,
             ]);
 
+            SpeedtestFailed::dispatch($this->result);
+
             return;
         }
 
@@ -65,5 +69,7 @@ class ExecuteOoklaSpeedtest implements ShouldQueue
             'data' => $output,
             'status' => ResultStatus::Completed,
         ]);
+
+        SpeedtestCompleted::dispatch($this->result);
     }
 }
