@@ -87,23 +87,5 @@ class SpeedtestCompletedListener
                 }
             }
         }
-
-        if ($this->notificationSettings->webhook_enabled) {
-            if ($this->notificationSettings->webhook_on_speedtest_run && count($this->notificationSettings->webhook_urls)) {
-                foreach ($this->notificationSettings->webhook_urls as $url) {
-                    WebhookCall::create()
-                        ->url($url['url'])
-                        ->payload([
-                            'result_id' => $event->result->id,
-                            'site_name' => $this->generalSettings->site_name,
-                            'ping' => $event->result->ping,
-                            'download' => $event->result->downloadBits,
-                            'upload' => $event->result->uploadBits,
-                        ])
-                        ->doNotSign()
-                        ->dispatch();
-                }
-            }
-        }
     }
 }

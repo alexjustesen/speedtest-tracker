@@ -11,6 +11,8 @@ use App\Listeners\Database\SendSpeedtestCompletedNotification as DatabaseSendSpe
 use App\Listeners\Database\SendSpeedtestThresholdNotification as DatabaseSendSpeedtestThresholdNotification;
 use App\Listeners\SpeedtestCompletedListener;
 use App\Listeners\Threshold\AbsoluteListener;
+use App\Listeners\Webhook\SendSpeedtestCompletedNotification as WebhookSendSpeedtestCompletedNotification;
+use App\Listeners\Webhook\SendSpeedtestThresholdNotification as WebhookSendSpeedtestThresholdNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -39,9 +41,13 @@ class EventServiceProvider extends ServiceProvider
             // Data listeners
             InfluxDb2Listener::class,
 
-            // Notification listeners
+            // Database notification listeners
             DatabaseSendSpeedtestCompletedNotification::class,
             DatabaseSendSpeedtestThresholdNotification::class,
+
+            // Webhook notification listeners
+            WebhookSendSpeedtestCompletedNotification::class,
+            WebhookSendSpeedtestThresholdNotification::class,
 
             AbsoluteListener::class,
         ],
