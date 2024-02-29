@@ -53,7 +53,7 @@ class ResultResource extends Resource
                             Forms\Components\TextInput::make('created_at')
                                 ->label('Created')
                                 ->afterStateHydrated(function (TextInput $component, $state) use ($settings) {
-                                    $component->state(Carbon::parse($state)->format($settings->time_format ?? 'M j, Y G:i:s'));
+                                    $component->state(Carbon::parse($state)->timezone(TimeZoneHelper::displayTimeZone($settings))->format($settings->time_format ?? 'M j, Y G:i:s'));
                                 })
                                 ->columnSpan(2),
                             Forms\Components\TextInput::make('download')
