@@ -7,6 +7,8 @@ use App\Events\SpeedtestFailed;
 use App\Events\SpeedtestStarted;
 use App\Listeners\ClearApplicationCache;
 use App\Listeners\Data\InfluxDb2Listener;
+use App\Listeners\Database\SendSpeedtestCompletedNotification as DatabaseSendSpeedtestCompletedNotification;
+use App\Listeners\Database\SendSpeedtestThresholdNotification as DatabaseSendSpeedtestThresholdNotification;
 use App\Listeners\SpeedtestCompletedListener;
 use App\Listeners\Threshold\AbsoluteListener;
 use Illuminate\Auth\Events\Registered;
@@ -38,6 +40,9 @@ class EventServiceProvider extends ServiceProvider
             InfluxDb2Listener::class,
 
             // Notification listeners
+            DatabaseSendSpeedtestCompletedNotification::class,
+            DatabaseSendSpeedtestThresholdNotification::class,
+
             AbsoluteListener::class,
         ],
 

@@ -4,12 +4,10 @@ namespace App\Listeners\Threshold;
 
 use App\Events\SpeedtestCompleted;
 use App\Mail\Threshold\AbsoluteMail;
-use App\Models\User;
 use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use App\Telegram\TelegramNotification;
-use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -43,15 +41,8 @@ class AbsoluteListener implements ShouldQueue
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        if ($this->thresholdSettings->absolute_enabled !== true) {
-            Log::info('Absolute threshold notifications disabled.');
-
+        if (! $this->thresholdSettings->absolute_enabled) {
             return;
-        }
-
-        // Database notification channel
-        if ($this->notificationSettings->database_enabled == true && $this->notificationSettings->database_on_threshold_failure == true) {
-            $this->databaseChannel($event);
         }
 
         // Mail notification channel
@@ -72,51 +63,6 @@ class AbsoluteListener implements ShouldQueue
         // Webhook notification channel
         if ($this->notificationSettings->webhook_enabled == true && $this->notificationSettings->webhook_on_threshold_failure == true) {
             $this->webhookChannel($event);
-        }
-    }
-
-    /**
-     * Handle database notifications.
-     */
-    protected function databaseChannel(SpeedtestCompleted $event): void
-    {
-        // Download threshold
-        if ($this->thresholdSettings->absolute_download > 0) {
-            if (absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->download)) {
-                foreach (User::all() as $user) {
-                    Notification::make()
-                        ->title('Threshold breached')
-                        ->body('Speedtest #'.$event->result->id.' breached the download threshold of '.$this->thresholdSettings->absolute_download.'Mbps at '.toBits(convertSize($event->result->download), 2).'Mbps.')
-                        ->warning()
-                        ->sendToDatabase($user);
-                }
-            }
-        }
-
-        // Upload threshold
-        if ($this->thresholdSettings->absolute_upload > 0) {
-            if (absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->upload)) {
-                foreach (User::all() as $user) {
-                    Notification::make()
-                        ->title('Threshold breached')
-                        ->body('Speedtest #'.$event->result->id.' breached the upload threshold of '.$this->thresholdSettings->absolute_upload.'Mbps at '.toBits(convertSize($event->result->upload), 2).'Mbps.')
-                        ->warning()
-                        ->sendToDatabase($user);
-                }
-            }
-        }
-
-        // Ping threshold
-        if ($this->thresholdSettings->absolute_ping > 0) {
-            if (absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
-                foreach (User::all() as $user) {
-                    Notification::make()
-                        ->title('Threshold breached')
-                        ->body('Speedtest #'.$event->result->id.' breached the ping threshold of '.$this->thresholdSettings->absolute_ping.'ms at '.$event->result->ping.'ms.')
-                        ->warning()
-                        ->sendToDatabase($user);
-                }
-            }
         }
     }
 
