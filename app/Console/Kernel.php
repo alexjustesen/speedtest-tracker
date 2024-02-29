@@ -2,12 +2,11 @@
 
 namespace App\Console;
 
-use App\Console\Commands\RunOoklaSpeedtest;
+use App\Actions\Speedtests\RunScheduledSpeedtests;
 use App\Console\Commands\SystemMaintenance;
 use App\Console\Commands\VersionChecker;
 use App\Models\Result;
 use App\Settings\GeneralSettings;
-use Cron\CronExpression;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -44,17 +43,14 @@ class Kernel extends ConsoleKernel
             ->timezone($settings->timezone ?? 'UTC');
 
         /**
-         * Check if an Ookla Speedtest needs to run.
+         * Action to run scheduled speedtests.
          */
-        $schedule->command(RunOoklaSpeedtest::class, ['--scheduled'])->everyMinute()
-            ->timezone($settings->timezone ?? 'UTC')
+        $schedule->call(function () {
+            RunScheduledSpeedtests::run();
+        })
+            ->everyMinute()
             ->when(function () use ($settings) {
-                if (blank($settings->speedtest_schedule)) {
-                    return false;
-                }
-
-                return (new CronExpression($settings->speedtest_schedule))
-                    ->isDue(now()->timezone($settings->timezone ?? 'UTC'));
+                return ! blank($settings->speedtest_schedule);
             });
     }
 

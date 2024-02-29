@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
-use App\Events\ResultCreated;
+use App\Events\SpeedtestCompleted;
+use App\Events\SpeedtestFailed;
+use App\Events\SpeedtestStarted;
 use App\Listeners\ClearApplicationCache;
 use App\Listeners\Data\InfluxDb2Listener;
 use App\Listeners\SpeedtestCompletedListener;
@@ -25,18 +27,26 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        ResultCreated::class => [
+        SettingsSaved::class => [
+            ClearApplicationCache::class,
+        ],
+
+        SpeedtestCompleted::class => [
             SpeedtestCompletedListener::class,
 
             // Data listeners
             InfluxDb2Listener::class,
 
-            // Threshold listeners
+            // Notification listeners
             AbsoluteListener::class,
         ],
 
-        SettingsSaved::class => [
-            ClearApplicationCache::class,
+        SpeedtestFailed::class => [
+            // nothing yet...
+        ],
+
+        SpeedtestStarted::class => [
+            // nothing yet...
         ],
     ];
 

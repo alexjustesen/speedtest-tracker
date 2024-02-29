@@ -2,8 +2,9 @@
 
 namespace App\Listeners\Threshold;
 
-use App\Events\ResultCreated;
+use App\Events\SpeedtestCompleted;
 use App\Mail\Threshold\AbsoluteMail;
+use App\Models\User;
 use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
@@ -40,7 +41,7 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(ResultCreated $event): void
+    public function handle(SpeedtestCompleted $event): void
     {
         if ($this->thresholdSettings->absolute_enabled !== true) {
             Log::info('Absolute threshold notifications disabled.');
@@ -77,38 +78,44 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle database notifications.
      */
-    protected function databaseChannel(ResultCreated $event): void
+    protected function databaseChannel(SpeedtestCompleted $event): void
     {
         // Download threshold
         if ($this->thresholdSettings->absolute_download > 0) {
             if (absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->download)) {
-                Notification::make()
-                    ->title('Threshold breached')
-                    ->body('Speedtest #'.$event->result->id.' breached the download threshold of '.$this->thresholdSettings->absolute_download.'Mbps at '.toBits(convertSize($event->result->download), 2).'Mbps.')
-                    ->warning()
-                    ->sendToDatabase($event->user);
+                foreach (User::all() as $user) {
+                    Notification::make()
+                        ->title('Threshold breached')
+                        ->body('Speedtest #'.$event->result->id.' breached the download threshold of '.$this->thresholdSettings->absolute_download.'Mbps at '.toBits(convertSize($event->result->download), 2).'Mbps.')
+                        ->warning()
+                        ->sendToDatabase($user);
+                }
             }
         }
 
         // Upload threshold
         if ($this->thresholdSettings->absolute_upload > 0) {
             if (absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->upload)) {
-                Notification::make()
-                    ->title('Threshold breached')
-                    ->body('Speedtest #'.$event->result->id.' breached the upload threshold of '.$this->thresholdSettings->absolute_upload.'Mbps at '.toBits(convertSize($event->result->upload), 2).'Mbps.')
-                    ->warning()
-                    ->sendToDatabase($event->user);
+                foreach (User::all() as $user) {
+                    Notification::make()
+                        ->title('Threshold breached')
+                        ->body('Speedtest #'.$event->result->id.' breached the upload threshold of '.$this->thresholdSettings->absolute_upload.'Mbps at '.toBits(convertSize($event->result->upload), 2).'Mbps.')
+                        ->warning()
+                        ->sendToDatabase($user);
+                }
             }
         }
 
         // Ping threshold
         if ($this->thresholdSettings->absolute_ping > 0) {
             if (absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
-                Notification::make()
-                    ->title('Threshold breached')
-                    ->body('Speedtest #'.$event->result->id.' breached the ping threshold of '.$this->thresholdSettings->absolute_ping.'ms at '.$event->result->ping.'ms.')
-                    ->warning()
-                    ->sendToDatabase($event->user);
+                foreach (User::all() as $user) {
+                    Notification::make()
+                        ->title('Threshold breached')
+                        ->body('Speedtest #'.$event->result->id.' breached the ping threshold of '.$this->thresholdSettings->absolute_ping.'ms at '.$event->result->ping.'ms.')
+                        ->warning()
+                        ->sendToDatabase($user);
+                }
             }
         }
     }
@@ -116,7 +123,7 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle database notifications.
      */
-    protected function mailChannel(ResultCreated $event): void
+    protected function mailChannel(SpeedtestCompleted $event): void
     {
         $failedThresholds = [];
 
@@ -168,7 +175,7 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle telegram notifications.
      */
-    protected function telegramChannel(ResultCreated $event): void
+    protected function telegramChannel(SpeedtestCompleted $event): void
     {
         $failedThresholds = [];
 
@@ -227,7 +234,7 @@ class AbsoluteListener implements ShouldQueue
     /**
      * Handle Discord notifications.
      */
-    protected function discordChannel(ResultCreated $event): void
+    protected function discordChannel(SpeedtestCompleted $event): void
     {
         if ($this->notificationSettings->discord_enabled) {
             $failedThresholds = []; // Initialize an array to keep track of failed thresholds
@@ -283,7 +290,7 @@ class AbsoluteListener implements ShouldQueue
      *
      * TODO: refactor
      */
-    protected function webhookChannel(ResultCreated $event): void
+    protected function webhookChannel(SpeedtestCompleted $event): void
     {
         $failedThresholds = [];
 

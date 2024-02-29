@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\ResultStatus;
-use App\Events\ResultCreated;
 use App\Settings\GeneralSettings;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -32,15 +31,6 @@ class Result extends Model
         'data' => 'array',
         'status' => ResultStatus::class,
         'scheduled' => 'boolean',
-    ];
-
-    /**
-     * Event mapping for the model.
-     *
-     * @var array
-     */
-    protected $dispatchesEvents = [
-        'created' => ResultCreated::class,
     ];
 
     /**

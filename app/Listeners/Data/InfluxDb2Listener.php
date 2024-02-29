@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Data;
 
-use App\Events\ResultCreated;
+use App\Events\SpeedtestCompleted;
 use App\Jobs\SendDataToInfluxDbV2;
 use App\Settings\InfluxDbSettings;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,7 +24,7 @@ class InfluxDb2Listener implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(ResultCreated $event): void
+    public function handle(SpeedtestCompleted $event): void
     {
         if ($this->influxDbSettings->v2_enabled) {
             SendDataToInfluxDbV2::dispatch($event->result, $this->influxDbSettings);

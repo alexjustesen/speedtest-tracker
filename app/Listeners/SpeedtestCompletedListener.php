@@ -2,8 +2,9 @@
 
 namespace App\Listeners;
 
-use App\Events\ResultCreated;
+use App\Events\SpeedtestCompleted;
 use App\Mail\SpeedtestCompletedMail;
+use App\Models\User;
 use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Telegram\TelegramNotification;
@@ -32,14 +33,14 @@ class SpeedtestCompletedListener
     /**
      * Handle the event.
      */
-    public function handle(ResultCreated $event): void
+    public function handle(SpeedtestCompleted $event): void
     {
-        if ($this->notificationSettings->database_enabled) {
-            if ($this->notificationSettings->database_on_speedtest_run) {
+        if ($this->notificationSettings->database_enabled && $this->notificationSettings->database_on_speedtest_run) {
+            foreach (User::all() as $user) {
                 Notification::make()
                     ->title('Speedtest completed')
                     ->success()
-                    ->sendToDatabase($event->user);
+                    ->sendToDatabase($user);
             }
         }
 

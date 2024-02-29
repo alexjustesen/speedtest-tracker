@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Console\Commands\RunOoklaSpeedtest;
+use App\Actions\Speedtests\RunOoklaSpeedtest;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
 use App\Filament\Widgets\RecentPingChartWidget;
@@ -10,28 +10,19 @@ use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BasePage;
-use Illuminate\Support\Facades\Artisan;
+use Filament\Support\Enums\ActionSize;
+use Filament\Support\Enums\IconPosition;
 
 class Dashboard extends BasePage
 {
-    public bool $publicDashboard = false;
-
-    protected static ?string $pollingInterval = null;
-
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
     protected static ?int $navigationSort = 1;
 
     protected static string $view = 'filament.pages.dashboard';
-
-    public function mount()
-    {
-        $settings = new GeneralSettings();
-
-        $this->publicDashboard = $settings->public_dashboard_enabled;
-    }
 
     protected function getHeaderActions(): array
     {
@@ -39,13 +30,27 @@ class Dashboard extends BasePage
             Action::make('home')
                 ->label('Public Dashboard')
                 ->color('gray')
-                ->hidden(! $this->publicDashboard)
+                ->hidden(fn (GeneralSettings $settings): bool => ! $settings->public_dashboard_enabled)
                 ->url('/'),
-            Action::make('speedtest')
-                ->label('Queue Speedtest')
+            ActionGroup::make([
+                Action::make('ookla speedtest')
+                    ->action(function () {
+                        RunOoklaSpeedtest::run();
+
+                        Notification::make()
+                            ->title('Ookla speedtest started')
+                            ->success()
+                            ->send();
+                    }),
+            ])
+                ->button()
                 ->color('primary')
-                ->action('queueSpeedtest')
-                ->hidden(fn (): bool => ! auth()->user()->is_admin && ! auth()->user()->is_user),
+                ->dropdownPlacement('bottom-end')
+                ->label('Run Speedtest')
+                ->icon('heroicon-o-rocket-launch')
+                ->iconPosition(IconPosition::After)
+                ->hidden(! auth()->user()->is_admin)
+                ->size(ActionSize::Small),
         ];
     }
 
@@ -58,25 +63,5 @@ class Dashboard extends BasePage
             RecentPingChartWidget::make(),
             RecentJitterChartWidget::make(),
         ];
-    }
-
-    public function queueSpeedtest(): void
-    {
-        try {
-            Artisan::call(RunOoklaSpeedtest::class);
-        } catch (\Throwable $th) {
-            Notification::make()
-                ->title('Manual speedtest failed!')
-                ->body('The starting a manual speedtest failed, check the logs.')
-                ->warning()
-                ->sendToDatabase(auth()->user());
-
-            return;
-        }
-
-        Notification::make()
-            ->title('Speedtest added to the queue')
-            ->success()
-            ->send();
     }
 }
