@@ -16,7 +16,7 @@ class RunScheduledSpeedtests
         $settings = new GeneralSettings();
 
         /**
-         * Ookla speedtests.
+         * Ookla service
          */
         $cronExpression = new CronExpression($settings->speedtest_schedule);
 
