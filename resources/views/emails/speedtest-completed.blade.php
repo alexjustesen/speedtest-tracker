@@ -1,7 +1,17 @@
 <x-mail::message>
-# Speedtest Result #{{ $id }} - Completed
+# Speedtest Completed - #{{ $id }}
 
-A speedtest was successfully run, click the button below to view the results.
+A new speedtest was completed using **{{ $service }}**.
+
+<x-mail::table>
+| **Metric**  | **Value**         |
+|-------------|------------------:|
+| Server name | {{ $serverName }} |
+| Server ID   | {{ $serverId }}   |
+| Ping        | {{ $ping }}       |
+| Download    | {{ $download }}   |
+| Upload      | {{ $upload }}     |
+</x-mail::table>
 
 <x-mail::button :url="$url">
 View Results

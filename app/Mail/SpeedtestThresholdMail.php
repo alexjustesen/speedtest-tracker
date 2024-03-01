@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail\Threshold;
+namespace App\Mail;
 
 use App\Models\Result;
 use Illuminate\Bus\Queueable;
@@ -9,25 +9,21 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
-class AbsoluteMail extends Mailable implements ShouldQueue
+class SpeedtestThresholdMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
-
-    public $result;
-
-    public $metrics;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Result $result, array $metrics)
-    {
-        $this->result = $result;
-
-        $this->metrics = $metrics;
+    public function __construct(
+        public Result $result,
+        public array $metrics,
+    ) {
     }
 
     /**
@@ -36,7 +32,7 @@ class AbsoluteMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Speedtest Result #'.$this->result->id.' - Absolute threshold failed',
+            subject: 'Speedtest Threshold Breached - #'.$this->result->id,
         );
     }
 
@@ -46,9 +42,12 @@ class AbsoluteMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.threshold.absolute',
+            markdown: 'emails.speedtest-threshold',
             with: [
                 'id' => $this->result->id,
+                'service' => Str::title($this->result->service),
+                'serverName' => $this->result->server_name,
+                'serverId' => $this->result->server_id,
                 'url' => url('/admin/results'),
                 'metrics' => $this->metrics,
             ],
