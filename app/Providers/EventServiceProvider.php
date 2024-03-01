@@ -9,12 +9,12 @@ use App\Listeners\ClearApplicationCache;
 use App\Listeners\Data\InfluxDb2Listener;
 use App\Listeners\Database\SendSpeedtestCompletedNotification as DatabaseSendSpeedtestCompletedNotification;
 use App\Listeners\Database\SendSpeedtestThresholdNotification as DatabaseSendSpeedtestThresholdNotification;
+use App\Listeners\Discord\SendSpeedtestCompletedNotification as DiscordSendSpeedtestCompletedNotification;
+use App\Listeners\Discord\SendSpeedtestThresholdNotification as DiscordSendSpeedtestThresholdNotification;
 use App\Listeners\Mail\SendSpeedtestCompletedNotification as MailSendSpeedtestCompletedNotification;
 use App\Listeners\Mail\SendSpeedtestThresholdNotification as MailSendSpeedtestThresholdNotification;
-use App\Listeners\SpeedtestCompletedListener;
 use App\Listeners\Telegram\SendSpeedtestCompletedNotification as TelegramSendSpeedtestCompletedNotification;
 use App\Listeners\Telegram\SendSpeedtestThresholdNotification as TelegramSendSpeedtestThresholdNotification;
-use App\Listeners\Threshold\AbsoluteListener;
 use App\Listeners\Webhook\SendSpeedtestCompletedNotification as WebhookSendSpeedtestCompletedNotification;
 use App\Listeners\Webhook\SendSpeedtestThresholdNotification as WebhookSendSpeedtestThresholdNotification;
 use Illuminate\Auth\Events\Registered;
@@ -40,14 +40,16 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         SpeedtestCompleted::class => [
-            SpeedtestCompletedListener::class,
-
             // Data listeners
             InfluxDb2Listener::class,
 
             // Database notification listeners
             DatabaseSendSpeedtestCompletedNotification::class,
             DatabaseSendSpeedtestThresholdNotification::class,
+
+            // Discord notification listeners
+            DiscordSendSpeedtestCompletedNotification::class,
+            DiscordSendSpeedtestThresholdNotification::class,
 
             // Mail notification listeners
             MailSendSpeedtestCompletedNotification::class,
@@ -60,8 +62,6 @@ class EventServiceProvider extends ServiceProvider
             // Webhook notification listeners
             WebhookSendSpeedtestCompletedNotification::class,
             WebhookSendSpeedtestThresholdNotification::class,
-
-            AbsoluteListener::class,
         ],
 
         SpeedtestFailed::class => [
