@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Listeners\Mail;
+namespace App\Listeners\Telegram;
 
 use App\Events\SpeedtestCompleted;
 use App\Helpers\Number;
-use App\Mail\SpeedtestThresholdMail;
+use App\Notifications\Telegram\SpeedtestNotification;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class SendSpeedtestThresholdNotification
 {
@@ -19,16 +20,16 @@ class SendSpeedtestThresholdNotification
     {
         $notificationSettings = new NotificationSettings();
 
-        if (! $notificationSettings->mail_enabled) {
+        if (! $notificationSettings->telegram_enabled) {
             return;
         }
 
-        if (! $notificationSettings->mail_on_threshold_failure) {
+        if (! $notificationSettings->telegram_on_threshold_failure) {
             return;
         }
 
-        if (! count($notificationSettings->mail_recipients) > 0) {
-            Log::warning('Mail recipients not found, check mail notification channel settings.');
+        if (! count($notificationSettings->telegram_recipients) > 0) {
+            Log::warning('Telegram recipients not found, check Telegram notification channel settings.');
 
             return;
         }
@@ -53,14 +54,22 @@ class SendSpeedtestThresholdNotification
             return;
         }
 
-        foreach ($notificationSettings->mail_recipients as $recipient) {
-            Mail::to($recipient)
-                ->send(new SpeedtestThresholdMail($event->result, $failed));
+        $content = view('telegram.speedtest-threshold', [
+            'id' => $event->result->id,
+            'service' => Str::title($event->result->service),
+            'serverName' => $event->result->server_name,
+            'serverId' => $event->result->server_id,
+            'metrics' => $failed,
+        ])->render();
+
+        foreach ($notificationSettings->telegram_recipients as $recipient) {
+            Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
+                ->notify(new SpeedtestNotification($content, $notificationSettings->telegram_disable_notification));
         }
     }
 
     /**
-     * Build mail notification if absolute download threshold is breached.
+     * Build Telegram notification if absolute download threshold is breached.
      */
     protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): array
     {
@@ -76,7 +85,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build mail notification if absolute upload threshold is breached.
+     * Build Telegram notification if absolute upload threshold is breached.
      */
     protected function absoluteUploadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): array
     {
@@ -92,7 +101,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build mail notification if absolute ping threshold is breached.
+     * Build Telegram notification if absolute ping threshold is breached.
      */
     protected function absolutePingThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): array
     {

@@ -1,5 +1,5 @@
 <x-mail::message>
-# Speedtest Thresholds Breached - #{{ $id }}
+# Speedtest Threshold Breached - #{{ $id }}
 
 A new speedtest was completed using **{{ $service }}** but a threshold was breached.
 

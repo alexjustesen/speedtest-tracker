@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Events\SpeedtestCompleted;
 use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
-use App\Telegram\TelegramNotification;
 use Spatie\WebhookServer\WebhookCall;
 
 class SpeedtestCompletedListener
@@ -31,29 +30,6 @@ class SpeedtestCompletedListener
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        if ($this->notificationSettings->telegram_enabled) {
-            if ($this->notificationSettings->telegram_on_speedtest_run && count($this->notificationSettings->telegram_recipients)) {
-                foreach ($this->notificationSettings->telegram_recipients as $recipient) {
-                    $download_value = toBits(convertSize($event->result->download), 2).' (Mbps)';
-
-                    $upload_value = toBits(convertSize($event->result->upload), 2).' (Mbps)';
-
-                    $ping_value = number_format($event->result->ping, 2).' (ms)';
-
-                    $message = view('telegram.speedtest-completed', [
-                        'id' => $event->result->id,
-                        'site_name' => $this->generalSettings->site_name,
-                        'ping' => $ping_value,
-                        'download' => $download_value,
-                        'upload' => $upload_value,
-                    ])->render();
-
-                    \Illuminate\Support\Facades\Notification::route('telegram_chat_id', $recipient['telegram_chat_id'])
-                        ->notify(new TelegramNotification($message));
-                }
-            }
-        }
-
         if ($this->notificationSettings->discord_enabled) {
             if ($this->notificationSettings->discord_on_speedtest_run && count($this->notificationSettings->discord_webhooks)) {
                 foreach ($this->notificationSettings->discord_webhooks as $webhook) {

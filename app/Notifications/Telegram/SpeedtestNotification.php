@@ -1,38 +1,31 @@
 <?php
 
-namespace App\Telegram;
+namespace App\Notifications\Telegram;
 
-use App\Settings\NotificationSettings;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class TelegramNotification extends Notification
+class SpeedtestNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $message;
-
-    protected $settings;
-
     /**
      * Create a new notification instance.
-     *
-     * @return void
      */
-    public function __construct($message)
-    {
-        $this->message = $message;
-
-        $this->settings = new NotificationSettings();
+    public function __construct(
+        public string $content,
+        public bool $disableNotification = false,
+    ) {
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @return array<int, string>
      */
-    public function via($notifiable): array
+    public function via(object $notifiable): array
     {
         return ['telegram'];
     }
@@ -46,7 +39,7 @@ class TelegramNotification extends Notification
     {
         return TelegramMessage::create()
             ->to($notifiable->routes['telegram_chat_id'])
-            ->disableNotification($this->settings->telegram_disable_notification)
-            ->content($this->message);
+            ->content($this->content)
+            ->disableNotification($this->disableNotification);
     }
 }
