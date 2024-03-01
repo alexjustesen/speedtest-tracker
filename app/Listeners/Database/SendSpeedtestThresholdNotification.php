@@ -18,13 +18,17 @@ class SendSpeedtestThresholdNotification
     {
         $notificationSettings = new NotificationSettings();
 
-        $thresholdSettings = new ThresholdSettings();
-
         if (! $notificationSettings->database_enabled) {
             return;
         }
 
         if (! $notificationSettings->database_on_threshold_failure) {
+            return;
+        }
+
+        $thresholdSettings = new ThresholdSettings();
+
+        if (! $thresholdSettings->absolute_enabled) {
             return;
         }
 
