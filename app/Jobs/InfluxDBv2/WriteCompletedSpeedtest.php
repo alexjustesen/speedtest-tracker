@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\InfluxDBv2;
 
 use App\Models\Result;
 use App\Settings\InfluxDbSettings;
@@ -12,24 +12,19 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use InfluxDB2\Client;
 
-class SendDataToInfluxDbV2 implements ShouldQueue
+class WriteCompletedSpeedtest implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public $result;
-
-    public $settings;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Result $result, InfluxDbSettings $settings)
-    {
-        $this->result = $result;
-
-        $this->settings = $settings;
+    public function __construct(
+        public Result $result,
+        public InfluxDbSettings $settings,
+    ) {
     }
 
     /**
