@@ -15,6 +15,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BasePage;
 use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\IconPosition;
+use Illuminate\Support\Arr;
 
 class Dashboard extends BasePage
 {
@@ -34,8 +35,14 @@ class Dashboard extends BasePage
                 ->url('/'),
             ActionGroup::make([
                 Action::make('ookla speedtest')
-                    ->action(function () {
-                        RunOoklaSpeedtest::run();
+                    ->action(function (GeneralSettings $settings) {
+                        $serverId = null;
+
+                        if (is_array($settings->speedtest_server) && count($settings->speedtest_server)) {
+                            $serverId = Arr::random($settings->speedtest_server);
+                        }
+
+                        RunOoklaSpeedtest::run(serverId: $serverId);
 
                         Notification::make()
                             ->title('Ookla speedtest started')
