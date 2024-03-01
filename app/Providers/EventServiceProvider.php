@@ -12,6 +12,8 @@ use App\Listeners\Database\SendSpeedtestThresholdNotification as DatabaseSendSpe
 use App\Listeners\Mail\SendSpeedtestCompletedNotification as MailSendSpeedtestCompletedNotification;
 use App\Listeners\Mail\SendSpeedtestThresholdNotification as MailSendSpeedtestThresholdNotification;
 use App\Listeners\SpeedtestCompletedListener;
+use App\Listeners\Telegram\SendSpeedtestCompletedNotification as TelegramSendSpeedtestCompletedNotification;
+use App\Listeners\Telegram\SendSpeedtestThresholdNotification as TelegramSendSpeedtestThresholdNotification;
 use App\Listeners\Threshold\AbsoluteListener;
 use App\Listeners\Webhook\SendSpeedtestCompletedNotification as WebhookSendSpeedtestCompletedNotification;
 use App\Listeners\Webhook\SendSpeedtestThresholdNotification as WebhookSendSpeedtestThresholdNotification;
@@ -50,6 +52,10 @@ class EventServiceProvider extends ServiceProvider
             // Mail notification listeners
             MailSendSpeedtestCompletedNotification::class,
             MailSendSpeedtestThresholdNotification::class,
+
+            // Telegram notification listeners
+            TelegramSendSpeedtestCompletedNotification::class,
+            TelegramSendSpeedtestThresholdNotification::class,
 
             // Webhook notification listeners
             WebhookSendSpeedtestCompletedNotification::class,
