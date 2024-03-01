@@ -35,6 +35,10 @@ class SendSpeedtestThresholdNotification
 
         $thresholdSettings = new ThresholdSettings();
 
+        if (! $thresholdSettings->absolute_enabled) {
+            return;
+        }
+
         $failed = [];
 
         if ($thresholdSettings->absolute_download > 0) {
@@ -50,6 +54,8 @@ class SendSpeedtestThresholdNotification
         }
 
         if (! count($failed)) {
+            Log::warning('Failed mail thresholds not found, won\'t send notification.');
+
             return;
         }
 
