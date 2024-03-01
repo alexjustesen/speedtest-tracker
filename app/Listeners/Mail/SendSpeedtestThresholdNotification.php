@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Listeners\Webhook;
+namespace App\Listeners\Mail;
 
 use App\Events\SpeedtestCompleted;
 use App\Helpers\Number;
-use App\Settings\GeneralSettings;
+use App\Mail\SpeedtestThresholdMail;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use Illuminate\Support\Facades\Log;
-use Spatie\WebhookServer\WebhookCall;
+use Illuminate\Support\Facades\Mail;
 
 class SendSpeedtestThresholdNotification
 {
@@ -19,21 +19,19 @@ class SendSpeedtestThresholdNotification
     {
         $notificationSettings = new NotificationSettings();
 
-        if (! $notificationSettings->webhook_enabled) {
+        if (! $notificationSettings->mail_enabled) {
             return;
         }
 
-        if (! $notificationSettings->webhook_on_threshold_failure) {
+        if (! $notificationSettings->mail_on_threshold_failure) {
             return;
         }
 
-        if (! count($notificationSettings->webhook_urls)) {
-            Log::warning('Webhook urls not found, check webhook notification channel settings.');
+        if (! count($notificationSettings->mail_recipients) > 0) {
+            Log::warning('Mail recipients not found, check mail notification channel settings.');
 
             return;
         }
-
-        $generalSettings = new GeneralSettings();
 
         $thresholdSettings = new ThresholdSettings();
 
@@ -55,21 +53,14 @@ class SendSpeedtestThresholdNotification
             return;
         }
 
-        foreach ($notificationSettings->webhook_urls as $url) {
-            WebhookCall::create()
-                ->url($url['url'])
-                ->payload([
-                    'result_id' => $event->result->id,
-                    'site_name' => $generalSettings->site_name,
-                    'metrics' => $failed,
-                ])
-                ->doNotSign()
-                ->dispatch();
+        foreach ($notificationSettings->mail_recipients as $recipient) {
+            Mail::to($recipient)
+                ->send(new SpeedtestThresholdMail($event->result, $failed));
         }
     }
 
     /**
-     * Build webhook notification if absolute download threshold is breached.
+     * Build mail notification if absolute download threshold is breached.
      */
     protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): array
     {

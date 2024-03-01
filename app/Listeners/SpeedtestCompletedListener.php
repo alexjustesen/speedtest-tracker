@@ -3,11 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\SpeedtestCompleted;
-use App\Mail\SpeedtestCompletedMail;
 use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Telegram\TelegramNotification;
-use Illuminate\Support\Facades\Mail;
 use Spatie\WebhookServer\WebhookCall;
 
 class SpeedtestCompletedListener
@@ -33,15 +31,6 @@ class SpeedtestCompletedListener
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        if ($this->notificationSettings->mail_enabled) {
-            if ($this->notificationSettings->mail_on_speedtest_run && count($this->notificationSettings->mail_recipients)) {
-                foreach ($this->notificationSettings->mail_recipients as $recipient) {
-                    Mail::to($recipient)
-                        ->send(new SpeedtestCompletedMail($event->result));
-                }
-            }
-        }
-
         if ($this->notificationSettings->telegram_enabled) {
             if ($this->notificationSettings->telegram_on_speedtest_run && count($this->notificationSettings->telegram_recipients)) {
                 foreach ($this->notificationSettings->telegram_recipients as $recipient) {

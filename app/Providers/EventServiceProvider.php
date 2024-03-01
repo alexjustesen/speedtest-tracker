@@ -9,6 +9,8 @@ use App\Listeners\ClearApplicationCache;
 use App\Listeners\Data\InfluxDb2Listener;
 use App\Listeners\Database\SendSpeedtestCompletedNotification as DatabaseSendSpeedtestCompletedNotification;
 use App\Listeners\Database\SendSpeedtestThresholdNotification as DatabaseSendSpeedtestThresholdNotification;
+use App\Listeners\Mail\SendSpeedtestCompletedNotification as MailSendSpeedtestCompletedNotification;
+use App\Listeners\Mail\SendSpeedtestThresholdNotification as MailSendSpeedtestThresholdNotification;
 use App\Listeners\SpeedtestCompletedListener;
 use App\Listeners\Threshold\AbsoluteListener;
 use App\Listeners\Webhook\SendSpeedtestCompletedNotification as WebhookSendSpeedtestCompletedNotification;
@@ -44,6 +46,10 @@ class EventServiceProvider extends ServiceProvider
             // Database notification listeners
             DatabaseSendSpeedtestCompletedNotification::class,
             DatabaseSendSpeedtestThresholdNotification::class,
+
+            // Mail notification listeners
+            MailSendSpeedtestCompletedNotification::class,
+            MailSendSpeedtestThresholdNotification::class,
 
             // Webhook notification listeners
             WebhookSendSpeedtestCompletedNotification::class,
