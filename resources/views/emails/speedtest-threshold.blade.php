@@ -5,7 +5,7 @@ A new speedtest was completed using **{{ $service }}** but a threshold was breac
 
 <x-mail::table>
 | **Metric** | **Threshold** | **Value** |
-|------------|--------------:|----------:|
+|:-----------|:--------------|----------:|
 @foreach ($metrics as $item)
 | {{ $item['name'] }} | {{ $item['threshold'] }} | {{ $item['value'] }} |
 @endforeach

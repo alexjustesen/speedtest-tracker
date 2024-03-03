@@ -5,7 +5,7 @@ A new speedtest was completed using **{{ $service }}**.
 
 <x-mail::table>
 | **Metric**  | **Value**         |
-|-------------|------------------:|
+|:------------|------------------:|
 | Server name | {{ $serverName }} |
 | Server ID   | {{ $serverId }}   |
 | Ping        | {{ $ping }}       |
