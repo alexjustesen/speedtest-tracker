@@ -53,6 +53,8 @@ class SendSpeedtestThresholdNotification
             array_push($failed, $this->absolutePingThreshold(event: $event, thresholdSettings: $thresholdSettings));
         }
 
+        $failed = array_filter($failed);
+
         if (! count($failed)) {
             Log::warning('Failed Discord thresholds not found, won\'t send notification.');
 
@@ -81,10 +83,10 @@ class SendSpeedtestThresholdNotification
     /**
      * Build Discord notification if absolute download threshold is breached.
      */
-    protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): array
+    protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
         if (! absoluteDownloadThresholdFailed($thresholdSettings->absolute_download, $event->result->download)) {
-            return [];
+            return false;
         }
 
         return [
@@ -97,10 +99,10 @@ class SendSpeedtestThresholdNotification
     /**
      * Build Discord notification if absolute upload threshold is breached.
      */
-    protected function absoluteUploadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): array
+    protected function absoluteUploadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
         if (! absoluteUploadThresholdFailed($thresholdSettings->absolute_upload, $event->result->upload)) {
-            return [];
+            return false;
         }
 
         return [
@@ -113,10 +115,10 @@ class SendSpeedtestThresholdNotification
     /**
      * Build Discord notification if absolute ping threshold is breached.
      */
-    protected function absolutePingThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): array
+    protected function absolutePingThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
         if (! absolutePingThresholdFailed($thresholdSettings->absolute_ping, $event->result->ping)) {
-            return [];
+            return false;
         }
 
         return [
