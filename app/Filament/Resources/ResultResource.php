@@ -74,6 +74,8 @@ class ResultResource extends Resource
                                 ->label('Upload Jitter (ms)'),
                             Forms\Components\TextInput::make('data.ping.jitter')
                                 ->label('Ping Jitter (ms)'),
+                            Forms\Components\TextInput::make('data.packetLoss')
+                                ->label('Packet Loss'),
                             Forms\Components\Textarea::make('data.message')
                                 ->label('Error Message')
                                 ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))
@@ -163,6 +165,9 @@ class ResultResource extends Resource
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->ping->jitter', $direction);
                     }),
+                Tables\Columns\TextColumn::make('packet_loss')
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 Tables\Columns\TextColumn::make('status')
                     ->toggleable()
                     ->sortable(),
