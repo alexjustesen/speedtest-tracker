@@ -49,8 +49,8 @@ class GeneralPage extends SettingsPage
                         Forms\Components\Section::make('Site Settings')
                             ->schema([
                                 Forms\Components\TextInput::make('site_name')
-                                    ->maxLength(50)
-                                    ->required()
+                                    ->disabled()
+                                    ->helperText(new HtmlString('⚠️ DEPRECATED: Use <code>APP_NAME</code> environment variable.'))
                                     ->columnSpanFull(),
                                 Forms\Components\Toggle::make('public_dashboard_enabled')
                                     ->label('Public dashboard'),
