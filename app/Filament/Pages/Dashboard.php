@@ -32,7 +32,7 @@ class Dashboard extends BasePage
                 ->icon('heroicon-o-chart-bar')
                 ->iconPosition(IconPosition::Before)
                 ->color('gray')
-                ->hidden(fn (): bool => !config('speedtest.public_dashboard'))
+                ->hidden(fn (): bool => ! config('speedtest.public_dashboard'))
                 ->url(shouldOpenInNewTab: true, url: '/'),
             ActionGroup::make([
                 Action::make('ookla speedtest')
