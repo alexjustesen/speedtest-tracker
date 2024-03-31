@@ -53,7 +53,9 @@ class GeneralPage extends SettingsPage
                                     ->helperText(new HtmlString('⚠️ DEPRECATED: Use <code>APP_NAME</code> environment variable.'))
                                     ->columnSpanFull(),
                                 Forms\Components\Toggle::make('public_dashboard_enabled')
-                                    ->label('Public dashboard'),
+                                    ->label('Public dashboard')
+                                    ->disabled()
+                                    ->helperText(new HtmlString('⚠️ DEPRECATED: Use <code>PUBLIC_DASHBOARD</code> environment variable.')),
                             ])
                             ->compact()
                             ->columns([

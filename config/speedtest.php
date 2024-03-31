@@ -15,6 +15,8 @@ return [
      */
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
+    'public_dashboard' => env('PUBLIC_DASHBOARD', false),
+
     /**
      * Polling
      */
