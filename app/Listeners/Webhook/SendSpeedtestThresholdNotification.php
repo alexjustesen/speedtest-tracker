@@ -4,7 +4,6 @@ namespace App\Listeners\Webhook;
 
 use App\Events\SpeedtestCompleted;
 use App\Helpers\Number;
-use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use Illuminate\Support\Facades\Log;
@@ -32,8 +31,6 @@ class SendSpeedtestThresholdNotification
 
             return;
         }
-
-        $generalSettings = new GeneralSettings();
 
         $thresholdSettings = new ThresholdSettings();
 
@@ -68,7 +65,7 @@ class SendSpeedtestThresholdNotification
                 ->url($url['url'])
                 ->payload([
                     'result_id' => $event->result->id,
-                    'site_name' => $generalSettings->site_name,
+                    'site_name' => config('app.name'),
                     'metrics' => $failed,
                 ])
                 ->doNotSign()

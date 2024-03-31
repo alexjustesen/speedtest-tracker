@@ -3,7 +3,6 @@
 namespace App\Listeners\Webhook;
 
 use App\Events\SpeedtestCompleted;
-use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use Illuminate\Support\Facades\Log;
 use Spatie\WebhookServer\WebhookCall;
@@ -15,8 +14,6 @@ class SendSpeedtestCompletedNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $generalSettings = new GeneralSettings();
-
         $notificationSettings = new NotificationSettings();
 
         if (! $notificationSettings->webhook_enabled) {
@@ -38,7 +35,7 @@ class SendSpeedtestCompletedNotification
                 ->url($url['url'])
                 ->payload([
                     'result_id' => $event->result->id,
-                    'site_name' => $generalSettings->site_name,
+                    'site_name' => config('app.name'),
                     'ping' => $event->result->ping,
                     'download' => $event->result->downloadBits,
                     'upload' => $event->result->uploadBits,

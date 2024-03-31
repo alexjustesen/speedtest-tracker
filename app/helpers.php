@@ -62,7 +62,7 @@ if (! function_exists('absolutePingThresholdFailed')) {
  * @deprecated
  *
  * @param  string  $data
- * @return  bool
+ * @return bool
  */
 if (! function_exists('json_validate')) {
     function json_validate($data)
