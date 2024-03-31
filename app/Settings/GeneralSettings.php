@@ -26,6 +26,9 @@ class GeneralSettings extends Settings
 
     public bool $db_has_timezone;
 
+    /**
+     * @deprecated Use PUBLIC_DASHBOARD environment variable.
+     */
     public bool $public_dashboard_enabled;
 
     public static function group(): string

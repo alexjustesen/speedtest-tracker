@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         $settings = new GeneralSettings();
 
-        if (! $settings->public_dashboard_enabled) {
+        if (! config('speedtest.public_dashboard')) {
             return redirect()->route('filament.admin.auth.login');
         }
 
