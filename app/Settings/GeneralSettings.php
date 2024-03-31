@@ -15,6 +15,9 @@ class GeneralSettings extends Settings
     /** @var string[] */
     public $speedtest_server;
 
+    /**
+     * @deprecated Use APP_NAME environment variable.
+     */
     public string $site_name;
 
     public string $time_format;
