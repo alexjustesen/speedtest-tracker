@@ -27,11 +27,9 @@ class NotificationPage extends SettingsPage
 
     protected static string $settings = NotificationSettings::class;
 
-    public function mount(): void
+    public static function canAccess(): bool
     {
-        parent::mount();
-
-        abort_unless(auth()->user()->is_admin, 403);
+        return auth()->user()->is_admin;
     }
 
     public static function shouldRegisterNavigation(): bool

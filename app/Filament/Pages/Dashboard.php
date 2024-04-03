@@ -13,15 +13,12 @@ use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BasePage;
-use Filament\Support\Enums\ActionSize;
 use Filament\Support\Enums\IconPosition;
 use Illuminate\Support\Arr;
 
 class Dashboard extends BasePage
 {
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
-
-    protected static ?int $navigationSort = 1;
 
     protected static string $view = 'filament.pages.dashboard';
 
@@ -30,9 +27,11 @@ class Dashboard extends BasePage
         return [
             Action::make('home')
                 ->label('Public Dashboard')
+                ->icon('heroicon-o-chart-bar')
+                ->iconPosition(IconPosition::Before)
                 ->color('gray')
-                ->hidden(fn (GeneralSettings $settings): bool => ! $settings->public_dashboard_enabled)
-                ->url('/'),
+                ->hidden(fn (): bool => ! config('speedtest.public_dashboard'))
+                ->url(shouldOpenInNewTab: true, url: '/'),
             ActionGroup::make([
                 Action::make('ookla speedtest')
                     ->action(function (GeneralSettings $settings) {
@@ -55,9 +54,8 @@ class Dashboard extends BasePage
                 ->dropdownPlacement('bottom-end')
                 ->label('Run Speedtest')
                 ->icon('heroicon-o-rocket-launch')
-                ->iconPosition(IconPosition::After)
-                ->hidden(! auth()->user()->is_admin)
-                ->size(ActionSize::Small),
+                ->iconPosition(IconPosition::Before)
+                ->hidden(! auth()->user()->is_admin),
         ];
     }
 

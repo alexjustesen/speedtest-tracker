@@ -15,6 +15,9 @@ class GeneralSettings extends Settings
     /** @var string[] */
     public $speedtest_server;
 
+    /**
+     * @deprecated Use APP_NAME environment variable.
+     */
     public string $site_name;
 
     public string $time_format;
@@ -23,6 +26,9 @@ class GeneralSettings extends Settings
 
     public bool $db_has_timezone;
 
+    /**
+     * @deprecated Use PUBLIC_DASHBOARD environment variable.
+     */
     public bool $public_dashboard_enabled;
 
     public static function group(): string

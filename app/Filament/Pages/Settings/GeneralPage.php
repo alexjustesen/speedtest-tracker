@@ -26,11 +26,9 @@ class GeneralPage extends SettingsPage
 
     protected static string $settings = GeneralSettings::class;
 
-    public function mount(): void
+    public static function canAccess(): bool
     {
-        parent::mount();
-
-        abort_unless(auth()->user()->is_admin, 403);
+        return auth()->user()->is_admin;
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -49,11 +47,13 @@ class GeneralPage extends SettingsPage
                         Forms\Components\Section::make('Site Settings')
                             ->schema([
                                 Forms\Components\TextInput::make('site_name')
-                                    ->maxLength(50)
-                                    ->required()
+                                    ->disabled()
+                                    ->helperText(new HtmlString('⚠️ DEPRECATED: Use <code>APP_NAME</code> environment variable.'))
                                     ->columnSpanFull(),
                                 Forms\Components\Toggle::make('public_dashboard_enabled')
-                                    ->label('Public dashboard'),
+                                    ->label('Public dashboard')
+                                    ->disabled()
+                                    ->helperText(new HtmlString('⚠️ DEPRECATED: Use <code>PUBLIC_DASHBOARD</code> environment variable.')),
                             ])
                             ->compact()
                             ->columns([

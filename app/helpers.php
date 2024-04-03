@@ -27,6 +27,10 @@ if (! function_exists('toBits')) {
 if (! function_exists('percentChange')) {
     function percentChange(float $dividend, float $divisor, int $precision = 0): string
     {
+        if ($dividend === 0 || $divisor === 0) {
+            return 0;
+        }
+
         $quotient = ($dividend - $divisor) / $divisor;
 
         return number_format(round($quotient * 100, $precision), $precision);
@@ -62,7 +66,7 @@ if (! function_exists('absolutePingThresholdFailed')) {
  * @deprecated
  *
  * @param  string  $data
- * @return  bool
+ * @return bool
  */
 if (! function_exists('json_validate')) {
     function json_validate($data)

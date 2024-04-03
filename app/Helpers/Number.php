@@ -35,6 +35,10 @@ class Number extends SupportNumber
     {
         $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'];
 
+        if ($bits === 0) {
+            return '0 B';
+        }
+
         for ($i = 0; ($bits / 1000) > 0.99 && ($i < count($units) - 1); $i++) {
             $bits /= 1000;
         }
@@ -50,6 +54,10 @@ class Number extends SupportNumber
     public static function toBitRate(int|float $bits, int $precision = 0, ?int $maxPrecision = null): string
     {
         $units = ['Bps', 'Kbps', 'Mbps', 'Gbps', 'Tbps', 'Pbps', 'Ebps', 'Zbps', 'Ybps'];
+
+        if ($bits === 0) {
+            return '0 B';
+        }
 
         for ($i = 0; ($bits / 1000) > 0.99 && ($i < count($units) - 1); $i++) {
             $bits /= 1000;

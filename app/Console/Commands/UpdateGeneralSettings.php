@@ -8,6 +8,7 @@ use Cron\CronExpression;
 use Illuminate\Console\Command;
 
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
 class UpdateGeneralSettings extends Command
@@ -34,6 +35,7 @@ class UpdateGeneralSettings extends Command
         $settings = new GeneralSettings();
 
         $this->updateSiteName($settings);
+        $this->updatePublicDashboard($settings);
         $this->updateTimeZone($settings);
         $this->updateSchedule($settings);
         $this->resetSevers($settings);
@@ -57,12 +59,32 @@ class UpdateGeneralSettings extends Command
         }
     }
 
+    protected function updatePublicDashboard($settings): void
+    {
+        $publicDashboard = select(
+            label: 'Make the dashboard public?',
+            options: ['Yes', 'No'],
+            default: 'Yes',
+            required: true,
+        );
+
+        if ($publicDashboard == 'Yes') {
+            $settings->public_dashboard_enabled = true;
+
+            $settings->save();
+        } else {
+            $settings->public_dashboard_enabled = false;
+        }
+
+        $settings->save();
+    }
+
     protected function updateSchedule($settings): void
     {
         $cron = text(
             label: 'What is the schedule?',
             placeholder: '0 * * * *',
-            default: $settings->speedtest_schedule,
+            default: $settings->speedtest_schedule ?? '0 * * * *',
             required: true,
             validate: fn (string $value) => match (true) {
                 ! CronExpression::isValidExpression($value) => 'The schedule expression is invalid.',
