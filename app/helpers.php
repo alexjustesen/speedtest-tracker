@@ -27,7 +27,9 @@ if (! function_exists('toBits')) {
 if (! function_exists('percentChange')) {
     function percentChange(float $dividend, float $divisor, int $precision = 0): string
     {
-        if ($dividend === 0 || $divisor === 0) {
+        try {
+            $quotient = $dividend / $divisor;
+        } catch (DivisionByZeroError $e) {
             return 0;
         }
 
@@ -73,7 +75,7 @@ if (! function_exists('json_validate')) {
     {
         if (! empty($data)) {
             return is_string($data) &&
-              is_array(json_decode($data, true)) ? true : false;
+                is_array(json_decode($data, true)) ? true : false;
         }
 
         return false;
