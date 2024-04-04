@@ -10,7 +10,7 @@ use Filament\Widgets\ChartWidget;
 
 class RecentDownloadLatencyChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Jitter';
+    protected static ?string $heading = 'Download Latency';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -54,7 +54,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download Latency High (ms)',
+                    'label' => 'High (ms)',
                     'data' => $results->map(fn ($item) => $item->download_latency_high ? number_format($item->download_latency_high, 2) : 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
@@ -63,7 +63,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
                 [
-                    'label' => 'Download Latency Low (ms)',
+                    'label' => 'Low (ms)',
                     'data' => $results->map(fn ($item) => $item->download_latency_low ? number_format($item->download_latency_low, 2) : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
@@ -72,7 +72,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
                 [
-                    'label' => 'Download Latency iqm (ms)',
+                    'label' => 'iqm (ms)',
                     'data' => $results->map(fn ($item) => $item->download_latency_iqm ? number_format($item->pdownload_latency_iqm, 2) : 0),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
