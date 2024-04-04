@@ -175,6 +175,12 @@ class ResultResource extends Resource
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->ping->jitter', $direction);
                     }),
+                Tables\Columns\TextColumn::make('download_latency_high')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->download>latency>high', $direction);
+                    }),
                 Tables\Columns\TextColumn::make('packet_loss')
                     ->toggleable()
                     ->toggledHiddenByDefault(),
