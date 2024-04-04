@@ -19,9 +19,9 @@ enum ResultStatus: string implements HasColor, HasLabel
     public function getColor(): ?string
     {
         return match ($this) {
-            ResultStatus::Completed => 'success',
-            ResultStatus::Failed => 'danger',
-            ResultStatus::Started => 'warning',
+            self::Completed => 'success',
+            self::Failed => 'danger',
+            self::Started => 'warning',
         };
     }
 }
