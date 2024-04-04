@@ -68,8 +68,20 @@ class ResultResource extends Resource
                                 ->label('Ping (ms)'),
                             Forms\Components\TextInput::make('data.download.latency.jitter')
                                 ->label('Download Jitter (ms)'),
+                            Forms\Components\TextInput::make('data.download.latency.high')
+                                ->label('Download Latency High'),
+                            Forms\Components\TextInput::make('data.download.latency.low')
+                                ->label('Download Latency low'),
+                            Forms\Components\TextInput::make('data.download.latency.iqm')
+                                ->label('Download Latency iqm'),
                             Forms\Components\TextInput::make('data.upload.latency.jitter')
                                 ->label('Upload Jitter (ms)'),
+                            Forms\Components\TextInput::make('data.upload.latency.high')
+                                ->label('Upload Latency High'),
+                            Forms\Components\TextInput::make('data.upload.latency.low')
+                                ->label('Upload Latency low'),
+                            Forms\Components\TextInput::make('data.upload.latency.iqm')
+                                ->label('Upload Latency iqm'),                               
                             Forms\Components\TextInput::make('data.ping.jitter')
                                 ->label('Ping Jitter (ms)'),
                             Forms\Components\TextInput::make('data.packetLoss')
