@@ -66,27 +66,27 @@ class ResultExporter extends Exporter
                 }),
             ExportColumn::make('upload_latency_high')
                 ->state(function (Result $record): ?string {
-                    return $record->pupload_latency_high;
+                    return $record->upload_latency_high;
                 }),
             ExportColumn::make('upload_latency_low')
                 ->state(function (Result $record): ?string {
-                    return $record->pupload_latency_low;
+                    return $record->upload_latency_low;
                 }),
             ExportColumn::make('upload_latency_avg')
                 ->state(function (Result $record): ?string {
-                    return $record->pupload_latency_iqm;
+                    return $record->upload_latency_iqm;
                 }),
             ExportColumn::make('download_latency_high')
                 ->state(function (Result $record): ?string {
-                    return $record->pdownload_latency_high;
+                    return $record->download_latency_high;
                 }),
             ExportColumn::make('download_latency_low')
                 ->state(function (Result $record): ?string {
-                    return $record->pdownload_latency_low;
+                    return $record->download_latency_low;
                 }),
             ExportColumn::make('download_latency_avg')
                 ->state(function (Result $record): ?string {
-                    return $record->pdownload_latency_iqm;
+                    return $record->download_latency_iqm;
                 }),
             ExportColumn::make('comments')
                 ->enabledByDefault(false),
