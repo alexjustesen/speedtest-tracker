@@ -167,19 +167,19 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download>latency>high', $direction);
+                        return $query->orderBy('data->download->latency->high', $direction);
                     }),
                 Tables\Columns\TextColumn::make('download_latency_low')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download>latency>low', $direction);
+                        return $query->orderBy('data->download->latency->low', $direction);
                     }),
-                Tables\Columns\TextColumn::make('download_latency_avg')
+                Tables\Columns\TextColumn::make('download_latency_iqm')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download>latency>iqm', $direction);
+                        return $query->orderBy('data->download->latency->iqm', $direction);
                     }),
                 Tables\Columns\TextColumn::make('upload_jitter')
                     ->toggleable()
@@ -191,19 +191,19 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload>latency>high', $direction);
+                        return $query->orderBy('data->upload->latency->high', $direction);
                     }),
                 Tables\Columns\TextColumn::make('upload_latency_low')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload>latency>low', $direction);
+                        return $query->orderBy('data->upload->latency->low', $direction);
                     }),
-                Tables\Columns\TextColumn::make('upload_latency_avg')
+                Tables\Columns\TextColumn::make('upload_latency_iqm')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload>latency>iqm', $direction);
+                        return $query->orderBy('data->upload->latency->iqm', $direction);
                     }),
                 Tables\Columns\TextColumn::make('ping_jitter')
                     ->toggleable()
