@@ -64,6 +64,30 @@ class ResultExporter extends Exporter
                 ->state(function (Result $record): ?string {
                     return $record->ping_jitter;
                 }),
+            ExportColumn::make('upload_latency_high')
+                ->state(function (Result $record): ?string {
+                    return $record->pupload_latency_high;
+                }),
+            ExportColumn::make('upload_latency_low')
+                ->state(function (Result $record): ?string {
+                    return $record->pupload_latency_low;
+                }),
+            ExportColumn::make('upload_latency_iqm')
+                ->state(function (Result $record): ?string {
+                    return $record->pupload_latency_iqm;
+                }),
+            ExportColumn::make('download_latency_high')
+                ->state(function (Result $record): ?string {
+                    return $record->pdownload_latency_high;
+                }),
+            ExportColumn::make('download_latency_low')
+                ->state(function (Result $record): ?string {
+                    return $record->pdownload_latency_low;
+                }),
+            ExportColumn::make('download_latency_iqm')
+                ->state(function (Result $record): ?string {
+                    return $record->pdownload_latency_iqm;
+                }),
             ExportColumn::make('comments')
                 ->enabledByDefault(false),
             // ExportColumn::make('status'), // TODO: enable status when upgrading to PHP v8.3: https://php.watch/versions/8.3/dynamic-class-const-enum-member-syntax-support
