@@ -72,7 +72,7 @@ class ResultExporter extends Exporter
                 ->state(function (Result $record): ?string {
                     return $record->pupload_latency_low;
                 }),
-            ExportColumn::make('upload_latency_iqm')
+            ExportColumn::make('upload_latency_avg')
                 ->state(function (Result $record): ?string {
                     return $record->pupload_latency_iqm;
                 }),
@@ -84,7 +84,7 @@ class ResultExporter extends Exporter
                 ->state(function (Result $record): ?string {
                     return $record->pdownload_latency_low;
                 }),
-            ExportColumn::make('download_latency_iqm')
+            ExportColumn::make('download_latency_avg')
                 ->state(function (Result $record): ?string {
                     return $record->pdownload_latency_iqm;
                 }),
