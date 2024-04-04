@@ -54,6 +54,15 @@ class RecentUploadLatencyChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
+                    'label' => 'Average (ms)',
+                    'data' => $results->map(fn ($item) => $item->upload_latency_iqm ? number_format($item->upload_latency_iqm, 2) : 0),
+                    'borderColor' => '#10b981',
+                    'backgroundColor' => '#10b981',
+                    'fill' => false,
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                ],
+                [
                     'label' => 'High (ms)',
                     'data' => $results->map(fn ($item) => $item->upload_latency_high ? number_format($item->upload_latency_high, 2) : 0),
                     'borderColor' => '#0ea5e9',
@@ -67,15 +76,6 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                     'data' => $results->map(fn ($item) => $item->upload_latency_low ? number_format($item->upload_latency_low, 2) : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
-                    'fill' => false,
-                    'cubicInterpolationMode' => 'monotone',
-                    'tension' => 0.4,
-                ],
-                [
-                    'label' => 'iqm (ms)',
-                    'data' => $results->map(fn ($item) => $item->upload_latency_iqm ? number_format($item->upload_latency_iqm, 2) : 0),
-                    'borderColor' => '#10b981',
-                    'backgroundColor' => '#10b981',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
