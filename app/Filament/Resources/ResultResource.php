@@ -81,7 +81,7 @@ class ResultResource extends Resource
                             Forms\Components\TextInput::make('data.upload.latency.low')
                                 ->label('Upload Latency low'),
                             Forms\Components\TextInput::make('data.upload.latency.iqm')
-                                ->label('Upload Latency iqm'),                               
+                                ->label('Upload Latency iqm'),
                             Forms\Components\TextInput::make('data.ping.jitter')
                                 ->label('Ping Jitter (ms)'),
                             Forms\Components\TextInput::make('data.packetLoss')

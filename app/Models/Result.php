@@ -107,7 +107,7 @@ class Result extends Model
         );
     }
 
-        /**
+    /**
      * Get the result's download latency high in milliseconds.
      */
     protected function downloadlatencyHigh(): Attribute
@@ -117,8 +117,7 @@ class Result extends Model
         );
     }
 
-
-/**
+    /**
      * Get the result's download latency low in milliseconds.
      */
     protected function downloadlatencyLow(): Attribute
@@ -128,8 +127,7 @@ class Result extends Model
         );
     }
 
-
-/**
+    /**
      * Get the result's download latency iqm in milliseconds.
      */
     protected function downloadlatencyiqm(): Attribute
@@ -138,7 +136,6 @@ class Result extends Model
             get: fn () => Arr::get($this->data, 'download.latency.iqm'),
         );
     }
-
 
     /**
      * Get the result's download jitter in milliseconds.
@@ -252,8 +249,7 @@ class Result extends Model
         );
     }
 
-
-        /**
+    /**
      * Get the result's upload latency high in milliseconds.
      */
     protected function uploadlatencyHigh(): Attribute
@@ -263,8 +259,7 @@ class Result extends Model
         );
     }
 
-
-/**
+    /**
      * Get the result's upload latency low in milliseconds.
      */
     protected function uploadlatencyLow(): Attribute
@@ -274,8 +269,7 @@ class Result extends Model
         );
     }
 
-
-/**
+    /**
      * Get the result's upload latency iqm in milliseconds.
      */
     protected function uploadlatencyiqm(): Attribute
