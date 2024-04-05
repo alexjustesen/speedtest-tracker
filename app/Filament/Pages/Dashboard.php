@@ -4,9 +4,11 @@ namespace App\Filament\Pages;
 
 use App\Actions\Speedtests\RunOoklaSpeedtest;
 use App\Filament\Widgets\RecentDownloadChartWidget;
+use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
 use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentUploadChartWidget;
+use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
@@ -67,6 +69,8 @@ class Dashboard extends BasePage
             RecentUploadChartWidget::make(),
             RecentPingChartWidget::make(),
             RecentJitterChartWidget::make(),
+            RecentUploadLatencyChartWidget::make(),
+            RecentDownloadLatencyChartWidget::make(),
         ];
     }
 }

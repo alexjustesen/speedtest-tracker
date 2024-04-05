@@ -60,6 +60,12 @@ class Result extends Model
             'ping_jitter' => $this->ping_jitter,
             'download_jitter' => $this->download_jitter,
             'upload_jitter' => $this->upload_jitter,
+            'download_latency_avg' => $this->download_latency_iqm,
+            'download_latency_low' => $this->download_latency_low,
+            'download_latency_high' => $this->download_latency_high,
+            'upload_latency_avg' => $this->upload_latency_iqm,
+            'upload_latency_low' => $this->upload_latency_low,
+            'upload_latency_high' => $this->upload_latency_high,
             'server_id' => $this?->server_id,
             'server_host' => $this?->server_host,
             'server_name' => $this?->server_name,
@@ -98,6 +104,36 @@ class Result extends Model
     {
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'download.latency.jitter'),
+        );
+    }
+
+    /**
+     * Get the result's download latency high in milliseconds.
+     */
+    protected function downloadlatencyHigh(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'download.latency.high'),
+        );
+    }
+
+    /**
+     * Get the result's download latency low in milliseconds.
+     */
+    protected function downloadlatencyLow(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'download.latency.low'),
+        );
+    }
+
+    /**
+     * Get the result's download latency iqm in milliseconds.
+     */
+    protected function downloadlatencyiqm(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'download.latency.iqm'),
         );
     }
 
@@ -210,6 +246,36 @@ class Result extends Model
     {
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'upload.latency.jitter'),
+        );
+    }
+
+    /**
+     * Get the result's upload latency high in milliseconds.
+     */
+    protected function uploadlatencyHigh(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'upload.latency.high'),
+        );
+    }
+
+    /**
+     * Get the result's upload latency low in milliseconds.
+     */
+    protected function uploadlatencyLow(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'upload.latency.low'),
+        );
+    }
+
+    /**
+     * Get the result's upload latency iqm in milliseconds.
+     */
+    protected function uploadlatencyiqm(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'upload.latency.iqm'),
         );
     }
 }
