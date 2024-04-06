@@ -55,7 +55,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Average (ms)',
-                    'data' => $results->map(fn ($item) => $item->download_latency_iqm ? number_format($item->pdownload_latency_iqm, 2) : 0),
+                    'data' => $results->map(fn ($item) => $item->download_latency_iqm ? number_format($item->download_latency_iqm, 2) : 0),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'fill' => false,
