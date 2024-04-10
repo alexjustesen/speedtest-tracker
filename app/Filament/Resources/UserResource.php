@@ -2,15 +2,19 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\UserRole;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Helpers\TimeZoneHelper;
 use App\Models\User;
+use App\Settings\GeneralSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\Rules\Password;
@@ -71,12 +75,8 @@ class UserResource extends Resource
                                 Forms\Components\Section::make()
                                     ->schema([
                                         Forms\Components\Select::make('role')
-                                            ->options([
-                                                'admin' => 'Admin',
-                                                'user' => 'User',
-                                            ])
-                                            ->default('user')
-                                            ->disabled(fn (): bool => ! auth()->user()->is_admin || auth()->user()->is_user)
+                                            ->options(UserRole::class)
+                                            ->disabled(fn (): bool => ! Auth::user()->is_admin)
                                             ->required(),
                                     ])
                                     ->columns(1)
@@ -106,6 +106,8 @@ class UserResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $settings = new GeneralSettings();
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -116,20 +118,20 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('role')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'admin' => 'success',
-                        'user' => 'gray',
-                    }),
+                    ->color(UserRole::class),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->alignEnd()
+                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
+                    ->timezone(TimeZoneHelper::displayTimeZone($settings)),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Last updated')
-                    ->dateTime(),
+                    ->alignEnd()
+                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
+                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('role')
-                    ->options([
-                        'admin' => 'Admin',
-                        'user' => 'User',
-                    ]),
+                    ->options(UserRole::class),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
