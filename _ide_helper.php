@@ -5,7 +5,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.48.2.
+ * Generated for Laravel 10.48.5.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -8862,6 +8862,17 @@ namespace Illuminate\Support\Facades {
         {
                         /** @var \Illuminate\Support\Testing\Fakes\NotificationFake $instance */
                         return $instance->hasSent($notifiable, $notification);
+        }
+                    /**
+         * Specify if notification should be serialized and restored when being "pushed" to the queue.
+         *
+         * @param bool $serializeAndRestore
+         * @return \Illuminate\Support\Testing\Fakes\NotificationFake 
+         * @static 
+         */        public static function serializeAndRestore($serializeAndRestore = true)
+        {
+                        /** @var \Illuminate\Support\Testing\Fakes\NotificationFake $instance */
+                        return $instance->serializeAndRestore($serializeAndRestore);
         }
                     /**
          * Get the notifications that have been sent.
@@ -20024,22 +20035,26 @@ namespace Livewire\Features\SupportTesting {
          *
          * @see \Filament\Tables\Testing\TestsActions::assertTableActionExists()
          * @param array|string $name
+         * @param \Closure|null $checkActionUsing
+         * @param mixed $record
          * @return static 
          * @static 
-         */        public static function assertTableActionExists($name)
+         */        public static function assertTableActionExists($name, $checkActionUsing = null, $record = null)
         {
-                        return \Livewire\Features\SupportTesting\Testable::assertTableActionExists($name);
+                        return \Livewire\Features\SupportTesting\Testable::assertTableActionExists($name, $checkActionUsing, $record);
         }
                     /**
          * 
          *
          * @see \Filament\Tables\Testing\TestsActions::assertTableActionDoesNotExist()
          * @param array|string $name
+         * @param \Closure|null $checkActionUsing
+         * @param mixed $record
          * @return static 
          * @static 
-         */        public static function assertTableActionDoesNotExist($name)
+         */        public static function assertTableActionDoesNotExist($name, $checkActionUsing = null, $record = null)
         {
-                        return \Livewire\Features\SupportTesting\Testable::assertTableActionDoesNotExist($name);
+                        return \Livewire\Features\SupportTesting\Testable::assertTableActionDoesNotExist($name, $checkActionUsing, $record);
         }
                     /**
          * 
@@ -20630,6 +20645,19 @@ namespace Livewire\Features\SupportTesting {
          */        public static function assertTableColumnExists($name, $checkColumnUsing = null, $record = null)
         {
                         return \Livewire\Features\SupportTesting\Testable::assertTableColumnExists($name, $checkColumnUsing, $record);
+        }
+                    /**
+         * 
+         *
+         * @see \Filament\Tables\Testing\TestsColumns::assertTableColumnDoesNotExist()
+         * @param string $name
+         * @param \Closure|null $checkColumnUsing
+         * @param mixed $record
+         * @return static 
+         * @static 
+         */        public static function assertTableColumnDoesNotExist($name, $checkColumnUsing = null, $record = null)
+        {
+                        return \Livewire\Features\SupportTesting\Testable::assertTableColumnDoesNotExist($name, $checkColumnUsing, $record);
         }
                     /**
          * 
@@ -22682,10 +22710,11 @@ namespace  {
              * @param mixed $direction
              * @param mixed $aggregation
              * @param mixed $joinType
+             * @param mixed $aliases
              * @static 
-             */            public static function orderByPowerJoins($sort, $direction = 'asc', $aggregation = null, $joinType = 'join')
+             */            public static function orderByPowerJoins($sort, $direction = 'asc', $aggregation = null, $joinType = 'join', $aliases = null)
             {
-                                return \Illuminate\Database\Eloquent\Builder::orderByPowerJoins($sort, $direction, $aggregation, $joinType);
+                                return \Illuminate\Database\Eloquent\Builder::orderByPowerJoins($sort, $direction, $aggregation, $joinType, $aliases);
             }
                             /**
              * 
