@@ -6,7 +6,9 @@ use App\Enums\UserRole;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Helpers\TimeZoneHelper;
 use App\Models\User;
+use App\Settings\GeneralSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -104,6 +106,8 @@ class UserResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $settings = new GeneralSettings();
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -115,9 +119,15 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('role')
                     ->badge()
                     ->color(UserRole::class),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->alignEnd()
+                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
+                    ->timezone(TimeZoneHelper::displayTimeZone($settings)),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Last updated')
-                    ->dateTime('M. d, Y g:ia'),
+                    ->alignEnd()
+                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
+                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('role')
