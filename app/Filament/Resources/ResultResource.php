@@ -216,6 +216,7 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->toggledHiddenByDefault(),
                 Tables\Columns\TextColumn::make('status')
+                    ->badge()
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
