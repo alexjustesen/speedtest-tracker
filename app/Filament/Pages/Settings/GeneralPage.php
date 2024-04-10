@@ -89,7 +89,7 @@ class GeneralPage extends SettingsPage
                                 Forms\Components\TextInput::make('speedtest_schedule')
                                     ->rules([new Cron()])
                                     ->helperText('Leave empty to disable scheduled tests.')
-                                    ->hint(new HtmlString('&#x1f517;<a href="https://crontab.cronhub.io/" target="_blank" rel="nofollow">Cron Generator</a>'))
+                                    ->hint(new HtmlString('&#x1f517;<a href="https://crontab.guru" target="_blank" rel="nofollow">Cron Generator</a>'))
                                     ->nullable()
                                     ->columnSpan(1),
                                 Forms\Components\TextInput::make('prune_results_older_than')
