@@ -8,6 +8,7 @@ use App\Filament\Exports\ResultExporter;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
 use App\Helpers\TimeZoneHelper;
+use App\Jobs\TruncateResults;
 use App\Models\Result;
 use App\Settings\DataMigrationSettings;
 use App\Settings\GeneralSettings;
@@ -316,6 +317,16 @@ class ResultResource extends Resource
                     ->modalHeading('Migrate History')
                     ->modalDescription(new HtmlString('<p>v0.16.0 archived the old <code>"results"</code> table, to migrate your history click the button below.</p><p>For more information read the <a href="#" target="_blank" rel="nofollow" class="underline">docs</a>.</p>'))
                     ->modalSubmitActionLabel('Yes, migrate it'),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('truncate')
+                        ->action(fn () => TruncateResults::dispatch(Auth::user()))
+                        ->requiresConfirmation()
+                        ->modalHeading('Truncate Results')
+                        ->modalDescription('Are you sure you want to truncate all results data? This can\'t be undone.')
+                        ->color('danger')
+                        ->icon('heroicon-o-trash')
+                        ->hidden(fn (): bool => ! Auth::user()->is_admin),
+                ])->dropdownPlacement('bottom-end'),
             ])
             ->defaultSort('created_at', 'desc')
             ->paginated([5, 15, 25, 50, 100])
