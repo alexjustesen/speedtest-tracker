@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API\Speedtest;
 
 use App\Enums\ResultStatus;
 use App\Helpers\Number;
+use App\Helpers\TimeZoneHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Illuminate\Http\JsonResponse;
 
 class GetLatestController extends Controller
@@ -26,6 +28,8 @@ class GetLatestController extends Controller
             ], 404);
         }
 
+        $settings = new GeneralSettings();
+
         return response()->json([
             'message' => 'ok',
             'data' => [
@@ -39,8 +43,8 @@ class GetLatestController extends Controller
                 'url' => $latest->result_url,
                 'scheduled' => $latest->scheduled,
                 'failed' => $latest->status === ResultStatus::Failed,
-                'created_at' => $latest->created_at->toISOString(true),
-                'updated_at' => $latest->updated_at->toISOString(true),
+                'created_at' => $latest->created_at->timezone(TimeZoneHelper::displayTimeZone($settings))->toISOString(true),
+                'updated_at' => $latest->updated_at->timezone(TimeZoneHelper::displayTimeZone($settings))->toISOString(true),
             ],
         ]);
     }
