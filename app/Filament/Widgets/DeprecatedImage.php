@@ -9,7 +9,7 @@ class DeprecatedImage extends Widget
 {
     protected static string $view = 'filament.widgets.deprecated-image';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public static function canView(): bool
     {
