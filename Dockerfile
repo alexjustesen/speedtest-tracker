@@ -20,9 +20,7 @@ RUN apt-get update \
     \
 # Clean up package lists
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
-# Add deprecated image file
-    && touch /var/html/www/storage/app/public/.deprecated_image
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Copy package configs
 COPY --chmod=755 docker/deploy/etc /etc
@@ -39,5 +37,8 @@ RUN composer install \
     --optimize-autoloader \
     --no-dev \
     --no-cache
+
+# Add deprecated image file
+RUN touch /var/www/html/storage/app/public/.deprecated_image
 
 VOLUME /config
