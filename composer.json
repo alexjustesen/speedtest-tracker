@@ -87,7 +87,7 @@
     "config": {
         "optimize-autoloader": true,
         "platform": {
-            "php": "8.2"
+            "php": "8.3"
         },
         "preferred-install": "dist",
         "sort-packages": true,

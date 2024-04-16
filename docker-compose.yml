@@ -2,11 +2,11 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./docker/8.2
+            context: ./docker/8.3
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: speedtest-tracker-8.2/app
+        image: speedtest-tracker-8.3/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
