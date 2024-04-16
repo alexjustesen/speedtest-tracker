@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-LABEL maintainer="Taylor Otwell"
+LABEL maintainer="Alex Justesen"
 
 ARG WWWGROUP
 ARG NODE_VERSION=20
