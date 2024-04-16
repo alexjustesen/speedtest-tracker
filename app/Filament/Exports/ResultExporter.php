@@ -52,6 +52,7 @@ class ResultExporter extends Exporter
                     return $record->upload_bits;
                 }),
             ExportColumn::make('ping'),
+            ExportColumn::make('packet_loss'),
             ExportColumn::make('download_jitter')
                 ->state(function (Result $record): ?string {
                     return $record->download_jitter;
