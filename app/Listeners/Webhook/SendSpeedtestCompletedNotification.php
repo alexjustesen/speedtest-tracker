@@ -39,6 +39,8 @@ class SendSpeedtestCompletedNotification
                     'ping' => $event->result->ping,
                     'download' => $event->result->downloadBits,
                     'upload' => $event->result->uploadBits,
+                    'packetLoss' => $event->result->packet_loss,
+                    'url' => url('/admin/results'),
                 ])
                 ->doNotSign()
                 ->dispatch();

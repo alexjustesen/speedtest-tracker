@@ -68,6 +68,7 @@ class SendSpeedtestThresholdNotification
                 'serverName' => $event->result->server_name,
                 'serverId' => $event->result->server_id,
                 'metrics' => $failed,
+                'url' => url('/admin/results'),
             ])->render(),
         ];
 
