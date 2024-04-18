@@ -14,7 +14,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->redirectGuestsTo(fn () => route('admin/login'));
+        $middleware->redirectUsersTo(RouteServiceProvider::HOME);
+
+        $middleware->validateCsrfTokens(except: [
+            '/',
+        ]);
+
+        $middleware->throttleApi();
+
+        $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, \App\Http\Middleware\TrustProxies::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
