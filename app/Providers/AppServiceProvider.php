@@ -7,7 +7,6 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -38,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        });
+
         if (config('app.force_https')) {
             URL::forceScheme('https');
         }
@@ -48,15 +51,5 @@ class AppServiceProvider extends ServiceProvider
             'Version' => $system->getLocalVersion(),
             'Out of date' => $system->isOutOfDate() ? 'Yes' : 'No',
         ]);
-
-        $this->bootRoute();
-    }
-
-    public function bootRoute(): void
-    {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
-
     }
 }
