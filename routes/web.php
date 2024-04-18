@@ -20,8 +20,6 @@ Route::get('/', HomeController::class)
 Route::redirect('/login', '/admin/login')
     ->name('login');
 
-require __DIR__.'/debug.php';
-
 if (app()->isLocal()) {
     require __DIR__.'/test.php';
 }
