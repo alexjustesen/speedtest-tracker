@@ -30,7 +30,7 @@ class UpdateGeneralSettings extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $settings = new GeneralSettings();
 

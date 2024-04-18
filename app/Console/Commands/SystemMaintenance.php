@@ -25,7 +25,7 @@ class SystemMaintenance extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         try {
             Artisan::call('cache:clear');
