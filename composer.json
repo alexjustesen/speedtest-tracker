@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "awcodes/filament-versions": "^2.0.1",
         "chrisullyott/php-filesize": "^4.2.1",
         "doctrine/dbal": "^3.8.3",
@@ -17,28 +17,28 @@
         "filament/spatie-laravel-settings-plugin": "^3.2.69",
         "guzzlehttp/guzzle": "^7.8.1",
         "influxdata/influxdb-client-php": "^3.5",
-        "laravel-notification-channels/telegram": "^4.0",
-        "laravel/framework": "^10.48.8",
+        "laravel-notification-channels/telegram": "^5.0",
+        "laravel/framework": "^11.4",
         "laravel/prompts": "^0.1.19",
-        "laravel/sanctum": "^3.3.3",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9.0",
         "livewire/livewire": "^3.4.10",
         "lorisleiva/laravel-actions": "^2.8.0",
         "maennchen/zipstream-php": "^2.4",
-        "spatie/laravel-settings": "^2.8.3",
+        "spatie/laravel-settings": "^3.3",
         "spatie/laravel-webhook-server": "^3.8.1",
         "timokoerber/laravel-one-time-operations": "^1.4.2"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^2.15.1",
+        "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.23.1",
         "laravel/pint": "^1.15.1",
         "laravel/sail": "^1.29.1",
-        "laravel/telescope": "^4.17.6",
+        "laravel/telescope": "^5.0",
         "mockery/mockery": "^1.6.11",
-        "nunomaduro/collision": "^7.10.0",
+        "nunomaduro/collision": "^8.0",
         "phpunit/phpunit": "^10.5.18",
-        "spatie/laravel-ignition": "^2.5.2",
+        "spatie/laravel-ignition": "^2.4",
         "tightenco/duster": "^2.7.5"
     },
     "autoload": {
@@ -96,6 +96,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
