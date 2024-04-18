@@ -11,7 +11,6 @@
         "php": "^8.2",
         "awcodes/filament-versions": "^2.0.1",
         "chrisullyott/php-filesize": "^4.2.1",
-        "doctrine/dbal": "^3.8.3",
         "dragonmantank/cron-expression": "^3.3.3",
         "filament/filament": "^3.2.70",
         "filament/spatie-laravel-settings-plugin": "^3.2.70",
