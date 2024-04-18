@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
-use Illuminate\Support\ServiceProvider;
 
 return [
 
-    'force_https' => env('FORCE_HTTPS', false),
+    'name' => env('APP_NAME', 'Speedtest Tracker'),
 
+    'force_https' => env('FORCE_HTTPS', false),
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
