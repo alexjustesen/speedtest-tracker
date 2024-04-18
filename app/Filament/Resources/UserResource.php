@@ -117,8 +117,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('role')
-                    ->badge()
-                    ->color(UserRole::class),
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->alignEnd()
                     ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
