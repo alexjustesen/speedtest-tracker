@@ -26,7 +26,7 @@ class FixResultStatuses extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(): void
     {
         $this->newLine();
 
@@ -34,7 +34,7 @@ class FixResultStatuses extends Command
         $this->info('📖 Read the docs: https://docs.speedtest-tracker.dev/other/commands');
 
         if (! $this->confirm('Do you want to continue?')) {
-            return Command::FAILURE;
+            return;
         }
 
         /**
@@ -64,7 +64,5 @@ class FixResultStatuses extends Command
             ]);
 
         $this->line('✅ finished!');
-
-        return Command::SUCCESS;
     }
 }

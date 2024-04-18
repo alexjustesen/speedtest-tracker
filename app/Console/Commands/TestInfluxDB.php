@@ -25,7 +25,7 @@ class TestInfluxDB extends Command
     /**
      * Execute the console command.
      */
-    public function handle(InfluxDbSettings $settings): int
+    public function handle(InfluxDbSettings $settings): void
     {
         $influxdb = [
             'enabled' => $settings->v2_enabled,
@@ -38,7 +38,5 @@ class TestInfluxDB extends Command
         if ($influxdb['enabled'] == true) {
             $result = Result::factory()->create();
         }
-
-        return 0;
     }
 }

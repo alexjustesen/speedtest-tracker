@@ -24,7 +24,7 @@ class InstallCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(): void
     {
         if (! $this->option('force')) {
             $this->newLine(2);
@@ -35,7 +35,7 @@ class InstallCommand extends Command
             if (! $this->confirm('Do you wish to continue?')) {
                 $this->info('Install cancelled.');
 
-                return 0;
+                return;
             }
         }
 
@@ -62,7 +62,7 @@ class InstallCommand extends Command
         } catch (\Throwable $th) {
             $this->error('❌ There was an issue migrating the database, check the logs.');
 
-            return 0;
+            return;
         }
 
         $this->line('✅ Database migrated');
@@ -70,8 +70,6 @@ class InstallCommand extends Command
         $this->newLine();
 
         $this->line('🚀 Finished installing the application!');
-
-        return 0;
     }
 
     public function checkAppKey()

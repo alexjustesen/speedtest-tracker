@@ -34,7 +34,7 @@ class ResetUserPassword extends Command
             // couldn't find the user so should fail.
             $this->error('Could not find a user with the email address of '.$$this->argument('email'));
 
-            Command::FAILURE;
+            return;
         }
 
         $password = $this->secret('What is the password?');
@@ -42,7 +42,5 @@ class ResetUserPassword extends Command
         $user->update([
             'password' => Hash::make($password),
         ]);
-
-        Command::SUCCESS;
     }
 }
