@@ -41,6 +41,8 @@ class SendSpeedtestCompletedNotification
             'ping' => round($event->result->ping).' ms',
             'download' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
             'upload' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),
+            'packetLoss' => $event->result->packet_loss,
+            'url' => url('/admin/results'),
         ])->render();
 
         foreach ($notificationSettings->telegram_recipients as $recipient) {
