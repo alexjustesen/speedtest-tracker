@@ -7,3 +7,5 @@ A new speedtest was completed using *{{ $service }}*.
 - *Ping:* {{ $ping }}
 - *Download:* {{ $download }}
 - *Upload:* {{ $upload }}
+- **Packet Loss:** {{ $packetLoss }} **%**
+- **URL:** {{ $url }}
