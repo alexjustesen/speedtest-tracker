@@ -39,6 +39,4 @@ Schedule::call(function () {
     RunScheduledSpeedtests::run();
 })
     ->everyMinute()
-    ->when(function () use ($settings) {
-        return ! blank($settings->speedtest_schedule);
-    });
+    ->when(! blank($settings->speedtest_schedule));
