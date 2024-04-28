@@ -47,10 +47,6 @@ class InstallCommand extends Command
 
         $this->line('⏳ Optimizing the cache...');
 
-        if (app()->environment('local')) {
-            Artisan::call('optimize:clear');
-        }
-
         if (app()->environment('production') || app()->environment('testing')) {
             Artisan::call('view:clear');
             Artisan::call('filament:cache-components');
