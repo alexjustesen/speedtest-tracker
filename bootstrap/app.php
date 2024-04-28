@@ -12,7 +12,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
-        // commands: __DIR__.'/../routes/console.php',
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->redirectGuestsTo(fn () => route('admin/login'));
@@ -52,9 +51,9 @@ return Application::configure(basePath: dirname(__DIR__))
             ->timezone($settings->timezone ?? 'UTC');
 
         /**
-        * Checked for new versions weekly on Thursday because
-        * I usually do releases on Thursday or Friday.
-        */
+         * Checked for new versions weekly on Thursday because
+         * I usually do releases on Thursday or Friday.
+         */
         $schedule->command(\App\Console\Commands\VersionChecker::class)->weeklyOn(5)
             ->timezone($settings->timezone ?? 'UTC');
 
