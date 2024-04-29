@@ -39,7 +39,7 @@ jobs:
         run: cp .env.testing .env
 
       - name: Install composer dependencies
-        run: composer install -n --prefer-dist
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
 
       - name: Install npm dependencies and build assets
         run: npm ci && npm run build
