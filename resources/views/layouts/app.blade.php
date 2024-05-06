@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="min-h-dvh">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,7 @@
             }
         </script>
     </head>
-    <body class="min-h-screen antialiased bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-white">
+    <body class="antialiased min-h-dvh bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-white">
         <main class="p-4 sm:p-6 lg:p-8 mx-auto max-w-{{ config('speedtest.content_width') }} space-y-4 sm:space-y-8">
             <header class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
                 <div>
