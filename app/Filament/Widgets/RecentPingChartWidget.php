@@ -58,6 +58,7 @@ class RecentPingChartWidget extends ChartWidget
                     'data' => $results->map(fn ($item) => ! blank($item->ping) ? number_format($item->ping, 2) : 0),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
+                    'pointBackgroundColor' => '#10b981',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,

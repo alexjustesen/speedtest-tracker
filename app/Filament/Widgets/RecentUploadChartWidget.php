@@ -59,6 +59,7 @@ class RecentUploadChartWidget extends ChartWidget
                     'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
+                    'pointBackgroundColor' => '#8b5cf6',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,

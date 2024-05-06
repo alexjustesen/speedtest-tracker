@@ -59,6 +59,7 @@ class RecentDownloadChartWidget extends ChartWidget
                     'data' => $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : 0),
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
+                    'pointBackgroundColor' => '#0ea5e9',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
