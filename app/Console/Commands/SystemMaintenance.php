@@ -25,14 +25,14 @@ class SystemMaintenance extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         try {
             Artisan::call('cache:clear');
         } catch (\Throwable $th) {
             Log::info('System maintenance failed to clear the cache.');
 
-            return Command::FAILURE;
+            return;
         }
 
         try {
@@ -40,9 +40,7 @@ class SystemMaintenance extends Command
         } catch (\Throwable $th) {
             Log::info('System maintenance failed to clear the view cache.');
 
-            return Command::FAILURE;
+            return;
         }
-
-        return Command::SUCCESS;
     }
 }

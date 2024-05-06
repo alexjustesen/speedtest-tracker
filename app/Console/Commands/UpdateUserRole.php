@@ -29,7 +29,7 @@ class UpdateUserRole extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $email = text(
             label: 'What is the email address?',

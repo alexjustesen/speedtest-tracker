@@ -23,15 +23,18 @@ class Result extends Model
     protected $guarded = [];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array
+     * @return array<string, string>
      */
-    protected $casts = [
-        'data' => 'array',
-        'status' => ResultStatus::class,
-        'scheduled' => 'boolean',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'data' => 'array',
+            'status' => ResultStatus::class,
+            'scheduled' => 'boolean',
+        ];
+    }
 
     /**
      * The tag attributes to be passed to influxdb

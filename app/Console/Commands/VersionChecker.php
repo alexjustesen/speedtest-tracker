@@ -27,12 +27,12 @@ class VersionChecker extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $system = new SystemChecker;
 
         if (! $system->isOutOfDate()) {
-            return Command::SUCCESS;
+            return;
         }
 
         $admins = User::select(['id', 'name', 'email', 'role'])
@@ -53,7 +53,5 @@ class VersionChecker extends Command
                 ])
                 ->sendToDatabase($user);
         }
-
-        return Command::SUCCESS;
     }
 }
