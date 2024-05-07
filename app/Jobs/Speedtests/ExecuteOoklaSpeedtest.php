@@ -16,7 +16,7 @@ use Illuminate\Support\Arr;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-class ExecuteOoklaSpeedtest implements ShouldQueue, ShouldBeUnique
+class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
