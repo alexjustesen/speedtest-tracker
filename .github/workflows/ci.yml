@@ -15,4 +15,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build image
-        run: docker build ../../docker/ci --file Dockerfile --tag speedtest-tracker
+        run: docker build ./docker/ci --file Dockerfile --tag speedtest-tracker
