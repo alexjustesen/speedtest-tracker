@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Http;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -41,6 +42,26 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        /**
+         * Check to make sure there is an internet connection first.
+         */
+        try {
+            Http::retry(3, 500)->get('https://google.com');
+        } catch (\Throwable $th) {
+            $this->result->update([
+                'data' => [
+                    'type' => 'log',
+                    'level' => 'error',
+                    'message' => 'Could not resolve host.',
+                ],
+                'status' => ResultStatus::Failed,
+            ]);
+
+            SpeedtestFailed::dispatch($this->result);
+
+            return;
+        }
+
         $options = array_filter([
             'speedtest',
             '--accept-license',
