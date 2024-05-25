@@ -13,7 +13,7 @@ chmod -R 755 /config
 chown -R webuser:webgroup /config
 chmod -R 755 $WEBUSER_HOME/storage
 chown -R webuser:webgroup $WEBUSER_HOME/storage
-echo "✅  Permissions fixed."
+echo "✅  Done."
 echo ""
 
 if [ ${DB_CONNECTION:="sqlite"} = "sqlite" ]; then
@@ -33,39 +33,9 @@ if [ ${DB_CONNECTION:="sqlite"} = "sqlite" ]; then
         fi
     done
 
-    echo "✅  Database symlink created."
+    echo "✅  Done."
     echo ""
 fi
-
-# Check for env file
-if [ ! -f /config/.env ]; then
-    echo "🙄  Environment file not found, creating..."
-    s6-setuidgid webuser cp $WEBUSER_HOME/.env.production /config/.env
-    echo "✅  Environment file created."
-else
-    echo "✅  Environment file exists."
-fi
-
-echo ""
-
-# create symlinks
-echo "🔗  Creating symlinks for config and log files..."
-symlinks=( \
-/var/www/html/.env \
-)
-
-for i in "${symlinks[@]}"
-do
-    if [[ -e "$i" && ! -L "$i" ]]; then
-        rm -rf "$i"
-    fi
-    if [[ ! -L "$i" ]]; then
-        ln -s /config/"$(basename "$i")" "$i"
-    fi
-done
-
-echo "✅  Symlinks created."
-echo ""
 
 # Check for app key
 if [ ! ${APP_KEY} ]; then
@@ -84,18 +54,19 @@ fi
 echo ""
 
 # Refresh cache
-echo "💰  Building the cache..."
+echo "💰  Refreshing the cache..."
+s6-setuidgid webuser php $WEBUSER_HOME/artisan config:cache --no-ansi -q
+s6-setuidgid webuser php $WEBUSER_HOME/artisan route:cache --no-ansi -q
 s6-setuidgid webuser php $WEBUSER_HOME/artisan view:clear --no-ansi -q
-s6-setuidgid webuser php $WEBUSER_HOME/artisan optimize --no-ansi -q
-echo "✅  Cache set."
+echo "✅  Done."
 echo ""
 
 # Migrate database
 echo "🚛  Migrating the database..."
 s6-setuidgid webuser php $WEBUSER_HOME/artisan migrate --force --no-ansi -q
-echo "✅  Database migrated."
+echo "✅  Done."
 echo ""
 
 # App install done, show a message
-echo "✅  All set, Speedtest Tracker started."
+echo "✅  All set, Speedtest Tracker has started!"
 echo ""
