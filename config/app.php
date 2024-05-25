@@ -13,4 +13,5 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'TimeZoneHelper' => App\Helpers\TimeZoneHelper::class,
     ])->toArray(),
+
 ];
