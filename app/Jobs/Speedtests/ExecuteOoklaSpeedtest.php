@@ -58,7 +58,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
             $message = collect(array_filter($messages, 'json_validate'))->last();
 
-            Result::create([
+            $this->result->update([
                 'data' => json_decode($message, true),
                 'status' => ResultStatus::Failed,
             ]);
