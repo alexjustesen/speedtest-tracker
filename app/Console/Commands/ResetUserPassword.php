@@ -32,7 +32,7 @@ class ResetUserPassword extends Command
 
         if (! $user) {
             // couldn't find the user so should fail.
-            $this->error('Could not find a user with the email address of '.$$this->argument('email'));
+            $this->error('Could not find a user with the email address of '.$this->argument('email'));
 
             return;
         }
