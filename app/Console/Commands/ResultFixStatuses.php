@@ -7,14 +7,14 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
-class FixResultStatuses extends Command
+class ResultFixStatuses extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:fix-result-statuses';
+    protected $signature = 'app:result-fix-statuses';
 
     /**
      * The console command description.
