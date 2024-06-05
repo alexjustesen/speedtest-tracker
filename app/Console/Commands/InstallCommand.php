@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
+
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\info;
 
 class InstallCommand extends Command
 {
@@ -19,7 +21,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $description = 'A fresh install of Speedtest Tracker.';
+    protected $description = 'Install a fresh version of the Speedtest Tracker application.';
 
     /**
      * Execute the console command.
@@ -27,63 +29,30 @@ class InstallCommand extends Command
     public function handle(): void
     {
         if (! $this->option('force')) {
-            $this->newLine(2);
+            $confirmed = confirm('Are you sure you want to continue?');
 
-            $this->info("Running the install will reset all of the application's data.");
-            $this->warn('!!! ALL OF THE DATA WILL BE DELETED !!!');
-
-            if (! $this->confirm('Do you wish to continue?')) {
-                $this->info('Install cancelled.');
-
-                return;
+            if (! $confirmed) {
+                $this->fail('Application install cancelled.');
             }
         }
 
-        $this->info('Starting to install the application...');
-
-        $this->newLine();
-
-        $this->checkAppKey();
-
-        $this->line('⏳ Optimizing the cache...');
+        $this->info('⏳ Starting to install the application...');
 
         if (app()->environment('production') || app()->environment('testing')) {
-            Artisan::call('view:clear');
-            Artisan::call('filament:cache-components');
-            Artisan::call('optimize');
+            $this->call('filament:cache-components');
+            $this->call('optimize');
+        } else {
+            $this->call('optimize:clear');
         }
 
-        $this->line('✅ Optimized cache');
-
-        $this->newLine();
-
-        $this->line('⏳ Migrating the database...');
-
         try {
-            Artisan::call('migrate:fresh', [
+            $this->call('migrate:fresh', [
                 '--force' => true,
             ]);
         } catch (\Throwable $th) {
-            $this->error('❌ There was an issue migrating the database, check the logs.');
-
-            return;
+            $this->fail('❌ There was an issue migrating the database, check the logs.');
         }
 
-        $this->line('✅ Database migrated');
-
-        $this->newLine();
-
-        $this->line('🚀 Finished installing the application!');
-    }
-
-    public function checkAppKey()
-    {
-        if (empty(config('app.key'))) {
-            $this->line('🔑  Creating an application key');
-
-            Artisan::call('key:generate');
-
-            $this->line('✅  Application key created');
-        }
+        info('🚀 Finished installing Speedtest Tracker!');
     }
 }

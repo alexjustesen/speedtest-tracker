@@ -46,7 +46,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
          * Check to make sure there is an internet connection first.
          */
         try {
-            Http::retry(3, 500)->get('https://google.com');
+            Http::retry(3, 500)->get('1.1.1.1');
         } catch (\Throwable $th) {
             $this->result->update([
                 'data' => [
