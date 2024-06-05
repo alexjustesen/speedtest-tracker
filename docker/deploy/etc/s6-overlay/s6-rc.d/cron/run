@@ -1,2 +1,0 @@
-#!/command/with-contenv bash
-s6-setuidgid root /usr/sbin/cron -f -l 8
