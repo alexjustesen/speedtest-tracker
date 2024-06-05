@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use App\Services\SystemChecker;
 use Filament\Notifications\Actions\Action;
@@ -35,9 +36,7 @@ class VersionChecker extends Command
             return;
         }
 
-        $admins = User::select(['id', 'name', 'email', 'role'])
-            ->where('role', 'admin')
-            ->get();
+        $admins = User::where('role', '=', UserRole::Admin)->get();
 
         foreach ($admins as $user) {
             Notification::make()
