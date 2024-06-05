@@ -47,9 +47,8 @@ echo ""
 
 # Refresh cache
 echo "💰  Refreshing the cache..."
-s6-setuidgid webuser php $WEBUSER_HOME/artisan config:cache --no-ansi -q
-s6-setuidgid webuser php $WEBUSER_HOME/artisan route:cache --no-ansi -q
-s6-setuidgid webuser php $WEBUSER_HOME/artisan view:clear --no-ansi -q
+s6-setuidgid webuser php $WEBUSER_HOME/artisan filament:cache-components --no-ansi -q
+s6-setuidgid webuser php $WEBUSER_HOME/artisan optimize --no-ansi -q
 echo "✅  Done."
 echo ""
 
