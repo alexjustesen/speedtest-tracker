@@ -34,7 +34,7 @@ class FixResultStatuses extends Command
         $this->info('📖 Read the docs: https://docs.speedtest-tracker.dev/other/commands');
 
         if (! $this->confirm('Do you want to continue?')) {
-            return;
+            $this->fail('Command cancelled.');
         }
 
         /**
