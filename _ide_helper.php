@@ -5,7 +5,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 11.9.1.
+ * Generated for Laravel 11.10.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -656,6 +656,26 @@ namespace Illuminate\Support\Facades {
         {
                         /** @var \Illuminate\Foundation\Application $instance */
                         return $instance->handleCommand($input);
+        }
+                    /**
+         * Determine if the framework's base configuration should be merged.
+         *
+         * @return bool 
+         * @static 
+         */        public static function shouldMergeFrameworkConfiguration()
+        {
+                        /** @var \Illuminate\Foundation\Application $instance */
+                        return $instance->shouldMergeFrameworkConfiguration();
+        }
+                    /**
+         * Indicate that the framework's base configuration should not be merged.
+         *
+         * @return \Illuminate\Foundation\Application 
+         * @static 
+         */        public static function dontMergeFrameworkConfiguration()
+        {
+                        /** @var \Illuminate\Foundation\Application $instance */
+                        return $instance->dontMergeFrameworkConfiguration();
         }
                     /**
          * Determine if middleware has been disabled for the application.
@@ -25555,7 +25575,7 @@ namespace  {
              * Insert or update a record matching the attributes, and fill it with values.
              *
              * @param array $attributes
-             * @param array $values
+             * @param array|callable $values
              * @return bool 
              * @static 
              */            public static function updateOrInsert($attributes, $values = [])
@@ -25886,11 +25906,6 @@ namespace  {
     }
 
 
-namespace Facades\Livewire\Features\SupportFileUploads {
-    /**
-     * @mixin \Livewire\Features\SupportFileUploads\GenerateSignedUploadUrl     */
-    class GenerateSignedUploadUrl extends \Livewire\Features\SupportFileUploads\GenerateSignedUploadUrl {}
-}
 
 
 
