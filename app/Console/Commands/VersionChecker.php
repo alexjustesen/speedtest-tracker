@@ -36,7 +36,7 @@ class VersionChecker extends Command
             return;
         }
 
-        $admins = User::where('role', '='. UserRole::Admin)->get();
+        $admins = User::where('role', '=', UserRole::Admin)->get();
 
         foreach ($admins as $user) {
             Notification::make()
