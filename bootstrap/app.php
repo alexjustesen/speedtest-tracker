@@ -44,13 +44,6 @@ return Application::configure(basePath: dirname(__DIR__))
         }
 
         /**
-         * Perform system maintenance weekly on Sunday morning,
-         * start off the week nice and fresh.
-         */
-        $schedule->command(\App\Console\Commands\SystemMaintenance::class)->weeklyOn(0)
-            ->timezone($settings->timezone ?? 'UTC');
-
-        /**
          * Checked for new versions weekly on Thursday because
          * I usually do releases on Thursday or Friday.
          */

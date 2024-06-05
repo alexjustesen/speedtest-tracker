@@ -8,7 +8,6 @@ use Cron\CronExpression;
 use Illuminate\Console\Command;
 
 use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
 class UpdateGeneralSettings extends Command
@@ -25,7 +24,7 @@ class UpdateGeneralSettings extends Command
      *
      * @var string
      */
-    protected $description = 'CLI to update the general settings.';
+    protected $description = 'Update the application\'s general settings.';
 
     /**
      * Execute the console command.
@@ -34,8 +33,6 @@ class UpdateGeneralSettings extends Command
     {
         $settings = new GeneralSettings();
 
-        $this->updateSiteName($settings);
-        $this->updatePublicDashboard($settings);
         $this->updateTimeZone($settings);
         $this->updateSchedule($settings);
         $this->resetSevers($settings);
@@ -59,26 +56,6 @@ class UpdateGeneralSettings extends Command
         }
     }
 
-    protected function updatePublicDashboard($settings): void
-    {
-        $publicDashboard = select(
-            label: 'Make the dashboard public?',
-            options: ['Yes', 'No'],
-            default: 'Yes',
-            required: true,
-        );
-
-        if ($publicDashboard == 'Yes') {
-            $settings->public_dashboard_enabled = true;
-
-            $settings->save();
-        } else {
-            $settings->public_dashboard_enabled = false;
-        }
-
-        $settings->save();
-    }
-
     protected function updateSchedule($settings): void
     {
         $cron = text(
@@ -94,27 +71,6 @@ class UpdateGeneralSettings extends Command
 
         if ($cron) {
             $settings->speedtest_schedule = $cron;
-
-            $settings->save();
-        }
-    }
-
-    protected function updateSiteName($settings): void
-    {
-        $name = text(
-            label: 'What is the site name?',
-            placeholder: 'Speedtest Tracker',
-            default: $settings->site_name,
-            required: true,
-            validate: fn (string $value) => match (true) {
-                strlen($value) < 2 => 'The site name must be at least 2 characters.',
-                strlen($value) > 50 => 'The site name must not exceed 50 characters.',
-                default => null
-            }
-        );
-
-        if ($name) {
-            $settings->site_name = $name;
 
             $settings->save();
         }
