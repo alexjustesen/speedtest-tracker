@@ -37,7 +37,9 @@ class Dashboard extends BasePage
             ActionGroup::make([
                 Action::make('ookla speedtest')
                     ->action(function () {
-                        $servers = explode(',', config('speedtest.servers'));
+                        $servers = array_filter(
+                            explode(',', config('speedtest.servers'))
+                        );
 
                         $serverId = null;
 

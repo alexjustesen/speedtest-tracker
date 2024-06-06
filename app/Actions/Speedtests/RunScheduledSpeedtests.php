@@ -18,7 +18,9 @@ class RunScheduledSpeedtests
             return;
         }
 
-        $servers = explode(',', config('speedtest.servers'));
+        $servers = array_filter(
+            explode(',', config('speedtest.servers'))
+        );
 
         $serverId = null;
 
