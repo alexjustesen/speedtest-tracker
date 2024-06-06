@@ -18,12 +18,12 @@ Speedtest Tracker is containerized so you can run it anywhere you run your Docke
 
 ### Quick Start
 
-```dockerfile
+```bash
 docker run -d --name speedtest-tracker --restart unless-stopped \
     -p 8080:80 \
     -e PUID=1000 \
     -e PGID=1000 \
-    -e APP_KEY= # How to generate an app key: https://docs.speedtest-tracker.dev/getting-started/installation
+    -e APP_KEY= # How to generate an app key: https://speedtest-tracker.dev/
     -e APP_URL=http://localhost
     -e DB_CONNECTION=sqlite \
     -v ${PWD}:/config \
