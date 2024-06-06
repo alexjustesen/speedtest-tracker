@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
-use function Laravel\Prompts\note;
 use function Laravel\Prompts\table;
 
 class OoklaListServers extends Command
