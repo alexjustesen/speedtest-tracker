@@ -8,7 +8,7 @@ return [
 
     'datetime_format' => env('DATETIME_FORMAT', 'M. jS, Y g:ia'),
 
-    'display_timezone' => env('DISPLAY_TIMEZONE', 'UTC'),
+    'display_timezone' => env('DISPLAY_TIMEZONE'),
 
     'force_https' => env('FORCE_HTTPS', false),
 
