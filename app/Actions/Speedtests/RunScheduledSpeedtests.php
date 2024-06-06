@@ -2,7 +2,6 @@
 
 namespace App\Actions\Speedtests;
 
-use App\Settings\GeneralSettings;
 use Cron\CronExpression;
 use Illuminate\Support\Arr;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -11,23 +10,25 @@ class RunScheduledSpeedtests
 {
     use AsAction;
 
-    public function handle()
+    public function handle(): void
     {
-        $settings = new GeneralSettings();
+        $cronExpression = new CronExpression(config('speedtest.schedule'));
 
-        /**
-         * Ookla service
-         */
-        $cronExpression = new CronExpression($settings->speedtest_schedule);
-
-        if ($cronExpression->isDue(now()->timezone($settings->timezone ?? 'UTC'))) {
-            $serverId = null;
-
-            if (is_array($settings->speedtest_server) && count($settings->speedtest_server)) {
-                $serverId = Arr::random($settings->speedtest_server);
-            }
-
-            RunOoklaSpeedtest::run(serverId: $serverId, scheduled: true);
+        if (! $cronExpression->isDue(now()->timezone(config('app.timezone')))) {
+            return;
         }
+
+        $servers = explode(',', config('speedtest.servers'));
+
+        $serverId = null;
+
+        if (count($servers)) {
+            $serverId = Arr::random($servers);
+        }
+
+        RunOoklaSpeedtest::run(
+            serverId: $serverId,
+            scheduled: true,
+        );
     }
 }
