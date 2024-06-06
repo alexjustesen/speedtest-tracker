@@ -1,13 +1,8 @@
-# Speedtest Tracker
+# 🐇 Speedtest Tracker
 
-> [!IMPORTANT]
-> `v0.16.0` includes a breaking change that requires user action for existing installs. Read the [release](https://github.com/alexjustesen/speedtest-tracker/releases/tag/v0.16.0) notes regarding the data migration.
+Speedtest Tracker is a self-hosted internet performance tracking application that runs speedtests using Ookla's Speedtest service.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
-
-## Introduction
-
-Speedtest Tracker is a self-hosted internet performance tracking application that runs speedtest checks against Ookla's Speedtest service.
 
 ### Why might I use this?
 
@@ -28,9 +23,13 @@ docker run -d --name speedtest-tracker --restart unless-stopped \
     -p 8080:80 \
     -e PUID=1000 \
     -e PGID=1000 \
+    -e APP_KEY= # How to generate an app key: https://docs.speedtest-tracker.dev/getting-started/installation
+    -e APP_URL=http://localhost
     -e DB_CONNECTION=sqlite \
-    -v /path/to/data:/config \
+    -v ${PWD}:/config \
     lscr.io/linuxserver/speedtest-tracker:latest
+
+# For more environment configuration see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
 ```
 
 ### FAQs and Features
