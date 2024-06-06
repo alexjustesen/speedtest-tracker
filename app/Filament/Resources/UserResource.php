@@ -74,6 +74,7 @@ class UserResource extends Resource
                                     ->schema([
                                         Forms\Components\Select::make('role')
                                             ->options(UserRole::class)
+                                            ->default(UserRole::User)
                                             ->disabled(fn (): bool => ! Auth::user()->is_admin)
                                             ->required(),
                                     ])
