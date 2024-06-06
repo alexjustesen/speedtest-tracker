@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Maintenance;
+namespace App\Console\Commands;
 
 use App\Enums\ResultStatus;
 use Illuminate\Console\Command;
