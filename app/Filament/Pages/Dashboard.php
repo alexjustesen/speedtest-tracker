@@ -11,7 +11,6 @@ use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
-use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Notifications\Notification;
@@ -37,11 +36,15 @@ class Dashboard extends BasePage
                 ->url(shouldOpenInNewTab: true, url: '/'),
             ActionGroup::make([
                 Action::make('ookla speedtest')
-                    ->action(function (GeneralSettings $settings) {
+                    ->action(function () {
+                        $servers = array_filter(
+                            explode(',', config('speedtest.servers'))
+                        );
+
                         $serverId = null;
 
-                        if (is_array($settings->speedtest_server) && count($settings->speedtest_server)) {
-                            $serverId = Arr::random($settings->speedtest_server);
+                        if (count($servers)) {
+                            $serverId = Arr::random($servers);
                         }
 
                         RunOoklaSpeedtest::run(serverId: $serverId);

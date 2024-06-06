@@ -1,8 +1,8 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
 use App\Settings\DataMigrationSettings;
-use App\Settings\GeneralSettings;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Migrations\Migration;
@@ -57,15 +57,7 @@ return new class extends Migration
             return;
         }
 
-        $settings = new GeneralSettings();
-
-        $settings->speedtest_schedule = '';
-
-        $settings->save();
-
-        $admins = User::select(['id', 'name', 'email', 'role'])
-            ->where('role', 'admin')
-            ->get();
+        $admins = User::where('role', '=', UserRole::Admin)->get();
 
         foreach ($admins as $user) {
             Notification::make()

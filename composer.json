@@ -42,8 +42,7 @@
     },
     "autoload": {
         "files": [
-            "app/helpers.php",
-            "app/Helpers/TimeZoneHelper.php"
+            "app/helpers.php"
         ],
         "psr-4": {
             "App\\": "app/",

@@ -1,17 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Facade;
-
 return [
 
     'name' => env('APP_NAME', 'Speedtest Tracker'),
 
     'env' => env('APP_ENV', 'production'),
 
-    'force_https' => env('FORCE_HTTPS', false),
+    'datetime_format' => env('DATETIME_FORMAT', 'M. jS, Y g:ia'),
 
-    'aliases' => Facade::defaultAliases()->merge([
-        'TimeZoneHelper' => App\Helpers\TimeZoneHelper::class,
-    ])->toArray(),
+    'display_timezone' => env('DISPLAY_TIMEZONE'),
+
+    'force_https' => env('FORCE_HTTPS', false),
 
 ];

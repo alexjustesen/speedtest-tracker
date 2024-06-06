@@ -7,11 +7,9 @@ use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
-use App\Helpers\TimeZoneHelper;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
 use App\Settings\DataMigrationSettings;
-use App\Settings\GeneralSettings;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -34,8 +32,6 @@ class ResultResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $settings = new GeneralSettings();
-
         return $form
             ->schema([
                 Forms\Components\Grid::make([
@@ -51,8 +47,8 @@ class ResultResource extends Resource
                                 ->label('ID'),
                             Forms\Components\TextInput::make('created_at')
                                 ->label('Created')
-                                ->afterStateHydrated(function (TextInput $component, $state) use ($settings) {
-                                    $component->state(Carbon::parse($state)->timezone(TimeZoneHelper::displayTimeZone($settings))->format($settings->time_format ?? 'M j, Y G:i:s'));
+                                ->afterStateHydrated(function (TextInput $component, $state) {
+                                    $component->state(Carbon::parse($state)->timezone(config('app.display_timezone'))->format(config('app.datetime_format')));
                                 })
                                 ->columnSpan(2),
                             Forms\Components\TextInput::make('download')
@@ -119,8 +115,6 @@ class ResultResource extends Resource
     public static function table(Table $table): Table
     {
         $dataSettings = new DataMigrationSettings();
-
-        $settings = new GeneralSettings();
 
         return $table
             ->columns([
@@ -225,14 +219,14 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->alignment(Alignment::Center),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->dateTime(config('app.datetime_format'))
+                    ->timezone(config('app.display_timezone'))
                     ->toggleable()
                     ->sortable()
                     ->alignment(Alignment::End),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->dateTime(config('app.datetime_format'))
+                    ->timezone(config('app.display_timezone'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable()
