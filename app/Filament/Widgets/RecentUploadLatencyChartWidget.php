@@ -80,7 +80,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format('M. j - g:ia')),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
         ];
     }
 
