@@ -14,7 +14,7 @@ class RunScheduledSpeedtests
     {
         $cronExpression = new CronExpression(config('speedtest.schedule'));
 
-        if (! $cronExpression->isDue(now()->timezone(config('app.timezone')))) {
+        if (! $cronExpression->isDue(now()->timezone(config('app.display_timezone')))) {
             return;
         }
 
