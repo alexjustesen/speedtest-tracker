@@ -3,7 +3,6 @@
 namespace App\Filament\Pages;
 
 use App\Actions\Speedtests\RunOoklaSpeedtest;
-use App\Filament\Widgets\DeprecatedImage;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
@@ -83,7 +82,6 @@ class Dashboard extends BasePage
     protected function getHeaderWidgets(): array
     {
         return [
-            DeprecatedImage::make(),
             StatsOverviewWidget::make(),
             RecentDownloadChartWidget::make(),
             RecentUploadChartWidget::make(),
