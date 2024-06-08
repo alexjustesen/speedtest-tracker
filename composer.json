@@ -14,6 +14,7 @@
         "dragonmantank/cron-expression": "^3.3.3",
         "filament/filament": "^3.2.86",
         "filament/spatie-laravel-settings-plugin": "^3.2.86",
+        "geerlingguy/ping": "^1.2.1",
         "guzzlehttp/guzzle": "^7.8.1",
         "influxdata/influxdb-client-php": "^3.5",
         "laravel-notification-channels/telegram": "^5.0",
