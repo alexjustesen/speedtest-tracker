@@ -13,7 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Http;
+use JJG\Ping;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -43,11 +43,14 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     public function handle(): void
     {
         /**
-         * Check to make sure there is an internet connection first.
+         * Check for an internet connection first.
          */
-        try {
-            Http::retry(3, 500)->get('1.1.1.1');
-        } catch (\Throwable $th) {
+        $ping = new Ping(
+            host: config('speedtest.ping_url'),
+            timeout: 3,
+        );
+
+        if ($ping->ping() === false) {
             $this->result->update([
                 'data' => [
                     'type' => 'log',
