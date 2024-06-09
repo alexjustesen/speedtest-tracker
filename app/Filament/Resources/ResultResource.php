@@ -7,11 +7,9 @@ use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
-use App\Helpers\TimeZoneHelper;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
 use App\Settings\DataMigrationSettings;
-use App\Settings\GeneralSettings;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -34,8 +32,6 @@ class ResultResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $settings = new GeneralSettings();
-
         return $form
             ->schema([
                 Forms\Components\Grid::make([
@@ -51,8 +47,8 @@ class ResultResource extends Resource
                                 ->label('ID'),
                             Forms\Components\TextInput::make('created_at')
                                 ->label('Created')
-                                ->afterStateHydrated(function (TextInput $component, $state) use ($settings) {
-                                    $component->state(Carbon::parse($state)->timezone(TimeZoneHelper::displayTimeZone($settings))->format($settings->time_format ?? 'M j, Y G:i:s'));
+                                ->afterStateHydrated(function (TextInput $component, $state) {
+                                    $component->state(Carbon::parse($state)->timezone(config('app.display_timezone'))->format(config('app.datetime_format')));
                                 })
                                 ->columnSpan(2),
                             Forms\Components\TextInput::make('download')
@@ -120,14 +116,12 @@ class ResultResource extends Resource
     {
         $dataSettings = new DataMigrationSettings();
 
-        $settings = new GeneralSettings();
-
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('ip_address')
+                Tables\Columns\TextColumn::make('data.interface.externalIp')
                     ->label('IP address')
                     ->toggleable()
                     ->toggledHiddenByDefault()
@@ -138,13 +132,13 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('server_id')
+                Tables\Columns\TextColumn::make('data.server.id')
                     ->label('Server ID')
                     ->toggleable()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->id', $direction);
                     }),
-                Tables\Columns\TextColumn::make('server_name')
+                Tables\Columns\TextColumn::make('data.server.name')
                     ->toggleable()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->name', $direction);
@@ -158,55 +152,64 @@ class ResultResource extends Resource
                 Tables\Columns\TextColumn::make('ping')
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('download_jitter')
+                Tables\Columns\TextColumn::make('data.download.latency.jitter')
+                    ->label('Download jitter')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->jitter', $direction);
                     }),
-                Tables\Columns\TextColumn::make('download_latency_high')
+                Tables\Columns\TextColumn::make('data.download.latency.high')
+                    ->label('Download latency high')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->high', $direction);
                     }),
-                Tables\Columns\TextColumn::make('download_latency_low')
+                Tables\Columns\TextColumn::make('data.download.latency.low')
+                    ->label('Download latency low')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->low', $direction);
                     }),
-                Tables\Columns\TextColumn::make('download_latency_iqm')
+                Tables\Columns\TextColumn::make('data.download.latency.iqm')
+                    ->label('Download latency iqm')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->iqm', $direction);
                     }),
-                Tables\Columns\TextColumn::make('upload_jitter')
+                Tables\Columns\TextColumn::make('data.upload.latency.jitter')
+                    ->label('Upload jitter')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->jitter', $direction);
                     }),
-                Tables\Columns\TextColumn::make('upload_latency_high')
+                Tables\Columns\TextColumn::make('data.upload.latency.high')
+                    ->label('Upload latency high')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->high', $direction);
                     }),
-                Tables\Columns\TextColumn::make('upload_latency_low')
+                Tables\Columns\TextColumn::make('data.upload.latency.low')
+                    ->label('Upload latency low')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->low', $direction);
                     }),
-                Tables\Columns\TextColumn::make('upload_latency_iqm')
+                Tables\Columns\TextColumn::make('data.upload.latency.iqm')
+                    ->label('Upload latency iqm')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->iqm', $direction);
                     }),
-                Tables\Columns\TextColumn::make('ping_jitter')
+                Tables\Columns\TextColumn::make('data.ping.jitter')
+                    ->label('Ping jitter')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -225,14 +228,14 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->alignment(Alignment::Center),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->dateTime(config('app.datetime_format'))
+                    ->timezone(config('app.display_timezone'))
                     ->toggleable()
                     ->sortable()
                     ->alignment(Alignment::End),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->dateTime(config('app.datetime_format'))
+                    ->timezone(config('app.display_timezone'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable()

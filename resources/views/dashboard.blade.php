@@ -6,7 +6,7 @@
 
         @isset($latestResult)
             <div class="text-sm font-semibold leading-6 text-center col-span-full sm:text-base">
-                Latest result: <time datetime="{{ $latestResult->created_at }}">{{ $diff }}</time>
+                Latest result: <time title="{{ $latestResult->created_at->timezone(config('app.display_timezone'))->format(config('app.datetime_format')) }}" datetime="{{ $latestResult->created_at->timezone(config('app.display_timezone')) }}">{{ $latestResult->created_at->diffForHumans() }}</time>
             </div>
         @endisset
 

@@ -6,9 +6,7 @@ use App\Enums\UserRole;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\Pages\EditUser;
-use App\Helpers\TimeZoneHelper;
 use App\Models\User;
-use App\Settings\GeneralSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -76,6 +74,7 @@ class UserResource extends Resource
                                     ->schema([
                                         Forms\Components\Select::make('role')
                                             ->options(UserRole::class)
+                                            ->default(UserRole::User)
                                             ->disabled(fn (): bool => ! Auth::user()->is_admin)
                                             ->required(),
                                     ])
@@ -106,8 +105,6 @@ class UserResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $settings = new GeneralSettings();
-
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -120,12 +117,12 @@ class UserResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->alignEnd()
-                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone(TimeZoneHelper::displayTimeZone($settings)),
+                    ->dateTime(config('app.datetime_format'))
+                    ->timezone(config('app.display_timezone')),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->alignEnd()
-                    ->dateTime($settings->time_format ?? 'M j, Y G:i:s')
-                    ->timezone(TimeZoneHelper::displayTimeZone($settings))
+                    ->dateTime(config('app.datetime_format'))
+                    ->timezone(config('app.display_timezone'))
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

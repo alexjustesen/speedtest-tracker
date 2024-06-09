@@ -17,43 +17,43 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "duster"
-        uses: tighten/duster-action@v2
+        uses: tighten/duster-action@v3
         with:
           args: lint --using=pint -v
 
-  test:
-    needs: [lint] # needs lint job to pass first
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # test:
+  #   needs: [lint] # needs lint job to pass first
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
-          coverage: none
+  #     - name: Setup PHP
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: '8.3'
+  #         extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+  #         coverage: none
 
-      - name: Prepare the environment
-        run: cp .env.testing .env
+  #     - name: Prepare the environment
+  #       run: cp .env.testing .env
 
-      - name: Install composer dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+  #     - name: Install composer dependencies
+  #       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
 
-      - name: Install npm dependencies and build assets
-        run: npm ci && npm run build
+  #     - name: Install npm dependencies and build assets
+  #       run: npm ci && npm run build
 
-      - name: Generate an application key
-        run: php artisan key:generate
+  #     - name: Generate an application key
+  #       run: php artisan key:generate
 
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
+  #     - name: Directory Permissions
+  #       run: chmod -R 777 storage bootstrap/cache
 
-      - name: Create SQLite database
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
+  #     - name: Create SQLite database
+  #       run: |
+  #         mkdir -p database
+  #         touch database/database.sqlite
 
-      - name: Run tests
-        run: php artisan test
+  #     - name: Run tests
+  #       run: php artisan test

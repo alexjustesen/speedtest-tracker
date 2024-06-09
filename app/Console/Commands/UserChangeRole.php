@@ -5,26 +5,25 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Illuminate\Console\Command;
 
-use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
-class UpdateUserRole extends Command
+class UserChangeRole extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:update-user-role';
+    protected $signature = 'app:user-change-role';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Change the role for a given user.';
+    protected $description = 'Change the role for a user.';
 
     /**
      * Execute the console command.
@@ -49,18 +48,11 @@ class UpdateUserRole extends Command
             default: 'user'
         );
 
-        $confirmed = confirm(
-            label: 'Are you sure?',
-            required: true
-        );
+        User::where('email', '=', $email)
+            ->update([
+                'role' => $role,
+            ]);
 
-        if ($confirmed) {
-            User::firstWhere('email', $email)
-                ->update([
-                    'role' => $role,
-                ]);
-
-            info('User role updated.');
-        }
+        info('User role updated.');
     }
 }

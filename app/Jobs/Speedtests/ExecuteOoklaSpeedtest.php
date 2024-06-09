@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use JJG\Ping;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -41,6 +42,10 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
+        if (! $this->checkForInternetConnection()) {
+            return;
+        }
+
         $options = array_filter([
             'speedtest',
             '--accept-license',
@@ -58,7 +63,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
             $message = collect(array_filter($messages, 'json_validate'))->last();
 
-            Result::create([
+            $this->result->update([
                 'data' => json_decode($message, true),
                 'status' => ResultStatus::Failed,
             ]);
@@ -79,5 +84,35 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         ]);
 
         SpeedtestCompleted::dispatch($this->result);
+    }
+
+    protected function checkForInternetConnection(): bool
+    {
+        // Skip checking for internet connection if ping url isn't set (disabled)
+        if (blank(config('speedtest.ping_url'))) {
+            return true;
+        }
+
+        $ping = new Ping(
+            host: config('speedtest.ping_url'),
+            timeout: 3,
+        );
+
+        if ($ping->ping() === false) {
+            $this->result->update([
+                'data' => [
+                    'type' => 'log',
+                    'level' => 'error',
+                    'message' => 'Could not resolve host.',
+                ],
+                'status' => ResultStatus::Failed,
+            ]);
+
+            SpeedtestFailed::dispatch($this->result);
+
+            return false;
+        }
+
+        return true;
     }
 }

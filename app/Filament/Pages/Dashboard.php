@@ -3,7 +3,6 @@
 namespace App\Filament\Pages;
 
 use App\Actions\Speedtests\RunOoklaSpeedtest;
-use App\Filament\Widgets\DeprecatedImage;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
@@ -11,7 +10,8 @@ use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
-use App\Settings\GeneralSettings;
+use Carbon\Carbon;
+use Cron\CronExpression;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Notifications\Notification;
@@ -25,6 +25,19 @@ class Dashboard extends BasePage
 
     protected static string $view = 'filament.pages.dashboard';
 
+    public function getSubheading(): ?string
+    {
+        if (blank(config('speedtest.schedule'))) {
+            return __('No speedtests scheduled.');
+        }
+
+        $cronExpression = new CronExpression(config('speedtest.schedule'));
+
+        $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
+
+        return 'Next speedtest at: '.$nextRunDate;
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -37,11 +50,15 @@ class Dashboard extends BasePage
                 ->url(shouldOpenInNewTab: true, url: '/'),
             ActionGroup::make([
                 Action::make('ookla speedtest')
-                    ->action(function (GeneralSettings $settings) {
+                    ->action(function () {
+                        $servers = array_filter(
+                            explode(',', config('speedtest.servers'))
+                        );
+
                         $serverId = null;
 
-                        if (is_array($settings->speedtest_server) && count($settings->speedtest_server)) {
-                            $serverId = Arr::random($settings->speedtest_server);
+                        if (count($servers)) {
+                            $serverId = Arr::random($servers);
                         }
 
                         RunOoklaSpeedtest::run(serverId: $serverId);
@@ -65,7 +82,6 @@ class Dashboard extends BasePage
     protected function getHeaderWidgets(): array
     {
         return [
-            DeprecatedImage::make(),
             StatsOverviewWidget::make(),
             RecentDownloadChartWidget::make(),
             RecentUploadChartWidget::make(),

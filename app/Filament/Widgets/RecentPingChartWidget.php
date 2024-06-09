@@ -3,9 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
-use App\Helpers\TimeZoneHelper;
 use App\Models\Result;
-use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentPingChartWidget extends ChartWidget
@@ -34,8 +32,6 @@ class RecentPingChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-        $settings = new GeneralSettings();
-
         $results = Result::query()
             ->select(['id', 'ping', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
@@ -64,7 +60,7 @@ class RecentPingChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(TimeZoneHelper::displayTimeZone($settings))->format('M d - G:i')),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
         ];
     }
 

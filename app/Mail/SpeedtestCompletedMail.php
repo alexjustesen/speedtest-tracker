@@ -51,7 +51,7 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
                 'ping' => round($this->result->ping, 2).' ms',
                 'download' => Number::toBitRate(bits: $this->result->download_bits, precision: 2),
                 'upload' => Number::toBitRate(bits: $this->result->upload_bits, precision: 2),
-                'packetLoss' => $event->result->packet_loss,
+                'packetLoss' => is_numeric($this->result->packet_loss) ? $this->result->packet_loss : 'n/a',
                 'url' => url('/admin/results'),
             ],
         );
