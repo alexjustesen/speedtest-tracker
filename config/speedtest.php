@@ -29,7 +29,7 @@ return [
     /**
      * Speedtest settings.
      */
-    'ping_url' => env('SPEEDTEST_PING_URL', '1.1.1.1'),
+    'ping_url' => env('SPEEDTEST_PING_URL'),
 
     'schedule' => env('SPEEDTEST_SCHEDULE'),
 

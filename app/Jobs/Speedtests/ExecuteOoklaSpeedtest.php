@@ -42,26 +42,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
      */
     public function handle(): void
     {
-        /**
-         * Check for an internet connection first.
-         */
-        $ping = new Ping(
-            host: config('speedtest.ping_url'),
-            timeout: 3,
-        );
-
-        if ($ping->ping() === false) {
-            $this->result->update([
-                'data' => [
-                    'type' => 'log',
-                    'level' => 'error',
-                    'message' => 'Could not resolve host.',
-                ],
-                'status' => ResultStatus::Failed,
-            ]);
-
-            SpeedtestFailed::dispatch($this->result);
-
+        if (! $this->checkForInternetConnection()) {
             return;
         }
 
@@ -103,5 +84,35 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         ]);
 
         SpeedtestCompleted::dispatch($this->result);
+    }
+
+    protected function checkForInternetConnection(): bool
+    {
+        // Skip checking for internet connection if ping url isn't set (disabled)
+        if (blank(config('speedtest.ping_url'))) {
+            return true;
+        }
+
+        $ping = new Ping(
+            host: config('speedtest.ping_url'),
+            timeout: 3,
+        );
+
+        if ($ping->ping() === false) {
+            $this->result->update([
+                'data' => [
+                    'type' => 'log',
+                    'level' => 'error',
+                    'message' => 'Could not resolve host.',
+                ],
+                'status' => ResultStatus::Failed,
+            ]);
+
+            SpeedtestFailed::dispatch($this->result);
+
+            return false;
+        }
+
+        return true;
     }
 }
