@@ -48,6 +48,7 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
                 'service' => Str::title($this->result->service),
                 'serverName' => $this->result->server_name,
                 'serverId' => $this->result->server_id,
+                'isp' => $event->result->isp,
                 'ping' => round($this->result->ping, 2).' ms',
                 'download' => Number::toBitRate(bits: $this->result->download_bits, precision: 2),
                 'upload' => Number::toBitRate(bits: $this->result->upload_bits, precision: 2),

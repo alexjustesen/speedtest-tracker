@@ -66,6 +66,7 @@ class SendSpeedtestThresholdNotification
                 ->payload([
                     'result_id' => $event->result->id,
                     'site_name' => config('app.name'),
+                    'isp' => $event->result->isp,
                     'metrics' => $failed,
                     'url' => url('/admin/results'),
                 ])

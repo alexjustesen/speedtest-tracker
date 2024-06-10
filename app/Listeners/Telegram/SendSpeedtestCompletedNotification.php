@@ -38,6 +38,7 @@ class SendSpeedtestCompletedNotification
             'service' => Str::title($event->result->service),
             'serverName' => $event->result->server_name,
             'serverId' => $event->result->server_id,
+            'isp' => $event->result->isp,
             'ping' => round($event->result->ping).' ms',
             'download' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
             'upload' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),

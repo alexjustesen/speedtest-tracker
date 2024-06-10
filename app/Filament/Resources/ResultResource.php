@@ -99,6 +99,9 @@ class ResultResource extends Resource
                             Forms\Components\Placeholder::make('server_id')
                                 ->label('Server ID')
                                 ->content(fn (Result $result): ?string => $result->server_id),
+                            Forms\Components\Placeholder::make('isp')
+                                ->label('ISP')
+                                ->content(fn (Result $result): ?string => $result->isp),
                             Forms\Components\Placeholder::make('server_host')
                                 ->content(fn (Result $result): ?string => $result->server_host),
                             Forms\Components\Checkbox::make('scheduled'),
@@ -137,6 +140,13 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->id', $direction);
+                    }),
+                Tables\Columns\TextColumn::make('data.isp')
+                    ->label('ISP')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->isp', $direction);
                     }),
                 Tables\Columns\TextColumn::make('data.server.name')
                     ->toggleable()

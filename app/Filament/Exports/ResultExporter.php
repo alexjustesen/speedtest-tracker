@@ -30,6 +30,12 @@ class ResultExporter extends Exporter
                     return $record->ip_address;
                 })
                 ->enabledByDefault(false),
+            ExportColumn::make('isp')
+                ->label('ISP')
+                ->state(function (Result $record): ?string {
+                    return $record->isp;
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('service'),
             ExportColumn::make('server_id')
                 ->label('Server ID')
