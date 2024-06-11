@@ -1,7 +1,7 @@
 <x-mail::message>
 # Speedtest Threshold Breached - #{{ $id }}
 
-A new speedtest was completed using **{{ $service }}** but a threshold was breached.
+A new speedtest was completed using **{{ $service }}** on **{{ $isp }}** but a threshold was breached.
 
 <x-mail::table>
 | **Metric** | **Threshold** | **Value** |

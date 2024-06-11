@@ -69,6 +69,7 @@ class Result extends Model
             'upload_latency_low' => $this->upload_latency_low,
             'upload_latency_high' => $this->upload_latency_high,
             'server_id' => $this?->server_id,
+            'isp' => $this?->isp,
             'server_host' => $this?->server_host,
             'server_name' => $this?->server_name,
             'scheduled' => $this->scheduled,

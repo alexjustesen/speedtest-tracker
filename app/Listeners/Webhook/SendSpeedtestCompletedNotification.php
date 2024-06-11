@@ -36,6 +36,7 @@ class SendSpeedtestCompletedNotification
                 ->payload([
                     'result_id' => $event->result->id,
                     'site_name' => config('app.name'),
+                    'isp' => $event->result->isp,
                     'ping' => $event->result->ping,
                     'download' => $event->result->downloadBits,
                     'upload' => $event->result->uploadBits,
