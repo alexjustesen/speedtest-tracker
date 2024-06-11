@@ -18,19 +18,43 @@ Speedtest Tracker is containerized so you can run it anywhere you run your Docke
 
 ### Quick Start
 
+#### Docker
+
 ```bash
 docker run -d --name speedtest-tracker --restart unless-stopped \
     -p 8080:80 \
     -e PUID=1000 \
     -e PGID=1000 \
-    -e APP_KEY= # How to generate an app key: https://speedtest-tracker.dev/
-    -e APP_URL=http://localhost
+    -e APP_KEY= \ # How to generate an app key: https://speedtest-tracker.dev/
+    -e APP_URL=http://localhost \
     -e DB_CONNECTION=sqlite \
     -v ${PWD}:/config \
     lscr.io/linuxserver/speedtest-tracker:latest
-
-# For more environment configuration see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
 ```
+
+#### Docker Compose
+
+```bash
+services:
+    speedtest-tracker:
+        container_name: speedtest-tracker
+        ports:
+            - 8080:80
+            - 8443:443
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - APP_KEY= # How to generate an app key: https://speedtest-tracker.dev/
+            - APP_URL=http://localhost
+            - DB_CONNECTION=sqlite
+        volumes:
+            - /path/to/data:/config
+            - /path/to-custom-ssl-keys:/config/keys
+        image: lscr.io/linuxserver/speedtest-tracker:latest
+        restart: unless-stopped
+```
+
+For more environment configuration see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
 
 ### FAQs and Features
 
