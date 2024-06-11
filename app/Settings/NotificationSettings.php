@@ -46,6 +46,14 @@ class NotificationSettings extends Settings
 
     public ?array $discord_webhooks;
 
+    public bool $slack_enabled;
+
+    public bool $slack_on_speedtest_run;
+
+    public bool $slack_on_threshold_failure;
+
+    public ?array $slack_webhooks;
+
     public static function group(): string
     {
         return 'notification';
