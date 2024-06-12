@@ -29,7 +29,7 @@ docker run -d --name speedtest-tracker --restart unless-stopped \
     -e APP_URL=http://localhost \
     -e DB_CONNECTION=sqlite \
     -v ${PWD}:/config \
-    lscr.io/linuxserver/speedtest-tracker:latest
+    lscr.io/linuxserver/speedtest-tracker:0.20.5
 ```
 
 #### Docker Compose
@@ -50,9 +50,12 @@ services:
         volumes:
             - /path/to/data:/config
             - /path/to-custom-ssl-keys:/config/keys
-        image: lscr.io/linuxserver/speedtest-tracker:latest
+        image: lscr.io/linuxserver/speedtest-tracker:0.20.5
         restart: unless-stopped
 ```
+## Image version
+
+Check [here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker) to see what the latest version is. Due to breaking changes we don't advise to use the `latest` tag. Best pratice is to pin it to a version.
 
 For more environment configuration see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
 
