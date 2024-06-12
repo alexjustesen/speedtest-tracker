@@ -55,7 +55,7 @@ services:
 ```
 ## Image version
 
-Check [here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker) to see what the latest version is. Due to breaking changes we don't advise to use the `latest` tag. Best pratice is to pin it to a version.
+A full list of released versions can be found[here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker)
 
 For more environment configuration see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
 
