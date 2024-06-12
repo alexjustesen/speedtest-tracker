@@ -55,7 +55,7 @@ services:
 ```
 ## Image version
 
-A full list of released versions can be found[here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker)
+A full list of released versions can be found here: https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker
 
 For more environment configuration see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
 
