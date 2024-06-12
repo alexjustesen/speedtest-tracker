@@ -25,5 +25,15 @@
         <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentJitterChartWidget::class)
         </div>
+
+        <div class="col-span-full">
+            @livewire(\App\Filament\Widgets\RecentDownloadLatencyChartWidget::class)
+        </div>
+
+        <div class="col-span-full">
+            @livewire(\App\Filament\Widgets\RecentUploadLatencyChartWidget::class)
+        </div>
+
     </div>
+
 </x-app-layout>
