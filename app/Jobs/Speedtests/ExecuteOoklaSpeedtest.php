@@ -64,6 +64,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             $message = collect(array_filter($messages, 'json_validate'))->last();
 
             $this->result->update([
+                'server_id' => $this->serverId,
                 'data' => json_decode($message, true),
                 'status' => ResultStatus::Failed,
             ]);
@@ -100,6 +101,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
         if ($ping->ping() === false) {
             $this->result->update([
+                'server_id' => $this->serverId,
                 'data' => [
                     'type' => 'log',
                     'level' => 'error',
