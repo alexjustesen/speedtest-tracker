@@ -87,8 +87,8 @@ class Dashboard extends BasePage
             RecentUploadChartWidget::make(),
             RecentPingChartWidget::make(),
             RecentJitterChartWidget::make(),
-            RecentUploadLatencyChartWidget::make(),
             RecentDownloadLatencyChartWidget::make(),
+            RecentUploadLatencyChartWidget::make(),
         ];
     }
 }
