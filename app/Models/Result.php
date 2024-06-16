@@ -229,8 +229,8 @@ class Result extends Model
             get: fn () => Arr::get($this->data, 'server.name'),
         );
     }
-    
-     /**
+
+    /**
      * Get the result's server location.
      */
     protected function serverLocation(): Attribute
@@ -239,6 +239,7 @@ class Result extends Model
             get: fn () => Arr::get($this->data, 'server.location'),
         );
     }
+
     /**
      * Get the result's upload in bits.
      */
