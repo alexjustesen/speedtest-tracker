@@ -73,6 +73,7 @@ class Result extends Model
             'location' => $this?->location,
             'server_host' => $this?->server_host,
             'server_name' => $this?->server_name,
+            'server_location' => $this?->server_location,
             'scheduled' => $this->scheduled,
             'successful' => $this->status === ResultStatus::Completed,
             'packet_loss' => (float) $this->packet_loss,
