@@ -62,27 +62,60 @@ class ResultResource extends Resource
                                     $component->state(! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : '');
                                 }),
                             Forms\Components\TextInput::make('ping')
-                                ->label('Ping (ms)'),
+                                ->label('Ping')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.download.latency.jitter')
-                                ->label('Download Jitter (ms)'),
+                                ->label('Download Jitter (ms)')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.download.latency.high')
-                                ->label('Download Latency High'),
+                                ->label('Download Latency High')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.download.latency.low')
-                                ->label('Download Latency low'),
+                                ->label('Download Latency low')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.download.latency.iqm')
-                                ->label('Download Latency iqm'),
+                                ->label('Download Latency iqm')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.upload.latency.jitter')
-                                ->label('Upload Jitter (ms)'),
+                                ->label('Upload Jitter')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.upload.latency.high')
-                                ->label('Upload Latency High'),
+                                ->label('Upload Latency High')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.upload.latency.low')
-                                ->label('Upload Latency low'),
+                                ->label('Upload Latency low')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.upload.latency.iqm')
-                                ->label('Upload Latency iqm'),
+                                ->label('Upload Latency iqm')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.ping.jitter')
-                                ->label('Ping Jitter (ms)'),
+                                ->label('Ping Jitter')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' ms';
+                                }),
                             Forms\Components\TextInput::make('data.packetLoss')
-                                ->label('Packet Loss'),
+                                ->label('Packet Loss')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 2, '.', '').' %';
+                                }),
                             Forms\Components\Textarea::make('data.message')
                                 ->label('Error Message')
                                 ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))
@@ -171,13 +204,19 @@ class ResultResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ping')
                     ->toggleable()
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
+                    }),
                 Tables\Columns\TextColumn::make('data.download.latency.jitter')
                     ->label('Download jitter')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->jitter', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('data.download.latency.high')
                     ->label('Download latency high')
@@ -185,6 +224,9 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->high', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('data.download.latency.low')
                     ->label('Download latency low')
@@ -192,6 +234,9 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->low', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('data.download.latency.iqm')
                     ->label('Download latency iqm')
@@ -199,6 +244,9 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->iqm', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('data.upload.latency.jitter')
                     ->label('Upload jitter')
@@ -206,6 +254,9 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->jitter', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('data.upload.latency.high')
                     ->label('Upload latency high')
@@ -213,6 +264,9 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->high', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('data.upload.latency.low')
                     ->label('Upload latency low')
@@ -220,6 +274,9 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->low', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('data.upload.latency.iqm')
                     ->label('Upload latency iqm')
@@ -227,6 +284,9 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->iqm', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('data.ping.jitter')
                     ->label('Ping jitter')
@@ -234,10 +294,19 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->ping->jitter', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 Tables\Columns\TextColumn::make('packet_loss')
                     ->toggleable()
-                    ->toggledHiddenByDefault(),
+                    ->toggledHiddenByDefault()
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->packetLoss', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 2, '.', '').' %';
+                    }),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->toggleable()
