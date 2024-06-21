@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46c918b9c0233bf52d43ae21851c9084",
+    "content-hash": "212c1a0b359e7229bdc58753c62c644b",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -4220,16 +4220,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "3.5.0",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "415782b7e48223342f1a616c16c45a95b15b2318"
+                "reference": "39c8ef752db6865717cc3fba63970c16f057982c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/415782b7e48223342f1a616c16c45a95b15b2318",
-                "reference": "415782b7e48223342f1a616c16c45a95b15b2318",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/39c8ef752db6865717cc3fba63970c16f057982c",
+                "reference": "39c8ef752db6865717cc3fba63970c16f057982c",
                 "shasum": ""
             },
             "require": {
@@ -4322,7 +4322,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-03T17:25:54+00:00"
+            "time": "2024-06-20T15:52:59+00:00"
         },
         {
             "name": "nette/schema",
@@ -10640,16 +10640,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.2.4",
+            "version": "11.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0991687efe8a29945cce2e85c475e5f3cb0aab6d"
+                "reference": "be9e3ed32a1287a9bfda15936cc86fef4e4cf591"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0991687efe8a29945cce2e85c475e5f3cb0aab6d",
-                "reference": "0991687efe8a29945cce2e85c475e5f3cb0aab6d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/be9e3ed32a1287a9bfda15936cc86fef4e4cf591",
+                "reference": "be9e3ed32a1287a9bfda15936cc86fef4e4cf591",
                 "shasum": ""
             },
             "require": {
@@ -10720,7 +10720,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.2.4"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.2.5"
             },
             "funding": [
                 {
@@ -10736,7 +10736,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-20T07:30:48+00:00"
+            "time": "2024-06-20T13:11:31+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -11726,16 +11726,16 @@
         },
         {
             "name": "spatie/error-solutions",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/error-solutions.git",
-                "reference": "202108314a6988ede156fba1b3ea80a784c1734a"
+                "reference": "d60d4d2ef4b7701c86134ded959667cac6215233"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/error-solutions/zipball/202108314a6988ede156fba1b3ea80a784c1734a",
-                "reference": "202108314a6988ede156fba1b3ea80a784c1734a",
+                "url": "https://api.github.com/repos/spatie/error-solutions/zipball/d60d4d2ef4b7701c86134ded959667cac6215233",
+                "reference": "d60d4d2ef4b7701c86134ded959667cac6215233",
                 "shasum": ""
             },
             "require": {
@@ -11788,7 +11788,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/error-solutions/issues",
-                "source": "https://github.com/spatie/error-solutions/tree/1.0.0"
+                "source": "https://github.com/spatie/error-solutions/tree/1.0.1"
             },
             "funding": [
                 {
@@ -11796,7 +11796,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-12T14:49:54+00:00"
+            "time": "2024-06-21T10:09:00+00:00"
         },
         {
             "name": "spatie/flare-client-php",
