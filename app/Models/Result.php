@@ -72,6 +72,7 @@ class Result extends Model
             'isp' => $this?->isp,
             'server_host' => $this?->server_host,
             'server_name' => $this?->server_name,
+            'server_location' => $this?->server_location,
             'scheduled' => $this->scheduled,
             'successful' => $this->status === ResultStatus::Completed,
             'packet_loss' => (float) $this->packet_loss,
@@ -225,6 +226,16 @@ class Result extends Model
     {
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'server.name'),
+        );
+    }
+
+    /**
+     * Get the result's server location.
+     */
+    protected function serverLocation(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'server.location'),
         );
     }
 
