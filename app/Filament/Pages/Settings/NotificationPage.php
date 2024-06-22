@@ -4,6 +4,7 @@ namespace App\Filament\Pages\Settings;
 
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
+use App\Actions\Notifications\SendGotifyTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
@@ -118,6 +119,49 @@ class NotificationPage extends SettingsPage
                                                         ->label('Test Discord webhook')
                                                         ->action(fn (Forms\Get $get) => SendDiscordTestNotification::run(webhooks: $get('discord_webhooks')))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('discord_webhooks'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Gotify')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('gotify_enabled')
+                                            ->label('Enable Gotify webhook notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('gotify_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('gotify_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('gotify_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('gotify_webhooks')
+                                                    ->label('Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test gotify')
+                                                        ->label('Test Gotify webhook')
+                                                        ->action(fn (Forms\Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('gotify_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
