@@ -62,7 +62,7 @@ class SendSpeedtestThresholdNotification
 
         foreach ($notificationSettings->healthcheck_webhooks as $url) {
             WebhookCall::create()
-                ->url($url['url'] . '/fail')
+                ->url($url['url'].'/fail')
                 ->payload([
                     'result_id' => $event->result->id,
                     'site_name' => config('app.name'),

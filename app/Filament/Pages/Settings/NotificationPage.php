@@ -4,8 +4,8 @@ namespace App\Filament\Pages\Settings;
 
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
-use App\Actions\Notifications\SendMailTestNotification;
 use App\Actions\Notifications\SendHealthCheckTestNotification;
+use App\Actions\Notifications\SendMailTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Settings\NotificationSettings;
@@ -212,7 +212,6 @@ class NotificationPage extends SettingsPage
                                         'default' => 1,
                                         'md' => 2,
                                     ]),
-
 
                                 Forms\Components\Section::make('Telegram')
                                     ->schema([
