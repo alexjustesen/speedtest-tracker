@@ -46,6 +46,14 @@ class NotificationSettings extends Settings
 
     public ?array $discord_webhooks;
 
+    public bool $healthcheck_enabled;
+
+    public bool $healthcheck_on_speedtest_run;
+
+    public bool $healthcheck_on_threshold_failure;
+
+    public ?array $healthcheck_webhooks;
+
     public static function group(): string
     {
         return 'notification';
