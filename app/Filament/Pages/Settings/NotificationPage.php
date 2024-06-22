@@ -188,6 +188,7 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                         Forms\Components\Toggle::make('healthcheck_on_threshold_failure')
                                                             ->label('Notify on threshold failures')
+                                                            ->helperText('Threshold notifications will be sent to the /fail path of the URL.')
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('healthcheck_webhooks')
