@@ -170,7 +170,7 @@ class NotificationPage extends SettingsPage
                                         'md' => 2,
                                     ]),
 
-                                Forms\Components\Section::make('HealthCheck.io')
+                                Forms\Components\Section::make('Healthcheck.io')
                                     ->schema([
                                         Forms\Components\Toggle::make('healthcheck_enabled')
                                             ->label('Enable healthcheck.io webhook notifications')
