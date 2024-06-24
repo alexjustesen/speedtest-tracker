@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', HomeController::class)
-    ->name('home');
+Route::middleware('public-dashboard')->group(function () {
+    Route::get('/', HomeController::class)
+        ->name('home');
+});
 
 Route::redirect('/login', '/admin/login')
     ->name('login');

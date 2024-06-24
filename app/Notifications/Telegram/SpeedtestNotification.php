@@ -17,8 +17,7 @@ class SpeedtestNotification extends Notification implements ShouldQueue
     public function __construct(
         public string $content,
         public bool $disableNotification = false,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.
