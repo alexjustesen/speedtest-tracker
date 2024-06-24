@@ -195,6 +195,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('webhooks')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://hc-ping.com/your-uuid-here')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
