@@ -152,6 +152,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Webhooks')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://push.example.com/message?token=<apptoken>')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
