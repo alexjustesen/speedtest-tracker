@@ -4,6 +4,7 @@
         "config"
     ],
     "rules": {
-        "fully_qualified_strict_types": false
+        "fully_qualified_strict_types": false,
+        "single_line_empty_body": true
     }
 }
