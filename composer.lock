@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "212c1a0b359e7229bdc58753c62c644b",
+    "content-hash": "fc18bf078d59c04fc15abe0a32d93baa",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -12164,29 +12164,29 @@
         },
         {
             "name": "tightenco/duster",
-            "version": "v2.7.5",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tighten/duster.git",
-                "reference": "b12d519e8cc59632832dbd4f9995d67ae015c600"
+                "reference": "0128c2eb26fe759b79148c18a8dfe442b32eb211"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tighten/duster/zipball/b12d519e8cc59632832dbd4f9995d67ae015c600",
-                "reference": "b12d519e8cc59632832dbd4f9995d67ae015c600",
+                "url": "https://api.github.com/repos/tighten/duster/zipball/0128c2eb26fe759b79148c18a8dfe442b32eb211",
+                "reference": "0128c2eb26fe759b79148c18a8dfe442b32eb211",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.1.0"
+                "php": "^8.2.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.49",
-                "laravel-zero/framework": "^10.3",
-                "laravel/pint": "^1.13",
-                "nunomaduro/termwind": "^1.15",
+                "friendsofphp/php-cs-fixer": "^3.59",
+                "laravel-zero/framework": "^11.0",
+                "laravel/pint": "^1.16",
+                "nunomaduro/termwind": "^2.0",
                 "spatie/invade": "^1.1",
-                "squizlabs/php_codesniffer": "^3.8",
-                "tightenco/tlint": "^9.2"
+                "squizlabs/php_codesniffer": "^3.10",
+                "tightenco/tlint": "^9.3"
             },
             "bin": [
                 "builds/duster"
@@ -12230,7 +12230,7 @@
                 "issues": "https://github.com/tighten/duster/issues",
                 "source": "https://github.com/tighten/duster"
             },
-            "time": "2024-04-12T19:37:39+00:00"
+            "time": "2024-06-24T20:05:09+00:00"
         }
     ],
     "aliases": [],
