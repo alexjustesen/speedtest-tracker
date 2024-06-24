@@ -23,8 +23,7 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
      */
     public function __construct(
         public Result $result,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the message envelope.

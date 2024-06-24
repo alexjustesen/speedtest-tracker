@@ -16,6 +16,5 @@ class SpeedtestStarted
      */
     public function __construct(
         public Result $result,
-    ) {
-    }
+    ) {}
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\PublicDashboard;
 use App\Providers\AppServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'public-dashboard' => PublicDashboard::class,
+        ]);
+
         $middleware->redirectGuestsTo(fn () => route('admin/login'));
         $middleware->redirectUsersTo(AppServiceProvider::HOME);
 

@@ -24,8 +24,7 @@ class WriteCompletedSpeedtest implements ShouldQueue
     public function __construct(
         public Result $result,
         public InfluxDbSettings $settings,
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.

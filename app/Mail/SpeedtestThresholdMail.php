@@ -23,8 +23,7 @@ class SpeedtestThresholdMail extends Mailable implements ShouldQueue
     public function __construct(
         public Result $result,
         public array $metrics,
-    ) {
-    }
+    ) {}
 
     /**
      * Get the message envelope.
