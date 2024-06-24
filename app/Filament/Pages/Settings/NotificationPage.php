@@ -109,6 +109,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Webhooks')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
@@ -196,6 +197,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Recipients')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('email_address')
+                                                            ->placeholder('your@email.com')
                                                             ->email()
                                                             ->required(),
                                                     ])
@@ -244,6 +246,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Recipients')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('telegram_chat_id')
+                                                            ->placeholder('12345678910')
                                                             ->label('Telegram Chat ID')
                                                             ->maxLength(50)
                                                             ->required(),
@@ -287,6 +290,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Recipients')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://webhook.site/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
