@@ -13,10 +13,6 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        if (! config('speedtest.public_dashboard')) {
-            return redirect()->route('filament.admin.auth.login');
-        }
-
         $latestResult = Result::query()
             ->select(['id', 'ping', 'download', 'upload', 'status', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)

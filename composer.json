@@ -39,7 +39,7 @@
         "nunomaduro/collision": "^8.1.1",
         "phpunit/phpunit": "^11.2.5",
         "spatie/laravel-ignition": "^2.8.0",
-        "tightenco/duster": "^2.7.5"
+        "tightenco/duster": "^3.0.1"
     },
     "autoload": {
         "files": [
