@@ -152,6 +152,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Webhooks')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://hooks.slack.com/services/abc/xyz')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
