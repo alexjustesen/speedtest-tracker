@@ -110,15 +110,18 @@ class NotificationPage extends SettingsPage
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->label('URL')
+                                                            ->placeholder('http://api.pushover.net/1/messages.json')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
                                                         Forms\Components\TextInput::make('user_key')
                                                             ->label('User Key')
+                                                            ->placeholder('Your Pushover User Key')
                                                             ->maxLength(200)
                                                             ->required(),
                                                         Forms\Components\TextInput::make('api_token')
                                                             ->label('API Token')
+                                                            ->placeholder('Your Pushover API Token')
                                                             ->maxLength(200)
                                                             ->required(),
                                                     ])
