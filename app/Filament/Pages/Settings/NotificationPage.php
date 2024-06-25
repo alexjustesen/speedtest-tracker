@@ -173,8 +173,8 @@ class NotificationPage extends SettingsPage
                                         'default' => 1,
                                         'md' => 2,
                                     ]),
-                             
-                                   Forms\Components\Section::make('Slack')
+
+                                Forms\Components\Section::make('Slack')
                                     ->schema([
                                         Forms\Components\Toggle::make('slack_enabled')
                                             ->label('Enable Slack webhook notifications')
@@ -216,7 +216,7 @@ class NotificationPage extends SettingsPage
                                     ->columns([
                                         'default' => 1,
                                         'md' => 2,
-                                    ]),                           
+                                    ]),
 
                                 Forms\Components\Section::make('Mail')
                                     ->schema([

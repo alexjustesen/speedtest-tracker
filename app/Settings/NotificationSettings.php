@@ -62,7 +62,6 @@ class NotificationSettings extends Settings
 
     public ?array $gotify_webhooks;
 
-
     public static function group(): string
     {
         return 'notification';
