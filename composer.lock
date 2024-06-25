@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc18bf078d59c04fc15abe0a32d93baa",
+    "content-hash": "6f1a18d1f78de4a968959d607d92a890",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2412,16 +2412,16 @@
         },
         {
             "name": "influxdata/influxdb-client-php",
-            "version": "3.5.0",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/influxdata/influxdb-client-php.git",
-                "reference": "fbdc713e22223a0adc1e76251535a2f43ec55055"
+                "reference": "3606b12214508f22126b7ed0565d53380674312a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/influxdata/influxdb-client-php/zipball/fbdc713e22223a0adc1e76251535a2f43ec55055",
-                "reference": "fbdc713e22223a0adc1e76251535a2f43ec55055",
+                "url": "https://api.github.com/repos/influxdata/influxdb-client-php/zipball/3606b12214508f22126b7ed0565d53380674312a",
+                "reference": "3606b12214508f22126b7ed0565d53380674312a",
                 "shasum": ""
             },
             "require": {
@@ -2456,9 +2456,9 @@
             ],
             "support": {
                 "issues": "https://github.com/influxdata/influxdb-client-php/issues",
-                "source": "https://github.com/influxdata/influxdb-client-php/tree/3.5.0"
+                "source": "https://github.com/influxdata/influxdb-client-php/tree/3.6.0"
             },
-            "time": "2024-04-16T19:28:44+00:00"
+            "time": "2024-06-24T10:01:53+00:00"
         },
         {
             "name": "kirschbaum-development/eloquent-power-joins",
@@ -2597,16 +2597,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v11.11.1",
+            "version": "v11.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "c9b52e84bd18f155e5ba59b948c7da3e7f37e87f"
+                "reference": "9a6d9cea83cfa6b9e8eda05c89741d0411d8ebe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/c9b52e84bd18f155e5ba59b948c7da3e7f37e87f",
-                "reference": "c9b52e84bd18f155e5ba59b948c7da3e7f37e87f",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/9a6d9cea83cfa6b9e8eda05c89741d0411d8ebe8",
+                "reference": "9a6d9cea83cfa6b9e8eda05c89741d0411d8ebe8",
                 "shasum": ""
             },
             "require": {
@@ -2798,7 +2798,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2024-06-20T10:54:53+00:00"
+            "time": "2024-06-25T19:33:56+00:00"
         },
         {
             "name": "laravel/prompts",
