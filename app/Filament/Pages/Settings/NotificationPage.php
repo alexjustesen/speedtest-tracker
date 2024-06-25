@@ -4,8 +4,8 @@ namespace App\Filament\Pages\Settings;
 
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
-use App\Actions\Notifications\SendHealthCheckTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
+use App\Actions\Notifications\SendHealthCheckTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
 use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
