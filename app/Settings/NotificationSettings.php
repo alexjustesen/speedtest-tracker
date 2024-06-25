@@ -53,6 +53,22 @@ class NotificationSettings extends Settings
     public bool $pushover_on_threshold_failure;
 
     public ?array $pushover_webhooks;
+  
+    public bool $slack_enabled;
+
+    public bool $slack_on_speedtest_run;
+
+    public bool $slack_on_threshold_failure;
+
+    public ?array $slack_webhooks;
+
+    public bool $gotify_enabled;
+
+    public bool $gotify_on_speedtest_run;
+
+    public bool $gotify_on_threshold_failure;
+
+    public ?array $gotify_webhooks;
 
     public static function group(): string
     {
