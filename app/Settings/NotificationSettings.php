@@ -53,7 +53,7 @@ class NotificationSettings extends Settings
     public bool $teams_on_threshold_failure;
 
     public ?array $teams_webhooks;
-  
+
     public bool $slack_enabled;
 
     public bool $slack_on_speedtest_run;
