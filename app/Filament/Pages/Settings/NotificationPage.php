@@ -4,8 +4,10 @@ namespace App\Filament\Pages\Settings;
 
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
+use App\Actions\Notifications\SendGotifyTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
 use App\Actions\Notifications\SendTeamsTestNotification;
+use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Settings\NotificationSettings;
@@ -154,6 +156,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Webhooks')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
@@ -164,6 +167,94 @@ class NotificationPage extends SettingsPage
                                                         ->label('Test Discord webhook')
                                                         ->action(fn (Forms\Get $get) => SendDiscordTestNotification::run(webhooks: $get('discord_webhooks')))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('discord_webhooks'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Gotify')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('gotify_enabled')
+                                            ->label('Enable Gotify webhook notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('gotify_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('gotify_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('gotify_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('gotify_webhooks')
+                                                    ->label('Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://example.com/message?token=<apptoken>')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test gotify')
+                                                        ->label('Test Gotify webhook')
+                                                        ->action(fn (Forms\Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('gotify_webhooks'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Slack')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('slack_enabled')
+                                            ->label('Enable Slack webhook notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('slack_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('slack_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('slack_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('slack_webhooks')
+                                                    ->label('Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://hooks.slack.com/services/abc/xyz')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test Slack')
+                                                        ->label('Test slack webhook')
+                                                        ->action(fn (Forms\Get $get) => SendSlackTestNotification::run(webhooks: $get('slack_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('slack_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
@@ -197,6 +288,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Recipients')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('email_address')
+                                                            ->placeholder('your@email.com')
                                                             ->email()
                                                             ->required(),
                                                     ])
@@ -245,6 +337,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Recipients')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('telegram_chat_id')
+                                                            ->placeholder('12345678910')
                                                             ->label('Telegram Chat ID')
                                                             ->maxLength(50)
                                                             ->required(),
@@ -288,6 +381,7 @@ class NotificationPage extends SettingsPage
                                                     ->label('Recipients')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://webhook.site/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
