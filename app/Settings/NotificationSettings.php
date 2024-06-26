@@ -46,6 +46,14 @@ class NotificationSettings extends Settings
 
     public ?array $discord_webhooks;
 
+    public bool $teams_enabled;
+
+    public bool $teams_on_speedtest_run;
+
+    public bool $teams_on_threshold_failure;
+
+    public ?array $teams_webhooks;
+
     public static function group(): string
     {
         return 'notification';
