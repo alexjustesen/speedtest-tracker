@@ -4,8 +4,8 @@ namespace App\Filament\Pages\Settings;
 
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
-use App\Actions\Notifications\SendNtfyTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
+use App\Actions\Notifications\SendNtfyTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Settings\NotificationSettings;
@@ -128,7 +128,7 @@ class NotificationPage extends SettingsPage
                                         'md' => 2,
                                     ]),
 
-                                    Forms\Components\Section::make('Ntfy')
+                                Forms\Components\Section::make('Ntfy')
                                     ->schema([
                                         Forms\Components\Toggle::make('ntfy_enabled')
                                             ->label('Enable Ntfy webhook notifications')

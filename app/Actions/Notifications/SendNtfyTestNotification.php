@@ -26,7 +26,7 @@ class SendNtfyTestNotification
                 ->url($webhook['url'])
                 ->payload([
                     'topic' => $webhook['topic'],
-                    'message' => '👋 Testing the Pushover notification channel.',
+                    'message' => '👋 Testing the ntfy notification channel.',
                 ])
                 ->doNotSign()
                 ->dispatch();
