@@ -73,14 +73,23 @@ class SendSpeedtestThresholdNotification
             ])->render();
 
         foreach ($notificationSettings->ntfy_webhooks as $url) {
-            WebhookCall::create()
+            $webhookCall = WebhookCall::create()
                 ->url($url['url'])
                 ->payload([
                     'topic' => $url['topic'],
                     'message' => $payload,
                 ])
-                ->doNotSign()
-                ->dispatch();
+                ->doNotSign();
+
+            // Only add authentication if username and password are provided
+            if (! empty($url['username']) && ! empty($url['password'])) {
+                $authHeader = 'Basic '.base64_encode($url['username'].':'.$url['password']);
+                $webhookCall->withHeaders([
+                    'Authorization' => $authHeader,
+                ]);
+            }
+
+            $webhookCall->dispatch();
         }
     }
 

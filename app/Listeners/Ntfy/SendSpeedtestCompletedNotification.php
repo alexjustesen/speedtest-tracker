@@ -33,28 +33,36 @@ class SendSpeedtestCompletedNotification
         }
 
         $payload =
-            view('ntfy.speedtest-completed', [
-                'id' => $event->result->id,
-                'service' => Str::title($event->result->service),
-                'serverName' => $event->result->server_name,
-                'serverId' => $event->result->server_id,
-                'isp' => $event->result->isp,
-                'ping' => round($event->result->ping).' ms',
-                'download' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
-                'upload' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),
-                'packetLoss' => $event->result->packet_loss,
-                'url' => url('/admin/results'),
-            ])->render();
+             view('ntfy.speedtest-completed', [
+                 'id' => $event->result->id,
+                 'service' => Str::title($event->result->service),
+                 'serverName' => $event->result->server_name,
+                 'serverId' => $event->result->server_id,
+                 'isp' => $event->result->isp,
+                 'ping' => round($event->result->ping).' ms',
+                 'download' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
+                 'upload' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),
+                 'packetLoss' => $event->result->packet_loss,
+                 'url' => url('/admin/results'),
+             ])->render();
 
         foreach ($notificationSettings->ntfy_webhooks as $url) {
-            WebhookCall::create()
+            $webhookCall = WebhookCall::create()
                 ->url($url['url'])
                 ->payload([
                     'topic' => $url['topic'],
                     'message' => $payload,
                 ])
-                ->doNotSign()
-                ->dispatch();
+                ->doNotSign();
+
+            // Only add authentication if username and password are provided
+            if (! empty($url['username']) && ! empty($url['password'])) {
+                $authHeader = 'Basic '.base64_encode($url['username'].':'.$url['password']);
+                $webhookCall->withHeaders([
+                    'Authorization' => $authHeader,
+                ]);
+            }
+            $webhookCall->dispatch();
         }
     }
 }

@@ -22,14 +22,23 @@ class SendNtfyTestNotification
         }
 
         foreach ($webhooks as $webhook) {
-            WebhookCall::create()
+            $webhookCall = WebhookCall::create()
                 ->url($webhook['url'])
                 ->payload([
                     'topic' => $webhook['topic'],
                     'message' => '👋 Testing the ntfy notification channel.',
                 ])
-                ->doNotSign()
-                ->dispatch();
+                ->doNotSign();
+
+            // Only add authentication if username and password are provided
+            if (! empty($webhook['username']) && ! empty($webhook['password'])) {
+                $authHeader = 'Basic '.base64_encode($webhook['username'].':'.$webhook['password']);
+                $webhookCall->withHeaders([
+                    'Authorization' => $authHeader,
+                ]);
+            }
+
+            $webhookCall->dispatch();
         }
 
         Notification::make()

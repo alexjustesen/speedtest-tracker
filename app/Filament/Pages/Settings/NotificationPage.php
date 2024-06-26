@@ -161,6 +161,15 @@ class NotificationPage extends SettingsPage
                                                             ->placeholder('Your ntfy Topic')
                                                             ->maxLength(200)
                                                             ->required(),
+                                                        Forms\Components\TextInput::make('username')
+                                                            ->label('Username')
+                                                            ->placeholder('Username for Basic Auth (optional)')
+                                                            ->maxLength(200),
+                                                        Forms\Components\TextInput::make('password')
+                                                            ->label('Password')
+                                                            ->placeholder('Password for Basic Auth (optional)')
+                                                            ->password()
+                                                            ->maxLength(200),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Forms\Components\Actions::make([
