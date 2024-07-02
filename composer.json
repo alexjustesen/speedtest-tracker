@@ -16,7 +16,7 @@
         "filament/spatie-laravel-settings-plugin": "^3.2.92",
         "geerlingguy/ping": "^1.2.1",
         "guzzlehttp/guzzle": "^7.8.1",
-        "influxdata/influxdb-client-php": "^3.5",
+        "influxdata/influxdb-client-php": "^3.6",
         "laravel-notification-channels/telegram": "^5.0",
         "laravel/framework": "^11.14",
         "laravel/prompts": "^0.1.24",
