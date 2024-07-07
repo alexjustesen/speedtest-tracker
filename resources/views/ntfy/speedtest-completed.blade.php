@@ -8,5 +8,5 @@ ISP: {{ $isp }}
 Ping: {{ $ping }}
 Download: {{ $download }}
 Upload: {{ $upload }}
-Packet Loss: {{ $packetLoss }} **%**
+Packet Loss: {{ $packetLoss }} %
 URL: {{ $url }}
