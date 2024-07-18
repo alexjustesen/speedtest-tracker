@@ -7,6 +7,7 @@ use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
 use App\Actions\Notifications\SendHealthCheckTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
+use App\Actions\Notifications\SendPushoverTestNotification;
 use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
@@ -78,6 +79,63 @@ class NotificationPage extends SettingsPage
                                                     Forms\Components\Actions\Action::make('test database')
                                                         ->label('Test database channel')
                                                         ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Pushover')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('pushover_enabled')
+                                            ->label('Enable Pushover webhook notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('pushover_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('pushover_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('pushover_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('pushover_webhooks')
+                                                    ->label('Pushover Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->label('URL')
+                                                            ->placeholder('http://api.pushover.net/1/messages.json')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                        Forms\Components\TextInput::make('user_key')
+                                                            ->label('User Key')
+                                                            ->placeholder('Your Pushover User Key')
+                                                            ->maxLength(200)
+                                                            ->required(),
+                                                        Forms\Components\TextInput::make('api_token')
+                                                            ->label('API Token')
+                                                            ->placeholder('Your Pushover API Token')
+                                                            ->maxLength(200)
+                                                            ->required(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test pushover')
+                                                        ->label('Test Pushover webhook')
+                                                        ->action(fn (Forms\Get $get) => SendPushoverTestNotification::run(
+                                                            webhooks: $get('pushover_webhooks')
+                                                        ))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('pushover_webhooks'))),
                                                 ]),
                                             ]),
                                     ])

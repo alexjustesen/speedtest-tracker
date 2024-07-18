@@ -46,6 +46,14 @@ class NotificationSettings extends Settings
 
     public ?array $discord_webhooks;
 
+    public bool $pushover_enabled;
+
+    public bool $pushover_on_speedtest_run;
+
+    public bool $pushover_on_threshold_failure;
+
+    public ?array $pushover_webhooks;
+
     public bool $healthcheck_enabled;
 
     public bool $healthcheck_on_speedtest_run;
