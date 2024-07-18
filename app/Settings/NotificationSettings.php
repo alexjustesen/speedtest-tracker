@@ -54,6 +54,14 @@ class NotificationSettings extends Settings
 
     public ?array $pushover_webhooks;
 
+    public bool $healthcheck_enabled;
+
+    public bool $healthcheck_on_speedtest_run;
+
+    public bool $healthcheck_on_threshold_failure;
+
+    public ?array $healthcheck_webhooks;
+
     public bool $slack_enabled;
 
     public bool $slack_on_speedtest_run;
