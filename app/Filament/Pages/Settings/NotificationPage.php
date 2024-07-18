@@ -5,6 +5,7 @@ namespace App\Filament\Pages\Settings;
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
+use App\Actions\Notifications\SendHealthCheckTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
 use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
@@ -252,6 +253,51 @@ class NotificationPage extends SettingsPage
                                                         ->label('Test mail channel')
                                                         ->action(fn (Forms\Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('mail_recipients'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Healthcheck.io')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('healthcheck_enabled')
+                                            ->label('Enable healthcheck.io webhook notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('healthcheck_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('healthcheck_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('healthcheck_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->helperText('Threshold notifications will be sent to the /fail path of the URL.')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('healthcheck_webhooks')
+                                                    ->label('webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://hc-ping.com/your-uuid-here')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test healthcheck')
+                                                        ->label('Test healthcheck.io webhook')
+                                                        ->action(fn (Forms\Get $get) => SendHealthCheckTestNotification::run(webhooks: $get('healthcheck_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('healthcheck_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
