@@ -33,7 +33,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
      */
     public function __construct(
         public Result $result,
-        public ?int $serverId,
+        public ?int $serverId = null,
     ) {}
 
     /**
