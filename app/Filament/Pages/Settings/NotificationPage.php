@@ -7,6 +7,7 @@ use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
 use App\Actions\Notifications\SendHealthCheckTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
+use App\Actions\Notifications\SendNtfyTestNotification;
 use App\Actions\Notifications\SendPushoverTestNotification;
 use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
@@ -268,6 +269,64 @@ class NotificationPage extends SettingsPage
                                                         ->label('Test slack webhook')
                                                         ->action(fn (Forms\Get $get) => SendSlackTestNotification::run(webhooks: $get('slack_webhooks')))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('slack_webhooks'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Ntfy')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('ntfy_enabled')
+                                            ->label('Enable Ntfy webhook notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('ntfy_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('ntfy_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('ntfy_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('ntfy_webhooks')
+                                                    ->label('Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->maxLength(2000)
+                                                            ->placeholder('Your ntfy server url')
+                                                            ->required()
+                                                            ->url(),
+                                                        Forms\Components\TextInput::make('topic')
+                                                            ->label('Topic')
+                                                            ->placeholder('Your ntfy Topic')
+                                                            ->maxLength(200)
+                                                            ->required(),
+                                                        Forms\Components\TextInput::make('username')
+                                                            ->label('Username')
+                                                            ->placeholder('Username for Basic Auth (optional)')
+                                                            ->maxLength(200),
+                                                        Forms\Components\TextInput::make('password')
+                                                            ->label('Password')
+                                                            ->placeholder('Password for Basic Auth (optional)')
+                                                            ->password()
+                                                            ->maxLength(200),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test ntfy')
+                                                        ->label('Test Ntfy webhook')
+                                                        ->action(fn (Forms\Get $get) => SendNtfyTestNotification::run(webhooks: $get('ntfy_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('ntfy_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
