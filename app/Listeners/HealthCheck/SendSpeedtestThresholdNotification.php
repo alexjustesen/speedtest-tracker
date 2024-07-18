@@ -68,6 +68,7 @@ class SendSpeedtestThresholdNotification
                     'site_name' => config('app.name'),
                     'isp' => $event->result->isp,
                     'metrics' => $failed,
+                    'speedtest_url' => $event->result->result_url,
                     'url' => url('/admin/results'),
                 ])
                 ->doNotSign()
