@@ -9,4 +9,5 @@ Ping: {{ $ping }}
 Download: {{ $download }}
 Upload: {{ $upload }}
 Packet Loss: {{ $packetLoss }} %
+Ookla Speedtest: {{ $speedtest_url }}
 URL: {{ $url }}

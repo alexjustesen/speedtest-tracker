@@ -41,6 +41,7 @@ class SendSpeedtestCompletedNotification
                     'download' => $event->result->downloadBits,
                     'upload' => $event->result->uploadBits,
                     'packetLoss' => $event->result->packet_loss,
+                    'speedtest_url' => $event->result->result_url,
                     'url' => url('/admin/results'),
                 ])
                 ->doNotSign()
