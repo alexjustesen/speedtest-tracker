@@ -9,5 +9,5 @@ A new speedtest was completed using {{ $service }}.
 - Download: {{ $download }}
 - Upload: {{ $upload }}
 - Packet Loss: {{ $packetLoss }} %
-- **Ookla Speedtest:** {{ $speedtest_url }}
+- Ookla Speedtest:{{ $speedtest_url }}
 - URL: {{ $url }}
