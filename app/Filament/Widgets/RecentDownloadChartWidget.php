@@ -48,17 +48,32 @@ class RecentDownloadChartWidget extends ChartWidget
             ->orderBy('created_at')
             ->get();
 
+        $downloads = $results->map(fn ($item) => !blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : 0);
+        $averageDownload = $downloads->avg();
+
         return [
             'datasets' => [
                 [
                     'label' => 'Download',
-                    'data' => $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : 0),
+                    'data' => $downloads,
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                     'pointBackgroundColor' => '#0ea5e9',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'pointRadius' => 0,
+                ],
+                [
+                    'label' => 'Average',
+                    'data' => array_fill(0, count($downloads), $averageDownload),
+                    'borderColor' => '#ff0000',
+                    'pointBackgroundColor' => '#ff0000',
+                    'fill' => false,
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                    'borderDash' => [5, 5],
+                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
@@ -70,12 +85,12 @@ class RecentDownloadChartWidget extends ChartWidget
         return [
             'plugins' => [
                 'legend' => [
-                    'display' => false,
+                    'display' => true,
                 ],
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => false,
                 ],
             ],
         ];
