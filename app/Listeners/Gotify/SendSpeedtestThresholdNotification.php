@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\Discord;
+namespace App\Listeners\Gotify;
 
 use App\Events\SpeedtestCompleted;
 use App\Helpers\Number;
@@ -19,16 +19,16 @@ class SendSpeedtestThresholdNotification
     {
         $notificationSettings = new NotificationSettings();
 
-        if (! $notificationSettings->discord_enabled) {
+        if (! $notificationSettings->gotify_enabled) {
             return;
         }
 
-        if (! $notificationSettings->discord_on_threshold_failure) {
+        if (! $notificationSettings->gotify_on_threshold_failure) {
             return;
         }
 
-        if (! count($notificationSettings->discord_webhooks)) {
-            Log::warning('Discord urls not found, check Discord notification channel settings.');
+        if (! count($notificationSettings->gotify_webhooks)) {
+            Log::warning('Gotify urls not found, check gotify notification channel settings.');
 
             return;
         }
@@ -56,13 +56,13 @@ class SendSpeedtestThresholdNotification
         $failed = array_filter($failed);
 
         if (! count($failed)) {
-            Log::warning('Failed Discord thresholds not found, won\'t send notification.');
+            Log::warning('Failed Gotify thresholds not found, won\'t send notification.');
 
             return;
         }
 
         $payload = [
-            'content' => view('discord.speedtest-threshold', [
+            'message' => view('gotify.speedtest-threshold', [
                 'id' => $event->result->id,
                 'service' => Str::title($event->result->service),
                 'serverName' => $event->result->server_name,
@@ -74,7 +74,7 @@ class SendSpeedtestThresholdNotification
             ])->render(),
         ];
 
-        foreach ($notificationSettings->discord_webhooks as $url) {
+        foreach ($notificationSettings->gotify_webhooks as $url) {
             WebhookCall::create()
                 ->url($url['url'])
                 ->payload($payload)
@@ -84,7 +84,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build Discord notification if absolute download threshold is breached.
+     * Build gotify notification if absolute download threshold is breached.
      */
     protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
@@ -100,7 +100,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build Discord notification if absolute upload threshold is breached.
+     * Build gotify notification if absolute upload threshold is breached.
      */
     protected function absoluteUploadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
@@ -116,7 +116,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build Discord notification if absolute ping threshold is breached.
+     * Build gotify notification if absolute ping threshold is breached.
      */
     protected function absolutePingThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {

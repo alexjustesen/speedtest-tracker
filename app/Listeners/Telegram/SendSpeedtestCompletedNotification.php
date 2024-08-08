@@ -43,6 +43,7 @@ class SendSpeedtestCompletedNotification
             'download' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
             'upload' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),
             'packetLoss' => is_numeric($event->result->packet_loss) ? round($event->result->packet_loss, 2) : 'n/a',
+            'speedtest_url' => $event->result->result_url,
             'url' => url('/admin/results'),
         ])->render();
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\Discord;
+namespace App\Listeners\Slack;
 
 use App\Events\SpeedtestCompleted;
 use App\Helpers\Number;
@@ -18,22 +18,22 @@ class SendSpeedtestCompletedNotification
     {
         $notificationSettings = new NotificationSettings();
 
-        if (! $notificationSettings->discord_enabled) {
+        if (! $notificationSettings->slack_enabled) {
             return;
         }
 
-        if (! $notificationSettings->discord_on_speedtest_run) {
+        if (! $notificationSettings->slack_on_speedtest_run) {
             return;
         }
 
-        if (! count($notificationSettings->discord_webhooks)) {
-            Log::warning('Discord urls not found, check Discord notification channel settings.');
+        if (! count($notificationSettings->slack_webhooks)) {
+            Log::warning('Slack URLs not found, check Slack notification channel settings.');
 
             return;
         }
 
         $payload = [
-            'content' => view('discord.speedtest-completed', [
+            'text' => view('slack.speedtest-completed', [
                 'id' => $event->result->id,
                 'service' => Str::title($event->result->service),
                 'serverName' => $event->result->server_name,
@@ -48,7 +48,7 @@ class SendSpeedtestCompletedNotification
             ])->render(),
         ];
 
-        foreach ($notificationSettings->discord_webhooks as $url) {
+        foreach ($notificationSettings->slack_webhooks as $url) {
             WebhookCall::create()
                 ->url($url['url'])
                 ->payload($payload)
