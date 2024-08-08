@@ -48,7 +48,7 @@ class RecentDownloadChartWidget extends ChartWidget
             ->orderBy('created_at')
             ->get();
 
-        $downloads = $results->map(fn ($item) => !blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : 0);
+        $downloads = $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : 0);
         $averageDownload = $downloads->avg();
 
         return [
