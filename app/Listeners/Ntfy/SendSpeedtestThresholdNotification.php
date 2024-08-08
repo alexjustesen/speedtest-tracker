@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\Discord;
+namespace App\Listeners\Ntfy;
 
 use App\Events\SpeedtestCompleted;
 use App\Helpers\Number;
@@ -19,16 +19,16 @@ class SendSpeedtestThresholdNotification
     {
         $notificationSettings = new NotificationSettings();
 
-        if (! $notificationSettings->discord_enabled) {
+        if (! $notificationSettings->ntfy_enabled) {
             return;
         }
 
-        if (! $notificationSettings->discord_on_threshold_failure) {
+        if (! $notificationSettings->ntfy_on_threshold_failure) {
             return;
         }
 
-        if (! count($notificationSettings->discord_webhooks)) {
-            Log::warning('Discord urls not found, check Discord notification channel settings.');
+        if (! count($notificationSettings->ntfy_webhooks)) {
+            Log::warning('Ntfy urls not found, check Ntfy notification channel settings.');
 
             return;
         }
@@ -56,13 +56,13 @@ class SendSpeedtestThresholdNotification
         $failed = array_filter($failed);
 
         if (! count($failed)) {
-            Log::warning('Failed Discord thresholds not found, won\'t send notification.');
+            Log::warning('Failed ntfy thresholds not found, won\'t send notification.');
 
             return;
         }
 
-        $payload = [
-            'content' => view('discord.speedtest-threshold', [
+        $payload =
+            view('ntfy.speedtest-threshold', [
                 'id' => $event->result->id,
                 'service' => Str::title($event->result->service),
                 'serverName' => $event->result->server_name,
@@ -71,20 +71,31 @@ class SendSpeedtestThresholdNotification
                 'metrics' => $failed,
                 'speedtest_url' => $event->result->result_url,
                 'url' => url('/admin/results'),
-            ])->render(),
-        ];
+            ])->render();
 
-        foreach ($notificationSettings->discord_webhooks as $url) {
-            WebhookCall::create()
+        foreach ($notificationSettings->ntfy_webhooks as $url) {
+            $webhookCall = WebhookCall::create()
                 ->url($url['url'])
-                ->payload($payload)
-                ->doNotSign()
-                ->dispatch();
+                ->payload([
+                    'topic' => $url['topic'],
+                    'message' => $payload,
+                ])
+                ->doNotSign();
+
+            // Only add authentication if username and password are provided
+            if (! empty($url['username']) && ! empty($url['password'])) {
+                $authHeader = 'Basic '.base64_encode($url['username'].':'.$url['password']);
+                $webhookCall->withHeaders([
+                    'Authorization' => $authHeader,
+                ]);
+            }
+
+            $webhookCall->dispatch();
         }
     }
 
     /**
-     * Build Discord notification if absolute download threshold is breached.
+     * Build Ntfy notification if absolute download threshold is breached.
      */
     protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
@@ -100,7 +111,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build Discord notification if absolute upload threshold is breached.
+     * Build Ntfy notification if absolute upload threshold is breached.
      */
     protected function absoluteUploadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
@@ -116,7 +127,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build Discord notification if absolute ping threshold is breached.
+     * Build Ntfy notification if absolute ping threshold is breached.
      */
     protected function absolutePingThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
