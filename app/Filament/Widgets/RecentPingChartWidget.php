@@ -47,17 +47,32 @@ class RecentPingChartWidget extends ChartWidget
             ->orderBy('created_at')
             ->get();
 
+        $ping = $results->map(fn ($item) => ! blank($item->ping) ? number_format($item->ping, 2) : 0);
+        $averagePing = $ping->avg();
+
         return [
             'datasets' => [
                 [
                     'label' => 'Ping (ms)',
-                    'data' => $results->map(fn ($item) => ! blank($item->ping) ? number_format($item->ping, 2) : 0),
+                    'data' => $ping,
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'pointBackgroundColor' => '#10b981',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'pointRadius' => 0,
+                ],
+                [
+                    'label' => 'Average',
+                    'data' => array_fill(0, count($ping), $averagePing),
+                    'borderColor' => '#ff0000',
+                    'pointBackgroundColor' => '#ff0000',
+                    'fill' => false,
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                    'borderDash' => [5, 5],
+                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
@@ -67,9 +82,14 @@ class RecentPingChartWidget extends ChartWidget
     protected function getOptions(): array
     {
         return [
+            'plugins' => [
+                'legend' => [
+                    'display' => true,
+                ],
+            ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => false,
                 ],
             ],
         ];
