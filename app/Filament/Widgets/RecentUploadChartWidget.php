@@ -48,17 +48,32 @@ class RecentUploadChartWidget extends ChartWidget
             ->orderBy('created_at')
             ->get();
 
+        $upload = $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : 0);
+        $averageUpload = $upload->avg();
+
         return [
             'datasets' => [
                 [
                     'label' => 'Upload',
-                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : 0),
+                    'data' => $upload,
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                     'pointBackgroundColor' => '#8b5cf6',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'pointRadius' => 0,
+                ],
+                [
+                    'label' => 'Average',
+                    'data' => array_fill(0, count($upload), $averageUpload),
+                    'borderColor' => '#ff0000',
+                    'pointBackgroundColor' => '#ff0000',
+                    'fill' => false,
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                    'borderDash' => [5, 5],
+                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
@@ -70,12 +85,12 @@ class RecentUploadChartWidget extends ChartWidget
         return [
             'plugins' => [
                 'legend' => [
-                    'display' => false,
+                    'display' => true,
                 ],
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => false,
                 ],
             ],
         ];
