@@ -21,7 +21,7 @@ A new speedtest was completed using **{{ $service }}**.
 View Results
 </x-mail::button>
 
-<x-mail::button :Ookla Speedtest="$speedtest_url">
+<x-mail::button :url="$speedtest_url">
 View Results on Ookla
 </x-mail::button>
 
