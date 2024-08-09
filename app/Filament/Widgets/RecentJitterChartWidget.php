@@ -58,6 +58,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'pointRadius' => 0,
                 ],
                 [
                     'label' => 'Upload (ms)',
@@ -68,6 +69,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'pointRadius' => 0,
                 ],
                 [
                     'label' => 'Ping (ms)',
@@ -78,6 +80,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
@@ -89,7 +92,7 @@ class RecentJitterChartWidget extends ChartWidget
         return [
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => false,
                 ],
             ],
         ];
