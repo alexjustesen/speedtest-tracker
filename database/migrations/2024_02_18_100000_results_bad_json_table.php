@@ -35,6 +35,9 @@ return new class extends Migration
                     $table->float('ping', 8, 3)->nullable();
                     $table->unsignedBigInteger('download')->nullable();
                     $table->unsignedBigInteger('upload')->nullable();
+                    $table->integer('server_id')->nullable();
+                    $table->string('server_host')->nullable();
+                    $table->string('server_name')->nullable();
                     $table->text('comments')->nullable();
                     $table->json('data')->nullable();
                     $table->string('status');
