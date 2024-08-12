@@ -62,7 +62,7 @@ class RecentDownloadChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => count($downloads) <= 25 ? 3 : 0,
+                    'pointRadius' => count($downloads) <= 5 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',

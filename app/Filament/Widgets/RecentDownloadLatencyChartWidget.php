@@ -58,7 +58,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => $averageData->count() <= 25 ? 3 : 0,
+                    'pointRadius' => $averageData->count() <= 5 ? 3 : 0,
                 ],
                 [
                     'label' => 'High (ms)',
@@ -69,7 +69,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => $highData->count() <= 25 ? 3 : 0,
+                    'pointRadius' => $highData->count() <= 5 ? 3 : 0,
                 ],
                 [
                     'label' => 'Low (ms)',
@@ -80,7 +80,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => $lowData->count() <= 25 ? 3 : 0,
+                    'pointRadius' => $lowData->count() <= 5 ? 3 : 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
