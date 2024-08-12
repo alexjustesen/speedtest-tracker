@@ -17,6 +17,8 @@ return [
 
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
 
+    'chart_time_range' => env('CHART_TIME_RANGE', 7),
+
     /**
      * Polling settings.
      */
@@ -34,5 +36,7 @@ return [
     'schedule' => env('SPEEDTEST_SCHEDULE'),
 
     'servers' => env('SPEEDTEST_SERVERS', ''),
+
+
 
 ];

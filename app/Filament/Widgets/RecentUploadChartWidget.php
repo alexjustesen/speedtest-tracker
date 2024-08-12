@@ -6,45 +6,35 @@ use App\Enums\ResultStatus;
 use App\Helpers\Number;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Illuminate\Database\Eloquent\Builder;
 
 class RecentUploadChartWidget extends ChartWidget
 {
+    use InteractsWithPageFilters;
+
     protected static ?string $heading = 'Upload (Mbps)';
 
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '250px';
 
-    public ?string $filter = '24h';
-
     protected function getPollingInterval(): ?string
     {
         return config('speedtest.dashboard_polling');
     }
 
-    protected function getFilters(): ?array
-    {
-        return [
-            '24h' => 'Last 24h',
-            'week' => 'Last week',
-            'month' => 'Last month',
-        ];
-    }
-
     protected function getData(): array
     {
+
+        $startDate = $this->filters['startDate'] ?? now()->subWeek();
+        $endDate = $this->filters['endDate'] ?? now();
+
         $results = Result::query()
             ->select(['id', 'upload', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
-            ->when($this->filter == '24h', function ($query) {
-                $query->where('created_at', '>=', now()->subDay());
-            })
-            ->when($this->filter == 'week', function ($query) {
-                $query->where('created_at', '>=', now()->subWeek());
-            })
-            ->when($this->filter == 'month', function ($query) {
-                $query->where('created_at', '>=', now()->subMonth());
-            })
+            ->when($startDate, fn (Builder $query) => $query->whereDate('created_at', '>=', $startDate))
+            ->when($endDate, fn (Builder $query) => $query->whereDate('created_at', '<=', $endDate))
             ->orderBy('created_at')
             ->get();
 
@@ -62,7 +52,7 @@ class RecentUploadChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => count($upload) <= 25 ? 3 : 0,
+                    'pointRadius' => count($upload) <= 5 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',
