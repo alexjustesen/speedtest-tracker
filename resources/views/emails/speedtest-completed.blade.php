@@ -12,12 +12,17 @@ A new speedtest was completed using **{{ $service }}**.
 | Ping        | {{ $ping }}                |
 | Download    | {{ $download }}            |
 | Upload      | {{ $upload }}              |
-| Packet Loss | {{ $packetLoss }}**%**    |
+| Packet Loss | {{ $packetLoss }} **%**    |
+
 
 </x-mail::table>
 
 <x-mail::button :url="$url">
 View Results
+</x-mail::button>
+
+<x-mail::button :url="$speedtest_url">
+View Results on Ookla
 </x-mail::button>
 
 Thanks,<br>

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Listeners\Discord;
+namespace App\Listeners\HealthCheck;
 
 use App\Events\SpeedtestCompleted;
 use App\Helpers\Number;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Spatie\WebhookServer\WebhookCall;
 
 class SendSpeedtestThresholdNotification
@@ -19,16 +18,16 @@ class SendSpeedtestThresholdNotification
     {
         $notificationSettings = new NotificationSettings();
 
-        if (! $notificationSettings->discord_enabled) {
+        if (! $notificationSettings->healthcheck_enabled) {
             return;
         }
 
-        if (! $notificationSettings->discord_on_threshold_failure) {
+        if (! $notificationSettings->healthcheck_on_threshold_failure) {
             return;
         }
 
-        if (! count($notificationSettings->discord_webhooks)) {
-            Log::warning('Discord urls not found, check Discord notification channel settings.');
+        if (! count($notificationSettings->healthcheck_webhooks)) {
+            Log::warning('HealthCheck urls not found, check healthcheck notification channel settings.');
 
             return;
         }
@@ -56,35 +55,29 @@ class SendSpeedtestThresholdNotification
         $failed = array_filter($failed);
 
         if (! count($failed)) {
-            Log::warning('Failed Discord thresholds not found, won\'t send notification.');
+            Log::warning('Failed healthcheck thresholds not found, won\'t send notification.');
 
             return;
         }
 
-        $payload = [
-            'content' => view('discord.speedtest-threshold', [
-                'id' => $event->result->id,
-                'service' => Str::title($event->result->service),
-                'serverName' => $event->result->server_name,
-                'serverId' => $event->result->server_id,
-                'isp' => $event->result->isp,
-                'metrics' => $failed,
-                'speedtest_url' => $event->result->result_url,
-                'url' => url('/admin/results'),
-            ])->render(),
-        ];
-
-        foreach ($notificationSettings->discord_webhooks as $url) {
+        foreach ($notificationSettings->healthcheck_webhooks as $url) {
             WebhookCall::create()
-                ->url($url['url'])
-                ->payload($payload)
+                ->url($url['url'].'/fail')
+                ->payload([
+                    'result_id' => $event->result->id,
+                    'site_name' => config('app.name'),
+                    'isp' => $event->result->isp,
+                    'metrics' => $failed,
+                    'speedtest_url' => $event->result->result_url,
+                    'url' => url('/admin/results'),
+                ])
                 ->doNotSign()
                 ->dispatch();
         }
     }
 
     /**
-     * Build Discord notification if absolute download threshold is breached.
+     * Build HealthCheck notification if absolute download threshold is breached.
      */
     protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
@@ -100,7 +93,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build Discord notification if absolute upload threshold is breached.
+     * Build Healthcheck notification if absolute upload threshold is breached.
      */
     protected function absoluteUploadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {
@@ -116,7 +109,7 @@ class SendSpeedtestThresholdNotification
     }
 
     /**
-     * Build Discord notification if absolute ping threshold is breached.
+     * Build Healthcheck notification if absolute ping threshold is breached.
      */
     protected function absolutePingThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
     {

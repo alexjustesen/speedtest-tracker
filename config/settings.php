@@ -53,7 +53,7 @@ return [
      * additional prefix.
      */
     'cache' => [
-        'enabled' => env('SETTINGS_CACHE_ENABLED', true),
+        'enabled' => env('SETTINGS_CACHE_ENABLED', false),
         'store' => env('CACHE_STORE', 'database'),
         'prefix' => null,
         'ttl' => null,
