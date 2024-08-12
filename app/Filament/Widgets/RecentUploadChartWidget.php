@@ -56,13 +56,13 @@ class RecentUploadChartWidget extends ChartWidget
                 [
                     'label' => 'Upload',
                     'data' => $upload,
-                    'borderColor' => '#8b5cf6',
-                    'backgroundColor' => '#8b5cf6',
-                    'pointBackgroundColor' => '#8b5cf6',
-                    'fill' => false,
+                    'borderColor' => 'rgba(139, 92, 246)',
+                    'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
+                    'pointBackgroundColor' => 'rgba(139, 92, 246)',
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => 0,
+                    'pointRadius' => count($upload) <= 25 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',

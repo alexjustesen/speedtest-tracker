@@ -56,13 +56,13 @@ class RecentDownloadChartWidget extends ChartWidget
                 [
                     'label' => 'Download',
                     'data' => $downloads,
-                    'borderColor' => '#0ea5e9',
-                    'backgroundColor' => '#0ea5e9',
-                    'pointBackgroundColor' => '#0ea5e9',
-                    'fill' => false,
+                    'borderColor' => 'rgba(14, 165, 233)',
+                    'backgroundColor' => 'rgba(14, 165, 233, 0.1)',  // 10% opacity
+                    'pointBackgroundColor' => 'rgba(14, 165, 233)',
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => 0,
+                    'pointRadius' => count($downloads) <= 25 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',

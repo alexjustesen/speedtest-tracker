@@ -55,13 +55,13 @@ class RecentPingChartWidget extends ChartWidget
                 [
                     'label' => 'Ping (ms)',
                     'data' => $ping,
-                    'borderColor' => '#10b981',
-                    'backgroundColor' => '#10b981',
-                    'pointBackgroundColor' => '#10b981',
-                    'fill' => false,
+                    'borderColor' => 'rgba(16, 185, 129)',
+                    'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
+                    'pointBackgroundColor' => 'rgba(16, 185, 129)',
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => 0,
+                    'pointRadius' => count($ping) <= 25 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',
