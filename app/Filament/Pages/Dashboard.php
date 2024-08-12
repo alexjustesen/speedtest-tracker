@@ -14,16 +14,20 @@ use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
-use Filament\Pages\Dashboard as BasePage;
+use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Filament\Support\Enums\IconPosition;
 use Illuminate\Support\Arr;
 
-class Dashboard extends BasePage
+class Dashboard extends BaseDashboard
 {
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    use HasFiltersForm;
 
-    protected static string $view = 'filament.pages.dashboard';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
     public function getSubheading(): ?string
     {
@@ -36,6 +40,31 @@ class Dashboard extends BasePage
         $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
 
         return 'Next speedtest at: '.$nextRunDate;
+    }
+
+    public function filtersForm(Form $form): Form
+    {
+        // Retrieve the default number of days from the configuration
+        $defaultRangeDays = config('speedtest.chart_time_range');
+
+        // Calculate the start and end dates based on the configuration value
+        $endDate = now(); // Today
+        $startDate = now()->subDays($defaultRangeDays); // Start date for the range
+
+        return $form
+            ->schema([
+                Forms\Components\Section::make()
+                    ->schema([
+                        DatePicker::make('startDate')
+                            ->default($startDate),
+                        DatePicker::make('endDate')
+                            ->default($endDate),
+                    ])
+                    ->columns([
+                        'default' => 1,
+                        'sm' => 2,
+                    ]),
+            ]);
     }
 
     protected function getHeaderActions(): array
@@ -83,6 +112,12 @@ class Dashboard extends BasePage
     {
         return [
             StatsOverviewWidget::make(),
+        ];
+    }
+
+    public function getWidgets(): array
+    {
+        return [
             RecentDownloadChartWidget::make(),
             RecentUploadChartWidget::make(),
             RecentPingChartWidget::make(),
