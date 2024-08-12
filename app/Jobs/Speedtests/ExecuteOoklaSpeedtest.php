@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\URL;
 use JJG\Ping;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -88,13 +89,34 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
     protected function checkForInternetConnection(): bool
     {
+        $url = config('speedtest.ping_url');
+
         // Skip checking for internet connection if ping url isn't set (disabled)
-        if (blank(config('speedtest.ping_url'))) {
+        if (blank($url)) {
             return true;
         }
 
+        if (! URL::isValidUrl($url)) {
+            $this->result->update([
+                'server_id' => $this->serverId,
+                'data' => [
+                    'type' => 'log',
+                    'level' => 'error',
+                    'message' => 'Invalid ping URL.',
+                ],
+                'status' => ResultStatus::Failed,
+            ]);
+
+            SpeedtestFailed::dispatch($this->result);
+
+            return false;
+        }
+
+        // Remove http:// or https:// from the URL if present
+        $url = preg_replace('/^https?:\/\//', '', $url);
+
         $ping = new Ping(
-            host: config('speedtest.ping_url'),
+            host: $url,
             timeout: 3,
         );
 

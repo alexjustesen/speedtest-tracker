@@ -48,6 +48,7 @@ class SpeedtestThresholdMail extends Mailable implements ShouldQueue
                 'serverName' => $this->result->server_name,
                 'serverId' => $this->result->server_id,
                 'isp' => $this->result->isp,
+                'speedtest_url' => $this->result->result_url,
                 'url' => url('/admin/results'),
                 'metrics' => $this->metrics,
             ],

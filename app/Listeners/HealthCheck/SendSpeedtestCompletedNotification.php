@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners\Webhook;
+namespace App\Listeners\HealthCheck;
 
 use App\Events\SpeedtestCompleted;
 use App\Settings\NotificationSettings;
@@ -16,21 +16,21 @@ class SendSpeedtestCompletedNotification
     {
         $notificationSettings = new NotificationSettings();
 
-        if (! $notificationSettings->webhook_enabled) {
+        if (! $notificationSettings->healthcheck_enabled) {
             return;
         }
 
-        if (! $notificationSettings->webhook_on_speedtest_run) {
+        if (! $notificationSettings->healthcheck_on_speedtest_run) {
             return;
         }
 
-        if (! count($notificationSettings->webhook_urls)) {
-            Log::warning('Webhook urls not found, check webhook notification channel settings.');
+        if (! count($notificationSettings->healthcheck_webhooks)) {
+            Log::warning('healthcheck urls not found, check healthcheck notification channel settings.');
 
             return;
         }
 
-        foreach ($notificationSettings->webhook_urls as $url) {
+        foreach ($notificationSettings->healthcheck_webhooks as $url) {
             WebhookCall::create()
                 ->url($url['url'])
                 ->payload([

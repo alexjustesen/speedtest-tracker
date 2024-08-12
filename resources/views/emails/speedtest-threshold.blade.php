@@ -15,6 +15,10 @@ A new speedtest was completed using **{{ $service }}** on **{{ $isp }}** but a t
 View Results
 </x-mail::button>
 
+<x-mail::button :url="$speedtest_url">
+View Results on Ookla
+</x-mail::button>
+
 Thanks,<br>
 {{ config('app.name') }}
 </x-mail::message>
