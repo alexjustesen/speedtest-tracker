@@ -35,6 +35,4 @@ return [
 
     'servers' => env('SPEEDTEST_SERVERS', ''),
 
-
-
 ];
