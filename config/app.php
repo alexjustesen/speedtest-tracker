@@ -14,4 +14,6 @@ return [
 
     'force_https' => env('FORCE_HTTPS', false),
 
+    'chart_time_range' => env('CHART_TIME_RANGE', 7),
+
 ];
