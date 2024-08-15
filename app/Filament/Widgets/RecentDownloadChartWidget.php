@@ -49,7 +49,7 @@ class RecentDownloadChartWidget extends ChartWidget
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',  // 10% opacity
                     'pointBackgroundColor' => 'rgba(14, 165, 233)',
-                    'fill' => true,
+                    'fill' => config('app.chart_fill_background'),
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                     'pointRadius' => count($downloads) <= 5 ? 3 : 0,
@@ -80,7 +80,7 @@ class RecentDownloadChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => false,
+                    'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],
             ],
         ];

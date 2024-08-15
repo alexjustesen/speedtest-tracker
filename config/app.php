@@ -16,4 +16,6 @@ return [
 
     'chart_time_range' => env('CHART_TIME_RANGE', 7),
 
+    'chart_begin_at_zero' => env('CHART_BEGIN_AT_ZERO', true),
+
 ];
