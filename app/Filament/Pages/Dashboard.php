@@ -46,7 +46,7 @@ class Dashboard extends BaseDashboard
     public function filtersForm(Form $form): Form
     {
         // Retrieve the default number of days from the configuration
-        $defaultRangeDays = config('app.chart_time_range');
+        $defaultRangeDays = config('app.chart_default_date_range');
 
         // Calculate the start and end dates based on the configuration value
         $defaultEndDate = now(); // Today
@@ -59,31 +59,14 @@ class Dashboard extends BaseDashboard
                         Select::make('predefinedRange')
                             ->label('Time Range')
                             ->options([
-                                '3_hours' => 'Last 3 Hours',
-                                '6_hours' => 'Last 6 Hours',
-                                '12_hours' => 'Last 12 Hours',
                                 '24_hours' => 'Last 24 Hours',
                                 '1_week' => 'Last 1 Week',
                                 '1_month' => 'Last 1 Month',
-                                '3_months' => 'Last 3 Months',
-                                '6_months' => 'Last 6 Months',
                                 'custom' => 'Custom Range',
                             ])
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
                                 switch ($state) {
-                                    case '3_hours':
-                                        $set('startDate', now()->subHours(3)->toDateString());
-                                        $set('endDate', now()->toDateString());
-                                        break;
-                                    case '6_hours':
-                                        $set('startDate', now()->subHours(6)->toDateString());
-                                        $set('endDate', now()->toDateString());
-                                        break;
-                                    case '12_hours':
-                                        $set('startDate', now()->subHours(12)->toDateString());
-                                        $set('endDate', now()->toDateString());
-                                        break;
                                     case '24_hours':
                                         $set('startDate', now()->subDay()->toDateString());
                                         $set('endDate', now()->toDateString());
@@ -94,14 +77,6 @@ class Dashboard extends BaseDashboard
                                         break;
                                     case '1_month':
                                         $set('startDate', now()->subMonth()->toDateString());
-                                        $set('endDate', now()->toDateString());
-                                        break;
-                                    case '3_months':
-                                        $set('startDate', now()->subMonths(3)->toDateString());
-                                        $set('endDate', now()->toDateString());
-                                        break;
-                                    case '6_months':
-                                        $set('startDate', now()->subMonths(6)->toDateString());
                                         $set('endDate', now()->toDateString());
                                         break;
                                     case 'custom':
