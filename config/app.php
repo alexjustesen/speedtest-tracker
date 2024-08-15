@@ -14,7 +14,7 @@ return [
 
     'force_https' => env('FORCE_HTTPS', false),
 
-    'chart_time_range' => env('CHART_TIME_RANGE', 7),
+    'chart_default_date_range' => env('CHART_DEFAULT_DATE_RANGE', 7),
 
     'chart_begin_at_zero' => env('CHART_BEGIN_AT_ZERO', true),
 
