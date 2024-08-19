@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ResultStatus;
+use App\Helpers\Number;
+use App\Settings\ThresholdSettings;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +15,15 @@ use Illuminate\Support\Arr;
 class Result extends Model
 {
     use HasFactory, Prunable;
+
+    protected $fillable = [
+        'status',
+        'download',
+        'upload',
+        'ping',
+        'data',
+        'threshold_breached',
+    ];
 
     /**
      * The attributes that aren't mass assignable.
@@ -289,5 +300,24 @@ class Result extends Model
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'upload.latency.iqm'),
         );
+    }
+
+    public function checkAndUpdateThresholds(): void
+    {
+
+        $thresholds = app(ThresholdSettings::class);
+
+        // Check if the threshold is breached
+        $downloadInMbits = ! is_null($this->download) ? Number::bitsToMagnitude($this->download_bits, 2, 'mbit') : null;
+        $uploadInMbits = ! is_null($this->upload) ? Number::bitsToMagnitude($this->upload_bits, 2, 'mbit') : null;
+
+        $downloadBreached = $downloadInMbits !== null && $downloadInMbits < $thresholds->absolute_download;
+        $uploadBreached = $uploadInMbits !== null && $uploadInMbits < $thresholds->absolute_upload;
+        $pingBreached = $this->ping !== null && $this->ping > $thresholds->absolute_ping;
+
+        // Update only the threshold_breached field
+        $this->update([
+            'threshold_breached' => $downloadBreached || $uploadBreached || $pingBreached ? 'Failed' : 'Passed',
+        ]);
     }
 }
