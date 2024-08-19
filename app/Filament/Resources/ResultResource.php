@@ -367,6 +367,10 @@ class ResultResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->multiple()
                     ->options(ResultStatus::class),
+                Tables\Filters\SelectFilter::make('threshold_breached')
+                    ->label('Threshold Status')
+                    ->multiple()
+                    ->options(ThresholdBreached::class),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
