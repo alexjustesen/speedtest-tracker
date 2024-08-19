@@ -6,13 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-            /**
+    /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::table('results', function (Blueprint $table) {
-                $table->string('threshold_breached')->default('Unknown');
+            $table->string('threshold_breached')->default('Unknown');
         });
     }
 

@@ -305,24 +305,24 @@ class Result extends Model
     public function checkAndUpdateThresholds(): void
     {
         $thresholds = app(ThresholdSettings::class);
-    
+
         // Determine if thresholds are enabled
         $thresholdsEnabled = $thresholds->absolute_enabled;
-    
+
         // Convert bits to Mbits if needed
-        $downloadInMbits = !is_null($this->download) ? Number::bitsToMagnitude($this->download_bits, 2, 'mbit') : null;
-        $uploadInMbits = !is_null($this->upload) ? Number::bitsToMagnitude($this->upload_bits, 2, 'mbit') : null;
-    
+        $downloadInMbits = ! is_null($this->download) ? Number::bitsToMagnitude($this->download_bits, 2, 'mbit') : null;
+        $uploadInMbits = ! is_null($this->upload) ? Number::bitsToMagnitude($this->upload_bits, 2, 'mbit') : null;
+
         // Determine if thresholds are breached or unknown
         $downloadBreached = $thresholdsEnabled && $downloadInMbits !== null && $downloadInMbits < $thresholds->absolute_download;
         $uploadBreached = $thresholdsEnabled && $uploadInMbits !== null && $uploadInMbits < $thresholds->absolute_upload;
         $pingBreached = $thresholdsEnabled && $this->ping !== null && $this->ping > $thresholds->absolute_ping;
-    
+
         // Update only the threshold_breached field
         $this->update([
-            'threshold_breached' => $thresholdsEnabled 
-                ? ($downloadBreached || $uploadBreached || $pingBreached ? 'Failed' : 'Passed') 
+            'threshold_breached' => $thresholdsEnabled
+                ? ($downloadBreached || $uploadBreached || $pingBreached ? 'Failed' : 'Passed')
                 : 'Unknown',
         ]);
-    }    
+    }
 }
