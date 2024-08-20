@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('results', function (Blueprint $table) {
-            $table->string('threshold_breached')->default('Unknown');
+            $table->string('threshold_breached')->default('NotChecked');
         });
     }
 

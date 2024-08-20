@@ -9,14 +9,14 @@ enum ThresholdBreached: string implements HasColor, HasLabel
 {
     case Failed = 'Failed';
     case Passed = 'Passed';
-    case Unknown = 'Unknown';
+    case NotChecked = 'NotChecked';
 
     public function getColor(): ?string
     {
         return match ($this) {
             self::Failed => 'danger',
             self::Passed => 'success',
-            self::Unknown => 'warning',
+            self::NotChecked => 'warning',
         };
     }
 
@@ -25,7 +25,7 @@ enum ThresholdBreached: string implements HasColor, HasLabel
         return match ($this) {
             self::Failed => 'Failed',
             self::Passed => 'Passed',
-            self::Unknown => 'Unknown',
+            self::NotChecked => 'NotChecked',
         };
     }
 }

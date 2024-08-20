@@ -103,6 +103,11 @@ class ResultExporter extends Exporter
                 }),
             ExportColumn::make('comments')
                 ->enabledByDefault(false),
+            ExportColumn::make('threshold_breached')
+                ->enabledByDefault(false)
+                ->state(function (Result $record): string {
+                    return $record->threshold_breached;
+                }),
             // ExportColumn::make('status'), // TODO: enable status when upgrading to PHP v8.3: https://php.watch/versions/8.3/dynamic-class-const-enum-member-syntax-support
             ExportColumn::make('scheduled')
                 ->state(function (Result $record): string {
