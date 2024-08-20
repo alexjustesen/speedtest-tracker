@@ -61,13 +61,35 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         } catch (ProcessFailedException $exception) {
             $messages = explode(PHP_EOL, $exception->getMessage());
 
-            $message = collect(array_filter($messages, 'json_validate'))->last();
+            // Extract only the "message" part from each JSON error message
+            $errorMessages = array_map(function ($message) {
+                $decoded = json_decode($message, true);
+                if (json_last_error() === JSON_ERROR_NONE && isset($decoded['message'])) {
+                    return $decoded['message'];
+                }
 
-            $this->result->update([
-                'data' => json_decode($message, true),
-                'status' => ResultStatus::Failed,
-            ]);
+                return ''; // If it's not valid JSON or doesn't contain "message", return an empty string
+            }, $messages);
 
+            // Filter out empty messages and concatenate
+            $errorMessage = implode(' | ', array_filter($errorMessages));
+
+            // Add server ID to the error message if it exists
+            if ($this->serverId !== null) {
+
+                $this->result->update([
+                    'data' => [
+                        'type' => 'log',
+                        'level' => 'error',
+                        'message' => $errorMessage,
+                        'server' => [
+                            'id' => $this->serverId,
+                        ],
+                    ],
+                    'status' => ResultStatus::Failed,
+                ]);
+
+            }
             SpeedtestFailed::dispatch($this->result);
 
             return;
@@ -86,6 +108,9 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         SpeedtestCompleted::dispatch($this->result);
     }
 
+    /**
+     * Check for internet connection.
+     */
     protected function checkForInternetConnection(): bool
     {
         $url = config('speedtest.ping_url');
