@@ -56,8 +56,8 @@ class RecentPingChartWidget extends ChartWidget
                 [
                     'label' => 'Average',
                     'data' => array_fill(0, count($ping), $averagePing),
-                    'borderColor' => '#ff0000',
-                    'pointBackgroundColor' => '#ff0000',
+                    'borderColor' => 'rgb(255, 165, 0)',
+                    'pointBackgroundColor' => 'rgb(255, 165, 0)',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
