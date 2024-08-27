@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Filament\Widgets\Latency;
 
@@ -8,9 +8,11 @@ use Filament\Widgets\ChartWidget;
 class RecentLatencyChartWidget extends ChartWidget
 {
     protected int|string|array $columnSpan = 'full';
+
     protected static ?string $maxHeight = '250px';
 
-    public ?string $url = null; // Public property for URL
+    public ?string $url = null;
+
     public ?string $filter = '24h';
 
     protected function getPollingInterval(): ?string
@@ -29,10 +31,9 @@ class RecentLatencyChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-        \Log::info("Widget URL in getData: " . ($this->url ?? 'null'));
 
-        if (!$this->url) {
-            \Log::info("No URL provided for widget.");
+        if (! $this->url) {
+
             return [];
         }
 
@@ -125,6 +126,6 @@ class RecentLatencyChartWidget extends ChartWidget
 
     public function getHeading(): ?string
     {
-        return '' . $this->url; // Set heading dynamically based on URL
+        return ''.$this->url;
     }
 }
