@@ -1,6 +1,6 @@
-<?php
+<?php 
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Widgets\Latency;
 
 use App\Models\PingResult;
 use Filament\Widgets\ChartWidget;
@@ -8,12 +8,10 @@ use Filament\Widgets\ChartWidget;
 class RecentLatencyChartWidget extends ChartWidget
 {
     protected int|string|array $columnSpan = 'full';
-
     protected static ?string $maxHeight = '250px';
 
+    public ?string $url = null; // Public property for URL
     public ?string $filter = '24h';
-
-    private ?string $url = null; // Private property for storing the URL
 
     protected function getPollingInterval(): ?string
     {
@@ -31,8 +29,17 @@ class RecentLatencyChartWidget extends ChartWidget
 
     protected function getData(): array
     {
+        \Log::info("Widget URL in getData: " . ($this->url ?? 'null'));
+
+        if (!$this->url) {
+            \Log::info("No URL provided for widget.");
+            return [];
+        }
+
+        // Fetch results based on the URL and filter
         $results = PingResult::query()
-            ->select(['id', 'url', 'avg_latency', 'packet_loss', 'created_at'])
+            ->select(['id', 'avg_latency', 'packet_loss', 'created_at'])
+            ->where('url', $this->url)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
             })
@@ -51,7 +58,7 @@ class RecentLatencyChartWidget extends ChartWidget
                     'label' => 'Average (ms)',
                     'data' => $results->map(fn ($item) => $item->avg_latency ?? 0)->toArray(),
                     'borderColor' => 'rgb(51, 181, 229)',
-                    'backgroundColor' => 'rgba(51, 181, 229, 0.2)',
+                    'backgroundColor' => 'rgba(51, 181, 229, 0.1)',
                     'pointBackgroundColor' => 'rgb(51, 181, 229)',
                     'fill' => true,
                     'yAxisID' => 'left-y-axis',
@@ -61,7 +68,7 @@ class RecentLatencyChartWidget extends ChartWidget
                     'label' => 'Packet Loss (%)',
                     'data' => $results->map(fn ($item) => $item->packet_loss ?? 0)->toArray(),
                     'borderColor' => 'rgb(255, 87, 51)',
-                    'backgroundColor' => 'rgba(255, 87, 51, 0.2)',
+                    'backgroundColor' => 'rgba(255, 87, 51, 0.1)',
                     'pointBackgroundColor' => 'rgb(255, 87, 51)',
                     'fill' => true,
                     'yAxisID' => 'right-y-axis',
@@ -69,7 +76,6 @@ class RecentLatencyChartWidget extends ChartWidget
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format')))->toArray(),
-            'heading' => $this->url, // Add heading here
         ];
     }
 
@@ -115,5 +121,10 @@ class RecentLatencyChartWidget extends ChartWidget
     protected function getType(): string
     {
         return 'line';
+    }
+
+    public function getHeading(): ?string
+    {
+        return '' . $this->url; // Set heading dynamically based on URL
     }
 }

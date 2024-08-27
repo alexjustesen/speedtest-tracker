@@ -14,7 +14,4 @@ class PingResult extends Model
         'packet_loss',
         'ping_count',
     ];
-
-    // You can also specify the table if it does not follow Laravel's naming conventions
-    // protected $table = 'ping_results';
 }

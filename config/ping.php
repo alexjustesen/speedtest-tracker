@@ -4,9 +4,9 @@ use Carbon\Carbon;
 
 return [
 
-    'schedule' => env('PING_SCHEDULE', '*/5 * * * *'),
+    'schedule' => env('PING_SCHEDULE'),
 
-    'urls' => explode(',', env('PING_URLS', 'http://example.com')),
+    'urls' => explode(',', env('PING_URLS',)),
 
     'timeout' => env('PING_TIMEOUT', 3),
 
