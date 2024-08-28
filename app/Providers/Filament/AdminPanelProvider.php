@@ -74,6 +74,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
+                    ->label('Latency'),
+                NavigationGroup::make()
                     ->label('Settings'),
                 NavigationGroup::make()
                     ->label('Links')

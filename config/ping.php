@@ -8,8 +8,6 @@ return [
 
     'urls' => explode(',', env('PING_URLS',)),
 
-    'timeout' => env('PING_TIMEOUT', 3),
-
     'ping_count' => env('PING_COUNT', 10),
 ];
 

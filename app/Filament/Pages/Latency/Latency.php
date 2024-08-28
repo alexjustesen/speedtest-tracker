@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\Pages\Latency;
 
 use App\Filament\Widgets\Latency\RecentLatencyChartWidget;
 use App\Models\PingResult;
+use Carbon\Carbon;
+use Cron\CronExpression;
 use Filament\Pages\Page;
 
 class Latency extends Page
@@ -15,6 +17,19 @@ class Latency extends Page
     protected static ?string $navigationGroup = 'Latency';
 
     protected static ?string $navigationLabel = 'Overview';
+
+    public function getSubheading(): ?string
+    {
+        if (blank(config('ping.schedule'))) {
+            return __('No latency tests scheduled.');
+        }
+
+        $cronExpression = new CronExpression(config('ping.schedule'));
+
+        $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
+
+        return 'Next latency tests at: '.$nextRunDate;
+    }
 
     public function getData()
     {

@@ -53,6 +53,9 @@ class RecentLatencyChartWidget extends ChartWidget
             ->orderBy('created_at')
             ->get();
 
+        // Count the number of data points
+        $dataPointsCount = $results->count();
+
         return [
             'datasets' => [
                 [
@@ -61,6 +64,7 @@ class RecentLatencyChartWidget extends ChartWidget
                     'borderColor' => 'rgb(51, 181, 229)',
                     'backgroundColor' => 'rgba(51, 181, 229, 0.1)',
                     'pointBackgroundColor' => 'rgb(51, 181, 229)',
+                    'pointRadius' => $dataPointsCount <= 5 ? 3 : 0,
                     'fill' => true,
                     'yAxisID' => 'left-y-axis',
                     'tension' => 0.4,
@@ -71,11 +75,13 @@ class RecentLatencyChartWidget extends ChartWidget
                     'borderColor' => 'rgb(255, 87, 51)',
                     'backgroundColor' => 'rgba(255, 87, 51, 0.1)',
                     'pointBackgroundColor' => 'rgb(255, 87, 51)',
+                    'pointRadius' => $dataPointsCount <= 5 ? 3 : 0,
                     'fill' => true,
                     'yAxisID' => 'right-y-axis',
                     'tension' => 0.4,
                 ],
             ],
+
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format')))->toArray(),
         ];
     }
@@ -101,6 +107,7 @@ class RecentLatencyChartWidget extends ChartWidget
                         'display' => false,
                         'drawBorder' => false,
                     ],
+
                 ],
                 'right-y-axis' => [
                     'type' => 'linear',
