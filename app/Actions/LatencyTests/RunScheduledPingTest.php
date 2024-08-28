@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Actions\Pings;
+namespace App\Actions\Latency;
 
-use App\Jobs\Pings\ExecutePingTest;
+use App\Jobs\Latency\ExecuteLatencyTest;
 use Cron\CronExpression;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class RunScheduledPingTests
+class RunScheduledLatencyTests
 {
     use AsAction;
 
     public function handle(): void
     {
-        $cronExpression = new CronExpression(config('ping.schedule'));
+        $cronExpression = new CronExpression(config('latency.schedule'));
 
         if (! $cronExpression->isDue(now()->timezone(config('app.display_timezone')))) {
             return;
         }
 
-        $urls = config('ping.urls');
+        $urls = config('latency.urls');
 
         foreach ($urls as $url) {
-            ExecutePingTest::dispatch($url);
+            ExecuteLatencyTest::dispatch($url);
         }
     }
 }

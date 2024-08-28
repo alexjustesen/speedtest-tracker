@@ -1,6 +1,6 @@
 <?php
 
-use App\Actions\Pings\RunScheduledPingTests;
+use App\Actions\Latency\RunScheduledLatencyTests;
 use App\Actions\Speedtests\RunScheduledSpeedtests;
 use Illuminate\Support\Facades\Schedule;
 
@@ -28,8 +28,8 @@ Schedule::call(fn () => RunScheduledSpeedtests::run())
     ->when(! blank(config('speedtest.schedule')));
 
 /**
- * Action to run scheduled ping tests.
+ * Action to run scheduled Latency tests.
  */
-Schedule::call(fn () => RunScheduledPingTests::run())
+Schedule::call(fn () => RunScheduledLatencyTests::run())
     ->everyMinute()
-    ->when(! blank(config('ping.schedule')));
+    ->when(! blank(config('latency.schedule')));

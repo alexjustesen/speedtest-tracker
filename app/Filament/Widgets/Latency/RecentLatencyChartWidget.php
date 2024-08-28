@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets\Latency;
 
-use App\Models\PingResult;
+use App\Models\LatencyResult;
 use Filament\Widgets\ChartWidget;
 
 class RecentLatencyChartWidget extends ChartWidget
@@ -38,7 +38,7 @@ class RecentLatencyChartWidget extends ChartWidget
         }
 
         // Fetch results based on the URL and filter
-        $results = PingResult::query()
+        $results = LatencyResult::query()
             ->select(['id', 'avg_latency', 'packet_loss', 'created_at'])
             ->where('url', $this->url)
             ->when($this->filter == '24h', function ($query) {
@@ -66,7 +66,6 @@ class RecentLatencyChartWidget extends ChartWidget
                     'pointBackgroundColor' => 'rgb(51, 181, 229)',
                     'pointRadius' => $dataPointsCount <= 5 ? 3 : 0,
                     'fill' => true,
-                    'yAxisID' => 'left-y-axis',
                     'tension' => 0.4,
                 ],
                 [
@@ -95,7 +94,7 @@ class RecentLatencyChartWidget extends ChartWidget
                 ],
             ],
             'scales' => [
-                'left-y-axis' => [
+                'y' => [
                     'type' => 'linear',
                     'position' => 'left',
                     'beginAtZero' => false,
@@ -104,10 +103,9 @@ class RecentLatencyChartWidget extends ChartWidget
                         'text' => 'Average (ms)',
                     ],
                     'grid' => [
-                        'display' => false,
+                        'display' => true,
                         'drawBorder' => false,
                     ],
-
                 ],
                 'right-y-axis' => [
                     'type' => 'linear',

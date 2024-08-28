@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Jobs\Pings;
+namespace App\Jobs\Latency;
 
-use App\Models\PingResult;
+use App\Models\LatencyResult;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ExecutePingTest implements ShouldQueue
+class ExecuteLatencyTest implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -21,7 +21,7 @@ class ExecutePingTest implements ShouldQueue
     public function __construct($url)
     {
         $this->url = $url;
-        $this->pingCount = config('ping.ping_count');
+        $this->pingCount = config('latency.ping_count');
     }
 
     public function handle()
@@ -40,7 +40,7 @@ class ExecutePingTest implements ShouldQueue
         $packetLoss = $this->parsePacketLoss($output);
 
         // Store the result in the database
-        PingResult::create([
+        LatencyResult::create([
             'url' => $this->url,
             'min_latency' => $latencies['min'] ?? null,
             'avg_latency' => $latencies['avg'] ?? null,

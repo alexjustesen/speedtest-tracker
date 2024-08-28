@@ -3,16 +3,16 @@
 namespace App\Filament\Pages\Latency;
 
 use App\Filament\Widgets\Latency\RecentLatencyChartWidget;
-use App\Models\PingResult;
+use App\Models\LatencyResult;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Pages\Page;
 
 class Latency extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    protected static ?string $navigationIcon = 'heroicon-o-cloud-arrow-up';
 
-    protected static string $view = 'filament.pages.ping-results-page';
+    protected static string $view = 'filament.pages.latency-results-page';
 
     protected static ?string $navigationGroup = 'Latency';
 
@@ -20,11 +20,11 @@ class Latency extends Page
 
     public function getSubheading(): ?string
     {
-        if (blank(config('ping.schedule'))) {
+        if (blank(config('latency.schedule'))) {
             return __('No latency tests scheduled.');
         }
 
-        $cronExpression = new CronExpression(config('ping.schedule'));
+        $cronExpression = new CronExpression(config('latency.schedule'));
 
         $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
 
@@ -34,7 +34,7 @@ class Latency extends Page
     public function getData()
     {
         // Retrieve distinct URLs
-        $urls = PingResult::distinct()->pluck('url');
+        $urls = LatencyResult::distinct()->pluck('url');
 
         return [
             'urls' => $urls,

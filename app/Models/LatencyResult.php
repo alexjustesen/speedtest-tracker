@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PingResult extends Model
+class LatencyResult extends Model
 {
     protected $fillable = [
         'url',
