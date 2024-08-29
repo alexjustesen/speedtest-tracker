@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Actions\Latency;
+
+use App\Jobs\Latency\ExecuteLatencyTest;
+use Cron\CronExpression;
+use Illuminate\Support\Facades\Log;
+use Lorisleiva\Actions\Concerns\AsAction;
+
+class RunScheduledLatencyTests
+{
+    use AsAction;
+
+    public function handle(): void
+    {
+        // Create a new CronExpression instance with the configured schedule
+        $cronExpression = new CronExpression(config('latency.schedule'));
+
+        // Get the current time in the configured timezone
+        $now = now()->timezone(config('app.display_timezone'));
+
+        // Log the current time and whether the job is due
+        Log::info('Checking if latency test is due.', [
+            'current_time' => $now,
+            'is_due' => $cronExpression->isDue($now),
+        ]);
+
+        // Exit if the cron expression is not due
+        if (!$cronExpression->isDue($now)) {
+            Log::info('Latency test is not due. Exiting.');
+            return;
+        }
+
+        // Retrieve and log the URLs from the configuration
+        $urls = explode(',', config('latency.urls')); // Assuming URLs are a comma-separated string
+        Log::info('Running latency tests for URLs', ['urls' => $urls]);
+
+        // Dispatch a job for each URL
+        foreach ($urls as $url) {
+            // Trim the URL to remove any extra whitespace
+            $url = trim($url);
+            if ($url) {
+                Log::info('Dispatching latency test', ['url' => $url]);
+                ExecuteLatencyTest::dispatch($url);
+            }
+        }
+    }
+}

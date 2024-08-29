@@ -9,45 +9,49 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use App\Settings\LatencySettings;
 
 class ExecuteLatencyTest implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $url;
+    protected array $urls; // Define this property to store the URLs
+    protected int $pingCount;
 
-    protected $pingCount;
-
-    public function __construct($url)
+    public function __construct()
     {
-        $this->url = $url;
-        $this->pingCount = config('latency.ping_count');
+        $settings = app(LatencySettings::class);
+        $this->pingCount = $settings->ping_count;
+        $this->urls = $settings->ping_urls; // Fetch URLs from settings
     }
 
     public function handle()
     {
-        Log::info("Starting ping test for URL: {$this->url}");
+        foreach ($this->urls as $urlData) {
+            $url = $urlData['url'];
+            Log::info("Starting ping test for URL: {$url}");
 
-        $command = sprintf(
-            'ping -c %d %s',
-            $this->pingCount,
-            escapeshellarg($this->url)
-        );
+            $command = sprintf(
+                'ping -c %d %s',
+                $this->pingCount,
+                escapeshellarg($url)
+            );
 
-        $output = shell_exec($command);
+            $output = shell_exec($command);
 
-        $latencies = $this->parseLatencies($output);
-        $packetLoss = $this->parsePacketLoss($output);
+            $latencies = $this->parseLatencies($output);
+            $packetLoss = $this->parsePacketLoss($output);
 
-        // Store the result in the database
-        LatencyResult::create([
-            'url' => $this->url,
-            'min_latency' => $latencies['min'] ?? null,
-            'avg_latency' => $latencies['avg'] ?? null,
-            'max_latency' => $latencies['max'] ?? null,
-            'packet_loss' => $packetLoss,
-            'ping_count' => $this->pingCount,
-        ]);
+            // Store the result in the database
+            LatencyResult::create([
+                'url' => $url,
+                'min_latency' => $latencies['min'] ?? null,
+                'avg_latency' => $latencies['avg'] ?? null,
+                'max_latency' => $latencies['max'] ?? null,
+                'packet_loss' => $packetLoss,
+                'ping_count' => $this->pingCount,
+            ]);
+        }
     }
 
     protected function parseLatencies($output)
