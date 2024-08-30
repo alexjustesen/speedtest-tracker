@@ -12,11 +12,4 @@ class AddLatencySettings extends SettingsMigration
         $this->migrator->add('latency.enabled', false);  // Default state for the enable/disable toggle
     }
 
-    public function down(): void
-    {
-        $this->migrator->delete('latency.ping_count');
-        $this->migrator->delete('latency.target_url');
-        $this->migrator->delete('latency.latency_schedule');  // Remove the cron expression setting
-        $this->migrator->delete('latency.enabled');  // Remove the enable/disable toggle setting
-    }
 }
