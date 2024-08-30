@@ -3,54 +3,63 @@
 namespace App\Jobs\Latency;
 
 use App\Models\LatencyResult;
+use App\Settings\LatencySettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use App\Settings\LatencySettings;
 
 class ExecuteLatencyTest implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected array $urls; // Define this property to store the URLs
+    protected string $target_url;
+    protected string $target_name;
     protected int $pingCount;
 
-    public function __construct()
+    public function __construct(string $target_url, string $target_name)
     {
         $settings = app(LatencySettings::class);
+        $this->target_url = $target_url;
+        $this->target_name = $target_name;
         $this->pingCount = $settings->ping_count;
-        $this->urls = $settings->ping_urls; // Fetch URLs from settings
     }
 
     public function handle()
     {
-        foreach ($this->urls as $urlData) {
-            $url = $urlData['url'];
-            Log::info("Starting ping test for URL: {$url}");
+        Log::info("Starting ping test for URL: {$this->target_url}");
 
+        try {
             $command = sprintf(
                 'ping -c %d %s',
                 $this->pingCount,
-                escapeshellarg($url)
+                escapeshellarg($this->target_url)
             );
 
             $output = shell_exec($command);
 
+            if ($output === null) {
+                Log::error("Failed to execute ping command for URL: {$this->target_url}");
+                return;
+            }
+
             $latencies = $this->parseLatencies($output);
             $packetLoss = $this->parsePacketLoss($output);
 
-            // Store the result in the database
             LatencyResult::create([
-                'url' => $url,
+                'target_url' => $this->target_url,
+                'target_name' => $this->target_name,
                 'min_latency' => $latencies['min'] ?? null,
                 'avg_latency' => $latencies['avg'] ?? null,
                 'max_latency' => $latencies['max'] ?? null,
                 'packet_loss' => $packetLoss,
                 'ping_count' => $this->pingCount,
             ]);
+
+        } catch (\Exception $e) {
+            Log::error("Error executing latency test for URL: {$this->target_url}. Error: {$e->getMessage()}");
         }
     }
 

@@ -7,8 +7,9 @@ use Spatie\LaravelSettings\Settings;
 class LatencySettings extends Settings
 {
     public int $ping_count;
-    public array $ping_urls;
-    public string $cron_expression;
+    public array $target_url;
+    public string $latency_schedule = ''; // Default cron expression
+    public bool $latency_enabled = false; // Default state for the enable/disable toggle
 
     /**
      * Define the group name for these settings.

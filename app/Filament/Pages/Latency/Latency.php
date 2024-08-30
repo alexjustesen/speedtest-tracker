@@ -34,10 +34,10 @@ class Latency extends Page
     public function getData()
     {
         // Retrieve distinct URLs
-        $urls = LatencyResult::distinct()->pluck('url');
+        $target_url = LatencyResult::distinct()->pluck('target_url');
 
         return [
-            'urls' => $urls,
+            'target_url' => $target_url,
             'filters' => $this->getFilters(),
         ];
     }
@@ -53,11 +53,11 @@ class Latency extends Page
 
     protected function getHeaderWidgets(): array
     {
-        $urls = $this->getData()['urls'];
+        $target_url = $this->getData()['target_url'];
 
         $widgets = [];
-        foreach ($urls as $url) {
-            $widget = RecentLatencyChartWidget::make(['url' => $url]); // Pass URL during creation
+        foreach ($target_url as $target_url) {
+            $widget = RecentLatencyChartWidget::make(['target_url' => $target_url]); // Pass URL during creation
             $widgets[] = $widget;
         }
 

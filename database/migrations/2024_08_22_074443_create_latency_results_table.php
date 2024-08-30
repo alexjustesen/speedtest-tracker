@@ -10,7 +10,8 @@ class CreateLatencyResultsTable extends Migration
     {
         Schema::create('latency_results', function (Blueprint $table) {
             $table->id();
-            $table->string('url');
+            $table->string('target_url');
+            $table->string('target_name')->nullable(); // Add 'name' column
             $table->decimal('min_latency', 8, 2)->nullable();
             $table->decimal('avg_latency', 8, 2)->nullable();
             $table->decimal('max_latency', 8, 2)->nullable();

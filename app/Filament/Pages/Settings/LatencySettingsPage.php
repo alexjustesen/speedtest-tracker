@@ -46,18 +46,22 @@ class LatencySettingsPage extends SettingsPage
                             ->schema([
                                 Forms\Components\Section::make('General')
                                     ->schema([
+                                        Forms\Components\Toggle::make('latency_enabled')
+                                            ->label('Enable Latency Tests')
+                                            ->default(false)
+                                            ->required(),
                                         Forms\Components\TextInput::make('ping_count')
                                             ->label('Ping Count')
                                             ->helperText('Number of pings to send during the test.')
-                                            ->default(4)
+                                            ->default(10)
                                             ->minValue(1)
                                             ->numeric()
                                             ->required(),
-                                        Forms\Components\TextInput::make('cron_expression')
+                                        Forms\Components\TextInput::make('latency_schedule')
                                             ->label('Cron Expression')
                                             ->helperText('Specify the cron expression for scheduling tests.')
                                             ->default('0 0 * * *') // Set default cron expression
-                                            ->required(),
+                                            # ->required(),
                                     ])
                                     ->compact()
                                     ->columns([
@@ -67,17 +71,17 @@ class LatencySettingsPage extends SettingsPage
 
                                 Forms\Components\Section::make('Targets')
                                     ->schema([
-                                        Forms\Components\Repeater::make('ping_urls')
+                                        Forms\Components\Repeater::make('target_url')
                                             ->label('Targets')
                                             ->schema([
-                                                Forms\Components\TextInput::make('name')
-                                                    ->label('Dispaly Name')
-                                                    ->placeholder('Enter a friendly name')
+                                                Forms\Components\TextInput::make('target_name')
+                                                    ->label('Display Name')
+                                                    ->placeholder('Enter a display name')
                                                     ->maxLength(100)
                                                     ->required(),
                                                 Forms\Components\TextInput::make('url')
                                                     ->label('Target')
-                                                    ->placeholder('example.com') // Removed URL validation
+                                                    ->placeholder('example.com')
                                                     ->maxLength(2000)
                                                     ->required(),
                                             ])

@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class LatencyResult extends Model
 {
     protected $fillable = [
-        'url',
+        'target_url',
+        'target_name',
         'min_latency',
         'avg_latency',
         'max_latency',

@@ -11,7 +11,7 @@ class RecentLatencyChartWidget extends ChartWidget
 
     protected static ?string $maxHeight = '250px';
 
-    public ?string $url = null;
+    public ?string $target_url = null;
 
     public ?string $filter = '24h';
 
@@ -32,26 +32,25 @@ class RecentLatencyChartWidget extends ChartWidget
     protected function getData(): array
     {
 
-        if (! $this->url) {
+        if (! $this->target_url) {
 
             return [];
         }
 
-        // Fetch results based on the URL and filter
         $results = LatencyResult::query()
-            ->select(['id', 'avg_latency', 'packet_loss', 'created_at'])
-            ->where('url', $this->url)
-            ->when($this->filter == '24h', function ($query) {
-                $query->where('created_at', '>=', now()->subDay());
-            })
-            ->when($this->filter == 'week', function ($query) {
-                $query->where('created_at', '>=', now()->subWeek());
-            })
-            ->when($this->filter == 'month', function ($query) {
-                $query->where('created_at', '>=', now()->subMonth());
-            })
-            ->orderBy('created_at')
-            ->get();
+        ->select(['id', 'avg_latency', 'packet_loss', 'created_at'])
+        ->where('target_url', $this->target_url)
+        ->when($this->filter == '24h', function ($query) {
+            $query->where('created_at', '>=', now()->subDay());
+        })
+        ->when($this->filter == 'week', function ($query) {
+            $query->where('created_at', '>=', now()->subWeek());
+        })
+        ->when($this->filter == 'month', function ($query) {
+            $query->where('created_at', '>=', now()->subMonth());
+        })
+        ->orderBy('created_at')
+        ->get();
 
         // Count the number of data points
         $dataPointsCount = $results->count();
@@ -131,6 +130,8 @@ class RecentLatencyChartWidget extends ChartWidget
 
     public function getHeading(): ?string
     {
-        return ''.$this->url;
+        $results = LatencyResult::query()->where('target_url', $this->target_url)->first();
+        $target_name = $results->target_name ?? 'Unknown';
+        return $target_name;
     }
 }
