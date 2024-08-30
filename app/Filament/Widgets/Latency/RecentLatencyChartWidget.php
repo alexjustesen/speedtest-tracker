@@ -3,17 +3,23 @@
 namespace App\Filament\Widgets\Latency;
 
 use App\Models\LatencyResult;
+use App\Settings\LatencySettings; // Import the settings class
 use Filament\Widgets\ChartWidget;
 
 class RecentLatencyChartWidget extends ChartWidget
 {
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan;
 
     protected static ?string $maxHeight = '250px';
 
     public ?string $target_url = null;
 
     public ?string $filter = '24h';
+
+    public function __construct()
+    {
+        $this->columnSpan = app(LatencySettings::class)->latency_column_span; // Set columnSpan from settings
+    }
 
     protected function getPollingInterval(): ?string
     {
@@ -31,28 +37,25 @@ class RecentLatencyChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-
         if (! $this->target_url) {
-
             return [];
         }
 
         $results = LatencyResult::query()
-        ->select(['id', 'avg_latency', 'packet_loss', 'created_at'])
-        ->where('target_url', $this->target_url)
-        ->when($this->filter == '24h', function ($query) {
-            $query->where('created_at', '>=', now()->subDay());
-        })
-        ->when($this->filter == 'week', function ($query) {
-            $query->where('created_at', '>=', now()->subWeek());
-        })
-        ->when($this->filter == 'month', function ($query) {
-            $query->where('created_at', '>=', now()->subMonth());
-        })
-        ->orderBy('created_at')
-        ->get();
+            ->select(['id', 'avg_latency', 'packet_loss', 'created_at'])
+            ->where('target_url', $this->target_url)
+            ->when($this->filter == '24h', function ($query) {
+                $query->where('created_at', '>=', now()->subDay());
+            })
+            ->when($this->filter == 'week', function ($query) {
+                $query->where('created_at', '>=', now()->subWeek());
+            })
+            ->when($this->filter == 'month', function ($query) {
+                $query->where('created_at', '>=', now()->subMonth());
+            })
+            ->orderBy('created_at')
+            ->get();
 
-        // Count the number of data points
         $dataPointsCount = $results->count();
 
         return [
@@ -79,7 +82,6 @@ class RecentLatencyChartWidget extends ChartWidget
                     'tension' => 0.4,
                 ],
             ],
-
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format')))->toArray(),
         ];
     }
@@ -132,6 +134,7 @@ class RecentLatencyChartWidget extends ChartWidget
     {
         $results = LatencyResult::query()->where('target_url', $this->target_url)->first();
         $target_name = $results->target_name ?? 'Unknown';
+
         return $target_name;
     }
 }

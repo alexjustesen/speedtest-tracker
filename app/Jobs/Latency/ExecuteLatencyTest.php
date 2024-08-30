@@ -16,7 +16,9 @@ class ExecuteLatencyTest implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected string $target_url;
+
     protected string $target_name;
+
     protected int $pingCount;
 
     public function __construct(string $target_url, string $target_name)
@@ -42,6 +44,7 @@ class ExecuteLatencyTest implements ShouldQueue
 
             if ($output === null) {
                 Log::error("Failed to execute ping command for URL: {$this->target_url}");
+
                 return;
             }
 

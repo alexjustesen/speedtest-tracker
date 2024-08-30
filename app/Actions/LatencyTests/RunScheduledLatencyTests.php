@@ -3,10 +3,10 @@
 namespace App\Actions\LatencyTests;
 
 use App\Jobs\Latency\ExecuteLatencyTest;
+use App\Settings\LatencySettings;
 use Cron\CronExpression;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
-use App\Settings\LatencySettings;
 
 class RunScheduledLatencyTests
 {
@@ -17,8 +17,9 @@ class RunScheduledLatencyTests
         $settings = $this->getSettings();
 
         // Check if latency tests are enabled
-        if (!$settings->latency_enabled) {
+        if (! $settings->latency_enabled) {
             Log::info('Latency tests are disabled in the settings. Exiting.');
+
             return;
         }
 
@@ -31,8 +32,9 @@ class RunScheduledLatencyTests
             'is_due' => $cronExpression->isDue($now),
         ]);
 
-        if (!$cronExpression->isDue($now)) {
+        if (! $cronExpression->isDue($now)) {
             Log::info('Latency test is not due. Exiting.');
+
             return;
         }
 
