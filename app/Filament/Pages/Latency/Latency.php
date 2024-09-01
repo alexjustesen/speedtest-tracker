@@ -7,6 +7,8 @@ use App\Models\LatencyResult;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Pages\Page;
+use App\Settings\LatencySettings; // Import the settings class
+
 
 class Latency extends Page
 {
@@ -18,26 +20,13 @@ class Latency extends Page
 
     protected static ?string $navigationLabel = 'Overview';
 
-    public function getSubheading(): ?string
-    {
-        if (blank(config('latency.schedule'))) {
-            return __('No latency tests scheduled.');
-        }
-
-        $cronExpression = new CronExpression(config('latency.schedule'));
-
-        $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
-
-        return 'Next latency tests at: '.$nextRunDate;
-    }
-
     public function getData()
     {
-        // Retrieve distinct URLs
-        $target_url = LatencyResult::distinct()->pluck('target_url');
+        // Retrieve distinct target names
+        $target_names = LatencyResult::distinct()->pluck('target_name');
 
         return [
-            'target_url' => $target_url,
+            'target_names' => $target_names,
             'filters' => $this->getFilters(),
         ];
     }
@@ -53,11 +42,11 @@ class Latency extends Page
 
     protected function getHeaderWidgets(): array
     {
-        $target_url = $this->getData()['target_url'];
+        $target_names = $this->getData()['target_names'];
 
         $widgets = [];
-        foreach ($target_url as $target_url) {
-            $widget = RecentLatencyChartWidget::make(['target_url' => $target_url]); // Pass URL during creation
+        foreach ($target_names as $target_name) {
+            $widget = RecentLatencyChartWidget::make(['target_name' => $target_name]); // Pass target_name during creation
             $widgets[] = $widget;
         }
 

@@ -12,7 +12,7 @@ class RecentLatencyChartWidget extends ChartWidget
 
     protected static ?string $maxHeight = '250px';
 
-    public ?string $target_url = null;
+    public ?string $target_name = null;
 
     public ?string $filter = '24h';
 
@@ -37,13 +37,13 @@ class RecentLatencyChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-        if (! $this->target_url) {
+        if (! $this->target_name) {
             return [];
         }
 
         $results = LatencyResult::query()
             ->select(['id', 'avg_latency', 'packet_loss', 'created_at'])
-            ->where('target_url', $this->target_url)
+            ->where('target_name', $this->target_name)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
             })
@@ -132,9 +132,6 @@ class RecentLatencyChartWidget extends ChartWidget
 
     public function getHeading(): ?string
     {
-        $results = LatencyResult::query()->where('target_url', $this->target_url)->first();
-        $target_name = $results->target_name ?? 'Unknown';
-
-        return $target_name;
+        return $this->target_name ?: 'Unknown'; // Return the target_name directly
     }
 }
