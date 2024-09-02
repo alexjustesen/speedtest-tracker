@@ -29,6 +29,10 @@ class RecentUploadLatencyChartWidget extends ChartWidget
         $startDate = $this->filters['startDate'] ?? now()->subWeek();
         $endDate = $this->filters['endDate'] ?? now();
 
+        // Convert dates to the correct timezone if necessary
+        $startDate = \Carbon\Carbon::parse($startDate)->startOfDay()->timezone(config('app.timezone'));
+        $endDate = \Carbon\Carbon::parse($endDate)->endOfDay()->timezone(config('app.timezone'));
+
         $results = Result::query()
             ->select(['id', 'data', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)

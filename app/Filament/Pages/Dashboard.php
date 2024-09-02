@@ -10,13 +10,11 @@ use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
+use App\Forms\Components\DateFilterForm;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
-use Filament\Forms;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BaseDashboard;
@@ -45,63 +43,7 @@ class Dashboard extends BaseDashboard
 
     public function filtersForm(Form $form): Form
     {
-        // Retrieve the default number of days from the configuration
-        $defaultRangeDays = config('app.chart_default_date_range');
-
-        // Calculate the start and end dates based on the configuration value
-        $defaultEndDate = now(); // Today
-        $defaultStartDate = now()->subDays($defaultRangeDays); // Start date for the range
-
-        return $form
-            ->schema([
-                Forms\Components\Section::make()
-                    ->schema([
-                        Select::make('predefinedRange')
-                            ->label('Time Range')
-                            ->options([
-                                '24_hours' => 'Last 24 Hours',
-                                '1_week' => 'Last 1 Week',
-                                '1_month' => 'Last 1 Month',
-                                'custom' => 'Custom Range',
-                            ])
-                            ->reactive()
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                switch ($state) {
-                                    case '24_hours':
-                                        $set('startDate', now()->subDay()->toDateString());
-                                        $set('endDate', now()->toDateString());
-                                        break;
-                                    case '1_week':
-                                        $set('startDate', now()->subWeek()->toDateString());
-                                        $set('endDate', now()->toDateString());
-                                        break;
-                                    case '1_month':
-                                        $set('startDate', now()->subMonth()->toDateString());
-                                        $set('endDate', now()->toDateString());
-                                        break;
-                                    case 'custom':
-                                        break;
-                                }
-                            })
-                            ->default('custom'),
-
-                        DatePicker::make('startDate')
-                            ->label('Start Date')
-                            ->default($defaultStartDate->toDateString())
-                            ->reactive()
-                            ->hidden(fn ($get) => $get('predefinedRange') !== 'custom'),
-
-                        DatePicker::make('endDate')
-                            ->label('End Date')
-                            ->default($defaultEndDate->toDateString())
-                            ->reactive()
-                            ->hidden(fn ($get) => $get('predefinedRange') !== 'custom'),
-                    ])
-                    ->columns([
-                        'default' => 1,
-                        'sm' => 3,
-                    ]),
-            ]);
+        return DateFilterForm::make($form);
     }
 
     protected function getHeaderActions(): array

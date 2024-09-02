@@ -7,7 +7,6 @@ use App\Helpers\Number;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use Illuminate\Database\Eloquent\Builder;
 
 class RecentDownloadChartWidget extends ChartWidget
 {
@@ -26,15 +25,18 @@ class RecentDownloadChartWidget extends ChartWidget
 
     protected function getData(): array
     {
-
+        // Ensure that startDate and endDate are treated as Carbon instances
         $startDate = $this->filters['startDate'] ?? now()->subWeek();
         $endDate = $this->filters['endDate'] ?? now();
+
+        // Convert dates to the correct timezone if necessary
+        $startDate = \Carbon\Carbon::parse($startDate)->startOfDay()->timezone(config('app.timezone'));
+        $endDate = \Carbon\Carbon::parse($endDate)->endOfDay()->timezone(config('app.timezone'));
 
         $results = Result::query()
             ->select(['id', 'download', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
-            ->when($startDate, fn (Builder $query) => $query->whereDate('created_at', '>=', $startDate))
-            ->when($endDate, fn (Builder $query) => $query->whereDate('created_at', '<=', $endDate))
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
 
