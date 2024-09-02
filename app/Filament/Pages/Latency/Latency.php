@@ -4,21 +4,37 @@ namespace App\Filament\Pages\Latency;
 
 use App\Filament\Widgets\Latency\RecentLatencyChartWidget;
 use App\Models\LatencyResult;
+use App\Settings\LatencySettings;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Pages\Page;
-use App\Settings\LatencySettings; // Import the settings class
-
 
 class Latency extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-cloud-arrow-up';
+    protected static ?string $navigationIcon = 'heroicon-o-arrows-up-down';
 
     protected static string $view = 'filament.pages.latency-results-page';
 
     protected static ?string $navigationGroup = 'Latency';
 
     protected static ?string $navigationLabel = 'Overview';
+
+    public function getSubheading(): ?string
+    {
+        $settings = app(LatencySettings::class);
+
+        if (! $settings->latency_enabled || blank($settings->latency_schedule)) {
+            return __('No latency tests scheduled.');
+        }
+
+        $cronExpression = new CronExpression($settings->latency_schedule);
+
+        $nextRunDate = Carbon::parse($cronExpression->getNextRunDate())
+            ->setTimezone(config('app.display_timezone'))
+            ->format(config('app.datetime_format'));
+
+        return 'Next latency test at: '.$nextRunDate;
+    }
 
     public function getData()
     {

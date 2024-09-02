@@ -84,6 +84,7 @@ class LatencySettingsPage extends SettingsPage
 
                                 Forms\Components\Section::make('Targets')
                                     ->hidden(fn (Forms\Get $get) => $get('latency_enabled') !== true)
+                                    ->collapsible()
                                     ->schema([
                                         Forms\Components\Repeater::make('target_url')
                                             ->label('Targets')
