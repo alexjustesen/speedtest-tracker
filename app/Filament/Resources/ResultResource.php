@@ -30,6 +30,12 @@ class ResultResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
 
+    protected static ?string $navigationGroup = 'Speedtest';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationLabel = 'Results';
+
     public static function form(Form $form): Form
     {
         return $form

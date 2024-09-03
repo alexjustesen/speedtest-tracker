@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Widgets\Speedtest;
 
 use App\Enums\ResultStatus;
-use App\Helpers\Number;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 
-class RecentUploadChartWidget extends ChartWidget
+class RecentUploadLatencyChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Upload (Mbps)';
+    protected static ?string $heading = 'Upload Latency';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -34,7 +33,7 @@ class RecentUploadChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'upload', 'created_at'])
+            ->select(['id', 'data', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
@@ -51,8 +50,28 @@ class RecentUploadChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Upload',
-                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : 0),
+                    'label' => 'Average (ms)',
+                    'data' => $results->map(fn ($item) => $item->upload_latency_iqm ? number_format($item->upload_latency_iqm, 2) : 0),
+                    'borderColor' => '#10b981',
+                    'backgroundColor' => '#10b981',
+                    'pointBackgroundColor' => '#10b981',
+                    'fill' => false,
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                ],
+                [
+                    'label' => 'High (ms)',
+                    'data' => $results->map(fn ($item) => $item->upload_latency_high ? number_format($item->upload_latency_high, 2) : 0),
+                    'borderColor' => '#0ea5e9',
+                    'backgroundColor' => '#0ea5e9',
+                    'pointBackgroundColor' => '#0ea5e9',
+                    'fill' => false,
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                ],
+                [
+                    'label' => 'Low (ms)',
+                    'data' => $results->map(fn ($item) => $item->upload_latency_low ? number_format($item->upload_latency_low, 2) : 0),
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                     'pointBackgroundColor' => '#8b5cf6',
@@ -68,11 +87,6 @@ class RecentUploadChartWidget extends ChartWidget
     protected function getOptions(): array
     {
         return [
-            'plugins' => [
-                'legend' => [
-                    'display' => false,
-                ],
-            ],
             'scales' => [
                 'y' => [
                     'beginAtZero' => true,

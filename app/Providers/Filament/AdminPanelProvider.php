@@ -74,10 +74,15 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
+                    ->label('Speedtest')
+                    ->collapsible(false),
+                NavigationGroup::make()
                     ->label('Latency')
                     ->collapsible(false),
                 NavigationGroup::make()
-                    ->label('Settings'),
+                    ->label('Settings')
+                    ->collapsible(true)
+                    ->collapsed(true),
                 NavigationGroup::make()
                     ->label('Links')
                     ->collapsible(false),

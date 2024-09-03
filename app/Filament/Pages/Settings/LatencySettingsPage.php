@@ -13,7 +13,7 @@ class LatencySettingsPage extends SettingsPage
 
     protected static ?string $navigationGroup = 'Settings';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $title = 'Latency Settings';
 

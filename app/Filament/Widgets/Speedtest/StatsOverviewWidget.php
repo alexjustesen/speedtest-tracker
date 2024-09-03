@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Widgets\Speedtest;
 
 use App\Enums\ResultStatus;
 use App\Helpers\Number;

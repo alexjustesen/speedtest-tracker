@@ -3,13 +3,10 @@
 namespace App\Filament\Pages;
 
 use App\Actions\Speedtests\RunOoklaSpeedtest;
-use App\Filament\Widgets\RecentDownloadChartWidget;
-use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
-use App\Filament\Widgets\RecentJitterChartWidget;
-use App\Filament\Widgets\RecentPingChartWidget;
-use App\Filament\Widgets\RecentUploadChartWidget;
-use App\Filament\Widgets\RecentUploadLatencyChartWidget;
-use App\Filament\Widgets\StatsOverviewWidget;
+use App\Filament\Widgets\Latency\DashboardLatencyChartWidget;
+use App\Filament\Widgets\Speedtest\DashboardDownloadUploadChartWidget;
+use App\Filament\Widgets\Speedtest\StatsOverviewWidget;
+use App\Settings\LatencySettings;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Actions\Action;
@@ -81,14 +78,19 @@ class Dashboard extends BasePage
 
     protected function getHeaderWidgets(): array
     {
-        return [
+        $widgets = [
             StatsOverviewWidget::make(),
-            RecentDownloadChartWidget::make(),
-            RecentUploadChartWidget::make(),
-            RecentPingChartWidget::make(),
-            RecentJitterChartWidget::make(),
-            RecentDownloadLatencyChartWidget::make(),
-            RecentUploadLatencyChartWidget::make(),
+            DashboardDownloadUploadChartWidget::make(),
         ];
+
+        // Get the settings instance
+        $settings = app(LatencySettings::class);
+
+        // Check if latency tests are enabled
+        if ($settings->latency_enabled) {
+            $widgets[] = DashboardLatencyChartWidget::make();
+        }
+
+        return $widgets;
     }
 }

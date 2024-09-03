@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Widgets\Speedtest;
 
 use App\Enums\ResultStatus;
+use App\Helpers\Number;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 
-class RecentPingChartWidget extends ChartWidget
+class RecentDownloadChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Ping (ms)';
+    protected static ?string $heading = 'Download (Mbps)';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -33,7 +34,7 @@ class RecentPingChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'ping', 'created_at'])
+            ->select(['id', 'download', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
@@ -50,11 +51,11 @@ class RecentPingChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Ping (ms)',
-                    'data' => $results->map(fn ($item) => ! blank($item->ping) ? number_format($item->ping, 2) : 0),
-                    'borderColor' => '#10b981',
-                    'backgroundColor' => '#10b981',
-                    'pointBackgroundColor' => '#10b981',
+                    'label' => 'Download',
+                    'data' => $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : 0),
+                    'borderColor' => '#0ea5e9',
+                    'backgroundColor' => '#0ea5e9',
+                    'pointBackgroundColor' => '#0ea5e9',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
@@ -67,6 +68,11 @@ class RecentPingChartWidget extends ChartWidget
     protected function getOptions(): array
     {
         return [
+            'plugins' => [
+                'legend' => [
+                    'display' => false,
+                ],
+            ],
             'scales' => [
                 'y' => [
                     'beginAtZero' => true,

@@ -11,7 +11,7 @@ use Filament\Pages\Page;
 
 class Latency extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-arrows-up-down';
+    protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
 
     protected static string $view = 'filament.pages.latency-results-page';
 
