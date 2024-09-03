@@ -53,14 +53,14 @@ class DateFilterForm
 
                         DatePicker::make('startDate')
                             ->label('Start Date')
-                            ->default($defaultStartDate->startOfDay()->toDateString()) // Ensure start of the day
+                            ->default($defaultStartDate->startOfDay()->toDateString())
                             ->reactive()
                             ->native(false)
                             ->hidden(fn ($get) => $get('predefinedRange') !== 'custom'),
 
                         DatePicker::make('endDate')
                             ->label('End Date')
-                            ->default($defaultStartDate->startOfDay()->toDateString()) // Ensure start of the day
+                            ->default($defaultEndDate->startOfDay()->toDateString())
                             ->reactive()
                             ->native(false)
                             ->hidden(fn ($get) => $get('predefinedRange') !== 'custom'),
