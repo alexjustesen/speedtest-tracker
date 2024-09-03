@@ -93,6 +93,11 @@ class RecentLatencyChartWidget extends ChartWidget
                 'legend' => [
                     'display' => true,
                 ],
+                'tooltip' => [
+                    'enabled' => true, // Enable tooltips
+                    'mode' => 'index', // Show data for all datasets at once
+                    'intersect' => false, // Don't require the mouse to intersect with a data point
+                ],
             ],
             'scales' => [
                 'y' => [
