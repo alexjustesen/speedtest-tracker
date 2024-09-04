@@ -92,6 +92,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'enabled' => true, // Enable tooltips
                     'mode' => 'index', // Show data for all datasets at once
                     'intersect' => false, // Don't require the mouse to intersect with a data point
+                    'position' => 'nearest', // Position the tooltip near the data point
                 ],
             ],
             'scales' => [
