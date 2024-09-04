@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Actions\MigrateBadJsonResults;
 use App\Enums\ResultStatus;
+use App\Enums\ThresholdBreached;
 use App\Filament\Exports\ResultExporter;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
@@ -317,6 +318,13 @@ class ResultResource extends Resource
                     ->badge()
                     ->toggleable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('threshold_breached')
+                    ->label('Threshold')
+                    ->badge()
+                    ->color(fn (string $state): string => ThresholdBreached::from($state)->getColor())
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
                     ->boolean()
                     ->toggleable()
@@ -365,6 +373,10 @@ class ResultResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->multiple()
                     ->options(ResultStatus::class),
+                Tables\Filters\SelectFilter::make('threshold_breached')
+                    ->label('Threshold Status')
+                    ->multiple()
+                    ->options(ThresholdBreached::class),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([

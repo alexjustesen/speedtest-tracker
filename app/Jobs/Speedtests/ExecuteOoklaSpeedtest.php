@@ -84,6 +84,9 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             'status' => ResultStatus::Completed,
         ]);
 
+        // Ensure thresholds are checked and updated
+        $this->result->checkAndUpdateThresholds();
+
         SpeedtestCompleted::dispatch($this->result);
     }
 
