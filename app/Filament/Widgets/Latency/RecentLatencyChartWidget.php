@@ -8,6 +8,11 @@ use Filament\Widgets\ChartWidget;
 
 class RecentLatencyChartWidget extends ChartWidget
 {
+    public function getHeading(): ?string
+    {
+        return $this->target_name ?: 'Unknown'; // Return the target_name directly
+    }
+
     protected int|string|array $columnSpan;
 
     protected static ?string $maxHeight = '250px';
@@ -97,6 +102,7 @@ class RecentLatencyChartWidget extends ChartWidget
                     'enabled' => true, // Enable tooltips
                     'mode' => 'index', // Show data for all datasets at once
                     'intersect' => false, // Don't require the mouse to intersect with a data point
+                    'position' => 'nearest', // Position the tooltip near the data point
                 ],
             ],
             'scales' => [
@@ -133,10 +139,5 @@ class RecentLatencyChartWidget extends ChartWidget
     protected function getType(): string
     {
         return 'line';
-    }
-
-    public function getHeading(): ?string
-    {
-        return $this->target_name ?: 'Unknown'; // Return the target_name directly
     }
 }
