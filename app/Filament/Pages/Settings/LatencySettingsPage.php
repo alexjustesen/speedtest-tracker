@@ -98,7 +98,9 @@ class LatencySettingsPage extends SettingsPage
                                                     ->label('Target')
                                                     ->placeholder('example.com')
                                                     ->maxLength(2000)
-                                                    ->required(),
+                                                    ->helperText('Please enter the URL without http, https, or www.')
+                                                    ->required()
+                                                    ->rule('regex:/^(?!.*(http|https|www))/i'), // Regex to ensure the URL does not contain 'http', 'https', or 'www'
                                             ])
                                             ->columns([
                                                 'default' => 1,
