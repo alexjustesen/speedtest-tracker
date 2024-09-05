@@ -13,6 +13,18 @@ class RecentLatencyChartWidget extends ChartWidget
         return $this->target_name ?: 'Unknown'; // Return the target_name directly
     }
 
+    public function getDescription(): ?string
+    {
+        // Get the settings instance
+        $settings = app(LatencySettings::class);
+
+        // Find the target by matching the target_name
+        $target = collect($settings->target_url)->firstWhere('target_name', $this->target_name);
+
+        // Return the description if found, otherwise return null to hide it
+        return $target['target_description'] ?? null;
+    }
+
     protected int|string|array $columnSpan;
 
     protected static ?string $maxHeight = '250px';

@@ -94,6 +94,10 @@ class LatencySettingsPage extends SettingsPage
                                                     ->placeholder('Enter a display name')
                                                     ->maxLength(100)
                                                     ->required(),
+                                                Forms\Components\TextInput::make('target_description')
+                                                    ->label('Display Description')
+                                                    ->placeholder('Enter a description to show on the chart')
+                                                    ->maxLength(100),
                                                 Forms\Components\TextInput::make('url')
                                                     ->label('Target')
                                                     ->placeholder('example.com')
