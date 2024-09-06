@@ -58,11 +58,14 @@ class Latency extends Page
 
     protected function getHeaderWidgets(): array
     {
-        $target_names = $this->getData()['target_names'];
+        // Assuming the settings are being stored in the LatencySettings class
+        $target_urls = app(LatencySettings::class)->target_url;
 
         $widgets = [];
-        foreach ($target_names as $target_name) {
-            $widget = RecentLatencyChartWidget::make(['target_name' => $target_name]); // Pass target_name during creation
+        foreach ($target_urls as $target) {
+            $target_name = $target['target_name'];  // Extract target_name from each target
+            // Create a widget for each target_name and pass it as a parameter
+            $widget = RecentLatencyChartWidget::make(['target_name' => $target_name]);
             $widgets[] = $widget;
         }
 
