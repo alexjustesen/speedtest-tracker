@@ -41,7 +41,7 @@ class RecentDownloadChartWidget extends ChartWidget
             ->get();
 
         $downloads = $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : 0);
-        $averageDownload = $downloads->avg();
+        $averageDownload = round($downloads->avg(), 2);
 
         return [
             'datasets' => [
@@ -59,8 +59,8 @@ class RecentDownloadChartWidget extends ChartWidget
                 [
                     'label' => 'Average',
                     'data' => array_fill(0, count($downloads), $averageDownload),
-                    'borderColor' => 'rgb(255, 165, 0)',
-                    'pointBackgroundColor' => 'rgb(255, 165, 0)',
+                    'borderColor' => 'rgb(243, 7, 6, 1)',
+                    'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,

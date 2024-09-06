@@ -43,7 +43,7 @@ class RecentUploadChartWidget extends ChartWidget
             ->get();
 
         $upload = $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : 0);
-        $averageUpload = $upload->avg();
+        $averageUpload = round($upload->avg(), 2);
 
         return [
             'datasets' => [
@@ -61,8 +61,8 @@ class RecentUploadChartWidget extends ChartWidget
                 [
                     'label' => 'Average',
                     'data' => array_fill(0, count($upload), $averageUpload),
-                    'borderColor' => 'rgb(255, 165, 0)',
-                    'pointBackgroundColor' => 'rgb(255, 165, 0)',
+                    'borderColor' => 'rgb(243, 7, 6, 1)',
+                    'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,

@@ -42,7 +42,7 @@ class RecentPingChartWidget extends ChartWidget
             ->get();
 
         $ping = $results->map(fn ($item) => ! blank($item->ping) ? number_format($item->ping, 2) : 0);
-        $averagePing = $ping->avg();
+        $averagePing = round($ping->avg(), 2);
 
         return [
             'datasets' => [
@@ -60,8 +60,8 @@ class RecentPingChartWidget extends ChartWidget
                 [
                     'label' => 'Average',
                     'data' => array_fill(0, count($ping), $averagePing),
-                    'borderColor' => 'rgb(255, 165, 0)',
-                    'pointBackgroundColor' => 'rgb(255, 165, 0)',
+                    'borderColor' => 'rgb(243, 7, 6, 1)',
+                    'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
