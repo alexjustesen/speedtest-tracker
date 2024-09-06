@@ -2,8 +2,9 @@
 
 namespace App\Filament\Pages\Speedtest;
 
-use App\Filament\Widgets\Speedtest\AverageDownloadUploadChartWidget;
-use App\Filament\Widgets\Speedtest\ResultStatusPieChartWidget;
+use App\Filament\Widgets\Speedtest\Insights\AverageDownloadUploadChartWidget;
+use App\Filament\Widgets\Speedtest\Insights\ResultStatusWidget;
+use App\Filament\Widgets\Speedtest\Insights\ResultThresholdWidget;
 use Filament\Pages\Page;
 
 class InsightsCharts extends Page
@@ -23,7 +24,8 @@ class InsightsCharts extends Page
     protected function getHeaderWidgets(): array
     {
         return [
-            ResultStatusPieChartWidget::make(),
+            ResultStatusWidget::make(),
+            ResultThresholdWidget::make(),
             AverageDownloadUploadChartWidget::make(),
         ];
     }

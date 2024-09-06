@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Filament\Widgets\Speedtest;
+namespace App\Filament\Widgets\Speedtest\Insights;
 
 use App\Enums\ResultStatus;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 
-class ResultStatusPieChartWidget extends ChartWidget
+class ResultStatusWidget extends ChartWidget
 {
     protected static ?string $heading = 'Result Statuses';
 

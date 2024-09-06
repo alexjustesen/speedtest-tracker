@@ -3,21 +3,15 @@
 namespace App\Filament\Widgets\Latency;
 
 use App\Models\LatencyResult;
-use App\Settings\LatencySettings; // Import the settings class
 use Filament\Widgets\ChartWidget;
 
 class DashboardLatencyChartWidget extends ChartWidget
 {
-    protected int|string|array $columnSpan;
+    protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '250px';
 
     public ?string $filter = '24h';
-
-    public function __construct()
-    {
-        $this->columnSpan = app(LatencySettings::class)->latency_column_span; // Set columnSpan from settings
-    }
 
     protected function getPollingInterval(): ?string
     {
