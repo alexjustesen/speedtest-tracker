@@ -15,85 +15,91 @@ class ExecuteLatencyTest implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected string $target_url;
-
-    protected string $target_name;
+    protected array $target_urls;
 
     protected int $pingCount;
 
-    public function __construct(string $target_url, string $target_name)
+    public function __construct(array $target_urls)
     {
         $settings = app(LatencySettings::class);
-        $this->target_url = $target_url;
-        $this->target_name = $target_name;
+        $this->target_urls = $target_urls;
         $this->pingCount = $settings->ping_count;
     }
 
     public function handle()
     {
-        Log::info("Starting ping test for URL: {$this->target_url}");
+        // Rebuild URLs string from target URLs
+        $urlsString = implode(' ', array_map('escapeshellarg', $this->target_urls));
 
         try {
-            $command = sprintf(
-                'ping -c %d %s',
-                $this->pingCount,
-                escapeshellarg($this->target_url)
-            );
+            // Build and log the command
+            $command = sprintf('fping -c %d -q %s', $this->pingCount, $urlsString);
 
-            $output = shell_exec($command);
+            // Execute the command and log both stdout and stderr
+            $output = shell_exec($command.' 2>&1');
 
             if ($output === null) {
-                Log::error("Failed to execute ping command for URL: {$this->target_url}");
-
                 return;
             }
 
-            $latencies = $this->parseLatencies($output);
-            $packetLoss = $this->parsePacketLoss($output);
+            // Parse and log the results
+            $results = $this->parseFpingOutput($output);
 
-            LatencyResult::create([
-                'target_url' => $this->target_url,
-                'target_name' => $this->target_name,
-                'min_latency' => $latencies['min'] ?? null,
-                'avg_latency' => $latencies['avg'] ?? null,
-                'max_latency' => $latencies['max'] ?? null,
-                'packet_loss' => $packetLoss,
-                'ping_count' => $this->pingCount,
-            ]);
+            foreach ($results as $url => $latencies) {
+
+                LatencyResult::create([
+                    'target_url' => $url,
+                    'target_name' => $this->getTargetName($url),
+                    'min_latency' => $latencies['min'] ?? null,
+                    'avg_latency' => $latencies['avg'] ?? null,
+                    'max_latency' => $latencies['max'] ?? null,
+                    'packet_loss' => $latencies['packet_loss'] ?? null,
+                    'ping_count' => $this->pingCount,
+                ]);
+            }
 
         } catch (\Exception $e) {
-            Log::error("Error executing latency test for URL: {$this->target_url}. Error: {$e->getMessage()}");
+            Log::error('Error executing latency test for URLs: '.implode(', ', $this->target_urls).'. Error: '.$e->getMessage());
         }
     }
 
-    protected function parseLatencies($output)
+    protected function parseFpingOutput($output)
     {
-        $latencies = [];
-        if (preg_match_all('/time=(\d+\.?\d*) ms/', $output, $matches)) {
-            $latencies = array_map('floatval', $matches[1]);
+        $results = [];
+        $lines = explode("\n", trim($output));
+
+        foreach ($lines as $line) {
+            // Revised regex to handle the output format more accurately
+            if (preg_match('/^(\S+)\s+:\s+xmt\/rcv\/%loss\s+=\s+\d+\/\d+\/(\d+)%.*, min\/avg\/max\s+=\s+([\d.]+)\/([\d.]+)\/([\d.]+)\s*$/', $line, $matches)) {
+                $url = $matches[1];
+                $packetLoss = $matches[2]; // %loss value
+                $min = $matches[3]; // min latency
+                $avg = $matches[4]; // avg latency
+                $max = $matches[5]; // max latency
+
+                $results[$url] = [
+                    'packet_loss' => $packetLoss,
+                    'min' => $min,
+                    'avg' => $avg,
+                    'max' => $max,
+                ];
+            }
         }
 
-        $min = $max = $avg = null;
-
-        if (count($latencies) > 0) {
-            $min = min($latencies);
-            $max = max($latencies);
-            $avg = array_sum($latencies) / count($latencies);
-        }
-
-        return [
-            'min' => $min,
-            'avg' => $avg,
-            'max' => $max,
-        ];
+        return $results;
     }
 
-    protected function parsePacketLoss($output)
+    protected function getTargetName($url)
     {
-        if (preg_match('/(\d+)% packet loss/', $output, $matches)) {
-            return $matches[1];
+        // Assuming you have a method to retrieve the target name based on the URL
+        // Example implementation (adapt to your data structure):
+        $settings = app(LatencySettings::class);
+        foreach ($settings->target_url as $target) {
+            if (isset($target['url']) && $target['url'] === $url) {
+                return $target['target_name'] ?? 'Unnamed';
+            }
         }
 
-        return null;
+        return 'Unnamed'; // Default if no name is found
     }
 }

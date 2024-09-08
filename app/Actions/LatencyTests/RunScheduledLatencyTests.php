@@ -18,8 +18,6 @@ class RunScheduledLatencyTests
 
         // Check if latency tests are enabled
         if (! $settings->latency_enabled) {
-            Log::info('Latency tests are disabled in the settings. Exiting.');
-
             return;
         }
 
@@ -38,21 +36,20 @@ class RunScheduledLatencyTests
             return;
         }
 
-        $urls = $settings->target_url;
-        Log::info('Running latency tests for URLs', ['urls' => $urls]);
+        $urls = collect($settings->target_url)
+            ->filter(fn ($urlItem) => is_array($urlItem) && isset($urlItem['url']) && is_string($urlItem['url']))
+            ->map(fn ($urlItem) => trim($urlItem['url']))
+            ->filter() // Remove empty URLs
+            ->toArray();
 
-        foreach ($urls as $urlItem) {
-            if (is_array($urlItem) && isset($urlItem['url']) && is_string($urlItem['url'])) {
-                $url = trim($urlItem['url']);
-                $target_name = $urlItem['target_name'] ?? 'Unnamed'; // Default to 'Unnamed' if no name is provided
-                if ($url) {
-                    Log::info('Dispatching latency test', ['url' => $url, 'name' => $target_name]);
-                    ExecuteLatencyTest::dispatch($url, $target_name);
-                }
-            } else {
-                Log::warning('Skipping invalid URL entry', ['urlItem' => $urlItem]);
-            }
+        if (empty($urls)) {
+            Log::warning('No valid URLs to ping.');
+
+            return;
         }
+
+        Log::info('Dispatching latency test for all URLs');
+        ExecuteLatencyTest::dispatch($urls); // Dispatch all URLs at once
     }
 
     protected function getSettings(): LatencySettings
