@@ -87,7 +87,11 @@ class LatencySettingsPage extends SettingsPage
                                     ->collapsible()
                                     ->schema([
                                         Forms\Components\Repeater::make('target_url')
-                                            ->label('Targets')
+                                            ->label('')
+                                            ->itemLabel(fn (array $state): ?string => $state['target_name'] ?? null)
+                                            ->collapsible()
+                                            ->collapsed()
+                                            ->addActionLabel('Add Target')
                                             ->schema([
                                                 Forms\Components\TextInput::make('target_name')
                                                     ->label('Display Name')
