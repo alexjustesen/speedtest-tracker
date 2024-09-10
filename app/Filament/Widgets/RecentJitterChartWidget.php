@@ -6,7 +6,6 @@ use App\Enums\ResultStatus;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use Illuminate\Database\Eloquent\Builder;
 
 class RecentJitterChartWidget extends ChartWidget
 {
@@ -29,15 +28,14 @@ class RecentJitterChartWidget extends ChartWidget
         $startDate = $this->filters['startDate'] ?? now()->subWeek();
         $endDate = $this->filters['endDate'] ?? now();
 
-        // Convert dates to the correct timezone if necessary
-        $startDate = \Carbon\Carbon::parse($startDate)->startOfDay()->timezone(config('app.timezone'));
-        $endDate = \Carbon\Carbon::parse($endDate)->endOfDay()->timezone(config('app.timezone'));
+        // Convert dates to the correct timezone without resetting the time
+        $startDate = \Carbon\Carbon::parse($startDate)->timezone(config('app.timezone'));
+        $endDate = \Carbon\Carbon::parse($endDate)->timezone(config('app.timezone'));
 
         $results = Result::query()
             ->select(['id', 'data', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
-            ->when($startDate, fn (Builder $query) => $query->whereDate('created_at', '>=', $startDate))
-            ->when($endDate, fn (Builder $query) => $query->whereDate('created_at', '<=', $endDate))
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
 
@@ -89,13 +87,18 @@ class RecentJitterChartWidget extends ChartWidget
                     'display' => true,
                 ],
                 'tooltip' => [
-                    'enabled' => true, // Enable tooltips
-                    'mode' => 'index', // Show data for all datasets at once
-                    'intersect' => false, // Don't require the mouse to intersect with a data point
-                    'position' => 'nearest', // Position the tooltip near the data point
+                    'enabled' => true,
+                    'mode' => 'index',
+                    'intersect' => false,
+                    'position' => 'nearest',
                 ],
             ],
             'scales' => [
+                'x' => [
+                    'ticks' => [
+                        'maxTicksLimit' => 25, // Adjust the maximum number of ticks you want
+                    ],
+                ],
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],

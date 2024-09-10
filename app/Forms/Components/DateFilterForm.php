@@ -3,7 +3,7 @@
 namespace App\Forms\Components;
 
 use Filament\Forms;
-use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 
@@ -51,16 +51,16 @@ class DateFilterForm
                             })
                             ->default('custom'),
 
-                        DatePicker::make('startDate')
+                        DateTimePicker::make('startDate')
                             ->label('Start Date')
-                            ->default($defaultStartDate->startOfDay()->toDateString())
+                            ->default($defaultStartDate->startOfDay()) // This preserves the time if needed
                             ->reactive()
                             ->native(false)
                             ->hidden(fn ($get) => $get('predefinedRange') !== 'custom'),
 
-                        DatePicker::make('endDate')
+                        DateTimePicker::make('endDate')
                             ->label('End Date')
-                            ->default($defaultEndDate->startOfDay()->toDateString())
+                            ->default($defaultEndDate->endOfDay()) // Preserving the full date-time
                             ->reactive()
                             ->native(false)
                             ->hidden(fn ($get) => $get('predefinedRange') !== 'custom'),

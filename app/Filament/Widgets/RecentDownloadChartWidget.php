@@ -29,9 +29,9 @@ class RecentDownloadChartWidget extends ChartWidget
         $startDate = $this->filters['startDate'] ?? now()->subWeek();
         $endDate = $this->filters['endDate'] ?? now();
 
-        // Convert dates to the correct timezone if necessary
-        $startDate = \Carbon\Carbon::parse($startDate)->startOfDay()->timezone(config('app.timezone'));
-        $endDate = \Carbon\Carbon::parse($endDate)->endOfDay()->timezone(config('app.timezone'));
+        // Convert dates to the correct timezone without resetting the time
+        $startDate = \Carbon\Carbon::parse($startDate)->timezone(config('app.timezone'));
+        $endDate = \Carbon\Carbon::parse($endDate)->timezone(config('app.timezone'));
 
         $results = Result::query()
             ->select(['id', 'download', 'created_at'])
@@ -80,13 +80,18 @@ class RecentDownloadChartWidget extends ChartWidget
                     'display' => true,
                 ],
                 'tooltip' => [
-                    'enabled' => true, // Enable tooltips
-                    'mode' => 'index', // Show data for all datasets at once
-                    'intersect' => false, // Don't require the mouse to intersect with a data point
-                    'position' => 'nearest', // Position the tooltip near the data point
+                    'enabled' => true,
+                    'mode' => 'index',
+                    'intersect' => false,
+                    'position' => 'nearest',
                 ],
             ],
             'scales' => [
+                'x' => [
+                    'ticks' => [
+                        'maxTicksLimit' => 25, // Adjust the maximum number of ticks you want
+                    ],
+                ],
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],
