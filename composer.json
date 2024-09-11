@@ -25,6 +25,7 @@
         "livewire/livewire": "^3.5.4",
         "lorisleiva/laravel-actions": "^2.8.1",
         "maennchen/zipstream-php": "^2.4",
+        "promphp/prometheus_client_php": "^2.11",
         "spatie/laravel-settings": "^3.3.2",
         "spatie/laravel-webhook-server": "^3.8.1",
         "timokoerber/laravel-one-time-operations": "^1.4.2"
