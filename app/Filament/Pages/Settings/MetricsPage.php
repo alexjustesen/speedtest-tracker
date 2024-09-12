@@ -47,12 +47,7 @@ class MetricsPage extends SettingsPage
                                 Forms\Components\Toggle::make('prometheus_enabled')
                                     ->label('Enable Metrics Endpoint'),
                             ])
-                            ->columnSpan(2), // Adjust columnSpan to fit width
-                        Forms\Components\Section::make()
-                            ->schema([
-                                Forms\Components\View::make('filament.forms.prometheus-helptext'),
-                            ])
-                            ->columnSpan(1),
+                            ->columnSpan(3), // Adjust columnSpan to fit width
 
                         // InfluxDB Section
                         Forms\Components\Section::make('InfluxDB v2 Settings')
