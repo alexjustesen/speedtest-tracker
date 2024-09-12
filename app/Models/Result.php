@@ -44,36 +44,37 @@ class Result extends Model
             'server_id' => (int) $this->server_id,
             'server_host' => $this->server_host,
             'server_name' => $this->server_name,
+            'isp' => $this->isp,
         ];
     }
 
     /**
      * The attributes to be passed to influxdb
      */
-    public function formatForInfluxDB2()
+    public function formatForInfluxDB2(): array
     {
         return [
             'id' => $this->id,
-            'ping' => $this?->ping,
-            'download' => $this?->download,
-            'upload' => $this?->upload,
-            'download_bits' => $this->download_bits,
-            'upload_bits' => $this->upload_bits,
-            'ping_jitter' => $this->ping_jitter,
-            'download_jitter' => $this->download_jitter,
-            'upload_jitter' => $this->upload_jitter,
-            'download_latency_avg' => $this->download_latency_iqm,
-            'download_latency_low' => $this->download_latency_low,
-            'download_latency_high' => $this->download_latency_high,
-            'upload_latency_avg' => $this->upload_latency_iqm,
-            'upload_latency_low' => $this->upload_latency_low,
-            'upload_latency_high' => $this->upload_latency_high,
-            'server_id' => $this?->server_id,
-            'isp' => $this?->isp,
-            'server_host' => $this?->server_host,
-            'server_name' => $this?->server_name,
-            'server_location' => $this?->server_location,
-            'scheduled' => $this->scheduled,
+            'ping' => $this->ping ?? null,
+            'download' => $this->download ?? null,
+            'upload' => $this->upload ?? null,
+            'download_bits' => (float) $this->download_bits,
+            'upload_bits' => (float) $this->upload_bits,
+            'ping_jitter' => (float) $this->ping_jitter,
+            'download_jitter' => (float) $this->download_jitter,
+            'upload_jitter' => (float) $this->upload_jitter,
+            'download_latency_avg' => (float) $this->download_latency_iqm,
+            'download_latency_low' => (float) $this->download_latency_low,
+            'download_latency_high' => (float) $this->download_latency_high,
+            'upload_latency_avg' => (float) $this->upload_latency_iqm,
+            'upload_latency_low' => (float) $this->upload_latency_low,
+            'upload_latency_high' => (float) $this->upload_latency_high,
+            'server_id' => $this->server_id ?? null,
+            'isp' => $this->isp ?? null,
+            'server_host' => $this->server_host ?? null,
+            'server_name' => $this->server_name ?? null,
+            'server_location' => $this->server_location ?? null,
+            'scheduled' => (bool) $this->scheduled,
             'successful' => $this->status === ResultStatus::Completed,
             'packet_loss' => (float) $this->packet_loss,
         ];
