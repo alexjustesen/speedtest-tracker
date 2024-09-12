@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Result;
-use App\Settings\InfluxDbSettings;
+use App\Settings\MetricsSettings;
 use Illuminate\Console\Command;
 
 class TestInfluxDB extends Command
@@ -25,17 +25,18 @@ class TestInfluxDB extends Command
     /**
      * Execute the console command.
      */
-    public function handle(InfluxDbSettings $settings): void
+    public function handle(MetricsSettings $settings): void
     {
         $influxdb = [
-            'enabled' => $settings->v2_enabled,
-            'url' => $settings?->v2_url,
-            'org' => $settings?->v2_org,
-            'bucket' => $settings?->v2_bucket,
-            'token' => $settings?->v2_token,
+            'enabled' => $settings->influxdb_v2_enabled,
+            'url' => $settings?->influxdb_v2_url,
+            'org' => $settings?->influxdb_v2_org,
+            'bucket' => $settings?->influxdb_v2_bucket,
+            'token' => $settings?->influxdb_v2_token,
         ];
 
         if ($influxdb['enabled'] == true) {
+            // Create a test result if InfluxDB is enabled
             $result = Result::factory()->create();
         }
     }

@@ -2,12 +2,12 @@
 
 namespace App\Filament\Pages\Settings;
 
-use App\Settings\InfluxDbSettings;
+use App\Settings\MetricsSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 
-class InfluxDbPage extends SettingsPage
+class MetricsPage extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
@@ -15,11 +15,11 @@ class InfluxDbPage extends SettingsPage
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $title = 'InfluxDB';
+    protected static ?string $title = 'Metrics Export Settings';
 
-    protected static ?string $navigationLabel = 'InfluxDB';
+    protected static ?string $navigationLabel = 'Metrics Export';
 
-    protected static string $settings = InfluxDbSettings::class;
+    protected static string $settings = MetricsSettings::class;
 
     public static function canAccess(): bool
     {
@@ -37,45 +37,61 @@ class InfluxDbPage extends SettingsPage
             ->schema([
                 Forms\Components\Grid::make([
                     'default' => 1,
+                    'md' => 3,
                 ])
                     ->schema([
+
+                        // Prometheus Section
+                        Forms\Components\Section::make('Prometheus Settings')
+                            ->schema([
+                                Forms\Components\Toggle::make('prometheus_enabled')
+                                    ->label('Enable Metrics Endpoint'),
+                            ])
+                            ->columnSpan(2), // Adjust columnSpan to fit width
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Forms\Components\View::make('filament.forms.prometheus-helptext'),
+                            ])
+                            ->columnSpan(1),
+
+                        // InfluxDB Section
                         Forms\Components\Section::make('InfluxDB v2 Settings')
                             ->schema([
-                                Forms\Components\Toggle::make('v2_enabled')
+                                Forms\Components\Toggle::make('influxdb_v2_enabled')
                                     ->label('Enable')
                                     ->reactive()
-                                    ->columnSpan(2),
+                                    ->columnSpan(2), // Make sure the toggle spans the same width as Prometheus section
                                 Forms\Components\Grid::make([
                                     'default' => 1,
                                     'md' => 3,
                                 ])
-                                    ->hidden(fn (Forms\Get $get) => $get('v2_enabled') !== true)
+                                    ->hidden(fn (Forms\Get $get) => $get('influxdb_v2_enabled') !== true)
                                     ->schema([
-                                        Forms\Components\TextInput::make('v2_url')
+                                        Forms\Components\TextInput::make('influxdb_v2_url')
                                             ->label('URL')
                                             ->placeholder('http://your-influxdb-instance')
                                             ->maxLength(255)
-                                            ->required(fn (Forms\Get $get) => $get('v2_enabled') == true)
+                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
                                             ->columnSpanFull(),
-                                        Forms\Components\Checkbox::make('v2_verify_ssl')
+                                        Forms\Components\Checkbox::make('influxdb_v2_verify_ssl')
                                             ->label('Verify SSL')
                                             ->columnSpanFull(),
-                                        Forms\Components\TextInput::make('v2_org')
+                                        Forms\Components\TextInput::make('influxdb_v2_org')
                                             ->label('Org')
                                             ->maxLength(255)
-                                            ->required(fn (Forms\Get $get) => $get('v2_enabled') == true)
+                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
                                             ->columnSpan(['md' => 2]),
-                                        Forms\Components\TextInput::make('v2_bucket')
+                                        Forms\Components\TextInput::make('influxdb_v2_bucket')
                                             ->placeholder('speedtest-tracker')
                                             ->label('Bucket')
                                             ->maxLength(255)
-                                            ->required(fn (Forms\Get $get) => $get('v2_enabled') == true)
+                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
                                             ->columnSpan(['md' => 1]),
-                                        Forms\Components\TextInput::make('v2_token')
+                                        Forms\Components\TextInput::make('influxdb_v2_token')
                                             ->label('Token')
                                             ->maxLength(255)
                                             ->password()
-                                            ->required(fn (Forms\Get $get) => $get('v2_enabled') == true)
+                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
                                             ->disableAutocomplete()
                                             ->columnSpanFull(),
                                     ]),
@@ -83,10 +99,9 @@ class InfluxDbPage extends SettingsPage
                             ->compact()
                             ->columns([
                                 'default' => 1,
-                                'md' => 2,
+                                'md' => 3,
                             ]),
-                    ])
-                    ->columnSpan('full'),
+                    ]),
             ]);
     }
 }
