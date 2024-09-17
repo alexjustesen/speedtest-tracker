@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Enums\ResultStatus;
 use App\Helpers\Number;
 use App\Models\Result;
+use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
@@ -30,8 +31,8 @@ class RecentUploadChartWidget extends ChartWidget
         $endDate = $this->filters['endDate'] ?? now();
 
         // Convert dates to the correct timezone without resetting the time
-        $startDate = \Carbon\Carbon::parse($startDate)->timezone(config('app.timezone'));
-        $endDate = \Carbon\Carbon::parse($endDate)->timezone(config('app.timezone'));
+        $startDate = Carbon::parse($startDate)->timezone(config('app.timezone'));
+        $endDate = Carbon::parse($endDate)->timezone(config('app.timezone'));
 
         // Use whereBetween to account for both date and time
         $results = Result::query()
