@@ -5,6 +5,7 @@ namespace App\Jobs\Speedtests;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
+use App\Events\SpeedtestSkipped;
 use App\Models\Result;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -46,6 +47,52 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return;
         }
 
+        // Fetch public IP data
+        $publicIpData = $this->getPublicIp();
+
+        $currentIp = $publicIpData['query'] ?? 'unknown';
+        $currentIsp = $publicIpData['isp'] ?? 'unknown';
+
+        // Retrieve SPEEDTEST_SKIP_IP Settings
+        $skipSettings = array_filter(array_map('trim', explode(';', config('speedtest.skip_ip'))));
+
+        // Check Each Skip Setting
+        foreach ($skipSettings as $setting) {
+
+            if (filter_var($setting, FILTER_VALIDATE_IP)) {
+
+                if ($currentIp === $setting) {
+                    $this->markAsSkipped(
+                        "Current public IP address ($currentIp) was listed to be skipped for testing.",
+                        $currentIp,
+                        $currentIsp
+                    );
+
+                    return;
+                }
+            } elseif (strpos($setting, '/') !== false) {
+
+                if ($this->ipInSubnet($currentIp, $setting)) {
+                    $this->markAsSkipped(
+                        "Current public IP address ($currentIp) falls within the excluded subnet ($setting).",
+                        $currentIp,
+                        $currentIsp
+                    );
+
+                    return;
+                }
+            } elseif (strcasecmp($currentIsp, $setting) === 0) {
+                $this->markAsSkipped(
+                    "Current ISP ($currentIsp) was listed to be skipped for testing.",
+                    $currentIp,
+                    $currentIsp
+                );
+
+                return;
+            }
+        }
+
+        // Execute Speedtest
         $options = array_filter([
             'speedtest',
             '--accept-license',
@@ -61,13 +108,42 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         } catch (ProcessFailedException $exception) {
             $messages = explode(PHP_EOL, $exception->getMessage());
 
-            $message = collect(array_filter($messages, 'json_validate'))->last();
+            // Extract only the "message" part from each JSON error message
+            $errorMessages = array_map(function ($message) {
+                $decoded = json_decode($message, true);
+                if (json_last_error() === JSON_ERROR_NONE && isset($decoded['message'])) {
+                    return $decoded['message'];
+                }
 
-            $this->result->update([
-                'server_id' => $this->serverId,
-                'data' => json_decode($message, true),
-                'status' => ResultStatus::Failed,
-            ]);
+                return ''; // If it's not valid JSON or doesn't contain "message", return an empty string
+            }, $messages);
+
+            // Filter out empty messages and concatenate
+            $errorMessage = implode(' | ', array_filter($errorMessages));
+
+            // Add server ID to the error message if it exists
+            if ($this->serverId !== null) {
+                $this->result->update([
+                    'data' => [
+                        'type' => 'log',
+                        'level' => 'error',
+                        'message' => $errorMessage,
+                        'server' => [
+                            'id' => $this->serverId,
+                        ],
+                    ],
+                    'status' => ResultStatus::Failed,
+                ]);
+            } else {
+                $this->result->update([
+                    'data' => [
+                        'type' => 'log',
+                        'level' => 'error',
+                        'message' => $errorMessage,
+                    ],
+                    'status' => ResultStatus::Failed,
+                ]);
+            }
 
             SpeedtestFailed::dispatch($this->result);
 
@@ -87,18 +163,61 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         SpeedtestCompleted::dispatch($this->result);
     }
 
+    protected function getPublicIp(): array
+    {
+        // Implement method to fetch public IP data
+        $response = file_get_contents('http://ip-api.com/json/?fields=25088');
+
+        return json_decode($response, true) ?? [];
+    }
+
+    protected function markAsSkipped(string $message, string $currentIp, string $currentIsp): void
+    {
+        $this->result->update([
+            'data' => ['type' => 'log', 'level' => 'info', 'message' => $message],
+            'data' => [
+                'type' => 'log',
+                'level' => 'info',
+                'message' => $message,
+                'isp' => $currentIsp,
+                'interface' => [
+                    'externalIp' => $currentIp,
+                ],
+            ],
+            'status' => ResultStatus::Skipped, // Use Skipped status
+        ]);
+        SpeedtestSkipped::dispatch($this->result); // Dispatch skipped event
+    }
+
+    protected function markAsFailed(string $message): void
+    {
+        $this->result->update([
+            'data' => ['type' => 'log', 'level' => 'error', 'message' => $message],
+            'status' => ResultStatus::Failed,
+        ]);
+        SpeedtestFailed::dispatch($this->result);
+    }
+
+    protected function ipInSubnet(string $ip, string $subnet): bool
+    {
+        [$subnet, $mask] = explode('/', $subnet) + [1 => '32'];
+        $subnetDecimal = ip2long($subnet);
+        $ipDecimal = ip2long($ip);
+        $maskDecimal = ~((1 << (32 - (int) $mask)) - 1);
+
+        return ($subnetDecimal & $maskDecimal) === ($ipDecimal & $maskDecimal);
+    }
+
     protected function checkForInternetConnection(): bool
     {
         $url = config('speedtest.ping_url');
 
-        // Skip checking for internet connection if ping url isn't set (disabled)
         if (blank($url)) {
             return true;
         }
 
         if (! URL::isValidUrl($url)) {
             $this->result->update([
-                'server_id' => $this->serverId,
                 'data' => [
                     'type' => 'log',
                     'level' => 'error',
@@ -112,7 +231,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return false;
         }
 
-        // Remove http:// or https:// from the URL if present
         $url = preg_replace('/^https?:\/\//', '', $url);
 
         $ping = new Ping(
@@ -122,7 +240,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
         if ($ping->ping() === false) {
             $this->result->update([
-                'server_id' => $this->serverId,
                 'data' => [
                     'type' => 'log',
                     'level' => 'error',

@@ -35,4 +35,9 @@ return [
 
     'servers' => env('SPEEDTEST_SERVERS', ''),
 
+    /**
+     * IP filtering settings.
+     */
+    'skip_ip' => env('SPEEDTEST_SKIP_IP', ''), // Comma-separated list of IPs, ISPs, ASNs, and subnets
+
 ];
