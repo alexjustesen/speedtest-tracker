@@ -5,5 +5,5 @@ A new speedtest was completed using **{{ $service }}** on **{{ $isp }}** but a t
 @foreach ($metrics as $item)
 - {{ $item['name'] }} {{ $item['threshold'] }}: **{{ $item['value'] }}**
 @endforeach
-- **Ookla Speedtest:** {{ $speedtest_url }}
-- **URL:** {{ $url }}
+- **Ookla Speedtest:** [{{ $speedtest_url }}]({{ $speedtest_url }})
+- **URL:** [{{ $url }}]({{ $url }})
