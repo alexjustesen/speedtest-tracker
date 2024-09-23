@@ -50,8 +50,8 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         // Fetch public IP data
         $publicIpData = $this->getPublicIp();
 
-        $currentIp = $publicIpData['query'] ?? 'unknown';
-        $currentIsp = $publicIpData['isp'] ?? 'unknown';
+        $currentIp = $publicIpData['ip'] ?? 'unknown';
+        $currentIsp = $publicIpData['org'] ?? 'unknown';
 
         // Retrieve SPEEDTEST_SKIP_IP Settings
         $skipSettings = array_filter(array_map('trim', explode(';', config('speedtest.skip_ip'))));
@@ -166,7 +166,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     protected function getPublicIp(): array
     {
         // Implement method to fetch public IP data
-        $response = file_get_contents('http://ip-api.com/json/?fields=25088');
+        $response = file_get_contents('https://ipapi.co/json/');
 
         return json_decode($response, true) ?? [];
     }
