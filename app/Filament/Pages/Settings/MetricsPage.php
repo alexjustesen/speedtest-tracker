@@ -35,68 +35,59 @@ class MetricsPage extends SettingsPage
     {
         return $form
             ->schema([
-                Forms\Components\Grid::make([
-                    'default' => 1,
-                    'md' => 3,
-                ])
-                    ->schema([
-
-                        // Prometheus Section
-                        Forms\Components\Section::make('Prometheus Settings')
+                Forms\Components\Tabs::make('metrics_tabs')
+                    ->columnSpanFull() // Ensures the tabs span the full width
+                    ->tabs([
+                        // Prometheus Tab
+                        Forms\Components\Tabs\Tab::make('Prometheus')
                             ->schema([
                                 Forms\Components\Toggle::make('prometheus_enabled')
-                                    ->label('Enable Metrics Endpoint'),
-                            ])
-                            ->columnSpan(3), // Adjust columnSpan to fit width
+                                    ->label('Enable')
+                                    ->columnSpanFull(), // Ensure full-width for the toggle
+                            ]),
 
-                        // InfluxDB Section
-                        Forms\Components\Section::make('InfluxDB v2 Settings')
+                        // InfluxDB Tab
+                        Forms\Components\Tabs\Tab::make('InfluxDB v2')
                             ->schema([
                                 Forms\Components\Toggle::make('influxdb_v2_enabled')
                                     ->label('Enable')
                                     ->reactive()
-                                    ->columnSpan(2), // Make sure the toggle spans the same width as Prometheus section
-                                Forms\Components\Grid::make([
-                                    'default' => 1,
-                                    'md' => 3,
-                                ])
-                                    ->hidden(fn (Forms\Get $get) => $get('influxdb_v2_enabled') !== true)
+                                    ->columnSpanFull(), // Ensure full-width for the toggle
+                                Forms\Components\Grid::make(['default' => 1, 'md' => 3])
+                                    ->hidden(fn (Forms\Get $get) => $get('influxdb_v2_enabled') !== true) // Only show when enabled
                                     ->schema([
                                         Forms\Components\TextInput::make('influxdb_v2_url')
                                             ->label('URL')
                                             ->placeholder('http://your-influxdb-instance')
                                             ->maxLength(255)
                                             ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
-                                            ->columnSpanFull(),
-                                        Forms\Components\Checkbox::make('influxdb_v2_verify_ssl')
-                                            ->label('Verify SSL')
-                                            ->columnSpanFull(),
+                                            ->columnSpan(['md' => 1]),
                                         Forms\Components\TextInput::make('influxdb_v2_org')
                                             ->label('Org')
                                             ->maxLength(255)
                                             ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
-                                            ->columnSpan(['md' => 2]),
+                                            ->columnSpan(['md' => 1]),
                                         Forms\Components\TextInput::make('influxdb_v2_bucket')
                                             ->placeholder('speedtest-tracker')
                                             ->label('Bucket')
                                             ->maxLength(255)
                                             ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
-                                            ->columnSpan(['md' => 1]),
+                                            ->columnSpan(['md' => 2]),
                                         Forms\Components\TextInput::make('influxdb_v2_token')
                                             ->label('Token')
                                             ->maxLength(255)
                                             ->password()
                                             ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
                                             ->disableAutocomplete()
-                                            ->columnSpanFull(),
+                                            ->columnSpan(['md' => 2]),
+                                        Forms\Components\Checkbox::make('influxdb_v2_verify_ssl')
+                                            ->label('Verify SSL')
+                                            ->columnSpanFull(), // Spans entire row
                                     ]),
                             ])
-                            ->compact()
-                            ->columns([
-                                'default' => 1,
-                                'md' => 3,
-                            ]),
+                            ->columnSpanFull(), // Ensures the InfluxDB section spans full width
                     ]),
-            ]);
+            ])
+            ->columns(1); // Sets the entire form to one column layout to use full width
     }
 }
