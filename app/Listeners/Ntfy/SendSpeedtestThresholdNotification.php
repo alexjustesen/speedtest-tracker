@@ -3,15 +3,27 @@
 namespace App\Listeners\Ntfy;
 
 use App\Events\SpeedtestCompleted;
-use App\Helpers\Number;
+use App\Services\SpeedtestThresholdNotificationPayload;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-use Spatie\WebhookServer\WebhookCall;
+use Ntfy\Auth\Token;
+use Ntfy\Auth\User;
+use Ntfy\Client;
+use Ntfy\Exception\EndpointException;
+use Ntfy\Exception\NtfyException;
+use Ntfy\Message;
+use Ntfy\Server;
 
 class SendSpeedtestThresholdNotification
 {
+    protected $payloadService;
+
+    public function __construct(SpeedtestThresholdNotificationPayload $payloadService)
+    {
+        $this->payloadService = $payloadService;
+    }
+
     /**
      * Handle the event.
      */
@@ -28,7 +40,7 @@ class SendSpeedtestThresholdNotification
         }
 
         if (! count($notificationSettings->ntfy_webhooks)) {
-            Log::warning('Ntfy urls not found, check Ntfy notification channel settings.');
+            Log::warning('Ntfy URLs not found, check Ntfy notification channel settings.');
 
             return;
         }
@@ -39,106 +51,41 @@ class SendSpeedtestThresholdNotification
             return;
         }
 
-        $failed = [];
+        $payload = $this->payloadService->generateThresholdPayload($event, $thresholdSettings);
 
-        if ($thresholdSettings->absolute_download > 0) {
-            array_push($failed, $this->absoluteDownloadThreshold(event: $event, thresholdSettings: $thresholdSettings));
-        }
-
-        if ($thresholdSettings->absolute_upload > 0) {
-            array_push($failed, $this->absoluteUploadThreshold(event: $event, thresholdSettings: $thresholdSettings));
-        }
-
-        if ($thresholdSettings->absolute_ping > 0) {
-            array_push($failed, $this->absolutePingThreshold(event: $event, thresholdSettings: $thresholdSettings));
-        }
-
-        $failed = array_filter($failed);
-
-        if (! count($failed)) {
+        if (empty($payload)) {
             Log::warning('Failed ntfy thresholds not found, won\'t send notification.');
 
             return;
         }
 
-        $payload =
-            view('ntfy.speedtest-threshold', [
-                'id' => $event->result->id,
-                'service' => Str::title($event->result->service),
-                'serverName' => $event->result->server_name,
-                'serverId' => $event->result->server_id,
-                'isp' => $event->result->isp,
-                'metrics' => $failed,
-                'speedtest_url' => $event->result->result_url,
-                'url' => url('/admin/results'),
-            ])->render();
-
         foreach ($notificationSettings->ntfy_webhooks as $url) {
-            $webhookCall = WebhookCall::create()
-                ->url($url['url'])
-                ->payload([
-                    'topic' => $url['topic'],
-                    'message' => $payload,
-                ])
-                ->doNotSign();
+            try {
+                // Set server
+                $server = new Server($url['url']);
 
-            // Only add authentication if username and password are provided
-            if (! empty($url['username']) && ! empty($url['password'])) {
-                $authHeader = 'Basic '.base64_encode($url['username'].':'.$url['password']);
-                $webhookCall->withHeaders([
-                    'Authorization' => $authHeader,
-                ]);
+                // Create a new message
+                $message = new Message();
+                $message->topic($url['topic']);
+                $message->title('Speedtest Threshold Alert');
+                $message->markdownBody($payload);
+                $message->priority(Message::PRIORITY_HIGH);
+
+                // Set authentication if username/password or token is provided
+                $auth = null;
+                if (! empty($url['token'])) {
+                    $auth = new Token($url['token']);
+                } elseif (! empty($url['username']) && ! empty($url['password'])) {
+                    $auth = new User($url['username'], $url['password']);
+                }
+
+                // Create a client with optional authentication
+                $client = new Client($server, $auth);
+                $client->send($message);
+
+            } catch (EndpointException|NtfyException $err) {
+                Log::error('Failed to send notification: '.$err->getMessage());
             }
-
-            $webhookCall->dispatch();
         }
-    }
-
-    /**
-     * Build Ntfy notification if absolute download threshold is breached.
-     */
-    protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
-    {
-        if (! absoluteDownloadThresholdFailed($thresholdSettings->absolute_download, $event->result->download)) {
-            return false;
-        }
-
-        return [
-            'name' => 'Download',
-            'threshold' => $thresholdSettings->absolute_download.' Mbps',
-            'value' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
-        ];
-    }
-
-    /**
-     * Build Ntfy notification if absolute upload threshold is breached.
-     */
-    protected function absoluteUploadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
-    {
-        if (! absoluteUploadThresholdFailed($thresholdSettings->absolute_upload, $event->result->upload)) {
-            return false;
-        }
-
-        return [
-            'name' => 'Upload',
-            'threshold' => $thresholdSettings->absolute_upload.' Mbps',
-            'value' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),
-        ];
-    }
-
-    /**
-     * Build Ntfy notification if absolute ping threshold is breached.
-     */
-    protected function absolutePingThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
-    {
-        if (! absolutePingThresholdFailed($thresholdSettings->absolute_ping, $event->result->ping)) {
-            return false;
-        }
-
-        return [
-            'name' => 'Ping',
-            'threshold' => $thresholdSettings->absolute_ping.' ms',
-            'value' => round($event->result->ping, 2).' ms',
-        ];
     }
 }

@@ -3,14 +3,26 @@
 namespace App\Listeners\Ntfy;
 
 use App\Events\SpeedtestCompleted;
-use App\Helpers\Number;
+use App\Services\SpeedtestCompletedNotificationPayload;
 use App\Settings\NotificationSettings;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-use Spatie\WebhookServer\WebhookCall;
+use Ntfy\Auth\Token;
+use Ntfy\Auth\User;
+use Ntfy\Client;
+use Ntfy\Exception\EndpointException;
+use Ntfy\Exception\NtfyException;
+use Ntfy\Message;
+use Ntfy\Server;
 
 class SendSpeedtestCompletedNotification
 {
+    protected $payloadService;
+
+    public function __construct(SpeedtestCompletedNotificationPayload $payloadService)
+    {
+        $this->payloadService = $payloadService;
+    }
+
     /**
      * Handle the event.
      */
@@ -27,43 +39,39 @@ class SendSpeedtestCompletedNotification
         }
 
         if (! count($notificationSettings->ntfy_webhooks)) {
-            Log::warning('Ntfy urls not found, check Ntfy notification channel settings.');
+            Log::warning('Ntfy URLs not found, check Ntfy notification channel settings.');
 
             return;
         }
 
-        $payload =
-             view('ntfy.speedtest-completed', [
-                 'id' => $event->result->id,
-                 'service' => Str::title($event->result->service),
-                 'serverName' => $event->result->server_name,
-                 'serverId' => $event->result->server_id,
-                 'isp' => $event->result->isp,
-                 'ping' => round($event->result->ping).' ms',
-                 'download' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
-                 'upload' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),
-                 'packetLoss' => $event->result->packet_loss,
-                 'speedtest_url' => $event->result->result_url,
-                 'url' => url('/admin/results'),
-             ])->render();
+        $payload = $this->payloadService->generateSpeedtestPayload($event);
 
         foreach ($notificationSettings->ntfy_webhooks as $url) {
-            $webhookCall = WebhookCall::create()
-                ->url($url['url'])
-                ->payload([
-                    'topic' => $url['topic'],
-                    'message' => $payload,
-                ])
-                ->doNotSign();
+            try {
+                // Set server
+                $server = new Server($url['url']);
 
-            // Only add authentication if username and password are provided
-            if (! empty($url['username']) && ! empty($url['password'])) {
-                $authHeader = 'Basic '.base64_encode($url['username'].':'.$url['password']);
-                $webhookCall->withHeaders([
-                    'Authorization' => $authHeader,
-                ]);
+                // Create a new message
+                $message = new Message();
+                $message->topic($url['topic']);
+                $message->title('Speedtest Completed');
+                $message->markdownBody($payload);
+
+                // Set authentication if username/password or token is provided
+                $auth = null;
+                if (! empty($url['token'])) {
+                    $auth = new Token($url['token']);
+                } elseif (! empty($url['username']) && ! empty($url['password'])) {
+                    $auth = new User($url['username'], $url['password']);
+                }
+
+                // Create a client with optional authentication
+                $client = new Client($server, $auth);
+                $client->send($message);
+
+            } catch (EndpointException|NtfyException $err) {
+                Log::error('Failed to send notification: '.$err->getMessage());
             }
-            $webhookCall->dispatch();
         }
     }
 }

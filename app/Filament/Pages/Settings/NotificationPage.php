@@ -218,12 +218,25 @@ class NotificationPage extends SettingsPage
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
+                                                        Forms\Components\TextInput::make('token')
+                                                            ->placeholder('App token here')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->password(),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Forms\Components\Actions::make([
                                                     Forms\Components\Actions\Action::make('test gotify')
                                                         ->label('Test Gotify webhook')
-                                                        ->action(fn (Forms\Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
+                                                        ->action(function (Forms\Get $get) {
+                                                            $webhooks = $get('gotify_webhooks');
+                                                            foreach ($webhooks as $webhook) {
+                                                                SendGotifyTestNotification::run(
+                                                                    webhooks: [$webhook['url']], // Pass a single URL as an array
+                                                                    token: $webhook['token']     // Pass the token as a string
+                                                                );
+                                                            }
+                                                        })
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('gotify_webhooks'))),
                                                 ]),
                                             ]),
@@ -299,7 +312,9 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('ntfy_webhooks')
-                                                    ->label('Webhooks')
+                                                    ->label('ntfy servers')
+                                                    ->collapsed()
+                                                    ->itemLabel(fn (array $state): ?string => $state['topic'] ?? null)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->maxLength(2000)
@@ -318,6 +333,11 @@ class NotificationPage extends SettingsPage
                                                         Forms\Components\TextInput::make('password')
                                                             ->label('Password')
                                                             ->placeholder('Password for Basic Auth (optional)')
+                                                            ->password()
+                                                            ->maxLength(200),
+                                                        Forms\Components\TextInput::make('token')
+                                                            ->label('Token')
+                                                            ->placeholder('Token for Token Auth (optional)')
                                                             ->password()
                                                             ->maxLength(200),
                                                     ])

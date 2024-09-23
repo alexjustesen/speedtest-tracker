@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b1b064aa394c00a4c3aba46d92a76b3",
+    "content-hash": "5548136a2fe01d566521f25978af8be4",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -9067,6 +9067,110 @@
                 "source": "https://github.com/TimoKoerber/laravel-one-time-operations/tree/1.4.2"
             },
             "time": "2024-04-04T11:16:58+00:00"
+        },
+        {
+            "name": "verifiedjoseph/gotify-api-php",
+            "version": "v1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/VerifiedJoseph/gotify-api-php.git",
+                "reference": "4295dc71bdca2c5e1d549b002b96e6daa9255d56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/VerifiedJoseph/gotify-api-php/zipball/4295dc71bdca2c5e1d549b002b96e6daa9255d56",
+                "reference": "4295dc71bdca2c5e1d549b002b96e6daa9255d56",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.4.5",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "^10.5",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gotify\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "VerifiedJoseph",
+                    "homepage": "https://github.com/VerifiedJoseph"
+                }
+            ],
+            "description": "PHP library for interacting with a Gotify server using the Gotify REST-API.",
+            "homepage": "https://github.com/VerifiedJoseph/gotify-api-php",
+            "keywords": [
+                "gotify"
+            ],
+            "support": {
+                "issues": "https://github.com/VerifiedJoseph/gotify-api-php/issues",
+                "source": "https://github.com/VerifiedJoseph/gotify-api-php/tree/v1.9.0"
+            },
+            "time": "2024-08-01T16:21:35+00:00"
+        },
+        {
+            "name": "verifiedjoseph/ntfy-php-library",
+            "version": "v4.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/VerifiedJoseph/ntfy-php-library.git",
+                "reference": "0e5c22be5e1633534e41a5835a8975bec5ff4cef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/VerifiedJoseph/ntfy-php-library/zipball/0e5c22be5e1633534e41a5835a8975bec5ff4cef",
+                "reference": "0e5c22be5e1633534e41a5835a8975bec5ff4cef",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.4",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "^10.5",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ntfy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "VerifiedJoseph",
+                    "homepage": "https://github.com/VerifiedJoseph"
+                }
+            ],
+            "description": "PHP library for interacting with a Ntfy server",
+            "homepage": "https://github.com/VerifiedJoseph/ntfy-php-library",
+            "keywords": [
+                "Ntfy"
+            ],
+            "support": {
+                "issues": "https://github.com/VerifiedJoseph/ntfy-php-library/issues",
+                "source": "https://github.com/VerifiedJoseph/ntfy-php-library/tree/v4.6.2"
+            },
+            "time": "2024-08-01T12:43:09+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

@@ -27,7 +27,9 @@
         "maennchen/zipstream-php": "^2.4",
         "spatie/laravel-settings": "^3.3.2",
         "spatie/laravel-webhook-server": "^3.8.1",
-        "timokoerber/laravel-one-time-operations": "^1.4.2"
+        "timokoerber/laravel-one-time-operations": "^1.4.2",
+        "verifiedjoseph/gotify-api-php": "^1.9",
+        "verifiedjoseph/ntfy-php-library": "^4.6"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.1",
