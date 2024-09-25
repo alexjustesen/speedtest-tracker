@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b1b064aa394c00a4c3aba46d92a76b3",
+    "content-hash": "c8530017d648dec5a6b6f440cfb08fcc",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -6116,6 +6116,64 @@
             "time": "2024-02-26T18:08:49+00:00"
         },
         {
+            "name": "serhiy/pushover",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slunak/pushover-php.git",
+                "reference": "b7cc7ffbb04d9558ccac02f882ee6bde3e8e81e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slunak/pushover-php/zipball/b7cc7ffbb04d9558ccac02f882ee6bde3e8e81e9",
+                "reference": "b7cc7ffbb04d9558ccac02f882ee6bde3e8e81e9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.43",
+                "ergebnis/php-cs-fixer-config": "^6.34",
+                "friendsofphp/php-cs-fixer": "^3.61",
+                "phpstan/phpstan": "^1.11",
+                "phpunit/phpunit": "*",
+                "rector/rector": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Serhiy\\Pushover\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Serhiy Lunak",
+                    "email": "serhiy.lunak@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Light, simple and fast, yet comprehensive wrapper for the Pushover API.",
+            "homepage": "https://github.com/slunak/pushover-php",
+            "keywords": [
+                "client",
+                "pushover",
+                "pushover.net",
+                "wrapper"
+            ],
+            "support": {
+                "issues": "https://github.com/slunak/pushover-php/issues",
+                "source": "https://github.com/slunak/pushover-php/tree/v1.6.0"
+            },
+            "time": "2024-08-29T08:23:58+00:00"
+        },
+        {
             "name": "spatie/color",
             "version": "1.5.3",
             "source": {
@@ -9067,6 +9125,110 @@
                 "source": "https://github.com/TimoKoerber/laravel-one-time-operations/tree/1.4.2"
             },
             "time": "2024-04-04T11:16:58+00:00"
+        },
+        {
+            "name": "verifiedjoseph/gotify-api-php",
+            "version": "v1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/VerifiedJoseph/gotify-api-php.git",
+                "reference": "4295dc71bdca2c5e1d549b002b96e6daa9255d56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/VerifiedJoseph/gotify-api-php/zipball/4295dc71bdca2c5e1d549b002b96e6daa9255d56",
+                "reference": "4295dc71bdca2c5e1d549b002b96e6daa9255d56",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.4.5",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "^10.5",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gotify\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "VerifiedJoseph",
+                    "homepage": "https://github.com/VerifiedJoseph"
+                }
+            ],
+            "description": "PHP library for interacting with a Gotify server using the Gotify REST-API.",
+            "homepage": "https://github.com/VerifiedJoseph/gotify-api-php",
+            "keywords": [
+                "gotify"
+            ],
+            "support": {
+                "issues": "https://github.com/VerifiedJoseph/gotify-api-php/issues",
+                "source": "https://github.com/VerifiedJoseph/gotify-api-php/tree/v1.9.0"
+            },
+            "time": "2024-08-01T16:21:35+00:00"
+        },
+        {
+            "name": "verifiedjoseph/ntfy-php-library",
+            "version": "v4.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/VerifiedJoseph/ntfy-php-library.git",
+                "reference": "0e5c22be5e1633534e41a5835a8975bec5ff4cef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/VerifiedJoseph/ntfy-php-library/zipball/0e5c22be5e1633534e41a5835a8975bec5ff4cef",
+                "reference": "0e5c22be5e1633534e41a5835a8975bec5ff4cef",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.4",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "^10.5",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ntfy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "VerifiedJoseph",
+                    "homepage": "https://github.com/VerifiedJoseph"
+                }
+            ],
+            "description": "PHP library for interacting with a Ntfy server",
+            "homepage": "https://github.com/VerifiedJoseph/ntfy-php-library",
+            "keywords": [
+                "Ntfy"
+            ],
+            "support": {
+                "issues": "https://github.com/VerifiedJoseph/ntfy-php-library/issues",
+                "source": "https://github.com/VerifiedJoseph/ntfy-php-library/tree/v4.6.2"
+            },
+            "time": "2024-08-01T12:43:09+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

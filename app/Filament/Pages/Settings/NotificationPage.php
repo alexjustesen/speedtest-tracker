@@ -110,14 +110,8 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('pushover_webhooks')
-                                                    ->label('Pushover Webhooks')
+                                                    ->label('Devices')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
-                                                            ->label('URL')
-                                                            ->placeholder('http://api.pushover.net/1/messages.json')
-                                                            ->maxLength(2000)
-                                                            ->required()
-                                                            ->url(),
                                                         Forms\Components\TextInput::make('user_key')
                                                             ->label('User Key')
                                                             ->placeholder('Your Pushover User Key')
@@ -211,19 +205,32 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('gotify_webhooks')
-                                                    ->label('Webhooks')
+                                                    ->label('Application')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://example.com/message?token=<apptoken>')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
+                                                        Forms\Components\TextInput::make('token')
+                                                            ->placeholder('App token here')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->password(),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Forms\Components\Actions::make([
                                                     Forms\Components\Actions\Action::make('test gotify')
                                                         ->label('Test Gotify webhook')
-                                                        ->action(fn (Forms\Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
+                                                        ->action(function (Forms\Get $get) {
+                                                            $webhooks = $get('gotify_webhooks');
+                                                            foreach ($webhooks as $webhook) {
+                                                                SendGotifyTestNotification::run(
+                                                                    webhooks: [$webhook['url']], // Pass a single URL as an array
+                                                                    token: $webhook['token']     // Pass the token as a string
+                                                                );
+                                                            }
+                                                        })
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('gotify_webhooks'))),
                                                 ]),
                                             ]),
@@ -299,7 +306,9 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('ntfy_webhooks')
-                                                    ->label('Webhooks')
+                                                    ->label('Ntfy Servers')
+                                                    ->collapsed()
+                                                    ->itemLabel(fn (array $state): ?string => $state['topic'] ?? null)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->maxLength(2000)
@@ -318,6 +327,11 @@ class NotificationPage extends SettingsPage
                                                         Forms\Components\TextInput::make('password')
                                                             ->label('Password')
                                                             ->placeholder('Password for Basic Auth (optional)')
+                                                            ->password()
+                                                            ->maxLength(200),
+                                                        Forms\Components\TextInput::make('token')
+                                                            ->label('Token')
+                                                            ->placeholder('Token for Token Auth (optional)')
                                                             ->password()
                                                             ->maxLength(200),
                                                     ])

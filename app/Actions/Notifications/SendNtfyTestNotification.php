@@ -4,7 +4,13 @@ namespace App\Actions\Notifications;
 
 use Filament\Notifications\Notification;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Spatie\WebhookServer\WebhookCall;
+use Ntfy\Auth\Token;
+use Ntfy\Auth\User;
+use Ntfy\Client;
+use Ntfy\Exception\EndpointException;
+use Ntfy\Exception\NtfyException;
+use Ntfy\Message;
+use Ntfy\Server;
 
 class SendNtfyTestNotification
 {
@@ -14,7 +20,7 @@ class SendNtfyTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title('You need to add ntfy urls!')
+                ->title('You need to add ntfy URLs!')
                 ->warning()
                 ->send();
 
@@ -22,28 +28,38 @@ class SendNtfyTestNotification
         }
 
         foreach ($webhooks as $webhook) {
-            $webhookCall = WebhookCall::create()
-                ->url($webhook['url'])
-                ->payload([
-                    'topic' => $webhook['topic'],
-                    'message' => '👋 Testing the ntfy notification channel.',
-                ])
-                ->doNotSign();
+            try {
+                // Set server
+                $server = new Server($webhook['url']);
 
-            // Only add authentication if username and password are provided
-            if (! empty($webhook['username']) && ! empty($webhook['password'])) {
-                $authHeader = 'Basic '.base64_encode($webhook['username'].':'.$webhook['password']);
-                $webhookCall->withHeaders([
-                    'Authorization' => $authHeader,
-                ]);
+                // Create a new message
+                $message = new Message();
+                $message->topic($webhook['topic']);
+                $message->title('Test Notification');
+                $message->body('👋 Testing the ntfy notification channel.');
+
+                $auth = null;
+                if (! empty($webhook['token'])) {
+                    $auth = new Token($webhook['token']);
+                } elseif (! empty($webhook['username']) && ! empty($webhook['password'])) {
+                    $auth = new User($webhook['username'], $webhook['password']);
+                }
+
+                // Create a client with optional authentication
+                $client = new Client($server, $auth);
+                $response = $client->send($message);
+
+                Notification::make()
+                    ->title("Test ntfy notification sent to {$webhook['topic']}.")
+                    ->success()
+                    ->send();
+
+            } catch (EndpointException|NtfyException $err) {
+                Notification::make()
+                    ->title("Failed to send notification to {$webhook['topic']}.")
+                    ->warning()
+                    ->send();
             }
-
-            $webhookCall->dispatch();
         }
-
-        Notification::make()
-            ->title('Test ntfy notification sent.')
-            ->success()
-            ->send();
     }
 }
