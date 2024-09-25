@@ -39,6 +39,8 @@ class ExecuteLatencyTest implements ShouldQueue
             $output = shell_exec($command.' 2>&1');
 
             if ($output === null) {
+                Log::warning('fping command returned null output.');
+
                 return;
             }
 
@@ -46,16 +48,21 @@ class ExecuteLatencyTest implements ShouldQueue
             $results = $this->parseFpingOutput($output);
 
             foreach ($results as $url => $latencies) {
+                try {
+                    // Store latency results in the database
+                    LatencyResult::create([
+                        'target_url' => $url,
+                        'target_name' => $this->getTargetName($url),
+                        'min_latency' => $latencies['min'] ?? null,
+                        'avg_latency' => $latencies['avg'] ?? null,
+                        'max_latency' => $latencies['max'] ?? null,
+                        'packet_loss' => $latencies['packet_loss'] ?? null,
+                        'ping_count' => $this->pingCount,
+                    ]);
 
-                LatencyResult::create([
-                    'target_url' => $url,
-                    'target_name' => $this->getTargetName($url),
-                    'min_latency' => $latencies['min'] ?? null,
-                    'avg_latency' => $latencies['avg'] ?? null,
-                    'max_latency' => $latencies['max'] ?? null,
-                    'packet_loss' => $latencies['packet_loss'] ?? null,
-                    'ping_count' => $this->pingCount,
-                ]);
+                } catch (\Exception $e) {
+                    Log::error('Database insert error for URL: '.$url.'. Error: '.$e->getMessage());
+                }
             }
 
         } catch (\Exception $e) {
@@ -69,7 +76,7 @@ class ExecuteLatencyTest implements ShouldQueue
         $lines = explode("\n", trim($output));
 
         foreach ($lines as $line) {
-            // Revised regex to handle the output format more accurately
+            // Handle successful ping results with min/avg/max values
             if (preg_match('/^(\S+)\s+:\s+xmt\/rcv\/%loss\s+=\s+\d+\/\d+\/(\d+)%.*, min\/avg\/max\s+=\s+([\d.]+)\/([\d.]+)\/([\d.]+)\s*$/', $line, $matches)) {
                 $url = $matches[1];
                 $packetLoss = $matches[2]; // %loss value
@@ -84,6 +91,20 @@ class ExecuteLatencyTest implements ShouldQueue
                     'max' => $max,
                 ];
             }
+            // Handle 100% packet loss (no latency values)
+            elseif (preg_match('/^(\S+)\s+:\s+xmt\/rcv\/%loss\s+=\s+\d+\/\d+\/(\d+)%/', $line, $matches)) {
+                $url = $matches[1];
+                $packetLoss = $matches[2]; // %loss value
+
+                $results[$url] = [
+                    'packet_loss' => $packetLoss,
+                    'min' => null, // No latency data available
+                    'avg' => null, // No latency data available
+                    'max' => null, // No latency data available
+                ];
+            } else {
+                Log::warning('Unrecognized line format: '.$line);
+            }
         }
 
         return $results;
@@ -92,7 +113,6 @@ class ExecuteLatencyTest implements ShouldQueue
     protected function getTargetName($url)
     {
         // Assuming you have a method to retrieve the target name based on the URL
-        // Example implementation (adapt to your data structure):
         $settings = app(LatencySettings::class);
         foreach ($settings->target_url as $target) {
             if (isset($target['url']) && $target['url'] === $url) {
