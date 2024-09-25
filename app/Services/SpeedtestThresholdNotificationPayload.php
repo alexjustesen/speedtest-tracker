@@ -12,7 +12,7 @@ class SpeedtestThresholdNotificationPayload
     /**
      * Generate the payload for the speedtest threshold notification.
      */
-    public function generateThresholdPayload(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): string
+    public function generateThresholdPayload(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings, string $viewName): string
     {
         $failed = [];
 
@@ -30,7 +30,7 @@ class SpeedtestThresholdNotificationPayload
 
         $failed = array_filter($failed);
 
-        return view('notifications.speedtest-threshold', [
+        return view($viewName, [
             'id' => $event->result->id,
             'service' => Str::title($event->result->service),
             'serverName' => $event->result->server_name,

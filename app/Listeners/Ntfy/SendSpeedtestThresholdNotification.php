@@ -51,7 +51,10 @@ class SendSpeedtestThresholdNotification
             return;
         }
 
-        $payload = $this->payloadService->generateThresholdPayload($event, $thresholdSettings);
+        // Define the view name directly
+        $viewName = 'notifications.speedtest-threshold';
+
+        $payload = $this->payloadService->generateThresholdPayload($event, $thresholdSettings, $viewName);
 
         if (empty($payload)) {
             Log::warning('Failed ntfy thresholds not found, won\'t send notification.');

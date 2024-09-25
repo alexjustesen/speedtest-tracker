@@ -2,9 +2,12 @@
 
 namespace App\Actions\Notifications;
 
-use Filament\Notifications\Notification;
+use Filament\Notifications\Notification as FilamentNotification;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Spatie\WebhookServer\WebhookCall;
+use Serhiy\Pushover\Api\Message\Message;
+use Serhiy\Pushover\Api\Message\Notification as PushoverNotification;
+use Serhiy\Pushover\Application;
+use Serhiy\Pushover\Recipient;
 
 class SendPushoverTestNotification
 {
@@ -13,8 +16,8 @@ class SendPushoverTestNotification
     public function handle(array $webhooks)
     {
         if (! count($webhooks)) {
-            Notification::make()
-                ->title('You need to add Pushover URLs!')
+            FilamentNotification::make()
+                ->title('You need to add Pushover credentials!')
                 ->warning()
                 ->send();
 
@@ -22,20 +25,39 @@ class SendPushoverTestNotification
         }
 
         foreach ($webhooks as $webhook) {
-            WebhookCall::create()
-                ->url($webhook['url'])
-                ->payload([
-                    'token' => $webhook['api_token'],
-                    'user' => $webhook['user_key'],
-                    'message' => '👋 Testing the Pushover notification channel.',
-                ])
-                ->doNotSign()
-                ->dispatch();
-        }
+            try {
+                // Create Application and Recipient objects
+                $application = new Application($webhook['api_token']);
+                $recipient = new Recipient($webhook['user_key']);
 
-        Notification::make()
-            ->title('Test Pushover notification sent.')
-            ->success()
-            ->send();
+                // Compose the message with title and body
+                $message = new Message('👋 Testing the Pushover notification channel.', 'Speedtest Tracker Test Notification');
+
+                // Create a notification with the application, recipient, and message
+                $pushoverNotification = new PushoverNotification($application, $recipient, $message);
+
+                // Push the notification
+                /** @var \Serhiy\Pushover\Client\Response\MessageResponse $response */
+                $response = $pushoverNotification->push();
+
+                // Check response status
+                if ($response->isSuccessful()) {
+                    FilamentNotification::make()
+                        ->title('Test Pushover notification sent.')
+                        ->success()
+                        ->send();
+                } else {
+                    FilamentNotification::make()
+                        ->title('Failed to send Pushover notification: '.$response->getMessage())
+                        ->danger()
+                        ->send();
+                }
+            } catch (\Exception $e) {
+                FilamentNotification::make()
+                    ->title('An error occurred: '.$e->getMessage())
+                    ->danger()
+                    ->send();
+            }
+        }
     }
 }

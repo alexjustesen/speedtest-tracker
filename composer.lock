@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5548136a2fe01d566521f25978af8be4",
+    "content-hash": "c8530017d648dec5a6b6f440cfb08fcc",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -6114,6 +6114,64 @@
                 }
             ],
             "time": "2024-02-26T18:08:49+00:00"
+        },
+        {
+            "name": "serhiy/pushover",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slunak/pushover-php.git",
+                "reference": "b7cc7ffbb04d9558ccac02f882ee6bde3e8e81e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slunak/pushover-php/zipball/b7cc7ffbb04d9558ccac02f882ee6bde3e8e81e9",
+                "reference": "b7cc7ffbb04d9558ccac02f882ee6bde3e8e81e9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.43",
+                "ergebnis/php-cs-fixer-config": "^6.34",
+                "friendsofphp/php-cs-fixer": "^3.61",
+                "phpstan/phpstan": "^1.11",
+                "phpunit/phpunit": "*",
+                "rector/rector": "^1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Serhiy\\Pushover\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Serhiy Lunak",
+                    "email": "serhiy.lunak@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Light, simple and fast, yet comprehensive wrapper for the Pushover API.",
+            "homepage": "https://github.com/slunak/pushover-php",
+            "keywords": [
+                "client",
+                "pushover",
+                "pushover.net",
+                "wrapper"
+            ],
+            "support": {
+                "issues": "https://github.com/slunak/pushover-php/issues",
+                "source": "https://github.com/slunak/pushover-php/tree/v1.6.0"
+            },
+            "time": "2024-08-29T08:23:58+00:00"
         },
         {
             "name": "spatie/color",

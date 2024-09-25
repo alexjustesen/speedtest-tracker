@@ -49,8 +49,10 @@ class SendSpeedtestThresholdNotification
         if (! $thresholdSettings->absolute_enabled) {
             return;
         }
+        // Define the view name directly
+        $viewName = 'notifications.speedtest-threshold';
 
-        $payload = $this->payloadService->generateThresholdPayload($event, $thresholdSettings);
+        $payload = $this->payloadService->generateThresholdPayload($event, $thresholdSettings, $viewName);
         $extras = [
             'client::display' => [
                 'contentType' => 'text/markdown',

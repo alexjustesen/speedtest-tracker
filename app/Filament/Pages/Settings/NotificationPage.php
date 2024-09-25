@@ -110,14 +110,8 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('pushover_webhooks')
-                                                    ->label('Pushover Webhooks')
+                                                    ->label('Devices')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
-                                                            ->label('URL')
-                                                            ->placeholder('http://api.pushover.net/1/messages.json')
-                                                            ->maxLength(2000)
-                                                            ->required()
-                                                            ->url(),
                                                         Forms\Components\TextInput::make('user_key')
                                                             ->label('User Key')
                                                             ->placeholder('Your Pushover User Key')
@@ -211,7 +205,7 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('gotify_webhooks')
-                                                    ->label('Webhooks')
+                                                    ->label('Application')
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://example.com/message?token=<apptoken>')
@@ -312,7 +306,7 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('ntfy_webhooks')
-                                                    ->label('ntfy servers')
+                                                    ->label('Ntfy Servers')
                                                     ->collapsed()
                                                     ->itemLabel(fn (array $state): ?string => $state['topic'] ?? null)
                                                     ->schema([

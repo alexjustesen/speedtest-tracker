@@ -11,9 +11,9 @@ class SpeedtestCompletedNotificationPayload
     /**
      * Generate the payload for the speedtest completed notification.
      */
-    public function generateSpeedtestPayload(SpeedtestCompleted $event): string
+    public function generateSpeedtestPayload(SpeedtestCompleted $event, string $viewName): string
     {
-        return view('notifications.speedtest-completed', [
+        return view($viewName, [
             'id' => $event->result->id,
             'service' => Str::title($event->result->service),
             'serverName' => $event->result->server_name,

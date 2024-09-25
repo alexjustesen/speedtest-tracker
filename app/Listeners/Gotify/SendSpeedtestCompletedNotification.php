@@ -41,8 +41,12 @@ class SendSpeedtestCompletedNotification
 
             return;
         }
+        // Define the view name directly
+        $viewName = 'notifications.speedtest-completed';
 
-        $payload = $this->payloadService->generateSpeedtestPayload($event);
+        // Generate the payload using the specified view
+        $payload = $this->payloadService->generateSpeedtestPayload($event, $viewName);
+
         $extras = [
             'client::display' => [
                 'contentType' => 'text/markdown',
