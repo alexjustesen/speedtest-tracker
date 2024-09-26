@@ -29,7 +29,7 @@ docker run -d --name speedtest-tracker --restart unless-stopped \
     -e APP_URL=http://localhost \
     -e DB_CONNECTION=sqlite \
     -v ${PWD}:/config \
-    lscr.io/linuxserver/speedtest-tracker:0.20.6
+    lscr.io/linuxserver/speedtest-tracker:latest
 ```
 
 #### Docker Compose
@@ -50,7 +50,7 @@ services:
         volumes:
             - /path/to/data:/config
             - /path/to-custom-ssl-keys:/config/keys
-        image: lscr.io/linuxserver/speedtest-tracker:0.20.6
+        image: lscr.io/linuxserver/speedtest-tracker:latest
         restart: unless-stopped
 ```
 ## Image version
