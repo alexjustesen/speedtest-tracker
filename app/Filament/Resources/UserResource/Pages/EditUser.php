@@ -20,10 +20,6 @@ class EditUser extends EditRecord
 
     public function beforeSave()
     {
-        if (! array_key_exists('new_password', $this->data) || ! filled($this->data['new_password'])) {
-            return;
-        }
-
-        $this->record->password = Hash::make($this->data['new_password']);
+        $this->record->password = Hash::make($this->data['password']);
     }
 }
