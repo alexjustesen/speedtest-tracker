@@ -34,16 +34,16 @@ class DateFilterForm
                             ->afterStateUpdated(function ($state, callable $set) {
                                 switch ($state) {
                                     case '24_hours':
-                                        $set('startDate', now()->subDay()->toDateString());
-                                        $set('endDate', now()->toDateString());
+                                        $set('startDate', now()->subDay()->toDateTimeString());
+                                        $set('endDate', now()->toDateTimeString());
                                         break;
                                     case '1_week':
-                                        $set('startDate', now()->subWeek()->toDateString());
-                                        $set('endDate', now()->toDateString());
+                                        $set('startDate', now()->subWeek()->toDateTimeString());
+                                        $set('endDate', now()->toDateTimeString());
                                         break;
                                     case '1_month':
-                                        $set('startDate', now()->subMonth()->toDateString());
-                                        $set('endDate', now()->toDateString());
+                                        $set('startDate', now()->subMonth()->toDateTimeString());
+                                        $set('endDate', now()->toDateTimeString());
                                         break;
                                     case 'custom':
                                         break;
