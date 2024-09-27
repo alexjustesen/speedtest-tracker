@@ -103,10 +103,25 @@ class ResultExporter extends Exporter
                 }),
             ExportColumn::make('comments')
                 ->enabledByDefault(false),
-            ExportColumn::make('threshold_breached')
+            ExportColumn::make('threshold_breached_overall')
                 ->enabledByDefault(false)
                 ->state(function (Result $record): string {
-                    return $record->threshold_breached;
+                    return $record->threshold_breached_overall;
+                }),
+            ExportColumn::make('threshold_breached_download')
+                ->enabledByDefault(false)
+                ->state(function (Result $record): string {
+                    return $record->threshold_breached_download;
+                }),
+            ExportColumn::make('threshold_breached_upload')
+                ->enabledByDefault(false)
+                ->state(function (Result $record): string {
+                    return $record->threshold_breached_upload;
+                }),
+            ExportColumn::make('threshold_breached_ping')
+                ->enabledByDefault(false)
+                ->state(function (Result $record): string {
+                    return $record->threshold_breached_ping;
                 }),
             // ExportColumn::make('status'), // TODO: enable status when upgrading to PHP v8.3: https://php.watch/versions/8.3/dynamic-class-const-enum-member-syntax-support
             ExportColumn::make('scheduled')

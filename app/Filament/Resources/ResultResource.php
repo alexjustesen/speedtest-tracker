@@ -20,6 +20,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -312,8 +313,29 @@ class ResultResource extends Resource
                     ->badge()
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('threshold_breached')
-                    ->label('Threshold')
+                Tables\Columns\TextColumn::make('threshold_breached_overall')
+                    ->label('Overall Threshold')
+                    ->badge()
+                    ->color(fn (string $state): string => ThresholdBreached::from($state)->getColor())
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('threshold_breached_download')
+                    ->label('Download Threshold')
+                    ->badge()
+                    ->color(fn (string $state): string => ThresholdBreached::from($state)->getColor())
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('threshold_breached_upload')
+                    ->label('Upload Threshold')
+                    ->badge()
+                    ->color(fn (string $state): string => ThresholdBreached::from($state)->getColor())
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('threshold_breached_ping')
+                    ->label('Ping Threshold')
                     ->badge()
                     ->color(fn (string $state): string => ThresholdBreached::from($state)->getColor())
                     ->toggleable()
@@ -367,11 +389,11 @@ class ResultResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->multiple()
                     ->options(ResultStatus::class),
-                Tables\Filters\SelectFilter::make('threshold_breached')
-                    ->label('Threshold Status')
+                Tables\Filters\SelectFilter::make('threshold_breached_overall')
+                    ->label('Overall Threshold Status')
                     ->multiple()
                     ->options(ThresholdBreached::class),
-            ])
+            ], layout: FiltersLayout::Modal)
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Action::make('view result')
