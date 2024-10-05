@@ -23,7 +23,6 @@ class Result extends Model
         'ping',
         'data',
         'threshold_breached_overall',
-        'threshold_breached_overall',
         'threshold_breached_download',
         'threshold_breached_upload',
         'threshold_breached_ping',
