@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\InfluxDBv2\WriteCompletedSpeedtest; // Ensure to import the job
 use App\Models\Result;
 use App\Settings\MetricsSettings;
 use Illuminate\Console\Command;
@@ -38,6 +39,15 @@ class TestInfluxDB extends Command
         if ($influxdb['enabled'] == true) {
             // Create a test result if InfluxDB is enabled
             $result = Result::factory()->create();
+
+            // Dispatch the job to write the result to InfluxDB
+            dispatch(new WriteCompletedSpeedtest($result, $settings));
+
+            // Output a success message
+            $this->info('Test result created and job dispatched to InfluxDB.');
+        } else {
+            // Output a message if InfluxDB is not enabled
+            $this->warn('InfluxDB is not enabled in the settings.');
         }
     }
 }
