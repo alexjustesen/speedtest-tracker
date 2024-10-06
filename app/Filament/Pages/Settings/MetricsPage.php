@@ -88,7 +88,7 @@ class MetricsPage extends SettingsPage
 
         Notification::make()
             ->title('Success')
-            ->body('A test log has been sent to InfluxDB successfully!')
+            ->body('A test log has been sent to InfluxDB, Check in InfluxDB if the data is received!')
             ->success()
             ->send();
     }
@@ -106,6 +106,17 @@ class MetricsPage extends SettingsPage
                                 Forms\Components\Toggle::make('prometheus_enabled')
                                     ->label('Enable')
                                     ->columnSpanFull(),
+                                // Button to view the metric page
+                                Forms\Components\Actions::make([
+                                    Forms\Components\Actions\Action::make('Open Metrics Page')
+                                        ->hidden(fn (Forms\Get $get) => $get('prometheus_enabled') !== true)
+                                        ->label('View Metrics')
+                                        ->action(function () {
+                                            return redirect(config('app.url').'/metrics');
+                                        })
+                                        ->color('primary')
+                                        ->icon('heroicon-o-eye'),
+                                ]),
                             ]),
 
                         // InfluxDB Tab

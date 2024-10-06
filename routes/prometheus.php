@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Prometheus\CollectorRegistry;
 use Prometheus\RenderTextFormat;
 use Prometheus\Storage\InMemory;
+use App\Models\Result;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,66 +27,73 @@ Route::get('/metrics', function (MetricsSettings $settings) {
     $registry = new CollectorRegistry(new InMemory());
 
     // Register gauges for numeric metrics with labels
-    $pingJitterGauge = $registry->registerGauge('speedtest_tracker', 'ping_jitter', 'Ping jitter', ['server_id', 'server_name', 'isp']);
-    $pingLatencyGauge = $registry->registerGauge('speedtest_tracker', 'ping_latency', 'Ping latency', ['server_id', 'server_name', 'isp']);
-    $pingLowGauge = $registry->registerGauge('speedtest_tracker', 'ping_low', 'Ping low value', ['server_id', 'server_name', 'isp']);
-    $pingHighGauge = $registry->registerGauge('speedtest_tracker', 'ping_high', 'Ping high value', ['server_id', 'server_name', 'isp']);
+    $pingJitterGauge = $registry->registerGauge('speedtest_tracker', 'ping_jitter', 'Ping jitter', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $pingLatencyGauge = $registry->registerGauge('speedtest_tracker', 'ping_latency', 'Ping latency', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $pingLowGauge = $registry->registerGauge('speedtest_tracker', 'ping_low', 'Ping low value', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $pingHighGauge = $registry->registerGauge('speedtest_tracker', 'ping_high', 'Ping high value', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
 
-    $downloadBandwidthGauge = $registry->registerGauge('speedtest_tracker', 'download_bandwidth', 'Download bandwidth', ['server_id', 'server_name', 'isp']);
-    $downloadBytesGauge = $registry->registerGauge('speedtest_tracker', 'download_bytes', 'Download bytes', ['server_id', 'server_name', 'isp']);
-    $downloadElapsedGauge = $registry->registerGauge('speedtest_tracker', 'download_elapsed', 'Download elapsed time', ['server_id', 'server_name', 'isp']);
-    $downloadLatencyIqmGauge = $registry->registerGauge('speedtest_tracker', 'download_latency_iqm', 'Download latency IQM', ['server_id', 'server_name', 'isp']);
-    $downloadLatencyLowGauge = $registry->registerGauge('speedtest_tracker', 'download_latency_low', 'Download latency low value', ['server_id', 'server_name', 'isp']);
-    $downloadLatencyHighGauge = $registry->registerGauge('speedtest_tracker', 'download_latency_high', 'Download latency high value', ['server_id', 'server_name', 'isp']);
-    $downloadLatencyJitterGauge = $registry->registerGauge('speedtest_tracker', 'download_latency_jitter', 'Download latency jitter', ['server_id', 'server_name', 'isp']);
+    $downloadBandwidthGauge = $registry->registerGauge('speedtest_tracker', 'download_bandwidth', 'Download bandwidth', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $downloadBytesGauge = $registry->registerGauge('speedtest_tracker', 'download_bytes', 'Download bytes', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $downloadElapsedGauge = $registry->registerGauge('speedtest_tracker', 'download_elapsed', 'Download elapsed time', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $downloadLatencyIqmGauge = $registry->registerGauge('speedtest_tracker', 'download_latency_iqm', 'Download latency IQM', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $downloadLatencyLowGauge = $registry->registerGauge('speedtest_tracker', 'download_latency_low', 'Download latency low value', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $downloadLatencyHighGauge = $registry->registerGauge('speedtest_tracker', 'download_latency_high', 'Download latency high value', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $downloadLatencyJitterGauge = $registry->registerGauge('speedtest_tracker', 'download_latency_jitter', 'Download latency jitter', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
 
-    $uploadBandwidthGauge = $registry->registerGauge('speedtest_tracker', 'upload_bandwidth', 'Upload bandwidth', ['server_id', 'server_name', 'isp']);
-    $uploadBytesGauge = $registry->registerGauge('speedtest_tracker', 'upload_bytes', 'Upload bytes', ['server_id', 'server_name', 'isp']);
-    $uploadElapsedGauge = $registry->registerGauge('speedtest_tracker', 'upload_elapsed', 'Upload elapsed time', ['server_id', 'server_name', 'isp']);
-    $uploadLatencyIqmGauge = $registry->registerGauge('speedtest_tracker', 'upload_latency_iqm', 'Upload latency IQM', ['server_id', 'server_name', 'isp']);
-    $uploadLatencyLowGauge = $registry->registerGauge('speedtest_tracker', 'upload_latency_low', 'Upload latency low value', ['server_id', 'server_name', 'isp']);
-    $uploadLatencyHighGauge = $registry->registerGauge('speedtest_tracker', 'upload_latency_high', 'Upload latency high value', ['server_id', 'server_name', 'isp']);
-    $uploadLatencyJitterGauge = $registry->registerGauge('speedtest_tracker', 'upload_latency_jitter', 'Upload latency jitter', ['server_id', 'server_name', 'isp']);
+    $uploadBandwidthGauge = $registry->registerGauge('speedtest_tracker', 'upload_bandwidth', 'Upload bandwidth', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $uploadBytesGauge = $registry->registerGauge('speedtest_tracker', 'upload_bytes', 'Upload bytes', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $uploadElapsedGauge = $registry->registerGauge('speedtest_tracker', 'upload_elapsed', 'Upload elapsed time', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $uploadLatencyIqmGauge = $registry->registerGauge('speedtest_tracker', 'upload_latency_iqm', 'Upload latency IQM', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $uploadLatencyLowGauge = $registry->registerGauge('speedtest_tracker', 'upload_latency_low', 'Upload latency low value', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $uploadLatencyHighGauge = $registry->registerGauge('speedtest_tracker', 'upload_latency_high', 'Upload latency high value', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $uploadLatencyJitterGauge = $registry->registerGauge('speedtest_tracker', 'upload_latency_jitter', 'Upload latency jitter', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
 
-    $packetLossGauge = $registry->registerGauge('speedtest_tracker', 'packet_loss', 'Packet loss percentage', ['server_id', 'server_name', 'isp']);
-    $resultIdGauge = $registry->registerGauge('speedtest_tracker', 'result_id', 'Result ID', ['server_id', 'server_name', 'isp']);
+    $packetLossGauge = $registry->registerGauge('speedtest_tracker', 'packet_loss', 'Packet loss percentage', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
+    $resultIdGauge = $registry->registerGauge('speedtest_tracker', 'result_id', 'Result ID', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
 
     // Fetch the latest result from the database
     $latestResult = DB::table('results')
         ->orderBy('created_at', 'desc')
         ->first();
 
-    if ($latestResult && $latestResult->data) {
-        $data = json_decode($latestResult->data);
+        if ($latestResult && $latestResult->data) {
+            // Decode the JSON data
+            $data = json_decode($latestResult->data);
+            $resultId = $latestResult->id;
+            $result = Result::find($resultId);
+        
+            // Set gauge values for numeric metrics with labels
+            $serverId = $data->server->id ?? 'unknown';
+            $serverName = $data->server->name ?? 'unknown';
+            $isp = $data->isp ?? 'unknown';
+            $serverLocation = $data->server->location ?? 'unknown';
+            $scheduled = $result->scheduled ? 'true' : 'false'; 'unknown';
+            $status = $result->status ?? 'unknown';
+            $app_name = config('app.name');
 
-        // Set gauge values for numeric metrics with labels
-        $serverId = $data->server->id ?? 'unknown';
-        $serverName = $data->server->name ?? 'unknown';
-        $isp = $data->isp ?? 'unknown';
+        $pingJitterGauge->set((float) ($data->ping->jitter ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $pingLatencyGauge->set((float) ($data->ping->latency ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $pingLowGauge->set((float) ($data->ping->low ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $pingHighGauge->set((float) ($data->ping->high ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
 
-        $pingJitterGauge->set((float) ($data->ping->jitter ?? 0.0), [$serverId, $serverName, $isp]);
-        $pingLatencyGauge->set((float) ($data->ping->latency ?? 0.0), [$serverId, $serverName, $isp]);
-        $pingLowGauge->set((float) ($data->ping->low ?? 0.0), [$serverId, $serverName, $isp]);
-        $pingHighGauge->set((float) ($data->ping->high ?? 0.0), [$serverId, $serverName, $isp]);
+        $downloadBandwidthGauge->set((float) ($data->download->bandwidth ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $downloadBytesGauge->set((float) ($data->download->bytes ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $downloadElapsedGauge->set((float) ($data->download->elapsed ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $downloadLatencyIqmGauge->set((float) ($data->download->latency->iqm ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $downloadLatencyLowGauge->set((float) ($data->download->latency->low ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $downloadLatencyHighGauge->set((float) ($data->download->latency->high ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $downloadLatencyJitterGauge->set((float) ($data->download->latency->jitter ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
 
-        $downloadBandwidthGauge->set((float) ($data->download->bandwidth ?? 0.0), [$serverId, $serverName, $isp]);
-        $downloadBytesGauge->set((float) ($data->download->bytes ?? 0.0), [$serverId, $serverName, $isp]);
-        $downloadElapsedGauge->set((float) ($data->download->elapsed ?? 0.0), [$serverId, $serverName, $isp]);
-        $downloadLatencyIqmGauge->set((float) ($data->download->latency->iqm ?? 0.0), [$serverId, $serverName, $isp]);
-        $downloadLatencyLowGauge->set((float) ($data->download->latency->low ?? 0.0), [$serverId, $serverName, $isp]);
-        $downloadLatencyHighGauge->set((float) ($data->download->latency->high ?? 0.0), [$serverId, $serverName, $isp]);
-        $downloadLatencyJitterGauge->set((float) ($data->download->latency->jitter ?? 0.0), [$serverId, $serverName, $isp]);
+        $uploadBandwidthGauge->set((float) ($data->upload->bandwidth ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $uploadBytesGauge->set((float) ($data->upload->bytes ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $uploadElapsedGauge->set((float) ($data->upload->elapsed ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $uploadLatencyIqmGauge->set((float) ($data->upload->latency->iqm ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $uploadLatencyLowGauge->set((float) ($data->upload->latency->low ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $uploadLatencyHighGauge->set((float) ($data->upload->latency->high ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $uploadLatencyJitterGauge->set((float) ($data->upload->latency->jitter ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
 
-        $uploadBandwidthGauge->set((float) ($data->upload->bandwidth ?? 0.0), [$serverId, $serverName, $isp]);
-        $uploadBytesGauge->set((float) ($data->upload->bytes ?? 0.0), [$serverId, $serverName, $isp]);
-        $uploadElapsedGauge->set((float) ($data->upload->elapsed ?? 0.0), [$serverId, $serverName, $isp]);
-        $uploadLatencyIqmGauge->set((float) ($data->upload->latency->iqm ?? 0.0), [$serverId, $serverName, $isp]);
-        $uploadLatencyLowGauge->set((float) ($data->upload->latency->low ?? 0.0), [$serverId, $serverName, $isp]);
-        $uploadLatencyHighGauge->set((float) ($data->upload->latency->high ?? 0.0), [$serverId, $serverName, $isp]);
-        $uploadLatencyJitterGauge->set((float) ($data->upload->latency->jitter ?? 0.0), [$serverId, $serverName, $isp]);
-
-        $packetLossGauge->set((float) ($data->packetLoss ?? 0.0), [$serverId, $serverName, $isp]);
-        $resultIdGauge->set((float) $latestResult->id ?? 0, [$serverId, $serverName, $isp]);
+        $packetLossGauge->set((float) ($data->packetLoss ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
+        $resultIdGauge->set((float) $latestResult->id ?? 0, [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
 
     } else {
         // Set default values for numeric metrics with labels
