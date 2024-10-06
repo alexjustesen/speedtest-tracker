@@ -1,12 +1,12 @@
 <?php
 
+use App\Models\Result;
 use App\Settings\MetricsSettings;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Prometheus\CollectorRegistry;
 use Prometheus\RenderTextFormat;
 use Prometheus\Storage\InMemory;
-use App\Models\Result;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,20 +56,20 @@ Route::get('/metrics', function (MetricsSettings $settings) {
         ->orderBy('created_at', 'desc')
         ->first();
 
-        if ($latestResult && $latestResult->data) {
-            // Decode the JSON data
-            $data = json_decode($latestResult->data);
-            $resultId = $latestResult->id;
-            $result = Result::find($resultId);
-        
-            // Set gauge values for numeric metrics with labels
-            $serverId = $data->server->id ?? 'unknown';
-            $serverName = $data->server->name ?? 'unknown';
-            $isp = $data->isp ?? 'unknown';
-            $serverLocation = $data->server->location ?? 'unknown';
-            $scheduled = $result->scheduled ? 'true' : 'false'; 'unknown';
-            $status = $result->status ?? 'unknown';
-            $app_name = config('app.name');
+    if ($latestResult && $latestResult->data) {
+        // Decode the JSON data
+        $data = json_decode($latestResult->data);
+        $resultId = $latestResult->id;
+        $result = Result::find($resultId);
+
+        // Set gauge values for numeric metrics with labels
+        $serverId = $data->server->id ?? 'unknown';
+        $serverName = $data->server->name ?? 'unknown';
+        $isp = $data->isp ?? 'unknown';
+        $serverLocation = $data->server->location ?? 'unknown';
+        $scheduled = $result->scheduled ? 'true' : 'false';
+        $status = $result->status ?? 'unknown';
+        $app_name = config('app.name');
 
         $pingJitterGauge->set((float) ($data->ping->jitter ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
         $pingLatencyGauge->set((float) ($data->ping->latency ?? 0.0), [$serverId, $serverName, $isp, $serverLocation, $scheduled, $status, $app_name]);
