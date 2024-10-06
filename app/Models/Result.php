@@ -45,6 +45,7 @@ class Result extends Model
             'server_host' => $this->server_host,
             'server_name' => $this->server_name,
             'isp' => $this->isp,
+            'app_name' => config('app.name'),
         ];
     }
 
