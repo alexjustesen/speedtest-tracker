@@ -48,7 +48,7 @@ return new class extends Migration
          * Don't disable the schedule or send a notification if there are no records.
          */
         if (! DB::table('results_bad_json')->count()) {
-            $dataSettings = new DataMigrationSettings();
+            $dataSettings = new DataMigrationSettings;
 
             $dataSettings->bad_json_migrated = true;
 

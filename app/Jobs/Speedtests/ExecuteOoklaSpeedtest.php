@@ -61,11 +61,34 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         } catch (ProcessFailedException $exception) {
             $messages = explode(PHP_EOL, $exception->getMessage());
 
-            $message = collect(array_filter($messages, 'json_validate'))->last();
+            // Extract only the "message" part from each JSON error message
+            $errorMessages = array_map(function ($message) {
+                $decoded = json_decode($message, true);
+                if (json_last_error() === JSON_ERROR_NONE && isset($decoded['message'])) {
+                    return $decoded['message'];
+                }
 
+                return ''; // If it's not valid JSON or doesn't contain "message", return an empty string
+            }, $messages);
+
+            // Filter out empty messages and concatenate
+            $errorMessage = implode(' | ', array_filter($errorMessages));
+
+            // Prepare the error message data
+            $data = [
+                'type' => 'log',
+                'level' => 'error',
+                'message' => $errorMessage,
+            ];
+
+            // Add server ID if it exists
+            if ($this->serverId !== null) {
+                $data['server'] = ['id' => $this->serverId];
+            }
+
+            // Update the result with the error data
             $this->result->update([
-                'server_id' => $this->serverId,
-                'data' => json_decode($message, true),
+                'data' => $data,
                 'status' => ResultStatus::Failed,
             ]);
 
@@ -88,6 +111,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     }
 
     /**
+     * Check for internet connection.
      * @throws \Exception
      */
     protected function checkForInternetConnection(): bool
@@ -101,7 +125,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
         if (! $this->isValidPingUrl($url)) {
             $this->result->update([
-                'server_id' => $this->serverId,
                 'data' => [
                     'type' => 'log',
                     'level' => 'error',
@@ -125,7 +148,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
         if ($ping->ping() === false) {
             $this->result->update([
-                'server_id' => $this->serverId,
                 'data' => [
                     'type' => 'log',
                     'level' => 'error',
