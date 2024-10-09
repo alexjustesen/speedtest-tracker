@@ -24,7 +24,7 @@ class SendMailTestNotification
 
         foreach ($recipients as $recipient) {
             Mail::to($recipient)
-                ->send(new TestMail());
+                ->send(new TestMail);
         }
 
         Notification::make()

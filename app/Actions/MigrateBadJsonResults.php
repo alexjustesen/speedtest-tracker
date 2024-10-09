@@ -21,7 +21,7 @@ class MigrateBadJsonResults
 
     public function handle(User $user)
     {
-        $dataSettings = new DataMigrationSettings();
+        $dataSettings = new DataMigrationSettings;
 
         $tableName = 'results_bad_json';
 

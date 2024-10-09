@@ -15,7 +15,7 @@ class SendSpeedtestCompletedNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings();
+        $notificationSettings = new NotificationSettings;
 
         if (! $notificationSettings->mail_enabled) {
             return;
