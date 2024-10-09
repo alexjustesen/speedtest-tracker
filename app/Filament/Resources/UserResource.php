@@ -40,26 +40,18 @@ class UserResource extends Resource
                                     ->required()
                                     ->email()
                                     ->unique(ignoreRecord: true),
-                                Forms\Components\TextInput::make('password')
+                                Forms\Components\TextInput::make('password')->label('Password')
                                     ->required()
                                     ->password()
-                                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                                    ->visible(fn ($livewire) => $livewire instanceof CreateUser)
-                                    ->rule(Password::default()),
-                                Forms\Components\TextInput::make('new_password')
+                                    ->required(fn (string $context) => $context === 'create')
+                                    ->nullable(fn (string $context) => $context === 'edit')                
+                                    ->maxLength(60),
+                                Forms\Components\TextInput::make('password_confirmation')->label('Confirm Password')
+                                    ->required()
                                     ->password()
-                                    ->label('New Password')
-                                    ->nullable()
-                                    ->rule(Password::default())
-                                    ->visible(fn ($livewire) => $livewire instanceof EditUser)
-                                    ->dehydrated(false),
-                                Forms\Components\TextInput::make('new_password_confirmation')
-                                    ->password()
-                                    ->label('Confirm New Password')
-                                    ->rule('required', fn ($get) => (bool) $get('new_password'))
+                                    ->required(fn (string $context) => $context === 'create')
+                                    ->nullable(fn (string $context) => $context === 'edit')
                                     ->same('new_password')
-                                    ->visible(fn ($livewire) => $livewire instanceof EditUser)
-                                    ->dehydrated(false),
                             ])
                             ->columns(1)
                             ->columnSpan([
