@@ -1,10 +1,16 @@
 {
-    "name": "laravel/laravel",
+    "name": "alexjustesen/speedtest-tracker",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Self-hosted internet performance tracking application that runs speedtests using Ookla's Speedtest service",
+    "homepage": "https://speedtest-tracker.dev",
     "keywords": [
-        "framework",
-        "laravel"
+        "tracker",
+        "docker",
+        "tracking",
+        "laravel",
+        "dashboard",
+        "speedtest",
+        "speedtest-cli"
     ],
     "license": "MIT",
     "require": {
@@ -74,6 +80,12 @@
             "@php artisan key:generate --ansi"
         ]
     },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/alexjustesen"
+        }
+    ],
     "extra": {
         "laravel": {
             "dont-discover": [
