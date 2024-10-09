@@ -21,7 +21,7 @@ class TestNotification extends Notification implements ShouldQueue
      */
     public function __construct()
     {
-        $this->settings = new NotificationSettings();
+        $this->settings = new NotificationSettings;
     }
 
     /**

@@ -18,7 +18,7 @@ class SendSpeedtestThresholdNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings();
+        $notificationSettings = new NotificationSettings;
 
         if (! $notificationSettings->telegram_enabled) {
             return;
@@ -34,7 +34,7 @@ class SendSpeedtestThresholdNotification
             return;
         }
 
-        $thresholdSettings = new ThresholdSettings();
+        $thresholdSettings = new ThresholdSettings;
 
         if (! $thresholdSettings->absolute_enabled) {
             return;
