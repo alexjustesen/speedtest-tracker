@@ -13,7 +13,7 @@ class InfluxDb2Listener
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $influxSettings = new InfluxDbSettings();
+        $influxSettings = new InfluxDbSettings;
 
         if ($influxSettings->v2_enabled) {
             WriteCompletedSpeedtest::dispatch($event->result, $influxSettings);
