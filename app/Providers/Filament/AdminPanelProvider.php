@@ -49,7 +49,7 @@ class AdminPanelProvider extends PanelProvider
                 VersionsPlugin::make()
                     ->hasDefaults(false)
                     ->items([
-                        new SpeedtestTrackerVersionProvider(),
+                        new SpeedtestTrackerVersionProvider,
                     ]),
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
