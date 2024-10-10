@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\LatencyTests\RunScheduledLatencyTests;
 use App\Actions\Speedtests\RunScheduledSpeedtests;
 use Illuminate\Support\Facades\Schedule;
 
@@ -25,3 +26,9 @@ Schedule::command('app:version')
 Schedule::call(fn () => RunScheduledSpeedtests::run())
     ->everyMinute()
     ->when(! blank(config('speedtest.schedule')));
+
+/**
+ * Action to run scheduled latency tests.
+ */
+Schedule::call(fn () => RunScheduledLatencyTests::run())
+    ->everyMinute();

@@ -3,11 +3,10 @@
 return [
 
     /*
-     * Each settings class used in your application must be registered, you can
-     * put them (manually) here.
+     * Each settings class used in your application must be registered here.
      */
     'settings' => [
-
+        \App\Settings\LatencySettings::class,  // Register the settings class here as a string
     ],
 
     /*
@@ -16,17 +15,14 @@ return [
     'setting_class_path' => app_path('Settings'),
 
     /*
-     * In these directories settings migrations will be stored and ran when migrating. A settings
-     * migration created via the make:settings-migration command will be stored in the first path or
-     * a custom defined path when running the command.
+     * In these directories, settings migrations will be stored and run when migrating. 
      */
     'migrations_paths' => [
         database_path('settings'),
     ],
 
     /*
-     * When no repository was set for a settings class the following repository
-     * will be used for loading and saving settings.
+     * When no repository is set for a settings class, the following repository will be used.
      */
     'default_repository' => 'database',
 
@@ -48,9 +44,7 @@ return [
     ],
 
     /*
-     * The contents of settings classes can be cached through your application,
-     * settings will be stored within a provided Laravel store and can have an
-     * additional prefix.
+     * Settings caching configuration.
      */
     'cache' => [
         'enabled' => env('SETTINGS_CACHE_ENABLED', false),
@@ -60,27 +54,22 @@ return [
     ],
 
     /*
-     * These global casts will be automatically used whenever a property within
-     * your settings class isn't a default PHP type.
+     * Global casts for non-PHP type properties in settings classes.
      */
     'global_casts' => [
         DateTimeInterface::class => Spatie\LaravelSettings\SettingsCasts\DateTimeInterfaceCast::class,
         DateTimeZone::class => Spatie\LaravelSettings\SettingsCasts\DateTimeZoneCast::class,
-        // Spatie\DataTransferObject\DataTransferObject::class => Spatie\LaravelSettings\SettingsCasts\DtoCast::class,
-        // Spatie\LaravelData\Data::class => Spatie\LaravelSettings\SettingsCasts\DataCast::class,
     ],
 
     /*
-     * The package will look for settings in these paths and automatically
-     * register them.
+     * Paths for automatically discovering settings classes.
      */
     'auto_discover_settings' => [
         app_path('Settings'),
     ],
 
     /*
-     * Automatically discovered settings classes can be cached, so they don't
-     * need to be searched each time the application boots up.
+     * Path to cache discovered settings classes.
      */
     'discovered_settings_cache_path' => base_path('bootstrap/cache'),
 ];
