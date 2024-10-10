@@ -24,7 +24,7 @@ Route::get('/metrics', function (MetricsSettings $settings) {
     }
 
     // Create a new Prometheus registry
-    $registry = new CollectorRegistry(new InMemory());
+    $registry = new CollectorRegistry(new InMemory);
 
     // Register gauges for numeric metrics with labels
     $pingJitterGauge = $registry->registerGauge('speedtest_tracker', 'ping_jitter', 'Ping jitter', ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'app_name']);
@@ -125,7 +125,7 @@ Route::get('/metrics', function (MetricsSettings $settings) {
     }
 
     // Render metrics
-    $renderer = new RenderTextFormat();
+    $renderer = new RenderTextFormat;
     $result = $renderer->render($registry->getMetricFamilySamples());
 
     return response($result, 200)->header('Content-Type', RenderTextFormat::MIME_TYPE);
