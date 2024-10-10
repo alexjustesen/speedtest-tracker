@@ -3,7 +3,7 @@
 namespace App\Jobs\InfluxDBv2;
 
 use App\Models\Result;
-use App\Settings\InfluxDbSettings;
+use App\Settings\MetricsSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,7 +23,7 @@ class WriteCompletedSpeedtest implements ShouldQueue
      */
     public function __construct(
         public Result $result,
-        public InfluxDbSettings $settings,
+        public MetricsSettings $settings,
     ) {}
 
     /**
@@ -32,13 +32,18 @@ class WriteCompletedSpeedtest implements ShouldQueue
     public function handle(): void
     {
         $influxdb = [
-            'enabled' => $this->settings->v2_enabled,
-            'url' => $this->settings?->v2_url,
-            'org' => $this->settings?->v2_org,
-            'bucket' => $this->settings?->v2_bucket,
-            'token' => $this->settings?->v2_token,
-            'verifySSL' => $this->settings->v2_verify_ssl,
+            'enabled' => $this->settings->influxdb_v2_enabled,
+            'url' => $this->settings?->influxdb_v2_url,
+            'org' => $this->settings?->influxdb_v2_org,
+            'bucket' => $this->settings?->influxdb_v2_bucket,
+            'token' => $this->settings?->influxdb_v2_token,
+            'verifySSL' => $this->settings->influxdb_v2_verify_ssl,
         ];
+
+        // Only proceed if InfluxDB is enabled
+        if (! $influxdb['enabled']) {
+            return;
+        }
 
         $client = new Client([
             'url' => $influxdb['url'],
