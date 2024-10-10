@@ -121,6 +121,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             // Filter out empty messages and concatenate
             $errorMessage = implode(' | ', array_filter($errorMessages));
 
+
             // Add server ID to the error message if it exists
             if ($this->serverId !== null) {
                 $this->result->update([
@@ -145,6 +146,25 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
                 ]);
             }
 
+            // Prepare the error message data
+            $data = [
+                'type' => 'log',
+                'level' => 'error',
+                'message' => $errorMessage,
+            ];
+
+            // Add server ID if it exists
+            if ($this->serverId !== null) {
+                $data['server'] = ['id' => $this->serverId];
+            }
+
+            // Update the result with the error data
+            $this->result->update([
+                'data' => $data,
+                'status' => ResultStatus::Failed,
+            ]);
+
+
             SpeedtestFailed::dispatch($this->result);
 
             return;
@@ -163,6 +183,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         SpeedtestCompleted::dispatch($this->result);
     }
 
+  
     protected function getPublicIp(): array
     {
         // Implement method to fetch public IP data
@@ -208,9 +229,20 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         return ($subnetDecimal & $maskDecimal) === ($ipDecimal & $maskDecimal);
     }
 
+
+    /**
+     * Check for internet connection.
+     */
+
     protected function checkForInternetConnection(): bool
     {
         $url = config('speedtest.ping_url');
+
+
+        // TODO: skip checking for internet connection, current validation does not take into account different host formats and ip addresses.
+        return true;
+
+        // Skip checking for internet connection if ping url isn't set (disabled)
 
         if (blank($url)) {
             return true;

@@ -14,7 +14,7 @@ class SendSpeedtestCompletedNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings();
+        $notificationSettings = new NotificationSettings;
 
         if (! $notificationSettings->healthcheck_enabled) {
             return;
