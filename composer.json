@@ -1,26 +1,32 @@
 {
-    "name": "laravel/laravel",
+    "name": "alexjustesen/speedtest-tracker",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Self-hosted internet performance tracking application that runs speedtests using Ookla's Speedtest service",
+    "homepage": "https://speedtest-tracker.dev",
     "keywords": [
-        "framework",
-        "laravel"
+        "tracker",
+        "docker",
+        "tracking",
+        "laravel",
+        "dashboard",
+        "speedtest",
+        "speedtest-cli"
     ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "awcodes/filament-versions": "^2.0.1",
         "chrisullyott/php-filesize": "^4.2.1",
-        "dragonmantank/cron-expression": "^3.3.3",
-        "filament/filament": "^3.2.114",
-        "filament/spatie-laravel-settings-plugin": "^3.2.114",
+        "dragonmantank/cron-expression": "^3.4.0",
+        "filament/filament": "^3.2.117",
+        "filament/spatie-laravel-settings-plugin": "^3.2.117",
         "geerlingguy/ping": "^1.2.1",
         "guzzlehttp/guzzle": "^7.9.2",
         "influxdata/influxdb-client-php": "^3.6",
         "laravel-notification-channels/telegram": "^5.0",
-        "laravel/framework": "^11.24.1",
+        "laravel/framework": "^11.27.2",
         "laravel/prompts": "^0.2.1",
-        "laravel/sanctum": "^4.0.2",
+        "laravel/sanctum": "^4.0.3",
         "laravel/tinker": "^2.10.0",
         "livewire/livewire": "^3.5.4",
         "lorisleiva/laravel-actions": "^2.8.4",
@@ -33,13 +39,13 @@
         "barryvdh/laravel-ide-helper": "^3.1",
         "fakerphp/faker": "^1.23.1",
         "laravel/pint": "^1.18.1",
-        "laravel/sail": "^1.33.0",
+        "laravel/sail": "^1.35.0",
         "laravel/telescope": "^5.2.2",
         "mockery/mockery": "^1.6.12",
         "nunomaduro/collision": "^8.4.0",
-        "phpunit/phpunit": "^11.3.6",
+        "phpunit/phpunit": "^11.4.1",
         "spatie/laravel-ignition": "^2.8.0",
-        "tightenco/duster": "^3.0.1"
+        "tightenco/duster": "^3.0.3"
     },
     "autoload": {
         "files": [
@@ -74,6 +80,12 @@
             "@php artisan key:generate --ansi"
         ]
     },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/alexjustesen"
+        }
+    ],
     "extra": {
         "laravel": {
             "dont-discover": [

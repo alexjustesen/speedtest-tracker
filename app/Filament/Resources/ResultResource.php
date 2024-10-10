@@ -153,7 +153,7 @@ class ResultResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $dataSettings = new DataMigrationSettings();
+        $dataSettings = new DataMigrationSettings;
 
         return $table
             ->columns([
