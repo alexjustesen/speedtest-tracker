@@ -13,7 +13,7 @@ class InfluxDb2Listener
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $metricsSettings = new MetricsSettings();
+        $metricsSettings = new MetricsSettings;
 
         if ($metricsSettings->influxdb_v2_enabled) {
             WriteCompletedSpeedtest::dispatch($event->result, $metricsSettings);
