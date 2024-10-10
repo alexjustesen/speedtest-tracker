@@ -9,7 +9,8 @@ enum ResultStatus: string implements HasColor, HasLabel
 {
     case Completed = 'completed'; // a speedtest that ran successfully.
     case Failed = 'failed'; // a speedtest that failed to run successfully.
-    case Started = 'started'; // a speedtest that has been started by a worker but has not finish running.
+    case Started = 'started'; // a speedtest that has been started by a worker but has not finished running.
+    case Skipped = 'skipped'; // a speedtest that was skipped.
 
     public function getColor(): ?string
     {
@@ -17,6 +18,7 @@ enum ResultStatus: string implements HasColor, HasLabel
             self::Completed => 'success',
             self::Failed => 'danger',
             self::Started => 'warning',
+            self::Skipped => 'info', // Adding Skipped state with a color
         };
     }
 
@@ -26,6 +28,7 @@ enum ResultStatus: string implements HasColor, HasLabel
             self::Completed => 'Completed',
             self::Failed => 'Failed',
             self::Started => 'Started',
+            self::Skipped => 'Skipped',
         };
     }
 }
