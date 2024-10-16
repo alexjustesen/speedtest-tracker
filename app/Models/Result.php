@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ResultStatus;
+use App\Helpers\Number;
+use App\Settings\ThresholdSettings;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +15,18 @@ use Illuminate\Support\Arr;
 class Result extends Model
 {
     use HasFactory, Prunable;
+
+    protected $fillable = [
+        'status',
+        'download',
+        'upload',
+        'ping',
+        'data',
+        'threshold_breached_overall',
+        'threshold_breached_download',
+        'threshold_breached_upload',
+        'threshold_breached_ping',
+    ];
 
     /**
      * The attributes that aren't mass assignable.
@@ -289,5 +303,40 @@ class Result extends Model
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'upload.latency.iqm'),
         );
+    }
+
+    public function checkAndUpdateThresholds(): void
+    {
+        $thresholds = app(ThresholdSettings::class);
+
+        // Determine if thresholds are enabled
+        $thresholdsEnabled = $thresholds->absolute_enabled;
+
+        // Convert bits to Mbits if needed
+        $downloadInMbits = ! is_null($this->download) ? Number::bitsToMagnitude($this->download_bits, 2, 'mbit') : null;
+        $uploadInMbits = ! is_null($this->upload) ? Number::bitsToMagnitude($this->upload_bits, 2, 'mbit') : null;
+
+        // Determine if thresholds are breached or NotChecked
+        $downloadBreached = $thresholdsEnabled && $downloadInMbits !== null && $downloadInMbits < $thresholds->absolute_download;
+        $uploadBreached = $thresholdsEnabled && $uploadInMbits !== null && $uploadInMbits < $thresholds->absolute_upload;
+        $pingBreached = $thresholdsEnabled && $this->ping !== null && $this->ping > $thresholds->absolute_ping;
+
+        // Calculate individual statuses
+        $downloadStatus = $thresholdsEnabled ? ($downloadBreached ? 'Failed' : 'Passed') : 'NotChecked';
+        $uploadStatus = $thresholdsEnabled ? ($uploadBreached ? 'Failed' : 'Passed') : 'NotChecked';
+        $pingStatus = $thresholdsEnabled ? ($pingBreached ? 'Failed' : 'Passed') : 'NotChecked';
+
+        // Calculate the overall status
+        $overallStatus = $thresholdsEnabled
+            ? ($downloadBreached || $uploadBreached || $pingBreached ? 'Failed' : 'Passed')
+            : 'NotChecked';
+
+        // Update all relevant fields in the database
+        $this->update([
+            'threshold_breached_overall' => $overallStatus,
+            'threshold_breached_download' => $downloadStatus,
+            'threshold_breached_upload' => $uploadStatus,
+            'threshold_breached_ping' => $pingStatus,
+        ]);
     }
 }
