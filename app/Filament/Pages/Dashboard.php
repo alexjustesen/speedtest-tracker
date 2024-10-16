@@ -10,20 +10,23 @@ use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
+use App\Forms\Components\DateFilterForm;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
-use Filament\Pages\Dashboard as BasePage;
+use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Filament\Support\Enums\IconPosition;
 use Illuminate\Support\Arr;
 
-class Dashboard extends BasePage
+class Dashboard extends BaseDashboard
 {
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    use HasFiltersForm;
 
-    protected static string $view = 'filament.pages.dashboard';
+    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
 
     public function getSubheading(): ?string
     {
@@ -36,6 +39,11 @@ class Dashboard extends BasePage
         $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
 
         return 'Next speedtest at: '.$nextRunDate;
+    }
+
+    public function filtersForm(Form $form): Form
+    {
+        return DateFilterForm::make($form);
     }
 
     protected function getHeaderActions(): array
@@ -83,6 +91,12 @@ class Dashboard extends BasePage
     {
         return [
             StatsOverviewWidget::make(),
+        ];
+    }
+
+    public function getWidgets(): array
+    {
+        return [
             RecentDownloadChartWidget::make(),
             RecentUploadChartWidget::make(),
             RecentPingChartWidget::make(),
