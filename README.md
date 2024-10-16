@@ -26,6 +26,7 @@ docker run -d --name speedtest-tracker --restart unless-stopped \
     -e PUID=1000 \
     -e PGID=1000 \
     -e APP_KEY= \ # How to generate an app key: https://speedtest-tracker.dev/
+    # -e SPEEDTEST_SCHEDULE= \ # optional: schedule a speedtest (default: every hour): https://crontab.guru
     -e APP_URL=http://localhost \
     -e DB_CONNECTION=sqlite \
     -v ${PWD}:/config \
@@ -47,6 +48,7 @@ services:
             - APP_KEY= # How to generate an app key: https://speedtest-tracker.dev/
             - APP_URL=http://localhost
             - DB_CONNECTION=sqlite
+            # - SPEEDTEST_SCHEDULE= # optional: schedule a speedtest (default: every hour): https://crontab.guru
         volumes:
             - /path/to/data:/config
             - /path/to-custom-ssl-keys:/config/keys
