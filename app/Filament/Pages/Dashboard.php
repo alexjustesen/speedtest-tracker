@@ -32,6 +32,7 @@ class Dashboard extends BasePage
         }
 
         $cronExpression = new CronExpression(config('speedtest.schedule'));
+
         $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
 
         return 'Next speedtest at: '.$nextRunDate;
