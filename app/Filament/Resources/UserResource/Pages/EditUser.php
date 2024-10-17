@@ -18,12 +18,13 @@ class EditUser extends EditRecord
         ];
     }
 
-    public function beforeSave()
+    protected function mutateFormDataBeforeSave(array $data): array
     {
-        if (! array_key_exists('new_password', $this->data) || ! filled($this->data['new_password'])) {
-            return;
-        }
+        if (!isset($data['password']) || empty( $data['password'])) {
+            unset($data['password']);
+        } 
 
-        $this->record->password = Hash::make($this->data['new_password']);
+        return $data;
     }
+
 }
