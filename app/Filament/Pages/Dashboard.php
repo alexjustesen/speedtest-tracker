@@ -103,7 +103,7 @@ class Dashboard extends BasePage
         // Map the server options, ensuring each item is valid
         return collect($servers)->mapWithKeys(function ($item) {
             if (is_array($item) && isset($item['id'], $item['name'], $item['sponsor'])) {
-                return [$item['id'] => "{$item['name']} ({$item['sponsor']})"];
+                return [$item['id'] => "{$item['sponsor']} ({$item['name']}, {$item['id']})"];
             }
 
             return [];
