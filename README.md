@@ -26,7 +26,7 @@ docker run -d --name speedtest-tracker --restart unless-stopped \
     -e PUID=1000 \
     -e PGID=1000 \
     -e APP_KEY= \ # How to generate an app key: https://speedtest-tracker.dev/
-    # -e SPEEDTEST_SCHEDULE= \ # optional: schedule a speedtest (default: every hour): https://crontab.guru
+    # -e SPEEDTEST_SCHEDULE= \ # optional: schedule a speedtest with an cronjob https://crontab.guru
     -e APP_URL=http://localhost \
     -e DB_CONNECTION=sqlite \
     -v ${PWD}:/config \
@@ -48,18 +48,19 @@ services:
             - APP_KEY= # How to generate an app key: https://speedtest-tracker.dev/
             - APP_URL=http://localhost
             - DB_CONNECTION=sqlite
-            # - SPEEDTEST_SCHEDULE= # optional: schedule a speedtest (default: every hour): https://crontab.guru
+            # - SPEEDTEST_SCHEDULE= # optional: schedule a speedtest with an cronjob https://crontab.guru
         volumes:
             - /path/to/data:/config
             - /path/to-custom-ssl-keys:/config/keys
         image: lscr.io/linuxserver/speedtest-tracker:latest
         restart: unless-stopped
 ```
+For more environment configuration to customize your installation see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
+
+
 ## Image version
 
 A full list of released versions can be found here: https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker
-
-For more environment configuration see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
 
 ### FAQs and Features
 
