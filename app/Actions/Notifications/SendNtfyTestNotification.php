@@ -33,7 +33,7 @@ class SendNtfyTestNotification
                 $server = new Server($webhook['url']);
 
                 // Create a new message
-                $message = new Message();
+                $message = new Message;
                 $message->topic($webhook['topic']);
                 $message->title('Test Notification');
                 $message->body('👋 Testing the ntfy notification channel.');

@@ -26,7 +26,7 @@ class SendSpeedtestCompletedNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings();
+        $notificationSettings = new NotificationSettings;
 
         if (! $notificationSettings->gotify_enabled) {
             return;

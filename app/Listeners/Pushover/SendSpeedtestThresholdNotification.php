@@ -27,7 +27,7 @@ class SendSpeedtestThresholdNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings();
+        $notificationSettings = new NotificationSettings;
 
         // Check if Pushover notifications are enabled and the threshold failure setting is enabled
         if (! $notificationSettings->pushover_enabled || ! $notificationSettings->pushover_on_threshold_failure) {
@@ -42,7 +42,7 @@ class SendSpeedtestThresholdNotification
         }
 
         // Get the threshold settings
-        $thresholdSettings = new ThresholdSettings();
+        $thresholdSettings = new ThresholdSettings;
 
         if (! $thresholdSettings->absolute_enabled) {
             return;

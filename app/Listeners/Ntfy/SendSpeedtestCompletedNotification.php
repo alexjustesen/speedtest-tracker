@@ -28,7 +28,7 @@ class SendSpeedtestCompletedNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings();
+        $notificationSettings = new NotificationSettings;
 
         if (! $notificationSettings->ntfy_enabled) {
             return;
@@ -55,7 +55,7 @@ class SendSpeedtestCompletedNotification
                 $server = new Server($url['url']);
 
                 // Create a new message
-                $message = new Message();
+                $message = new Message;
                 $message->topic($url['topic']);
                 $message->title('Speedtest Completed');
                 $message->markdownBody($payload);

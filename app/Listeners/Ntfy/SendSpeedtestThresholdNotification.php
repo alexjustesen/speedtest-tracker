@@ -29,7 +29,7 @@ class SendSpeedtestThresholdNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings();
+        $notificationSettings = new NotificationSettings;
 
         if (! $notificationSettings->ntfy_enabled) {
             return;
@@ -45,7 +45,7 @@ class SendSpeedtestThresholdNotification
             return;
         }
 
-        $thresholdSettings = new ThresholdSettings();
+        $thresholdSettings = new ThresholdSettings;
 
         if (! $thresholdSettings->absolute_enabled) {
             return;
@@ -68,7 +68,7 @@ class SendSpeedtestThresholdNotification
                 $server = new Server($url['url']);
 
                 // Create a new message
-                $message = new Message();
+                $message = new Message;
                 $message->topic($url['topic']);
                 $message->title('Speedtest Threshold Alert');
                 $message->markdownBody($payload);

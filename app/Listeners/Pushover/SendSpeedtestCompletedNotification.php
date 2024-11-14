@@ -25,7 +25,7 @@ class SendSpeedtestCompletedNotification
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings();
+        $notificationSettings = new NotificationSettings;
 
         // Check if Pushover notifications are enabled
         if (! $notificationSettings->pushover_enabled || ! $notificationSettings->pushover_on_speedtest_run) {
