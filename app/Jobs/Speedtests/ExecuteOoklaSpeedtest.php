@@ -61,11 +61,34 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         } catch (ProcessFailedException $exception) {
             $messages = explode(PHP_EOL, $exception->getMessage());
 
-            $message = collect(array_filter($messages, 'json_validate'))->last();
+            // Extract only the "message" part from each JSON error message
+            $errorMessages = array_map(function ($message) {
+                $decoded = json_decode($message, true);
+                if (json_last_error() === JSON_ERROR_NONE && isset($decoded['message'])) {
+                    return $decoded['message'];
+                }
 
+                return ''; // If it's not valid JSON or doesn't contain "message", return an empty string
+            }, $messages);
+
+            // Filter out empty messages and concatenate
+            $errorMessage = implode(' | ', array_filter($errorMessages));
+
+            // Prepare the error message data
+            $data = [
+                'type' => 'log',
+                'level' => 'error',
+                'message' => $errorMessage,
+            ];
+
+            // Add server ID if it exists
+            if ($this->serverId !== null) {
+                $data['server'] = ['id' => $this->serverId];
+            }
+
+            // Update the result with the error data
             $this->result->update([
-                'server_id' => $this->serverId,
-                'data' => json_decode($message, true),
+                'data' => $data,
                 'status' => ResultStatus::Failed,
             ]);
 
@@ -87,6 +110,11 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         SpeedtestCompleted::dispatch($this->result);
     }
 
+    /**
+     * Check for internet connection.
+     *
+     * @throws \Exception
+     */
     protected function checkForInternetConnection(): bool
     {
         $url = config('speedtest.ping_url');
@@ -96,9 +124,8 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return true;
         }
 
-        if (! URL::isValidUrl($url)) {
+        if (! $this->isValidPingUrl($url)) {
             $this->result->update([
-                'server_id' => $this->serverId,
                 'data' => [
                     'type' => 'log',
                     'level' => 'error',
@@ -122,7 +149,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
         if ($ping->ping() === false) {
             $this->result->update([
-                'server_id' => $this->serverId,
                 'data' => [
                     'type' => 'log',
                     'level' => 'error',
@@ -137,5 +163,21 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         }
 
         return true;
+    }
+
+    /**
+     * Check if the given URL is a valid ping URL.
+     */
+    public function isValidPingUrl(string $url): bool
+    {
+        $hasTLD = static function (string $url): bool {
+            // this also ensures the string ends with a TLD
+            return preg_match('/\.[a-z]{2,}$/i', $url);
+        };
+
+        return (filter_var($url, FILTER_VALIDATE_URL) && $hasTLD($url))
+            // to check for things like `google.com`, we need to add the protocol
+            || (filter_var('https://'.$url, FILTER_VALIDATE_URL) && $hasTLD($url))
+            || filter_var($url, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 || FILTER_FLAG_IPV6) !== false;
     }
 }
