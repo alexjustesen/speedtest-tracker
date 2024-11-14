@@ -119,9 +119,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     {
         $url = config('speedtest.ping_url');
 
-        // TODO: skip checking for internet connection, current validation does not take into account different host formats and ip addresses.
-        return true;
-
         // Skip checking for internet connection if ping url isn't set (disabled)
         if (blank($url)) {
             return true;
