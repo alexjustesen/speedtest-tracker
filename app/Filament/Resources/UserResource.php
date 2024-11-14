@@ -4,8 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Enums\UserRole;
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\Pages\CreateUser;
-use App\Filament\Resources\UserResource\Pages\EditUser;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -14,8 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\HtmlString;
-use Illuminate\Validation\Rules\Password;
 
 class UserResource extends Resource
 {
@@ -29,77 +25,72 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\Grid::make([
                     'default' => 1,
-                    'md' => 3,
-                ])
+                ])->columnSpan([
+                    'lg' => 2,
+                ])->schema([
+                    Forms\Components\Section::make('Details')
+                        ->columns([
+                            'default' => 1,
+                            'lg' => 2,
+                        ])
+                        ->schema([
+                            Forms\Components\TextInput::make('name')
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpanFull(),
+
+                            Forms\Components\TextInput::make('email')
+                                ->email()
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpanFull(),
+
+                            Forms\Components\TextInput::make('password')
+                                ->confirmed()
+                                ->password()
+                                ->revealable()
+                                ->required(fn (string $context): bool => $context === 'create')
+                                ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                                ->dehydrated(fn ($state) => filled($state)),
+
+                            Forms\Components\TextInput::make('password_confirmation')
+                                ->password()
+                                ->revealable(),
+
+                            // ...
+                        ]),
+                ]),
+
+                Forms\Components\Grid::make(1)
+                    ->columnSpan(1)
                     ->schema([
+                        Forms\Components\Section::make('Platform')
+                            ->schema([
+                                Forms\Components\Select::make('role')
+                                    ->label('Role')
+                                    ->default(UserRole::User)
+                                    ->options(UserRole::class)
+                                    ->required()
+                                    ->disabled(fn (?User $record): bool => Auth::user()->role !== UserRole::Admin),
+
+                                // ...
+                            ]),
+
                         Forms\Components\Section::make()
                             ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->required(),
-                                Forms\Components\TextInput::make('email')
-                                    ->required()
-                                    ->email()
-                                    ->unique(ignoreRecord: true),
-                                Forms\Components\TextInput::make('password')
-                                    ->required()
-                                    ->password()
-                                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                                    ->visible(fn ($livewire) => $livewire instanceof CreateUser)
-                                    ->rule(Password::default()),
-                                Forms\Components\TextInput::make('new_password')
-                                    ->password()
-                                    ->label('New Password')
-                                    ->nullable()
-                                    ->rule(Password::default())
-                                    ->visible(fn ($livewire) => $livewire instanceof EditUser)
-                                    ->dehydrated(false),
-                                Forms\Components\TextInput::make('new_password_confirmation')
-                                    ->password()
-                                    ->label('Confirm New Password')
-                                    ->rule('required', fn ($get) => (bool) $get('new_password'))
-                                    ->same('new_password')
-                                    ->visible(fn ($livewire) => $livewire instanceof EditUser)
-                                    ->dehydrated(false),
-                            ])
-                            ->columns(1)
-                            ->columnSpan([
-                                'md' => 2,
-                            ]),
+                                Forms\Components\Placeholder::make('created_at')
+                                    ->content(fn (?User $record): string => $record ? $record->created_at->diffForHumans() : '-'),
 
-                        Forms\Components\Grid::make([
-                            'default' => 1,
-                        ])
-                            ->schema([
-                                Forms\Components\Section::make()
-                                    ->schema([
-                                        Forms\Components\Select::make('role')
-                                            ->options(UserRole::class)
-                                            ->default(UserRole::User)
-                                            ->disabled(fn (): bool => ! Auth::user()->is_admin)
-                                            ->required(),
-                                    ])
-                                    ->columns(1)
-                                    ->columnSpan([
-                                        'md' => 1,
-                                    ]),
+                                Forms\Components\Placeholder::make('updated_at')
+                                    ->content(fn (?User $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
 
-                                Forms\Components\Section::make()
-                                    ->schema([
-                                        Forms\Components\Placeholder::make('created_at')
-                                            ->content(fn ($record) => $record?->created_at?->diffForHumans() ?? new HtmlString('&mdash;')),
-                                        Forms\Components\Placeholder::make('updated_at')
-                                            ->content(fn ($record) => $record?->updated_at?->diffForHumans() ?? new HtmlString('&mdash;')),
-                                    ])
-                                    ->columns(1)
-                                    ->columnSpan([
-                                        'md' => 1,
-                                    ]),
-                            ])
-                            ->columns(1)
-                            ->columnSpan([
-                                'md' => 1,
+                                // ...
                             ]),
                     ]),
+            ])
+            ->columns([
+                'default' => 1,
+                'lg' => 3,
             ]);
     }
 
@@ -108,22 +99,33 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID'),
+                    ->label('ID')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('role')
                     ->badge(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->alignEnd()
                     ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone')),
+                    ->timezone(config('app.display_timezone'))
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->alignEnd()
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
+                // ...
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('role')
@@ -131,10 +133,11 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
-                    Tables\Actions\DeleteAction::make(),
                 ]),
+            ])
+            ->bulkActions([
+                // ...
             ]);
     }
 
