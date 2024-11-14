@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Jobs\Speedtests\ExecuteOoklaSpeedtest;
 use App\Models\Result;
-use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 final class ExecuteOoklaSpeedtestTest extends TestCase

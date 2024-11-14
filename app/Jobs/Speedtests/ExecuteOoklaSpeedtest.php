@@ -112,6 +112,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
     /**
      * Check for internet connection.
+     *
      * @throws \Exception
      */
     protected function checkForInternetConnection(): bool
