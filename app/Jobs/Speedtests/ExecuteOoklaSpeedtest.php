@@ -5,7 +5,9 @@ namespace App\Jobs\Speedtests;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
+use App\Events\SpeedtestSkipped;
 use App\Models\Result;
+use App\Services\PublicIpService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,6 +37,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     public function __construct(
         public Result $result,
         public ?int $serverId = null,
+        protected PublicIpService $publicIpService = new PublicIpService
     ) {}
 
     /**
@@ -46,6 +49,24 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return;
         }
 
+        // Fetch public IP data using the PublicIpService
+        $ipData = $this->publicIpService->getPublicIp();
+        $currentIp = $ipData['ip'] ?? 'unknown';
+        $isp = $ipData['isp'] ?? 'unknown';  // Get the ISP value here
+
+        // Retrieve SPEEDTEST_SKIP_IP Settings
+        $skipSettings = array_filter(array_map('trim', explode(';', config('speedtest.skip_ip'))));
+
+        // Check Each Skip Setting
+        $skipMessage = $this->publicIpService->shouldSkipIp($currentIp, $skipSettings);
+        if ($skipMessage) {
+            // Pass the $isp along with $currentIp and $skipMessage
+            $this->markAsSkipped($skipMessage, $currentIp, $isp);
+
+            return;
+        }
+
+        // Execute Speedtest
         $options = array_filter([
             'speedtest',
             '--accept-license',
@@ -73,6 +94,30 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
             // Filter out empty messages and concatenate
             $errorMessage = implode(' | ', array_filter($errorMessages));
+
+            // Add server ID to the error message if it exists
+            if ($this->serverId !== null) {
+                $this->result->update([
+                    'data' => [
+                        'type' => 'log',
+                        'level' => 'error',
+                        'message' => $errorMessage,
+                        'server' => [
+                            'id' => $this->serverId,
+                        ],
+                    ],
+                    'status' => ResultStatus::Failed,
+                ]);
+            } else {
+                $this->result->update([
+                    'data' => [
+                        'type' => 'log',
+                        'level' => 'error',
+                        'message' => $errorMessage,
+                    ],
+                    'status' => ResultStatus::Failed,
+                ]);
+            }
 
             // Prepare the error message data
             $data = [
@@ -111,6 +156,27 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     }
 
     /**
+     * Mark the test as skipped with a specific message.
+     */
+    protected function markAsSkipped(string $message, string $currentIp, string $isp): void
+    {
+        $this->result->update([
+            'data' => [
+                'type' => 'log',
+                'level' => 'info',
+                'message' => $message,
+                'interface' => [
+                    'externalIp' => $currentIp,
+                ],
+                'isp' => $isp,
+            ],
+            'status' => ResultStatus::Skipped,
+        ]);
+
+        SpeedtestSkipped::dispatch($this->result);
+    }
+
+    /**
      * Check for internet connection.
      *
      * @throws \Exception
@@ -120,6 +186,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         $url = config('speedtest.ping_url');
 
         // Skip checking for internet connection if ping url isn't set (disabled)
+
         if (blank($url)) {
             return true;
         }
@@ -139,7 +206,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return false;
         }
 
-        // Remove http:// or https:// from the URL if present
         $url = preg_replace('/^https?:\/\//', '', $url);
 
         $ping = new Ping(

@@ -121,6 +121,10 @@ class ResultResource extends Resource
                                 ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))
                                 ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Failed)
                                 ->columnSpanFull(),
+                            Forms\Components\Textarea::make('data.message')
+                                ->label('Skip Message')
+                                ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Skipped)
+                                ->columnSpanFull(),
                         ])
                         ->columnSpan(2),
                     Forms\Components\Section::make()
