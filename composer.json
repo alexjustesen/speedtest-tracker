@@ -25,7 +25,7 @@
         "influxdata/influxdb-client-php": "^3.6",
         "laravel-notification-channels/telegram": "^5.0",
         "laravel/framework": "^11.33",
-        "laravel/prompts": "^0.2.1",
+        "laravel/prompts": "^0.3",
         "laravel/sanctum": "^4.0.3",
         "laravel/tinker": "^2.10.0",
         "livewire/livewire": "^3.5.12",
