@@ -7,6 +7,7 @@ use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use App\Events\SpeedtestSkipped;
 use App\Models\Result;
+use App\Services\PublicIpService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,6 +37,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     public function __construct(
         public Result $result,
         public ?int $serverId = null,
+        protected PublicIpService $publicIpService = new PublicIpService
     ) {}
 
     /**
@@ -47,33 +49,21 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        // Fetch public IP data using icanhazip.com
-        $currentIp = $this->getPublicIp();
+        // Fetch public IP data using the PublicIpService
+        $ipData = $this->publicIpService->getPublicIp();
+        $currentIp = $ipData['ip'] ?? 'unknown';
+        $isp = $ipData['isp'] ?? 'unknown';  // Get the ISP value here
 
         // Retrieve SPEEDTEST_SKIP_IP Settings
         $skipSettings = array_filter(array_map('trim', explode(';', config('speedtest.skip_ip'))));
 
         // Check Each Skip Setting
-        foreach ($skipSettings as $setting) {
-            if (filter_var($setting, FILTER_VALIDATE_IP)) {
-                if ($currentIp === $setting) {
-                    $this->markAsSkipped(
-                        "Current public IP address ($currentIp) was listed to be skipped for testing.",
-                        $currentIp
-                    );
+        $skipMessage = $this->publicIpService->shouldSkipIp($currentIp, $skipSettings);
+        if ($skipMessage) {
+            // Pass the $isp along with $currentIp and $skipMessage
+            $this->markAsSkipped($skipMessage, $currentIp, $isp);
 
-                    return;
-                }
-            } elseif (strpos($setting, '/') !== false) {
-                if ($this->ipInSubnet($currentIp, $setting)) {
-                    $this->markAsSkipped(
-                        "Current public IP address ($currentIp) falls within the excluded subnet ($setting).",
-                        $currentIp
-                    );
-
-                    return;
-                }
-            }
+            return;
         }
 
         // Execute Speedtest
@@ -166,25 +156,9 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     }
 
     /**
-     * Get the public IP address using icanhazip.com.
-     */
-    protected function getPublicIp(): string
-    {
-        try {
-            $response = file_get_contents('https://icanhazip.com');
-
-            return trim($response);
-        } catch (\Exception $e) {
-            \Log::error("Error fetching public IP data: {$e->getMessage()}");
-
-            return 'unknown';
-        }
-    }
-
-    /**
      * Mark the test as skipped with a specific message.
      */
-    protected function markAsSkipped(string $message, string $currentIp): void
+    protected function markAsSkipped(string $message, string $currentIp, string $isp): void
     {
         $this->result->update([
             'data' => [
@@ -194,24 +168,12 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
                 'interface' => [
                     'externalIp' => $currentIp,
                 ],
+                'isp' => $isp,
             ],
             'status' => ResultStatus::Skipped,
         ]);
 
         SpeedtestSkipped::dispatch($this->result);
-    }
-
-    /**
-     * Check if IP is in a given subnet.
-     */
-    protected function ipInSubnet(string $ip, string $subnet): bool
-    {
-        [$subnet, $mask] = explode('/', $subnet) + [1 => '32'];
-        $subnetDecimal = ip2long($subnet);
-        $ipDecimal = ip2long($ip);
-        $maskDecimal = ~((1 << (32 - (int) $mask)) - 1);
-
-        return ($subnetDecimal & $maskDecimal) === ($ipDecimal & $maskDecimal);
     }
 
     /**
