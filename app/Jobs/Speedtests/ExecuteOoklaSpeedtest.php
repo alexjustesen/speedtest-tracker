@@ -50,8 +50,13 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
         $externalIp = GetExternalIpAddress::run();
 
-        if ($skipMessage = $this->shouldSkip($externalIp) !== false) {
-            $this->markAsSkipped($skipMessage, $externalIp);
+        $shouldSkip = $this->shouldSkip($externalIp);
+
+        if ($shouldSkip !== false) {
+            $this->markAsSkipped(
+                message: $shouldSkip,
+                externalIp: $externalIp,
+            );
 
             return;
         }
