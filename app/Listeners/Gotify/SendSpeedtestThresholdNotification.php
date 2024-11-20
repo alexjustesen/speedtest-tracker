@@ -76,7 +76,8 @@ class SendSpeedtestThresholdNotification
                 'client::display' => [
                     'contentType' => 'text/markdown',
                 ],
-            ];
+            ],
+        ];
 
         foreach ($notificationSettings->gotify_webhooks as $url) {
             WebhookCall::create()
