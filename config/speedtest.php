@@ -35,4 +35,9 @@ return [
 
     'servers' => env('SPEEDTEST_SERVERS', ''),
 
+    /**
+     * IP filtering settings.
+     */
+    'skip_ips' => env('SPEEDTEST_SKIP_IPS'),
+
 ];
