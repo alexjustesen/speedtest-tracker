@@ -4,13 +4,14 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
+use Illuminate\Support\Str;
 
 enum ResultStatus: string implements HasColor, HasLabel
 {
-    case Completed = 'completed'; // a speedtest that ran successfully.
-    case Failed = 'failed'; // a speedtest that failed to run successfully.
-    case Started = 'started'; // a speedtest that has been started by a worker but has not finished running.
-    case Skipped = 'skipped'; // a speedtest that was skipped.
+    case Completed = 'completed';
+    case Failed = 'failed';
+    case Started = 'started';
+    case Skipped = 'skipped';
 
     public function getColor(): ?string
     {
@@ -18,17 +19,12 @@ enum ResultStatus: string implements HasColor, HasLabel
             self::Completed => 'success',
             self::Failed => 'danger',
             self::Started => 'warning',
-            self::Skipped => 'info', // Adding Skipped state with a color
+            self::Skipped => 'info',
         };
     }
 
     public function getLabel(): ?string
     {
-        return match ($this) {
-            self::Completed => 'Completed',
-            self::Failed => 'Failed',
-            self::Started => 'Started',
-            self::Skipped => 'Skipped',
-        };
+        return Str::title($this->name);
     }
 }
