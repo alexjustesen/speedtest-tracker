@@ -85,30 +85,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             // Filter out empty messages and concatenate
             $errorMessage = implode(' | ', array_filter($errorMessages));
 
-            // Add server ID to the error message if it exists
-            if ($this->serverId !== null) {
-                $this->result->update([
-                    'data' => [
-                        'type' => 'log',
-                        'level' => 'error',
-                        'message' => $errorMessage,
-                        'server' => [
-                            'id' => $this->serverId,
-                        ],
-                    ],
-                    'status' => ResultStatus::Failed,
-                ]);
-            } else {
-                $this->result->update([
-                    'data' => [
-                        'type' => 'log',
-                        'level' => 'error',
-                        'message' => $errorMessage,
-                    ],
-                    'status' => ResultStatus::Failed,
-                ]);
-            }
-
             // Prepare the error message data
             $data = [
                 'type' => 'log',
