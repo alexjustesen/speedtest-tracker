@@ -75,7 +75,6 @@ class SendSpeedtestThresholdNotification
             'extras' => [
                 'client::display' => [
                     'contentType' => 'text/markdown',
-                    ],
                 ],
             ];
 
