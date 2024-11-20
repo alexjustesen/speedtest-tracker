@@ -38,6 +38,6 @@ return [
     /**
      * IP filtering settings.
      */
-    'skip_ip' => env('SPEEDTEST_SKIP_IP', ''), // Comma-separated list of IPs, ISPs and subnets
+    'skip_ips' => env('SPEEDTEST_SKIP_IPS'),
 
 ];
