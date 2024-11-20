@@ -4,7 +4,7 @@ namespace App\Settings;
 
 use Spatie\LaravelSettings\Settings;
 
-class MetricsSettings extends Settings
+class DataIntegrationSettings extends Settings
 {
     public bool $prometheus_enabled;
 
@@ -22,6 +22,6 @@ class MetricsSettings extends Settings
 
     public static function group(): string
     {
-        return 'metrics';
+        return 'dataintegration';
     }
 }

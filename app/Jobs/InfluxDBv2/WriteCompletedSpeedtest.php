@@ -3,7 +3,7 @@
 namespace App\Jobs\InfluxDBv2;
 
 use App\Models\Result;
-use App\Settings\MetricsSettings;
+use App\Settings\DataIntegrationSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -23,7 +23,7 @@ class WriteCompletedSpeedtest implements ShouldQueue
      */
     public function __construct(
         public Result $result,
-        public MetricsSettings $settings,
+        public DataIntegrationSettings $settings,
     ) {}
 
     /**

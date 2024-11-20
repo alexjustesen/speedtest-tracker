@@ -4,14 +4,14 @@ namespace App\Filament\Pages\Settings;
 
 use App\Jobs\InfluxDBv2\WriteCompletedSpeedtest;
 use App\Models\Result;
-use App\Settings\MetricsSettings;
+use App\Settings\DataIntegrationSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Artisan;
 
-class MetricsPage extends SettingsPage
+class DataIntegrationPage extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
@@ -19,11 +19,11 @@ class MetricsPage extends SettingsPage
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $title = 'Metrics Export Settings';
+    protected static ?string $title = 'Data Integration';
 
-    protected static ?string $navigationLabel = 'Metrics Export';
+    protected static ?string $navigationLabel = 'Data Integration';
 
-    protected static string $settings = MetricsSettings::class;
+    protected static string $settings = DataIntegrationSettings::class;
 
     public static function canAccess(): bool
     {
@@ -40,9 +40,9 @@ class MetricsPage extends SettingsPage
      */
     public function sendAllResultsToInfluxDB(): void
     {
-        $metricsSettings = app(MetricsSettings::class);
+        $DataIntegrationSettings = app(DataIntegrationSettings::class);
 
-        if (! $metricsSettings->influxdb_v2_enabled) {
+        if (! $DataIntegrationSettings->influxdb_v2_enabled) {
             Notification::make()
                 ->title('Error')
                 ->body('InfluxDB is not enabled. Please enable InfluxDB in settings first.')
@@ -56,7 +56,7 @@ class MetricsPage extends SettingsPage
         $results = Result::where('status', 'completed')->get();
 
         foreach ($results as $result) {
-            WriteCompletedSpeedtest::dispatch($result, $metricsSettings);
+            WriteCompletedSpeedtest::dispatch($result, $DataIntegrationSettings);
         }
 
         Notification::make()
@@ -71,9 +71,9 @@ class MetricsPage extends SettingsPage
      */
     public function testInfluxDB(): void
     {
-        $metricsSettings = app(MetricsSettings::class);
+        $DataIntegrationSettings = app(DataIntegrationSettings::class);
 
-        if (! $metricsSettings->influxdb_v2_enabled) {
+        if (! $DataIntegrationSettings->influxdb_v2_enabled) {
             Notification::make()
                 ->title('Error')
                 ->body('InfluxDB is not enabled. Please enable InfluxDB in settings first.')
@@ -97,16 +97,18 @@ class MetricsPage extends SettingsPage
     {
         return $form
             ->schema([
-                Forms\Components\Tabs::make('metrics_tabs')
-                    ->columnSpanFull()
-                    ->tabs([
-                        // Prometheus Tab
-                        Forms\Components\Tabs\Tab::make('Prometheus')
+                Forms\Components\Grid::make([
+                    'default' => 1,
+                    'md' => 3,
+                ])
+                    ->schema([
+                        // Prometheus Section
+                        Forms\Components\Section::make('Prometheus')
+                            ->description('This enables a /metrics endpoint for Prometheus to scrape the latest results.')
                             ->schema([
                                 Forms\Components\Toggle::make('prometheus_enabled')
                                     ->label('Enable')
                                     ->columnSpanFull(),
-                                // Button to view the metric page
                                 Forms\Components\Actions::make([
                                     Forms\Components\Actions\Action::make('Open Metrics Page')
                                         ->hidden(fn (Forms\Get $get) => $get('prometheus_enabled') !== true)
@@ -117,10 +119,16 @@ class MetricsPage extends SettingsPage
                                         ->color('primary')
                                         ->icon('heroicon-o-eye'),
                                 ]),
+                            ])
+                            ->compact()
+                            ->columns([
+                                'default' => 1,
+                                'md' => 2,
                             ]),
 
-                        // InfluxDB Tab
-                        Forms\Components\Tabs\Tab::make('InfluxDB v2')
+                        // InfluxDB v2 Section
+                        Forms\Components\Section::make('InfluxDB v2')
+                            ->description('When enabled, all new Speedtest results will also be sent to InfluxDB.')
                             ->schema([
                                 Forms\Components\Toggle::make('influxdb_v2_enabled')
                                     ->label('Enable')
@@ -133,24 +141,24 @@ class MetricsPage extends SettingsPage
                                             ->label('URL')
                                             ->placeholder('http://your-influxdb-instance')
                                             ->maxLength(255)
-                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
+                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->columnSpan(['md' => 1]),
                                         Forms\Components\TextInput::make('influxdb_v2_org')
                                             ->label('Org')
                                             ->maxLength(255)
-                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
+                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->columnSpan(['md' => 1]),
                                         Forms\Components\TextInput::make('influxdb_v2_bucket')
                                             ->placeholder('speedtest-tracker')
                                             ->label('Bucket')
                                             ->maxLength(255)
-                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
+                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->columnSpan(['md' => 2]),
                                         Forms\Components\TextInput::make('influxdb_v2_token')
                                             ->label('Token')
                                             ->maxLength(255)
                                             ->password()
-                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') == true)
+                                            ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->disableAutocomplete()
                                             ->columnSpan(['md' => 2]),
                                         Forms\Components\Checkbox::make('influxdb_v2_verify_ssl')
@@ -163,7 +171,7 @@ class MetricsPage extends SettingsPage
                                                 ->action('sendAllResultsToInfluxDB')
                                                 ->color('primary')
                                                 ->icon('heroicon-o-cloud-arrow-up')
-                                                ->visible(fn (): bool => app(MetricsSettings::class)->influxdb_v2_enabled),
+                                                ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
                                         ]),
                                         // Button to test InfluxDB connection
                                         Forms\Components\Actions::make([
@@ -172,13 +180,16 @@ class MetricsPage extends SettingsPage
                                                 ->action('testInfluxDB')
                                                 ->color('primary')
                                                 ->icon('heroicon-o-check-circle')
-                                                ->visible(fn (): bool => app(MetricsSettings::class)->influxdb_v2_enabled),
+                                                ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
                                         ]),
                                     ]),
                             ])
-                            ->columnSpanFull(),
+                            ->compact()
+                            ->columns([
+                                'default' => 1,
+                                'md' => 2,
+                            ]),
                     ]),
-            ])
-            ->columns(1); // Sets the entire form to one column layout to use full width
+            ]);
     }
 }

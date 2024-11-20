@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Result;
-use App\Settings\MetricsSettings;
+use App\Settings\DataIntegrationSettings;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Prometheus\CollectorRegistry;
@@ -17,7 +17,7 @@ use Prometheus\Storage\InMemory;
 |
 */
 
-Route::get('/metrics', function (MetricsSettings $settings) {
+Route::get('/metrics', function (DataIntegrationSettings $settings) {
     // Check if metrics are enabled
     if (! $settings->prometheus_enabled) {
         return response('Metrics endpoint is disabled.', 403);

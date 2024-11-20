@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\InfluxDBv2\WriteCompletedSpeedtest; // Ensure to import the job
 use App\Models\Result;
-use App\Settings\MetricsSettings;
+use App\Settings\DataIntegrationSettings;
 use Illuminate\Console\Command;
 
 class TestInfluxDB extends Command
@@ -26,7 +26,7 @@ class TestInfluxDB extends Command
     /**
      * Execute the console command.
      */
-    public function handle(MetricsSettings $settings): void
+    public function handle(DataIntegrationSettings $settings): void
     {
         $influxdb = [
             'enabled' => $settings->influxdb_v2_enabled,

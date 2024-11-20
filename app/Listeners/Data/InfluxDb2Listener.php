@@ -4,7 +4,7 @@ namespace App\Listeners\Data;
 
 use App\Events\SpeedtestCompleted;
 use App\Jobs\InfluxDBv2\WriteCompletedSpeedtest;
-use App\Settings\MetricsSettings; // Update to use MetricsSettings
+use App\Settings\DataIntegrationSettings;
 
 class InfluxDb2Listener
 {
@@ -13,10 +13,10 @@ class InfluxDb2Listener
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $metricsSettings = new MetricsSettings;
+        $DataIntegrationSettings = new DataIntegrationSettings;
 
-        if ($metricsSettings->influxdb_v2_enabled) {
-            WriteCompletedSpeedtest::dispatch($event->result, $metricsSettings);
+        if ($DataIntegrationSettings->influxdb_v2_enabled) {
+            WriteCompletedSpeedtest::dispatch($event->result, $DataIntegrationSettings);
         }
     }
 }
