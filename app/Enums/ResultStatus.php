@@ -18,8 +18,8 @@ enum ResultStatus: string implements HasColor, HasLabel
         return match ($this) {
             self::Completed => 'success',
             self::Failed => 'danger',
-            self::Started => 'warning',
-            self::Skipped => 'info',
+            self::Started => 'info',
+            self::Skipped => 'gray',
         };
     }
 
