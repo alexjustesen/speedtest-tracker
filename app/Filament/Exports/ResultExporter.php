@@ -101,6 +101,10 @@ class ResultExporter extends Exporter
                 ->state(function (Result $record): ?string {
                     return $record->download_latency_iqm;
                 }),
+            ExportColumn::make('result_url')
+                ->state(function (Result $record) {
+                    return $record->result_url;
+                }),
             ExportColumn::make('comments')
                 ->enabledByDefault(false),
             // ExportColumn::make('status'), // TODO: enable status when upgrading to PHP v8.3: https://php.watch/versions/8.3/dynamic-class-const-enum-member-syntax-support
