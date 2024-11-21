@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Actions\Speedtests\RunOoklaSpeedtest;
+use App\Actions\Ookla\StartSpeedtest;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
@@ -17,7 +17,6 @@ use Filament\Actions\ActionGroup;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BasePage;
 use Filament\Support\Enums\IconPosition;
-use Illuminate\Support\Arr;
 
 class Dashboard extends BasePage
 {
@@ -27,11 +26,13 @@ class Dashboard extends BasePage
 
     public function getSubheading(): ?string
     {
-        if (blank(config('speedtest.schedule'))) {
+        $schedule = config('speedtest.schedule');
+
+        if (blank($schedule) || $schedule === false) {
             return __('No speedtests scheduled.');
         }
 
-        $cronExpression = new CronExpression(config('speedtest.schedule'));
+        $cronExpression = new CronExpression($schedule);
 
         $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
 
@@ -51,17 +52,7 @@ class Dashboard extends BasePage
             ActionGroup::make([
                 Action::make('ookla speedtest')
                     ->action(function () {
-                        $servers = array_filter(
-                            explode(',', config('speedtest.servers'))
-                        );
-
-                        $serverId = null;
-
-                        if (count($servers)) {
-                            $serverId = Arr::random($servers);
-                        }
-
-                        RunOoklaSpeedtest::run(serverId: $serverId);
+                        StartSpeedtest::run();
 
                         Notification::make()
                             ->title('Ookla speedtest started')
