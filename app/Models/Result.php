@@ -14,18 +14,6 @@ class Result extends Model
 {
     use HasFactory, Prunable;
 
-    protected $fillable = [
-        'status',
-        'download',
-        'upload',
-        'ping',
-        'data',
-        'threshold_breached_overall',
-        'threshold_breached_download',
-        'threshold_breached_upload',
-        'threshold_breached_ping',
-    ];
-
     /**
      * The attributes that aren't mass assignable.
      *
