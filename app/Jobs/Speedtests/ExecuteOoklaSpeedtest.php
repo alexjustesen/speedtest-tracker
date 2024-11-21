@@ -5,6 +5,7 @@ namespace App\Jobs\Speedtests;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
+use App\Jobs\CheckAndUpdateThresholds;
 use App\Models\Result;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -108,7 +109,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         ]);
 
         // Ensure thresholds are checked and updated
-        $this->result->checkAndUpdateThresholds();
+        CheckAndUpdateThresholds::dispatch($this->result);
 
         SpeedtestCompleted::dispatch($this->result);
     }
