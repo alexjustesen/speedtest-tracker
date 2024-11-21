@@ -37,6 +37,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     public function __construct(
         public Result $result,
         public ?int $serverId = null,
+        public bool $scheduled = false,
     ) {}
 
     /**
@@ -48,17 +49,19 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return;
         }
 
-        $externalIp = GetExternalIpAddress::run();
+        if ($this->scheduled) {
+            $externalIp = GetExternalIpAddress::run();
 
-        $shouldSkip = $this->shouldSkip($externalIp);
+            $shouldSkip = $this->shouldSkip($externalIp);
 
-        if ($shouldSkip !== false) {
-            $this->markAsSkipped(
-                message: $shouldSkip,
-                externalIp: $externalIp,
-            );
+            if ($shouldSkip !== false) {
+                $this->markAsSkipped(
+                    message: $shouldSkip,
+                    externalIp: $externalIp,
+                );
 
-            return;
+                return;
+            }
         }
 
         // Execute Speedtest

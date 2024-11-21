@@ -22,6 +22,6 @@ class RunOoklaSpeedtest
 
         SpeedtestStarted::dispatch($result);
 
-        ExecuteOoklaSpeedtest::dispatch(result: $result, serverId: $serverId);
+        ExecuteOoklaSpeedtest::dispatch(result: $result, serverId: $serverId, scheduled: $scheduled);
     }
 }
