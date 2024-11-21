@@ -52,16 +52,16 @@ class Dashboard extends BasePage
                 ->form([
                     Forms\Components\Select::make('server_id')
                         ->label('Select Server')
+                        ->helperText('Leave blank to run the speedtest without specifying a server.')
                         ->options(fn (callable $get) => app(GetOoklaSpeedtestServers::class)->handle($get('server_search')))
-                        ->searchable()
-                        ->required(),
+                        ->searchable(),
                 ])
                 ->action(function (array $data) {
-                    $serverId = $data['server_id'];
+                    $serverId = $data['server_id'] ?? null;
                     RunOoklaSpeedtest::run(serverId: $serverId);
 
                     Notification::make()
-                        ->title('Ookla speedtest started')
+                        ->title('Speedtest started')
                         ->success()
                         ->send();
                 })
