@@ -18,6 +18,13 @@ class RunSpeedtestJob implements ShouldQueue
     use Batchable, Queueable;
 
     /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 120;
+
+    /**
      * Create a new job instance.
      */
     public function __construct(
