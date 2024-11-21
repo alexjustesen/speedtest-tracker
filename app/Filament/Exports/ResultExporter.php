@@ -101,6 +101,10 @@ class ResultExporter extends Exporter
                 ->state(function (Result $record): ?string {
                     return $record->download_latency_iqm;
                 }),
+            ExportColumn::make('result_url')
+                ->state(function (Result $record) {
+                    return $record->result_url;
+                }),
             ExportColumn::make('comments')
                 ->enabledByDefault(false),
             ExportColumn::make('threshold_breached_overall')

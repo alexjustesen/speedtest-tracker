@@ -2,10 +2,13 @@
 
 namespace App\Jobs\Speedtests;
 
+use App\Actions\Helpers\GetExternalIpAddress;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use App\Jobs\CheckAndUpdateThresholds;
+use App\Events\SpeedtestSkipped;
+use App\Helpers\Network;
 use App\Models\Result;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -14,7 +17,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\URL;
 use JJG\Ping;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -36,6 +38,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     public function __construct(
         public Result $result,
         public ?int $serverId = null,
+        public bool $scheduled = false,
     ) {}
 
     /**
@@ -47,6 +50,22 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return;
         }
 
+        if ($this->scheduled) {
+            $externalIp = GetExternalIpAddress::run();
+
+            $shouldSkip = $this->shouldSkip($externalIp);
+
+            if ($shouldSkip !== false) {
+                $this->markAsSkipped(
+                    message: $shouldSkip,
+                    externalIp: $externalIp,
+                );
+
+                return;
+            }
+        }
+
+        // Execute Speedtest
         $options = array_filter([
             'speedtest',
             '--accept-license',
@@ -115,6 +134,26 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
     }
 
     /**
+     * Mark the test as skipped with a specific message.
+     */
+    protected function markAsSkipped(string $message, string $externalIp): void
+    {
+        $this->result->update([
+            'data' => [
+                'type' => 'log',
+                'level' => 'warning',
+                'message' => $message,
+                'interface' => [
+                    'externalIp' => $externalIp,
+                ],
+            ],
+            'status' => ResultStatus::Skipped,
+        ]);
+
+        SpeedtestSkipped::dispatch($this->result);
+    }
+
+    /**
      * Check for internet connection.
      *
      * @throws \Exception
@@ -124,6 +163,7 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
         $url = config('speedtest.ping_url');
 
         // Skip checking for internet connection if ping url isn't set (disabled)
+
         if (blank($url)) {
             return true;
         }
@@ -143,7 +183,6 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             return false;
         }
 
-        // Remove http:// or https:// from the URL if present
         $url = preg_replace('/^https?:\/\//', '', $url);
 
         $ping = new Ping(
@@ -171,6 +210,8 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
 
     /**
      * Check if the given URL is a valid ping URL.
+     *
+     * TODO: move to Network helper
      */
     public function isValidPingUrl(string $url): bool
     {
@@ -183,5 +224,31 @@ class ExecuteOoklaSpeedtest implements ShouldBeUnique, ShouldQueue
             // to check for things like `google.com`, we need to add the protocol
             || (filter_var('https://'.$url, FILTER_VALIDATE_URL) && $hasTLD($url))
             || filter_var($url, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 || FILTER_FLAG_IPV6) !== false;
+    }
+
+    /**
+     * Check if the speedtest should be skipped based on the skip ips list.
+     */
+    public function shouldSkip(string $externalIp): bool|string
+    {
+        if (blank(config('speedtest.skip_ips'))) {
+            return false;
+        }
+
+        $skipIPs = array_map('trim', explode(',', config('speedtest.skip_ips')));
+
+        foreach ($skipIPs as $ip) {
+            // Check for exact IP match
+            if (filter_var($ip, FILTER_VALIDATE_IP) && $externalIp === $ip) {
+                return sprintf('"%s" was found in public IP address skip list.', $externalIp);
+            }
+
+            // Check for IP range match
+            if (strpos($ip, '/') !== false && Network::ipInRange($externalIp, $ip)) {
+                return sprintf('"%s" was found in public IP address skip list within range "%s".', $externalIp, $ip);
+            }
+        }
+
+        return false;
     }
 }
