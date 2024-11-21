@@ -1,6 +1,6 @@
 <?php
 
-use App\Actions\Speedtests\RunScheduledSpeedtests;
+use App\Actions\CheckForScheduledSpeedtests;
 use Illuminate\Support\Facades\Schedule;
 
 /**
@@ -20,8 +20,9 @@ Schedule::command('app:version')
     ->weeklyOn(5);
 
 /**
- * Action to run scheduled speedtests.
+ * Check for scheduled speedtests.
  */
-Schedule::call(fn () => RunScheduledSpeedtests::run())
-    ->everyMinute()
-    ->when(! blank(config('speedtest.schedule')));
+Schedule::everyMinute()
+    ->group(function () {
+        Schedule::call(fn () => CheckForScheduledSpeedtests::run());
+    });

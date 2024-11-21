@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Helpers;
+namespace App\Actions;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -19,7 +19,7 @@ class GetExternalIpAddress
                 ->get('https://icanhazip.com/');
 
             if ($response->failed()) {
-                $message = sprintf('Failed to fetch public IP address, %d', $response->status());
+                $message = sprintf('Failed to fetch external IP address, %d', $response->status());
 
                 Log::warning($message);
 
