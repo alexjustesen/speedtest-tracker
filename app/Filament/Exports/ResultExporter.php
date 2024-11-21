@@ -42,7 +42,10 @@ class ResultExporter extends Exporter
                     return $record->server_location;
                 })
                 ->enabledByDefault(false),
-            ExportColumn::make('service'),
+            ExportColumn::make('service')
+                ->state(function (Result $record) {
+                    return $record->service->getLabel();
+                }),
             ExportColumn::make('server_id')
                 ->label('Server ID')
                 ->state(function (Result $record): ?string {
@@ -107,7 +110,10 @@ class ResultExporter extends Exporter
                 }),
             ExportColumn::make('comments')
                 ->enabledByDefault(false),
-            // ExportColumn::make('status'), // TODO: enable status when upgrading to PHP v8.3: https://php.watch/versions/8.3/dynamic-class-const-enum-member-syntax-support
+            ExportColumn::make('status')
+                ->state(function (Result $record) {
+                    return $record->status->getLabel();
+                }),
             ExportColumn::make('scheduled')
                 ->state(function (Result $record): string {
                     return $record->scheduled ? 'Yes' : 'No';

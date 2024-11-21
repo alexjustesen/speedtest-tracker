@@ -125,7 +125,7 @@ class ResultResource extends Resource
                     Forms\Components\Section::make()
                         ->schema([
                             Forms\Components\Placeholder::make('service')
-                                ->content(fn (Result $result): string => $result->service),
+                                ->content(fn (Result $result): string => $result->service->getLabel()),
                             Forms\Components\Placeholder::make('server_name')
                                 ->content(fn (Result $result): ?string => $result->server_name),
                             Forms\Components\Placeholder::make('server_id')
