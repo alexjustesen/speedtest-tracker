@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Speedtests\RunOoklaSpeedtest;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
@@ -17,7 +18,6 @@ use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BasePage;
 use Filament\Support\Enums\IconPosition;
-use Illuminate\Support\Facades\Http;
 
 class Dashboard extends BasePage
 {
@@ -52,7 +52,7 @@ class Dashboard extends BasePage
                 ->form([
                     Forms\Components\Select::make('server_id')
                         ->label('Select Server')
-                        ->options(fn (callable $get) => $this->getServerSearchOptions($get('server_search')))
+                        ->options(fn (callable $get) => app(GetOoklaSpeedtestServers::class)->handle($get('server_search')))
                         ->searchable()
                         ->required(),
                 ])
@@ -75,40 +75,6 @@ class Dashboard extends BasePage
                 ->iconPosition(IconPosition::Before)
                 ->hidden(! auth()->user()->is_admin),
         ];
-    }
-
-    protected function getServerSearchOptions(?string $search = ''): array
-    {
-        // Make an API request to fetch the servers
-        $response = Http::get('https://www.speedtest.net/api/js/servers', [
-            'engine' => 'js',
-            'search' => $search ?? '',
-            'https_functional' => true,
-            'limit' => 20,
-        ]);
-
-        // Check if the response failed
-        if ($response->failed()) {
-            return ['' => 'Error retrieving Speedtest servers'];
-        }
-
-        // Get the JSON response
-        $servers = $response->json();
-
-        // Ensure that the response is an array
-        if (! is_array($servers)) {
-            return ['' => 'Invalid response format'];
-        }
-
-        // Map the server options, ensuring each item is valid
-        return collect($servers)->mapWithKeys(function ($item) {
-            if (is_array($item) && isset($item['id'], $item['name'], $item['sponsor'])) {
-                return [$item['id'] => "{$item['sponsor']} ({$item['name']}, {$item['id']})"];
-            }
-
-            return [];
-
-        })->toArray();
     }
 
     protected function getHeaderWidgets(): array
