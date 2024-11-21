@@ -36,6 +36,6 @@ return [
     /**
      * IP filtering settings.
      */
-    'skip_ips' => env('SPEEDTEST_SKIP_IPS', false),
+    'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''),
 
 ];

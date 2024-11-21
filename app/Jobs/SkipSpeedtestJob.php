@@ -38,17 +38,10 @@ class SkipSpeedtestJob implements ShouldQueue
             return;
         }
 
-        $skipIPs = config('speedtest.skip_ips');
-
-        if ($skipIPs === false) {
-            return;
-        }
-
         $externalIp = GetExternalIpAddress::run();
 
         $shouldSkip = $this->shouldSkip(
             externalIp: $externalIp,
-            skipIPs: $skipIPs,
         );
 
         if ($shouldSkip === false) {
@@ -71,11 +64,16 @@ class SkipSpeedtestJob implements ShouldQueue
     /**
      * Check if the test should be skipped.
      */
-    private function shouldSkip(string $externalIp, string $skipIPs): bool|string
+    private function shouldSkip(string $externalIp): bool|string
     {
-        $skipIPs = array_map('trim', explode(',', $skipIPs));
+        $skipIPs = array_filter(
+            array_map(
+                'trim',
+                explode(',', config('speedtest.skip_ips')),
+            ),
+        );
 
-        if (count($skipIPs) == 0) {
+        if (count($skipIPs) < 1) {
             return false;
         }
 
