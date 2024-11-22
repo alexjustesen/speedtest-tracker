@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Actions\GetExternalIpAddress;
 use App\Enums\ResultStatus;
+use App\Events\SpeedtestChecking;
 use App\Events\SpeedtestFailed;
 use App\Models\Result;
 use Illuminate\Bus\Batchable;
@@ -29,6 +30,12 @@ class CheckForInternetConnectionJob implements ShouldQueue
         if ($this->batch()->cancelled()) {
             return;
         }
+
+        $this->result->update([
+            'status' => ResultStatus::Checking,
+        ]);
+
+        SpeedtestChecking::dispatch($this->result);
 
         if (GetExternalIpAddress::run() !== false) {
             return;
