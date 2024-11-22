@@ -72,6 +72,11 @@ class SendSpeedtestThresholdNotification
                 'speedtest_url' => $event->result->result_url,
                 'url' => url('/admin/results'),
             ])->render(),
+            'extras' => [
+                'client::display' => [
+                    'contentType' => 'text/markdown',
+                ],
+            ],
         ];
 
         foreach ($notificationSettings->gotify_webhooks as $url) {

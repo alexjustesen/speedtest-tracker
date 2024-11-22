@@ -4,9 +4,9 @@ use Carbon\Carbon;
 
 return [
 
-    'build_date' => Carbon::parse('2024-11-14'),
+    'build_date' => Carbon::parse('2024-11-20'),
 
-    'build_version' => 'v0.21.6',
+    'build_version' => 'v0.22.0',
 
     /**
      * General settings.
@@ -29,10 +29,13 @@ return [
     /**
      * Speedtest settings.
      */
-    'ping_url' => env('SPEEDTEST_PING_URL'),
-
-    'schedule' => env('SPEEDTEST_SCHEDULE'),
+    'schedule' => env('SPEEDTEST_SCHEDULE', false),
 
     'servers' => env('SPEEDTEST_SERVERS', ''),
+
+    /**
+     * IP filtering settings.
+     */
+    'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''),
 
 ];

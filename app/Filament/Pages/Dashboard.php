@@ -3,7 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Actions\GetOoklaSpeedtestServers;
-use App\Actions\Speedtests\RunOoklaSpeedtest;
+use App\Actions\Ookla\StartSpeedtest;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
@@ -27,11 +27,13 @@ class Dashboard extends BasePage
 
     public function getSubheading(): ?string
     {
-        if (blank(config('speedtest.schedule'))) {
+        $schedule = config('speedtest.schedule');
+
+        if (blank($schedule) || $schedule === false) {
             return __('No speedtests scheduled.');
         }
 
-        $cronExpression = new CronExpression(config('speedtest.schedule'));
+        $cronExpression = new CronExpression($schedule);
 
         $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
 
@@ -58,7 +60,8 @@ class Dashboard extends BasePage
                 ])
                 ->action(function (array $data) {
                     $serverId = $data['server_id'] ?? null;
-                    RunOoklaSpeedtest::run(serverId: $serverId);
+                  
+                    StartSpeedtest::run(serverId: $serverId);
 
                     Notification::make()
                         ->title('Speedtest started')
