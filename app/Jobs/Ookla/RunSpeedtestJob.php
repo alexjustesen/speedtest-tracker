@@ -5,6 +5,7 @@ namespace App\Jobs\Ookla;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
+use App\Events\SpeedtestRunning;
 use App\Helpers\Ookla;
 use App\Models\Result;
 use Illuminate\Bus\Batchable;
@@ -40,6 +41,12 @@ class RunSpeedtestJob implements ShouldQueue
         if ($this->batch()->cancelled()) {
             return;
         }
+
+        $this->result->update([
+            'status' => ResultStatus::Running,
+        ]);
+
+        SpeedtestRunning::dispatch($this->result);
 
         $command = array_filter([
             'speedtest',
