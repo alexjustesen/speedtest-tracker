@@ -5,6 +5,7 @@ namespace App\Jobs\Ookla;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
+use App\Helpers\Ookla;
 use App\Models\Result;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -53,25 +54,10 @@ class RunSpeedtestJob implements ShouldQueue
         try {
             $process->mustRun();
         } catch (ProcessFailedException $exception) {
-            $messages = explode(PHP_EOL, $exception->getMessage());
-
-            // Extract only the "message" part from each JSON error message
-            $errorMessages = array_map(function ($message) {
-                $decoded = json_decode($message, true);
-                if (json_last_error() === JSON_ERROR_NONE && isset($decoded['message'])) {
-                    return $decoded['message'];
-                }
-
-                return ''; // If it's not valid JSON or doesn't contain "message", return an empty string
-            }, $messages);
-
-            // Filter out empty messages and concatenate
-            $errorMessage = implode(' | ', array_filter($errorMessages));
-
             $this->result->update([
                 'data->type' => 'log',
                 'data->level' => 'error',
-                'data->message' => $errorMessage,
+                'data->message' => Ookla::getErrorMessage($exception),
                 'status' => ResultStatus::Failed,
             ]);
 
