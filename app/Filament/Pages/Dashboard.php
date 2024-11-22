@@ -51,11 +51,11 @@ class Dashboard extends BasePage
                 ->hidden(fn (): bool => ! config('speedtest.public_dashboard'))
                 ->url(shouldOpenInNewTab: true, url: '/'),
 
-            Action::make('ookla_speedtest')
+            Action::make('speedtest')
                 ->form([
                     Forms\Components\Select::make('server_id')
                         ->label('Select Server')
-                        ->helperText('Leave blank to run the speedtest without specifying a server.')
+                        ->helperText('Leave empty to run the speedtest without specifying a server.')
                         ->options(fn (): array => GetOoklaSpeedtestServers::run())
                         ->searchable(),
                 ])
@@ -73,8 +73,8 @@ class Dashboard extends BasePage
                         ->send();
                 })
                 ->modalHeading('Run Speedtest')
-                ->modalButton('Run Speedtest')
                 ->modalWidth('lg')
+                ->modalSubmitActionLabel('Start')
                 ->button()
                 ->color('primary')
                 ->label('Run Speedtest')
