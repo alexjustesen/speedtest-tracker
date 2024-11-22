@@ -20,6 +20,15 @@ Schedule::command('app:version')
     ->weeklyOn(5);
 
 /**
+ * Nightly maintenance
+ */
+Schedule::daily()
+    ->group(function () {
+        Schedule::command('queue:prune-batches --hours=48');
+        Schedule::command('queue:prune-failed --hours=48');
+    });
+
+/**
  * Check for scheduled speedtests.
  */
 Schedule::everyMinute()
