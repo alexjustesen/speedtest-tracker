@@ -60,7 +60,7 @@ class Dashboard extends BasePage
                 ])
                 ->action(function (array $data) {
                     $serverId = $data['server_id'] ?? null;
-                    
+
                     StartSpeedtest::run(serverId: $serverId);
 
                     Notification::make()
