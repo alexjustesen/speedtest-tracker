@@ -25,7 +25,7 @@ class ListResults extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Result::query())
+            ->query(Result::query()->whereDate('created_at', '>=', now()->subDays(30)))
             ->poll('5s')
             ->defaultSort('id', 'desc')
             ->columns([
