@@ -50,18 +50,22 @@ class Dashboard extends BasePage
                 ->color('gray')
                 ->hidden(fn (): bool => ! config('speedtest.public_dashboard'))
                 ->url(shouldOpenInNewTab: true, url: '/'),
-            Action::make('ookla_speedtest')
+
+            Action::make('speedtest')
                 ->form([
                     Forms\Components\Select::make('server_id')
                         ->label('Select Server')
-                        ->helperText('Leave blank to run the speedtest without specifying a server.')
-                        ->options(fn (callable $get) => app(GetOoklaSpeedtestServers::class)->handle($get('server_search')))
+                        ->helperText('Leave empty to run the speedtest without specifying a server.')
+                        ->options(fn (): array => GetOoklaSpeedtestServers::run())
                         ->searchable(),
                 ])
                 ->action(function (array $data) {
                     $serverId = $data['server_id'] ?? null;
 
-                    StartSpeedtest::run(serverId: $serverId);
+                    StartSpeedtest::run(
+                        scheduled: false,
+                        serverId: $serverId,
+                    );
 
                     Notification::make()
                         ->title('Speedtest started')
@@ -69,8 +73,8 @@ class Dashboard extends BasePage
                         ->send();
                 })
                 ->modalHeading('Run Speedtest')
-                ->modalButton('Run Speedtest')
                 ->modalWidth('lg')
+                ->modalSubmitActionLabel('Start')
                 ->button()
                 ->color('primary')
                 ->label('Run Speedtest')
