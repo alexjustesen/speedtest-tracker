@@ -13,7 +13,7 @@ class StartSpeedtest
 {
     use AsAction;
 
-    public function handle(bool $scheduled = false, ?int $serverId): void
+    public function handle(bool $scheduled = false, ?int $serverId = null): void
     {
         $result = Result::create([
             'service' => ResultService::Ookla,
@@ -24,7 +24,6 @@ class StartSpeedtest
         if (blank($serverId)) {
             $serverId = SelectSpeedtestServer::run();
         }
-
 
         if (! blank($serverId)) {
             $result->update([
