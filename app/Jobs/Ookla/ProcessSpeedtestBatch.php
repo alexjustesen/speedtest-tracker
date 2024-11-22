@@ -5,9 +5,11 @@ namespace App\Jobs\Ookla;
 use App\Jobs\CheckForInternetConnectionJob;
 use App\Jobs\SkipSpeedtestJob;
 use App\Models\Result;
+use Illuminate\Bus\Batch;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class ProcessSpeedtestBatch implements ShouldQueue
@@ -26,14 +28,14 @@ class ProcessSpeedtestBatch implements ShouldQueue
      */
     public function handle(): void
     {
-        $batch = Bus::batch([
+        Bus::batch([
             [
                 new CheckForInternetConnectionJob($this->result),
                 new SkipSpeedtestJob($this->result),
                 new RunSpeedtestJob($this->result),
             ],
-        ])->catch(function (Throwable $e) {
-            // TODO: A job within the chain failed, do something about it.
-        })->dispatch();
+        ])->catch(function (Batch $batch, ?Throwable $e) {
+            Log::error(sprintf('Speedtest batch "%s" failed for an unknown reason.', $batch->id));
+        })->name('Ookla Speedtest')->dispatch();
     }
 }
