@@ -47,6 +47,28 @@ class Number extends SupportNumber
     }
 
     /**
+     * Calculate percentage between two numbers.
+     */
+    public static function calculatePercentage($value, $total, int $decimals = 2, bool $formatOutput = false)
+    {
+        // Handle division by zero
+        if ($total == 0) {
+            return $formatOutput ? '0%' : 0;
+        }
+
+        // Calculate percentage
+        $percentage = ($value / $total) * 100;
+
+        // Round to specified decimal places
+        $percentage = round($percentage, $decimals);
+
+        // Return formatted or raw value
+        return $formatOutput
+            ? SupportNumber::percentage($percentage)
+            : $percentage;
+    }
+
+    /**
      * Convert the given number to its largest bit rate order of magnitude.
      *
      * Reference: https://en.wikipedia.org/wiki/Bit_rate
