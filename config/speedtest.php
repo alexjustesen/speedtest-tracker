@@ -29,15 +29,13 @@ return [
     /**
      * Speedtest settings.
      */
-    'ping_url' => env('SPEEDTEST_PING_URL'),
-
-    'schedule' => env('SPEEDTEST_SCHEDULE'),
+    'schedule' => env('SPEEDTEST_SCHEDULE', false),
 
     'servers' => env('SPEEDTEST_SERVERS', ''),
 
     /**
      * IP filtering settings.
      */
-    'skip_ips' => env('SPEEDTEST_SKIP_IPS'),
+    'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''),
 
 ];
