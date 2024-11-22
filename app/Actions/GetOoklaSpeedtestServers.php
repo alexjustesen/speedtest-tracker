@@ -34,7 +34,7 @@ class GetOoklaSpeedtestServers
 
         return $response->mapWithKeys(function (array $item, int $key) {
             return [
-                $item['id'] => $item['id'].': '.$item['name'].' ('.$item['sponsor'].')',
+                $item['id'] => $item['sponsor'].' ('.$item['name'].', '.$item['id'].')',
             ];
         })->toArray();
     }

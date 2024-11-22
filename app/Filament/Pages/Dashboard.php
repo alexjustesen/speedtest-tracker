@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Ookla\StartSpeedtest;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
@@ -13,7 +14,7 @@ use App\Filament\Widgets\StatsOverviewWidget;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
+use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BasePage;
 use Filament\Support\Enums\IconPosition;
@@ -49,20 +50,29 @@ class Dashboard extends BasePage
                 ->color('gray')
                 ->hidden(fn (): bool => ! config('speedtest.public_dashboard'))
                 ->url(shouldOpenInNewTab: true, url: '/'),
-            ActionGroup::make([
-                Action::make('ookla speedtest')
-                    ->action(function () {
-                        StartSpeedtest::run();
+            Action::make('ookla_speedtest')
+                ->form([
+                    Forms\Components\Select::make('server_id')
+                        ->label('Select Server')
+                        ->helperText('Leave blank to run the speedtest without specifying a server.')
+                        ->options(fn (callable $get) => app(GetOoklaSpeedtestServers::class)->handle($get('server_search')))
+                        ->searchable(),
+                ])
+                ->action(function (array $data) {
+                    $serverId = $data['server_id'] ?? null;
 
-                        Notification::make()
-                            ->title('Ookla speedtest started')
-                            ->success()
-                            ->send();
-                    }),
-            ])
+                    StartSpeedtest::run(serverId: $serverId);
+
+                    Notification::make()
+                        ->title('Speedtest started')
+                        ->success()
+                        ->send();
+                })
+                ->modalHeading('Run Speedtest')
+                ->modalButton('Run Speedtest')
+                ->modalWidth('lg')
                 ->button()
                 ->color('primary')
-                ->dropdownPlacement('bottom-end')
                 ->label('Run Speedtest')
                 ->icon('heroicon-o-rocket-launch')
                 ->iconPosition(IconPosition::Before)
