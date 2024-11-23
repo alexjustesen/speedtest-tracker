@@ -346,7 +346,6 @@ class ResultResource extends Resource
                             ->toArray();
                     })
                     ->attribute('data->interface->externalIp'),
-
                 Tables\Filters\TernaryFilter::make('scheduled')
                     ->placeholder('-')
                     ->trueLabel('Only scheduled speedtests')
@@ -356,7 +355,6 @@ class ResultResource extends Resource
                         false: fn (Builder $query) => $query->where('scheduled', false),
                         blank: fn (Builder $query) => $query,
                     ),
-
                 Tables\Filters\SelectFilter::make('status')
                     ->multiple()
                     ->options(ResultStatus::class),
