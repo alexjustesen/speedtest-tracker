@@ -45,9 +45,6 @@ class TestInfluxDB extends Command
 
             // Output a success message
             $this->info('Test result created and job dispatched to InfluxDB.');
-        } else {
-            // Output a message if InfluxDB is not enabled
-            $this->warn('InfluxDB is not enabled in the settings.');
         }
     }
 }
