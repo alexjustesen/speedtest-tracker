@@ -25,6 +25,10 @@ class CompleteSpeedtestJob implements ShouldQueue
      */
     public function handle(): void
     {
+        if ($this->batch()->cancelled()) {
+            return;
+        }
+
         $this->result->update([
             'status' => ResultStatus::Completed,
         ]);
