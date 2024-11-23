@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Ookla;
 
-use App\Actions\Ookla\EvaluateResultBenchmarks;
+use App\Actions\Ookla\EvaluateResultHealth;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestBenchmarking;
 use App\Models\Result;
@@ -52,7 +52,7 @@ class BenchmarkSpeedtestJob implements ShouldQueue
 
         $this->result->update([
             'benchmarks' => $benchmarks,
-            'healthy' => EvaluateResultBenchmarks::run($this->result, $benchmarks),
+            'healthy' => EvaluateResultHealth::run($this->result, $benchmarks),
         ]);
     }
 
