@@ -306,6 +306,10 @@ class ResultResource extends Resource
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 2, '.', '').' %';
                     }),
+                Tables\Columns\IconColumn::make('healthy')
+                    ->alignCenter()
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->toggleable()
@@ -330,6 +334,9 @@ class ResultResource extends Resource
                     ->alignment(Alignment::End),
             ])
             ->filters([
+                Tables\Filters\TernaryFilter::make('healthy')
+                    ->nullable(),
+
                 Tables\Filters\SelectFilter::make('ip_address')
                     ->label('IP address')
                     ->multiple()
@@ -346,6 +353,7 @@ class ResultResource extends Resource
                             ->toArray();
                     })
                     ->attribute('data->interface->externalIp'),
+
                 Tables\Filters\TernaryFilter::make('scheduled')
                     ->placeholder('-')
                     ->trueLabel('Only scheduled speedtests')
@@ -355,6 +363,7 @@ class ResultResource extends Resource
                         false: fn (Builder $query) => $query->where('scheduled', false),
                         blank: fn (Builder $query) => $query,
                     ),
+
                 Tables\Filters\SelectFilter::make('status')
                     ->multiple()
                     ->options(ResultStatus::class),

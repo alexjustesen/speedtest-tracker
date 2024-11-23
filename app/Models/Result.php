@@ -32,6 +32,7 @@ class Result extends Model
         return [
             'benchmarks' => 'array',
             'data' => 'array',
+            'healthy' => 'boolean',
             'service' => ResultService::class,
             'status' => ResultStatus::class,
             'scheduled' => 'boolean',
