@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ResultService;
 use App\Enums\ResultStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -29,7 +30,10 @@ class Result extends Model
     protected function casts(): array
     {
         return [
+            'benchmarks' => 'array',
             'data' => 'array',
+            'healthy' => 'boolean',
+            'service' => ResultService::class,
             'status' => ResultStatus::class,
             'scheduled' => 'boolean',
         ];
