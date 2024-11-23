@@ -140,6 +140,7 @@ class ResultResource extends Resource
                             Forms\Components\Placeholder::make('server_host')
                                 ->content(fn (Result $result): ?string => $result->server_host),
                             Forms\Components\Checkbox::make('scheduled'),
+                            Forms\Components\Checkbox::make('healthy'),
                         ])
                         ->columns(1)
                         ->columnSpan([
@@ -311,6 +312,11 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->alignment(Alignment::Center),
+                Tables\Columns\IconColumn::make('healthy')
                     ->boolean()
                     ->toggleable()
                     ->toggledHiddenByDefault()

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\Bitrate;
 use App\Models\Result;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,13 +32,13 @@ class CheckAndUpdateBenchmarkResult implements ShouldQueue
         // Retrieve benchmarks from the result
         $benchmarks = $this->result->benchmarks;
 
-        // Convert bits to Mbps for download and upload
+        // Convert bits to Mbps for download and upload using Bitrate helper
         $downloadInMbps = $this->result->download_bits !== null
-            ? $this->convertBitsToMbps($this->result->download_bits)
+            ? Bitrate::normalizeToBits($this->result->download_bits) / (1000 * 1000) // Convert to Mbps
             : null;
 
         $uploadInMbps = $this->result->upload_bits !== null
-            ? $this->convertBitsToMbps($this->result->upload_bits)
+            ? Bitrate::normalizeToBits($this->result->upload_bits) / (1000 * 1000) // Convert to Mbps
             : null;
 
         // Check and add results to benchmarks only if the benchmarks exist
@@ -98,13 +99,5 @@ class CheckAndUpdateBenchmarkResult implements ShouldQueue
         }
 
         return false; // Unknown benchmark type
-    }
-
-    /**
-     * Convert bits to Mbps.
-     */
-    private function convertBitsToMbps(int $bits): float
-    {
-        return $bits / (1000 * 1000); // Convert to Mbps
     }
 }
