@@ -364,6 +364,10 @@ class ResultResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->multiple()
                     ->options(ResultStatus::class),
+                Tables\Filters\TernaryFilter::make('healthy')
+                    ->placeholder('-')
+                    ->trueLabel('Only healthy speedtests')
+                    ->falseLabel('Only unhealthy speedtests'),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
