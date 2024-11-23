@@ -18,7 +18,7 @@ class EvaluateResultHealth
 
     public function handle(Result $result, array $benchmarks): bool
     {
-        if (Arr::get($benchmarks, 'download', false) && ! Benchmark::bitrate($result->download, $benchmarks['download']) ) {
+        if (Arr::get($benchmarks, 'download', false) && ! Benchmark::bitrate($result->download, $benchmarks['download'])) {
             $this->healthy = false;
         }
 
