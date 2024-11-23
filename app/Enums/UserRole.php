@@ -4,6 +4,7 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
+use Illuminate\Support\Str;
 
 enum UserRole: string implements HasColor, HasLabel
 {
@@ -20,9 +21,6 @@ enum UserRole: string implements HasColor, HasLabel
 
     public function getLabel(): ?string
     {
-        return match ($this) {
-            self::Admin => 'Admin',
-            self::User => 'User',
-        };
+        return Str::title($this->name);
     }
 }
