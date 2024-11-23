@@ -52,7 +52,7 @@ class SkipSpeedtestJob implements ShouldQueue
             'data->type' => 'log',
             'data->level' => 'error',
             'data->message' => $shouldSkip,
-            'interface->externalIp' => $externalIp,
+            'data->interface->externalIp' => $externalIp,
             'status' => ResultStatus::Skipped,
         ]);
 
