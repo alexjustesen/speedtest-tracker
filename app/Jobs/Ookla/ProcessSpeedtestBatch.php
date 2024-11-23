@@ -33,6 +33,8 @@ class ProcessSpeedtestBatch implements ShouldQueue
                 new CheckForInternetConnectionJob($this->result),
                 new SkipSpeedtestJob($this->result),
                 new RunSpeedtestJob($this->result),
+                new BenchmarkSpeedtestJob($this->result),
+                new CompleteSpeedtestJob($this->result),
             ],
         ])->catch(function (Batch $batch, ?Throwable $e) {
             Log::error(sprintf('Speedtest batch "%s" failed for an unknown reason.', $batch->id));

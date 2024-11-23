@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 
 enum ResultStatus: string implements HasColor, HasLabel
 {
+    case Benchmarking = 'benchmarking';
     case Checking = 'checking';
     case Completed = 'completed';
     case Failed = 'failed';
@@ -18,6 +19,7 @@ enum ResultStatus: string implements HasColor, HasLabel
     public function getColor(): ?string
     {
         return match ($this) {
+            self::Benchmarking => 'info',
             self::Checking => 'info',
             self::Completed => 'success',
             self::Failed => 'danger',
