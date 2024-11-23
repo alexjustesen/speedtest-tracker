@@ -30,6 +30,7 @@ class Result extends Model
     protected function casts(): array
     {
         return [
+            'benchmarks' => 'array',
             'data' => 'array',
             'service' => ResultService::class,
             'status' => ResultStatus::class,

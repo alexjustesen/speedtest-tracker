@@ -3,7 +3,6 @@
 namespace App\Jobs\Ookla;
 
 use App\Enums\ResultStatus;
-use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use App\Events\SpeedtestRunning;
 use App\Helpers\Ookla;
@@ -68,6 +67,8 @@ class RunSpeedtestJob implements ShouldQueue
                 'status' => ResultStatus::Failed,
             ]);
 
+            $this->batch()->cancel();
+
             SpeedtestFailed::dispatch($this->result);
 
             return;
@@ -80,9 +81,6 @@ class RunSpeedtestJob implements ShouldQueue
             'download' => Arr::get($output, 'download.bandwidth'),
             'upload' => Arr::get($output, 'upload.bandwidth'),
             'data' => $output,
-            'status' => ResultStatus::Completed,
         ]);
-
-        SpeedtestCompleted::dispatch($this->result);
     }
 }
