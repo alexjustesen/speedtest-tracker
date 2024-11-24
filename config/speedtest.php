@@ -31,7 +31,7 @@ return [
      */
     'schedule' => env('SPEEDTEST_SCHEDULE', false),
 
-    'servers' => env('SPEEDTEST_SERVERS', ''),
+    'servers' => env('SPEEDTEST_SERVERS'),
 
     /**
      * IP filtering settings.
