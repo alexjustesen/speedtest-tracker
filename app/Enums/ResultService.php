@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 enum ResultService: string implements HasLabel
 {
     case Ookla = 'ookla';
+    case faker = 'faker';
 
     public function getLabel(): ?string
     {

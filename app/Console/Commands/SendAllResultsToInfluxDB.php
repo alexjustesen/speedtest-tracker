@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\InfluxDBv2\WriteCompletedSpeedtest;
+use App\Jobs\InfluxDBv2\WriteSpeedtestResult;
 use App\Models\Result;
 use App\Settings\DataIntegrationSettings;
+use Filament\Notifications\Notification;
 use Illuminate\Console\Command;
 
 class SendAllResultsToInfluxDB extends Command
@@ -28,12 +29,6 @@ class SendAllResultsToInfluxDB extends Command
      */
     public function handle(DataIntegrationSettings $settings): void
     {
-        // Check if InfluxDB is enabled
-        if (! $settings->influxdb_v2_enabled) {
-            $this->error('InfluxDB is not enabled in the settings.');
-
-            return;
-        }
 
         // Get the count of all Result records
         $totalResults = Result::count();
@@ -46,15 +41,21 @@ class SendAllResultsToInfluxDB extends Command
 
         $this->info("Found {$totalResults} results to be sent to InfluxDB.");
 
-        // Iterate through all results in chunks of 100 to avoid memory issues
-        Result::chunk(100, function ($results) use ($settings) {
-            foreach ($results as $result) {
-                // Dispatch the InfluxDB job for each result
-                WriteCompletedSpeedtest::dispatch($result, $settings);
-                $this->info("Dispatched result ID {$result->id} to InfluxDB.");
-            }
-        });
+        // Fetch all results
+        $results = Result::all();
+
+        // Iterate through all results and dispatch the InfluxDB job for each
+        foreach ($results as $result) {
+            WriteSpeedtestResult::dispatch($result);
+            $this->info("Dispatched result ID {$result->id} to InfluxDB.");
+        }
 
         $this->info('Finished sending all results to InfluxDB.');
+
+        Notification::make()
+            ->title('Success')
+            ->body('All old results have been dispatched to InfluxDB successfully!')
+            ->success()
+            ->send();
     }
 }

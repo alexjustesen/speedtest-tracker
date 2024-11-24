@@ -3,6 +3,7 @@
 namespace App\Jobs\Ookla;
 
 use App\Jobs\CheckForInternetConnectionJob;
+use App\Jobs\InfluxDBv2\WriteSpeedtestResult;
 use App\Jobs\SkipSpeedtestJob;
 use App\Models\Result;
 use Illuminate\Bus\Batch;
@@ -35,6 +36,7 @@ class ProcessSpeedtestBatch implements ShouldQueue
                 new RunSpeedtestJob($this->result),
                 new BenchmarkSpeedtestJob($this->result),
                 new CompleteSpeedtestJob($this->result),
+                new WriteSpeedtestResult($this->result),
             ],
         ])->catch(function (Batch $batch, ?Throwable $e) {
             Log::error(sprintf('Speedtest batch "%s" failed for an unknown reason.', $batch->id));

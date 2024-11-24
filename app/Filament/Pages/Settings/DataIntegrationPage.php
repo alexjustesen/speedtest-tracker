@@ -2,12 +2,9 @@
 
 namespace App\Filament\Pages\Settings;
 
-use App\Jobs\InfluxDBv2\WriteCompletedSpeedtest;
-use App\Models\Result;
 use App\Settings\DataIntegrationSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Artisan;
 
@@ -40,30 +37,9 @@ class DataIntegrationPage extends SettingsPage
      */
     public function sendAllResultsToInfluxDB(): void
     {
-        $DataIntegrationSettings = app(DataIntegrationSettings::class);
+        // Execute the TestInfluxDB command
+        Artisan::call('app:send-all-results-to-influxdb');
 
-        if (! $DataIntegrationSettings->influxdb_v2_enabled) {
-            Notification::make()
-                ->title('Error')
-                ->body('InfluxDB is not enabled. Please enable InfluxDB in settings first.')
-                ->danger()
-                ->send();
-
-            return;
-        }
-
-        // Fetch all results that need to be sent to InfluxDB
-        $results = Result::where('status', 'completed')->get();
-
-        foreach ($results as $result) {
-            WriteCompletedSpeedtest::dispatch($result, $DataIntegrationSettings);
-        }
-
-        Notification::make()
-            ->title('Success')
-            ->body('All old results have been dispatched to InfluxDB successfully!')
-            ->success()
-            ->send();
     }
 
     /**
@@ -71,26 +47,8 @@ class DataIntegrationPage extends SettingsPage
      */
     public function testInfluxDB(): void
     {
-        $DataIntegrationSettings = app(DataIntegrationSettings::class);
-
-        if (! $DataIntegrationSettings->influxdb_v2_enabled) {
-            Notification::make()
-                ->title('Error')
-                ->body('InfluxDB is not enabled. Please enable InfluxDB in settings first.')
-                ->danger()
-                ->send();
-
-            return;
-        }
-
-        // Execute the TestInfluxDB command
         Artisan::call('app:test-influxdb');
 
-        Notification::make()
-            ->title('Success')
-            ->body('A test log has been sent to InfluxDB, Check in InfluxDB if the data is received!')
-            ->success()
-            ->send();
     }
 
     public function form(Form $form): Form
@@ -141,8 +99,8 @@ class DataIntegrationPage extends SettingsPage
                                             ->columnSpanFull(),
                                         // Button to send old data to InfluxDB
                                         Forms\Components\Actions::make([
-                                            Forms\Components\Actions\Action::make('Send All Previous Results to Influxdb')
-                                                ->label('Send All Previous Results to Influxdb')
+                                            Forms\Components\Actions\Action::make('Export current results')
+                                                ->label('Export current results')
                                                 ->action('sendAllResultsToInfluxDB')
                                                 ->color('primary')
                                                 ->icon('heroicon-o-cloud-arrow-up')
@@ -150,8 +108,8 @@ class DataIntegrationPage extends SettingsPage
                                         ]),
                                         // Button to test InfluxDB connection
                                         Forms\Components\Actions::make([
-                                            Forms\Components\Actions\Action::make('Test InfluxDB Connection')
-                                                ->label('Test InfluxDB Connection')
+                                            Forms\Components\Actions\Action::make('Test InfluxDB connection')
+                                                ->label('Test InfluxDB connection')
                                                 ->action('testInfluxDB')
                                                 ->color('primary')
                                                 ->icon('heroicon-o-check-circle')

@@ -2,9 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\InfluxDBv2\WriteCompletedSpeedtest; // Ensure to import the job
+use App\Jobs\InfluxDBv2\WriteSpeedtestResult;
 use App\Models\Result;
 use App\Settings\DataIntegrationSettings;
+use Filament\Notifications\Notification;
 use Illuminate\Console\Command;
 
 class TestInfluxDB extends Command
@@ -41,10 +42,17 @@ class TestInfluxDB extends Command
             $result = Result::factory()->create();
 
             // Dispatch the job to write the result to InfluxDB
-            dispatch(new WriteCompletedSpeedtest($result, $settings));
+            dispatch(new WriteSpeedtestResult($result, $settings));
 
             // Output a success message
             $this->info('Test result created and job dispatched to InfluxDB.');
+
         }
+
+        Notification::make()
+            ->title('Success')
+            ->body('A test log has been sent to InfluxDB, Check in InfluxDB if the data is received!')
+            ->success()
+            ->send();
     }
 }

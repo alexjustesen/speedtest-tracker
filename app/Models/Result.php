@@ -48,6 +48,9 @@ class Result extends Model
             'server_id' => (int) $this->server_id,
             'server_host' => $this->server_host,
             'server_name' => $this->server_name,
+            'status' => $this->status->value,
+            'scheduled' => (bool) $this->scheduled,
+            'health' => (bool) $this->healthy,
             'isp' => $this->isp,
             'app_name' => config('app.name'),
         ];
@@ -74,13 +77,6 @@ class Result extends Model
             'upload_latency_avg' => (float) $this->upload_latency_iqm,
             'upload_latency_low' => (float) $this->upload_latency_low,
             'upload_latency_high' => (float) $this->upload_latency_high,
-            'server_id' => $this->server_id ?? null,
-            'isp' => $this->isp ?? null,
-            'server_host' => $this->server_host ?? null,
-            'server_name' => $this->server_name ?? null,
-            'server_location' => $this->server_location ?? null,
-            'scheduled' => (bool) $this->scheduled,
-            'successful' => $this->status === ResultStatus::Completed,
             'packet_loss' => (float) $this->packet_loss,
         ];
     }
