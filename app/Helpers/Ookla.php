@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Actions\GetOoklaSpeedtestServers;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class Ookla
@@ -29,27 +30,54 @@ class Ookla
         return $errorMessage;
     }
 
+    /**
+     * Fetches and returns the server list from the GetOoklaSpeedtestServers action.
+     */
+    public static function GetOoklaSpeedtestServers(): array
+    {
+        // Call the action to get the servers
+        return (new GetOoklaSpeedtestServers)->handle();
+    }
+
+    /**
+     * Maps the server IDs from the configuration to their names using the GetOoklaSpeedtestServers action.
+     */
     public static function getConfigServers(): ?array
     {
         $list = [];
 
+        // Check if servers are configured
         if (blank(config('speedtest.servers'))) {
             return null;
         }
 
-        $servers = collect(array_map(
+        // Fetch the server list using the GetOoklaSpeedtestServers method
+        $servers = self::GetOoklaSpeedtestServers();
+
+        // If no servers are returned, return null
+        if (empty($servers)) {
+            return null;
+        }
+
+        // Get the configured server IDs
+        $configuredServers = collect(array_map(
             'trim',
             explode(',', config('speedtest.servers'))
         ));
 
-        if (! count($servers)) {
-            return null;
+        // Loop through each configured server ID and match it with the fetched server list
+        foreach ($configuredServers as $serverId) {
+            // Check if the server exists in the list
+            if (isset($servers[$serverId])) {
+                // If the server exists, use the formatted sponsor, name, and id
+                $list[$serverId] = $servers[$serverId];
+            } else {
+                // If the server isn't found, show the server ID with a "not available" message
+                $list[$serverId] = $serverId.' (Name not available)';
+            }
         }
 
-        $list = $servers->mapWithKeys(function ($serverId) {
-            return [$serverId => $serverId.' (Config server)'];
-        })->sort()->toArray();
-
-        return $list;
+        // Sort the server list alphabetically by formatted name
+        return $list ? collect($list)->sort()->toArray() : null;
     }
 }
