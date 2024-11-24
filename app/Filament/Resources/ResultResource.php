@@ -353,7 +353,7 @@ class ResultResource extends Resource
                     })
                     ->attribute('data->interface->externalIp'),
                 Tables\Filters\TernaryFilter::make('scheduled')
-                    ->placeholder('-')
+                    ->nullable()
                     ->trueLabel('Only scheduled speedtests')
                     ->falseLabel('Only manual speedtests')
                     ->queries(
