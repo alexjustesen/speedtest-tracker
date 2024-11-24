@@ -365,7 +365,7 @@ class ResultResource extends Resource
                     ->multiple()
                     ->options(ResultStatus::class),
                 Tables\Filters\TernaryFilter::make('healthy')
-                    ->placeholder('-')
+                    ->nullable()
                     ->trueLabel('Only healthy speedtests')
                     ->falseLabel('Only unhealthy speedtests'),
             ])
