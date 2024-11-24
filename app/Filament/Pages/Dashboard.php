@@ -11,6 +11,7 @@ use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
+use App\Helpers\Ookla;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Actions\Action;
@@ -57,6 +58,12 @@ class Dashboard extends BasePage
                         ->label('Select Server')
                         ->helperText('Leave empty to run the speedtest without specifying a server.')
                         ->options(fn (): array => GetOoklaSpeedtestServers::run())
+                        ->options(function (): array {
+                            return array_filter([
+                                'Manual servers' => Ookla::getConfigServers(),
+                                'Closest servers' => GetOoklaSpeedtestServers::run(),
+                            ]);
+                        })
                         ->searchable(),
                 ])
                 ->action(function (array $data) {
