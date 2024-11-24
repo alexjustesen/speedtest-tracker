@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Helpers\Bitrate;
+use App\Helpers\Benchmark;
 use App\Models\Result;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,79 +25,45 @@ class CheckAndUpdateBenchmarkResult implements ShouldQueue
      */
     public function handle(): void
     {
+        // If the batch is cancelled, do nothing
         if ($this->batch()->cancelled()) {
             return;
         }
 
-        // Retrieve benchmarks from the result
+        // Retrieve the benchmarks from the result
         $benchmarks = $this->result->benchmarks;
 
-        // Convert bits to Mbps for download and upload using Bitrate helper
-        $downloadInMbps = $this->result->download_bits !== null
-            ? Bitrate::normalizeToBits($this->result->download_bits) / (1000 * 1000) // Convert to Mbps
-            : null;
+        // Process the benchmarks (assuming you have download, upload, ping types)
+        $types = ['download', 'upload', 'ping'];
 
-        $uploadInMbps = $this->result->upload_bits !== null
-            ? Bitrate::normalizeToBits($this->result->upload_bits) / (1000 * 1000) // Convert to Mbps
-            : null;
+        foreach ($types as $type) {
+            $value = $this->result->{$type};
 
-        // Check and add results to benchmarks only if the benchmarks exist
-        $downloadBenchmark = Arr::get($benchmarks, 'download');
-        $uploadBenchmark = Arr::get($benchmarks, 'upload');
-        $pingBenchmark = Arr::get($benchmarks, 'ping');
+            // Retrieve the benchmark settings for the given type
+            $benchmark = Arr::get($benchmarks, $type);
 
-        // Proceed only if the benchmark exists
-        if ($downloadBenchmark) {
-            $benchmarks = $this->addBenchmarkResult($benchmarks, 'download', $downloadInMbps);
+            // Only check the benchmark if the value and benchmark are valid
+            if ($benchmark && $value !== null) {
+                if ($type === 'ping') {
+                    // Use the ping method for the ping benchmark
+                    $passed = Benchmark::ping($value, $benchmark);
+                } else {
+                    // Use the bitrate method for download/upload benchmarks
+                    $passed = Benchmark::bitrate($value, $benchmark);
+                }
+
+                // Invert the result logic here:
+                $passedStatus = ! $passed ? 'true' : 'false';
+
+                // If the result has changed, update the passed status
+                if (Arr::get($benchmarks, "$type.passed") !== $passedStatus) {
+                    $benchmarks[$type]['passed'] = $passedStatus;
+                }
+            }
         }
 
-        if ($uploadBenchmark) {
-            $benchmarks = $this->addBenchmarkResult($benchmarks, 'upload', $uploadInMbps);
-        }
-
-        if ($pingBenchmark) {
-            $benchmarks = $this->addBenchmarkResult($benchmarks, 'ping', $this->result->ping);
-        }
-
-        // Only update the result if there were any changes to the benchmarks
-        if ($this->result->benchmarks !== $benchmarks) {
-            $this->result->update([
-                'benchmarks' => $benchmarks,
-            ]);
-        }
-    }
-
-    /**
-     * Add the result of a benchmark check to the benchmarks array.
-     */
-    private function addBenchmarkResult(array $benchmarks, string $type, $value): array
-    {
-        $benchmark = Arr::get($benchmarks, $type); // Use Arr::get() to retrieve the benchmark
-
-        $passed = $this->checkBenchmark($value, $benchmark) ? 'false' : 'true';
-        $benchmarks[$type]['passed'] = $passed;
-
-        return $benchmarks;
-    }
-
-    /**
-     * Check if a metric breaches its benchmark.
-     */
-    private function checkBenchmark(?float $value, ?array $benchmark): bool
-    {
-        if ($value === null || $benchmark === null) {
-            return false; // No value or benchmark to compare
-        }
-
-        $bar = $benchmark['bar'] ?? null;
-        $threshold = $benchmark['value'] ?? null;
-
-        if ($bar === 'min') {
-            return $value < $threshold;
-        } elseif ($bar === 'max') {
-            return $value > $threshold;
-        }
-
-        return false; // Unknown benchmark type
+        // After processing, update the result with the modified benchmarks
+        $this->result->benchmarks = $benchmarks;
+        $this->result->save();
     }
 }
