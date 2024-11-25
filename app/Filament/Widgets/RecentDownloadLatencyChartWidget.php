@@ -51,7 +51,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Average (ms)',
-                    'data' => $results->map(fn ($item) => $item->download_latency_iqm ? number_format($item->download_latency_iqm, 2) : null),
+                    'data' => $results->map(fn ($item) => $item->download_latency_iqm),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
                     'pointBackgroundColor' => 'rgba(16, 185, 129)',
@@ -60,7 +60,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                 ],
                 [
                     'label' => 'High (ms)',
-                    'data' => $results->map(fn ($item) => $item->download_latency_high ? number_format($item->download_latency_high, 2) : null),
+                    'data' => $results->map(fn ($item) => $item->download_latency_high),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
                     'pointBackgroundColor' => 'rgba(14, 165, 233)',
@@ -69,7 +69,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                 ],
                 [
                     'label' => 'Low (ms)',
-                    'data' => $results->map(fn ($item) => $item->download_latency_low ? number_format($item->download_latency_low, 2) : null),
+                    'data' => $results->map(fn ($item) => $item->download_latency_low),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
                     'pointBackgroundColor' => 'rgba(139, 92, 246)',
