@@ -46,7 +46,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         $servers = config('speedtest.servers');
 
         if (blank($servers)) {
-            return;
+            return null;
         }
 
         $servers = array_filter(
