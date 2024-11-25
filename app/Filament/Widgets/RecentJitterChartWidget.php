@@ -55,7 +55,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                     'pointBackgroundColor' => '#0ea5e9',
-                    'fill' => false,
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                 ],
@@ -65,7 +65,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                     'pointBackgroundColor' => '#8b5cf6',
-                    'fill' => false,
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                 ],
@@ -75,7 +75,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'pointBackgroundColor' => '#10b981',
-                    'fill' => false,
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                 ],
@@ -89,7 +89,7 @@ class RecentJitterChartWidget extends ChartWidget
         return [
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],
             ],
         ];

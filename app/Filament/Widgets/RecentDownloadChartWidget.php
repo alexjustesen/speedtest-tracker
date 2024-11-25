@@ -56,7 +56,7 @@ class RecentDownloadChartWidget extends ChartWidget
                     'borderColor' => '#0ea5e9',
                     'backgroundColor' => '#0ea5e9',
                     'pointBackgroundColor' => '#0ea5e9',
-                    'fill' => false,
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                 ],
@@ -75,7 +75,7 @@ class RecentDownloadChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],
             ],
         ];

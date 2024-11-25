@@ -14,4 +14,6 @@ return [
 
     'force_https' => env('FORCE_HTTPS', false),
 
+    'chart_begin_at_zero' => env('CHART_BEGIN_AT_ZERO', true),
+
 ];

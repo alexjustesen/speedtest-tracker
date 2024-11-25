@@ -56,7 +56,7 @@ class RecentUploadChartWidget extends ChartWidget
                     'borderColor' => '#8b5cf6',
                     'backgroundColor' => '#8b5cf6',
                     'pointBackgroundColor' => '#8b5cf6',
-                    'fill' => false,
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                 ],
@@ -70,12 +70,12 @@ class RecentUploadChartWidget extends ChartWidget
         return [
             'plugins' => [
                 'legend' => [
-                    'display' => false,
+                    'display' => true,
                 ],
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],
             ],
         ];

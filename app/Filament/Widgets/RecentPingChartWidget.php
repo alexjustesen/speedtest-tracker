@@ -55,7 +55,7 @@ class RecentPingChartWidget extends ChartWidget
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'pointBackgroundColor' => '#10b981',
-                    'fill' => false,
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                 ],
@@ -69,12 +69,12 @@ class RecentPingChartWidget extends ChartWidget
         return [
             'plugins' => [
                 'legend' => [
-                    'display' => false,
+                    'display' => true,
                 ],
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],
             ],
         ];
