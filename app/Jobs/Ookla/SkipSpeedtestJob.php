@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Ookla;
 
 use App\Actions\GetExternalIpAddress;
 use App\Enums\ResultStatus;
