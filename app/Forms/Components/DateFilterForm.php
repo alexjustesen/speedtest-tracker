@@ -4,7 +4,6 @@ namespace App\Forms\Components;
 
 use Filament\Forms;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 
 class DateFilterForm
@@ -22,52 +21,22 @@ class DateFilterForm
             ->schema([
                 Forms\Components\Section::make()
                     ->schema([
-                        Select::make('predefinedRange')
-                            ->label('Time Range')
-                            ->options([
-                                '24_hours' => 'Last 24 Hours',
-                                '1_week' => 'Last 1 Week',
-                                '1_month' => 'Last 1 Month',
-                                'custom' => 'Custom Range',
-                            ])
-                            ->reactive()
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                switch ($state) {
-                                    case '24_hours':
-                                        $set('startDate', now()->subDay()->toDateTimeString());
-                                        $set('endDate', now()->toDateTimeString());
-                                        break;
-                                    case '1_week':
-                                        $set('startDate', now()->subWeek()->toDateTimeString());
-                                        $set('endDate', now()->toDateTimeString());
-                                        break;
-                                    case '1_month':
-                                        $set('startDate', now()->subMonth()->toDateTimeString());
-                                        $set('endDate', now()->toDateTimeString());
-                                        break;
-                                    case 'custom':
-                                        break;
-                                }
-                            })
-                            ->default('custom'),
-
                         DateTimePicker::make('startDate')
                             ->label('Start Date')
-                            ->default($defaultStartDate->startOfDay()) // This preserves the time if needed
+                            ->default($defaultStartDate->startOfDay())
                             ->reactive()
-                            ->native(false)
-                            ->hidden(fn ($get) => $get('predefinedRange') !== 'custom'),
-
+                            ->seconds(false)
+                            ->native(false),
                         DateTimePicker::make('endDate')
                             ->label('End Date')
-                            ->default($defaultEndDate->endOfDay()) // Preserving the full date-time
+                            ->default($defaultEndDate->endOfDay())
                             ->reactive()
-                            ->native(false)
-                            ->hidden(fn ($get) => $get('predefinedRange') !== 'custom'),
+                            ->seconds(false)
+                            ->native(false),
                     ])
                     ->columns([
                         'default' => 1,
-                        'sm' => 3,
+                        'sm' => 2,
                     ]),
             ]);
     }
