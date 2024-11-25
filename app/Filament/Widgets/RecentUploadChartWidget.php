@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
+use App\Helpers\Average;
 use App\Helpers\Number;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
@@ -52,13 +53,23 @@ class RecentUploadChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Upload',
-                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : 0),
-                    'borderColor' => '#8b5cf6',
-                    'backgroundColor' => '#8b5cf6',
-                    'pointBackgroundColor' => '#8b5cf6',
+                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : null),
+                    'borderColor' => 'rgba(139, 92, 246)',
+                    'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
+                    'pointBackgroundColor' => 'rgba(139, 92, 246)',
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                ],
+                [
+                    'label' => 'Average',
+                    'data' => array_fill(0, count($results), Average::averageUpload($results)),
+                    'borderColor' => 'rgb(243, 7, 6, 1)',
+                    'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'borderDash' => [5, 5],
+                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
@@ -70,7 +81,13 @@ class RecentUploadChartWidget extends ChartWidget
         return [
             'plugins' => [
                 'legend' => [
-                    'display' => false,
+                    'display' => true,
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    'mode' => 'index',
+                    'intersect' => false,
+                    'position' => 'nearest',
                 ],
             ],
             'scales' => [

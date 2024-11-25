@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
+use App\Helpers\Average;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 
@@ -50,14 +51,24 @@ class RecentPingChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Ping (ms)',
+                    'label' => 'Ping',
                     'data' => $results->map(fn ($item) => $item->ping),
-                    'borderColor' => '#10b981',
-                    'backgroundColor' => '#10b981',
-                    'pointBackgroundColor' => '#10b981',
+                    'borderColor' => 'rgba(16, 185, 129)',
+                    'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
+                    'pointBackgroundColor' => 'rgba(16, 185, 129)',
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                ],
+                [
+                    'label' => 'Average',
+                    'data' => array_fill(0, count($results), Average::averagePing($results)),
+                    'borderColor' => 'rgb(243, 7, 6, 1)',
+                    'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'borderDash' => [5, 5],
+                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
@@ -69,7 +80,13 @@ class RecentPingChartWidget extends ChartWidget
         return [
             'plugins' => [
                 'legend' => [
-                    'display' => false,
+                    'display' => true,
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    'mode' => 'index',
+                    'intersect' => false,
+                    'position' => 'nearest',
                 ],
             ],
             'scales' => [
