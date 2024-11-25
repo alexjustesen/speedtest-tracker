@@ -16,21 +16,11 @@ class StartSpeedtest
     public function handle(bool $scheduled = false, ?int $serverId = null): void
     {
         $result = Result::create([
-            'data->server-id' => $serverId,
+            'data->server->id' => $serverId,
             'service' => ResultService::Ookla,
             'status' => ResultStatus::Started,
             'scheduled' => $scheduled,
         ]);
-
-        // if (blank($serverId)) {
-        //     $serverId = SelectSpeedtestServer::run();
-        // }
-
-        // if (! blank($serverId)) {
-        //     $result->update([
-        //         'data->server->id' => $serverId,
-        //     ]);
-        // }
 
         ProcessSpeedtestBatch::dispatch(
             result: $result,
