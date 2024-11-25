@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\ResultStatus;
+use App\Helpers\Average;
 use App\Helpers\Number;
 use App\Models\Result;
 use Carbon\Carbon;
@@ -13,7 +13,7 @@ class RecentUploadChartWidget extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected static ?string $heading = 'Upload (Mbps)';
+    protected static ?string $heading = 'Upload';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -37,30 +37,26 @@ class RecentUploadChartWidget extends ChartWidget
         // Use whereBetween to account for both date and time
         $results = Result::query()
             ->select(['id', 'upload', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
-
-        $upload = $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : 0);
-        $averageUpload = round($upload->avg(), 2);
 
         return [
             'datasets' => [
                 [
                     'label' => 'Upload',
-                    'data' => $upload,
+                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : null),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
                     'pointBackgroundColor' => 'rgba(139, 92, 246)',
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => count($upload) <= 5 ? 3 : 0,
+                    'pointRadius' => count($results) <= 5 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',
-                    'data' => array_fill(0, count($upload), $averageUpload),
+                    'data' => array_fill(0, count($results), Average::averageUpload($results)),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,
@@ -96,6 +92,10 @@ class RecentUploadChartWidget extends ChartWidget
                 ],
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Mbit/s',
+                    ],
                 ],
             ],
         ];

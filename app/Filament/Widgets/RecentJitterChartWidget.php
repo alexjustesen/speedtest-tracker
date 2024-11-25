@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\ResultStatus;
 use App\Models\Result;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
@@ -35,7 +34,6 @@ class RecentJitterChartWidget extends ChartWidget
 
         $results = Result::query()
             ->select(['id', 'data', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
@@ -43,37 +41,37 @@ class RecentJitterChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download (ms)',
-                    'data' => $downloadData = $results->map(fn ($item) => $item->download_jitter ? number_format($item->download_jitter, 2) : 0),
+                    'label' => 'Download',
+                    'data' => $results->map(fn ($item) => $item->download_jitter ? number_format($item->download_jitter, 2) : null),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
                     'pointBackgroundColor' => 'rgba(14, 165, 233)',
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => $downloadData->count() <= 5 ? 3 : 0,
+                    'pointRadius' => $results->count() <= 5 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Upload (ms)',
-                    'data' => $uploadData = $results->map(fn ($item) => $item->upload_jitter ? number_format($item->upload_jitter, 2) : 0),
+                    'label' => 'Upload',
+                    'data' => $results->map(fn ($item) => $item->upload_jitter ? number_format($item->upload_jitter, 2) : null),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
                     'pointBackgroundColor' => 'rgba(139, 92, 246)',
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => $uploadData->count() <= 5 ? 3 : 0,
+                    'pointRadius' => $results->count() <= 5 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Ping (ms)',
-                    'data' => $pingData = $results->map(fn ($item) => $item->ping_jitter ? number_format($item->ping_jitter, 2) : 0),
+                    'label' => 'Ping',
+                    'data' => $results->map(fn ($item) => $item->ping_jitter ? number_format($item->ping_jitter, 2) : null),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
                     'pointBackgroundColor' => 'rgba(16, 185, 129)',
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => $pingData->count() <= 5 ? 3 : 0,
+                    'pointRadius' => $results->count() <= 5 ? 3 : 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
@@ -102,6 +100,10 @@ class RecentJitterChartWidget extends ChartWidget
                 ],
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Milliseconds',
+                    ],
                 ],
             ],
         ];
