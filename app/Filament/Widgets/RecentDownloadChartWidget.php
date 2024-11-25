@@ -70,7 +70,7 @@ class RecentDownloadChartWidget extends ChartWidget
         return [
             'plugins' => [
                 'legend' => [
-                    'display' => false,
+                    'display' => true,
                 ],
             ],
             'scales' => [
