@@ -35,7 +35,7 @@ class SendSpeedtestCompletedNotification
         $payload = [
             'message' => view('gotify.speedtest-completed', [
                 'id' => $event->result->id,
-                'service' => Str::title($event->result->service),
+                'service' => Str::title($event->result->service->getLabel()),
                 'serverName' => $event->result->server_name,
                 'serverId' => $event->result->server_id,
                 'isp' => $event->result->isp,
@@ -46,6 +46,11 @@ class SendSpeedtestCompletedNotification
                 'speedtest_url' => $event->result->result_url,
                 'url' => url('/admin/results'),
             ])->render(),
+            'extras' => [
+                'client::display' => [
+                    'contentType' => 'text/markdown',
+                ],
+            ],
         ];
 
         foreach ($notificationSettings->gotify_webhooks as $url) {

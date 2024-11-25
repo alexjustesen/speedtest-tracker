@@ -44,7 +44,7 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
             markdown: 'emails.speedtest-completed',
             with: [
                 'id' => $this->result->id,
-                'service' => Str::title($this->result->service),
+                'service' => Str::title($this->result->service->getLabel()),
                 'serverName' => $this->result->server_name,
                 'serverId' => $this->result->server_id,
                 'isp' => $this->result->isp,

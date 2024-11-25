@@ -2,7 +2,8 @@
 
 namespace App\Filament\Pages;
 
-use App\Actions\Speedtests\RunOoklaSpeedtest;
+use App\Actions\GetOoklaSpeedtestServers;
+use App\Actions\Ookla\StartSpeedtest;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
@@ -11,16 +12,15 @@ use App\Filament\Widgets\RecentUploadChartWidget;
 use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use App\Forms\Components\DateFilterForm;
+use App\Helpers\Ookla;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
-use Filament\Forms\Form;
+use Filament\Forms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Filament\Support\Enums\IconPosition;
-use Illuminate\Support\Arr;
 
 class Dashboard extends BaseDashboard
 {
@@ -30,11 +30,13 @@ class Dashboard extends BaseDashboard
 
     public function getSubheading(): ?string
     {
-        if (blank(config('speedtest.schedule'))) {
+        $schedule = config('speedtest.schedule');
+
+        if (blank($schedule) || $schedule === false) {
             return __('No speedtests scheduled.');
         }
 
-        $cronExpression = new CronExpression(config('speedtest.schedule'));
+        $cronExpression = new CronExpression($schedule);
 
         $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
 
@@ -56,30 +58,38 @@ class Dashboard extends BaseDashboard
                 ->color('gray')
                 ->hidden(fn (): bool => ! config('speedtest.public_dashboard'))
                 ->url(shouldOpenInNewTab: true, url: '/'),
-            ActionGroup::make([
-                Action::make('ookla speedtest')
-                    ->action(function () {
-                        $servers = array_filter(
-                            explode(',', config('speedtest.servers'))
-                        );
 
-                        $serverId = null;
+            Action::make('speedtest')
+                ->form([
+                    Forms\Components\Select::make('server_id')
+                        ->label('Select Server')
+                        ->helperText('Leave empty to run the speedtest without specifying a server.')
+                        ->options(function (): array {
+                            return array_filter([
+                                'Manual servers' => Ookla::getConfigServers(),
+                                'Closest servers' => GetOoklaSpeedtestServers::run(),
+                            ]);
+                        })
+                        ->searchable(),
+                ])
+                ->action(function (array $data) {
+                    $serverId = $data['server_id'] ?? null;
 
-                        if (count($servers)) {
-                            $serverId = Arr::random($servers);
-                        }
+                    StartSpeedtest::run(
+                        scheduled: false,
+                        serverId: $serverId,
+                    );
 
-                        RunOoklaSpeedtest::run(serverId: $serverId);
-
-                        Notification::make()
-                            ->title('Ookla speedtest started')
-                            ->success()
-                            ->send();
-                    }),
-            ])
+                    Notification::make()
+                        ->title('Speedtest started')
+                        ->success()
+                        ->send();
+                })
+                ->modalHeading('Run Speedtest')
+                ->modalWidth('lg')
+                ->modalSubmitActionLabel('Start')
                 ->button()
                 ->color('primary')
-                ->dropdownPlacement('bottom-end')
                 ->label('Run Speedtest')
                 ->icon('heroicon-o-rocket-launch')
                 ->iconPosition(IconPosition::Before)

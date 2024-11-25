@@ -66,6 +66,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                 ],
                 [
                     'label' => 'Low (ms)',
+
                     'data' => $lowData = $results->map(fn ($item) => $item->upload_latency_low ? number_format($item->upload_latency_low, 2) : 0),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',

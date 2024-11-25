@@ -35,7 +35,7 @@ class SendSpeedtestCompletedNotification
 
         $content = view('telegram.speedtest-completed', [
             'id' => $event->result->id,
-            'service' => Str::title($event->result->service),
+            'service' => Str::title($event->result->service->getLabel()),
             'serverName' => $event->result->server_name,
             'serverId' => $event->result->server_id,
             'isp' => $event->result->isp,

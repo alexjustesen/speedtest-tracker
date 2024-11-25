@@ -117,16 +117,15 @@ class ResultResource extends Resource
                                     return number_format((float) $state, 2, '.', '').' %';
                                 }),
                             Forms\Components\Textarea::make('data.message')
-                                ->label('Error Message')
+                                ->label('Message')
                                 ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))
-                                ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Failed)
                                 ->columnSpanFull(),
                         ])
                         ->columnSpan(2),
                     Forms\Components\Section::make()
                         ->schema([
                             Forms\Components\Placeholder::make('service')
-                                ->content(fn (Result $result): string => $result->service),
+                                ->content(fn (Result $result): string => $result->service->getLabel()),
                             Forms\Components\Placeholder::make('server_name')
                                 ->content(fn (Result $result): ?string => $result->server_name),
                             Forms\Components\Placeholder::make('server_id')
