@@ -2,11 +2,11 @@
 
 namespace App\Actions;
 
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Throwable;
 
 class GetExternalIpAddress
 {
@@ -14,21 +14,16 @@ class GetExternalIpAddress
 
     public function handle(): bool|string
     {
-        $externalIp = Cache::remember('external_ip', 30, function (): bool|string {
+        try {
             $response = Http::retry(3, 100)
-                ->get('https://icanhazip.com/');
+                ->timeout(5)
+                ->get(url: 'https://icanhazip.com/');
+        } catch (Throwable $e) {
+            Log::error('Failed to fetch external IP address.', [$e->getMessage()]);
 
-            if ($response->failed()) {
-                $message = sprintf('Failed to fetch external IP address, %d', $response->status());
+            return false;
+        }
 
-                Log::warning($message);
-
-                return false;
-            }
-
-            return Str::trim($response->body());
-        });
-
-        return $externalIp;
+        return Str::trim($response->body());
     }
 }
