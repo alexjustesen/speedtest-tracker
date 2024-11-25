@@ -51,7 +51,7 @@ class RecentPingChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => 'Ping (ms)',
-                    'data' => $results->map(fn ($item) => ! blank($item->ping) ? number_format($item->ping, 2) : 0),
+                    'data' => $results->map(fn ($item) => $item->ping),
                     'borderColor' => '#10b981',
                     'backgroundColor' => '#10b981',
                     'pointBackgroundColor' => '#10b981',
@@ -67,6 +67,11 @@ class RecentPingChartWidget extends ChartWidget
     protected function getOptions(): array
     {
         return [
+            'plugins' => [
+                'legend' => [
+                    'display' => false,
+                ],
+            ],
             'scales' => [
                 'y' => [
                     'beginAtZero' => true,

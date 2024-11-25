@@ -57,7 +57,6 @@ class Dashboard extends BasePage
                     Forms\Components\Select::make('server_id')
                         ->label('Select Server')
                         ->helperText('Leave empty to run the speedtest without specifying a server.')
-                        ->options(fn (): array => GetOoklaSpeedtestServers::run())
                         ->options(function (): array {
                             return array_filter([
                                 'Manual servers' => Ookla::getConfigServers(),

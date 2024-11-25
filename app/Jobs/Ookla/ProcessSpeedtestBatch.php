@@ -33,6 +33,7 @@ class ProcessSpeedtestBatch implements ShouldQueue
             [
                 new CheckForInternetConnectionJob($this->result),
                 new SkipSpeedtestJob($this->result),
+                new SelectSpeedtestServerJob($this->result),
                 new RunSpeedtestJob($this->result),
                 new BenchmarkSpeedtestJob($this->result),
                 new CheckAndUpdateBenchmarkResult($this->result),
