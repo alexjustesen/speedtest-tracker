@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Ookla;
 
+use App\Jobs\CheckAndUpdateBenchmarkResult;
 use App\Jobs\CheckForInternetConnectionJob;
 use App\Jobs\SkipSpeedtestJob;
 use App\Models\Result;
@@ -35,6 +36,7 @@ class ProcessSpeedtestBatch implements ShouldQueue
                 new SelectSpeedtestServerJob($this->result),
                 new RunSpeedtestJob($this->result),
                 new BenchmarkSpeedtestJob($this->result),
+                new CheckAndUpdateBenchmarkResult($this->result),
                 new CompleteSpeedtestJob($this->result),
             ],
         ])->catch(function (Batch $batch, ?Throwable $e) {
