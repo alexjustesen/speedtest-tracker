@@ -3,7 +3,6 @@
 namespace App\Jobs\Ookla;
 
 use App\Jobs\CheckForInternetConnectionJob;
-use App\Jobs\SkipSpeedtestJob;
 use App\Models\Result;
 use Illuminate\Bus\Batch;
 use Illuminate\Contracts\Queue\ShouldQueue;
