@@ -20,7 +20,7 @@ class Benchmark
             return true;
         }
 
-        return Bitrate::bytesToBits($bytes) < Bitrate::normalizeToBits($value.$unit);
+        return Bitrate::bytesToBits($bytes) >= Bitrate::normalizeToBits($value.$unit);
     }
 
     /**
@@ -35,6 +35,6 @@ class Benchmark
             return true;
         }
 
-        return $ping >= $value;
+        return $ping < $value;
     }
 }
