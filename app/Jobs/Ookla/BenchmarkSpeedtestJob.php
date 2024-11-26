@@ -98,7 +98,7 @@ class BenchmarkSpeedtestJob implements ShouldQueue
                 'unit' => 'ms',
             ]);
 
-            if (! Arr::get($benchmarks, 'ping.passed') == false) {
+            if (Arr::get($benchmarks, 'ping.passed') == false) {
                 $this->healthy = false;
             }
         }
