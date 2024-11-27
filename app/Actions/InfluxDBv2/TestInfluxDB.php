@@ -1,34 +1,25 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Actions\InfluxDBv2;
 
 use App\Jobs\InfluxDBv2\WriteSpeedtestResult;
 use App\Models\Result;
 use App\Settings\DataIntegrationSettings;
 use Filament\Notifications\Notification;
-use Illuminate\Console\Command;
+use Lorisleiva\Actions\Concerns\AsAction;
 
-class TestInfluxDB extends Command
+class TestInfluxDB
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'app:test-influxdb';
+    use AsAction;
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * Execute the action.
      */
-    protected $description = 'Write a test log to InfluxDB to make sure the config works.';
-
-    /**
-     * Execute the console command.
-     */
-    public function handle(DataIntegrationSettings $settings): void
+    public function handle(): void
     {
+        // Resolve the settings within the action
+        $settings = app(DataIntegrationSettings::class);
+
         $influxdb = [
             'enabled' => $settings->influxdb_v2_enabled,
             'url' => $settings?->influxdb_v2_url,
@@ -43,15 +34,12 @@ class TestInfluxDB extends Command
 
             // Dispatch the job to write the result to InfluxDB
             dispatch(new WriteSpeedtestResult($result, $settings));
-
-            // Output a success message
-            $this->info('Test result created and job dispatched to InfluxDB.');
-
         }
 
+        // Optional: Notification
         Notification::make()
             ->title('Success')
-            ->body('A test log has been sent to InfluxDB, Check in InfluxDB if the data is received!')
+            ->body('A test log has been sent to InfluxDB. Check if the data is received!')
             ->success()
             ->send();
     }

@@ -2,11 +2,12 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Actions\InfluxDBv2\SendAllResultsToInfluxDB;
+use App\Actions\InfluxDBv2\TestInfluxDB;
 use App\Settings\DataIntegrationSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
-use Illuminate\Support\Facades\Artisan;
 
 class DataIntegrationPage extends SettingsPage
 {
@@ -30,25 +31,6 @@ class DataIntegrationPage extends SettingsPage
     public static function shouldRegisterNavigation(): bool
     {
         return auth()->user()->is_admin;
-    }
-
-    /**
-     * Method to handle sending old data to InfluxDB.
-     */
-    public function sendAllResultsToInfluxDB(): void
-    {
-        // Execute the TestInfluxDB command
-        Artisan::call('app:send-all-results-to-influxdb');
-
-    }
-
-    /**
-     * Method to test InfluxDB connection by writing a test log.
-     */
-    public function testInfluxDB(): void
-    {
-        Artisan::call('app:test-influxdb');
-
     }
 
     public function form(Form $form): Form
@@ -101,7 +83,7 @@ class DataIntegrationPage extends SettingsPage
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('Export current results')
                                                 ->label('Export current results')
-                                                ->action('sendAllResultsToInfluxDB')
+                                                ->action(fn () => app(SendAllResultsToInfluxDB::class)->handle())
                                                 ->color('primary')
                                                 ->icon('heroicon-o-cloud-arrow-up')
                                                 ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
@@ -110,7 +92,7 @@ class DataIntegrationPage extends SettingsPage
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('Test InfluxDB connection')
                                                 ->label('Test InfluxDB connection')
-                                                ->action('testInfluxDB')
+                                                ->action(fn () => app(TestInfluxDB::class)->handle())
                                                 ->color('primary')
                                                 ->icon('heroicon-o-check-circle')
                                                 ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
