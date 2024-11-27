@@ -56,8 +56,10 @@ class RecentPingChartWidget extends ChartWidget
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
                     'pointBackgroundColor' => 'rgba(16, 185, 129)',
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'pointRadius' => count($results) <= 5 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',
