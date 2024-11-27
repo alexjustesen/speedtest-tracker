@@ -57,8 +57,10 @@ class RecentDownloadChartWidget extends ChartWidget
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
                     'pointBackgroundColor' => 'rgba(14, 165, 233)',
+                    'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',
@@ -82,6 +84,7 @@ class RecentDownloadChartWidget extends ChartWidget
             'plugins' => [
                 'legend' => [
                     'display' => true,
+
                 ],
                 'tooltip' => [
                     'enabled' => true,
@@ -92,7 +95,7 @@ class RecentDownloadChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => true,
+                    'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],
             ],
         ];
