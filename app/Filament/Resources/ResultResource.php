@@ -140,6 +140,7 @@ class ResultResource extends Resource
                             Forms\Components\Placeholder::make('server_host')
                                 ->content(fn (Result $result): ?string => $result->server_host),
                             Forms\Components\Checkbox::make('scheduled'),
+                            Forms\Components\Checkbox::make('healthy'),
                         ])
                         ->columns(1)
                         ->columnSpan([
@@ -315,6 +316,11 @@ class ResultResource extends Resource
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->alignment(Alignment::Center),
+                Tables\Columns\IconColumn::make('healthy')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->alignment(Alignment::Center),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
@@ -347,7 +353,7 @@ class ResultResource extends Resource
                     })
                     ->attribute('data->interface->externalIp'),
                 Tables\Filters\TernaryFilter::make('scheduled')
-                    ->placeholder('-')
+                    ->nullable()
                     ->trueLabel('Only scheduled speedtests')
                     ->falseLabel('Only manual speedtests')
                     ->queries(
@@ -358,6 +364,10 @@ class ResultResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->multiple()
                     ->options(ResultStatus::class),
+                Tables\Filters\TernaryFilter::make('healthy')
+                    ->nullable()
+                    ->trueLabel('Only healthy speedtests')
+                    ->falseLabel('Only unhealthy speedtests'),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
