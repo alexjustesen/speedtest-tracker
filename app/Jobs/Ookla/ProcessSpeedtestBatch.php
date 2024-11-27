@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-
 class ProcessSpeedtestBatch implements ShouldQueue
 {
     use Queueable;
