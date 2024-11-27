@@ -22,7 +22,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
     public function dashboardAction(): Action
     {
         return Action::make('home')
-            ->label('Dashboard')
+            ->label('Public Dashboard')
             ->icon('heroicon-o-chart-bar')
             ->iconPosition(IconPosition::Before)
             ->color('gray')
