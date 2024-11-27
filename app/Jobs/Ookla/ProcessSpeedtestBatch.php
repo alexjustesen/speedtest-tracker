@@ -4,7 +4,6 @@ namespace App\Jobs\Ookla;
 
 use App\Jobs\CheckForInternetConnectionJob;
 use App\Jobs\InfluxDBv2\WriteSpeedtestResult;
-use App\Jobs\SkipSpeedtestJob;
 use App\Models\Result;
 use Illuminate\Bus\Batch;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +11,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 use Throwable;
+
 
 class ProcessSpeedtestBatch implements ShouldQueue
 {
