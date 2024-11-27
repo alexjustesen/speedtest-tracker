@@ -59,7 +59,7 @@ class RecentPingChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'pointRadius' => count($results) <= 5 ? 3 : 0,
+                    'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
                     'label' => 'Average',
