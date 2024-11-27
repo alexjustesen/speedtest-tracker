@@ -2,11 +2,10 @@
 
 namespace App\Actions;
 
-use Illuminate\Http\Client\RequestException;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Throwable;
 
 class GetOoklaSpeedtestServers
 {
@@ -20,19 +19,19 @@ class GetOoklaSpeedtestServers
             'limit' => 20,
         ];
 
-        $response = Http::retry(3, 250)
-            ->timeout(5)
-            ->get(url: 'https://www.speedtest.net/api/js/servers', query: $query)
-            ->throw(function (Response $response, RequestException $e) {
-                Log::error($e);
+        try {
+            $response = Http::retry(3, 250)
+                ->timeout(5)
+                ->get(url: 'https://www.speedtest.net/api/js/servers', query: $query);
+        } catch (Throwable $e) {
+            Log::error('Unable to retrieve Ookla servers.', [$e->getMessage()]);
 
-                return [
-                    '0' => 'There was an issue retrieving Ookla speedtest servers, check the logs for more info.',
-                ];
-            })
-            ->collect();
+            return [
+                '⚠️ Unable to retrieve Ookla servers, check internet connection and see logs.',
+            ];
+        }
 
-        return $response->mapWithKeys(function (array $item, int $key) {
+        return $response->collect()->mapWithKeys(function (array $item, int $key) {
             return [
                 $item['id'] => $item['sponsor'].' ('.$item['name'].', '.$item['id'].')',
             ];
