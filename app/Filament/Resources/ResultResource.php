@@ -314,9 +314,6 @@ class ResultResource extends Resource
                     ->badge()
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('comments')
-                    ->toggleable()
-                    ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
                     ->boolean()
                     ->toggleable()
