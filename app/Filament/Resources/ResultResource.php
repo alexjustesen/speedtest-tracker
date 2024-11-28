@@ -140,7 +140,6 @@ class ResultResource extends Resource
                             Forms\Components\Placeholder::make('server_host')
                                 ->content(fn (Result $result): ?string => $result->server_host),
                             Forms\Components\Placeholder::make('comment')
-                                ->label('Comments')
                                 ->content(fn (Result $result): ?string => $result->comments),
                             Forms\Components\Checkbox::make('scheduled'),
                             Forms\Components\Checkbox::make('healthy'),
