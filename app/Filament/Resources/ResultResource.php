@@ -139,8 +139,12 @@ class ResultResource extends Resource
                                 ->content(fn (Result $result): ?string => $result->server_location),
                             Forms\Components\Placeholder::make('server_host')
                                 ->content(fn (Result $result): ?string => $result->server_host),
+                            Forms\Components\Placeholder::make('comment')
+                                ->label('Comments')
+                                ->content(fn (Result $result): ?string => $result->comments),
                             Forms\Components\Checkbox::make('scheduled'),
                             Forms\Components\Checkbox::make('healthy'),
+
                         ])
                         ->columns(1)
                         ->columnSpan([
@@ -309,6 +313,9 @@ class ResultResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
+                    ->toggleable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('comments')
                     ->toggleable()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
