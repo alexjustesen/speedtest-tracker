@@ -139,8 +139,11 @@ class ResultResource extends Resource
                                 ->content(fn (Result $result): ?string => $result->server_location),
                             Forms\Components\Placeholder::make('server_host')
                                 ->content(fn (Result $result): ?string => $result->server_host),
+                            Forms\Components\Placeholder::make('comment')
+                                ->content(fn (Result $result): ?string => $result->comments),
                             Forms\Components\Checkbox::make('scheduled'),
                             Forms\Components\Checkbox::make('healthy'),
+
                         ])
                         ->columns(1)
                         ->columnSpan([

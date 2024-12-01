@@ -71,39 +71,48 @@ class ResultExporter extends Exporter
             ExportColumn::make('download_jitter')
                 ->state(function (Result $record): ?string {
                     return $record->download_jitter;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('upload_jitter')
                 ->state(function (Result $record): ?string {
                     return $record->upload_jitter;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('ping_jitter')
                 ->state(function (Result $record): ?string {
                     return $record->ping_jitter;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('upload_latency_high')
                 ->state(function (Result $record): ?string {
                     return $record->upload_latency_high;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('upload_latency_low')
                 ->state(function (Result $record): ?string {
                     return $record->upload_latency_low;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('upload_latency_avg')
                 ->state(function (Result $record): ?string {
                     return $record->upload_latency_iqm;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('download_latency_high')
                 ->state(function (Result $record): ?string {
                     return $record->download_latency_high;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('download_latency_low')
                 ->state(function (Result $record): ?string {
                     return $record->download_latency_low;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('download_latency_avg')
                 ->state(function (Result $record): ?string {
                     return $record->download_latency_iqm;
-                }),
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('result_url')
                 ->state(function (Result $record) {
                     return $record->result_url;
@@ -118,6 +127,11 @@ class ResultExporter extends Exporter
                 ->state(function (Result $record): string {
                     return $record->scheduled ? 'Yes' : 'No';
                 }),
+            ExportColumn::make('healthy')
+                ->state(function (Result $record): string {
+                    return $record->healthy ? 'Yes' : 'No';
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at')
                 ->enabledByDefault(false),
