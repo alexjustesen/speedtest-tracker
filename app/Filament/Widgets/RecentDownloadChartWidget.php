@@ -70,7 +70,6 @@ class RecentDownloadChartWidget extends ChartWidget
                     'fill' => false,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
-                    'borderDash' => [5, 5],
                     'pointRadius' => 0,
                 ],
             ],
@@ -96,6 +95,7 @@ class RecentDownloadChartWidget extends ChartWidget
             'scales' => [
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'grace' => 2,
                 ],
             ],
         ];

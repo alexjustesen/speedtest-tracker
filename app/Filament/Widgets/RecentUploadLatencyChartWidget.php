@@ -104,6 +104,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
             'scales' => [
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'grace' => 2,
                 ],
             ],
         ];
