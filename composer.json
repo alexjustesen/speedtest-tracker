@@ -36,7 +36,6 @@
         "timokoerber/laravel-one-time-operations": "^1.4.4"
     },
     "require-dev": {
-        "barryvdh/laravel-ide-helper": "^3.2.2",
         "fakerphp/faker": "^1.24.1",
         "laravel/pint": "^1.18.3",
         "laravel/sail": "^1.39.1",
@@ -69,9 +68,7 @@
             "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan ide-helper:generate",
-            "@php artisan ide-helper:meta"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
