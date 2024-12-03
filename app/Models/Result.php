@@ -30,7 +30,9 @@ class Result extends Model
     protected function casts(): array
     {
         return [
+            'benchmarks' => 'array',
             'data' => 'array',
+            'healthy' => 'boolean',
             'service' => ResultService::class,
             'status' => ResultStatus::class,
             'scheduled' => 'boolean',

@@ -1,0 +1,11 @@
+.fi-topbar #dashboardAction .fi-btn-label,
+.fi-topbar #speedtestAction .fi-btn-label {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .fi-topbar #dashboardAction .fi-btn-label,
+    .fi-topbar #speedtestAction .fi-btn-label {
+        display: block;
+    }
+}

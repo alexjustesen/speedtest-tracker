@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Ookla;
 
 use App\Actions\GetExternalIpAddress;
 use App\Enums\ResultStatus;
@@ -52,7 +52,7 @@ class SkipSpeedtestJob implements ShouldQueue
             'data->type' => 'log',
             'data->level' => 'error',
             'data->message' => $shouldSkip,
-            'interface->externalIp' => $externalIp,
+            'data->interface->externalIp' => $externalIp,
             'status' => ResultStatus::Skipped,
         ]);
 
