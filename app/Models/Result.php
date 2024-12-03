@@ -33,9 +33,9 @@ class Result extends Model
             'benchmarks' => 'array',
             'data' => 'array',
             'healthy' => 'boolean',
+            'scheduled' => 'boolean',
             'service' => ResultService::class,
             'status' => ResultStatus::class,
-            'scheduled' => 'boolean',
         ];
     }
 

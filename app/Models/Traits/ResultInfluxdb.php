@@ -4,7 +4,7 @@ namespace App\Models\Traits;
 
 trait ResultInfluxdb
 {
-/**
+    /**
      * The tag attributes to be passed to influxdb
      */
     public function formatTagsForInfluxDB2(): array
