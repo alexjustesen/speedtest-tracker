@@ -7,6 +7,20 @@ use Illuminate\Support\Number as SupportNumber;
 class Number extends SupportNumber
 {
     /**
+     * Cast the given value to the type specified.
+     */
+    public static function castToType(mixed $value, string $type): mixed
+    {
+        if (is_null($value)) {
+            return null;
+        }
+
+        settype($value, $type);
+
+        return $value;
+    }
+
+    /**
      * Convert the given number to a specific bit order of magnitude.
      */
     public static function bitsToMagnitude(int|float $bits, int $precision = 0, string $magnitude = 'kbit'): float

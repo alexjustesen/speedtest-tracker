@@ -3,6 +3,7 @@
 namespace App\Actions\Influxdb\v2;
 
 use App\Helpers\Bitrate;
+use App\Helpers\Number;
 use App\Models\Result;
 use Illuminate\Support\Arr;
 use InfluxDB2\Point;
@@ -33,21 +34,21 @@ class BuildPointData
             ->addTag('scheduled', $result->scheduled ? 'true' : 'false');
 
         // Quantitative fields
-        $point->addField('download', $result->download)
-            ->addField('upload', $result->upload)
-            ->addField('ping', $result->ping)
-            ->addField('download_bits', ! blank($result->download) ? Bitrate::bytesToBits($result->download) : null)
-            ->addField('upload_bits', ! blank($result->upload) ? Bitrate::bytesToBits($result->upload) : null)
-            ->addField('download_jitter', Arr::get($result->data, 'download.latency.jitter'))
-            ->addField('upload_jitter', Arr::get($result->data, 'upload.latency.jitter'))
-            ->addField('ping_jitter', Arr::get($result->data, 'ping.jitter'))
-            ->addField('download_latency_avg', Arr::get($result->data, 'download.latency.iqm'))
-            ->addField('download_latency_high', Arr::get($result->data, 'download.latency.high'))
-            ->addField('download_latency_low', Arr::get($result->data, 'download.latency.low'))
-            ->addField('upload_latency_avg', Arr::get($result->data, 'upload.latency.iqm'))
-            ->addField('upload_latency_high', Arr::get($result->data, 'upload.latency.high'))
-            ->addField('upload_latency_low', Arr::get($result->data, 'upload.latency.low'))
-            ->addField('packet_loss', Arr::get($result->data, 'packetLoss'));
+        $point->addField('download', Number::castToType($result->download, 'int'))
+            ->addField('upload', Number::castToType($result->upload, 'int'))
+            ->addField('ping', Number::castToType($result->ping, 'float'))
+            ->addField('download_bits', ! blank($result->download) ? Number::castToType(Bitrate::bytesToBits($result->download), 'int') : null)
+            ->addField('upload_bits', ! blank($result->upload) ? Number::castToType(Bitrate::bytesToBits($result->upload), 'int') : null)
+            ->addField('download_jitter', Number::castToType(Arr::get($result->data, 'download.latency.jitter'), 'float'))
+            ->addField('upload_jitter', Number::castToType(Arr::get($result->data, 'upload.latency.jitter'), 'float'))
+            ->addField('ping_jitter', Number::castToType(Arr::get($result->data, 'ping.jitter'), 'float'))
+            ->addField('download_latency_avg', Number::castToType(Arr::get($result->data, 'download.latency.iqm'), 'float'))
+            ->addField('download_latency_high', Number::castToType(Arr::get($result->data, 'download.latency.high'), 'float'))
+            ->addField('download_latency_low', Number::castToType(Arr::get($result->data, 'download.latency.low'), 'float'))
+            ->addField('upload_latency_avg', Number::castToType(Arr::get($result->data, 'upload.latency.iqm'), 'float'))
+            ->addField('upload_latency_high', Number::castToType(Arr::get($result->data, 'upload.latency.high'), 'float'))
+            ->addField('upload_latency_low', Number::castToType(Arr::get($result->data, 'upload.latency.low'), 'float'))
+            ->addField('packet_loss', Number::castToType(Arr::get($result->data, 'packetLoss'), 'float'));
 
         return $point;
     }
