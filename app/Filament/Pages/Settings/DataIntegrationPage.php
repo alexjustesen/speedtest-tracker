@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
-use App\Actions\InfluxDBv2\SendAllResultsToInfluxDB;
+use App\Jobs\Influxdb\v2\BulkWriteResults;
 use App\Jobs\Influxdb\v2\TestConnectionJob;
 use App\Settings\DataIntegrationSettings;
 use Filament\Forms;
@@ -85,7 +85,14 @@ class DataIntegrationPage extends SettingsPage
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('Export current results')
                                                 ->label('Export current results')
-                                                ->action(fn () => app(SendAllResultsToInfluxDB::class)->handle())
+                                                ->action(function () {
+                                                    Notification::make()
+                                                        ->title('Starting bulk data write to Influxdb')
+                                                        ->info()
+                                                        ->send();
+
+                                                    BulkWriteResults::dispatch(Auth::user());
+                                                })
                                                 ->color('primary')
                                                 ->icon('heroicon-o-cloud-arrow-up')
                                                 ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
