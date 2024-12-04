@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\ResultService;
 use App\Enums\ResultStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -32,7 +33,7 @@ class ResultFactory extends Factory
 
         if (Arr::exists($output, 'level')) {
             return [
-                'service' => 'faker',
+                'service' => ResultService::Faker,
                 'data' => $output,
                 'status' => ResultStatus::Failed,
                 'scheduled' => false,
@@ -40,7 +41,7 @@ class ResultFactory extends Factory
         }
 
         return [
-            'service' => 'faker',
+            'service' => ResultService::Faker,
             'ping' => Arr::get($output, 'ping.latency'),
             'download' => Arr::get($output, 'download.bandwidth'),
             'upload' => Arr::get($output, 'upload.bandwidth'),
