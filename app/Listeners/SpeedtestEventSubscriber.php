@@ -18,7 +18,8 @@ class SpeedtestEventSubscriber
     /**
      * Handle speedtest completed events.
      */
-    public function handleSpeedtestCompleted(SpeedtestCompleted $event): void {
+    public function handleSpeedtestCompleted(SpeedtestCompleted $event): void
+    {
         $settings = app(DataIntegrationSettings::class);
 
         if ($settings->influxdb_v2_enabled) {
