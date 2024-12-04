@@ -16,7 +16,7 @@ class BuildPointData
     public function handle(Result $result): Point
     {
         $point = Point::measurement('speedtest')
-            ->addTag('app_name', (string) config('app.name'))
+            ->addTag('app_name', config('app.name'))
             ->time($result->created_at->timestamp ?? time());
 
         // Qualitative tags
