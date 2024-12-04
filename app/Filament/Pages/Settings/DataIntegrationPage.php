@@ -3,11 +3,13 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Actions\InfluxDBv2\SendAllResultsToInfluxDB;
-use App\Actions\InfluxDBv2\TestInfluxDB;
+use App\Jobs\Influxdb\v2\TestConnectionJob;
 use App\Settings\DataIntegrationSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
+use Illuminate\Support\Facades\Auth;
 
 class DataIntegrationPage extends SettingsPage
 {
@@ -90,9 +92,16 @@ class DataIntegrationPage extends SettingsPage
                                         ]),
                                         // Button to test InfluxDB connection
                                         Forms\Components\Actions::make([
-                                            Forms\Components\Actions\Action::make('Test InfluxDB connection')
-                                                ->label('Test InfluxDB connection')
-                                                ->action(fn () => app(TestInfluxDB::class)->handle())
+                                            Forms\Components\Actions\Action::make('Test connection')
+                                                ->label('Test connection')
+                                                ->action(function () {
+                                                    Notification::make()
+                                                        ->title('Sending test data to Influxdb')
+                                                        ->info()
+                                                        ->send();
+
+                                                    TestConnectionJob::dispatch(Auth::user());
+                                                })
                                                 ->color('primary')
                                                 ->icon('heroicon-o-check-circle')
                                                 ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
