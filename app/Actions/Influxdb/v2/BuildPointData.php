@@ -22,7 +22,7 @@ class BuildPointData
         $point->addTag('result_id', $result->id)
             ->addTag('external_ip', Arr::get($result->data, 'interface.externalIp'))
             ->addTag('id', $result->id)
-            ->addTag('isp', $result->isp)
+            ->addTag('isp', Arr::get($result->data, 'isp'))
             ->addTag('service', $result->service->value)
             ->addTag('server_id', Arr::get($result->data, 'server.id'))
             ->addTag('server_name', Arr::get($result->data, 'server.name'))
