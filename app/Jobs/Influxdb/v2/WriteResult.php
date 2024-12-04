@@ -2,13 +2,12 @@
 
 namespace App\Jobs\Influxdb\v2;
 
+use App\Actions\Influxdb\v2\BuildPointData;
+use App\Actions\Influxdb\v2\CreateClient;
 use App\Models\Result;
-use App\Settings\DataIntegrationSettings;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-use InfluxDB2\Client;
-use InfluxDB2\Model\WritePrecision;
 
 class WriteResult implements ShouldQueue
 {
@@ -26,30 +25,16 @@ class WriteResult implements ShouldQueue
      */
     public function handle(): void
     {
-        $settings = app(DataIntegrationSettings::class);
+        $client = CreateClient::run();
 
-        $client = new Client([
-            'url' => $settings->influxdb_v2_url,
-            'token' => $settings->influxdb_v2_token,
-            'bucket' => $settings->influxdb_v2_bucket,
-            'org' => $settings->influxdb_v2_org,
-            'verifySSL' => $settings->influxdb_v2_verify_ssl,
-            'precision' => WritePrecision::S,
-        ]);
+        $writeApi = $client->createWriteApi();
 
-        $api = $client->createWriteApi();
-
-        $data = [
-            'name' => 'speedtest',
-            'tags' => $this->result->formatTagsForInfluxDB2(),
-            'fields' => $this->result->formatForInfluxDB2(),
-            'time' => $this->result->created_at->timestamp,
-        ];
+        $point = BuildPointData::run($this->result);
 
         try {
-            $api->write($data);
+            $writeApi->write($point);
         } catch (\Exception $e) {
-            Log::error('Failed to write to InfluxDB', [
+            Log::error('Failed to write to InfluxDB.', [
                 'error' => $e->getMessage(),
                 'result_id' => $this->result->id,
             ]);
@@ -57,6 +42,6 @@ class WriteResult implements ShouldQueue
             $this->fail($e);
         }
 
-        $api->close();
+        $writeApi->close();
     }
 }

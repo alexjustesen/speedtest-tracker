@@ -19,7 +19,7 @@ class BuildPointData
             ->time($result->created_at->timestamp ?? time());
 
         // Qualitative tags
-        $point->addTag('id', $result->id)
+        $point->addTag('result_id', $result->id)
             ->addTag('external_ip', Arr::get($result->data, 'interface.externalIp'))
             ->addTag('id', $result->id)
             ->addTag('isp', $result->isp)

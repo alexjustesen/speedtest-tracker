@@ -3,16 +3,14 @@
 namespace App\Jobs\Influxdb\v2;
 
 use App\Actions\Influxdb\v2\BuildPointData;
+use App\Actions\Influxdb\v2\CreateClient;
 use App\Models\Result;
 use App\Models\User;
-use App\Settings\DataIntegrationSettings;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use InfluxDB2\ApiException;
-use InfluxDB2\Client;
-use InfluxDB2\Model\WritePrecision;
 
 class TestConnectionJob implements ShouldQueue
 {
@@ -30,18 +28,9 @@ class TestConnectionJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $settings = app(DataIntegrationSettings::class);
-
         $result = Result::factory()->make();
 
-        $client = new Client([
-            'url' => $settings->influxdb_v2_url,
-            'token' => $settings->influxdb_v2_token,
-            'bucket' => $settings->influxdb_v2_bucket,
-            'org' => $settings->influxdb_v2_org,
-            'verifySSL' => $settings->influxdb_v2_verify_ssl,
-            'precision' => WritePrecision::S,
-        ]);
+        $client = CreateClient::run();
 
         $writeApi = $client->createWriteApi();
 
@@ -50,7 +39,9 @@ class TestConnectionJob implements ShouldQueue
         try {
             $writeApi->write($point);
         } catch (ApiException $e) {
-            Log::error('Writing test data to Influxdb failed.', ['output' => $e]);
+            Log::error('Failed to write test data to Influxdb.', [
+                'error' => $e->getMessage(),
+            ]);
 
             Notification::make()
                 ->title('Influxdb test failed')
