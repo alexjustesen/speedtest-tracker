@@ -24,4 +24,8 @@ Route::redirect('/login', '/admin/login')
 
 if (app()->isLocal()) {
     require __DIR__.'/test.php';
+
+    // Include the metrics routes
+    require __DIR__.'/prometheus.php';
+
 }

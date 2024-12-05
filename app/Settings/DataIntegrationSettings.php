@@ -6,6 +6,8 @@ use Spatie\LaravelSettings\Settings;
 
 class DataIntegrationSettings extends Settings
 {
+    public bool $prometheus_enabled;
+
     public bool $influxdb_v2_enabled;
 
     public ?string $influxdb_v2_url;
