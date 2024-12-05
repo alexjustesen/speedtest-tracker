@@ -14,7 +14,6 @@ class PrometheusService
 
     public function __construct()
     {
-        // Use InMemory storage. Replace with a more suitable storage (e.g., APC, Redis) in production.
         $this->registry = new CollectorRegistry(new InMemory);
     }
 

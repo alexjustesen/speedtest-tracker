@@ -10,7 +10,6 @@ class PrometheusServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        // Bind the Prometheus registry into the service container
         $this->app->singleton(CollectorRegistry::class, function () {
             return new CollectorRegistry(new InMemory);
         });
