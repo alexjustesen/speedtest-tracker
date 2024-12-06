@@ -7,6 +7,9 @@ use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class SelectSpeedtestServerJob implements ShouldQueue
 {
@@ -28,14 +31,30 @@ class SelectSpeedtestServerJob implements ShouldQueue
             return;
         }
 
+        if (Arr::exists($this->result->data, 'server.id')) {
+            Log::info('Server exists for speedtest, skipping select server job.');
+
+            return;
+        }
+
+        $serverId = null;
+
+        if (! blank(config('speedtest.servers'))) {
+            $serverId = $this->getConfigServer();
+
+            $this->updateServerId($this->result, $serverId);
+
+            return;
+        }
+
+        $serverId = $this->filterServers()
+
         $serverId = $this->result->server_id
             ?? $this->getConfigServer();
 
-        if ($this->result->server_id != $serverId) {
-            $this->result->update([
-                'data->server->id' => $serverId,
-            ]);
-        }
+        $this->result->update([
+            'data->server->id' => $serverId,
+        ]);
     }
 
     /**
@@ -55,5 +74,64 @@ class SelectSpeedtestServerJob implements ShouldQueue
         return count($servers) > 0
             ? Arr::random($servers)
             : null;
+    }
+
+    /**
+     * Filter servers from server list.
+     */
+    private function filterServers()
+    {
+        $blocked = config('speedtest.blocked_servers');
+
+        $blocked = array_filter(
+            array_map(
+                'trim',
+                explode(',', $blocked),
+            ),
+        );
+
+        $servers = $this->listServers();
+
+        $filtered = Arr::except($servers, $blocked);
+
+
+    }
+
+    /**
+     * Get a list of servers.
+     */
+    private function listServers(): ?array
+    {
+        $command = [
+            'speedtest',
+            '--accept-license',
+            '--accept-gdpr',
+            '--servers',
+            '--format=json',
+        ];
+
+        $process = new Process($command);
+
+        try {
+            $process->run();
+        } catch (ProcessFailedException $e) {
+            Log::error('Failed listing Ookla speedtest servers.', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return [];
+        }
+
+        return json_decode($process->getOutput(), true);
+    }
+
+    /**
+     * Update the result with the selected server Id.
+     */
+    private function updateServerId(Result $result, int $serverId): void
+    {
+        $result->update([
+            'data->server->id' => $serverId,
+        ]);
     }
 }
