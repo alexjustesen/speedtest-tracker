@@ -2,15 +2,14 @@
 
 namespace App\Jobs\Influxdb\v2;
 
-use App\Actions\Influxdb\v2\BuildPointData;
 use App\Actions\Influxdb\v2\CreateClient;
-use App\Models\Result;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use InfluxDB2\ApiException;
+use InfluxDB2\Point;
 
 class TestConnectionJob implements ShouldQueue
 {
@@ -28,13 +27,16 @@ class TestConnectionJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $result = Result::factory()->make();
-
         $client = CreateClient::run();
 
         $writeApi = $client->createWriteApi();
 
-        $point = BuildPointData::run($result);
+        $point = Point::measurement('speedtest')
+            ->addTag('service', 'faker')
+            ->addField('download', (int) 420)
+            ->addField('upload', (int) 69)
+            ->addField('ping', (float) 4.321)
+            ->time(time());
 
         try {
             $writeApi->write($point);
