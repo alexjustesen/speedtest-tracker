@@ -176,6 +176,13 @@ class NotificationPage extends SettingsPage
                                                             ->url(),
                                                     ])
                                                     ->columnSpanFull(),
+                                                Forms\Components\Fieldset::make('discord_user_mention')
+                                                    ->label('User Id to mention if threshold is hit')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('discord_user_mention')
+                                                            ->label('Mention ID')
+                                                            ->maxLength(18),
+                                                    ]),
                                                 Forms\Components\Actions::make([
                                                     Forms\Components\Actions\Action::make('test discord')
                                                         ->label('Test Discord webhook')

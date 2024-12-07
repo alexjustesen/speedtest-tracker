@@ -71,6 +71,7 @@ class SendSpeedtestThresholdNotification
                 'metrics' => $failed,
                 'speedtest_url' => $event->result->result_url,
                 'url' => url('/admin/results'),
+                'mentionUser' => $notificationSettings->discord_user_mention,
             ])->render(),
         ];
 

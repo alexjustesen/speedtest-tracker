@@ -46,6 +46,8 @@ class NotificationSettings extends Settings
 
     public ?array $discord_webhooks;
 
+    public ?string $discord_user_mention;
+
     public bool $ntfy_enabled;
 
     public bool $ntfy_on_speedtest_run;
