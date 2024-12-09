@@ -1,5 +1,9 @@
 **Speedtest Threshold Breached - #{{ $id }}**
 
+@if (!empty($mentionUser))
+{!! "<@{$mentionUser}>" !!}
+@endif
+
 A new speedtest on **{{ config('app.name') }}** was completed using **{{ $service }}** on **{{ $isp }}** but a threshold was breached.
 
 @foreach ($metrics as $item)

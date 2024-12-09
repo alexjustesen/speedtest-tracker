@@ -152,9 +152,7 @@ class NotificationPage extends SettingsPage
                                             ->label('Enable Discord webhook notifications')
                                             ->reactive()
                                             ->columnSpanFull(),
-                                        Forms\Components\Grid::make([
-                                            'default' => 1,
-                                        ])
+                                        Forms\Components\Grid::make(['default' => 1])
                                             ->hidden(fn (Forms\Get $get) => $get('discord_enabled') !== true)
                                             ->schema([
                                                 Forms\Components\Fieldset::make('Triggers')
@@ -164,6 +162,7 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                         Forms\Components\Toggle::make('discord_on_threshold_failure')
                                                             ->label('Notify on threshold failures')
+                                                            ->reactive()
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('discord_webhooks')
@@ -174,6 +173,17 @@ class NotificationPage extends SettingsPage
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Fieldset::make('discord_user_mention')
+                                                    ->label('Discord User Mention')
+                                                    ->hidden(fn (Forms\Get $get) => $get('discord_on_threshold_failure') !== true)
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('discord_user_mention')
+                                                            ->label('User ID')
+                                                            ->placeholder('Enter the Discord User ID')
+                                                            ->maxLength(18)
+                                                            ->helperText('This should be the numeric User ID from Discord (e.g., 123456789012345678)'),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Forms\Components\Actions::make([
@@ -189,7 +199,6 @@ class NotificationPage extends SettingsPage
                                         'default' => 1,
                                         'md' => 2,
                                     ]),
-
                                 Forms\Components\Section::make('Gotify')
                                     ->schema([
                                         Forms\Components\Toggle::make('gotify_enabled')
