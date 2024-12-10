@@ -44,6 +44,29 @@ class DataIntegrationPage extends SettingsPage
                     'md' => 3,
                 ])
                     ->schema([
+                        // Prometheus Section
+                        Forms\Components\Section::make('Prometheus')
+                            ->description('This enables a /metrics endpoint for Prometheus to scrape the latest results.')
+                            ->schema([
+                                Forms\Components\Toggle::make('prometheus_enabled')
+                                    ->label('Enable')
+                                    ->columnSpanFull(),
+                                Forms\Components\Actions::make([
+                                    Forms\Components\Actions\Action::make('Open Metrics Page')
+                                        ->hidden(fn (Forms\Get $get) => $get('prometheus_enabled') !== true)
+                                        ->label('View Metrics')
+                                        ->action(function () {
+                                            return redirect(config('app.url').'/metrics');
+                                        })
+                                        ->color('primary')
+                                        ->icon('heroicon-o-eye'),
+                                ]),
+                            ])
+                            ->compact()
+                            ->columns([
+                                'default' => 1,
+                                'md' => 2,
+                            ]),
                         Forms\Components\Section::make('InfluxDB v2')
                             ->description('When enabled, all new Speedtest results will also be sent to InfluxDB.')
                             ->schema([
