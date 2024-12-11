@@ -54,7 +54,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         $serverId = $this->filterBlockedServers();
 
         if (blank($serverId)) {
-            Log::info('Failed to select a server for Ookla speedtest.', [
+            Log::info('Failed to select a server for Ookla speedtest, skipping blocked server filter.', [
                 'result_id' => $this->result->id,
             ]);
 
@@ -109,7 +109,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
     /**
      * Filter servers from server list.
      */
-    private function filterBlockedServers(): ?int
+    private function filterBlockedServers(): mixed
     {
         $blocked = $this->getConfigBlockedServers();
 
@@ -145,7 +145,15 @@ class SelectSpeedtestServerJob implements ShouldQueue
             return [];
         }
 
-        return json_decode($process->getOutput(), true);
+        $servers = Arr::get(
+            array: json_decode($process->getOutput(), true),
+            key: 'servers',
+            default: [],
+        );
+
+        return collect($servers)->mapWithKeys(function (array $server) {
+            return [$server['id'] => $server['id']];
+        })->toArray();
     }
 
     /**
