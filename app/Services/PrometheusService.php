@@ -107,13 +107,37 @@ class PrometheusService
 
     protected function setDefaultMetrics(): void
     {
-        $defaultLabels = ['unknown', 'unknown', 'unknown', 'unknown', 'false', 'unknown', config('app.name')];
+        $defaultLabels = [
+            'unknown', 'unknown', 'unknown', 'unknown',
+            'false', 'unknown', 'false', config('app.name'),
+        ];
 
-        foreach ($this->registry->getMetricFamilySamples() as $metric) {
-            foreach ($metric->getSamples() as $sample) {
-                $gauge = $this->registry->getGauge($metric->getNamespace(), $metric->getName());
-                $gauge->set(0.0, $defaultLabels);
+        // Register and set default value for all metrics
+        $metrics = [
+            'ping_jitter', 'ping_latency', 'ping_low', 'ping_high',
+            'download_bandwidth', 'download_bytes', 'download_elapsed',
+            'download_latency_iqm', 'download_latency_low', 'download_latency_high',
+            'download_latency_jitter', 'upload_bandwidth', 'upload_bytes',
+            'upload_elapsed', 'upload_latency_iqm', 'upload_latency_low',
+            'upload_latency_high', 'upload_latency_jitter', 'packet_loss',
+            'result_id',
+        ];
+
+        foreach ($metrics as $metric) {
+            $gauge = $this->registry->getGauge('speedtest_tracker', $metric);
+
+            // If the metric doesn't exist, register it
+            if (! $gauge) {
+                $gauge = $this->registry->registerGauge(
+                    'speedtest_tracker',
+                    $metric,
+                    'Default metric for '.$metric,
+                    ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'healthy', 'status', 'app_name']
+                );
             }
+
+            // Set the default value for the metric
+            $gauge->set(0.0, $defaultLabels);
         }
     }
 

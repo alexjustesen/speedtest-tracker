@@ -5100,16 +5100,16 @@
         },
         {
             "name": "promphp/prometheus_client_php",
-            "version": "v2.13.0",
+            "version": "v2.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PromPHP/prometheus_client_php.git",
-                "reference": "abe6bbb198ba83a306c45c9872c8f386dc323e91"
+                "reference": "3f8e4ff20e4090e494572feaf68b36c197e0e3ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PromPHP/prometheus_client_php/zipball/abe6bbb198ba83a306c45c9872c8f386dc323e91",
-                "reference": "abe6bbb198ba83a306c45c9872c8f386dc323e91",
+                "url": "https://api.github.com/repos/PromPHP/prometheus_client_php/zipball/3f8e4ff20e4090e494572feaf68b36c197e0e3ef",
+                "reference": "3f8e4ff20e4090e494572feaf68b36c197e0e3ef",
                 "shasum": ""
             },
             "require": {
@@ -5162,9 +5162,9 @@
             "description": "Prometheus instrumentation library for PHP applications.",
             "support": {
                 "issues": "https://github.com/PromPHP/prometheus_client_php/issues",
-                "source": "https://github.com/PromPHP/prometheus_client_php/tree/v2.13.0"
+                "source": "https://github.com/PromPHP/prometheus_client_php/tree/v2.13.1"
             },
-            "time": "2024-12-02T12:27:42+00:00"
+            "time": "2024-12-10T13:48:27+00:00"
         },
         {
             "name": "psr/cache",
@@ -11775,5 +11775,5 @@
     "platform-overrides": {
         "php": "8.3"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
