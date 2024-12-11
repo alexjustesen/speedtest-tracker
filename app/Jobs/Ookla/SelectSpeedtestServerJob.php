@@ -31,30 +31,60 @@ class SelectSpeedtestServerJob implements ShouldQueue
             return;
         }
 
+        // If the server id is already set, we don't need to do anything.
         if (Arr::exists($this->result->data, 'server.id')) {
-            Log::info('Server exists for speedtest, skipping select server job.');
-
             return;
         }
 
-        $serverId = null;
-
+        // If preferred servers are set in the config, we can use that.
         if (! blank(config('speedtest.servers'))) {
-            $serverId = $this->getConfigServer();
-
-            $this->updateServerId($this->result, $serverId);
+            $this->updateServerId(
+                result: $this->result,
+                serverId: $this->getConfigServer(),
+            );
 
             return;
         }
 
-        $serverId = $this->filterServers()
+        // If blocked servers config is blank, we can skip picking a server.
+        if (blank(config('speedtest.blocked_servers'))) {
+            return;
+        }
 
-        $serverId = $this->result->server_id
-            ?? $this->getConfigServer();
+        $serverId = $this->filterBlockedServers();
 
-        $this->result->update([
-            'data->server->id' => $serverId,
-        ]);
+        if (blank($serverId)) {
+            Log::info('Failed to select a server for Ookla speedtest.', [
+                'result_id' => $this->result->id,
+            ]);
+
+            return;
+        }
+
+        $this->updateServerId($this->result, $serverId);
+    }
+
+    /**
+     * Get a list of servers from config blocked servers.
+     */
+    private function getConfigBlockedServers(): array
+    {
+        $blocked = config('speedtest.blocked_servers');
+
+        $blocked = array_filter(
+            array_map(
+                'trim',
+                explode(',', $blocked),
+            ),
+        );
+
+        if (blank($blocked)) {
+            return [];
+        }
+
+        return collect($blocked)->mapWithKeys(function (int $serverId) {
+            return [$serverId => $serverId];
+        })->toArray();
     }
 
     /**
@@ -79,28 +109,21 @@ class SelectSpeedtestServerJob implements ShouldQueue
     /**
      * Filter servers from server list.
      */
-    private function filterServers()
+    private function filterBlockedServers(): ?int
     {
-        $blocked = config('speedtest.blocked_servers');
-
-        $blocked = array_filter(
-            array_map(
-                'trim',
-                explode(',', $blocked),
-            ),
-        );
+        $blocked = $this->getConfigBlockedServers();
 
         $servers = $this->listServers();
 
         $filtered = Arr::except($servers, $blocked);
 
-
+        return Arr::first($filtered);
     }
 
     /**
      * Get a list of servers.
      */
-    private function listServers(): ?array
+    private function listServers(): array
     {
         $command = [
             'speedtest',
