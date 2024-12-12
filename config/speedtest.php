@@ -4,9 +4,9 @@ use Carbon\Carbon;
 
 return [
 
-    'build_date' => Carbon::parse('2024-11-27'),
+    'build_date' => Carbon::parse('2024-12-11'),
 
-    'build_version' => 'v0.24.3',
+    'build_version' => 'v0.26.0',
 
     /**
      * General settings.
@@ -32,6 +32,8 @@ return [
     'schedule' => env('SPEEDTEST_SCHEDULE', false),
 
     'servers' => env('SPEEDTEST_SERVERS'),
+
+    'blocked_servers' => env('SPEEDTEST_BLOCKED_SERVERS'),
 
     /**
      * IP filtering settings.
