@@ -1,12 +1,12 @@
 # 🐇 Speedtest Tracker
 
-Speedtest Tracker is a self-hosted internet performance tracking application that runs speedtests using Ookla's Speedtest service.
+Speedtest Tracker is a self-hosted application that monitors the performance and uptime of your internet connection.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
 
 ### Why might I use this?
 
-The main use case for Speedtest Tracker is to build a history of your internet's performance so that you can be informed when you're not receiving your ISP's advertised rates.
+Speedtest Tracker's use case is to build a history of your internet's performance and uptime so that you can be informed when you're not receiving your ISP's advertised rates.
 
 ### What about that other Speedtest Tracker?
 
@@ -14,61 +14,16 @@ As far as I can tell https://github.com/henrywhitaker3/Speedtest-Tracker was aba
 
 ## Getting Started
 
-Speedtest Tracker is containerized so you can run it anywhere you run your Docker containers. The [install](https://docs.speedtest-tracker.dev/getting-started/installation) documentation will get you up and running with using Docker or Docker Composer along with choosing a database (SQLite, MySQL/MariaDB or Postgresql).
+Speedtest Tracker is containerized so you can run it anywhere you run your containers. The image is built by LinuxServer.io, build information can be found [here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker).
 
-### Quick Start
+- [Installation](https://docs.speedtest-tracker.dev/getting-started/installation) will help you get up and running if you're deploying the Docker image or to a NAS platform like Synology and Unraid.
+- [Configurations](https://docs.speedtest-tracker.dev/getting-started/environment-variables) are used to tailor Speedtest Tracker to your needs.
+- [Notifications](https://docs.speedtest-tracker.dev/settings/notifications) keep you informed when issues happen.
 
-#### Docker
+### FAQs and Questions
 
-```bash
-docker run -d --name speedtest-tracker --restart unless-stopped \
-    -p 8080:80 \
-    -e PUID=1000 \
-    -e PGID=1000 \
-    -e APP_KEY= \ # How to generate an app key: https://speedtest-tracker.dev/
-    # -e SPEEDTEST_SCHEDULE= \ # optional: schedule a speedtest with an cronjob https://crontab.guru
-    -e APP_URL=http://localhost \
-    -e DB_CONNECTION=sqlite \
-    -v ${PWD}:/config \
-    lscr.io/linuxserver/speedtest-tracker:latest
-```
-
-#### Docker Compose
-
-```bash
-services:
-    speedtest-tracker:
-        container_name: speedtest-tracker
-        ports:
-            - 8080:80
-            - 8443:443
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - APP_KEY= # How to generate an app key: https://speedtest-tracker.dev/
-            - APP_URL=http://localhost
-            - DB_CONNECTION=sqlite
-            # - SPEEDTEST_SCHEDULE= # optional: schedule a speedtest with an cronjob https://crontab.guru
-        volumes:
-            - /path/to/data:/config
-            - /path/to-custom-ssl-keys:/config/keys
-        image: lscr.io/linuxserver/speedtest-tracker:latest
-        restart: unless-stopped
-```
-For more environment configuration to customize your installation see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
-
-
-## Image version
-
-A full list of released versions can be found here: https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker
-
-### FAQs and Features
-
-[FAQs](https://docs.speedtest-tracker.dev/faqs) and a full list of planned and completed [features](https://docs.speedtest-tracker.dev/getting-started/features) can be found in the [documentation](https://docs.speedtest-tracker.dev).
-
-## API
-
-A robust API is planned for a later release but as of `v0.11.8` a legacy endpoint `/api/speedtest/latest` which is used by home lab dashboards like [Homepage](https://github.com/benphelps/homepage) and [Organizr](https://github.com/causefx/Organizr/tree/v2-master).
+- [Frequently Asked Questions](https://docs.speedtest-tracker.dev/help/faqs) is a collection of common questions.
+- [Error Messages](https://docs.speedtest-tracker.dev/help/error-messages) are thrown when the application experiences a problem. These can help you resolve issues you might experience.
 
 ## Screenshots
 
