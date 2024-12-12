@@ -2,6 +2,8 @@
 
 namespace App\Jobs\Ookla;
 
+use App\Enums\ResultStatus;
+use App\Events\SpeedtestFailed;
 use App\Models\Result;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -136,24 +138,65 @@ class SelectSpeedtestServerJob implements ShouldQueue
         $process = new Process($command);
 
         try {
+
             $process->run();
+
+            $output = $process->getOutput();
+            $errorOutput = $process->getErrorOutput();
+
+            // Handle process errors
+            if ($process->getExitCode() !== 0 || ! empty($errorOutput)) {
+                // Check if error output contains the "Limit reached" message
+                if (strpos($errorOutput, 'Limit reached') !== false) {
+                    // Update result message for too many requests error
+                    $this->result->update([
+                        'data->type' => 'log',
+                        'data->level' => 'error',
+                        'data->message' => 'Speedtest CLI: Too many requests received. To maintain a fair and stable environment, please review and adjust the frequency of your requests.',
+                        'status' => ResultStatus::Failed,
+                    ]);
+                } else {
+                    // Generic failure for other errors
+                    $this->result->update([
+                        'data->type' => 'log',
+                        'data->level' => 'error',
+                        'data->message' => 'Failed to list Speedtest servers',
+                        'status' => ResultStatus::Failed,
+                    ]);
+                }
+
+                // Dispatch failure event and cancel batch
+                SpeedtestFailed::dispatch($this->result);
+                $this->batch()->cancel();
+
+                return [];
+            }
+
+            // Parse server list JSON and return the servers using your logic
+            $servers = Arr::get(
+                array: json_decode($process->getOutput(), true),
+                key: 'servers',
+                default: [],
+            );
+
+            return collect($servers)->mapWithKeys(function (array $server) {
+                return [$server['id'] => $server['id']];
+            })->toArray();
+
         } catch (ProcessFailedException $e) {
-            Log::error('Failed listing Ookla speedtest servers.', [
-                'error' => $e->getMessage(),
+            $this->result->update([
+                'data->type' => 'log',
+                'data->level' => 'error',
+                'data->message' => 'Failed to list Speedtest servers',
+                'status' => ResultStatus::Failed,
+            ]);
+            Log::error('Speedtest server list command failed', [
+                'error_output' => $e->getMessage(),
+                'result_id' => $this->result->id,
             ]);
 
             return [];
         }
-
-        $servers = Arr::get(
-            array: json_decode($process->getOutput(), true),
-            key: 'servers',
-            default: [],
-        );
-
-        return collect($servers)->mapWithKeys(function (array $server) {
-            return [$server['id'] => $server['id']];
-        })->toArray();
     }
 
     /**
