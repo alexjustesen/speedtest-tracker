@@ -14,6 +14,8 @@ As far as I can tell https://github.com/henrywhitaker3/Speedtest-Tracker was aba
 
 ## Getting Started
 
+![Dashboard](.github/screenshots/dashboard.jpeg)
+
 Speedtest Tracker is containerized so you can run it anywhere you run your containers. The image is built by LinuxServer.io, build information can be found [here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker).
 
 - [Installation](https://docs.speedtest-tracker.dev/getting-started/installation) will help you get up and running if you're deploying the Docker image or to a NAS platform like Synology and Unraid.
@@ -24,8 +26,3 @@ Speedtest Tracker is containerized so you can run it anywhere you run your conta
 
 - [Frequently Asked Questions](https://docs.speedtest-tracker.dev/help/faqs) is a collection of common questions.
 - [Error Messages](https://docs.speedtest-tracker.dev/help/error-messages) are thrown when the application experiences a problem. These can help you resolve issues you might experience.
-
-## Screenshots
-
-![Dashboard](.github/screenshots/dashboard_screenshot.jpg)
-**Dashboard**
