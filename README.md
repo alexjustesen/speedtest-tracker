@@ -1,76 +1,23 @@
 # 🐇 Speedtest Tracker
 
-Speedtest Tracker is a self-hosted internet performance tracking application that runs speedtests using Ookla's Speedtest service.
+Speedtest Tracker is a self-hosted application that monitors the performance and uptime of your internet connection.
 
-[![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
+![Dashboard](.github/screenshots/dashboard.jpeg)
 
-### Why might I use this?
+## Features
 
-The main use case for Speedtest Tracker is to build a history of your internet's performance so that you can be informed when you're not receiving your ISP's advertised rates.
-
-### What about that other Speedtest Tracker?
-
-As far as I can tell https://github.com/henrywhitaker3/Speedtest-Tracker was abandoned. This is meant to be an actively maintained replacement with an improved UI and feature set.
+- **Automated Tests**: Schedule regular speed tests to monitor your internet connection's performance over time.
+- **Detailed Metrics**: Capture download and upload speeds, ping, packet loss and more.
+- **Historical Data**: View historical data and trends to identify patterns and issues with your internet connection.
+- **Notifications**: Receive notifications when your internet performance drops below a certain threshold.
 
 ## Getting Started
 
-Speedtest Tracker is containerized so you can run it anywhere you run your Docker containers. The [install](https://docs.speedtest-tracker.dev/getting-started/installation) documentation will get you up and running with using Docker or Docker Composer along with choosing a database (SQLite, MySQL/MariaDB or Postgresql).
+Speedtest Tracker is containerized so you can run it anywhere you run your containers. The image is built by LinuxServer.io, build information can be found [here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker).
 
-### Quick Start
+- [Installation](https://docs.speedtest-tracker.dev/getting-started/installation) guide will get you up and running and includes steps for deploying the Docker image or to NAS platforms like Synology and Unraid.
+- [Configurations](https://docs.speedtest-tracker.dev/getting-started/environment-variables) are used to tailor Speedtest Tracker to your needs.
+- [Notifications](https://docs.speedtest-tracker.dev/settings/notifications) channels alert you when issues happen.
+- [Frequently Asked Questions](https://docs.speedtest-tracker.dev/help/faqs) are common questions that can help you resolve issues.
 
-#### Docker
-
-```bash
-docker run -d --name speedtest-tracker --restart unless-stopped \
-    -p 8080:80 \
-    -e PUID=1000 \
-    -e PGID=1000 \
-    -e APP_KEY= \ # How to generate an app key: https://speedtest-tracker.dev/
-    # -e SPEEDTEST_SCHEDULE= \ # optional: schedule a speedtest with an cronjob https://crontab.guru
-    -e APP_URL=http://localhost \
-    -e DB_CONNECTION=sqlite \
-    -v ${PWD}:/config \
-    lscr.io/linuxserver/speedtest-tracker:latest
-```
-
-#### Docker Compose
-
-```bash
-services:
-    speedtest-tracker:
-        container_name: speedtest-tracker
-        ports:
-            - 8080:80
-            - 8443:443
-        environment:
-            - PUID=1000
-            - PGID=1000
-            - APP_KEY= # How to generate an app key: https://speedtest-tracker.dev/
-            - APP_URL=http://localhost
-            - DB_CONNECTION=sqlite
-            # - SPEEDTEST_SCHEDULE= # optional: schedule a speedtest with an cronjob https://crontab.guru
-        volumes:
-            - /path/to/data:/config
-            - /path/to-custom-ssl-keys:/config/keys
-        image: lscr.io/linuxserver/speedtest-tracker:latest
-        restart: unless-stopped
-```
-For more environment configuration to customize your installation see the docs: https://docs.speedtest-tracker.dev/getting-started/environment-variables
-
-
-## Image version
-
-A full list of released versions can be found here: https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker
-
-### FAQs and Features
-
-[FAQs](https://docs.speedtest-tracker.dev/faqs) and a full list of planned and completed [features](https://docs.speedtest-tracker.dev/getting-started/features) can be found in the [documentation](https://docs.speedtest-tracker.dev).
-
-## API
-
-A robust API is planned for a later release but as of `v0.11.8` a legacy endpoint `/api/speedtest/latest` which is used by home lab dashboards like [Homepage](https://github.com/benphelps/homepage) and [Organizr](https://github.com/causefx/Organizr/tree/v2-master).
-
-## Screenshots
-
-![Dashboard](.github/screenshots/dashboard_screenshot.jpg)
-**Dashboard**
+[![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
