@@ -4,13 +4,12 @@ Speedtest Tracker is a self-hosted application that monitors the performance and
 
 [![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
 
-### Why might I use this?
+## Features
 
-Speedtest Tracker's use case is to build a history of your internet's performance and uptime so that you can be informed when you're not receiving your ISP's advertised rates.
-
-### What about that other Speedtest Tracker?
-
-As far as I can tell https://github.com/henrywhitaker3/Speedtest-Tracker was abandoned. This is meant to be an actively maintained replacement with an improved UI and feature set.
+- **Automated Tests**: Schedule regular speed tests to monitor your internet connection's performance over time.
+- **Detailed Metrics**: Capture download and upload speeds, ping, packet loss and more.
+- **Historical Data**: View historical data and trends to identify patterns and issues with your internet connection.
+- **Notifications**: Receive notifications when your internet performance drops below a certain threshold.
 
 ## Getting Started
 
@@ -18,11 +17,7 @@ As far as I can tell https://github.com/henrywhitaker3/Speedtest-Tracker was aba
 
 Speedtest Tracker is containerized so you can run it anywhere you run your containers. The image is built by LinuxServer.io, build information can be found [here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker).
 
-- [Installation](https://docs.speedtest-tracker.dev/getting-started/installation) will help you get up and running if you're deploying the Docker image or to a NAS platform like Synology and Unraid.
+- [Installation](https://docs.speedtest-tracker.dev/getting-started/installation) guide will get you up and running and includes steps for deploying the Docker image or to NAS platforms like Synology and Unraid.
 - [Configurations](https://docs.speedtest-tracker.dev/getting-started/environment-variables) are used to tailor Speedtest Tracker to your needs.
-- [Notifications](https://docs.speedtest-tracker.dev/settings/notifications) keep you informed when issues happen.
-
-### FAQs and Questions
-
-- [Frequently Asked Questions](https://docs.speedtest-tracker.dev/help/faqs) is a collection of common questions.
-- [Error Messages](https://docs.speedtest-tracker.dev/help/error-messages) are thrown when the application experiences a problem. These can help you resolve issues you might experience.
+- [Notifications](https://docs.speedtest-tracker.dev/settings/notifications) channels alert you when issues happen.
+- [Frequently Asked Questions](https://docs.speedtest-tracker.dev/help/faqs) are common questions that can help you resolve issues.
