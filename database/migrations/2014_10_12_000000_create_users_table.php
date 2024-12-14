@@ -26,10 +26,10 @@ return new class extends Migration
         });
 
         User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
+            'name' => config('app.admin_name'),
+            'email' => config('app.admin_email'),
             'email_verified_at' => now(),
-            'password' => Hash::make('password'),
+            'password' => Hash::make(config('app.admin_passwd')),
             'role' => UserRole::Admin,
         ]);
     }
