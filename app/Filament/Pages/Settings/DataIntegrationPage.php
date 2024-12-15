@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class DataIntegrationPage extends SettingsPage
 {
@@ -39,18 +40,15 @@ class DataIntegrationPage extends SettingsPage
     {
         return $form
             ->schema([
-                Forms\Components\Grid::make([
-                    'default' => 1,
-                    'md' => 3,
-                ])
-                    ->schema([
-                        // Prometheus Section
-                        Forms\Components\Section::make('Prometheus')
-                            ->description('This enables a /metrics endpoint for Prometheus to scrape the latest results.')
+                Forms\Components\Tabs::make('Integration Settings')
+                    ->columnSpanFull()
+                    ->tabs([
+                        Forms\Components\Tabs\Tab::make('Prometheus')
                             ->schema([
                                 Forms\Components\Toggle::make('prometheus_enabled')
-                                    ->label('Enable')
-                                    ->columnSpanFull(),
+                                    ->label('Enable Prometheus')
+                                    ->hint(new HtmlString('<a href="https://docs.speedtest-tracker.dev/settings/data-platforms/prometheus" target="_blank">Prometheus Documentation</a>'))
+                                    ->helpertext('When enabled there will be a /metrics endpoint for prometheus to scrape the last test result.'),
                                 Forms\Components\Actions::make([
                                     Forms\Components\Actions\Action::make('Open Metrics Page')
                                         ->hidden(fn (Forms\Get $get) => $get('prometheus_enabled') !== true)
@@ -61,19 +59,14 @@ class DataIntegrationPage extends SettingsPage
                                         ->color('primary')
                                         ->icon('heroicon-o-eye'),
                                 ]),
-                            ])
-                            ->compact()
-                            ->columns([
-                                'default' => 1,
-                                'md' => 2,
                             ]),
-                        Forms\Components\Section::make('InfluxDB v2')
-                            ->description('When enabled, all new Speedtest results will also be sent to InfluxDB.')
+                        Forms\Components\Tabs\Tab::make('InfluxDB v2')
                             ->schema([
                                 Forms\Components\Toggle::make('influxdb_v2_enabled')
-                                    ->label('Enable')
-                                    ->reactive()
-                                    ->columnSpanFull(),
+                                    ->hint(new HtmlString('<a href="https://docs.speedtest-tracker.dev/settings/data-platforms/influxdb2" target="_blank">InfluxDB Documentation</a>'))
+                                    ->helpertext('When enabled all resutls will be sent to InfluxDB.')
+                                    ->label('Enable InfluxDB v2')
+                                    ->reactive(),
                                 Forms\Components\Grid::make(['default' => 1, 'md' => 3])
                                     ->hidden(fn (Forms\Get $get) => $get('influxdb_v2_enabled') !== true)
                                     ->schema([
@@ -137,11 +130,6 @@ class DataIntegrationPage extends SettingsPage
                                                 ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
                                         ]),
                                     ]),
-                            ])
-                            ->compact()
-                            ->columns([
-                                'default' => 1,
-                                'md' => 2,
                             ]),
                     ]),
             ]);
