@@ -47,7 +47,7 @@ class PrometheusService
                 'speedtest_tracker',
                 $key,
                 $description,
-                ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'healthy', 'status', 'app_name']
+                ['service', 'server_id', 'server_name', 'isp', 'server_country', 'server_location', 'externalIp', 'scheduled', 'healthy', 'status', 'app_name']
             );
         }
     }
@@ -61,13 +61,16 @@ class PrometheusService
             $result = Result::find($latestResult->id);
 
             $labels = [
+                $result->service->value ?? 'unknown',
                 $data->server->id ?? 'unknown',
                 $data->server->name ?? 'unknown',
                 $data->isp ?? 'unknown',
+                $data->server->country ?? 'unknown',
                 $data->server->location ?? 'unknown',
+                $data->interface->externalIp ?? 'unknown',
                 $result->scheduled ? 'true' : 'false',
-                $result->status ?? 'unknown',
                 $result->healthy ? 'true' : 'false',
+                $result->status ?? 'unknown',
                 config('app.name'),
             ];
 
@@ -132,7 +135,7 @@ class PrometheusService
                     'speedtest_tracker',
                     $metric,
                     'Default metric for '.$metric,
-                    ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'healthy', 'status', 'app_name']
+                    ['server_id', 'server_name', 'isp', 'server_location', 'scheduled', 'status', 'healthy', 'app_name']
                 );
             }
 

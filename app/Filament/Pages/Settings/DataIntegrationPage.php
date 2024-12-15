@@ -54,7 +54,7 @@ class DataIntegrationPage extends SettingsPage
                                         ->hidden(fn (Forms\Get $get) => $get('prometheus_enabled') !== true)
                                         ->label('View Metrics')
                                         ->action(function () {
-                                            return redirect(config('app.url').'/metrics');
+                                            return redirect('/metrics');
                                         })
                                         ->color('primary')
                                         ->icon('heroicon-o-eye'),
