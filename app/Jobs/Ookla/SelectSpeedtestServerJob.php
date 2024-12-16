@@ -32,7 +32,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         }
 
         // If the server id is already set, we don't need to do anything.
-        if (Arr::exists($this->result->data, 'server.id')) {
+        if (Arr::get($this->result->data, 'server.id')) {
             return;
         }
 
