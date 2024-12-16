@@ -31,6 +31,7 @@
         "livewire/livewire": "^3.5.17",
         "lorisleiva/laravel-actions": "^2.8.4",
         "maennchen/zipstream-php": "^2.4",
+        "orisai/cron-expression-explainer": "^1.1",
         "spatie/laravel-settings": "^3.4",
         "spatie/laravel-webhook-server": "^3.8.1",
         "timokoerber/laravel-one-time-operations": "^1.4.4"

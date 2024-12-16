@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Actions\ExplainCronExpression;
 use App\Filament\Resources\TestResource\Pages;
 use App\Filament\Resources\TestResource\RelationManagers;
 use App\Models\Test;
 use App\Rules\Cron;
-use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Radio;
@@ -28,6 +28,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
+use Orisai\CronExpressionExplainer\DefaultCronExpressionExplainer;
 
 class TestResource extends Resource
 {
@@ -73,7 +74,7 @@ class TestResource extends Resource
                                     ->schema([
                                         TextInput::make('options.cron_expression')
                                             ->placeholder('Enter a cron expression.')
-                                            ->helperText(new HtmlString('This is a cron expression that determines when the test should run.'))
+                                            ->helperText(fn (Get $get) => ExplainCronExpression::run($get('options.cron_expression')))
                                             ->required()
                                             ->rules([new Cron()])
                                             ->live(),
@@ -116,7 +117,7 @@ class TestResource extends Resource
                                     ->schema([
                                         TagsInput::make('options.skip_ips')
                                             ->label('Skip IP addresses')
-                                            ->placeholder('Add external Ip addresses that should be skipped.'),
+                                            ->placeholder('Add external IP addresses that should be skipped.'),
 
                                         // ...
                                     ]),
