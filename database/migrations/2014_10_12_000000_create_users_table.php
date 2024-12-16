@@ -29,7 +29,7 @@ return new class extends Migration
             'name' => config('app.admin_name'),
             'email' => config('app.admin_email'),
             'email_verified_at' => now(),
-            'password' => Hash::make(config('app.admin_passwd')),
+            'password' => Hash::make(config('app.admin_password')),
             'role' => UserRole::Admin,
         ]);
     }

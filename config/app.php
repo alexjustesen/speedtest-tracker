@@ -20,6 +20,6 @@ return [
 
     'admin_email' => env('ADMIN_EMAIL', 'admin@example.com'),
 
-    'admin_passwd' => env('ADMIN_PASSWD', 'password'),
+    'admin_password' => env('ADMIN_PASSWORD', 'password'),
 
 ];
