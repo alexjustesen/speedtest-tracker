@@ -140,7 +140,6 @@ class ResultResource extends Resource
                                 ->content(fn (Result $result): ?string => $result->comments),
                             Forms\Components\Checkbox::make('scheduled'),
                             Forms\Components\Checkbox::make('healthy'),
-
                         ])
                         ->columns(1)
                         ->columnSpan([
@@ -318,6 +317,7 @@ class ResultResource extends Resource
                     ->boolean()
                     ->toggleable()
                     ->toggledHiddenByDefault()
+                    ->sortable()
                     ->alignment(Alignment::Center),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
@@ -365,7 +365,12 @@ class ResultResource extends Resource
                 Tables\Filters\TernaryFilter::make('healthy')
                     ->nullable()
                     ->trueLabel('Only healthy speedtests')
-                    ->falseLabel('Only unhealthy speedtests'),
+                    ->falseLabel('Only unhealthy speedtests')
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('healthy', true),
+                        false: fn (Builder $query) => $query->where('healthy', false),
+                        blank: fn (Builder $query) => $query,
+                    ),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
