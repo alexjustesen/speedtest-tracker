@@ -392,6 +392,22 @@ class ResultResource extends Resource
                                 ->maxLength(500),
                         ])
                         ->modalButton('Save'),
+                    Tables\Actions\Action::make('updateHealthy')
+                        ->icon('heroicon-o-check-circle')
+                        ->hidden(fn (): bool => ! auth()->user()->is_admin && ! auth()->user()->is_user)
+                        ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Completed)
+                        ->mountUsing(fn (Forms\ComponentContainer $form, Result $record) => $form->fill([
+                            'healthy' => $record->healthy,
+                        ]))
+                        ->action(function (Result $record, array $data): void {
+                            $record->healthy = $data['healthy'];
+                            $record->save();
+                        })
+                        ->form([
+                            Forms\Components\Checkbox::make('healthy')
+                                ->label('Healthy'),
+                        ])
+                        ->modalButton('Save'),
                     Tables\Actions\DeleteAction::make(),
                 ]),
             ])
