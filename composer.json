@@ -24,15 +24,15 @@
         "guzzlehttp/guzzle": "^7.9.2",
         "influxdata/influxdb-client-php": "^3.6",
         "laravel-notification-channels/telegram": "^5.0",
-        "laravel/framework": "^11.36",
+        "laravel/framework": "^11.36.1",
         "laravel/prompts": "^0.3.2",
-        "laravel/sanctum": "^4.0.6",
+        "laravel/sanctum": "^4.0.7",
         "laravel/tinker": "^2.10.0",
         "livewire/livewire": "^3.5.17",
         "lorisleiva/laravel-actions": "^2.8.4",
         "maennchen/zipstream-php": "^2.4",
         "spatie/laravel-settings": "^3.4",
-        "spatie/laravel-webhook-server": "^3.8.1",
+        "spatie/laravel-webhook-server": "^3.8.2",
         "timokoerber/laravel-one-time-operations": "^1.4.4"
     },
     "require-dev": {
@@ -68,7 +68,8 @@
             "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php composer bump"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
