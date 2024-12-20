@@ -20,7 +20,8 @@ class Ookla
                 return $decoded['message'];
             }
 
-            return ''; // If it's not valid JSON or doesn't contain "message", return an empty string
+            // Placeholder for invalid JSON or missing "message"
+            return 'An unexpected error occurred while running the Ookla CLI.';
         }, $messages);
 
         // Filter out empty messages and concatenate
