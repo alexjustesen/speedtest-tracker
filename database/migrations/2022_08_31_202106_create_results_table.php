@@ -13,17 +13,15 @@ return new class extends Migration
     {
         Schema::create('results', function (Blueprint $table) {
             $table->id();
-            $table->float('ping', 8, 3);
-            $table->unsignedBigInteger('download'); // will be stored in bytes
-            $table->unsignedBigInteger('upload'); // will be stored in bytes
-            $table->integer('server_id')->nullable();
-            $table->string('server_host')->nullable();
-            $table->string('server_name')->nullable();
-            $table->string('url')->nullable();
+            $table->string('service')->default('ookla');
+            $table->float('ping', 8, 3)->nullable();
+            $table->unsignedBigInteger('download')->nullable();
+            $table->unsignedBigInteger('upload')->nullable();
+            $table->text('comments')->nullable();
+            $table->json('data')->nullable();
+            $table->string('status');
             $table->boolean('scheduled')->default(false);
-            $table->json('data'); // is a dump of the cli output in case we want more fields later
-            $table->timestamp('created_at')
-                ->useCurrent();
+            $table->timestamps();
         });
     }
 
