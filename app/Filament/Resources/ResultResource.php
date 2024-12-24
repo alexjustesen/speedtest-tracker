@@ -2,19 +2,16 @@
 
 namespace App\Filament\Resources;
 
-use App\Actions\MigrateBadJsonResults;
 use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
-use App\Settings\DataMigrationSettings;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables;
@@ -143,7 +140,6 @@ class ResultResource extends Resource
                                 ->content(fn (Result $result): ?string => $result->comments),
                             Forms\Components\Checkbox::make('scheduled'),
                             Forms\Components\Checkbox::make('healthy'),
-
                         ])
                         ->columns(1)
                         ->columnSpan([
@@ -156,8 +152,6 @@ class ResultResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $dataSettings = new DataMigrationSettings;
-
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -323,6 +317,7 @@ class ResultResource extends Resource
                     ->boolean()
                     ->toggleable()
                     ->toggledHiddenByDefault()
+                    ->sortable()
                     ->alignment(Alignment::Center),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
@@ -370,7 +365,12 @@ class ResultResource extends Resource
                 Tables\Filters\TernaryFilter::make('healthy')
                     ->nullable()
                     ->trueLabel('Only healthy speedtests')
-                    ->falseLabel('Only unhealthy speedtests'),
+                    ->falseLabel('Only unhealthy speedtests')
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('healthy', true),
+                        false: fn (Builder $query) => $query->where('healthy', false),
+                        blank: fn (Builder $query) => $query,
+                    ),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -407,21 +407,6 @@ class ResultResource extends Resource
                 Tables\Actions\ExportAction::make()
                     ->exporter(ResultExporter::class)
                     ->fileName(fn (): string => 'results-'.now()->timestamp),
-                Tables\Actions\Action::make('migrate')
-                    ->action(function (): void {
-                        Notification::make()
-                            ->title('Starting data migration...')
-                            ->body('This can take a little bit depending how much data you have.')
-                            ->warning()
-                            ->sendToDatabase(Auth::user());
-
-                        MigrateBadJsonResults::dispatch(Auth::user());
-                    })
-                    ->hidden($dataSettings->bad_json_migrated)
-                    ->requiresConfirmation()
-                    ->modalHeading('Migrate History')
-                    ->modalDescription(new HtmlString('<p>v0.16.0 archived the old <code>"results"</code> table, to migrate your history click the button below.</p><p>For more information read the <a href="#" target="_blank" rel="nofollow" class="underline">docs</a>.</p>'))
-                    ->modalSubmitActionLabel('Yes, migrate it'),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('truncate')
                         ->action(fn () => TruncateResults::dispatch(Auth::user()))
