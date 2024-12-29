@@ -6,6 +6,7 @@ use App\Services\SystemChecker;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -37,6 +38,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->defineCustomIfStatements();
+
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
@@ -51,5 +54,27 @@ class AppServiceProvider extends ServiceProvider
             'Version' => $system->getLocalVersion(),
             'Out of date' => $system->isOutOfDate() ? 'Yes' : 'No',
         ]);
+    }
+
+    /**
+     * Define custom if statements, these were added to make the blade templates more readable.
+     *
+     * Ref: https://github.com/laravel/framework/pull/51561
+     */
+    protected function defineCustomIfStatements(): void
+    {
+        /**
+         * Adds blank() custom if statement.
+         */
+        Blade::if('blank', function (mixed $value) {
+            return blank($value);
+        });
+
+        /**
+         * Adds filled() custom if statement.
+         */
+        Blade::if('filled', function (mixed $value) {
+            return filled($value);
+        });
     }
 }
