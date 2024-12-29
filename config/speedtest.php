@@ -50,5 +50,5 @@ return [
 
      'threshold_upload' => env('THRESHOLD_UPLOAD', 0),
 
-     'threshold_ping' => env('THRESHOLD_PING', 0 ,
+     'threshold_ping' => env('THRESHOLD_PING', 0) ,
 ];
