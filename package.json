@@ -1,25 +1,9 @@
 {
-    "name": "speedtest-tracker",
-    "version": "1.0.2",
-    "description": "Speedtest Tracker is a self-hosted application that monitors the performance and uptime of your internet connection.",
+    "private": true,
     "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build"
-    },
-    "keywords": [
-        "laravel",
-        "vite",
-        "tailwindcss",
-        "speedtest",
-        "tracker",
-        "speedtest tracker"
-    ],
-    "author": "Alex Justesen (@alexjustesen)",
-    "license": "MIT",
-    "repository": { 
-        "type": "git", 
-        "url": "https://github.com/alexjustesen/speedtest-tracker.git" 
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.7",
