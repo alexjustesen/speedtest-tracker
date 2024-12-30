@@ -18,6 +18,6 @@ return [
     'password' => 'Şifre ve onay aynı olmalı ve en az altı karakter uzunluğunda olmalıdır.',
     'throttled' => 'Tekrar denemeden önce lütfen bekleyin.',
     'token' => 'Bu parola sıfırlama anahtarı geçersiz.',
-    'user' => "Bu e-posta adresine sahip bir kullanıcı bulamadık.",
+    'user' => 'Bu e-posta adresine sahip bir kullanıcı bulamadık.',
 
 ];
