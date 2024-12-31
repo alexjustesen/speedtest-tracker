@@ -10,12 +10,12 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Components\TextEntry\TextEntrySize;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
 use Filament\Support\Enums\FontFamily;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -105,7 +105,8 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
                         $this->token = $token->plainTextToken;
                     })
                     ->label('Create API Token')
-                    ->modal('createToken'),
+                    ->modal('createToken')
+                    ->modalWidth(MaxWidth::ExtraLarge),
             ])
             ->columns([
                 TextColumn::make('id')
