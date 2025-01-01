@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Actions\Notifications\SendAppriseTestNotification;
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
@@ -17,6 +18,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class NotificationPage extends SettingsPage
 {
@@ -80,6 +82,77 @@ class NotificationPage extends SettingsPage
                                                     Forms\Components\Actions\Action::make('test database')
                                                         ->label('Test database channel')
                                                         ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Apprise')
+                                    ->description('The Apprise Notification Library enables sending notifications to a wide range of services.')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('apprise_enabled')
+                                            ->label('Enable Apprise Notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('apprise_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('apprise_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('apprise_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+
+                                                Forms\Components\Repeater::make('apprise_webhooks')
+                                                    ->label('apprise Webhooks')
+                                                    ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">Apprise Documentation</a>'))
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->label('URL')
+                                                            ->placeholder('http://apprise:8000/notify/apprise')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                        Forms\Components\Radio::make('notification_type')
+                                                            ->label('Notification Type')
+                                                            ->options([
+                                                                'service_url' => 'Service URL',
+                                                                'tags' => 'Tags',
+                                                            ])
+                                                            ->default('service_url')
+                                                            ->reactive()
+                                                            ->required(),
+                                                        Forms\Components\TextInput::make('service_url')
+                                                            ->label('Service URL')
+                                                            ->placeholder('discord://WebhookID/WebhookToken')
+                                                            ->maxLength(200)
+                                                            ->required()
+                                                            ->visible(fn (callable $get) => $get('notification_type') === 'service_url'),
+                                                        Forms\Components\TextInput::make('tags')
+                                                            ->label('Tags')
+                                                            ->placeholder('Homelab')
+                                                            ->maxLength(200)
+                                                            ->required()
+                                                            ->visible(fn (callable $get) => $get('notification_type') === 'tags'),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test apprise')
+                                                        ->label('Test Apprise')
+                                                        ->action(fn (Forms\Get $get) => SendAppriseTestNotification::run(
+                                                            webhooks: $get('apprise_webhooks')
+                                                        ))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('apprise_webhooks'))),
                                                 ]),
                                             ]),
                                     ])

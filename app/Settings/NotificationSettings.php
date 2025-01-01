@@ -86,6 +86,14 @@ class NotificationSettings extends Settings
 
     public ?array $gotify_webhooks;
 
+    public bool $apprise_enabled;
+
+    public bool $apprise_on_speedtest_run;
+
+    public bool $apprise_on_threshold_failure;
+
+    public ?array $apprise_webhooks;
+
     public static function group(): string
     {
         return 'notification';
