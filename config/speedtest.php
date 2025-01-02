@@ -35,6 +35,8 @@ return [
 
     'blocked_servers' => env('SPEEDTEST_BLOCKED_SERVERS'),
 
+    'interface' => env('SPEEDTEST_INTERFACE'),
+
     /**
      * IP filtering settings.
      */
