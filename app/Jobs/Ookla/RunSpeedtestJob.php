@@ -64,7 +64,7 @@ class RunSpeedtestJob implements ShouldQueue
             '--accept-gdpr',
             '--format=json',
             $this->result->server_id ? '--server-id='.$this->result->server_id : null,
-            '--interface='.config('speedtest.interface') ?: null,
+            config('speedtest.interface') ? '--interface='.config('speedtest.interface') : null,
         ]);
 
         $process = new Process($command);
