@@ -16,7 +16,8 @@ abstract class RecentChartWidget extends ChartWidget
 
     public function mount(): void
     {
-        $this->filter = config('app.chart_default_filter');
+        $configDefaultChart = config('app.chart_default_filter');
+        $this->filter = array_key_exists($configDefaultChart, $this->getDateFilters()) ? $configDefaultChart : '24h';
     }
 
     protected function getPollingInterval(): ?string
