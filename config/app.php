@@ -10,6 +10,8 @@ return [
 
     'chart_datetime_format' => env('CHART_DATETIME_FORMAT', 'M. j - G:i'),
 
+    'chart_default_filter' => env('CHART_DEFAULT_FILTER', '24h'),
+
     'datetime_format' => env('DATETIME_FORMAT', 'M. jS, Y g:ia'),
 
     'display_timezone' => env('DISPLAY_TIMEZONE', 'UTC'),
