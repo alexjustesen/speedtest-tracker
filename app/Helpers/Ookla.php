@@ -12,22 +12,22 @@ class Ookla
     public static function getErrorMessage(ProcessFailedException $exception): string
     {
         $messages = explode(PHP_EOL, $exception->getMessage());
+        $errorMessages = [];
 
-        // Extract only the "message" part from each JSON error message
-        $errorMessages = array_map(function ($message) {
+        foreach ($messages as $message) {
             $decoded = json_decode($message, true);
             if (json_last_error() === JSON_ERROR_NONE && isset($decoded['message'])) {
-                return $decoded['message'];
+                $errorMessages[] = $decoded['message'];
             }
+        }
 
-            // Placeholder for invalid JSON or missing "message"
-            return 'An unexpected error occurred while running the Ookla CLI.';
-        }, $messages);
+        // If no valid messages, use the placeholder
+        if (empty($errorMessages)) {
+            $errorMessages[] = 'An unexpected error occurred while running the Ookla CLI.';
+        }
 
-        // Filter out empty messages and concatenate
-        $errorMessage = implode(' | ', array_filter($errorMessages));
-
-        return $errorMessage;
+        // Remove duplicates and concatenate
+        return implode(' | ', array_unique($errorMessages));
     }
 
     public static function getConfigServers(): ?array
