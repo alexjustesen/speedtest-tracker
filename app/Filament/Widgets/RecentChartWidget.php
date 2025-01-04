@@ -27,9 +27,16 @@ abstract class RecentChartWidget extends ChartWidget
     protected function getDateFilters()
     {
         return [
-            '24h' => ['label' => 'Last 24h', 'date' => now()->subDay()],
-            'week' => ['label' => 'Last week', 'date' => now()->subWeek()],
-            'month' => ['label' => 'Last month', 'date' => now()->subMonth()],
+            '1h' => ['label' => 'Last hour', 'date' => now()->subHour()],
+            '3h' => ['label' => 'Last 3 hours', 'date' => now()->subHours(3)],
+            '6h' => ['label' => 'Last 6 hours', 'date' => now()->subHours(6)],
+            '12h' => ['label' => 'Last 12 hours', 'date' => now()->subHours(12)],
+            '24h' => ['label' => 'Last 24 hours', 'date' => now()->subDay()],
+            '1w' => ['label' => 'Last week', 'date' => now()->subWeek()],
+            '1m' => ['label' => 'Last month', 'date' => now()->subMonth()],
+            '3m' => ['label' => 'Last 3 months', 'date' => now()->subMonths(3)],
+            '6m' => ['label' => 'Last 6 months', 'date' => now()->subMonths(6)],
+            '1y' => ['label' => 'Last year', 'date' => now()->subYear()],
         ];
     }
 
