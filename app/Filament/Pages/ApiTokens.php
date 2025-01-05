@@ -43,9 +43,12 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
 
     public ?string $token = '';
 
+    /**
+     * NOTE: This page is disabled until the api feature is ready.
+     */
     public static function canAccess(): bool
     {
-        return Auth::user()->is_admin;
+        return false;
     }
 
     public function tokenInfolist(Infolist $infolist): Infolist
@@ -84,10 +87,10 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
                         CheckboxList::make('token_abilities')
                             ->label('Abilities')
                             ->options([
-                                'result:read' => 'Read results',
+                                'result-read' => 'Read results',
                             ])
                             ->descriptions([
-                                'result:read' => new HtmlString('Allow the token to retrieve result data.'),
+                                'result-read' => new HtmlString('Allow the token to retrieve result data.'),
                             ])
                             ->required()
                             ->bulkToggleable(),
