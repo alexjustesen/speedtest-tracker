@@ -117,7 +117,9 @@ class SelectSpeedtestServerJob implements ShouldQueue
 
         $filtered = Arr::except($servers, $blocked);
 
-        return Arr::first($filtered);
+        return count($filtered) > 0
+            ? Arr::random($filtered)
+            : null;
     }
 
     /**
