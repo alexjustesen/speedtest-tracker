@@ -32,6 +32,7 @@
         "lorisleiva/laravel-actions": "^2.8.5",
         "maennchen/zipstream-php": "^2.4",
         "ryangjchandler/blade-tabler-icons": "^2.3",
+        "spatie/laravel-query-builder": "^6.3",
         "spatie/laravel-settings": "^3.4",
         "spatie/laravel-webhook-server": "^3.8.2",
         "timokoerber/laravel-one-time-operations": "^1.4.4"
