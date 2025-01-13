@@ -10,15 +10,15 @@ abstract class ApiController
     /**
      * Send a response.
      *
-     * @param mixed $data
-     * @param string $message
-     * @param int $code
+     * @param  mixed  $data
+     * @param  string  $message
+     * @param  int  $code
      * @return \Illuminate\Http\JsonResponse
      */
     public static function sendResponse($data, $message = 'ok', $code = 200)
     {
         $response = array_filter([
-            'data'    => $data,
+            'data' => $data,
             'message' => $message,
         ]);
 
@@ -32,8 +32,9 @@ abstract class ApiController
     /**
      * Throw an exception.
      *
-     * @param \Exception $e
-     * @param int $code
+     * @param  \Exception  $e
+     * @param  int  $code
+     *
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
     public static function throw($e, $code = 500)
