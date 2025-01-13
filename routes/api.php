@@ -24,6 +24,6 @@ Route::get('/healthcheck', function () {
 Route::get('/speedtest/latest', GetLatestController::class)
     ->name('speedtest.latest');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     require __DIR__.'/api/v1/routes.php';
 });
