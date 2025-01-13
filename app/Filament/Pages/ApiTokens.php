@@ -37,8 +37,6 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
 
     protected static ?string $navigationGroup = 'Settings';
 
-    protected static ?int $navigationSort = 5;
-
     public ?string $token = '';
 
     public function tokenInfolist(Infolist $infolist): Infolist
