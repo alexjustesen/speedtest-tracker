@@ -35,7 +35,7 @@ class ListResults extends Controller
                 AllowedFilter::operator('ping', FilterOperator::DYNAMIC),
                 AllowedFilter::operator('download', FilterOperator::DYNAMIC),
                 AllowedFilter::operator('upload', FilterOperator::DYNAMIC),
-                AllowedFilter::exact('healthy'),
+                AllowedFilter::exact('healthy')->nullable(),
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('scheduled'),
                 AllowedFilter::operator('created_at', FilterOperator::DYNAMIC),
@@ -48,9 +48,8 @@ class ListResults extends Controller
                 'created_at',
                 'updated_at',
             ])
-            ->paginate($request->input('per_page', 25));
+            ->jsonPaginate($request->input('per_page', 25));
 
-        // TODO: build a better json payload using the resource and pagination
         return ResultResource::collection($results);
     }
 }
