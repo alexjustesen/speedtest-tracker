@@ -3,7 +3,6 @@
 namespace App\Filament\Pages;
 
 use Carbon\Carbon;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -25,7 +24,6 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\HtmlString;
 
 class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
 {
@@ -42,14 +40,6 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
     protected static ?int $navigationSort = 5;
 
     public ?string $token = '';
-
-    /**
-     * NOTE: This page is disabled until the api feature is ready.
-     */
-    public static function canAccess(): bool
-    {
-        return false;
-    }
 
     public function tokenInfolist(Infolist $infolist): Infolist
     {
@@ -83,25 +73,16 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
                         TextInput::make('token_name')
                             ->label('Name')
                             ->maxLength('100')
-                            ->required(),
-                        CheckboxList::make('token_abilities')
-                            ->label('Abilities')
-                            ->options([
-                                'result-read' => 'Read results',
-                            ])
-                            ->descriptions([
-                                'result-read' => new HtmlString('Allow the token to retrieve result data.'),
-                            ])
                             ->required()
-                            ->bulkToggleable(),
+                            ->autocomplete(false),
                         DateTimePicker::make('token_expires_at')
                             ->label('Expires at')
-                            ->nullable(),
+                            ->nullable()
+                            ->helperText('Leave empty for no expiration'),
                     ])
                     ->action(function (array $data) {
                         $token = Auth::user()->createToken(
                             name: $data['token_name'],
-                            abilities: $data['token_abilities'],
                             expiresAt: $data['token_expires_at'] ? Carbon::parse($data['token_expires_at']) : null,
                         );
 
