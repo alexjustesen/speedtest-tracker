@@ -11,7 +11,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
@@ -25,11 +28,8 @@ jobs:
       run: ./vendor/bin/openapi app -o openapi.json -f json
 
     - name: Commit and push changes
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add openapi.json
-        git commit -m 'chore: update OpenAPI JSON file [skip ci]' || exit 0
-        git push
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Dusting
+        commit_user_name: GitHub Action
+        commit_user_email: actions@github.com
