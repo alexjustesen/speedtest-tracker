@@ -18,7 +18,7 @@ class LatestResult extends ApiController
             ->latest()
             ->firstOr(function () {
                 self::throw(
-                    e: new NotFoundException('Result not found.'),
+                    e: new NotFoundException('No results found.'),
                     code: 404,
                 );
             });
