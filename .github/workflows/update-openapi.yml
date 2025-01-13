@@ -1,0 +1,35 @@
+name: Update OpenAPI JSON
+
+on:
+  pull_request:
+    paths:
+      - 'app/Http/Controllers/Api/**/*.php'
+
+jobs:
+  update-openapi:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+
+    - name: Install dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+
+    - name: Generate OpenAPI JSON
+      run: ./vendor/bin/openapi app -o openapi.json -f json
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add openapi.json
+        git commit -m 'chore: update OpenAPI JSON file [skip ci]' || exit 0
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
