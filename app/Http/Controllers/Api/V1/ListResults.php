@@ -2,20 +2,27 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\ResultResource;
 use App\Models\Result;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use OpenApi\Attributes as OA;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\Enums\FilterOperator;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class ListResults extends Controller
+class ListResults extends ApiController
 {
     /**
      * Handle the incoming request.
      */
+    #[OA\Get(
+        path: '/api/v1/results',
+        description: 'List results.',
+        responses: [
+            new OA\Response(response: 200, description: 'OK'),
+            new OA\Response(response: 422, description: 'Unprocessable Entity'),
+        ])]
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [
