@@ -5,9 +5,22 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/v1/results/latest": {
+            "get": {
+                "description": "Get the latest result.",
+                "operationId": "4b44d6935caeb91d3e687ab4bc176f62",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "No result found"
+                    }
+                }
+            }
+        },
         "/api/v1/results": {
             "get": {
-                "summary": "Handle the incoming request.",
                 "description": "List results.",
                 "operationId": "32a45ba8e8e9a81955a178ae686273ce",
                 "responses": {
@@ -22,7 +35,6 @@
         },
         "/api/v1/results/{id}": {
             "get": {
-                "summary": "Handle the incoming request.",
                 "description": "Get result.",
                 "operationId": "bc182a4008f0ff94a6318893359f3adc",
                 "responses": {

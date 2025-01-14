@@ -6,7 +6,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Log;
 use OpenApi\Attributes as OA;
 
-#[OA\Info(title: "Speedtest Tracker API", version: "1.0.0")]
+#[OA\Info(title: 'Speedtest Tracker API', version: '1.0.0')]
 abstract class ApiController
 {
     /**
