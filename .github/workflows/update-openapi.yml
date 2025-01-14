@@ -30,6 +30,6 @@ jobs:
     - name: Commit and push changes
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: Dusting
+        commit_message: published OpenAPI JSON
         commit_user_name: GitHub Action
         commit_user_email: actions@github.com
