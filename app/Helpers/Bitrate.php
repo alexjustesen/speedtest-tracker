@@ -32,7 +32,7 @@ class Bitrate
         }
 
         // 1 byte = 8 bits
-        return $bytes * 8;
+        return round($bytes * 8);
     }
 
     /**
