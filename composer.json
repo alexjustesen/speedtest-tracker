@@ -31,7 +31,7 @@
         "livewire/livewire": "^3.5.18",
         "lorisleiva/laravel-actions": "^2.8.5",
         "maennchen/zipstream-php": "^2.4",
-        "ryangjchandler/blade-tabler-icons": "^2.3",
+        "secondnetwork/blade-tabler-icons": "^3.28",
         "spatie/laravel-json-api-paginate": "^1.16.1",
         "spatie/laravel-query-builder": "^6.3",
         "spatie/laravel-settings": "^3.4",

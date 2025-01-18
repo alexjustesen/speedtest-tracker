@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7331775f930b052158e864be31b418f7",
+    "content-hash": "933bfec8bdbfb5e0f4cfe0579fa0e76e",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5939,40 +5939,39 @@
             "time": "2024-02-26T18:08:49+00:00"
         },
         {
-            "name": "ryangjchandler/blade-tabler-icons",
-            "version": "v2.3.0",
+            "name": "secondnetwork/blade-tabler-icons",
+            "version": "v3.28.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ryangjchandler/blade-tabler-icons.git",
-                "reference": "cd359f5d3b406a982dae1aaaf121d84067576a2e"
+                "url": "https://github.com/secondnetwork/blade-tabler-icons.git",
+                "reference": "a1eee5932f204fd8bcc063b6fbb9313f95e6589e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ryangjchandler/blade-tabler-icons/zipball/cd359f5d3b406a982dae1aaaf121d84067576a2e",
-                "reference": "cd359f5d3b406a982dae1aaaf121d84067576a2e",
+                "url": "https://api.github.com/repos/secondnetwork/blade-tabler-icons/zipball/a1eee5932f204fd8bcc063b6fbb9313f95e6589e",
+                "reference": "a1eee5932f204fd8bcc063b6fbb9313f95e6589e",
                 "shasum": ""
             },
             "require": {
-                "blade-ui-kit/blade-icons": "^1.5",
-                "illuminate/support": "^10.0 || ^11.0",
-                "php": "^8.1"
+                "blade-ui-kit/blade-icons": "^1.1|^1.5|^1.6",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
+                "php": "^7.4|^8.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.14",
-                "orchestra/testbench": "^8.0 || ^9.0",
-                "phpunit/phpunit": "^9.5.10 || ^10.5"
+                "orchestra/testbench": "^6.0|^7.0|^9.0",
+                "phpunit/phpunit": "^9.0|^10.0|^11.0"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "RyanChandler\\TablerIcons\\BladeTablerIconsServiceProvider"
+                        "secondnetwork\\TablerIcons\\BladeTablerIconsServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "RyanChandler\\TablerIcons\\": "src"
+                    "secondnetwork\\TablerIcons\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -5981,25 +5980,21 @@
             ],
             "authors": [
                 {
-                    "name": "Ryan Chandler",
-                    "email": "support@ryangjchandler.co.uk",
-                    "homepage": "https://ryangjchandler.co.uk",
-                    "role": "Developer"
+                    "name": "Andreas Farah"
                 }
             ],
-            "description": "A package to easily make use of Tabler icons in your Laravel Blade views.",
-            "homepage": "https://github.com/ryangjchandler/blade-tabler-icons",
+            "description": "A package to easily make use of tabler-icons in your Laravel Blade views.",
+            "homepage": "https://github.com/secondnetwork/blade-tabler-icons",
             "keywords": [
                 "blade",
                 "laravel",
-                "tabler"
+                "tabler-icons"
             ],
             "support": {
-                "issues": "https://github.com/ryangjchandler/blade-tabler-icons/issues",
-                "source": "https://github.com/ryangjchandler/blade-tabler-icons/tree/v2.3.0"
+                "issues": "https://github.com/secondnetwork/blade-tabler-icons/issues",
+                "source": "https://github.com/secondnetwork/blade-tabler-icons/tree/v3.28.0"
             },
-            "abandoned": "secondnetwork/blade-tabler-icons",
-            "time": "2024-03-12T23:54:24+00:00"
+            "time": "2025-01-09T14:42:38+00:00"
         },
         {
             "name": "spatie/color",
