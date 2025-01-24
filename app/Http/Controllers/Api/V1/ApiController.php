@@ -17,10 +17,11 @@ abstract class ApiController
      * @param  int  $code
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function sendResponse($data, $message = 'ok', $code = 200)
+    public static function sendResponse($data, $filters = [], $message = 'ok', $code = 200)
     {
         $response = array_filter([
             'data' => $data,
+            'filters' => $filters,
             'message' => $message,
         ]);
 
