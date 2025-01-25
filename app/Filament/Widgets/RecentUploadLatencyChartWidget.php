@@ -35,7 +35,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'download', 'created_at'])
+            ->select(['id', 'data', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
