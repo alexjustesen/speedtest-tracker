@@ -29,6 +29,8 @@ class RecentDownloadChartWidget extends ChartWidget
             '24h' => 'Last 24h',
             'week' => 'Last week',
             'month' => 'Last month',
+            'year' => 'Last year',
+            'all' => 'All time',
         ];
     }
 
@@ -45,6 +47,8 @@ class RecentDownloadChartWidget extends ChartWidget
             })
             ->when($this->filter == 'month', function ($query) {
                 $query->where('created_at', '>=', now()->subMonth());
+            })->when($this->filter == 'year', function ($query) {
+                $query->where('created_at', '>=', now()->subYear());
             })
             ->orderBy('created_at')
             ->get();

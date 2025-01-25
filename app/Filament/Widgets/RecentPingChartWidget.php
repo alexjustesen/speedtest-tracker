@@ -28,13 +28,15 @@ class RecentPingChartWidget extends ChartWidget
             '24h' => 'Last 24h',
             'week' => 'Last week',
             'month' => 'Last month',
+            'year' => 'Last year',
+            'all' => 'All time',
         ];
     }
 
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'ping', 'created_at'])
+            ->select(['id', 'download', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
@@ -44,6 +46,8 @@ class RecentPingChartWidget extends ChartWidget
             })
             ->when($this->filter == 'month', function ($query) {
                 $query->where('created_at', '>=', now()->subMonth());
+            })->when($this->filter == 'year', function ($query) {
+                $query->where('created_at', '>=', now()->subYear());
             })
             ->orderBy('created_at')
             ->get();
