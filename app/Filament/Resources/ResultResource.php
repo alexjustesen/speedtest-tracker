@@ -357,6 +357,7 @@ class ResultResource extends Resource
                         return Result::query()
                             ->whereNotNull('data')
                             ->where('status', '=', ResultStatus::Completed)
+                            ->orderBy('data->server->name')
                             ->distinct()
                             ->get()
                             ->mapWithKeys(fn (Result $result) => [
