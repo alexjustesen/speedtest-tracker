@@ -350,6 +350,22 @@ class ResultResource extends Resource
                             ->toArray();
                     })
                     ->attribute('data->interface->externalIp'),
+                Tables\Filters\SelectFilter::make('server_name')
+                    ->label('Server Name')
+                    ->multiple()
+                    ->options(function (): array {
+                        return Result::query()
+                            ->whereNotNull('data')
+                            ->where('status', '=', ResultStatus::Completed)
+                            ->orderBy('data->server->name')
+                            ->distinct()
+                            ->get()
+                            ->mapWithKeys(fn (Result $result) => [
+                                $result->data['server']['name'] => $result->data['server']['name'],
+                            ])
+                            ->toArray();
+                    })
+                    ->attribute('data->server->name'),
                 Tables\Filters\TernaryFilter::make('scheduled')
                     ->nullable()
                     ->trueLabel('Only scheduled speedtests')
