@@ -13,7 +13,7 @@ return [
      */
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
-    'prune_results_older_than' => env('PRUNE_RESULTS_OLDER_THAN', 0),
+    'prune_results_older_than' => (int) env('PRUNE_RESULTS_OLDER_THAN', 0),
 
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
 
