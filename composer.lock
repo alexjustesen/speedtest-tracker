@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "57c40fb2829f4ff2b9bd3e5b220bd45a",
+    "content-hash": "f506ff423442e6d39135e59413d29ad1",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -6316,16 +6316,16 @@
         },
         {
             "name": "spatie/laravel-settings",
-            "version": "3.4.0",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-settings.git",
-                "reference": "2da8cb5b051678725476b299ef8e13b2e5015260"
+                "reference": "a596c671b5e059b0e3cd7e52c9f576b1d3e06154"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-settings/zipball/2da8cb5b051678725476b299ef8e13b2e5015260",
-                "reference": "2da8cb5b051678725476b299ef8e13b2e5015260",
+                "url": "https://api.github.com/repos/spatie/laravel-settings/zipball/a596c671b5e059b0e3cd7e52c9f576b1d3e06154",
+                "reference": "a596c671b5e059b0e3cd7e52c9f576b1d3e06154",
                 "shasum": ""
             },
             "require": {
@@ -6387,7 +6387,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-settings/issues",
-                "source": "https://github.com/spatie/laravel-settings/tree/3.4.0"
+                "source": "https://github.com/spatie/laravel-settings/tree/3.4.1"
             },
             "funding": [
                 {
@@ -6399,7 +6399,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-20T13:48:17+00:00"
+            "time": "2025-01-31T14:51:02+00:00"
         },
         {
             "name": "spatie/laravel-webhook-server",
@@ -10462,16 +10462,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.5.5",
+            "version": "11.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b9a975972f580c0491f834eb0818ad2b32fd8bba"
+                "reference": "3c3ae14c90f244cdda95028c3e469028e8d1c02c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b9a975972f580c0491f834eb0818ad2b32fd8bba",
-                "reference": "b9a975972f580c0491f834eb0818ad2b32fd8bba",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3c3ae14c90f244cdda95028c3e469028e8d1c02c",
+                "reference": "3c3ae14c90f244cdda95028c3e469028e8d1c02c",
                 "shasum": ""
             },
             "require": {
@@ -10543,7 +10543,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.5"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.5.6"
             },
             "funding": [
                 {
@@ -10559,7 +10559,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-01-29T14:01:11+00:00"
+            "time": "2025-01-31T07:03:30+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -12040,15 +12040,15 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.3"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
