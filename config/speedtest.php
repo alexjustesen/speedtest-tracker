@@ -4,9 +4,9 @@ use Carbon\Carbon;
 
 return [
 
-    'build_date' => Carbon::parse('2025-02-02'),
+    'build_date' => Carbon::parse('2025-02-03'),
 
-    'build_version' => 'v1.2.1',
+    'build_version' => 'v1.2.2',
 
     /**
      * General settings.
