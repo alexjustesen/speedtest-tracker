@@ -10,6 +10,7 @@ use App\Settings\ThresholdSettings;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
 use Illuminate\Support\Arr;
 
 class BenchmarkSpeedtestJob implements ShouldQueue
@@ -26,13 +27,23 @@ class BenchmarkSpeedtestJob implements ShouldQueue
     ) {}
 
     /**
+     * Get the middleware the job should pass through.
+     */
+    public function middleware(): array
+    {
+        return [
+            new SkipIfBatchCancelled,
+        ];
+    }
+
+    /**
      * Execute the job.
      */
     public function handle(): void
     {
         $settings = app(ThresholdSettings::class);
 
-        if ($this->batch()->cancelled() || $settings->absolute_enabled == false) {
+        if ($settings->absolute_enabled == false) {
             return;
         }
 
