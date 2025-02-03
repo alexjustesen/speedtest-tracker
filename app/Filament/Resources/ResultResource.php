@@ -343,6 +343,7 @@ class ResultResource extends Resource
                             ->whereNotNull('data->interface->externalIp')
                             ->where('status', '=', ResultStatus::Completed)
                             ->distinct()
+                            ->orderBy('data->interface->externalIp')
                             ->get()
                             ->mapWithKeys(function (Result $item, int $key) {
                                 return [$item['public_ip_address'] => $item['public_ip_address']];
@@ -351,18 +352,19 @@ class ResultResource extends Resource
                     })
                     ->attribute('data->interface->externalIp'),
                 Tables\Filters\SelectFilter::make('server_name')
-                    ->label('Server Name')
+                    ->label('Server name')
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
-                            ->whereNotNull('data')
+                            ->select('data->server->name AS data_server_name')
+                            ->whereNotNull('data->server->name')
                             ->where('status', '=', ResultStatus::Completed)
-                            ->orderBy('data->server->name')
                             ->distinct()
+                            ->orderBy('data->server->name')
                             ->get()
-                            ->mapWithKeys(fn (Result $result) => [
-                                $result->data['server']['name'] => $result->data['server']['name'],
-                            ])
+                            ->mapWithKeys(function (Result $item, int $key) {
+                                return [$item['data_server_name'] => $item['data_server_name']];
+                            })
                             ->toArray();
                     })
                     ->attribute('data->server->name'),
