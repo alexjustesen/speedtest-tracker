@@ -10,6 +10,7 @@ use App\Models\Result;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
 
 class SkipSpeedtestJob implements ShouldQueue
 {
@@ -23,14 +24,20 @@ class SkipSpeedtestJob implements ShouldQueue
     ) {}
 
     /**
+     * Get the middleware the job should pass through.
+     */
+    public function middleware(): array
+    {
+        return [
+            new SkipIfBatchCancelled,
+        ];
+    }
+
+    /**
      * Execute the job.
      */
     public function handle(): void
     {
-        if ($this->batch()->cancelled()) {
-            return;
-        }
-
         /**
          * Only skip IPs for scheduled tests.
          */
