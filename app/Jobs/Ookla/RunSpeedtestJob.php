@@ -10,6 +10,7 @@ use App\Models\Result;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
 use Illuminate\Support\Arr;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -33,14 +34,22 @@ class RunSpeedtestJob implements ShouldQueue
     ) {}
 
     /**
+     * Get the middleware the job should pass through.
+     *
+     * @return array<int, object>
+     */
+    public function middleware(): array
+    {
+        return [
+            new SkipIfBatchCancelled,
+        ];
+    }
+
+    /**
      * Execute the job.
      */
     public function handle(): void
     {
-        if ($this->batch()->cancelled()) {
-            return;
-        }
-
         $this->result->update([
             'status' => ResultStatus::Running,
         ]);
@@ -53,6 +62,7 @@ class RunSpeedtestJob implements ShouldQueue
             '--accept-gdpr',
             '--format=json',
             $this->result->server_id ? '--server-id='.$this->result->server_id : null,
+            config('speedtest.interface') ? '--interface='.config('speedtest.interface') : null,
         ]);
 
         $process = new Process($command);

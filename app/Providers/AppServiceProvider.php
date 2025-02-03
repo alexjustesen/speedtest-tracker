@@ -39,10 +39,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->defineCustomIfStatements();
-
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-        });
+        $this->setApiRateLimit();
 
         if (config('app.force_https')) {
             URL::forceScheme('https');
@@ -75,6 +72,13 @@ class AppServiceProvider extends ServiceProvider
          */
         Blade::if('filled', function (mixed $value) {
             return filled($value);
+        });
+    }
+
+    protected function setApiRateLimit(): void
+    {
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(config('api.rate_limit'));
         });
     }
 }

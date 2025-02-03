@@ -1,31 +1,29 @@
 <?php
 
-use App\Http\Controllers\API\HealthCheckController;
-use App\Http\Controllers\API\Speedtest\GetLatestController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V0\GetLatestController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::get('/healthcheck', HealthCheckController::class);
+/**
+ * Health check route to ensure the API is up and running.
+ *
+ * @deprecated
+ */
+Route::get('/healthcheck', function () {
+    return response()->json([
+        'message' => 'Speedtest Tracker is running!',
+    ]);
+})->name('healthcheck');
 
 /**
  * This route provides backwards compatibility from https://github.com/henrywhitaker3/Speedtest-Tracker
  * for Homepage and Organizr dashboards which expects the returned
  * download and upload values in mbits.
+ *
+ * @deprecated
  */
 Route::get('/speedtest/latest', GetLatestController::class)
     ->name('speedtest.latest');
+
+Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+    require __DIR__.'/api/v1/routes.php';
+});

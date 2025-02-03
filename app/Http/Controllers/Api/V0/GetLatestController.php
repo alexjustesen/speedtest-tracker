@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Speedtest;
+namespace App\Http\Controllers\Api\V0;
 
 use App\Enums\ResultStatus;
 use App\Helpers\Number;
