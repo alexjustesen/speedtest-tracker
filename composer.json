@@ -28,6 +28,7 @@
         "laravel/prompts": "^0.3.4",
         "laravel/sanctum": "^4.0.8",
         "laravel/tinker": "^2.10.1",
+        "livewire/livewire": "3.5.12",
         "lorisleiva/laravel-actions": "^2.8.5",
         "maennchen/zipstream-php": "^2.4",
         "secondnetwork/blade-tabler-icons": "^3.29.1",
