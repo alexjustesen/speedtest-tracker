@@ -55,7 +55,6 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([])
             ->databaseNotifications()
             ->maxContentWidth(config('speedtest.content_width'))
-            ->spa()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
