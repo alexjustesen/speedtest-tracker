@@ -2,7 +2,6 @@
 
 use App\Actions\CheckForScheduledSpeedtests;
 use Illuminate\Support\Facades\Schedule;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Checks if Result model records should be pruned.
@@ -10,8 +9,6 @@ use Illuminate\Support\Facades\Log;
 Schedule::command('model:prune')
     ->everyMinute()
     ->when(function () {
-        Log::debug('Checking if Result model records should be pruned.');
-
         return config('speedtest.prune_results_older_than') > 0;
     });
 
