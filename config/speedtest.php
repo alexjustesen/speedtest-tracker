@@ -18,15 +18,6 @@ return [
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
 
     /**
-     * Polling settings.
-     */
-    'dashboard_polling' => env('DASHBOARD_POLLING', '60s'),
-
-    'notification_polling' => env('NOTIFICATION_POLLING', '60s'),
-
-    'results_polling' => env('RESULTS_POLLING', null),
-
-    /**
      * Speedtest settings.
      */
     'schedule' => env('SPEEDTEST_SCHEDULE', false),

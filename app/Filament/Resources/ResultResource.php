@@ -438,7 +438,9 @@ class ResultResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->paginated([5, 15, 25, 50, 100])
-            ->defaultPaginationPageOption(15);
+            ->defaultPaginationPageOption(15)
+            ->deferLoading()
+            ->poll('60s');
     }
 
     public static function getPages(): array

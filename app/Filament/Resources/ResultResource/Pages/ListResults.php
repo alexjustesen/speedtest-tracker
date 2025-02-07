@@ -9,11 +9,6 @@ class ListResults extends ListRecords
 {
     protected static string $resource = ResultResource::class;
 
-    protected function getTablePollingInterval(): ?string
-    {
-        return config('speedtest.results_polling');
-    }
-
     protected function getHeaderWidgets(): array
     {
         return ResultResource::getWidgets();
