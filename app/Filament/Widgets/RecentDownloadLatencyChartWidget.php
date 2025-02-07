@@ -14,12 +14,9 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
 
     protected static ?string $maxHeight = '250px';
 
-    public ?string $filter = '24h';
+    protected static ?string $pollingInterval = '60s';
 
-    protected function getPollingInterval(): ?string
-    {
-        return config('speedtest.dashboard_polling');
-    }
+    public ?string $filter = '24h';
 
     protected function getFilters(): ?array
     {

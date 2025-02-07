@@ -54,7 +54,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([])
             ->databaseNotifications()
-            ->databaseNotificationsPolling(config('speedtest.notification_polling'))
             ->maxContentWidth(config('speedtest.content_width'))
             ->spa()
             ->middleware([

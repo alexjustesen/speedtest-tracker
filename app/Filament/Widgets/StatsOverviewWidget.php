@@ -12,10 +12,7 @@ class StatsOverviewWidget extends BaseWidget
 {
     public ?Result $result = null;
 
-    protected function getPollingInterval(): ?string
-    {
-        return config('speedtest.dashboard_polling');
-    }
+    protected static ?string $pollingInterval = '60s';
 
     protected function getCards(): array
     {

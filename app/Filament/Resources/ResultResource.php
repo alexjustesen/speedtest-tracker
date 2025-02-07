@@ -436,9 +436,9 @@ class ResultResource extends Resource
                         ->hidden(fn (): bool => ! Auth::user()->is_admin),
                 ])->dropdownPlacement('bottom-end'),
             ])
-            ->defaultSort('created_at', 'desc')
-            ->paginated([5, 15, 25, 50, 100])
-            ->defaultPaginationPageOption(15);
+            ->defaultSort('id', 'desc')
+            ->deferLoading()
+            ->poll('60s');
     }
 
     public static function getPages(): array
