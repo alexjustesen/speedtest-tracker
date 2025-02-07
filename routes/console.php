@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schedule;
  * Checks if Result model records should be pruned.
  */
 Schedule::command('model:prune')
-    ->everyMinute()
+    ->daily()
     ->when(function () {
         return config('speedtest.prune_results_older_than') > 0;
     });
