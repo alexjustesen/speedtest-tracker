@@ -13,13 +13,6 @@ Schedule::command('model:prune')
     });
 
 /**
- * Checked for new versions weekly on Thursday because
- * I usually do releases on Thursday or Friday.
- */
-Schedule::command('app:version')
-    ->weeklyOn(5);
-
-/**
  * Nightly maintenance
  */
 Schedule::daily()

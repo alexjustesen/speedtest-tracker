@@ -2,9 +2,7 @@
 
 namespace App\Providers;
 
-use App\Services\SystemChecker;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\RateLimiter;
@@ -44,13 +42,6 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.force_https')) {
             URL::forceScheme('https');
         }
-
-        $system = new SystemChecker;
-
-        AboutCommand::add('Speedtest Tracker', fn () => [
-            'Version' => $system->getLocalVersion(),
-            'Out of date' => $system->isOutOfDate() ? 'Yes' : 'No',
-        ]);
     }
 
     /**
