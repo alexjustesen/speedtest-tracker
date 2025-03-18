@@ -18,37 +18,37 @@
         "awcodes/filament-versions": "^2.0.1",
         "chrisullyott/php-filesize": "^4.2.1",
         "dragonmantank/cron-expression": "^3.4.0",
-        "filament/filament": "^3.2.142",
-        "filament/spatie-laravel-settings-plugin": "^3.2.142",
+        "filament/filament": "^3.3.4",
+        "filament/spatie-laravel-settings-plugin": "^3.3.4",
         "geerlingguy/ping": "^1.2.1",
-        "guzzlehttp/guzzle": "^7.9.2",
         "influxdata/influxdb-client-php": "^3.7",
-        "laravel-notification-channels/telegram": "^5.0",
-        "laravel/framework": "^11.43.2",
+        "laravel-notification-channels/telegram": "^6.0",
+        "laravel/framework": "^12.3",
         "laravel/prompts": "^0.3.5",
         "laravel/sanctum": "^4.0.8",
         "laravel/tinker": "^2.10.1",
-        "livewire/livewire": "3.5.12",
-        "lorisleiva/laravel-actions": "^2.8.6",
+        "livewire/livewire": "^3.6.2",
+        "lorisleiva/laravel-actions": "^2.9",
         "maennchen/zipstream-php": "^2.4",
-        "secondnetwork/blade-tabler-icons": "^3.30.1",
-        "spatie/laravel-json-api-paginate": "^1.16.2",
+        "secondnetwork/blade-tabler-icons": "^3.31.0",
+        "spatie/laravel-json-api-paginate": "^1.16.3",
         "spatie/laravel-query-builder": "^6.3.1",
         "spatie/laravel-settings": "^3.4.2",
         "spatie/laravel-webhook-server": "^3.8.3",
-        "timokoerber/laravel-one-time-operations": "^1.4.4",
-        "zircote/swagger-php": "^5.0.4"
+        "timokoerber/laravel-one-time-operations": "^1.4.5",
+        "zircote/swagger-php": "^5.0.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
-        "laravel/pint": "^1.21.0",
+        "laravel/pint": "^1.21.2",
         "laravel/sail": "^1.41.0",
-        "laravel/telescope": "^5.5.0",
+        "laravel/telescope": "^5.6.0",
         "mockery/mockery": "^1.6.12",
-        "nunomaduro/collision": "^8.6.1",
-        "phpunit/phpunit": "^11.5.9",
+        "nunomaduro/collision": "^8.7.0",
+        "phpunit/phpunit": "^11.5.13",
         "spatie/laravel-ignition": "^2.9.1",
-        "tightenco/duster": "^3.1.0"
+        "tightenco/duster": "^3.1.0",
+        "laravel/pail": "^1.2.2"
     },
     "autoload": {
         "files": [
@@ -80,6 +80,10 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ]
     },
     "funding": [
@@ -107,6 +111,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
