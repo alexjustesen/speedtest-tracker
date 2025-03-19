@@ -1,0 +1,52 @@
+# .github/workflows/tests.yml
+name: Tests
+
+on:
+  push:
+    branches:
+      - '!main'
+      - '!release-**'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint-app:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: "duster"
+        uses: tighten/duster-action@v3
+        with:
+          args: lint --using=pint -v
+
+  test-app:
+    needs: lint-app
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Create SQLite Database
+        run: |
+          touch database/testing.sqlite
+
+      - name: Install Dependencies
+        run: |
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          npm ci && npm run build
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate App Key
+        run: php artisan key:generate --quiet
+
+      - name: Run Tests
+        run: php artisan test --parallel
