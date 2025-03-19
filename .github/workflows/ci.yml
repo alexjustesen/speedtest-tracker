@@ -38,7 +38,9 @@ jobs:
           touch database/testing.sqlite
 
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: |
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          npm ci && npm run build
 
       - name: Copy Environment File
         run: cp .env.example .env
