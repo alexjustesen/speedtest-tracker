@@ -343,6 +343,7 @@ class ResultResource extends Resource
                             ->whereNotNull('data->interface->externalIp')
                             ->where('status', '=', ResultStatus::Completed)
                             ->distinct()
+                            ->orderBy('data->interface->externalIp')
                             ->get()
                             ->mapWithKeys(function (Result $item, int $key) {
                                 return [$item['public_ip_address'] => $item['public_ip_address']];
@@ -350,6 +351,23 @@ class ResultResource extends Resource
                             ->toArray();
                     })
                     ->attribute('data->interface->externalIp'),
+                Tables\Filters\SelectFilter::make('server_name')
+                    ->label('Server name')
+                    ->multiple()
+                    ->options(function (): array {
+                        return Result::query()
+                            ->select('data->server->name AS data_server_name')
+                            ->whereNotNull('data->server->name')
+                            ->where('status', '=', ResultStatus::Completed)
+                            ->distinct()
+                            ->orderBy('data->server->name')
+                            ->get()
+                            ->mapWithKeys(function (Result $item, int $key) {
+                                return [$item['data_server_name'] => $item['data_server_name']];
+                            })
+                            ->toArray();
+                    })
+                    ->attribute('data->server->name'),
                 Tables\Filters\TernaryFilter::make('scheduled')
                     ->nullable()
                     ->trueLabel('Only scheduled speedtests')
@@ -418,9 +436,9 @@ class ResultResource extends Resource
                         ->hidden(fn (): bool => ! Auth::user()->is_admin),
                 ])->dropdownPlacement('bottom-end'),
             ])
-            ->defaultSort('created_at', 'desc')
-            ->paginated([5, 15, 25, 50, 100])
-            ->defaultPaginationPageOption(15);
+            ->defaultSort('id', 'desc')
+            ->deferLoading()
+            ->poll('60s');
     }
 
     public static function getPages(): array

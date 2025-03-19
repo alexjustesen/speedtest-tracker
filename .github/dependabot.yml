@@ -1,18 +1,5 @@
 version: 2
 updates:
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "thursday"
-    labels:
-      - "😑 dependencies"
-      - "🐋 docker"
-    reviewers:
-      - "alexjustesen"
-    commit-message:
-      prefix: "docker"
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -20,7 +7,6 @@ updates:
       day: "thursday"
     labels:
       - "😑 dependencies"
-      - "🧑‍💻 github actions"
     reviewers:
       - "alexjustesen"
     commit-message:

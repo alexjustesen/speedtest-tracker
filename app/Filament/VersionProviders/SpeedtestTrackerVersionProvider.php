@@ -2,7 +2,6 @@
 
 namespace App\Filament\VersionProviders;
 
-use App\Services\SystemChecker;
 use Awcodes\FilamentVersions\Providers\Contracts\VersionProvider;
 
 class SpeedtestTrackerVersionProvider implements VersionProvider
@@ -15,7 +14,7 @@ class SpeedtestTrackerVersionProvider implements VersionProvider
     public function getVersion(): string
     {
         return app()->isProduction()
-            ? (new SystemChecker)->getLocalVersion()
+            ? (config('speedtest.build_version'))
             : config('app.env');
     }
 }

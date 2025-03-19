@@ -10,7 +10,7 @@ use App\Models\Result;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
+use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
 use Illuminate\Support\Arr;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -40,7 +40,9 @@ class RunSpeedtestJob implements ShouldQueue
      */
     public function middleware(): array
     {
-        return [new WithoutOverlapping('run-speedtest')];
+        return [
+            new SkipIfBatchCancelled,
+        ];
     }
 
     /**
@@ -48,10 +50,6 @@ class RunSpeedtestJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if ($this->batch()->cancelled()) {
-            return;
-        }
-
         $this->result->update([
             'status' => ResultStatus::Running,
         ]);

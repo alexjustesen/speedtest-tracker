@@ -43,8 +43,16 @@ class ListResults extends ApiController
                 AllowedFilter::exact('healthy')->nullable(),
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('scheduled'),
-                AllowedFilter::operator('created_at', FilterOperator::DYNAMIC),
-                AllowedFilter::operator('updated_at', FilterOperator::DYNAMIC),
+                AllowedFilter::operator(
+                    name: 'start_at',
+                    internalName: 'created_at',
+                    filterOperator: FilterOperator::DYNAMIC,
+                ),
+                AllowedFilter::operator(
+                    name: 'end_at',
+                    internalName: 'created_at',
+                    filterOperator: FilterOperator::DYNAMIC,
+                ),
             ])
             ->allowedSorts([
                 'ping',
