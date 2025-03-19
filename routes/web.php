@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('public-dashboard')->group(function () {
     Route::get('/', [PagesController::class, 'home'])
         ->name('home');
-
-    Route::get('/getting-started', [PagesController::class, 'gettingStarted'])
-        ->name('getting-started');
 });
+
+Route::get('/getting-started', [PagesController::class, 'gettingStarted'])
+    ->name('getting-started');
 
 Route::redirect('/login', '/admin/login')
     ->name('login');
