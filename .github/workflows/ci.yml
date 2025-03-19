@@ -47,4 +47,4 @@ jobs:
         run: php artisan key:generate --quiet
 
       - name: Run Tests
-        run: php artisan test
+        run: php artisan test --parallel
