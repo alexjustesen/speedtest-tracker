@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('public-dashboard')->group(function () {
-    Route::get('/', HomeController::class)
+    Route::get('/', [PagesController::class, 'home'])
         ->name('home');
+
+    Route::get('/getting-started', [PagesController::class, 'gettingStarted'])
+        ->name('getting-started');
 });
 
 Route::redirect('/login', '/admin/login')
