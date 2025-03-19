@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'public-dashboard' => App\Http\Middleware\PublicDashboard::class,
         ]);
 
-        $middleware->redirectGuestsTo(fn () => route('admin/login'));
+        $middleware->redirectGuestsTo(fn () => route('filament.admin.auth.login'));
         $middleware->redirectUsersTo(AppServiceProvider::HOME);
 
         $middleware->trustProxies(at: '*');
