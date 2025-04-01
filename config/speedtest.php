@@ -28,6 +28,8 @@ return [
 
     'interface' => env('SPEEDTEST_INTERFACE'),
 
+    'externalip_url' => env('SPEEDTEST_EXTERNALIP_URL'),
+
     /**
      * IP filtering settings.
      */

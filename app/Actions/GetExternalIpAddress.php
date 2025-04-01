@@ -8,6 +8,12 @@ use Illuminate\Support\Str;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Throwable;
 
+if (! config('speedtest.externalip_url')) {
+    $fetch_url = 'https://icanhazip.com/';
+} else {
+    $fetch_url = $speedtest.externalip_url;
+}
+
 class GetExternalIpAddress
 {
     use AsAction;
@@ -15,9 +21,14 @@ class GetExternalIpAddress
     public function handle(): bool|string
     {
         try {
+            if (! config('speedtest.externalip_url')) {
+                $fetch_url = $speedtest.externalip_url;
+            } else {
+                $fetch_url = "https://icanhazip.com/";
+            }
             $response = Http::retry(3, 100)
                 ->timeout(5)
-                ->get(url: 'https://icanhazip.com/');
+                ->get(url: $fetch_url);
         } catch (Throwable $e) {
             Log::error('Failed to fetch external IP address.', [$e->getMessage()]);
 
