@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Actions\GetExternalIpAddress;
+use App\Actions\CheckInternetConnection;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestChecking;
 use App\Events\SpeedtestFailed;
@@ -44,7 +44,7 @@ class CheckForInternetConnectionJob implements ShouldQueue
 
         SpeedtestChecking::dispatch($this->result);
 
-        if (GetExternalIpAddress::run() !== false) {
+        if (CheckInternetConnection::run() !== false) {
             return;
         }
 

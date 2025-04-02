@@ -28,6 +28,8 @@ return [
 
     'interface' => env('SPEEDTEST_INTERFACE'),
 
+    'externalip_url' => env('SPEEDTEST_EXTERNALIP_URL', 'https://icanhazip.com'),
+
     /**
      * IP filtering settings.
      */
