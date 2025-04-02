@@ -17,7 +17,7 @@ class CheckInternetConnection
         try {
             $response = Http::retry(3, 100)
                 ->timeout(5)
-                ->get(config('speedtest.externalip_url'));
+                ->get(config('speedtest.checkinternet_url'));
 
             if (! $response->ok()) {
                 return false;
