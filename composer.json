@@ -18,12 +18,12 @@
         "awcodes/filament-versions": "^2.0.1",
         "chrisullyott/php-filesize": "^4.2.1",
         "dragonmantank/cron-expression": "^3.4.0",
-        "filament/filament": "^3.3.4",
-        "filament/spatie-laravel-settings-plugin": "^3.3.4",
+        "filament/filament": "^3.3.8",
+        "filament/spatie-laravel-settings-plugin": "^3.3.8",
         "geerlingguy/ping": "^1.2.1",
         "influxdata/influxdb-client-php": "^3.7",
         "laravel-notification-channels/telegram": "^6.0",
-        "laravel/framework": "^12.3",
+        "laravel/framework": "^12.6",
         "laravel/prompts": "^0.3.5",
         "laravel/sanctum": "^4.0.8",
         "livewire/livewire": "^3.6.2",
@@ -35,21 +35,21 @@
         "spatie/laravel-settings": "^3.4.2",
         "spatie/laravel-webhook-server": "^3.8.3",
         "timokoerber/laravel-one-time-operations": "^1.4.5",
-        "zircote/swagger-php": "^5.0.6"
+        "zircote/swagger-php": "^5.0.7"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.21.2",
         "laravel/sail": "^1.41.0",
-        "laravel/telescope": "^5.6.0",
+        "laravel/telescope": "^5.7.0",
         "laravel/tinker": "^2.10.1",
         "mockery/mockery": "^1.6.12",
         "nunomaduro/collision": "^8.7.0",
-        "pestphp/pest": "^3.7.4",
+        "pestphp/pest": "^3.8.0",
         "pestphp/pest-plugin-laravel": "^3.1",
         "spatie/laravel-ignition": "^2.9.1",
-        "tightenco/duster": "^3.1.0"
+        "tightenco/duster": "^3.2.0"
     },
     "autoload": {
         "files": [
