@@ -1,0 +1,35 @@
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      description: |
+        Before opening an Q&A make sure you've checked the resources below first, any Q&A that could have been solved by reading the docs or existing issues will be closed.
+      options:
+      - label: I have read the [docs]().
+        required: true
+      - label: I have searched open and closed issues.
+        required: true
+  - type: dropdown
+    id: deployment-environment
+    attributes:
+      label: Deployment Environment
+      description: How did you deploy the application?
+      options:
+        - Docker Compose
+        - Docker Run
+        - Bare Metal
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: Please describe your qeustion in detail.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Anything else?
+      description: |
+        Links? References? Or logs? Anything that will give us more context about the issue you are encountering!
