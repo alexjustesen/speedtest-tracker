@@ -23,7 +23,7 @@
         "geerlingguy/ping": "^1.2.1",
         "influxdata/influxdb-client-php": "^3.7",
         "laravel-notification-channels/telegram": "^6.0",
-        "laravel/framework": "^12.6",
+        "laravel/framework": "^12.7",
         "laravel/prompts": "^0.3.5",
         "laravel/sanctum": "^4.0.8",
         "livewire/livewire": "^3.6.2",

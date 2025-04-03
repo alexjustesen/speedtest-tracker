@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f8064002b5dacc90b2ae5c364fb5e9c",
+    "content-hash": "801f696468cbdcf789b52bbfc941e77e",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2408,16 +2408,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v12.6.0",
+            "version": "v12.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "0219fdf28b749460e2f9ebd4e283a00d58b8f758"
+                "reference": "a4ba76e06fe6dd02312359f8184ab259900a7780"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/0219fdf28b749460e2f9ebd4e283a00d58b8f758",
-                "reference": "0219fdf28b749460e2f9ebd4e283a00d58b8f758",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/a4ba76e06fe6dd02312359f8184ab259900a7780",
+                "reference": "a4ba76e06fe6dd02312359f8184ab259900a7780",
                 "shasum": ""
             },
             "require": {
@@ -2619,7 +2619,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-04-02T16:25:03+00:00"
+            "time": "2025-04-03T18:00:49+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -10123,38 +10123,39 @@
         },
         {
             "name": "nunomaduro/collision",
-            "version": "v8.7.0",
+            "version": "v8.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/collision.git",
-                "reference": "586cb8181a257a2152b6a855ca8d9598878a1a26"
+                "reference": "4cf9f3b47afff38b139fb79ce54fc71799022ce8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/586cb8181a257a2152b6a855ca8d9598878a1a26",
-                "reference": "586cb8181a257a2152b6a855ca8d9598878a1a26",
+                "url": "https://api.github.com/repos/nunomaduro/collision/zipball/4cf9f3b47afff38b139fb79ce54fc71799022ce8",
+                "reference": "4cf9f3b47afff38b139fb79ce54fc71799022ce8",
                 "shasum": ""
             },
             "require": {
-                "filp/whoops": "^2.17.0",
+                "filp/whoops": "^2.18.0",
                 "nunomaduro/termwind": "^2.3.0",
                 "php": "^8.2.0",
-                "symfony/console": "^7.2.1"
+                "symfony/console": "^7.2.5"
             },
             "conflict": {
-                "laravel/framework": "<11.39.1 || >=13.0.0",
-                "phpunit/phpunit": "<11.5.3 || >=12.0.0"
+                "laravel/framework": "<11.44.2 || >=13.0.0",
+                "phpunit/phpunit": "<11.5.15 || >=13.0.0"
             },
             "require-dev": {
-                "larastan/larastan": "^2.10.0",
-                "laravel/framework": "^11.44.2",
+                "brianium/paratest": "^7.8.3",
+                "larastan/larastan": "^3.2",
+                "laravel/framework": "^11.44.2 || ^12.6",
                 "laravel/pint": "^1.21.2",
                 "laravel/sail": "^1.41.0",
                 "laravel/sanctum": "^4.0.8",
                 "laravel/tinker": "^2.10.1",
-                "orchestra/testbench-core": "^9.12.0",
-                "pestphp/pest": "^3.7.4",
-                "sebastian/environment": "^6.1.0 || ^7.2.0"
+                "orchestra/testbench-core": "^9.12.0 || ^10.1",
+                "pestphp/pest": "^3.8.0",
+                "sebastian/environment": "^7.2.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -10217,25 +10218,25 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-03-14T22:37:40+00:00"
+            "time": "2025-04-03T14:33:09+00:00"
         },
         {
             "name": "pestphp/pest",
-            "version": "v3.8.0",
+            "version": "v3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pestphp/pest.git",
-                "reference": "42e1b9f17fc2b2036701f4b968158264bde542d4"
+                "reference": "6080f51a0b0830715c48ba0e7458b06907febfe5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pestphp/pest/zipball/42e1b9f17fc2b2036701f4b968158264bde542d4",
-                "reference": "42e1b9f17fc2b2036701f4b968158264bde542d4",
+                "url": "https://api.github.com/repos/pestphp/pest/zipball/6080f51a0b0830715c48ba0e7458b06907febfe5",
+                "reference": "6080f51a0b0830715c48ba0e7458b06907febfe5",
                 "shasum": ""
             },
             "require": {
                 "brianium/paratest": "^7.8.3",
-                "nunomaduro/collision": "^8.7.0",
+                "nunomaduro/collision": "^8.8.0",
                 "nunomaduro/termwind": "^2.3.0",
                 "pestphp/pest-plugin": "^3.0.0",
                 "pestphp/pest-plugin-arch": "^3.1.0",
@@ -10317,7 +10318,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pestphp/pest/issues",
-                "source": "https://github.com/pestphp/pest/tree/v3.8.0"
+                "source": "https://github.com/pestphp/pest/tree/v3.8.1"
             },
             "funding": [
                 {
@@ -10329,7 +10330,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-30T17:49:10+00:00"
+            "time": "2025-04-03T16:35:58+00:00"
         },
         {
             "name": "pestphp/pest-plugin",
@@ -12840,15 +12841,15 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.3"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
