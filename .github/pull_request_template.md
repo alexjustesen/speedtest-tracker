@@ -2,6 +2,10 @@
 
 A short description of the pull request changes should go here and the sections below should list in detail all changes. You can remove the sections you don't need.
 
+## 📖 Documentation
+
+Add a link to the PR for [documentation](https://github.com/alexjustesen/speedtest-tracker-docs) changes.
+
 ## 🪵 Changelog
 
 ### ➕ Added
