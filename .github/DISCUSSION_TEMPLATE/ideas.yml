@@ -1,0 +1,21 @@
+body:
+  - type: dropdown
+    id: idea-section
+    attributes:
+      label: "Which part of the application does your idea belong to?"
+      description: "Select the section of the application that your idea pertains to."
+      options:
+        - "Charts"
+        - "Notifications"
+        - "Speedtest"
+        - "WebGui"
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: Please describe in detail what you want to share.
+    validations:
+      required: true
+
