@@ -5,7 +5,7 @@ body:
       description: |
         Before opening an Q&A make sure you've checked the resources below first, any Q&A that could have been solved by reading the docs or existing issues will be closed.
       options:
-      - label: I have read the [docs]().
+      - label: I have read the [docs](https://docs.speedtest-tracker.dev/help/faqs).
         required: true
       - label: I have searched open and closed issues.
         required: true
