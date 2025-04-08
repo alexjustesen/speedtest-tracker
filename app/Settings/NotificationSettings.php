@@ -86,6 +86,14 @@ class NotificationSettings extends Settings
 
     public ?array $gotify_webhooks;
 
+    public bool $dingtalk_enabled;
+
+    public bool $dingtalk_on_speedtest_run;
+
+    public bool $dingtalk_on_threshold_failure;
+
+    public ?array $dingtalk_webhooks;
+
     public static function group(): string
     {
         return 'notification';

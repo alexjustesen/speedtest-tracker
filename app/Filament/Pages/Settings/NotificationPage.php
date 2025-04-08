@@ -3,6 +3,7 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Actions\Notifications\SendDatabaseTestNotification;
+use App\Actions\Notifications\SendDingTalkTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
 use App\Actions\Notifications\SendHealthCheckTestNotification;
@@ -509,6 +510,50 @@ class NotificationPage extends SettingsPage
                                                         ->label('Test webhook channel')
                                                         ->action(fn (Forms\Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('webhook_urls'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('DingTalk')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('dingtalk_enabled')
+                                            ->label('Enable dingtalk notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('dingtalk_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('dingtalk_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpan(2),
+                                                        Forms\Components\Toggle::make('dingtalk_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpan(2),
+                                                    ]),
+                                                Forms\Components\Repeater::make('dingtalk_webhooks')
+                                                    ->label('Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxx')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test dingtalk')
+                                                        ->label('Test dingtalk channel')
+                                                        ->action(fn (Forms\Get $get) => SendDingTalkTestNotification::run(webhooks: $get('dingtalk_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('dingtalk_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
