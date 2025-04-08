@@ -24,7 +24,7 @@ class SendDingTalkTestNotification
         $payload = [
             'msgtype' => 'text',
             'text' => [
-                'content' => '👋 Testing the Webhook notification channel on Speedtest Tracker.',
+                'content' => '👋 Testing the DingTalk notification channel on Speedtest Tracker.',
             ],
         ];
 
