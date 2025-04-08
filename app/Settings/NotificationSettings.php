@@ -94,6 +94,14 @@ class NotificationSettings extends Settings
 
     public ?array $dingtalk_webhooks;
 
+    public bool $wecom_enabled;
+
+    public bool $wecom_on_speedtest_run;
+
+    public bool $wecom_on_threshold_failure;
+
+    public ?array $wecom_webhooks;
+
     public static function group(): string
     {
         return 'notification';
