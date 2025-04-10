@@ -3,6 +3,7 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Actions\Notifications\SendDatabaseTestNotification;
+use App\Actions\Notifications\SendDingTalkTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
 use App\Actions\Notifications\SendHealthCheckTestNotification;
@@ -12,6 +13,7 @@ use App\Actions\Notifications\SendPushoverTestNotification;
 use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
+use App\Actions\Notifications\SendWeComTestNotification;
 use App\Settings\NotificationSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -517,6 +519,95 @@ class NotificationPage extends SettingsPage
                                         'default' => 1,
                                         'md' => 2,
                                     ]),
+
+                                Forms\Components\Section::make('DingTalk')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('dingtalk_enabled')
+                                            ->label('Enable dingtalk notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('dingtalk_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('dingtalk_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpan(2),
+                                                        Forms\Components\Toggle::make('dingtalk_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpan(2),
+                                                    ]),
+                                                Forms\Components\Repeater::make('dingtalk_webhooks')
+                                                    ->label('Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://oapi.dingtalk.com/robot/send?access_token=xxxxxxxx')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test dingtalk')
+                                                        ->label('Test dingtalk channel')
+                                                        ->action(fn (Forms\Get $get) => SendDingTalkTestNotification::run(webhooks: $get('dingtalk_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('dingtalk_webhooks'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('WeCom')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('wecom_enabled')
+                                            ->label('Enable wecom notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('wecom_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('wecom_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpan(2),
+                                                        Forms\Components\Toggle::make('wecom_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpan(2),
+                                                    ]),
+                                                Forms\Components\Repeater::make('wecom_webhooks')
+                                                    ->label('Webhooks')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxxxxxx')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test wecom')
+                                                        ->label('Test wecom channel')
+                                                        ->action(fn (Forms\Get $get) => SendWeComTestNotification::run(webhooks: $get('wecom_webhooks')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('wecom_webhooks'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
                             ])
                             ->columnSpan([
                                 'md' => 2,
