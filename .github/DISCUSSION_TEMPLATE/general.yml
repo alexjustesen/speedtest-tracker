@@ -1,0 +1,16 @@
+body:
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      description: Following the guidelines can make you more likely to get responses.
+      options:
+        - label: >-
+            I have read and accepted the
+            [contributing guidelines](https://github.com/alexjustesen/speedtest-tracker/blob/main/CONTRIBUTING.md).
+          required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: Please describe in detail what you want to share.
+    validations:
+      required: true
