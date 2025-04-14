@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        You should only use this form to request a change or new feature, to report a bug or issue use the [bug report form](https://github.com/alexjustesen/testing-gh-templates).
+        You should only use this form to request a change or new feature, to report a bug or issue use the [bug report form](https://github.com/alexjustesen/speedtest-tracker).
   - type: checkboxes
     attributes:
       label: Pre-work
