@@ -53,10 +53,20 @@ class ResultResource extends Resource
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
                                     $component->state(! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : '');
                                 }),
+                            Forms\Components\TextInput::make('downloaded_bytes')
+                                ->label('Downloaded bytes')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' bytes';
+                                }),
                             Forms\Components\TextInput::make('upload')
                                 ->label('Upload')
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
                                     $component->state(! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : '');
+                                }),
+                            Forms\Components\TextInput::make('uploaded_bytes')
+                                ->label('Uploaded bytes')
+                                ->formatStateUsing(function ($state) {
+                                    return number_format((float) $state, 0, '.', '').' bytes';
                                 }),
                             Forms\Components\TextInput::make('ping')
                                 ->label('Ping')
@@ -196,8 +206,14 @@ class ResultResource extends Resource
                 Tables\Columns\TextColumn::make('download')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : null)
                     ->sortable(),
+                Tables\Columns\TextColumn::make('downloaded_bytes')
+                    ->toggleable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('upload')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('uploaded_bytes')
+                    ->toggleable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ping')
                     ->toggleable()
