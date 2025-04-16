@@ -51,7 +51,7 @@ class CheckForInternetConnectionJob implements ShouldQueue
         $this->result->update([
             'data->type' => 'log',
             'data->level' => 'error',
-            'data->message' => 'Failed to check internet connection.',
+            'data->message' => 'Failed to connect to the internet.',
             'status' => ResultStatus::Failed,
         ]);
 
