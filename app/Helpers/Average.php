@@ -21,12 +21,36 @@ class Average
         );
     }
 
+    public static function averageDownloadedBytes(Collection $results, int $precision = 2, string $magnitude = 'mbit'): float
+    {
+        return round(
+            $results->map(function ($item) use ($magnitude, $precision) {
+                return ! blank($item->downloaded_bytes)
+                    ? Number::bitsToMagnitude(bits: $item->downloaded_bytes, precision: $precision, magnitude: $magnitude)
+                    : 0;
+            })->avg(),
+            $precision
+        );
+    }
+
     public static function averageUpload(Collection $results, int $precision = 2, string $magnitude = 'mbit'): float
     {
         return round(
             $results->map(function ($item) use ($magnitude, $precision) {
                 return ! blank($item->upload)
                     ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: $precision, magnitude: $magnitude)
+                    : 0;
+            })->avg(),
+            $precision
+        );
+    }
+
+    public static function averageUploadedBytes(Collection $results, int $precision = 2, string $magnitude = 'mbit'): float
+    {
+        return round(
+            $results->map(function ($item) use ($magnitude, $precision) {
+                return ! blank($item->uploaded_bytes)
+                    ? Number::bitsToMagnitude(bits: $item->uploaded_bytes, precision: $precision, magnitude: $magnitude)
                     : 0;
             })->avg(),
             $precision
