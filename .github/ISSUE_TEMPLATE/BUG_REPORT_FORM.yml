@@ -1,7 +1,7 @@
 name: Bug Report
 description: Use this template to report a bug or issue.
-title: "[Bug]: "
-labels: ["bug", "unverified"]
+title: "[Bug] "
+labels: ["bug", "needs review"]
 body:
   - type: markdown
     attributes:
@@ -17,7 +17,7 @@ body:
         required: true
       - label: I have searched open and closed issues.
         required: true
-      - label: I agree to follow this project's [Code of Conduct]().
+      - label: I agree to follow this project's [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md).
         required: true
   - type: textarea
     id: description
@@ -54,7 +54,7 @@ body:
       options:
         - Docker Compose
         - Docker Run
-        - Bare Metal
+        - Other
       default: 0
     validations:
       required: true

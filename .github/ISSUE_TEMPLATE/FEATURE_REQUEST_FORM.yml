@@ -1,7 +1,7 @@
 name: Feature Request
 description: Use this template for requesting a new feature or change.
-title: "[Feature]: "
-labels: ["feature", "needs-review"]
+title: "[Feature] "
+labels: ["feature", "needs review"]
 body:
   - type: markdown
     attributes:
@@ -26,7 +26,7 @@ body:
         - Charts
         - Notifications
         - Speedtest
-        - WebGui
+        - Web UI/UX
       default: 0
     validations:
       required: true
