@@ -65,9 +65,9 @@ class Number extends SupportNumber
      *
      * Reference: https://en.wikipedia.org/wiki/Bit
      */
-    public static function bytesToHuman(int|float $bits, int $precision = 0, ?int $maxPrecision = null): string
+    public static function bytesToHuman(int|float $bytes, int $precision = 0, ?int $maxPrecision = null): string
     {
-        return strtoupper(Number::bitsToHuman($bits, $precision, $maxPrecision));
+        return strtoupper(Number::bitsToHuman($bytes, $precision, $maxPrecision));
     }
 
     /**
