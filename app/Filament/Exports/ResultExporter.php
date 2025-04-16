@@ -113,6 +113,16 @@ class ResultExporter extends Exporter
                     return $record->download_latency_iqm;
                 })
                 ->enabledByDefault(false),
+            ExportColumn::make('downloaded_bytes')
+                ->state(function (Result $record): ?string {
+                    return $record->downloaded_bytes;
+                })
+                ->enabledByDefault(false),
+            ExportColumn::make('uploaded_bytes')
+                ->state(function (Result $record): ?string {
+                    return $record->uploaded_bytes;
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('result_url')
                 ->state(function (Result $record) {
                     return $record->result_url;
