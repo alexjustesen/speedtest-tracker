@@ -8,6 +8,7 @@ use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
+use App\Settings\ThresholdSettings;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -152,6 +153,8 @@ class ResultResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $thresholdSettings = app(ThresholdSettings::class);
+
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -316,9 +319,19 @@ class ResultResource extends Resource
                 Tables\Columns\IconColumn::make('healthy')
                     ->boolean()
                     ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->when(
+                        ! $thresholdSettings->absolute_enabled,
+                        fn ($column) => $column->toggledHiddenByDefault()
+                    )
                     ->sortable()
                     ->alignment(Alignment::Center),
+                Tables\Columns\TextColumn::make('data.message')
+                    ->label('Error Message')
+                    ->limit(15)
+                    ->tooltip(fn ($state) => $state)
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
