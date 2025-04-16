@@ -33,7 +33,6 @@ class RecentDownloadedChartWidget extends ChartWidget
     {
         $results = Result::query()
             ->select(['id', 'data', 'created_at'])
-            ->selectRaw('JSON_EXTRACT(data, "$.download.bytes") as download_bytes')
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter == '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
