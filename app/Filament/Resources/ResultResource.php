@@ -53,20 +53,10 @@ class ResultResource extends Resource
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
                                     $component->state(! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : '');
                                 }),
-                            Forms\Components\TextInput::make('downloaded_bytes')
-                                ->label('Downloaded bytes')
-                                ->formatStateUsing(function ($state) {
-                                    return number_format((float) $state, 0, '.', '').' bytes';
-                                }),
                             Forms\Components\TextInput::make('upload')
                                 ->label('Upload')
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
                                     $component->state(! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : '');
-                                }),
-                            Forms\Components\TextInput::make('uploaded_bytes')
-                                ->label('Uploaded bytes')
-                                ->formatStateUsing(function ($state) {
-                                    return number_format((float) $state, 0, '.', '').' bytes';
                                 }),
                             Forms\Components\TextInput::make('ping')
                                 ->label('Ping')
@@ -93,6 +83,11 @@ class ResultResource extends Resource
                                 ->formatStateUsing(function ($state) {
                                     return number_format((float) $state, 0, '.', '').' ms';
                                 }),
+                            Forms\Components\TextInput::make('downloaded_bytes')
+                                ->label('Downloaded bytes')
+                                ->afterStateHydrated(function (TextInput $component, Result $record) {
+                                    $component->state(! blank($record->downloaded_bytes) ? Number::bytesToHuman(bits: $record->downloaded_bytes, precision: 2) : '');
+                                }),
                             Forms\Components\TextInput::make('data.upload.latency.jitter')
                                 ->label('Upload Jitter')
                                 ->formatStateUsing(function ($state) {
@@ -112,6 +107,11 @@ class ResultResource extends Resource
                                 ->label('Upload Latency iqm')
                                 ->formatStateUsing(function ($state) {
                                     return number_format((float) $state, 0, '.', '').' ms';
+                                }),
+                            Forms\Components\TextInput::make('uploaded_bytes')
+                                ->label('Uploaded bytes')
+                                ->afterStateHydrated(function (TextInput $component, Result $record) {
+                                    $component->state(! blank($record->downloaded_bytes) ? Number::bytesToHuman(bits: $record->uploaded_bytes, precision: 2) : '');
                                 }),
                             Forms\Components\TextInput::make('data.ping.jitter')
                                 ->label('Ping Jitter')
