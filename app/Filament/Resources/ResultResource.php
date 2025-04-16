@@ -208,12 +208,14 @@ class ResultResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('downloaded_bytes')
                     ->toggleable()
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::bytesToHuman(bits: $record->downloaded_bytes, precision: 2) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('upload')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('uploaded_bytes')
                     ->toggleable()
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::bytesToHuman(bits: $record->uploaded_bytes, precision: 2) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ping')
                     ->toggleable()
