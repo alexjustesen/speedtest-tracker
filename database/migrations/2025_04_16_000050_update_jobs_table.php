@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::table('results', function (Blueprint $table) {
+        Schema::table('results', function (Blueprint $table) {
             $table->unsignedBigInteger('downloaded_bytes')->nullable();
             $table->unsignedBigInteger('uploaded_bytes')->nullable();
         });
