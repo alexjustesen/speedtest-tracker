@@ -9,15 +9,8 @@ use Illuminate\Support\Facades\Schedule;
 Schedule::command('model:prune')
     ->daily()
     ->when(function () {
-        return config('speedtest.prune_speedtests_older_than') > 0;
+        return config('speedtest.prune_results_older_than') > 0;
     });
-
-/**
- * Checked for new versions weekly on Thursday because
- * I usually do releases on Thursday or Friday.
- */
-Schedule::command('app:version')
-    ->weeklyOn(5);
 
 /**
  * Nightly maintenance

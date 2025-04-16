@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\PublicDashboard;
 use App\Providers\AppServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -16,10 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'public-dashboard' => PublicDashboard::class,
+            'getting-started' => App\Http\Middleware\GettingStarted::class,
+            'public-dashboard' => App\Http\Middleware\PublicDashboard::class,
         ]);
 
-        $middleware->redirectGuestsTo(fn () => route('admin/login'));
+        $middleware->redirectGuestsTo(fn () => route('filament.admin.auth.login'));
         $middleware->redirectUsersTo(AppServiceProvider::HOME);
 
         $middleware->trustProxies(at: '*');

@@ -41,7 +41,6 @@ class AdminPanelProvider extends PanelProvider
                 provider: LocalFontProvider::class,
             )
             ->sidebarCollapsibleOnDesktop()
-            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([])
@@ -55,9 +54,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([])
             ->databaseNotifications()
-            ->databaseNotificationsPolling(config('speedtest.notification_polling'))
             ->maxContentWidth(config('speedtest.content_width'))
-            ->spa()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

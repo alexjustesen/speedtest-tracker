@@ -4,9 +4,9 @@ use Carbon\Carbon;
 
 return [
 
-    'build_date' => Carbon::parse('2025-02-03'),
+    'build_date' => Carbon::parse('2025-04-15'),
 
-    'build_version' => 'v1.2.2',
+    'build_version' => 'v1.4.1',
 
     /**
      * General settings.
@@ -18,15 +18,6 @@ return [
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
 
     /**
-     * Polling settings.
-     */
-    'dashboard_polling' => env('DASHBOARD_POLLING', '60s'),
-
-    'notification_polling' => env('NOTIFICATION_POLLING', '60s'),
-
-    'results_polling' => env('RESULTS_POLLING', null),
-
-    /**
      * Speedtest settings.
      */
     'schedule' => env('SPEEDTEST_SCHEDULE', false),
@@ -36,6 +27,8 @@ return [
     'blocked_servers' => env('SPEEDTEST_BLOCKED_SERVERS'),
 
     'interface' => env('SPEEDTEST_INTERFACE'),
+
+    'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
 
     /**
      * IP filtering settings.

@@ -8,12 +8,13 @@ export default {
     presets: [presets],
 
     content: [
-        './app/Filament/**/*.php',
+        // Core
         './resources/views/**/*.blade.php',
+
+        // Filament
+        './app/Filament/**/*.php',
         './vendor/filament/**/*.blade.php',
     ],
-
-    darkMode: 'class',
 
     theme: {
         extend: {
