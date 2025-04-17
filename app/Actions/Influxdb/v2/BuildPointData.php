@@ -49,8 +49,8 @@ class BuildPointData
             ->addField('upload_latency_high', Number::castToType(Arr::get($result->data, 'upload.latency.high'), 'float'))
             ->addField('upload_latency_low', Number::castToType(Arr::get($result->data, 'upload.latency.low'), 'float'))
             ->addField('packet_loss', Number::castToType(Arr::get($result->data, 'packetLoss'), 'float'))
-            ->addField('downloaded_bytes', Number::castToType(Arr::get($result->data, 'download.bytes'), 'int'))
-            ->addField('uploaded_bytes', Number::castToType(Arr::get($result->data, 'upload.bytes'), 'int'));
+            ->addField('downloaded_bytes', Number::castToType($result->downloaded_bytes, 'int'))
+            ->addField('uploaded_bytes', Number::castToType($result->uploaded_bytes, 'int'));
 
         return $point;
     }
