@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('results', function (Blueprint $table) {
-            $table->unsignedBigInteger('downloaded_bytes')->nullable();
-            $table->unsignedBigInteger('uploaded_bytes')->nullable();
+            $table->unsignedBigInteger('downloaded_bytes')->nullable()->after('download');
+            $table->unsignedBigInteger('uploaded_bytes')->nullable()->after('upload');
         });
     }
 
@@ -22,9 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('results', function (Blueprint $table) {
-            $table->dropColumn('downloaded_bytes');
-            $table->dropColumn('uploaded_bytes');
-        });
+        //
     }
 };
