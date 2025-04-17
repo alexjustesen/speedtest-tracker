@@ -38,6 +38,11 @@ class Result extends Model
         ];
     }
 
+    public function test()
+    {
+        return $this->belongsTo(Test::class);
+    }
+
     /**
      * Get the prunable model query.
      */

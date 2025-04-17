@@ -137,7 +137,10 @@ class ResultResource extends Resource
                             Forms\Components\Placeholder::make('server_host')
                                 ->content(fn (Result $result): ?string => $result->server_host),
                             Forms\Components\Placeholder::make('comment')
-                                ->content(fn (Result $result): ?string => $result->comments),
+                                ->content(fn (Result $result): ?string => $result->comments),             
+                            Forms\Components\Placeholder::make('test_id')
+                                ->label('Test Schedule')
+                                ->content(fn ($record) => $record->test->name ?? 'N/A'),
                             Forms\Components\Checkbox::make('scheduled'),
                             Forms\Components\Checkbox::make('healthy'),
                         ])
@@ -307,6 +310,12 @@ class ResultResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->toggleable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('test_id')
+                    ->label('Test Schedule')
+                    ->getStateUsing(fn ($record) => $record->test->name ?? 'N/A') // Look up the test name
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
                     ->boolean()
