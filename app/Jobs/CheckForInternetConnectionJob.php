@@ -51,7 +51,7 @@ class CheckForInternetConnectionJob implements ShouldQueue
         $this->result->update([
             'data->type' => 'log',
             'data->level' => 'error',
-            'data->message' => 'Failed to fetch external IP address, server is likely unable to connect to the internet.',
+            'data->message' => 'Failed to connect to the internet.',
             'status' => ResultStatus::Failed,
         ]);
 

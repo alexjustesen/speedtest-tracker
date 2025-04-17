@@ -337,6 +337,13 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable()
                     ->alignment(Alignment::Center),
+                Tables\Columns\TextColumn::make('data.message')
+                    ->label('Error Message')
+                    ->limit(15)
+                    ->tooltip(fn ($state) => $state)
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))

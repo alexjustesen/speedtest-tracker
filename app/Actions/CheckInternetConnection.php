@@ -25,7 +25,7 @@ class CheckInternetConnection
 
             return Str::trim($response->body());
         } catch (Throwable $e) {
-            Log::error('Failed to check internet connection.', [$e->getMessage()]);
+            Log::error('Failed to connect to the internet.', [$e->getMessage()]);
 
             return false;
         }
