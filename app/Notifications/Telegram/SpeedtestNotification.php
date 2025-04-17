@@ -17,6 +17,7 @@ class SpeedtestNotification extends Notification implements ShouldQueue
     public function __construct(
         public string $content,
         public bool $disableNotification = false,
+        public ?int $messageThreadId = null,
     ) {}
 
     /**
@@ -39,6 +40,7 @@ class SpeedtestNotification extends Notification implements ShouldQueue
         return TelegramMessage::create()
             ->to($notifiable->routes['telegram_chat_id'])
             ->content($this->content)
-            ->disableNotification($this->disableNotification);
+            ->disableNotification($this->disableNotification)
+            ->options(['message_thread_id' => $this->messageThreadId]);
     }
 }
