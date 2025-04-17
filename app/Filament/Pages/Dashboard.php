@@ -3,12 +3,10 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\RecentDownloadChartWidget;
-use App\Filament\Widgets\RecentDownloadedChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
 use App\Filament\Widgets\RecentPingChartWidget;
 use App\Filament\Widgets\RecentUploadChartWidget;
-use App\Filament\Widgets\RecentUploadedChartWidget;
 use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use Carbon\Carbon;
@@ -43,8 +41,6 @@ class Dashboard extends BasePage
             RecentDownloadChartWidget::make(),
             RecentUploadChartWidget::make(),
             RecentPingChartWidget::make(),
-            RecentDownloadedChartWidget::make(),
-            RecentUploadedChartWidget::make(),
             RecentJitterChartWidget::make(),
             RecentDownloadLatencyChartWidget::make(),
             RecentUploadLatencyChartWidget::make(),
