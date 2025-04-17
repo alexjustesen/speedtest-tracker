@@ -19,16 +19,6 @@ trait ResultDataAttributes
     }
 
     /**
-     * Get the result's downloaded data in bytes.
-     */
-    protected function downloadedBytes(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'download.bytes'),
-        );
-    }
-
-    /**
      * Get the result's download jitter in milliseconds.
      */
     protected function downloadJitter(): Attribute
@@ -175,16 +165,6 @@ trait ResultDataAttributes
     {
         return Attribute::make(
             get: fn (): null|int|float => ! blank($this->upload) ? Bitrate::bytesToBits($this->upload) : null,
-        );
-    }
-
-    /**
-     * Get the result's uploaded data in bytes.
-     */
-    protected function uploadedBytes(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'upload.bytes'),
         );
     }
 
