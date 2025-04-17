@@ -114,14 +114,8 @@ class ResultExporter extends Exporter
                 })
                 ->enabledByDefault(false),
             ExportColumn::make('downloaded_bytes')
-                ->state(function (Result $record): ?string {
-                    return $record->downloaded_bytes;
-                })
                 ->enabledByDefault(false),
             ExportColumn::make('uploaded_bytes')
-                ->state(function (Result $record): ?string {
-                    return $record->uploaded_bytes;
-                })
                 ->enabledByDefault(false),
             ExportColumn::make('result_url')
                 ->state(function (Result $record) {
