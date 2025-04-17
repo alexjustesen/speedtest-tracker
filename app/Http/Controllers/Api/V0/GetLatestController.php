@@ -33,8 +33,6 @@ class GetLatestController extends Controller
                 'ping' => $latest->ping,
                 'download' => ! blank($latest->download) ? Number::bitsToMagnitude(bits: $latest->download_bits, precision: 2, magnitude: 'mbit') : null,
                 'upload' => ! blank($latest->upload) ? Number::bitsToMagnitude(bits: $latest->upload_bits, precision: 2, magnitude: 'mbit') : null,
-                'downloaded_bytes' => ! blank($latest->downloaded_bytes) ? Number::bitsToMagnitude(bits: $latest->downloaded_bytes, precision: 2, magnitude: 'mbit') : null,
-                'uploaded_bytes' => ! blank($latest->uploaded_bytes) ? Number::bitsToMagnitude(bits: $latest->uploaded_bytes, precision: 2, magnitude: 'mbit') : null,
                 'server_id' => $latest->server_id,
                 'server_host' => $latest->server_host,
                 'server_name' => $latest->server_name,
