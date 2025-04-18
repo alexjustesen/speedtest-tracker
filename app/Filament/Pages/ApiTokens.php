@@ -35,7 +35,7 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
 
     protected static ?string $title = 'API Tokens';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Application Settings';
 
     public ?string $token = '';
 

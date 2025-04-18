@@ -31,14 +31,14 @@ class SelectSpeedtestServerJob implements ShouldQueue
             return;
         }
 
-        $test = $this->result->test;
+        $schedule = $this->result->schedule;
 
-        if (!$test || blank($test->options)) {
+        if (!$schedule || blank($schedule->options)) {
             return;
         }
 
-        $preference = data_get($test->options, 'server_preference', 'auto');
-        $preferredServers = collect(data_get($test->options, 'servers', []))
+        $preference = data_get($schedule->options, 'server_preference', 'auto');
+        $preferredServers = collect(data_get($schedule->options, 'servers', []))
             ->pluck('server_id')
             ->filter()
             ->map(fn($id) => (int) $id)
@@ -48,32 +48,35 @@ class SelectSpeedtestServerJob implements ShouldQueue
 
         $serverId = null;
 
+        // Handle preference: "prefer"
         if ($preference === 'prefer' && !empty($preferredServers)) {
-            $serverId = Arr::random($preferredServers);
-        } elseif ($preference === 'ignore' && !empty($preferredServers)) {
+            $serverId = count($preferredServers) === 1 
+                ? $preferredServers[0] 
+                : Arr::random($preferredServers);
+        }
+        // Handle preference: "ignore"
+        elseif ($preference === 'ignore' && !empty($preferredServers)) {
             $serverId = $this->filterOutServers($preferredServers);
-        } elseif ($preference === 'auto') {
-            $serverId = $this->getAnyServer();
+        }
+        // Handle preference: "auto" (no server is selected)
+        elseif ($preference === 'auto') {
+            // No server is selected for "auto" preference.
+            return;
         }
 
         if ($serverId) {
             $this->updateServerId($this->result, $serverId);
         } else {
-            Log::warning('No suitable server found for Test #' . $test->id);
+            Log::warning('No suitable server found for Schedule #' . $schedule->id);
         }
-    }
-
-    private function getAnyServer(): ?int
-    {
-        $servers = array_keys($this->listServers());
-        return Arr::random($servers);
     }
 
     private function filterOutServers(array $excluded): ?int
     {
         $servers = $this->listServers();
+        // Filter out the excluded servers
         $filtered = Arr::except($servers, $excluded);
-        return Arr::first($filtered);
+        return Arr::first($filtered);  // Return the first available server after exclusion
     }
 
     private function listServers(): array
@@ -94,7 +97,6 @@ class SelectSpeedtestServerJob implements ShouldQueue
             Log::error('Failed listing Ookla speedtest servers.', [
                 'error' => $e->getMessage(),
             ]);
-
             return [];
         }
 
@@ -104,6 +106,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
             []
         );
 
+        // Return a list of servers in the format server_id => server_id
         return collect($servers)->mapWithKeys(fn(array $server) => [
             $server['id'] => $server['id'],
         ])->toArray();

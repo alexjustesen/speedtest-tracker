@@ -8,6 +8,7 @@ use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
+use App\Models\Schedule;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -138,9 +139,9 @@ class ResultResource extends Resource
                                 ->content(fn (Result $result): ?string => $result->server_host),
                             Forms\Components\Placeholder::make('comment')
                                 ->content(fn (Result $result): ?string => $result->comments),             
-                            Forms\Components\Placeholder::make('test_id')
+                            Forms\Components\Placeholder::make('schedule_id')
                                 ->label('Test Schedule')
-                                ->content(fn ($record) => $record->test->name ?? 'N/A'),
+                                ->content(fn ($record) => $record->schedule->name ?? 'N/A'),
                             Forms\Components\Checkbox::make('scheduled'),
                             Forms\Components\Checkbox::make('healthy'),
                         ])
@@ -311,9 +312,9 @@ class ResultResource extends Resource
                     ->badge()
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('test_id')
+                Tables\Columns\TextColumn::make('schedule_id')
                     ->label('Test Schedule')
-                    ->getStateUsing(fn ($record) => $record->test->name ?? 'N/A') // Look up the test name
+                    ->getStateUsing(fn ($record) => $record->schedule->name ?? 'N/A')
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(),
@@ -377,6 +378,16 @@ class ResultResource extends Resource
                             ->toArray();
                     })
                     ->attribute('data->server->name'),
+                Tables\Filters\SelectFilter::make('schedule_id')
+                    ->label('Schedule name')
+                    ->multiple()
+                    ->attribute('schedule_id')
+                    ->options(function (): array {
+                        return Schedule::query()
+                            ->orderBy('name')
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    }),
                 Tables\Filters\TernaryFilter::make('scheduled')
                     ->nullable()
                     ->trueLabel('Only scheduled speedtests')

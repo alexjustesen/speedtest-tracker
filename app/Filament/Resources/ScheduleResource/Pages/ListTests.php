@@ -1,14 +1,14 @@
 <?php
 
- namespace App\Filament\Resources\TestResource\Pages;
+ namespace App\Filament\Resources\ScheduleResource\Pages;
 
- use App\Filament\Resources\TestResource;
+ use App\Filament\Resources\ScheduleResource;
  use Filament\Actions;
  use Filament\Resources\Pages\ListRecords;
 
- class ListTests extends ListRecords
+ class ListSchedule extends ListRecords
  {
-     protected static string $resource = TestResource::class;
+     protected static string $resource = ScheduleResource::class;
 
      protected function getHeaderActions(): array
      {

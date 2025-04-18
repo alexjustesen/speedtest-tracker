@@ -38,9 +38,9 @@ class Result extends Model
         ];
     }
 
-    public function test()
+    public function schedule()
     {
-        return $this->belongsTo(Test::class);
+        return $this->belongsTo(Schedule::class);
     }
 
     /**

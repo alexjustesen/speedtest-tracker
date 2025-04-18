@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use App\Models\Traits\HasOwner;
-use App\Observers\TestObserver;
+use App\Observers\ScheduleObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[ObservedBy([TestObserver::class])]
-class Test extends Model
+#[ObservedBy([ScheduleObserver::class])]
+class Schedule extends Model
 {
     use HasFactory, HasOwner;
 

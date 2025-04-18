@@ -11,7 +11,7 @@ class ThresholdsPage extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Test Settings';
 
     protected static ?int $navigationSort = 4;
 

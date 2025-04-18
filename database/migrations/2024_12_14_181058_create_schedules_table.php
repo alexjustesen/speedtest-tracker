@@ -13,7 +13,7 @@ return new class extends Migration
     */
     public function up(): void
     {
-        Schema::create('tests', function (Blueprint $table) {
+        Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('owned_by_id')->nullable();
             $table->string('type')->default('speedtest');
@@ -23,8 +23,8 @@ return new class extends Migration
             $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('next_run_at')->nullable();
+            $table->string('service')->nullable();
             $table->timestamps();
-
             $table->foreign('owned_by_id')
                 ->references('id')
                 ->on('users')
@@ -37,6 +37,6 @@ return new class extends Migration
     */
     public function down(): void
     {
-        Schema::dropIfExists('tests');
+        Schema::dropIfExists('schedules');
     }
 };

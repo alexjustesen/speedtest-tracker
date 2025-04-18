@@ -3,10 +3,11 @@
  namespace App\Filament\Resources;
 
  use App\Actions\ExplainCronExpression;
- use App\Filament\Resources\TestResource\Pages;
- use App\Filament\Resources\TestResource\RelationManagers;
- use App\Models\Test;
+ use App\Filament\Resources\ScheduleResource\Pages;
+ use App\Filament\Resources\ScheduleResource\RelationManagers;
+ use App\Models\Schedule;
  use App\Rules\Cron;
+ use App\Rules\NoCronOverlap;
  use Filament\Forms\Components\Grid;
  use Filament\Forms\Components\MarkdownEditor;
  use Filament\Forms\Components\Radio;
@@ -18,23 +19,31 @@
  use Filament\Forms\Components\TagsInput;
  use Filament\Forms\Components\TextInput;
  use Filament\Forms\Components\Toggle;
+ use Filament\Forms\Components\Placeholder;
  use Filament\Forms\Form;
  use Filament\Forms\Get;
  use Filament\Resources\Resource;
  use Filament\Tables;
  use Filament\Tables\Columns\IconColumn;
  use Filament\Tables\Columns\TextColumn;
+ use Filament\Tables\Filters\SelectFilter;
+ use Filament\Tables\Filters\TernaryFilter;
  use Filament\Tables\Table;
  use Illuminate\Database\Eloquent\Builder;
  use Illuminate\Support\Facades\Auth;
  use Illuminate\Support\HtmlString;
+ use Illuminate\Support\Str;
  use Orisai\CronExpressionExplainer\DefaultCronExpressionExplainer;
 
- class TestResource extends Resource
+ class ScheduleResource extends Resource
  {
-     protected static ?string $model = Test::class;
+    protected static ?string $model = Schedule::class;
 
-     protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+
+    protected static ?string $navigationGroup = 'Test Settings';
+
+    protected static ?int $navigationSort = 1;
 
      public static function form(Form $form): Form
      {
@@ -72,16 +81,30 @@
                              ->tabs([
                                  Tab::make('Schedule')
                                      ->schema([
-                                         TextInput::make('options.cron_expression')
-                                             ->placeholder('Enter a cron expression.')
-                                             ->helperText(fn (Get $get) => ExplainCronExpression::run($get('options.cron_expression')))
-                                             ->required()
-                                             ->rules([new Cron()])
-                                             ->live(),
-
-                                         // add placeholder after a scheduled is created for the next run at
-
-                                         // ...
+                                        TextInput::make('options.cron_expression')
+                                            ->placeholder('Enter a cron expression.')
+                                            ->helperText(fn (Get $get) => ExplainCronExpression::run($get('options.cron_expression')))
+                                            ->required()
+                                            ->rules([new Cron()])
+                                            ->live(),
+                                        Placeholder::make('next_run_at')
+                                            ->label('Next Run At')
+                                            ->content(function (Get $get) {
+                                                $expression = $get('options.cron_expression');
+                                
+                                                if (!$expression) {
+                                                    return '—';
+                                                }
+                                
+                                                try {
+                                                    $cron = new \Cron\CronExpression($expression);
+                                                    return \Carbon\Carbon::instance(
+                                                        $cron->getNextRunDate(now(), 0, false, config('app.display_timezone'))
+                                                    )->toDayDateTimeString();
+                                                } catch (\Exception $e) {
+                                                    return 'Invalid cron expression';
+                                                }
+                                            }),
                                      ]),
 
                                  Tab::make('Servers')
@@ -147,7 +170,14 @@
                                      ->relationship('ownedBy', 'name')
                                      ->default(Auth::id())
                                      ->searchable(),
-
+                                Select::make('service')
+                                     ->label('Service')
+                                     ->options([
+                                         'Ookla' => 'Ookla',
+                                     ])
+                                     ->default('Ookla Speedtest')
+                                     ->native(false)
+                                     ->required(),
                                  TextInput::make('token')
                                      ->helperText(new HtmlString('This is a secret token that can be used to authenticate requests to the test.'))
                                      ->readOnly()
@@ -175,17 +205,28 @@
                      ->copyable()
                      ->toggleable(isToggledHiddenByDefault: true),
                  TextColumn::make('name'),
+                 TextColumn::make('service')
+                    ->label('Service')
+                    ->sortable(),
                  TextColumn::make('options.cron_expression')
-                     ->label('Cron expression')
-                     ->sortable(),
+                    ->label('Schedule')
+                    ->sortable()
+                    ->formatStateUsing(fn (?string $state) => ExplainCronExpression::run($state)),
                 TextColumn::make('options.server_preference')
-                     ->label('Server Preference')
-                     ->sortable(),
-                 IconColumn::make('is_active')
+                    ->label('Server Preference')
+                    ->sortable()
+                    ->formatStateUsing(function (?string $state) {
+                        return match ($state) {
+                            'auto' => 'Automatic',
+                            'prefer' => 'Prefer Specific Servers',
+                            'ignore' => 'Ignore Specific Servers',
+                        };
+                    }),
+                IconColumn::make('is_active')
                      ->label('Active')
                      ->alignCenter()
                      ->boolean(),
-                 TextColumn::make('ownedBy.name')
+                TextColumn::make('ownedBy.name')
                      ->toggleable(isToggledHiddenByDefault: true),
                  TextColumn::make('next_run_at')
                      ->alignEnd()
@@ -203,15 +244,29 @@
                      ->toggleable(isToggledHiddenByDefault: true),
              ])
              ->filters([
-                 //
+                SelectFilter::make('service')
+                    ->label('Service')
+                    ->options(function () {
+                        return Schedule::distinct()
+                            ->pluck('service', 'service')
+                            ->toArray();
+                    })
+                    ->native(false),
+                TernaryFilter::make('Active')
+                    ->nullable()
+                    ->trueLabel('Active schedules only')
+                    ->falseLabel('Inactive schedules only')
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('is_active', true),
+                        false: fn (Builder $query) => $query->where('is_active', false),
+                        blank: fn (Builder $query) => $query,
+                    ),
              ])
              ->actions([
                  Tables\Actions\EditAction::make(),
              ])
              ->bulkActions([
-                 Tables\Actions\BulkActionGroup::make([
-                     Tables\Actions\DeleteBulkAction::make(),
-                 ]),
+                 Tables\Actions\DeleteBulkAction::make(),
              ]);
      }
 
@@ -225,9 +280,7 @@
      public static function getPages(): array
      {
          return [
-             'index' => Pages\ListTests::route('/'),
-             'create' => Pages\CreateTest::route('/create'),
-             'edit' => Pages\EditTest::route('/{record}/edit'),
+             'index' => Pages\ListSchedule::route('/'),
          ];
      }
  }
