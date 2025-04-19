@@ -11,7 +11,7 @@ class SendTelegramTestNotification
 {
     use AsAction;
 
-    public function handle(array $recipients)
+    public function handle(array $recipients, ?int $messageThreadId = null)
     {
         if (! count($recipients)) {
             Notification::make()
@@ -24,7 +24,7 @@ class SendTelegramTestNotification
 
         foreach ($recipients as $recipient) {
             FacadesNotification::route('telegram_chat_id', $recipient['telegram_chat_id'])
-                ->notify(new TestNotification);
+                ->notify(new TestNotification($messageThreadId));
         }
 
         Notification::make()

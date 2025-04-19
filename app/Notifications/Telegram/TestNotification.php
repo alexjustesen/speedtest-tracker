@@ -13,15 +13,17 @@ class TestNotification extends Notification implements ShouldQueue
     use Queueable;
 
     protected $settings;
+    protected ?int $messageThreadId;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(?int $messageThreadId = null)
     {
         $this->settings = new NotificationSettings;
+        $this->messageThreadId = $messageThreadId;
     }
 
     /**
@@ -43,7 +45,8 @@ class TestNotification extends Notification implements ShouldQueue
     {
         return TelegramMessage::create()
             ->to($notifiable->routes['telegram_chat_id'])
+            ->content('👋 Testing the Telegram notification channel.')
             ->disableNotification($this->settings->telegram_disable_notification)
-            ->content('👋 Testing the Telegram notification channel.');
+            ->options(['message_thread_id' => $this->messageThreadId]);
     }
 }
