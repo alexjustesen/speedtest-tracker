@@ -20,6 +20,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Number as LaravelNumber;
 
 class ResultResource extends Resource
 {
@@ -86,7 +87,7 @@ class ResultResource extends Resource
                             Forms\Components\TextInput::make('downloaded_bytes')
                                 ->label('Downloaded bytes')
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
-                                    $component->state(! blank($record->downloaded_bytes) ? Number::bytesToHuman(bytes: $record->downloaded_bytes, precision: 2) : '');
+                                    $component->state(! blank($record->downloaded_bytes) ? LaravelNumber::fileSize(bytes: $record->downloaded_bytes, precision: 2) : '');
                                 }),
                             Forms\Components\TextInput::make('data.upload.latency.jitter')
                                 ->label('Upload Jitter')
@@ -111,7 +112,7 @@ class ResultResource extends Resource
                             Forms\Components\TextInput::make('uploaded_bytes')
                                 ->label('Uploaded bytes')
                                 ->afterStateHydrated(function (TextInput $component, Result $record) {
-                                    $component->state(! blank($record->downloaded_bytes) ? Number::bytesToHuman(bytes: $record->uploaded_bytes, precision: 2) : '');
+                                    $component->state(! blank($record->downloaded_bytes) ? LaravelNumber::fileSize(bytes: $record->uploaded_bytes, precision: 2) : '');
                                 }),
                             Forms\Components\TextInput::make('data.ping.jitter')
                                 ->label('Ping Jitter')
@@ -208,14 +209,14 @@ class ResultResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('downloaded_bytes')
                     ->toggleable()
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::bytesToHuman(bytes: $record->downloaded_bytes, precision: 2) : null)
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? LaravelNumber::fileSize(bytes: $record->downloaded_bytes, precision: 2) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('upload')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('uploaded_bytes')
                     ->toggleable()
-                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::bytesToHuman(bytes: $record->uploaded_bytes, precision: 2) : null)
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? LaravelNumber::fileSize(bytes: $record->uploaded_bytes, precision: 2) : null)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('ping')
                     ->toggleable()

@@ -61,16 +61,6 @@ class Number extends SupportNumber
     }
 
     /**
-     * Convert the given number to its largest bit order of magnitude.
-     *
-     * Reference: https://en.wikipedia.org/wiki/Byte
-     */
-    public static function bytesToHuman(int|float $bytes, int $precision = 0, ?int $maxPrecision = null): string
-    {
-        return strtoupper(Number::bitsToHuman($bytes, $precision, $maxPrecision));
-    }
-
-    /**
      * Convert the given number to its largest bit rate order of magnitude.
      *
      * Reference: https://en.wikipedia.org/wiki/Bit_rate
