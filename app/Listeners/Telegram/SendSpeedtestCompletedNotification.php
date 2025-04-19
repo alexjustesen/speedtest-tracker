@@ -42,8 +42,6 @@ class SendSpeedtestCompletedNotification
             'ping' => round($event->result->ping).' ms',
             'download' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
             'upload' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),
-            'downloaded_bytes' => Number::bytesToHuman(bytes: $event->result->downloaded_bytes, precision: 2),
-            'uploaded_bytes' => Number::bytesToHuman(bytes: $event->result->uploaded_bytes, precision: 2),
             'packetLoss' => is_numeric($event->result->packet_loss) ? round($event->result->packet_loss, 2) : 'n/a',
             'speedtest_url' => $event->result->result_url,
             'url' => url('/admin/results'),
