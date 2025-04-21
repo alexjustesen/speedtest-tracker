@@ -153,8 +153,8 @@ class ScheduleResource extends Resource
                                     ->relationship('ownedBy', 'name')
                                     ->default(Auth::id())
                                     ->searchable(),
-                                Select::make('service')
-                                    ->label('Service')
+                                Select::make('type')
+                                    ->label('Type')
                                     ->options([
                                         'Ookla' => 'Ookla',
                                     ])
@@ -188,8 +188,8 @@ class ScheduleResource extends Resource
                 TextColumn::make('name'),
                 TextColumn::make('description')
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('service')
-                    ->label('Service')
+                TextColumn::make('type')
+                    ->label('Type')
                     ->sortable(),
                 TextColumn::make('options.cron_expression')
                     ->label('Schedule')
@@ -245,11 +245,11 @@ class ScheduleResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('service')
-                    ->label('Service')
+                SelectFilter::make('type')
+                    ->label('Type')
                     ->options(function () {
                         return Schedule::distinct()
-                            ->pluck('service', 'service')
+                            ->pluck('type', 'type')
                             ->toArray();
                     })
                     ->native(false),

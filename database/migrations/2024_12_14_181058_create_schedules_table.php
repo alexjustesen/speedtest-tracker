@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('owned_by_id')->nullable();
-            $table->string('type')->default('speedtest');
+            $table->string('type')->nullable();
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->json('options')->nullable();
             $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('next_run_at')->nullable();
-            $table->string('service')->nullable();
             $table->timestamps();
             $table->foreign('owned_by_id')
                 ->references('id')
