@@ -1,42 +1,40 @@
 <?php
 
- namespace App\Filament\Resources;
+namespace App\Filament\Resources;
 
- use App\Actions\ExplainCronExpression;
- use App\Filament\Resources\ScheduleResource\Pages;
- use App\Filament\Resources\ScheduleResource\RelationManagers;
- use App\Models\Schedule;
- use App\Rules\Cron;
- use App\Rules\NoCronOverlap;
- use Filament\Forms\Components\Grid;
- use Filament\Forms\Components\MarkdownEditor;
- use Filament\Forms\Components\Radio;
- use Filament\Forms\Components\Repeater;
- use Filament\Forms\Components\Section;
- use Filament\Forms\Components\Select;
- use Filament\Forms\Components\Tabs;
- use Filament\Forms\Components\Tabs\Tab;
- use Filament\Forms\Components\TagsInput;
- use Filament\Forms\Components\TextInput;
- use Filament\Forms\Components\Toggle;
- use Filament\Forms\Components\Placeholder;
- use Filament\Forms\Form;
- use Filament\Forms\Get;
- use Filament\Resources\Resource;
- use Filament\Tables;
- use Filament\Tables\Columns\IconColumn;
- use Filament\Tables\Columns\TextColumn;
- use Filament\Tables\Filters\SelectFilter;
- use Filament\Tables\Filters\TernaryFilter;
- use Filament\Tables\Table;
- use Illuminate\Database\Eloquent\Builder;
- use Illuminate\Support\Facades\Auth;
- use Illuminate\Support\HtmlString;
- use Illuminate\Support\Str;
- use Orisai\CronExpressionExplainer\DefaultCronExpressionExplainer;
+use App\Actions\ExplainCronExpression;
+use App\Actions\GetOoklaSpeedtestServers;
+use App\Filament\Resources\ScheduleResource\Pages;
+use App\Models\Schedule;
+use App\Rules\Cron;
+use Carbon\Carbon;
+use Cron\CronExpression;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
- class ScheduleResource extends Resource
- {
+class ScheduleResource extends Resource
+{
     protected static ?string $model = Schedule::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
@@ -45,176 +43,162 @@
 
     protected static ?int $navigationSort = 1;
 
-     public static function form(Form $form): Form
-     {
-         return $form
-             ->schema([
-                 Grid::make([
-                     'default' => 1,
-                     'lg' => 3,
-                 ])->schema([
-                     Grid::make([
-                         'default' => 1,
-                         'lg' => 2,
-                     ])->schema([
-                         Section::make('Details')
-                             ->schema([
-                                 TextInput::make('name')
-                                     ->placeholder('Enter a name for the test.')
-                                     ->maxLength(255)
-                                     ->required(),
-                                 MarkdownEditor::make('description')
-                                     ->placeholder('Markdown is supported.')
-                                     ->toolbarButtons([
-                                         'bold',
-                                         'bulletList',
-                                         'italic',
-                                         'link',
-                                         'orderedList',
-                                         'strike',
-                                     ]),
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Grid::make([
+                    'default' => 1,
+                    'lg' => 3,
+                ])->schema([
+                    Grid::make([
+                        'default' => 1,
+                        'lg' => 2,
+                    ])->schema([
+                        Section::make('Details')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->placeholder('Enter a name for the test.')
+                                    ->maxLength(255)
+                                    ->required(),
+                                TextInput::make('description')
+                                    ->maxLength(255),
+                            ]),
 
-                                 // ...
-                             ]),
-
-                         Tabs::make('Options')
-                             ->tabs([
-                                 Tab::make('Schedule')
-                                     ->schema([
+                        Tabs::make('Options')
+                            ->tabs([
+                                Tab::make('Schedule')
+                                    ->schema([
                                         TextInput::make('options.cron_expression')
                                             ->placeholder('Enter a cron expression.')
                                             ->helperText(fn (Get $get) => ExplainCronExpression::run($get('options.cron_expression')))
                                             ->required()
-                                            ->rules([new Cron()])
+                                            ->rules([new Cron])
                                             ->live(),
                                         Placeholder::make('next_run_at')
                                             ->label('Next Run At')
                                             ->content(function (Get $get) {
                                                 $expression = $get('options.cron_expression');
-                                
-                                                if (!$expression) {
+
+                                                if (! $expression) {
                                                     return '—';
                                                 }
-                                
+
                                                 try {
-                                                    $cron = new \Cron\CronExpression($expression);
-                                                    return \Carbon\Carbon::instance(
+                                                    $cron = new CronExpression($expression);
+
+                                                    return Carbon::instance(
                                                         $cron->getNextRunDate(now(), 0, false, config('app.display_timezone'))
                                                     )->toDayDateTimeString();
                                                 } catch (\Exception $e) {
                                                     return 'Invalid cron expression';
                                                 }
                                             }),
-                                     ]),
+                                    ]),
 
-                                 Tab::make('Servers')
-                                     ->schema([
-                                         Radio::make('options.server_preference')
-                                             ->options([
-                                                 'auto' => 'Automatically select a server',
-                                                 'prefer' => 'Prefer servers from the list',
-                                                 'ignore' => 'Ignore servers from the list',
-                                             ])
-                                             ->default('auto')
-                                             ->required()
-                                             ->live(),
+                                Tab::make('Servers')
+                                    ->schema([
+                                        Radio::make('options.server_preference')
+                                            ->options([
+                                                'auto' => 'Automatically select a server',
+                                                'prefer' => 'Prefer servers from the list',
+                                                'ignore' => 'Ignore servers from the list',
+                                            ])
+                                            ->default('auto')
+                                            ->required()
+                                            ->live(),
 
-                                         Repeater::make('options.servers')
-                                             ->schema([
-                                                 TextInput::make('server_id')
-                                                     ->label('Server ID')
-                                                     ->placeholder('Enter the ID of the server.')
-                                                     ->integer()
-                                                     ->required(),
+                                        Repeater::make('options.servers')
+                                            ->schema([
+                                                Select::make('server_id')
+                                                    ->label('Server ID')
+                                                    ->placeholder('Select the ID of the server.')
+                                                    ->options(function (): array {
+                                                        return GetOoklaSpeedtestServers::run();
+                                                    })
+                                                    ->searchable()
+                                                    ->required(),
+                                            ])
+                                            ->minItems(1)
+                                            ->maxItems(20)
+                                            ->hidden(fn (Get $get) => $get('options.server_preference') === 'auto'),
+                                    ]),
 
-                                                 // ...
-                                             ])
-                                             ->minItems(1)
-                                             ->maxItems(20)
-                                             ->hidden(fn (Get $get) => $get('options.server_preference') === 'auto'),
+                                Tab::make('Advanced')
+                                    ->schema([
+                                        TagsInput::make('options.skip_ips')
+                                            ->label('Skip IP addresses')
+                                            ->placeholder('Add external IP addresses that should be skipped.'),
+                                    ]),
+                            ])
+                            ->columnSpanFull(),
 
-                                         // ...
-                                     ]),
+                        // ...
+                    ])->columnSpan([
+                        'default' => 1,
+                        'lg' => 2,
+                    ]),
 
-                                 Tab::make('Advanced')
-                                     ->schema([
-                                         TagsInput::make('options.skip_ips')
-                                             ->label('Skip IP addresses')
-                                             ->placeholder('Add external IP addresses that should be skipped.'),
-
-                                         // ...
-                                     ]),
-
-                                 // ...
-                             ])
-                             ->columnSpanFull(),
-
-                         // ...
-                     ])->columnSpan([
-                         'default' => 1,
-                         'lg' => 2,
-                     ]),
-
-                     Grid::make([
-                         'default' => 1,
-                     ])->schema([
-                         Section::make('Settings')
-                             ->schema([
-                                 Toggle::make('is_active')
-                                     ->label('Active')
-                                     ->required(),
-
-                                 Select::make('owned_by_id')
-                                     ->label('Owner')
-                                     ->placeholder('Select an owner.')
-                                     ->relationship('ownedBy', 'name')
-                                     ->default(Auth::id())
-                                     ->searchable(),
+                    Grid::make([
+                        'default' => 1,
+                    ])->schema([
+                        Section::make('Settings')
+                            ->schema([
+                                Toggle::make('is_active')
+                                    ->label('Active')
+                                    ->required(),
+                                Select::make('owned_by_id')
+                                    ->label('Owner')
+                                    ->placeholder('Select an owner.')
+                                    ->relationship('ownedBy', 'name')
+                                    ->default(Auth::id())
+                                    ->searchable(),
                                 Select::make('service')
-                                     ->label('Service')
-                                     ->options([
-                                         'Ookla' => 'Ookla',
-                                     ])
-                                     ->default('Ookla Speedtest')
-                                     ->native(false)
-                                     ->required(),
-                                 TextInput::make('token')
-                                     ->helperText(new HtmlString('This is a secret token that can be used to authenticate requests to the test.'))
-                                     ->readOnly()
-                                     ->hiddenOn('create'),
+                                    ->label('Service')
+                                    ->options([
+                                        'Ookla' => 'Ookla',
+                                    ])
+                                    ->default('Ookla Speedtest')
+                                    ->native(false)
+                                    ->required(),
+                                TextInput::make('token')
+                                    ->helperText(new HtmlString('This is a secret token that can be used to authenticate requests to the test.'))
+                                    ->readOnly()
+                                    ->hiddenOn('create'),
+                            ]),
 
-                                 // ...
-                             ]),
+                        // ...
+                    ])->columnSpan([
+                        'default' => 1,
+                    ]),
+                ]),
+            ]);
+    }
 
-                         // ...
-                     ])->columnSpan([
-                         'default' => 1,
-                     ]),
-                 ]),
-             ]);
-     }
-
-     public static function table(Table $table): Table
-     {
-         return $table
-             ->columns([
-                 TextColumn::make('id')
-                     ->label('ID')
-                     ->sortable(),
-                 TextColumn::make('token')
-                     ->copyable()
-                     ->toggleable(isToggledHiddenByDefault: true),
-                 TextColumn::make('name'),
-                 TextColumn::make('service')
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
+                TextColumn::make('token')
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('name'),
+                TextColumn::make('description')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('service')
                     ->label('Service')
                     ->sortable(),
-                 TextColumn::make('options.cron_expression')
+                TextColumn::make('options.cron_expression')
                     ->label('Schedule')
                     ->sortable()
                     ->formatStateUsing(fn (?string $state) => ExplainCronExpression::run($state)),
                 TextColumn::make('options.server_preference')
                     ->label('Server Preference')
                     ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(function (?string $state) {
                         return match ($state) {
                             'auto' => 'Automatic',
@@ -222,28 +206,45 @@
                             'ignore' => 'Ignore Specific Servers',
                         };
                     }),
+                TextColumn::make('options.servers')
+                    ->label('Servers')
+                    ->getStateUsing(function ($record) {
+                        $servers = collect($record->options['servers'] ?? [])
+                            ->pluck('server_id')
+                            ->filter();
+
+                        $lookup = GetOoklaSpeedtestServers::run(); // [id => "Name (Location, ID)"]
+
+                        return $servers
+                            ->map(fn ($id) => $lookup[$id] ?? "Unknown ($id)")
+                            ->implode(', ');
+                    })
+                    ->limit(15)
+                    ->tooltip(fn ($state) => $state)
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
                 IconColumn::make('is_active')
-                     ->label('Active')
-                     ->alignCenter()
-                     ->boolean(),
+                    ->label('Active')
+                    ->alignCenter()
+                    ->boolean(),
                 TextColumn::make('ownedBy.name')
-                     ->toggleable(isToggledHiddenByDefault: true),
-                 TextColumn::make('next_run_at')
-                     ->alignEnd()
-                     ->dateTime()
-                     ->sortable(),
-                 TextColumn::make('created_at')
-                     ->alignEnd()
-                     ->dateTime()
-                     ->sortable()
-                     ->toggleable(isToggledHiddenByDefault: false),
-                 TextColumn::make('updated_at')
-                     ->alignEnd()
-                     ->dateTime()
-                     ->sortable()
-                     ->toggleable(isToggledHiddenByDefault: true),
-             ])
-             ->filters([
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('next_run_at')
+                    ->alignEnd()
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->alignEnd()
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
+                TextColumn::make('updated_at')
+                    ->alignEnd()
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
                 SelectFilter::make('service')
                     ->label('Service')
                     ->options(function () {
@@ -261,26 +262,19 @@
                         false: fn (Builder $query) => $query->where('is_active', false),
                         blank: fn (Builder $query) => $query,
                     ),
-             ])
-             ->actions([
-                 Tables\Actions\EditAction::make(),
-             ])
-             ->bulkActions([
-                 Tables\Actions\DeleteBulkAction::make(),
-             ]);
-     }
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]);
+    }
 
-     public static function getRelations(): array
-     {
-         return [
-             //
-         ];
-     }
-
-     public static function getPages(): array
-     {
-         return [
-             'index' => Pages\ListSchedule::route('/'),
-         ];
-     }
- }
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListSchedule::route('/'),
+        ];
+    }
+}

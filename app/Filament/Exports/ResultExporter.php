@@ -127,6 +127,11 @@ class ResultExporter extends Exporter
                 ->state(function (Result $record): string {
                     return $record->scheduled ? 'Yes' : 'No';
                 }),
+            ExportColumn::make('schedule_id')
+                ->label('Test Schedule')
+                ->state(function (Result $record) {
+                    return $record->schedule->name ?? 'Unknown';
+                }),
             ExportColumn::make('healthy')
                 ->state(function (Result $record): string {
                     return $record->healthy ? 'Yes' : 'No';

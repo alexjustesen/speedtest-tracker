@@ -138,7 +138,7 @@ class ResultResource extends Resource
                             Forms\Components\Placeholder::make('server_host')
                                 ->content(fn (Result $result): ?string => $result->server_host),
                             Forms\Components\Placeholder::make('comment')
-                                ->content(fn (Result $result): ?string => $result->comments),             
+                                ->content(fn (Result $result): ?string => $result->comments),
                             Forms\Components\Placeholder::make('schedule_id')
                                 ->label('Test Schedule')
                                 ->content(fn ($record) => $record->schedule->name ?? 'N/A'),

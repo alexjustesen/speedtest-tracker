@@ -15,8 +15,6 @@ return new class extends Migration
             $table->foreignId('schedule_id')
                 ->nullable()
                 ->after('id');
-
-                // add fk constraint/indexing
         });
     }
 

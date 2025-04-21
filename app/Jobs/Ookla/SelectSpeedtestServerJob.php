@@ -33,7 +33,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
 
         $schedule = $this->result->schedule;
 
-        if (!$schedule || blank($schedule->options)) {
+        if (! $schedule || blank($schedule->options)) {
             return;
         }
 
@@ -41,7 +41,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         $preferredServers = collect(data_get($schedule->options, 'servers', []))
             ->pluck('server_id')
             ->filter()
-            ->map(fn($id) => (int) $id)
+            ->map(fn ($id) => (int) $id)
             ->unique()
             ->values()
             ->all();
@@ -49,13 +49,13 @@ class SelectSpeedtestServerJob implements ShouldQueue
         $serverId = null;
 
         // Handle preference: "prefer"
-        if ($preference === 'prefer' && !empty($preferredServers)) {
-            $serverId = count($preferredServers) === 1 
-                ? $preferredServers[0] 
+        if ($preference === 'prefer' && ! empty($preferredServers)) {
+            $serverId = count($preferredServers) === 1
+                ? $preferredServers[0]
                 : Arr::random($preferredServers);
         }
         // Handle preference: "ignore"
-        elseif ($preference === 'ignore' && !empty($preferredServers)) {
+        elseif ($preference === 'ignore' && ! empty($preferredServers)) {
             $serverId = $this->filterOutServers($preferredServers);
         }
         // Handle preference: "auto" (no server is selected)
@@ -67,7 +67,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         if ($serverId) {
             $this->updateServerId($this->result, $serverId);
         } else {
-            Log::warning('No suitable server found for Schedule #' . $schedule->id);
+            Log::warning('No suitable server found for Schedule #'.$schedule->id);
         }
     }
 
@@ -76,6 +76,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         $servers = $this->listServers();
         // Filter out the excluded servers
         $filtered = Arr::except($servers, $excluded);
+
         return Arr::first($filtered);  // Return the first available server after exclusion
     }
 
@@ -97,6 +98,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
             Log::error('Failed listing Ookla speedtest servers.', [
                 'error' => $e->getMessage(),
             ]);
+
             return [];
         }
 
@@ -107,7 +109,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         );
 
         // Return a list of servers in the format server_id => server_id
-        return collect($servers)->mapWithKeys(fn(array $server) => [
+        return collect($servers)->mapWithKeys(fn (array $server) => [
             $server['id'] => $server['id'],
         ])->toArray();
     }

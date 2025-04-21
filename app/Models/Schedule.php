@@ -14,17 +14,17 @@ class Schedule extends Model
     use HasFactory, HasOwner;
 
     /**
-    * The attributes that aren't mass assignable.
-    *
-    * @var array
-    */
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
     protected $guarded = [];
 
     /**
-    * Get the attributes that should be cast.
-    *
-    * @return array<string, string>
-    */
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array
     {
         return [

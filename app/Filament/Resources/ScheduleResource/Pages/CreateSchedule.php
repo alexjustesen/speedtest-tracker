@@ -1,12 +1,11 @@
 <?php
 
- namespace App\Filament\Resources\ScheduleResource\Pages;
+namespace App\Filament\Resources\ScheduleResource\Pages;
 
- use App\Filament\Resources\ScheduleResource;
- use Filament\Actions;
- use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\ScheduleResource;
+use Filament\Resources\Pages\CreateRecord;
 
- class CreateSchedule extends CreateRecord
- {
-     protected static string $resource = ScheduleResource::class;
- }
+class CreateSchedule extends CreateRecord
+{
+    protected static string $resource = ScheduleResource::class;
+}

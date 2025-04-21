@@ -2,18 +2,18 @@
 
 namespace App\Helpers;
 
-Use Cron\CronExpression;
+use Cron\CronExpression;
 
 class Cron
 {
     /**
      * Check if two cron expressions overlap within a given time range
-    *
-    * @param string $cron1 First cron expression
-    * @param string $cron2 Second cron expression
-    * @param int $checkHours Number of hours to check for overlap (default: 24)
-    * @return bool Returns true if schedules overlap, false otherwise
-    */
+     *
+     * @param  string  $cron1  First cron expression
+     * @param  string  $cron2  Second cron expression
+     * @param  int  $checkHours  Number of hours to check for overlap (default: 24)
+     * @return bool Returns true if schedules overlap, false otherwise
+     */
     public static function hasOverlap(string $cron1, string $cron2, int $checkHours = 24): bool
     {
         $cron1Expression = new CronExpression($cron1);

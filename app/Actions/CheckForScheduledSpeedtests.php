@@ -2,12 +2,10 @@
 
 namespace App\Actions;
 
+use App\Actions\Ookla\StartSpeedtest;
 use App\Models\Schedule;
-use Carbon\Carbon;
 use Cron\CronExpression;
 use Lorisleiva\Actions\Concerns\AsAction;
-use App\Actions\Ookla\StartSpeedtest;
-use Illuminate\Support\Arr;
 
 class CheckForScheduledSpeedtests
 {
@@ -19,15 +17,12 @@ class CheckForScheduledSpeedtests
         $activeSchedules = Schedule::where('is_active', true)->get();
 
         foreach ($activeSchedules as $schedule) {
-            // Get the cron expression for the schedule
             $expression = data_get($schedule, 'options.cron_expression');
 
-            // If there's a cron expression and the speedtest is due, dispatch the job
             if (is_string($expression) && $this->isSpeedtestDue($expression)) {
-                // Fetch the server preferences and other options
                 $serverPreference = data_get($schedule->options, 'server_preference', 'auto');
-                $preference = Arr::get($this->scheduleOptions, 'server_preference', 'auto');
-                $preferredServers = Arr::get($this->scheduleOptions, 'servers', []);
+                $servers = data_get($schedule->options, 'servers', []);
+                $skipIps = data_get($schedule->options, 'skip_ips', []);
 
                 StartSpeedtest::dispatch(
                     scheduled: true,
@@ -35,7 +30,7 @@ class CheckForScheduledSpeedtests
                     scheduleOptions: [
                         'server_preference' => $serverPreference,
                         'servers' => $servers,
-                        'skip_ips' => $skipIps
+                        'skip_ips' => $skipIps,
                     ]
                 );
             }
@@ -46,6 +41,7 @@ class CheckForScheduledSpeedtests
     private function isSpeedtestDue(string $expression): bool
     {
         $cron = new CronExpression($expression);
+
         return $cron->isDue(
             currentTime: now(),
             timeZone: config('app.display_timezone')

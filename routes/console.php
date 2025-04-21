@@ -30,7 +30,9 @@ Schedule::everyMinute()
         Schedule::call(fn () => CheckForScheduledSpeedtests::run());
     });
 
-
+/**
+ * Update Next Run.
+ */
 Schedule::everyMinute()
     ->group(function () {
         Schedule::call(fn () => UpdateNextRun::run());
