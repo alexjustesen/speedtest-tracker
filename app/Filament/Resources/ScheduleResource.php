@@ -7,6 +7,7 @@ use App\Actions\GetOoklaSpeedtestServers;
 use App\Filament\Resources\ScheduleResource\Pages;
 use App\Models\Schedule;
 use App\Rules\Cron;
+use App\Rules\NoCronOverlap;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Forms\Components\Grid;
@@ -25,7 +26,6 @@ use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -35,7 +35,6 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
@@ -66,6 +65,7 @@ class ScheduleResource extends Resource
                                 TextInput::make('name')
                                     ->placeholder('Enter a name for the test.')
                                     ->maxLength(255)
+                                    ->unique(ignoreRecord: true)
                                     ->required(),
                                 TextInput::make('description')
                                     ->maxLength(255),
@@ -79,7 +79,14 @@ class ScheduleResource extends Resource
                                             ->placeholder('Enter a cron expression.')
                                             ->helperText(fn (Get $get) => ExplainCronExpression::run($get('options.cron_expression')))
                                             ->required()
-                                            ->rules([new Cron])
+                                            ->rules([
+                                                new Cron,
+                                                fn (?Schedule $record, Get $get): NoCronOverlap => new NoCronOverlap(
+                                                    new Schedule(['type' => $get('type') ?? $record?->type]),
+                                                    $record?->id,
+                                                    (bool) ($get('is_active') ?? $record?->is_active),
+                                                ),
+                                            ])
                                             ->live(),
                                         Placeholder::make('next_run_at')
                                             ->label('Next Run At')
@@ -135,6 +142,10 @@ class ScheduleResource extends Resource
                                         TagsInput::make('options.skip_ips')
                                             ->label('Skip IP addresses')
                                             ->placeholder('8.8.8.8')
+                                            ->nestedRecursiveRules([
+                                                'ip',
+                                            ])
+                                            ->live()
                                             ->helpertext('Add external IP addresses that should be skipped.'),
                                         TextInput::make('options.interface')
                                             ->label('Network Interface')
@@ -315,13 +326,6 @@ class ScheduleResource extends Resource
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
-                    Action::make('changeScheduleStatus')
-                        ->label('Change Schedule Status')
-                        ->action(function ($record) {
-                            // Toggle the 'is_active' field based on its current state
-                            $record->update(['is_active' => ! $record->is_active]);
-                        })
-                        ->icon('heroicon-c-arrow-path'),
                     Action::make('viewResults')
                         ->label('View Results')
                         ->action(function ($record) {
@@ -335,14 +339,6 @@ class ScheduleResource extends Resource
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),
-                BulkAction::make('toggleSchedules')
-                    ->label('Toggle Schedules')
-                    ->action(function (Collection $records) {
-                        $records->each(function ($schedule) {
-                            $schedule->update(['is_active' => ! $schedule->is_active]);
-                        });
-                    })
-                    ->icon('heroicon-c-arrow-path'),
             ])
             ->poll('60s');
     }
