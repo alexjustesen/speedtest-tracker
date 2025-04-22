@@ -20,6 +20,7 @@ class ProcessSpeedtestBatch implements ShouldQueue
      */
     public function __construct(
         public Result $result,
+        public array $scheduleOptions = [],
     ) {}
 
     /**
@@ -27,12 +28,15 @@ class ProcessSpeedtestBatch implements ShouldQueue
      */
     public function handle(): void
     {
+        $skipIps = $this->scheduleOptions['skip_ips'] ?? [];
+        $interface = $this->scheduleOptions['interface'] ?? null;
+
         Bus::batch([
             [
                 new CheckForInternetConnectionJob($this->result),
-                new SkipSpeedtestJob($this->result),
+                new SkipSpeedtestJob($this->result, $skipIps),
                 new SelectSpeedtestServerJob($this->result),
-                new RunSpeedtestJob($this->result),
+                new RunSpeedtestJob($this->result, $interface),
                 new BenchmarkSpeedtestJob($this->result),
                 new CompleteSpeedtestJob($this->result),
             ],

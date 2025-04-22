@@ -26,7 +26,8 @@ class StartSpeedtest
 
         // Dispatch the job to handle the server selection and speedtest process
         ProcessSpeedtestBatch::dispatch(
-            result: $result,
+            $result,
+            $scheduleOptions,
         );
 
         // Fire event that the speedtest has started

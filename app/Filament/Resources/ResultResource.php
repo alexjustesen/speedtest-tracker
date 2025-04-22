@@ -415,7 +415,8 @@ class ResultResource extends Resource
                         true: fn (Builder $query) => $query->where('healthy', true),
                         false: fn (Builder $query) => $query->where('healthy', false),
                         blank: fn (Builder $query) => $query,
-                    ),
+                    )
+                    ->native(false),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([

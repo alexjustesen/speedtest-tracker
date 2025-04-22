@@ -21,6 +21,7 @@ class SkipSpeedtestJob implements ShouldQueue
      */
     public function __construct(
         public Result $result,
+        public array $skipIps = [],
     ) {}
 
     /**
@@ -49,6 +50,7 @@ class SkipSpeedtestJob implements ShouldQueue
 
         $shouldSkip = $this->shouldSkip(
             externalIp: $externalIp,
+            skipIps: $this->skipIps,
         );
 
         if ($shouldSkip === false) {
@@ -65,26 +67,21 @@ class SkipSpeedtestJob implements ShouldQueue
 
         SpeedtestSkipped::dispatch($this->result);
 
-        $this->batch()->cancel();
+        $this->batch()?->cancel();
     }
 
     /**
      * Check if the test should be skipped.
      */
-    private function shouldSkip(string $externalIp): bool|string
+    private function shouldSkip(string $externalIp, array $skipIps): bool|string
     {
-        $skipIPs = array_filter(
-            array_map(
-                'trim',
-                explode(',', config('speedtest.skip_ips')),
-            ),
-        );
+        $skipIps = array_filter(array_map('trim', $skipIps));
 
-        if (count($skipIPs) < 1) {
+        if (count($skipIps) < 1) {
             return false;
         }
 
-        foreach ($skipIPs as $ip) {
+        foreach ($skipIps as $ip) {
             // Check for exact IP match
             if (filter_var($ip, FILTER_VALIDATE_IP) && $externalIp === $ip) {
                 return sprintf('"%s" was found in external IP address skip list.', $externalIp);

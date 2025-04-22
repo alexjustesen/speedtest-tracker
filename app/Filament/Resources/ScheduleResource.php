@@ -23,13 +23,19 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
@@ -128,7 +134,12 @@ class ScheduleResource extends Resource
                                     ->schema([
                                         TagsInput::make('options.skip_ips')
                                             ->label('Skip IP addresses')
-                                            ->placeholder('Add external IP addresses that should be skipped.'),
+                                            ->placeholder('8.8.8.8')
+                                            ->helpertext('Add external IP addresses that should be skipped.'),
+                                        TextInput::make('options.interface')
+                                            ->label('Network Interface')
+                                            ->placeholder('eth0')
+                                            ->helpertext('Set the network interface to use for the test. This need to be the network interface available inside the container'),
                                     ]),
                             ])
                             ->columnSpanFull(),
@@ -158,7 +169,7 @@ class ScheduleResource extends Resource
                                     ->options([
                                         'Ookla' => 'Ookla',
                                     ])
-                                    ->default('Ookla Speedtest')
+                                    ->default('Ookla')
                                     ->native(false)
                                     ->required(),
                                 TextInput::make('token')
@@ -190,15 +201,17 @@ class ScheduleResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('type')
                     ->label('Type')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('options.cron_expression')
                     ->label('Schedule')
                     ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->formatStateUsing(fn (?string $state) => ExplainCronExpression::run($state)),
                 TextColumn::make('options.server_preference')
                     ->label('Server Preference')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->formatStateUsing(function (?string $state) {
                         return match ($state) {
                             'auto' => 'Automatic',
@@ -206,6 +219,14 @@ class ScheduleResource extends Resource
                             'ignore' => 'Ignore Specific Servers',
                         };
                     }),
+                TextColumn::make('options.skip_ips')
+                    ->label('Skip IP')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                TextColumn::make('options.interface')
+                    ->label('Network Interface')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
                 TextColumn::make('options.servers')
                     ->label('Servers')
                     ->getStateUsing(function ($record) {
@@ -226,12 +247,14 @@ class ScheduleResource extends Resource
                 IconColumn::make('is_active')
                     ->label('Active')
                     ->alignCenter()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->boolean(),
                 TextColumn::make('ownedBy.name')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('next_run_at')
                     ->alignEnd()
                     ->dateTime()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->alignEnd()
@@ -261,14 +284,67 @@ class ScheduleResource extends Resource
                         true: fn (Builder $query) => $query->where('is_active', true),
                         false: fn (Builder $query) => $query->where('is_active', false),
                         blank: fn (Builder $query) => $query,
-                    ),
+                    )
+                    ->native(false),
+                SelectFilter::make('options.server_preference')
+                    ->label('Server Preference')
+                    ->options(function () {
+                        return Schedule::distinct()
+                            ->get() // Get all schedules
+                            ->pluck('options') // Get the 'options' column as an array
+                            ->map(function ($options) {
+                                // Ensure that 'server_preference' exists in the options
+                                return $options['server_preference'] ?? null;
+                            })
+                            ->filter() // Remove any null or empty values
+                            ->unique() // Get distinct values
+                            ->mapWithKeys(function ($value) {
+                                // Return human-readable labels for the options
+                                return [
+                                    $value => match ($value) {
+                                        'auto' => 'Automatic',
+                                        'prefer' => 'Prefer Specific Servers',
+                                        'ignore' => 'Ignore Specific Servers',
+                                    },
+                                ];
+                            })
+                            ->toArray();
+                    })
+                    ->native(false),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    Action::make('changeScheduleStatus')
+                        ->label('Change Schedule Status')
+                        ->action(function ($record) {
+                            // Toggle the 'is_active' field based on its current state
+                            $record->update(['is_active' => ! $record->is_active]);
+                        })
+                        ->icon('heroicon-c-arrow-path'),
+                    Action::make('viewResults')
+                        ->label('View Results')
+                        ->action(function ($record) {
+                            return redirect()->route('filament.admin.resources.results.index', [
+                                'tableFilters[schedule_id][values][0]' => $record->id,
+                            ]);
+                        })
+                        ->icon('heroicon-s-eye'),
+                    DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]);
+                DeleteBulkAction::make(),
+                BulkAction::make('toggleSchedules')
+                    ->label('Toggle Schedules')
+                    ->action(function (Collection $records) {
+                        $records->each(function ($schedule) {
+                            $schedule->update(['is_active' => ! $schedule->is_active]);
+                        });
+                    })
+                    ->icon('heroicon-c-arrow-path'),
+            ])
+            ->poll('60s');
     }
 
     public static function getPages(): array
