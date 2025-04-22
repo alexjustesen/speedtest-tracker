@@ -22,6 +22,7 @@ return new class extends Migration
             $table->json('options')->nullable();
             $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->unsignedSmallInteger('failed_runs')->default(0);
             $table->dateTime('next_run_at')->nullable();
             $table->timestamps();
             $table->foreign('owned_by_id')

@@ -151,6 +151,11 @@ class ScheduleResource extends Resource
                                             ->label('Network Interface')
                                             ->placeholder('eth0')
                                             ->helpertext('Set the network interface to use for the test. This need to be the network interface available inside the container'),
+                                        TextInput::make('options.max_retries')
+                                            ->label('Max Retries')
+                                            ->type('number')
+                                            ->minValue(0)
+                                            ->helperText('Maximum number of retry attempts on failed Speedtests. Set to zero to disable.'),
                                     ]),
                             ])
                             ->columnSpanFull(),
