@@ -23,6 +23,7 @@ class CheckForScheduledSpeedtests
                 $serverPreference = data_get($schedule->options, 'server_preference', 'auto');
                 $servers = data_get($schedule->options, 'servers', []);
                 $skipIps = data_get($schedule->options, 'skip_ips', []);
+                $interface = data_get($schedule->options, 'interface');
 
                 StartSpeedtest::dispatch(
                     scheduled: true,
@@ -31,6 +32,7 @@ class CheckForScheduledSpeedtests
                         'server_preference' => $serverPreference,
                         'servers' => $servers,
                         'skip_ips' => $skipIps,
+                        'interface' => $interface,
                     ]
                 );
             }
