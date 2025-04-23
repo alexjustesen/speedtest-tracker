@@ -192,6 +192,10 @@ class ScheduleResource extends Resource
                                     ->helperText(new HtmlString('This is a secret token that can be used to authenticate requests to the test.'))
                                     ->readOnly()
                                     ->hiddenOn('create'),
+                                TextInput::make('failed_runs')
+                                    ->label('Failed Runs')
+                                    ->readOnly()
+                                    ->helperText('The number of test failures for this schedule.'),
                             ]),
 
                         // ...
@@ -265,6 +269,9 @@ class ScheduleResource extends Resource
                     ->alignCenter()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->boolean(),
+                TextColumn::make('failed_runs')
+                    ->label('Failed Runs')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('ownedBy.name')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('next_run_at')

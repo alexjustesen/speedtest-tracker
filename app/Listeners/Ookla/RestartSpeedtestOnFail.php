@@ -2,8 +2,8 @@
 
 namespace App\Listeners\Ookla;
 
-use App\Actions\Ookla\StartSpeedtest;
 use App\Actions\GetOoklaSpeedtestServers;
+use App\Actions\Ookla\StartSpeedtest;
 use App\Events\SpeedtestFailed;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Arr;
@@ -15,7 +15,7 @@ class RestartSpeedtestOnFail implements ShouldQueue
      */
     public function handle(SpeedtestFailed $event): void
     {
-        $failed   = $event->result;
+        $failed = $event->result;
         $schedule = $failed->schedule;
 
         // No schedule? Nothing to do.
@@ -42,11 +42,11 @@ class RestartSpeedtestOnFail implements ShouldQueue
 
         // Extract server preference and lists
         $preference = $options['server_preference'] ?? 'auto';
-        $explicit   = Arr::pluck($options['servers'] ?? [], 'server_id');
+        $explicit = Arr::pluck($options['servers'] ?? [], 'server_id');
 
         // Fetch all available server IDs
         $allServers = array_keys(GetOoklaSpeedtestServers::run());
-        $currentId  = data_get($failed->data, 'server.id');
+        $currentId = data_get($failed->data, 'server.id');
 
         // Build candidate list based on preference
         switch ($preference) {
@@ -72,10 +72,10 @@ class RestartSpeedtestOnFail implements ShouldQueue
 
         // Dispatch a new speedtest run
         StartSpeedtest::run(
-            scheduled:       $failed->scheduled,
-            schedule:        $schedule,
+            scheduled: $failed->scheduled,
+            schedule: $schedule,
             scheduleOptions: $options,
-            serverId:        $newServerId,
+            serverId: $newServerId,
         );
     }
 }

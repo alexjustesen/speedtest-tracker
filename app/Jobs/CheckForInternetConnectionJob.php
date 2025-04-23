@@ -55,6 +55,11 @@ class CheckForInternetConnectionJob implements ShouldQueue
             'status' => ResultStatus::Failed,
         ]);
 
+        $this->result->load('schedule');
+        if ($schedule = $this->result->schedule) {
+            $schedule->increment('failed_runs');
+        }
+
         SpeedtestFailed::dispatch($this->result);
 
         $this->batch()->cancel();

@@ -7,7 +7,6 @@ use App\Events\SpeedtestFailed;
 use App\Events\SpeedtestRunning;
 use App\Helpers\Ookla;
 use App\Models\Result;
-use App\Models\Schedule;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
