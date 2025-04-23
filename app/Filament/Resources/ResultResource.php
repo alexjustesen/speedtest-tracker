@@ -143,6 +143,8 @@ class ResultResource extends Resource
                                 ->label('Test Schedule')
                                 ->content(fn ($record) => $record->schedule->name ?? 'N/A'),
                             Forms\Components\Checkbox::make('scheduled'),
+                            Forms\Components\Checkbox::make('retry')
+                                ->label('Retry'),
                             Forms\Components\Checkbox::make('healthy'),
                         ])
                         ->columns(1)
@@ -324,6 +326,12 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->alignment(Alignment::Center),
                 Tables\Columns\IconColumn::make('healthy')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable()
+                    ->alignment(Alignment::Center),
+                Tables\Columns\IconColumn::make('retry')
                     ->boolean()
                     ->toggleable()
                     ->toggledHiddenByDefault()

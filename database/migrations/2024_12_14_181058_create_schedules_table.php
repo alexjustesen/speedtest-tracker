@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('options')->nullable();
             $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->unsignedSmallInteger('failed_runs')->default(0);
+            $table->unsignedInteger('failed_runs')->default(0);
             $table->dateTime('next_run_at')->nullable();
             $table->timestamps();
             $table->foreign('owned_by_id')
@@ -116,6 +116,8 @@ return new class extends Migration
                 }
                 $options['server_preference'] = 'ignore';
             }
+
+            $options['max_retries'] = config('SPEEDTEST_MAX_RETRIES', 0);
 
             Schedule::create([
                 'type' => 'Ookla',

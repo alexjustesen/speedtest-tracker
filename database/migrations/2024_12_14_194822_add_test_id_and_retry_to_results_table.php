@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('results', function (Blueprint $table) {
-            $table->foreignId('schedule_id')
-                ->nullable()
-                ->after('id');
+            $table->foreignId('schedule_id')->nullable()->after('id');
+            $table->boolean('retry')->default(false)->after('scheduled');
         });
     }
 
@@ -23,8 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('results', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

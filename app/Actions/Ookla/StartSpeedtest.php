@@ -14,7 +14,7 @@ class StartSpeedtest
 {
     use AsAction;
 
-    public function handle(bool $scheduled = false, ?Schedule $schedule = null, array $scheduleOptions = [], ?int $serverId = null): void
+    public function handle(bool $scheduled = false, ?Schedule $schedule = null, array $scheduleOptions = [], ?int $serverId = null, bool $retry = false): void
     {
         $result = Result::create([
             'schedule_id' => $schedule?->id,
@@ -22,6 +22,7 @@ class StartSpeedtest
             'service' => ResultService::Ookla,
             'status' => ResultStatus::Started,
             'scheduled' => $scheduled,
+            'retry' => $retry,
         ]);
 
         // Dispatch the job to handle the server selection and speedtest process
