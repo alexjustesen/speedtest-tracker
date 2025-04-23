@@ -117,8 +117,6 @@ return new class extends Migration
                 $options['server_preference'] = 'ignore';
             }
 
-            $options['max_retries'] = config('SPEEDTEST_MAX_RETRIES', 0);
-
             Schedule::create([
                 'type' => 'Ookla',
                 'name' => 'Default Speedtest Schedule',

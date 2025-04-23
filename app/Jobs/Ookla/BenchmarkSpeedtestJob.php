@@ -69,9 +69,17 @@ class BenchmarkSpeedtestJob implements ShouldQueue
             'healthy' => $this->healthy,
         ]);
 
-        $this->healthy
-            ? SpeedtestBenchmarkPassed::dispatch($this->result)
-            : SpeedtestBenchmarkFailed::dispatch($this->result);
+        if (! $this->healthy) {
+            if ($this->result->schedule) {
+                $this->result->schedule->increment('failed_runs');
+            }
+
+            SpeedtestBenchmarkFailed::dispatch($this->result);
+
+            return;
+        }
+
+        SpeedtestBenchmarkPassed::dispatch($this->result);
     }
 
     private function benchmark(Result $result, ThresholdSettings $settings): array

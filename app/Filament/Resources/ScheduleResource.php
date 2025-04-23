@@ -151,11 +151,32 @@ class ScheduleResource extends Resource
                                             ->label('Network Interface')
                                             ->placeholder('eth0')
                                             ->helpertext('Set the network interface to use for the test. This need to be the network interface available inside the container'),
+                                    ]),
+                                Tab::make('Retries')
+                                    ->schema([
+                                        Toggle::make('options.retries_enabled')
+                                            ->label('Enable Retries')
+                                            ->default(false)
+                                            ->live()
+                                            ->helperText('Enable automatic retry attempts on failed tests.'),
+                                        Toggle::make('options.retries_speedtest_enabled')
+                                            ->label('Retry Speedtest Failures')
+                                            ->visible(fn ($get) => $get('options.retries_enabled') === true)
+                                            ->helperText('Retry failed speedtest measurements automatically.')
+                                            ->live(),
+                                        Toggle::make('options.retries_benchmark_enabled')
+                                            ->label('Retry Benchmark Failures')
+                                            ->visible(fn ($get) => $get('options.retries_enabled') === true)
+                                            ->helperText('Retry failed benchmark measurements automatically.')
+                                            ->live(),
                                         TextInput::make('options.max_retries')
                                             ->label('Max Retries')
                                             ->type('number')
-                                            ->minValue(0)
-                                            ->helperText('Maximum number of retry attempts on failed Speedtests. Set to zero to disable.'),
+                                            ->required()
+                                            ->minValue(1)
+                                            ->visible(fn ($get) => $get('options.retries_enabled') === true)
+                                            ->helperText('Maximum number of retry attempts'),
+
                                     ]),
                             ])
                             ->columnSpanFull(),

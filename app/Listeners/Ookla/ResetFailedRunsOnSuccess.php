@@ -13,22 +13,36 @@ class ResetFailedRunsOnSuccess implements ShouldQueue
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $schedule = $event->result->schedule;
+        $result = $event->result;
+        $schedule = $result->schedule;
 
-        // Nothing to do if there's no schedule
         if (! $schedule) {
             return;
         }
 
         $options = $schedule->options ?? [];
 
-        // Only reset if max_retries is explicitly set and greater than zero
-        $maxRetries = isset($options['max_retries']) ? (int) $options['max_retries'] : 0;
-        if ($maxRetries <= 0) {
+        $maxRetries = (int) ($options['max_retries'] ?? 0);
+        if ($maxRetries <= 0 || $schedule->failed_runs <= 0) {
             return;
         }
 
-        // Reset failed_runs back to zero
-        $schedule->update(['failed_runs' => 0]);
+        $retrySpeedtest = ! empty($options['retries_speedtest_enabled']);
+        $retryBenchmark = ! empty($options['retries_benchmark_enabled']);
+
+        $speedtestHealthy = $result->type === 'speedtest' && $result->healthy;
+        $benchmarkHealthy = $result->type === 'benchmark' && $result->healthy;
+
+        $bothRetryTypesEnabled = $retrySpeedtest && $retryBenchmark;
+
+        if (
+            ($bothRetryTypesEnabled && $speedtestHealthy && $benchmarkHealthy) ||
+            ($retrySpeedtest && ! $retryBenchmark && $speedtestHealthy) ||
+            ($retryBenchmark && ! $retrySpeedtest && $benchmarkHealthy)
+        ) {
+            $schedule->update(['failed_runs' => 0]);
+
+            logger()->info("Reset failed_runs for schedule #{$schedule->id} after a healthy {$result->type} result (#{$result->id}).");
+        }
     }
 }

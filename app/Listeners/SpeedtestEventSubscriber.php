@@ -2,10 +2,12 @@
 
 namespace App\Listeners;
 
+use App\Events\SpeedtestBenchmarkFailed;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use App\Jobs\Influxdb\v2\WriteResult;
 use App\Jobs\Ookla\RetrySpeedtestWithDifferentServer;
+use App\Models\Result;
 use App\Settings\DataIntegrationSettings;
 use Illuminate\Events\Dispatcher;
 
@@ -16,6 +18,10 @@ class SpeedtestEventSubscriber
      */
     public function handleSpeedtestFailed(SpeedtestFailed $event): void
     {
+        if (! $this->shouldRetry($event->result, 'speedtest')) {
+            return;
+        }
+
         RetrySpeedtestWithDifferentServer::dispatch($event->result);
     }
 
@@ -31,6 +37,45 @@ class SpeedtestEventSubscriber
         }
     }
 
+    public function handleSpeedtestBenchmarkFailed(SpeedtestBenchmarkFailed $event): void
+    {
+        if (! $this->shouldRetry($event->result, 'benchmark')) {
+            return;
+        }
+
+        RetrySpeedtestWithDifferentServer::dispatch($event->result);
+    }
+
+    protected function shouldRetry(Result $result, string $type): bool
+    {
+        $schedule = $result->schedule;
+        if (! $schedule) {
+            return false;
+        }
+
+        $options = $schedule->options ?? [];
+
+        if (empty($options['retries_enabled'])) {
+            return false;
+        }
+
+        // Check the specific retry type
+        if (
+            ($type === 'speedtest' && empty($options['retries_speedtest_enabled'])) ||
+            ($type === 'benchmark' && empty($options['retries_benchmark_enabled']))
+        ) {
+            return false;
+        }
+
+        // Check retry limit
+        $maxRetries = (int) ($options['max_retries'] ?? 0);
+        if ($maxRetries < 1 || $schedule->failed_runs >= ($maxRetries + 1)) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Register the listeners for the subscriber.
      */
@@ -44,6 +89,11 @@ class SpeedtestEventSubscriber
         $events->listen(
             SpeedtestCompleted::class,
             [SpeedtestEventSubscriber::class, 'handleSpeedtestCompleted']
+        );
+
+        $events->listen(
+            SpeedtestBenchmarkFailed::class,
+            [SpeedtestEventSubscriber::class, 'handleSpeedtestBenchmarkFailed']
         );
     }
 }

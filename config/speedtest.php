@@ -30,8 +30,6 @@ return [
 
     'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
 
-    'max_retries' => env('SPEEDTEST_MAX_RETRIES'),
-
     /**
      * IP filtering settings.
      */
