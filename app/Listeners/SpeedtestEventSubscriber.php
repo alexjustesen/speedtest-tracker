@@ -53,22 +53,22 @@ class SpeedtestEventSubscriber
             return false;
         }
 
-        $options = $schedule->options ?? [];
+        $retries = $schedule->retries ?? [];
 
-        if (empty($options['retries_enabled'])) {
+        if (empty($retries['enabled'])) {
             return false;
         }
 
         // Check the specific retry type
         if (
-            ($type === 'speedtest' && empty($options['retries_speedtest_enabled'])) ||
-            ($type === 'benchmark' && empty($options['retries_benchmark_enabled']))
+            ($type === 'speedtest' && empty($retries['speedtest_enabled'])) ||
+            ($type === 'benchmark' && empty($retries['benchmark_enabled']))
         ) {
             return false;
         }
 
         // Check retry limit
-        $maxRetries = (int) ($options['max_retries'] ?? 0);
+        $maxRetries = (int) ($retries['max_retries'] ?? 0);
         if ($maxRetries < 1 || $schedule->failed_runs >= ($maxRetries + 1)) {
             return false;
         }

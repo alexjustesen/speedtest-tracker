@@ -18,17 +18,11 @@ class RetrySpeedtestWithDifferentServer implements ShouldQueue
 
     public Result $failedResult;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(Result $failedResult)
     {
         $this->failedResult = $failedResult;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         $failed = $this->failedResult;
@@ -38,20 +32,23 @@ class RetrySpeedtestWithDifferentServer implements ShouldQueue
             return;
         }
 
-        $options = $schedule->options ?? [];
+        // Pull retries config
+        $retries = $schedule->retries ?? [];
 
-        $limit = isset($options['max_retries']) ? (int) $options['max_retries'] : 0;
+        $enabled = $retries['enabled'] ?? false;
+        $maxRetries = (int) ($retries['max_retries'] ?? 0);
 
-        if ($limit < 1) {
+        if (! $enabled || $maxRetries < 1) {
             return;
         }
 
-        if ($schedule->failed_runs >= ($limit + 1)) {
+        if ($schedule->failed_runs >= ($maxRetries + 1)) {
             return;
         }
 
         $schedule->increment('failed_runs');
 
+        $options = $schedule->options ?? [];
         $preference = $options['server_preference'] ?? 'auto';
         $explicit = Arr::pluck($options['servers'] ?? [], 'server_id');
 

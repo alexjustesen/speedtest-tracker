@@ -31,6 +31,8 @@ class Schedule extends Model
             'options' => 'array',
             'is_active' => 'boolean',
             'next_run_at' => 'datetime',
+            'thresholds' => 'array',
+            'retries' => 'array',
         ];
     }
 }

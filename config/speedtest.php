@@ -38,12 +38,22 @@ return [
     /**
      * Threshold settings.
      */
+    'threshold_enabled' => env('THRESHOLD_ENABLED', false),
 
-     'threshold_enabled' => env('THRESHOLD_ENABLED', false),
+    'threshold_download' => env('THRESHOLD_DOWNLOAD', 0),
 
-     'threshold_download' => env('THRESHOLD_DOWNLOAD', 0),
+    'threshold_upload' => env('THRESHOLD_UPLOAD', 0),
 
-     'threshold_upload' => env('THRESHOLD_UPLOAD', 0),
+    'threshold_ping' => env('THRESHOLD_PING', 0) ,
 
-     'threshold_ping' => env('THRESHOLD_PING', 0) ,
+    /**
+     * Spedtest Retry settings.
+     */
+    'retries_enabled' => env('RETRIES_ENABLED', false),
+
+    'retries_speedtest_enabled' => env('RETRIES_SPEEDTEST_ENABLED', false),
+
+    'retries_benchmark_enabled' => env('RETRIES_BENCHMARK_ENABLED', false),
+
+    'max_retries' => env('MAX_RETRIES', 5),
 ];
