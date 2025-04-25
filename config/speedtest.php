@@ -11,6 +11,8 @@ return [
     /**
      * General settings.
      */
+    'allowed_ips' => env('ALLOWED_IPS'),
+
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
     'prune_results_older_than' => (int) env('PRUNE_RESULTS_OLDER_THAN', 0),
