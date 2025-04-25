@@ -19,6 +19,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'public-dashboard' => App\Http\Middleware\PublicDashboard::class,
         ]);
 
+        $middleware->prependToGroup('api', [
+            App\Http\Middleware\AllowedIpAddressesMiddleware::class,
+        ]);
+
         $middleware->prependToGroup('web', [
             App\Http\Middleware\AllowedIpAddressesMiddleware::class,
         ]);
