@@ -15,7 +15,7 @@ class DataIntegrationPage extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
-    protected static ?string $navigationGroup = 'Application Settings';
+    protected static ?string $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 2;
 

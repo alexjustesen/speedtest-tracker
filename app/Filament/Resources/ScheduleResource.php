@@ -44,7 +44,7 @@ class ScheduleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar';
 
-    protected static ?string $navigationGroup = 'Test Settings';
+    protected static ?string $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 1;
 
@@ -152,66 +152,46 @@ class ScheduleResource extends Resource
                                             ->placeholder('eth0')
                                             ->helpertext('Set the network interface to use for the test. This need to be the network interface available inside the container'),
                                     ]),
-                                Tab::make('Retries')
-                                    ->schema([
-                                        Toggle::make('retries.enabled')
-                                            ->label('Enable Retries')
-                                            ->default(false)
-                                            ->live()
-                                            ->helperText('Enable automatic retry attempts on failed tests.'),
-                                        Toggle::make('retries.speedtest_enabled')
-                                            ->label('Retry Speedtest Failures')
-                                            ->visible(fn ($get) => $get('retries.enabled') === true)
-                                            ->helperText('Retry failed speedtest measurements automatically.')
-                                            ->live(),
-                                        Toggle::make('retries.benchmark_enabled')
-                                            ->label('Retry Benchmark Failures')
-                                            ->visible(fn ($get) => $get('retries.enabled') === true)
-                                            ->helperText('Retry failed benchmark measurements automatically.')
-                                            ->live(),
-                                        TextInput::make('retries.max_retries')
-                                            ->label('Max Retries')
-                                            ->type('number')
-                                            ->required()
-                                            ->minValue(1)
-                                            ->visible(fn ($get) => $get('retries.enabled') === true)
-                                            ->helperText('Maximum number of retry attempts'),
-
-                                    ]),
                                 Tab::make('Thresholds')
                                     ->schema([
                                         Toggle::make('thresholds.enabled')
                                             ->label('Enable Threshold')
-                                            ->helpertext('Thresholds do not take into account previous history and could be triggered on each test')
+                                            ->helperText('Thresholds do not take into account previous history and could be triggered on each test')
                                             ->live()
                                             ->default(false),
-                                        TextInput::make('thresholds.download')
-                                            ->label('Download')
-                                            ->hint('Mbps')
-                                            ->helperText('Set to zero to disable this metric.')
-                                            ->default(0)
-                                            ->minValue(0)
-                                            ->numeric()
-                                            ->required()
-                                            ->visible(fn ($get) => $get('thresholds.enabled') === true),
-                                        TextInput::make('thresholds.upload')
-                                            ->label('Upload')
-                                            ->hint('Mbps')
-                                            ->helperText('Set to zero to disable this metric.')
-                                            ->default(0)
-                                            ->minValue(0)
-                                            ->numeric()
-                                            ->required()
-                                            ->visible(fn ($get) => $get('thresholds.enabled') === true),
-                                        TextInput::make('thresholds.ping')
-                                            ->label('Ping')
-                                            ->hint('ms')
-                                            ->helperText('Set to zero to disable this metric.')
-                                            ->default(0)
-                                            ->minValue(0)
-                                            ->numeric()
-                                            ->required()
-                                            ->visible(fn ($get) => $get('thresholds.enabled') === true),
+
+                                        Grid::make(2)
+                                            ->schema([
+                                                TextInput::make('thresholds.download')
+                                                    ->label('Download')
+                                                    ->hint('Mbps')
+                                                    ->helperText('Set to zero to disable this metric.')
+                                                    ->default(0)
+                                                    ->minValue(0)
+                                                    ->numeric()
+                                                    ->required()
+                                                    ->visible(fn ($get) => $get('thresholds.enabled') === true),
+
+                                                TextInput::make('thresholds.upload')
+                                                    ->label('Upload')
+                                                    ->hint('Mbps')
+                                                    ->helperText('Set to zero to disable this metric.')
+                                                    ->default(0)
+                                                    ->minValue(0)
+                                                    ->numeric()
+                                                    ->required()
+                                                    ->visible(fn ($get) => $get('thresholds.enabled') === true),
+
+                                                TextInput::make('thresholds.ping')
+                                                    ->label('Ping')
+                                                    ->hint('ms')
+                                                    ->helperText('Set to zero to disable this metric.')
+                                                    ->default(0)
+                                                    ->minValue(0)
+                                                    ->numeric()
+                                                    ->required()
+                                                    ->visible(fn ($get) => $get('thresholds.enabled') === true),
+                                            ]),
                                     ]),
                             ])
                             ->columnSpanFull(),
@@ -250,6 +230,7 @@ class ScheduleResource extends Resource
                                     ->hiddenOn('create'),
                                 TextInput::make('failed_runs')
                                     ->label('Failed Runs')
+                                    ->default(0)
                                     ->readOnly()
                                     ->helperText('The number of test failures for this schedule.'),
                             ]),
@@ -273,12 +254,12 @@ class ScheduleResource extends Resource
                     ->copyable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('name'),
-                TextColumn::make('description')
-                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('type')
                     ->label('Type')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
+                TextColumn::make('description')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('options.cron_expression')
                     ->label('Schedule')
                     ->sortable()
@@ -294,32 +275,8 @@ class ScheduleResource extends Resource
                             'prefer' => 'Prefer Specific Servers',
                             'ignore' => 'Ignore Specific Servers',
                         };
-                    }),
-                TextColumn::make('options.skip_ips')
-                    ->label('Skip IP')
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
-                TextColumn::make('options.interface')
-                    ->label('Network Interface')
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
-                TextColumn::make('options.servers')
-                    ->label('Servers')
-                    ->getStateUsing(function ($record) {
-                        $servers = collect($record->options['servers'] ?? [])
-                            ->pluck('server_id')
-                            ->filter();
-
-                        $lookup = GetOoklaSpeedtestServers::run();
-
-                        return $servers
-                            ->map(fn ($id) => $lookup[$id] ?? "Unknown ($id)")
-                            ->implode(', ');
                     })
-                    ->limit(15)
-                    ->tooltip(fn ($state) => $state)
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
+                    ->tooltip(fn ($record) => $record->getServerTooltip()),
                 IconColumn::make('is_active')
                     ->label('Active')
                     ->alignCenter()
@@ -329,10 +286,8 @@ class ScheduleResource extends Resource
                     ->label('Thresholds')
                     ->alignCenter()
                     ->toggleable(isToggledHiddenByDefault: true)
+                    ->tooltip(fn ($record) => $record->getThresholdTooltip())
                     ->boolean(),
-                TextColumn::make('failed_runs')
-                    ->label('Failed Runs')
-                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('ownedBy.name')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('next_run_at')
@@ -374,16 +329,14 @@ class ScheduleResource extends Resource
                     ->label('Server Preference')
                     ->options(function () {
                         return Schedule::distinct()
-                            ->get() // Get all schedules
-                            ->pluck('options') // Get the 'options' column as an array
+                            ->get()
+                            ->pluck('options')
                             ->map(function ($options) {
-                                // Ensure that 'server_preference' exists in the options
                                 return $options['server_preference'] ?? null;
                             })
-                            ->filter() // Remove any null or empty values
-                            ->unique() // Get distinct values
+                            ->filter()
+                            ->unique()
                             ->mapWithKeys(function ($value) {
-                                // Return human-readable labels for the options
                                 return [
                                     $value => match ($value) {
                                         'auto' => 'Automatic',

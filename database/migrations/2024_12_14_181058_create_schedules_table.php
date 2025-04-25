@@ -21,7 +21,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->json('options')->nullable();
             $table->json('thresholds')->nullable();
-            $table->json('retries')->nullable();
             $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
             $table->unsignedInteger('failed_runs')->default(0);
@@ -126,20 +125,13 @@ return new class extends Migration
                 'ping' => (int) config('speedtest.threshold_ping'),
             ];
 
-            $retries = [
-                'enabled' => (bool) config('speedtest.retries_enabled'),
-                'speedtest_enabled' => (bool) config('speedtest.retries_speedtest_enabled'),
-                'benchmark_enabled' => (bool) config('speedtest.retries_benchmark_enabled'),
-                'max_retries' => (int) config('speedtest.max_retries'),
-            ];
-
             Schedule::create([
                 'type' => 'Ookla',
                 'name' => 'Default Speedtest Schedule',
                 'description' => 'Auto-created from environment variables.',
                 'options' => $options,
                 'thresholds' => $thresholds,
-                'retries' => $retries,
+                'failed_runs' => 0,
                 'token' => strtolower(Str::random(16)),
                 'owned_by_id' => '1',
                 'is_active' => true,

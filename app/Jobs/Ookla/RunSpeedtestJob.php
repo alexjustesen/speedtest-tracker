@@ -83,11 +83,6 @@ class RunSpeedtestJob implements ShouldQueue
                 'status' => ResultStatus::Failed,
             ]);
 
-            $this->result->load('schedule');
-            if ($schedule = $this->result->schedule) {
-                $schedule->increment('failed_runs');
-            }
-
             $this->batch()->cancel();
 
             SpeedtestFailed::dispatch($this->result);
