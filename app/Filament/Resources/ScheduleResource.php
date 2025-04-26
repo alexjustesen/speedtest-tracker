@@ -228,11 +228,6 @@ class ScheduleResource extends Resource
                                     ->helperText(new HtmlString('This is a secret token that can be used to authenticate requests to the test.'))
                                     ->readOnly()
                                     ->hiddenOn('create'),
-                                TextInput::make('failed_runs')
-                                    ->label('Failed Runs')
-                                    ->default(0)
-                                    ->readOnly()
-                                    ->helperText('The number of test failures for this schedule.'),
                             ]),
 
                         // ...

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->json('thresholds')->nullable();
             $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->unsignedInteger('failed_runs')->default(0);
             $table->dateTime('next_run_at')->nullable();
             $table->timestamps();
             $table->foreign('owned_by_id')
@@ -131,7 +130,6 @@ return new class extends Migration
                 'description' => 'Auto-created from environment variables.',
                 'options' => $options,
                 'thresholds' => $thresholds,
-                'failed_runs' => 0,
                 'token' => strtolower(Str::random(16)),
                 'owned_by_id' => '1',
                 'is_active' => true,
