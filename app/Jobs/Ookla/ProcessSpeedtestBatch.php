@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Ookla;
 
+use App\Actions\UpdateNextRun;
 use App\Jobs\CheckForInternetConnectionJob;
 use App\Models\Result;
 use Illuminate\Bus\Batch;
@@ -28,6 +29,7 @@ class ProcessSpeedtestBatch implements ShouldQueue
      */
     public function handle(): void
     {
+        $result = $this->result;
         $skipIps = $this->scheduleOptions['skip_ips'] ?? [];
         $interface = $this->scheduleOptions['interface'] ?? null;
 
@@ -42,6 +44,13 @@ class ProcessSpeedtestBatch implements ShouldQueue
             ],
         ])->catch(function (Batch $batch, ?Throwable $e) {
             Log::error(sprintf('Speedtest batch "%s" failed for an unknown reason.', $batch->id));
-        })->name('Ookla Speedtest')->dispatch();
+        })
+            ->finally(function () use ($result) {
+                if ($result && $result->schedule) {
+                    UpdateNextRun::dispatch($result->schedule);
+                }
+            })
+            ->name('Ookla Speedtest')
+            ->dispatch();
     }
 }

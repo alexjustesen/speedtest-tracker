@@ -314,16 +314,11 @@ class ResultResource extends Resource
                     ->badge()
                     ->toggleable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('schedule_id')
-                    ->label('Test Schedule')
-                    ->getStateUsing(fn ($record) => $record->schedule->name ?? 'N/A')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable(),
                 Tables\Columns\IconColumn::make('scheduled')
                     ->boolean()
                     ->toggleable()
                     ->toggledHiddenByDefault()
+                    ->tooltip(fn ($record) => $record->schedule->name ?? null)
                     ->alignment(Alignment::Center),
                 Tables\Columns\IconColumn::make('healthy')
                     ->boolean()

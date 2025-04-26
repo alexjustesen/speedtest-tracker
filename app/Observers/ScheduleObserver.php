@@ -25,7 +25,7 @@ class ScheduleObserver
      */
     public function created(Schedule $schedule): void
     {
-        UpdateNextRun::run();
+        UpdateNextRun::run($schedule);
     }
 
     /**
@@ -33,7 +33,7 @@ class ScheduleObserver
      */
     public function updated(Schedule $schedule): void
     {
-        UpdateNextRun::run();
+        UpdateNextRun::run($schedule);
     }
 
     /**

@@ -1,7 +1,6 @@
 <?php
 
 use App\Actions\CheckForScheduledSpeedtests;
-use App\Actions\UpdateNextRun;
 use Illuminate\Support\Facades\Schedule;
 
 /**
@@ -28,12 +27,4 @@ Schedule::daily()
 Schedule::everyMinute()
     ->group(function () {
         Schedule::call(fn () => CheckForScheduledSpeedtests::run());
-    });
-
-/**
- * Update Next Run.
- */
-Schedule::everyMinute()
-    ->group(function () {
-        Schedule::call(fn () => UpdateNextRun::run());
     });

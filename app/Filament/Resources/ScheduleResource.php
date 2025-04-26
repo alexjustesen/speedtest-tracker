@@ -48,6 +48,16 @@ class ScheduleResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->is_admin;
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->is_admin;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
