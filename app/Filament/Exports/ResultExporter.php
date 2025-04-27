@@ -117,6 +117,11 @@ class ResultExporter extends Exporter
                 ->state(function (Result $record) {
                     return $record->result_url;
                 }),
+            ExportColumn::make('error_message')
+                ->state(function (Result $record) {
+                    return $record->error_message;
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('comments')
                 ->enabledByDefault(false),
             ExportColumn::make('status')

@@ -4,13 +4,15 @@ use Carbon\Carbon;
 
 return [
 
-    'build_date' => Carbon::parse('2025-04-15'),
+    'build_date' => Carbon::parse('2025-04-24'),
 
-    'build_version' => 'v1.4.1',
+    'build_version' => 'v1.5.0',
 
     /**
      * General settings.
      */
+    'allowed_ips' => env('ALLOWED_IPS'),
+
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
     'prune_results_older_than' => (int) env('PRUNE_RESULTS_OLDER_THAN', 0),
