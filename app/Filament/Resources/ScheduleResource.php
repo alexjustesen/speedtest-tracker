@@ -352,7 +352,6 @@ class ScheduleResource extends Resource
                     Action::make('changeScheduleStatus')
                         ->label('Change Schedule Status')
                         ->action(function ($record) {
-                            // Toggle the 'is_active' field based on its current state
                             $record->update(['is_active' => ! $record->is_active]);
                         })
                         ->icon('heroicon-c-arrow-path'),

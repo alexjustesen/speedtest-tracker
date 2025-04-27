@@ -389,7 +389,7 @@ class ResultResource extends Resource
                     })
                     ->attribute('data->server->name'),
                 Tables\Filters\SelectFilter::make('schedule_id')
-                    ->label('Schedule name')
+                    ->label('Schedule')
                     ->multiple()
                     ->attribute('schedule_id')
                     ->options(function (): array {
