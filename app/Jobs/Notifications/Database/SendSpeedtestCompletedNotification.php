@@ -1,26 +1,32 @@
 <?php
 
-namespace App\Listeners\Database;
+namespace App\Jobs\Notifications\Database;
 
-use App\Events\SpeedtestCompleted;
 use App\Models\User;
 use App\Settings\NotificationSettings;
 use Filament\Notifications\Notification;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 
-class SendSpeedtestCompletedNotification
+class SendSpeedtestCompletedNotification implements ShouldQueue
 {
+    use Dispatchable, Queueable;
+
     /**
-     * Handle the event.
+     * Handle the job.
      */
-    public function handle(SpeedtestCompleted $event): void
+    public function handle(): void
     {
         $notificationSettings = new NotificationSettings;
 
         if (! $notificationSettings->database_enabled) {
+
             return;
         }
 
         if (! $notificationSettings->database_on_speedtest_run) {
+
             return;
         }
 

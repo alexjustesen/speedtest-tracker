@@ -32,17 +32,14 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
      */
     public function handle(): void
     {
-        // Resolve NotificationSettings from the service container
         $notificationSettings = app(NotificationSettings::class);
 
-        // Ensure we have at least one Apprise webhook URL
         if (! count($notificationSettings->apprise_webhooks)) {
             Log::warning('Apprise URLs not found, check Apprise notification channel settings.');
 
             return;
         }
 
-        // Prepare the payload using the view
         $payload = view('apprise.speedtest-completed', [
             'id' => $this->result->id,
             'service' => Str::title($this->result->service->getLabel()),
@@ -57,27 +54,20 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
             'url' => url('/admin/results'),
         ])->render();
 
-        // Loop through the webhooks and send the notifications
         foreach ($notificationSettings->apprise_webhooks as $webhook) {
-            // Build the payload for each webhook
+            if (empty($webhook['service_url']) || empty($webhook['url'])) {
+                Log::warning('Webhook is missing service URL or URL, skipping.');
+
+                continue;
+            }
+
             $webhookPayload = [
                 'body' => $payload,
                 'title' => 'Speedtest Completed',
                 'type' => 'info',
+                'urls' => $webhook['service_url'],
             ];
 
-            // Add tags if applicable
-            if ($webhook['notification_type'] === 'tags' && ! empty($webhook['tags'])) {
-                $tags = is_string($webhook['tags']) ? explode(',', $webhook['tags']) : $webhook['tags'];
-                $webhookPayload['tag'] = implode(',', array_map('trim', $tags));
-            }
-
-            // Add the service URL
-            if (! empty($webhook['service_url'])) {
-                $webhookPayload['urls'] = $webhook['service_url'];
-            }
-
-            // Send the notification
             try {
                 $client = new Client;
                 $response = $client->post($webhook['url'], [
@@ -87,7 +77,6 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
                     ],
                 ]);
 
-                // Optionally, log the response status for debugging
                 Log::info('Apprise notification sent successfully to '.$webhook['url']);
             } catch (RequestException $e) {
                 Log::error('Apprise notification failed: '.$e->getMessage());

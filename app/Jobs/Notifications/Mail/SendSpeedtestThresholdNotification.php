@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Jobs\Notifications\Apprise;
+namespace App\Jobs\Notifications\Mail;
 
 use App\Helpers\Number;
+use App\Mail\SpeedtestThresholdMail;
 use App\Models\Result;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 
 class SendSpeedtestThresholdNotification implements ShouldQueue
 {
@@ -29,19 +28,19 @@ class SendSpeedtestThresholdNotification implements ShouldQueue
     }
 
     /**
-     * Handle the event.
+     * Handle the job.
      */
     public function handle(): void
     {
-        $notificationSettings = app(NotificationSettings::class);
+        $notificationSettings = new NotificationSettings;
 
-        if (! count($notificationSettings->apprise_webhooks)) {
-            Log::warning('Apprise URLs not found, check Apprise notification channel settings.');
+        if (! count($notificationSettings->mail_recipients)) {
+            Log::warning('Mail recipients not found, check mail notification channel settings.');
 
             return;
         }
 
-        $thresholdSettings = app(ThresholdSettings::class);
+        $thresholdSettings = new ThresholdSettings;
 
         if (! $thresholdSettings->absolute_enabled) {
 
@@ -65,50 +64,14 @@ class SendSpeedtestThresholdNotification implements ShouldQueue
         $failed = array_filter($failed);
 
         if (! count($failed)) {
-            Log::warning('Failed apprise thresholds not found, won\'t send notification.');
+            Log::warning('No threshold breaches found, skipping mail notification.');
 
             return;
         }
 
-        $payload = view('apprise.speedtest-threshold', [
-            'id' => $this->result->id,
-            'service' => Str::title($this->result->service->getLabel()),
-            'serverName' => $this->result->server_name,
-            'serverId' => $this->result->server_id,
-            'isp' => $this->result->isp,
-            'metrics' => $failed,
-            'speedtest_url' => $this->result->result_url,
-            'url' => url('/admin/results'),
-        ])->render();
-
-        $client = new Client;
-
-        foreach ($notificationSettings->apprise_webhooks as $webhook) {
-            if (empty($webhook['service_url']) || empty($webhook['url'])) {
-                Log::warning('Webhook is missing service URL or URL, skipping.');
-
-                continue;
-            }
-
-            $webhookPayload = [
-                'body' => $payload,
-                'title' => 'Speedtest Threshold Breach',
-                'type' => 'info',
-                'urls' => $webhook['service_url'],
-            ];
-
-            try {
-                $response = $client->post($webhook['url'], [
-                    'json' => $webhookPayload,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]);
-
-                Log::info('Apprise notification sent successfully to '.$webhook['url']);
-            } catch (RequestException $e) {
-                Log::error('Apprise notification failed: '.$e->getMessage());
-            }
+        foreach ($notificationSettings->mail_recipients as $recipient) {
+            Mail::to($recipient)
+                ->send(new SpeedtestThresholdMail($this->result, $failed));
         }
     }
 
