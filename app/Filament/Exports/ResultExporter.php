@@ -142,11 +142,6 @@ class ResultExporter extends Exporter
                     return $record->healthy ? 'Yes' : 'No';
                 })
                 ->enabledByDefault(false),
-            ExportColumn::make('retry')
-                ->state(function (Result $record): string {
-                    return $record->retry ? 'Yes' : 'No';
-                })
-                ->enabledByDefault(false),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at')
                 ->enabledByDefault(false),

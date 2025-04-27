@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('results', function (Blueprint $table) {
             $table->foreignId('schedule_id')->nullable()->after('id');
-            $table->boolean('retry')->default(false)->after('scheduled');
         });
     }
 
