@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Actions\CheckCronOverlap;
 use App\Actions\UpdateNextRun;
 use App\Models\Schedule;
 use Illuminate\Support\Str;
@@ -26,6 +27,7 @@ class ScheduleObserver
     public function created(Schedule $schedule): void
     {
         UpdateNextRun::run($schedule);
+        CheckCronOverlap::run($schedule);
     }
 
     /**
@@ -34,6 +36,7 @@ class ScheduleObserver
     public function updated(Schedule $schedule): void
     {
         UpdateNextRun::run($schedule);
+        CheckCronOverlap::run($schedule);
     }
 
     /**

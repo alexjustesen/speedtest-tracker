@@ -14,33 +14,44 @@ class UpdateNextRun implements ShouldQueue
 
     public function handle(Schedule $schedule): void
     {
-        if (! $schedule->is_active) {
-            // If the schedule is not active, clear the next_run_at
-            if ($schedule->next_run_at !== null) {
-                $schedule->next_run_at = null;
-                $schedule->save();
+        // Disable model events for the entire action
+        Schedule::withoutEvents(function () use ($schedule) {
+
+            // If the schedule is not active, clear the next_run_at field
+            if (! $schedule->is_active) {
+                if ($schedule->next_run_at !== null) {
+                    // Update without firing events
+                    $schedule->next_run_at = null;
+                    $schedule->save();
+                }
+
+                return;
             }
 
-            return;
-        }
+            // Get the cron expression from the schedule options
+            $expression = data_get($schedule, 'options.cron_expression');
 
-        $expression = data_get($schedule, 'options.cron_expression');
+            if ($expression) {
+                // Calculate the next run time based on the cron expression
+                $nextRun = $this->getNextRunAt($expression);
 
-        if ($expression) {
-            $nextRun = $this->getNextRunAt($expression);
-
-            if (! $schedule->next_run_at || ! $schedule->next_run_at->equalTo($nextRun)) {
-                $schedule->next_run_at = $nextRun;
-                $schedule->save();
+                // Only update if the next_run_at field is different from the calculated next run time
+                if ($schedule->next_run_at !== $nextRun) {
+                    $schedule->next_run_at = $nextRun;
+                    $schedule->save();
+                }
             }
-        }
+
+        });  // End of withoutEvents closure
     }
 
+    // Calculate the next run time based on the cron expression
     private function getNextRunAt(string $expression): Carbon
     {
+        // Create a CronExpression instance from the cron expression
         $cron = CronExpression::factory($expression);
-        $nextRun = $cron->getNextRunDate();
 
-        return Carbon::parse($nextRun);
+        // Get the next valid run time
+        return Carbon::parse($cron->getNextRunDate());
     }
 }

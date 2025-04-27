@@ -7,7 +7,6 @@ use App\Actions\GetOoklaSpeedtestServers;
 use App\Filament\Resources\ScheduleResource\Pages;
 use App\Models\Schedule;
 use App\Rules\Cron;
-use App\Rules\NoCronOverlap;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Forms\Components\Grid;
@@ -89,14 +88,7 @@ class ScheduleResource extends Resource
                                             ->placeholder('Enter a cron expression.')
                                             ->helperText(fn (Get $get) => ExplainCronExpression::run($get('options.cron_expression')))
                                             ->required()
-                                            ->rules([
-                                                new Cron,
-                                                fn (?Schedule $record, Get $get): NoCronOverlap => new NoCronOverlap(
-                                                    new Schedule(['type' => $get('type') ?? $record?->type]),
-                                                    $record?->id,
-                                                    (bool) ($get('is_active') ?? $record?->is_active),
-                                                ),
-                                            ])
+                                            ->rules([new Cron])
                                             ->live(),
                                         Placeholder::make('next_run_at')
                                             ->label('Next Run At')
@@ -357,6 +349,13 @@ class ScheduleResource extends Resource
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
+                    Action::make('changeScheduleStatus')
+                        ->label('Change Schedule Status')
+                        ->action(function ($record) {
+                            // Toggle the 'is_active' field based on its current state
+                            $record->update(['is_active' => ! $record->is_active]);
+                        })
+                        ->icon('heroicon-c-arrow-path'),
                     Action::make('viewResults')
                         ->label('View Results')
                         ->action(function ($record) {
