@@ -1,5 +1,3 @@
-Speedtest Completed - #{{ $id }}
-
 A new speedtest on {{ config('app.name') }} was completed using {{ $service }}.
 
 Server name: {{ $serverName }}

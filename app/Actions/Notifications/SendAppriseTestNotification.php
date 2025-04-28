@@ -35,7 +35,10 @@ class SendAppriseTestNotification
 
             try {
                 $response = $client->post(rtrim($webhook['url'], '/'), [
-                    'form_params' => $payload,
+                    'json' => $payload,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
                 ]);
 
                 if ($response->getStatusCode() === 200) {

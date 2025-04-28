@@ -10,6 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Spatie\WebhookServer\WebhookCall;
 
 class SendSpeedtestThresholdNotification implements ShouldQueue
@@ -74,6 +75,9 @@ class SendSpeedtestThresholdNotification implements ShouldQueue
                 ->payload([
                     'result_id' => $this->result->id,
                     'site_name' => config('app.name'),
+                    'service' => Str::title($this->result->service->getLabel()),
+                    'serverName' => $this->result->server_name,
+                    'serverId' => $this->result->server_id,
                     'isp' => $this->result->isp,
                     'metrics' => $failed,
                     'speedtest_url' => $this->result->result_url,

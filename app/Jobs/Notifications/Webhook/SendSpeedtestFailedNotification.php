@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\WebhookServer\WebhookCall;
 
-class SendSpeedtestCompletedNotification implements ShouldQueue
+class SendSpeedtestFailedNotification implements ShouldQueue
 {
     use Dispatchable, Queueable;
 
@@ -45,14 +45,9 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
                     'result_id' => $this->result->id,
                     'site_name' => config('app.name'),
                     'service' => Str::title($this->result->service->getLabel()),
-                    'serverName' => $this->result->server_name,
-                    'serverId' => $this->result->server_id,
-                    'isp' => $this->result->isp,
-                    'ping' => $this->result->ping,
-                    'download' => $this->result->downloadBits,
-                    'upload' => $this->result->uploadBits,
-                    'packetLoss' => $this->result->packet_loss,
-                    'speedtest_url' => $this->result->result_url,
+                    'serverName' => $this->result->server_name ?? 'Unknown',
+                    'serverId' => $this->result->server_id ?? 'Unknown',
+                    'errorMessage' => $this->result->data['message'] ?? 'Unknown error during speedtest.',
                     'url' => url('/admin/results'),
                 ])
                 ->doNotSign()

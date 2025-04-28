@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Notifications\Apprise;
 
-use App\Helpers\Number;
 use App\Models\Result;
 use App\Settings\NotificationSettings;
 use GuzzleHttp\Client;
@@ -13,7 +12,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class SendSpeedtestCompletedNotification implements ShouldQueue
+class SendSpeedtestFailedNotification implements ShouldQueue
 {
     use Dispatchable, Queueable;
 
@@ -40,17 +39,13 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
             return;
         }
 
-        $payload = view('apprise.speedtest-completed', [
+        $payload = view('apprise.speedtest-failed', [
             'id' => $this->result->id,
             'service' => Str::title($this->result->service->getLabel()),
-            'serverName' => $this->result->server_name,
-            'serverId' => $this->result->server_id,
-            'isp' => $this->result->isp,
-            'ping' => round($this->result->ping).' ms',
-            'download' => Number::toBitRate(bits: $this->result->download_bits, precision: 2),
-            'upload' => Number::toBitRate(bits: $this->result->upload_bits, precision: 2),
-            'packetLoss' => $this->result->packet_loss,
-            'speedtest_url' => $this->result->result_url,
+            'serverName' => $this->result->server_name ?? 'Unknown',
+            'serverId' => $this->result->server_id ?? 'Unknown',
+            'isp' => $this->result->isp ?? 'Unknown',
+            'errorMessage' => $this->result->data['message'] ?? 'Unknown error during speedtest.',
             'url' => url('/admin/results'),
         ])->render();
 
@@ -63,9 +58,9 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
 
             $webhookPayload = [
                 'body' => $payload,
-                'title' => 'Speedtest Completed - #{$this->result->id}',
+                'title' => "Speedtest Failed - #{$this->result->id}",
                 'type' => 'info',
-                'urls' => $webhook['service_url'],
+                'urls' => [$webhook['service_url']],
             ];
 
             try {
@@ -77,9 +72,9 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
                     ],
                 ]);
 
-                Log::info('Apprise notification sent successfully to '.$webhook['url']);
+                Log::info('Apprise failed notification sent successfully to '.$webhook['url']);
             } catch (RequestException $e) {
-                Log::error('Apprise notification failed: '.$e->getMessage());
+                Log::error('Apprise failed notification failed: '.$e->getMessage());
             }
         }
     }
