@@ -2,9 +2,9 @@
 
 namespace App\Listeners;
 
+use App\Events\SpeedtestBenchmarkFailed;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
-use App\Events\SpeedtestBenchmarkFailed;
 use App\Jobs\Influxdb\v2\WriteResult;
 use App\Jobs\Notifications\Apprise\SendSpeedtestCompletedNotification as AppriseCompleted;
 use App\Jobs\Notifications\Apprise\SendSpeedtestThresholdNotification as AppriseThresholds;
