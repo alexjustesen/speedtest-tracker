@@ -28,7 +28,7 @@
         "laravel/sanctum": "^4.0.8",
         "livewire/livewire": "^3.6.3",
         "lorisleiva/laravel-actions": "^2.9",
-        "maennchen/zipstream-php": "^2.4",
+        "maennchen/zipstream-php": "^3.1",
         "secondnetwork/blade-tabler-icons": "^3.31.0",
         "spatie/laravel-json-api-paginate": "^1.16.3",
         "spatie/laravel-query-builder": "^6.3.2",
