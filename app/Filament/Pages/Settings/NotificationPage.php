@@ -79,9 +79,6 @@ class NotificationPage extends SettingsPage
                                                         Forms\Components\Toggle::make('database_on_threshold_failure')
                                                             ->label('Notify on threshold failures')
                                                             ->columnSpanFull(),
-                                                        Forms\Components\Toggle::make('database_on_speedtest_failed')
-                                                            ->label('Notify on speedtest failures')
-                                                            ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Actions::make([
                                                     Forms\Components\Actions\Action::make('test database')
@@ -115,9 +112,6 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpanFull(),
                                                         Forms\Components\Toggle::make('apprise_on_threshold_failure')
                                                             ->label('Notify on threshold failures')
-                                                            ->columnSpanFull(),
-                                                        Forms\Components\Toggle::make('apprise_on_speedtest_failed')
-                                                            ->label('Notify on speedtest failures')
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('apprise_webhooks')
@@ -174,9 +168,6 @@ class NotificationPage extends SettingsPage
                                                         Forms\Components\Toggle::make('mail_on_threshold_failure')
                                                             ->label('Notify on threshold failures')
                                                             ->columnSpanFull(),
-                                                        Forms\Components\Toggle::make('mail_on_speedtest_failed')
-                                                            ->label('Notify on every speedtest failures')
-                                                            ->columnSpanFull(),
                                                     ]),
                                                 Forms\Components\Repeater::make('mail_recipients')
                                                     ->label('Recipients')
@@ -219,9 +210,6 @@ class NotificationPage extends SettingsPage
                                                             ->columnSpan(2),
                                                         Forms\Components\Toggle::make('webhook_on_threshold_failure')
                                                             ->label('Notify on threshold failures')
-                                                            ->columnSpan(2),
-                                                        Forms\Components\Toggle::make('webhook_on_speedtest_failed')
-                                                            ->label('Notify on every speedtest failure')
                                                             ->columnSpan(2),
                                                     ]),
                                                 Forms\Components\Repeater::make('webhook_urls')

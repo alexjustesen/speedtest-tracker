@@ -12,15 +12,11 @@ class NotificationSettings extends Settings
 
     public bool $database_on_threshold_failure;
 
-    public bool $database_on_speedtest_failed;
-
     public bool $mail_enabled;
 
     public bool $mail_on_speedtest_run;
 
     public bool $mail_on_threshold_failure;
-
-    public bool $mail_on_speedtest_failed;
 
     public ?array $mail_recipients;
 
@@ -37,8 +33,6 @@ class NotificationSettings extends Settings
     public bool $webhook_enabled;
 
     public bool $webhook_on_speedtest_run;
-
-    public bool $webhook_on_speedtest_failed;
 
     public bool $webhook_on_threshold_failure;
 
@@ -97,8 +91,6 @@ class NotificationSettings extends Settings
     public bool $apprise_on_speedtest_run;
 
     public bool $apprise_on_threshold_failure;
-
-    public bool $apprise_on_speedtest_failed;
 
     public ?array $apprise_webhooks;
 
