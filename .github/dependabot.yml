@@ -3,11 +3,35 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "thursday"
     labels:
-      - "😑 dependencies"
+      - "dependencies"
     reviewers:
       - "alexjustesen"
     commit-message:
       prefix: "gh actions"
+
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "thursday"
+    labels:
+      - "dependencies"
+    reviewers:
+      - "alexjustesen"
+    commit-message:
+      prefix: "composer"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "thursday"
+    labels:
+      - "dependencies"
+    reviewers:
+      - "alexjustesen"
+    commit-message:
+      prefix: "npm"
