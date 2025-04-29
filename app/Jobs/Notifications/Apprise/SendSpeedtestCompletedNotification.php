@@ -3,7 +3,6 @@
 namespace App\Jobs\Notifications\Apprise;
 
 use App\Helpers\Number;
-use App\Notifications\SpeedtestNotificationData;
 use App\Models\Result;
 use App\Settings\NotificationSettings;
 use GuzzleHttp\Client;
@@ -41,8 +40,19 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
             return;
         }
 
-        $data = SpeedtestNotificationData::make($this->result);
-        $payload = view('apprise.speedtest-completed', $data)->render();
+        $payload = view('apprise.speedtest-completed', [
+            'id' => $this->result->id,
+            'service' => Str::title($this->result->service->getLabel()),
+            'serverName' => $this->result->server_name,
+            'serverId' => $this->result->server_id,
+            'isp' => $this->result->isp,
+            'ping' => round($this->result->ping).' ms',
+            'download' => Number::toBitRate(bits: $this->result->download_bits, precision: 2),
+            'upload' => Number::toBitRate(bits: $this->result->upload_bits, precision: 2),
+            'packetLoss' => $this->result->packet_loss,
+            'speedtest_url' => $this->result->result_url,
+            'url' => url('/admin/results'),
+        ])->render();
 
         foreach ($notificationSettings->apprise_webhooks as $webhook) {
             if (empty($webhook['service_url']) || empty($webhook['url'])) {
@@ -53,7 +63,7 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
 
             $webhookPayload = [
                 'body' => $payload,
-                'title' => "Speedtest Completed - #{$data['id']}",
+                'title' => 'Speedtest Completed - #{$this->result->id}',
                 'type' => 'info',
                 'urls' => $webhook['service_url'],
             ];

@@ -22,10 +22,7 @@ class SpeedtestEventSubscriber
     /**
      * Handle speedtest failed events.
      */
-    public function handleSpeedtestFailed(SpeedtestFailed $event): void
-    {
-
-    }
+    public function handleSpeedtestFailed(SpeedtestFailed $event): void {}
 
     /**
      * Handle speedtest completed events.
