@@ -120,7 +120,7 @@ class NotificationPage extends SettingsPage
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->label('URL')
-                                                            ->placeholder('http://apprise:8000/notify/apprise')
+                                                            ->placeholder('http://apprise:8000/notify')
                                                             ->helperText('The URL to your Apprise instance.')
                                                             ->maxLength(2000)
                                                             ->required()
