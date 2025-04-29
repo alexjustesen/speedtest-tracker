@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\SpeedtestBenchmarkFailed;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use App\Jobs\Influxdb\v2\WriteResult;
@@ -113,6 +114,11 @@ class SpeedtestEventSubscriber
         $events->listen(
             SpeedtestCompleted::class,
             [SpeedtestEventSubscriber::class, 'handleSpeedtestCompleted']
+        );
+
+        $events->listen(
+            SpeedtestBenchmarkFailed::class,
+            [SpeedtestEventSubscriber::class, 'handleSpeedtestBenchmarkFailed']
         );
     }
 }
