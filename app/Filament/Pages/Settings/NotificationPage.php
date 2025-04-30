@@ -15,6 +15,7 @@ use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Settings\NotificationSettings;
 use Filament\Forms;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Auth;
@@ -258,6 +259,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('pushover_webhooks')
                                                     ->label('Pushover Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->label('URL')
@@ -315,6 +317,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('discord_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
@@ -359,6 +362,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('gotify_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://example.com/message?token=<apptoken>')
@@ -403,6 +407,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('slack_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://hooks.slack.com/services/abc/xyz')
@@ -447,6 +452,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('ntfy_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->maxLength(2000)
@@ -506,6 +512,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('healthcheck_webhooks')
                                                     ->label('webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://hc-ping.com/your-uuid-here')
@@ -556,6 +563,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('telegram_recipients')
                                                     ->label('Recipients')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('telegram_chat_id')
                                                             ->placeholder('12345678910')
