@@ -3,12 +3,12 @@
 namespace App\Jobs\Notifications\Webhook;
 
 use App\Models\Result;
+use App\Services\Notifications\SpeedtestNotificationData;
 use App\Settings\NotificationSettings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Spatie\WebhookServer\WebhookCall;
 
 class SendSpeedtestCompletedNotification implements ShouldQueue
@@ -38,23 +38,12 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
             return;
         }
 
+        $data = SpeedtestNotificationData::make($this->result);
+
         foreach ($notificationSettings->webhook_urls as $url) {
             WebhookCall::create()
                 ->url($url['url'])
-                ->payload([
-                    'result_id' => $this->result->id,
-                    'site_name' => config('app.name'),
-                    'service' => Str::title($this->result->service->getLabel()),
-                    'serverName' => $this->result->server_name,
-                    'serverId' => $this->result->server_id,
-                    'isp' => $this->result->isp,
-                    'ping' => $this->result->ping,
-                    'download' => $this->result->downloadBits,
-                    'upload' => $this->result->uploadBits,
-                    'packetLoss' => $this->result->packet_loss,
-                    'speedtest_url' => $this->result->result_url,
-                    'url' => url('/admin/results'),
-                ])
+                ->payload($data)
                 ->doNotSign()
                 ->dispatch();
         }

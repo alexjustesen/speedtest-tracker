@@ -4,6 +4,7 @@ namespace App\Jobs\Notifications\Apprise;
 
 use App\Helpers\Number;
 use App\Models\Result;
+use App\Services\Notifications\SpeedtestNotificationData;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use GuzzleHttp\Client;
@@ -12,7 +13,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class SendSpeedtestThresholdNotification implements ShouldQueue
 {
@@ -70,16 +70,9 @@ class SendSpeedtestThresholdNotification implements ShouldQueue
             return;
         }
 
-        $payload = view('apprise.speedtest-threshold', [
-            'id' => $this->result->id,
-            'service' => Str::title($this->result->service->getLabel()),
-            'serverName' => $this->result->server_name,
-            'serverId' => $this->result->server_id,
-            'isp' => $this->result->isp,
-            'metrics' => $failed,
-            'speedtest_url' => $this->result->result_url,
-            'url' => url('/admin/results'),
-        ])->render();
+        $data = SpeedtestNotificationData::make($this->result);
+
+        $payload = view('apprise.speedtest-threshold', $data)->render();
 
         $client = new Client;
 
