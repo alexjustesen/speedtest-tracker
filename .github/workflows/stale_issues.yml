@@ -37,7 +37,7 @@ jobs:
           close-issue-label: 'closed-no-issue-activity'
           remove-stale-when-updated: true
 
-          # Targeting only `bug`-labeled issues
+          # Targeting only `question`-labeled issues
           only-issue-labels: 'question'
           exempt-issue-labels: >
             bug, chore, confirmed, dependencies, help wanted,
