@@ -1,14 +1,8 @@
 name: Close Stale Issues
 
 on:
-  # Runs daily at 10:00 AM UTC
   schedule:
-    - cron: '0 10 * * *'
-  # Runs at issue comment
-  issue_comment:
-    types: [created]
-
-  # Allow manual trigger
+    - cron: '0 10 * * *'  # Runs daily at 10:00 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -20,26 +14,36 @@ jobs:
         uses: actions/stale@v9
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          
-          # Issue-specific configuration
+
+          # Only apply to issues, not PRs
+          only-issues: true
+
+          # Stale messaging
           stale-issue-message: >
             👋 This issue has been automatically marked as stale due to inactivity.
             If this issue is still relevant, please comment to keep it open.
             Without activity, it will be closed in 7 days.
-          
-          close-issue-message: > 
+
+          close-issue-message: >
             🔒 This issue has been automatically closed due to prolonged inactivity.
             Feel free to reopen if the issue is still valid.
-          
-          # More nuanced staleness criteria
-          days-before-issue-stale: 7        # Mark as stale after 7 days of inactivity
-          days-before-issue-close: 7         # Close 7 days after being marked stale
-          
-          # More specific labeling
+
+          # Timing
+          days-before-issue-stale: 7
+          days-before-issue-close: 7
+
+          # Label management
           stale-issue-label: 'no-issue-activity'
           close-issue-label: 'closed-no-issue-activity'
-          
-          # Refined issue selection, Only issues with both bug and question label
-          only-issue-labels: 'bug, question'
+          remove-stale-when-updated: true
 
-# Issues will be closed as "Not Planned" by default. 
+          # Targeting only `bug`-labeled issues
+          only-issue-labels: 'question'
+          exempt-issue-labels: >
+            bug, chore, confirmed, dependencies, help wanted,
+            documentation, duplicate, feature, good first issue,
+            needs review, wontfix
+
+          # Skip assigned or milestone-tracked issues
+          exempt-assignees: true
+          exempt-milestones: true
