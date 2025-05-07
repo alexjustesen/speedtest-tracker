@@ -59,16 +59,6 @@ trait ResultDataAttributes
     }
 
     /**
-     * Get the result's download latency jitter in milliseconds.
-     */
-    protected function downloadLatencyJitter(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'download.latency.jitter'),
-        );
-    }
-
-    /**
      * Get the result's error message in milliseconds.
      */
     protected function errorMessage(): Attribute
@@ -115,26 +105,6 @@ trait ResultDataAttributes
     {
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'ping.jitter'),
-        );
-    }
-
-    /**
-     * Get the result's ping low latency in milliseconds.
-     */
-    protected function pingLow(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'ping.low'),
-        );
-    }
-
-    /**
-     * Get the result's ping high latency in milliseconds.
-     */
-    protected function pingHigh(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'ping.high'),
         );
     }
 
