@@ -59,7 +59,7 @@ trait ResultDataAttributes
     }
 
     /**
-     * Get the result's error message in milliseconds.
+     * Get the result's download jitter in milliseconds.
      */
     protected function errorMessage(): Attribute
     {
@@ -159,36 +159,6 @@ trait ResultDataAttributes
     }
 
     /**
-     * Get the result's server country.
-     */
-    protected function serverCountry(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'server.country'),
-        );
-    }
-
-    /**
-     * Get the result's server IP address.
-     */
-    protected function serverIp(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'server.ip'),
-        );
-    }
-
-    /**
-     * Get the result's server port.
-     */
-    protected function serverPort(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'server.port'),
-        );
-    }
-
-    /**
      * Get the result's upload in bits.
      */
     protected function uploadBits(): Attribute
@@ -235,16 +205,6 @@ trait ResultDataAttributes
     {
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'upload.latency.iqm'),
-        );
-    }
-
-    /**
-     * Get the result's upload latency jitter in milliseconds.
-     */
-    protected function uploadLatencyJitter(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => Arr::get($this->data, 'upload.latency.jitter'),
         );
     }
 }
