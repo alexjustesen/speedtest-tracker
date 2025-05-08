@@ -21,7 +21,7 @@ trait ResultDataAttributes
     /**
      * Get the result's download jitter in milliseconds.
      */
-    protected function downloadJitter(): Attribute
+    protected function downloadlatencyJitter(): Attribute
     {
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'download.latency.jitter'),
@@ -171,7 +171,7 @@ trait ResultDataAttributes
     /**
      * Get the result's upload jitter in milliseconds.
      */
-    protected function uploadJitter(): Attribute
+    protected function uploadLatencyjitter(): Attribute
     {
         return Attribute::make(
             get: fn () => Arr::get($this->data, 'upload.latency.jitter'),
