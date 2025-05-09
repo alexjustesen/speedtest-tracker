@@ -38,7 +38,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
             ->form([
                 Select::make('server_id')
                     ->label('Select Server')
-                    ->helperText('Leave empty to run the speedtest without specifying a server.')
+                    ->helperText('Leave empty to run the speedtest without specifying a server. Blocked servers will be skipped.')
                     ->options(function (): array {
                         return GetOoklaSpeedtestServers::run();
                     })

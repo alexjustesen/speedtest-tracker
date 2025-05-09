@@ -83,6 +83,16 @@ class ResultExporter extends Exporter
                     return $record->ping_jitter;
                 })
                 ->enabledByDefault(false),
+            ExportColumn::make('ping_low')
+                ->state(function (Result $record): ?string {
+                    return $record->ping_low;
+                })
+                ->enabledByDefault(false),
+            ExportColumn::make('ping_high')
+                ->state(function (Result $record): ?string {
+                    return $record->ping_high;
+                })
+                ->enabledByDefault(false),
             ExportColumn::make('upload_latency_high')
                 ->state(function (Result $record): ?string {
                     return $record->upload_latency_high;
