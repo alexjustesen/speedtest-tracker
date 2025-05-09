@@ -22,7 +22,6 @@ class StartSpeedtest
             'service' => ResultService::Ookla,
             'status' => ResultStatus::Started,
             'scheduled' => $scheduled,
-            'retry' => $retry,
         ]);
 
         // Dispatch the job to handle the server selection and speedtest process

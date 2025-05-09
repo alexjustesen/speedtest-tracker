@@ -33,7 +33,6 @@ class SelectSpeedtestServerJob implements ShouldQueue
 
         $schedule = $this->result->schedule;
 
-
         if (! $schedule || blank($schedule->options)) {
             return;
         }

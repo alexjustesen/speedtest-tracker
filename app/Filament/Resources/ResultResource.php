@@ -394,6 +394,7 @@ class ResultResource extends Resource
                     ->nullable()
                     ->trueLabel('Only scheduled speedtests')
                     ->falseLabel('Only manual speedtests')
+                    ->native(false)
                     ->queries(
                         true: fn (Builder $query) => $query->where('scheduled', true),
                         false: fn (Builder $query) => $query->where('scheduled', false),
