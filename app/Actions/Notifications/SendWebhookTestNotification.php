@@ -14,7 +14,7 @@ class SendWebhookTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title('You need to add webhook urls!')
+                ->title('You need to add webhook URLs!')
                 ->warning()
                 ->send();
 
