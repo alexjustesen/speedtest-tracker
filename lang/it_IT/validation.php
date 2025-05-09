@@ -135,7 +135,7 @@ return [
     'required_with_all' => 'Il campo :attribute è richiesto quando :values sono presenti.',
     'required_without' => 'Il campo :attribute è richiesto quando :values non è presente.',
     'required_without_all' => 'Il campo :attribute è richiesto quando nessuno dei :values sono presenti.',
-    'same' => 'Il campo :attribute non deve corrispondere a :other.',
+    'same' => 'Il campo :attribute deve corrispondere a :other.',
     'size' => [
         'array' => 'Il campo :attribute deve contenere :size elementi.',
         'file' => 'Il campo :attribute deve essere :size kilobyte.',

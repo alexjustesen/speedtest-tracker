@@ -7,8 +7,6 @@ updates:
       day: "thursday"
     labels:
       - "dependencies"
-    reviewers:
-      - "alexjustesen"
     commit-message:
       prefix: "gh actions"
 
@@ -19,8 +17,6 @@ updates:
       day: "thursday"
     labels:
       - "dependencies"
-    reviewers:
-      - "alexjustesen"
     commit-message:
       prefix: "composer"
 
@@ -31,7 +27,5 @@ updates:
       day: "thursday"
     labels:
       - "dependencies"
-    reviewers:
-      - "alexjustesen"
     commit-message:
       prefix: "npm"
