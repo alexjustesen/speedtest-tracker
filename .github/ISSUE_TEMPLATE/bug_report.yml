@@ -6,8 +6,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report! You should only use this form for issues, to request a change or feature use the [feature request form](https://github.com/alexjustesen/speedtest-tracker/issues/new?template=feature_request.yml).
-        If you have a **general question**, need help with **setup or configuration**, or are unsure if it's a bug, please post in **[GitHub Discussions](https://github.com/alexjustesen/speedtest-tracker/discussions)** instead.
+        Thanks for taking the time to report this issue! We appreciate your help in improving the project. If this report is confirmed as a bug, we’ll update its type accordingly.
+
+        Please note:  
+        - For **feature requests or changes**, use the [feature request form](https://github.com/alexjustesen/speedtest-tracker/issues/new?template=feature_request.yml).  
+        - For **general questions**, **setup or configuration help**, or if you’re not sure this is a bug, please use **[GitHub Discussions](https://github.com/alexjustesen/speedtest-tracker/discussions)** instead.
   - type: checkboxes
     attributes:
       label: Pre-work
