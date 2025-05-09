@@ -1,9 +1,12 @@
-name: Close Stale Issues
+name: 'Close stale issues'
 
 on:
   schedule:
     - cron: '0 10 * * *'  # Runs daily at 10:00 AM UTC
   workflow_dispatch:
+
+permissions:
+  issues: write
 
 jobs:
   manage-stale-issues:
@@ -15,9 +18,6 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-          # Only apply to issues, not PRs
-          only-issues: true
-
           # Stale messaging
           stale-issue-message: >
             👋 This issue has been automatically marked as stale due to inactivity.
@@ -26,15 +26,14 @@ jobs:
 
           close-issue-message: >
             🔒 This issue has been automatically closed due to prolonged inactivity.
-            Feel free to reopen if the issue is still valid.
+            Feel free to open a new issue if you have further questions or concerns.
 
           # Timing
-          days-before-issue-stale: 7
+          days-before-issue-stale: 14
           days-before-issue-close: 7
 
           # Label management
-          stale-issue-label: 'no-issue-activity'
-          close-issue-label: 'closed-no-issue-activity'
+          stale-issue-label: 'stale'
           remove-stale-when-updated: true
 
           # Targeting only `question`-labeled issues
@@ -47,4 +46,3 @@ jobs:
           # Skip assigned or milestone-tracked issues
           exempt-assignees: true
           exempt-milestones: true
-
