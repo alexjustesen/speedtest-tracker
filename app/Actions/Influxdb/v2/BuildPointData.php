@@ -19,7 +19,7 @@ class BuildPointData
             ->addTag('app_name', config('app.name'))
             ->time($result->created_at->timestamp ?? time());
 
-        // Tags (default to 'unknown' for missing values)
+        // Qualitative tags
         $point->addTag('result_id', $result->id)
             ->addTag('external_ip', Arr::get($result->data, 'interface.externalIp'))
             ->addTag('id', $result->id)
