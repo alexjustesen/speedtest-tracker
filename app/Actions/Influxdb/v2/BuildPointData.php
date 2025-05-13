@@ -19,21 +19,21 @@ class BuildPointData
             ->addTag('app_name', config('app.name'))
             ->time($result->created_at->timestamp ?? time());
 
-        // Qualitative tags
+        // Tags (default to 'unknown' for missing values)
         $point->addTag('result_id', $result->id)
-            ->addTag('external_ip', Arr::get($result->data, 'interface.externalIp'))
+            ->addTag('external_ip', Arr::get($result->data, 'interface.externalIp') ?? 'unknown')
             ->addTag('id', $result->id)
-            ->addTag('isp', Arr::get($result->data, 'isp'))
-            ->addTag('service', $result->service->value)
-            ->addTag('server_id', Arr::get($result->data, 'server.id'))
-            ->addTag('server_name', Arr::get($result->data, 'server.name'))
-            ->addTag('server_country', Arr::get($result->data, 'server.country'))
-            ->addTag('server_location', Arr::get($result->data, 'server.location'))
+            ->addTag('isp', Arr::get($result->data, 'isp') ?? 'unknown')
+            ->addTag('service', $result->service->value ?? 'unknown')
+            ->addTag('server_id', Arr::get($result->data, 'server.id') ?? 'unknown')
+            ->addTag('server_name', Arr::get($result->data, 'server.name') ?? 'unknown')
+            ->addTag('server_country', Arr::get($result->data, 'server.country') ?? 'unknown')
+            ->addTag('server_location', Arr::get($result->data, 'server.location') ?? 'unknown')
             ->addTag('healthy', $this->evalHealthyTag($result->healthy))
             ->addTag('status', $result->status->value)
             ->addTag('scheduled', $result->scheduled ? 'true' : 'false');
 
-        // Quantitative fields
+        // Core test fields — cast if present, skip if null
         $point->addField('download', Number::castToType($result->download, 'int'))
             ->addField('upload', Number::castToType($result->upload, 'int'))
             ->addField('ping', Number::castToType($result->ping, 'float'))
@@ -48,7 +48,8 @@ class BuildPointData
             ->addField('upload_latency_avg', Number::castToType(Arr::get($result->data, 'upload.latency.iqm'), 'float'))
             ->addField('upload_latency_high', Number::castToType(Arr::get($result->data, 'upload.latency.high'), 'float'))
             ->addField('upload_latency_low', Number::castToType(Arr::get($result->data, 'upload.latency.low'), 'float'))
-            ->addField('packet_loss', Number::castToType(Arr::get($result->data, 'packetLoss'), 'float'));
+            ->addField('packet_loss', Number::castToType(Arr::get($result->data, 'packetLoss'), 'float'))
+            ->addField('log_message', Arr::get($result->data, 'message'));
 
         return $point;
     }
