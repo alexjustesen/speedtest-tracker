@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\LatestResult;
 use App\Http\Controllers\Api\V1\ListResults;
 use App\Http\Controllers\Api\V1\ShowResult;
+use App\Http\Controllers\Api\V1\StartTest;
 use App\Http\Controllers\Api\V1\Stats;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     Route::get('/stats', Stats::class)
         ->name('stats');
+
+    Route::post('/test/start', StartTest::class)
+        ->name('test.start');
 });

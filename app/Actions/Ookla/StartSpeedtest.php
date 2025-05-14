@@ -13,7 +13,7 @@ class StartSpeedtest
 {
     use AsAction;
 
-    public function handle(bool $scheduled = false, ?int $serverId = null): void
+    public function handle(bool $scheduled = false, ?int $serverId = null): Result
     {
         $result = Result::create([
             'data->server->id' => $serverId,
@@ -27,5 +27,7 @@ class StartSpeedtest
         );
 
         SpeedtestStarted::dispatch($result);
+
+        return $result;
     }
 }
