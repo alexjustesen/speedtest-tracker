@@ -33,7 +33,7 @@ class BuildPointData
             ->addTag('status', $result->status->value)
             ->addTag('scheduled', $result->scheduled ? 'true' : 'false');
 
-        // Core test fields — cast if present, skip if null
+        // Quantitative fields
         $point->addField('download', Number::castToType($result->download, 'int'))
             ->addField('upload', Number::castToType($result->upload, 'int'))
             ->addField('ping', Number::castToType($result->ping, 'float'))
