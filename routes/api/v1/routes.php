@@ -20,6 +20,6 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('/stats', Stats::class)
         ->name('stats');
 
-    Route::post('/test/start', StartTest::class)
-        ->name('test.start');
+    Route::post('/speedtests', StartTest::class)
+        ->name('speedtests');
 });
