@@ -30,7 +30,7 @@ class SendWebhookTestNotification
                 ->url($webhook['url'])
                 ->payload([
                     'result_id' => fake()->uuid(),
-                    'site_name' => config('app.name'),
+                    'site_name' => 'Webhook Notification Testing',
                     'isp' => $fakeResult->data['isp'],
                     'ping' => $fakeResult->ping,
                     'download' => $fakeResult->download,
