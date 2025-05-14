@@ -48,7 +48,8 @@ class BuildPointData
             ->addField('upload_latency_avg', Number::castToType(Arr::get($result->data, 'upload.latency.iqm'), 'float'))
             ->addField('upload_latency_high', Number::castToType(Arr::get($result->data, 'upload.latency.high'), 'float'))
             ->addField('upload_latency_low', Number::castToType(Arr::get($result->data, 'upload.latency.low'), 'float'))
-            ->addField('packet_loss', Number::castToType(Arr::get($result->data, 'packetLoss'), 'float'));
+            ->addField('packet_loss', Number::castToType(Arr::get($result->data, 'packetLoss'), 'float'))
+            ->addField('log_message', Arr::get($result->data, 'message'));
 
         return $point;
     }
