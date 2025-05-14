@@ -1,0 +1,116 @@
+{
+    "name": "alexjustesen/speedtest-tracker",
+    "type": "project",
+    "description": "Self-hosted internet performance tracking application that runs speedtests using Ookla's Speedtest service",
+    "homepage": "https://speedtest-tracker.dev",
+    "keywords": [
+        "tracker",
+        "docker",
+        "tracking",
+        "laravel",
+        "dashboard",
+        "speedtest",
+        "speedtest-cli"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "awcodes/filament-versions": "^2.0.1",
+        "chrisullyott/php-filesize": "^4.2.1",
+        "dragonmantank/cron-expression": "^3.4.0",
+        "filament/filament": "^3.3.14",
+        "filament/spatie-laravel-settings-plugin": "^3.3.14",
+        "geerlingguy/ping": "^1.2.1",
+        "influxdata/influxdb-client-php": "^3.7",
+        "laravel-notification-channels/telegram": "^6.0",
+        "laravel/framework": "^12.13.0",
+        "laravel/prompts": "^0.3.5",
+        "laravel/sanctum": "^4.1.1",
+        "livewire/livewire": "^3.6.3",
+        "lorisleiva/laravel-actions": "^2.9",
+        "maennchen/zipstream-php": "^2.4",
+        "secondnetwork/blade-tabler-icons": "^3.31.0",
+        "spatie/laravel-json-api-paginate": "^1.16.3",
+        "spatie/laravel-query-builder": "^6.3.2",
+        "spatie/laravel-settings": "^3.4.4",
+        "spatie/laravel-webhook-server": "^3.8.3",
+        "timokoerber/laravel-one-time-operations": "^1.4.5",
+        "zircote/swagger-php": "^5.1.1"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.24.1",
+        "laravel/pail": "^1.2.2",
+        "laravel/pint": "^1.22.1",
+        "laravel/sail": "^1.42.0",
+        "laravel/telescope": "^5.7.0",
+        "laravel/tinker": "^2.10.1",
+        "mockery/mockery": "^1.6.12",
+        "nunomaduro/collision": "^8.8.0",
+        "pestphp/pest": "^3.8.2",
+        "pestphp/pest-plugin-laravel": "^3.2",
+        "spatie/laravel-ignition": "^2.9.1",
+        "tightenco/duster": "^3.2.0"
+    },
+    "autoload": {
+        "files": [
+            "app/helpers.php"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
+        ]
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/alexjustesen"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+                "laravel/telescope"
+            ]
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "8.3"
+        },
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

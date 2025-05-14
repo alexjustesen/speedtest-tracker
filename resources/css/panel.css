@@ -1,0 +1,16 @@
+.fi-topbar #dashboardAction .fi-btn-label,
+.fi-topbar #speedtestAction .fi-btn-label {
+    display: none;
+}
+
+.fi-fo-field-wrp-helper-text a,
+.fi-fo-field-wrp-hint a {
+    @apply font-bold underline;
+}
+
+@media (min-width: 768px) {
+    .fi-topbar #dashboardAction .fi-btn-label,
+    .fi-topbar #speedtestAction .fi-btn-label {
+        display: block;
+    }
+}
