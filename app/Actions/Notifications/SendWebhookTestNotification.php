@@ -3,6 +3,7 @@
 namespace App\Actions\Notifications;
 
 use App\Models\Result;
+use App\Services\SpeedtestFakeResultGenerator;
 use Filament\Notifications\Notification;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Spatie\WebhookServer\WebhookCall;
@@ -23,7 +24,7 @@ class SendWebhookTestNotification
         }
 
         // Generate a fake Result (NOT saved to database)
-        $fakeResult = Result::factory()->make();
+        $fakeResult = SpeedtestFakeResultGenerator::completed();
 
         foreach ($webhooks as $webhook) {
             WebhookCall::create()
