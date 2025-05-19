@@ -103,13 +103,14 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
                     ->modalWidth(MaxWidth::ExtraLarge),
             ])
             ->columns([
-                TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('abilities')
                     ->badge(),
+                TextColumn::make('created_at')
+                    ->alignEnd()
+                    ->dateTime()
+                    ->sortable(),
                 TextColumn::make('last_used_at')
                     ->alignEnd()
                     ->dateTime()
