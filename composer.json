@@ -34,7 +34,6 @@
         "spatie/laravel-query-builder": "^6.3.2",
         "spatie/laravel-settings": "^3.4.4",
         "spatie/laravel-webhook-server": "^3.8.3",
-        "timokoerber/laravel-one-time-operations": "^1.4.5",
         "zircote/swagger-php": "^5.1.1"
     },
     "require-dev": {

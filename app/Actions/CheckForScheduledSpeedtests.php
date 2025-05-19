@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Actions\Ookla\StartSpeedtest;
+use App\Actions\Ookla\RunSpeedtest;
 use Cron\CronExpression;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -18,7 +18,7 @@ class CheckForScheduledSpeedtests
             return;
         }
 
-        StartSpeedtest::runIf(
+        RunSpeedtest::runIf(
             $this->isSpeedtestDue(schedule: $schedule),
             scheduled: true,
         );
