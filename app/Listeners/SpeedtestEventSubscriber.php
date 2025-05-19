@@ -23,7 +23,14 @@ class SpeedtestEventSubscriber
     /**
      * Handle speedtest failed events.
      */
-    public function handleSpeedtestFailed(SpeedtestFailed $event): void {}
+    public function handleSpeedtestFailed(SpeedtestFailed $event): void
+    {
+        $settings = app(DataIntegrationSettings::class);
+
+        if ($settings->influxdb_v2_enabled) {
+            WriteResult::dispatch($event->result);
+        }
+    }
 
     /**
      * Handle speedtest completed events.

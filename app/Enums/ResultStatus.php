@@ -15,6 +15,7 @@ enum ResultStatus: string implements HasColor, HasLabel
     case Running = 'running';
     case Started = 'started';
     case Skipped = 'skipped';
+    case Waiting = 'waiting';
 
     public function getColor(): ?string
     {
@@ -26,6 +27,7 @@ enum ResultStatus: string implements HasColor, HasLabel
             self::Running => 'info',
             self::Started => 'info',
             self::Skipped => 'gray',
+            self::Waiting => 'info',
         };
     }
 
