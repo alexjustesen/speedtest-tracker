@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Actions\Ookla\StartSpeedtest;
+use App\Actions\Ookla\RunSpeedtest as RunSpeedtestAction;
 use App\Http\Resources\V1\ResultResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -51,7 +51,7 @@ class RunSpeedtest extends ApiController
             );
         }
 
-        $result = StartSpeedtest::run(
+        $result = RunSpeedtestAction::run(
             serverId: $validated['server_id'] ?? null,
         );
 
