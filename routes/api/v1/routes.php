@@ -17,7 +17,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('/results/{result}', ShowResult::class)
         ->name('results.show');
 
-    Route::get('/speedtests/run', RunSpeedtest::class)
+    Route::post('/speedtests/run', RunSpeedtest::class)
         ->name('speedtests.run');
 
     Route::get('/stats', Stats::class)
