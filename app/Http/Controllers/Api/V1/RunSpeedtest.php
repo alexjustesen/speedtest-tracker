@@ -52,7 +52,7 @@ class RunSpeedtest extends ApiController
         }
 
         $result = RunSpeedtestAction::run(
-            serverId: $validated['server_id'] ?? null,
+            serverId: $request->input('server_id'),
         );
 
         return self::sendResponse(
