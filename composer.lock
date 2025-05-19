@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e35ff4f41ae3089f88ce59122636e52",
+    "content-hash": "b9343b126af993aac70ad5d2b1abda4b",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -8873,70 +8873,6 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.3.0"
             },
             "time": "2024-12-21T16:25:41+00:00"
-        },
-        {
-            "name": "timokoerber/laravel-one-time-operations",
-            "version": "1.4.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/TimoKoerber/laravel-one-time-operations.git",
-                "reference": "df0cc43bb30681a3cbc0b6801d98958fe022e4ef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/TimoKoerber/laravel-one-time-operations/zipball/df0cc43bb30681a3cbc0b6801d98958fe022e4ef",
-                "reference": "df0cc43bb30681a3cbc0b6801d98958fe022e4ef",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/contracts": "^9.0|^10.0|^11.0|^12.0",
-                "illuminate/support": "^9.0|^10.0|^11.0|^12.0",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "7|^9.0|^10.0",
-                "phpunit/phpunit": "^9.4|^10.5|^11.5.3"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "TimoKoerber\\LaravelOneTimeOperations\\Providers\\OneTimeOperationsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "TimoKoerber\\LaravelOneTimeOperations\\": "src/",
-                    "TimoKoerber\\LaravelOneTimeOperations\\Database\\Factories\\": "database/factories/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "timo.koerber",
-                    "email": "koerber.timo@gmail.com",
-                    "homepage": "https://www.timokoerber.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Run operations once after deployment - just like you do it with migrations!",
-            "homepage": "https://github.com/timokoerber/laravel-one-time-operations",
-            "keywords": [
-                "deployment",
-                "jobs",
-                "laravel",
-                "migrations",
-                "operations"
-            ],
-            "support": {
-                "issues": "https://github.com/TimoKoerber/laravel-one-time-operations/issues",
-                "source": "https://github.com/TimoKoerber/laravel-one-time-operations/tree/1.4.5"
-            },
-            "time": "2025-02-27T12:11:38+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
