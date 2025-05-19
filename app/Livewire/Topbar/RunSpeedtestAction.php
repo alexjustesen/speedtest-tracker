@@ -3,7 +3,7 @@
 namespace App\Livewire\Topbar;
 
 use App\Actions\GetOoklaSpeedtestServers;
-use App\Actions\Ookla\StartSpeedtest;
+use App\Actions\Ookla\RunSpeedtest;
 use App\Helpers\Ookla;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -51,7 +51,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
             ->action(function (array $data) {
                 $serverId = $data['server_id'] ?? null;
 
-                StartSpeedtest::run(
+                RunSpeedtest::run(
                     scheduled: false,
                     serverId: $serverId,
                 );
