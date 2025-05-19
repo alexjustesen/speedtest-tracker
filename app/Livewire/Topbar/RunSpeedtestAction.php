@@ -52,7 +52,6 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
                 $serverId = $data['server_id'] ?? null;
 
                 RunSpeedtest::run(
-                    scheduled: false,
                     serverId: $serverId,
                 );
 
