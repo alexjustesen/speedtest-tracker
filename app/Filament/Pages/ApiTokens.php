@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use Carbon\Carbon;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -73,6 +74,16 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
                             ->maxLength('100')
                             ->required()
                             ->autocomplete(false),
+                        CheckboxList::make('abilities')
+                            ->options([
+                                'results:read' => 'Read results',
+                                'speedtests:run' => 'Run speedtest',
+                            ])
+                            ->descriptions([
+                                'results:read' => 'Allow this token to read results.',
+                                'speedtests:run' => 'Allow this token to run speedtests.',
+                            ])
+                            ->bulkToggleable(),
                         DateTimePicker::make('token_expires_at')
                             ->label('Expires at')
                             ->nullable()
@@ -81,6 +92,7 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
                     ->action(function (array $data) {
                         $token = Auth::user()->createToken(
                             name: $data['token_name'],
+                            abilities: $data['abilities'],
                             expiresAt: $data['token_expires_at'] ? Carbon::parse($data['token_expires_at']) : null,
                         );
 
@@ -96,6 +108,8 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
                     ->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('abilities')
+                    ->badge(),
                 TextColumn::make('last_used_at')
                     ->alignEnd()
                     ->dateTime()

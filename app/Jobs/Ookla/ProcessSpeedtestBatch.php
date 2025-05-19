@@ -29,6 +29,7 @@ class ProcessSpeedtestBatch implements ShouldQueue
     {
         Bus::batch([
             [
+                new StartSpeedtestJob($this->result),
                 new CheckForInternetConnectionJob($this->result),
                 new SkipSpeedtestJob($this->result),
                 new SelectSpeedtestServerJob($this->result),
