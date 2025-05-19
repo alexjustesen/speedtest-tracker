@@ -46,8 +46,6 @@ class RunSpeedtest
             ],
         ])->catch(function (Batch $batch, ?Throwable $e) {
             Log::error(sprintf('Speedtest batch "%s" failed for an unknown reason.', $batch->id));
-
-            return;
         })->name('Ookla Speedtest')->dispatch();
 
         return $result;
