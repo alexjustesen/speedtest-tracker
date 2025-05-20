@@ -38,8 +38,8 @@ class ListSpeedtestServers extends ApiController
 
         $servers = GetOoklaSpeedtestServers::run();
 
-        if ($request->filled('name')) {
-            $filter = strtolower($request->query('name'));
+        if ($request->filled('filter')) {
+            $filter = strtolower($request->query('filter'));
             $servers = collect($servers)->filter(function ($label) use ($filter) {
                 return str_contains(strtolower($label), $filter);
             })->toArray();
