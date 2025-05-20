@@ -10,7 +10,7 @@ use OpenApi\Attributes as OA;
 class ListSpeedtestServers extends ApiController
 {
     #[OA\Get(
-        path: '/api/v1/speedtests/servers',
+        path: '/api/v1/ookla/list-servers',
         description: 'Get a list of available Ookla speedtest servers.',
         responses: [
             new OA\Response(response: Response::HTTP_OK, description: 'OK'),
@@ -19,7 +19,7 @@ class ListSpeedtestServers extends ApiController
     )]
     public function __invoke(Request $request)
     {
-        if ($request->user()->tokenCant('speedtests:run')) {
+        if ($request->user()->tokenCant('ookla:list-servers')) {
             return self::sendResponse(
                 data: null,
                 message: 'You do not have permission to view speedtest servers.',
