@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\LatestResult;
 use App\Http\Controllers\Api\V1\ListResults;
+use App\Http\Controllers\Api\V1\ListSpeedtestServers;
 use App\Http\Controllers\Api\V1\RunSpeedtest;
 use App\Http\Controllers\Api\V1\ShowResult;
 use App\Http\Controllers\Api\V1\Stats;
@@ -19,6 +20,9 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     Route::post('/speedtests/run', RunSpeedtest::class)
         ->name('speedtests.run');
+
+    Route::get('/speedtests/servers', ListSpeedtestServers::class)
+        ->name('speedtests.servers');
 
     Route::get('/stats', Stats::class)
         ->name('stats');
