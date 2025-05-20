@@ -78,10 +78,12 @@ class ApiTokens extends Page implements HasForms, HasInfolists, HasTable
                             ->options([
                                 'results:read' => 'Read results',
                                 'speedtests:run' => 'Run speedtest',
+                                'ookla:list-servers' => 'List servers',
                             ])
                             ->descriptions([
                                 'results:read' => 'Allow this token to read results.',
                                 'speedtests:run' => 'Allow this token to run speedtests.',
+                                'ookla:list-servers' => 'Allow this token to list server.',
                             ])
                             ->bulkToggleable(),
                         DateTimePicker::make('token_expires_at')
