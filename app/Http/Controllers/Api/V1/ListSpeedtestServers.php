@@ -12,15 +12,6 @@ class ListSpeedtestServers extends ApiController
     #[OA\Get(
         path: '/api/v1/speedtests/servers',
         description: 'Get a list of available Ookla speedtest servers.',
-        parameters: [
-            new OA\Parameter(
-                name: 'name',
-                in: 'query',
-                required: false,
-                schema: new OA\Schema(type: 'string'),
-                description: 'Optional search filter for server name (e.g., city, ISP, ID)'
-            ),
-        ],
         responses: [
             new OA\Response(response: Response::HTTP_OK, description: 'OK'),
             new OA\Response(response: Response::HTTP_FORBIDDEN, description: 'Forbidden'),
@@ -38,16 +29,9 @@ class ListSpeedtestServers extends ApiController
 
         $servers = GetOoklaSpeedtestServers::run();
 
-        if ($request->filled('filter')) {
-            $filter = strtolower($request->query('filter'));
-            $servers = collect($servers)->filter(function ($label) use ($filter) {
-                return str_contains(strtolower($label), $filter);
-            })->toArray();
-        }
-
         return self::sendResponse(
             data: $servers,
-            message: 'Speedtest servers fetched successfully.',
+            message: 'Speedtest servers fetched successfully.'
         );
     }
 }
