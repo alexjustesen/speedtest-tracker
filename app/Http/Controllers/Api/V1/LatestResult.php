@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Resources\V1\ResultResource;
 use App\Models\Result;
+use App\OpenApi\Support\ResultExamples;
 use Http\Discovery\Exception\NotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,9 +16,22 @@ class LatestResult extends ApiController
         path: '/api/v1/results/latest',
         description: 'Get the latest result.',
         responses: [
-            new OA\Response(response: 200, description: 'OK'),
-            new OA\Response(response: Response::HTTP_NOT_FOUND, description: 'No result found'),
-        ])]
+            new OA\Response(
+                response: Response::HTTP_OK,
+                description: 'OK',
+                content: new OA\JsonContent(
+                    example: ResultExamples::SINGLE
+                )
+            ),
+            new OA\Response(
+                response: Response::HTTP_NOT_FOUND,
+                description: 'No result found',
+                content: new OA\JsonContent(
+                    example: ResultExamples::NOT_FOUND
+                )
+            ),
+        ]
+    )]
     public function __invoke(Request $request)
     {
         $result = Result::query()

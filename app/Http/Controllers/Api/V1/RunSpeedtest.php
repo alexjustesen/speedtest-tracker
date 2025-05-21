@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Ookla\RunSpeedtest as RunSpeedtestAction;
 use App\Http\Resources\V1\ResultResource;
+use App\OpenApi\Support\SpeedtestExamples;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -24,9 +25,27 @@ class RunSpeedtest extends ApiController
             ),
         ],
         responses: [
-            new OA\Response(response: Response::HTTP_CREATED, description: 'Created'),
-            new OA\Response(response: Response::HTTP_FORBIDDEN, description: 'Forbidden'),
-            new OA\Response(response: Response::HTTP_UNPROCESSABLE_ENTITY, description: 'Validation error'),
+            new OA\Response(
+                response: Response::HTTP_CREATED,
+                description: 'Created',
+                content: new OA\JsonContent(
+                    example: SpeedtestExamples::CREATED
+                )
+            ),
+            new OA\Response(
+                response: Response::HTTP_FORBIDDEN,
+                description: 'Forbidden',
+                content: new OA\JsonContent(
+                    example: SpeedtestExamples::FORBIDDEN
+                )
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNPROCESSABLE_ENTITY,
+                description: 'Validation error',
+                content: new OA\JsonContent(
+                    example: SpeedtestExamples::VALIDATION
+                )
+            ),
         ]
     )]
     public function __invoke(Request $request)

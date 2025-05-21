@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Resources\V1\ResultResource;
 use App\Models\Result;
+use App\OpenApi\Support\ResultExamples;
+use App\OpenApi\Support\ValidationErrorExamples;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -18,8 +20,20 @@ class ListResults extends ApiController
         path: '/api/v1/results',
         description: 'List results.',
         responses: [
-            new OA\Response(response: Response::HTTP_OK, description: 'OK'),
-            new OA\Response(response: Response::HTTP_UNPROCESSABLE_ENTITY, description: 'Unprocessable Entity'),
+            new OA\Response(
+                response: Response::HTTP_OK,
+                description: 'OK',
+                content: new OA\JsonContent(
+                    example: ResultExamples::COLLECTION
+                )
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNPROCESSABLE_ENTITY,
+                description: 'Validation failed',
+                content: new OA\JsonContent(
+                    example: ValidationErrorExamples::PER_PAGE
+                )
+            ),
         ])]
     public function __invoke(Request $request)
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\GetOoklaSpeedtestServers;
+use App\OpenApi\Support\OoklaExamples;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use OpenApi\Attributes as OA;
@@ -13,8 +14,20 @@ class ListSpeedtestServers extends ApiController
         path: '/api/v1/ookla/list-servers',
         description: 'Get a list of available Ookla speedtest servers.',
         responses: [
-            new OA\Response(response: Response::HTTP_OK, description: 'OK'),
-            new OA\Response(response: Response::HTTP_FORBIDDEN, description: 'Forbidden'),
+            new OA\Response(
+                response: Response::HTTP_OK,
+                description: 'OK',
+                content: new OA\JsonContent(
+                    example: OoklaExamples::LIST
+                )
+            ),
+            new OA\Response(
+                response: Response::HTTP_FORBIDDEN,
+                description: 'Forbidden',
+                content: new OA\JsonContent(
+                    example: OoklaExamples::FORBIDDEN
+                )
+            ),
         ]
     )]
     public function __invoke(Request $request)

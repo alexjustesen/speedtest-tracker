@@ -11,10 +11,100 @@
                 "operationId": "4b44d6935caeb91d3e687ab4bc176f62",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "service": "faker",
+                                        "ping": 19.133,
+                                        "download": 113750000,
+                                        "upload": 113750000,
+                                        "download_bits": 113750000,
+                                        "upload_bits": 113750000,
+                                        "download_bits_human": "113.75 Mbps",
+                                        "upload_bits_human": "113.75 Mbps",
+                                        "benchmarks": null,
+                                        "healthy": null,
+                                        "status": "completed",
+                                        "scheduled": false,
+                                        "comments": null,
+                                        "data": {
+                                            "isp": "Speedtest Communications",
+                                            "ping": {
+                                                "low": 17.841,
+                                                "high": 24.077,
+                                                "jitter": 1.878,
+                                                "latency": 19.133
+                                            },
+                                            "type": "result",
+                                            "result": {
+                                                "id": "abc123-uuid",
+                                                "url": "https://docs.speedtest-tracker.dev",
+                                                "persisted": true
+                                            },
+                                            "server": {
+                                                "id": 1234,
+                                                "ip": "127.0.0.1",
+                                                "host": "docs.speedtest-tracker.dev",
+                                                "name": "Speedtest",
+                                                "port": 8080,
+                                                "country": "United States",
+                                                "location": "New York City, NY"
+                                            },
+                                            "upload": {
+                                                "bytes": 124297377,
+                                                "elapsed": 9628,
+                                                "latency": {
+                                                    "iqm": 341.111,
+                                                    "low": 16.663,
+                                                    "high": 529.86,
+                                                    "jitter": 37.587
+                                                },
+                                                "bandwidth": 113750000
+                                            },
+                                            "download": {
+                                                "bytes": 230789788,
+                                                "elapsed": 14301,
+                                                "latency": {
+                                                    "iqm": 104.125,
+                                                    "low": 23.72,
+                                                    "high": 269.563,
+                                                    "jitter": 13.447
+                                                },
+                                                "bandwidth": 115625000
+                                            },
+                                            "interface": {
+                                                "name": "eth0",
+                                                "isVpn": false,
+                                                "macAddr": "00:00:00:00:00:00",
+                                                "externalIp": "127.0.0.1",
+                                                "internalIp": "127.0.0.1"
+                                            },
+                                            "timestamp": "2025-05-21T12:00:00Z",
+                                            "packetLoss": 11
+                                        },
+                                        "created_at": "2025-05-21T12:00:00Z",
+                                        "updated_at": "2025-05-21T12:00:00Z"
+                                    },
+                                    "message": "ok"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "No result found"
+                        "description": "No result found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": null,
+                                    "message": "No result found."
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -25,10 +115,308 @@
                 "operationId": "32a45ba8e8e9a81955a178ae686273ce",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 1,
+                                            "service": "faker",
+                                            "ping": 19.133,
+                                            "download": 113750000,
+                                            "upload": 113750000,
+                                            "download_bits": 113750000,
+                                            "upload_bits": 113750000,
+                                            "download_bits_human": "113.75 Mbps",
+                                            "upload_bits_human": "113.75 Mbps",
+                                            "benchmarks": null,
+                                            "healthy": null,
+                                            "status": "completed",
+                                            "scheduled": false,
+                                            "comments": null,
+                                            "data": {
+                                                "isp": "Speedtest Communications",
+                                                "ping": {
+                                                    "low": 17.841,
+                                                    "high": 24.077,
+                                                    "jitter": 1.878,
+                                                    "latency": 19.133
+                                                },
+                                                "type": "result",
+                                                "result": {
+                                                    "id": "abc123-uuid",
+                                                    "url": "https://docs.speedtest-tracker.dev",
+                                                    "persisted": true
+                                                },
+                                                "server": {
+                                                    "id": 1234,
+                                                    "ip": "127.0.0.1",
+                                                    "host": "docs.speedtest-tracker.dev",
+                                                    "name": "Speedtest",
+                                                    "port": 8080,
+                                                    "country": "United States",
+                                                    "location": "New York City, NY"
+                                                },
+                                                "upload": {
+                                                    "bytes": 124297377,
+                                                    "elapsed": 9628,
+                                                    "latency": {
+                                                        "iqm": 341.111,
+                                                        "low": 16.663,
+                                                        "high": 529.86,
+                                                        "jitter": 37.587
+                                                    },
+                                                    "bandwidth": 113750000
+                                                },
+                                                "download": {
+                                                    "bytes": 230789788,
+                                                    "elapsed": 14301,
+                                                    "latency": {
+                                                        "iqm": 104.125,
+                                                        "low": 23.72,
+                                                        "high": 269.563,
+                                                        "jitter": 13.447
+                                                    },
+                                                    "bandwidth": 115625000
+                                                },
+                                                "interface": {
+                                                    "name": "eth0",
+                                                    "isVpn": false,
+                                                    "macAddr": "00:00:00:00:00:00",
+                                                    "externalIp": "127.0.0.1",
+                                                    "internalIp": "127.0.0.1"
+                                                },
+                                                "timestamp": "2025-05-21T12:00:00Z",
+                                                "packetLoss": 11
+                                            },
+                                            "created_at": "2025-05-21T12:00:00Z",
+                                            "updated_at": "2025-05-21T12:00:00Z"
+                                        },
+                                        {
+                                            "id": 1,
+                                            "service": "faker",
+                                            "ping": 19.133,
+                                            "download": 113750000,
+                                            "upload": 113750000,
+                                            "download_bits": 113750000,
+                                            "upload_bits": 113750000,
+                                            "download_bits_human": "113.75 Mbps",
+                                            "upload_bits_human": "113.75 Mbps",
+                                            "benchmarks": null,
+                                            "healthy": null,
+                                            "status": "completed",
+                                            "scheduled": false,
+                                            "comments": null,
+                                            "data": {
+                                                "isp": "Speedtest Communications",
+                                                "ping": {
+                                                    "low": 17.841,
+                                                    "high": 24.077,
+                                                    "jitter": 1.878,
+                                                    "latency": 19.133
+                                                },
+                                                "type": "result",
+                                                "result": {
+                                                    "id": "abc123-uuid",
+                                                    "url": "https://docs.speedtest-tracker.dev",
+                                                    "persisted": true
+                                                },
+                                                "server": {
+                                                    "id": 1234,
+                                                    "ip": "127.0.0.1",
+                                                    "host": "docs.speedtest-tracker.dev",
+                                                    "name": "Speedtest",
+                                                    "port": 8080,
+                                                    "country": "United States",
+                                                    "location": "New York City, NY"
+                                                },
+                                                "upload": {
+                                                    "bytes": 124297377,
+                                                    "elapsed": 9628,
+                                                    "latency": {
+                                                        "iqm": 341.111,
+                                                        "low": 16.663,
+                                                        "high": 529.86,
+                                                        "jitter": 37.587
+                                                    },
+                                                    "bandwidth": 113750000
+                                                },
+                                                "download": {
+                                                    "bytes": 230789788,
+                                                    "elapsed": 14301,
+                                                    "latency": {
+                                                        "iqm": 104.125,
+                                                        "low": 23.72,
+                                                        "high": 269.563,
+                                                        "jitter": 13.447
+                                                    },
+                                                    "bandwidth": 115625000
+                                                },
+                                                "interface": {
+                                                    "name": "eth0",
+                                                    "isVpn": false,
+                                                    "macAddr": "00:00:00:00:00:00",
+                                                    "externalIp": "127.0.0.1",
+                                                    "internalIp": "127.0.0.1"
+                                                },
+                                                "timestamp": "2025-05-21T12:00:00Z",
+                                                "packetLoss": 11
+                                            },
+                                            "created_at": "2025-05-21T12:00:00Z",
+                                            "updated_at": "2025-05-21T12:00:00Z"
+                                        }
+                                    ],
+                                    "meta": {
+                                        "current_page": 1,
+                                        "per_page": 25,
+                                        "total": 2
+                                    },
+                                    "links": {
+                                        "first": "/?page=1",
+                                        "last": "/?page=1",
+                                        "prev": null,
+                                        "next": null
+                                    }
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Unprocessable Entity"
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": {
+                                        "per_page": [
+                                            "The per page must be at least 1."
+                                        ]
+                                    },
+                                    "message": "Validation failed."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/ookla/list-servers": {
+            "get": {
+                "description": "Get a list of available Ookla speedtest servers.",
+                "operationId": "d17884529f3db1e804b33e36fd35adaf",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": [
+                                        {
+                                            "id": 12345,
+                                            "host": "speedtest.example.com",
+                                            "port": 8080,
+                                            "name": "Example ISP",
+                                            "location": "Amsterdam",
+                                            "country": "Netherlands",
+                                            "ip": "192.0.2.1"
+                                        },
+                                        {
+                                            "id": 23456,
+                                            "host": "speedtest2.example.com",
+                                            "port": 8080,
+                                            "name": "Another ISP",
+                                            "location": "Rotterdam",
+                                            "country": "Netherlands",
+                                            "ip": "198.51.100.2"
+                                        }
+                                    ],
+                                    "message": "Speedtest servers fetched successfully."
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": null,
+                                    "message": "You do not have permission to view speedtest servers."
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/speedtests/run": {
+            "post": {
+                "description": "Run a new Ookla speedtest. Optionally provide a server_id.",
+                "operationId": "4fbb559a58e0a0e1c22645ec79dc6b15",
+                "parameters": [
+                    {
+                        "name": "server_id",
+                        "in": "query",
+                        "description": "Optional Ookla speedtest server ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": {
+                                        "id": 99,
+                                        "service": "ookla",
+                                        "status": "queued",
+                                        "scheduled": false,
+                                        "uuid": "queued-uuid-1234",
+                                        "comments": null,
+                                        "created_at": "2025-05-21T12:34:00Z",
+                                        "updated_at": "2025-05-21T12:34:00Z"
+                                    },
+                                    "message": "Speedtest added to the queue."
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": null,
+                                    "message": "You do not have permission to run speedtests."
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": {
+                                        "server_id": [
+                                            "The server id must be an integer."
+                                        ]
+                                    },
+                                    "message": "Validation failed."
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -37,15 +425,142 @@
             "get": {
                 "description": "Get result.",
                 "operationId": "bc182a4008f0ff94a6318893359f3adc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the result",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": {
+                                        "id": 1,
+                                        "service": "faker",
+                                        "ping": 19.133,
+                                        "download": 113750000,
+                                        "upload": 113750000,
+                                        "download_bits": 113750000,
+                                        "upload_bits": 113750000,
+                                        "download_bits_human": "113.75 Mbps",
+                                        "upload_bits_human": "113.75 Mbps",
+                                        "benchmarks": null,
+                                        "healthy": null,
+                                        "status": "completed",
+                                        "scheduled": false,
+                                        "comments": null,
+                                        "data": {
+                                            "isp": "Speedtest Communications",
+                                            "ping": {
+                                                "low": 17.841,
+                                                "high": 24.077,
+                                                "jitter": 1.878,
+                                                "latency": 19.133
+                                            },
+                                            "type": "result",
+                                            "result": {
+                                                "id": "abc123-uuid",
+                                                "url": "https://docs.speedtest-tracker.dev",
+                                                "persisted": true
+                                            },
+                                            "server": {
+                                                "id": 1234,
+                                                "ip": "127.0.0.1",
+                                                "host": "docs.speedtest-tracker.dev",
+                                                "name": "Speedtest",
+                                                "port": 8080,
+                                                "country": "United States",
+                                                "location": "New York City, NY"
+                                            },
+                                            "upload": {
+                                                "bytes": 124297377,
+                                                "elapsed": 9628,
+                                                "latency": {
+                                                    "iqm": 341.111,
+                                                    "low": 16.663,
+                                                    "high": 529.86,
+                                                    "jitter": 37.587
+                                                },
+                                                "bandwidth": 113750000
+                                            },
+                                            "download": {
+                                                "bytes": 230789788,
+                                                "elapsed": 14301,
+                                                "latency": {
+                                                    "iqm": 104.125,
+                                                    "low": 23.72,
+                                                    "high": 269.563,
+                                                    "jitter": 13.447
+                                                },
+                                                "bandwidth": 115625000
+                                            },
+                                            "interface": {
+                                                "name": "eth0",
+                                                "isVpn": false,
+                                                "macAddr": "00:00:00:00:00:00",
+                                                "externalIp": "127.0.0.1",
+                                                "internalIp": "127.0.0.1"
+                                            },
+                                            "timestamp": "2025-05-21T12:00:00Z",
+                                            "packetLoss": 11
+                                        },
+                                        "created_at": "2025-05-21T12:00:00Z",
+                                        "updated_at": "2025-05-21T12:00:00Z"
+                                    },
+                                    "message": "ok"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Result not found"
+                        "description": "Result not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "data": null,
+                                    "message": "No result found."
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-    }
+    },
+    "components": {
+        "parameters": {
+            "Accept": {
+                "name": "Accept",
+                "in": "header",
+                "description": "Expected response format",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "default": "application/json"
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "yourtokengoeshere",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
 }
