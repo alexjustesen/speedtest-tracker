@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Resources\V1\ResultResource;
 use App\Models\Result;
+use Http\Discovery\Exception\NotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use OpenApi\Attributes as OA;
 
@@ -36,12 +38,19 @@ class LatestResult extends ApiController
             ),
         ]
     )]
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        $result = Result::latest()->firstOrFail();
+        $result = Result::query()
+            ->latest()
+            ->firstOr(function () {
+                self::throw(
+                    e: new NotFoundException('No result found.'),
+                    code: 404,
+                );
+            });
 
-        return $this->sendResponse(
-            data: new ResultResource($result)
+        return self::sendResponse(
+            data: new ResultResource($result),
         );
     }
 }
