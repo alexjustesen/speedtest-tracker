@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Resources\V1\ResultResource;
 use App\Models\Result;
-use App\OpenApi\Support\ResultExamples;
 use Http\Discovery\Exception\NotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,7 +13,9 @@ class ShowResult extends ApiController
 {
     #[OA\Get(
         path: '/api/v1/results/{id}',
-        description: 'Get result.',
+        summary: 'Fetch a single result by ID',
+        operationId: 'getResult',
+        tags: ['Results'],
         parameters: [
             new OA\Parameter(
                 name: 'id',
@@ -26,18 +27,19 @@ class ShowResult extends ApiController
         ],
         responses: [
             new OA\Response(
-                response: 200,
+                response: Response::HTTP_OK,
                 description: 'OK',
-                content: new OA\JsonContent(
-                    example: ResultExamples::SINGLE
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/ResultResponse')
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNAUTHORIZED,
+                description: 'Unauthenticated',
+                content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
             ),
             new OA\Response(
                 response: Response::HTTP_NOT_FOUND,
                 description: 'Result not found',
-                content: new OA\JsonContent(
-                    example: ResultExamples::NOT_FOUND
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/NotFoundError')
             ),
         ]
     )]

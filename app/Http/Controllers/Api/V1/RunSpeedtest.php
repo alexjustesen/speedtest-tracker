@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Ookla\RunSpeedtest as RunSpeedtestAction;
 use App\Http\Resources\V1\ResultResource;
-use App\OpenApi\Support\SpeedtestExamples;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -14,37 +13,41 @@ class RunSpeedtest extends ApiController
 {
     #[OA\Post(
         path: '/api/v1/speedtests/run',
-        description: 'Run a new Ookla speedtest. Optionally provide a server_id.',
+        summary: 'Run a new Ookla speedtest',
+        operationId: 'runSpeedtest',
+        tags: ['Speedtests'],
         parameters: [
             new OA\Parameter(
                 name: 'server_id',
                 in: 'query',
+                description: 'Optional Ookla speedtest server ID',
                 required: false,
-                schema: new OA\Schema(type: 'integer'),
-                description: 'Optional Ookla speedtest server ID'
+                schema: new OA\Schema(type: 'integer')
             ),
         ],
         responses: [
             new OA\Response(
                 response: Response::HTTP_CREATED,
                 description: 'Created',
-                content: new OA\JsonContent(
-                    example: SpeedtestExamples::CREATED
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/QueuedResultResponse')
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNAUTHORIZED,
+                description: 'Unauthenticated',
+                content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
             ),
             new OA\Response(
                 response: Response::HTTP_FORBIDDEN,
                 description: 'Forbidden',
                 content: new OA\JsonContent(
-                    example: SpeedtestExamples::FORBIDDEN
+                    ref: '#/components/schemas/ForbiddenError',
+                    example: ['message' => 'You do not have permission to run speedtests.']
                 )
             ),
             new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
                 description: 'Validation error',
-                content: new OA\JsonContent(
-                    example: SpeedtestExamples::VALIDATION
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/ValidationError')
             ),
         ]
     )]

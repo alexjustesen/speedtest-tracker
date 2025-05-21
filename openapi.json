@@ -7,89 +7,28 @@
     "paths": {
         "/api/v1/results/latest": {
             "get": {
-                "description": "Get the latest result.",
-                "operationId": "4b44d6935caeb91d3e687ab4bc176f62",
+                "tags": [
+                    "Results"
+                ],
+                "summary": "Fetch the single most recent result",
+                "operationId": "getLatestResult",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "service": "faker",
-                                        "ping": 19.133,
-                                        "download": 113750000,
-                                        "upload": 113750000,
-                                        "download_bits": 113750000,
-                                        "upload_bits": 113750000,
-                                        "download_bits_human": "113.75 Mbps",
-                                        "upload_bits_human": "113.75 Mbps",
-                                        "benchmarks": null,
-                                        "healthy": null,
-                                        "status": "completed",
-                                        "scheduled": false,
-                                        "comments": null,
-                                        "data": {
-                                            "isp": "Speedtest Communications",
-                                            "ping": {
-                                                "low": 17.841,
-                                                "high": 24.077,
-                                                "jitter": 1.878,
-                                                "latency": 19.133
-                                            },
-                                            "type": "result",
-                                            "result": {
-                                                "id": "abc123-uuid",
-                                                "url": "https://docs.speedtest-tracker.dev",
-                                                "persisted": true
-                                            },
-                                            "server": {
-                                                "id": 1234,
-                                                "ip": "127.0.0.1",
-                                                "host": "docs.speedtest-tracker.dev",
-                                                "name": "Speedtest",
-                                                "port": 8080,
-                                                "country": "United States",
-                                                "location": "New York City, NY"
-                                            },
-                                            "upload": {
-                                                "bytes": 124297377,
-                                                "elapsed": 9628,
-                                                "latency": {
-                                                    "iqm": 341.111,
-                                                    "low": 16.663,
-                                                    "high": 529.86,
-                                                    "jitter": 37.587
-                                                },
-                                                "bandwidth": 113750000
-                                            },
-                                            "download": {
-                                                "bytes": 230789788,
-                                                "elapsed": 14301,
-                                                "latency": {
-                                                    "iqm": 104.125,
-                                                    "low": 23.72,
-                                                    "high": 269.563,
-                                                    "jitter": 13.447
-                                                },
-                                                "bandwidth": 115625000
-                                            },
-                                            "interface": {
-                                                "name": "eth0",
-                                                "isVpn": false,
-                                                "macAddr": "00:00:00:00:00:00",
-                                                "externalIp": "127.0.0.1",
-                                                "internalIp": "127.0.0.1"
-                                            },
-                                            "timestamp": "2025-05-21T12:00:00Z",
-                                            "packetLoss": 11
-                                        },
-                                        "created_at": "2025-05-21T12:00:00Z",
-                                        "updated_at": "2025-05-21T12:00:00Z"
-                                    },
-                                    "message": "ok"
+                                "schema": {
+                                    "$ref": "#/components/schemas/Result"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
                                 }
                             }
                         }
@@ -98,187 +37,42 @@
                         "description": "No result found",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": null,
-                                    "message": "No result found."
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
                                 }
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Server error"
                     }
                 }
             }
         },
         "/api/v1/results": {
             "get": {
-                "description": "List results.",
-                "operationId": "32a45ba8e8e9a81955a178ae686273ce",
+                "tags": [
+                    "Results"
+                ],
+                "summary": "List results",
+                "operationId": "listResults",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": [
-                                        {
-                                            "id": 1,
-                                            "service": "faker",
-                                            "ping": 19.133,
-                                            "download": 113750000,
-                                            "upload": 113750000,
-                                            "download_bits": 113750000,
-                                            "upload_bits": 113750000,
-                                            "download_bits_human": "113.75 Mbps",
-                                            "upload_bits_human": "113.75 Mbps",
-                                            "benchmarks": null,
-                                            "healthy": null,
-                                            "status": "completed",
-                                            "scheduled": false,
-                                            "comments": null,
-                                            "data": {
-                                                "isp": "Speedtest Communications",
-                                                "ping": {
-                                                    "low": 17.841,
-                                                    "high": 24.077,
-                                                    "jitter": 1.878,
-                                                    "latency": 19.133
-                                                },
-                                                "type": "result",
-                                                "result": {
-                                                    "id": "abc123-uuid",
-                                                    "url": "https://docs.speedtest-tracker.dev",
-                                                    "persisted": true
-                                                },
-                                                "server": {
-                                                    "id": 1234,
-                                                    "ip": "127.0.0.1",
-                                                    "host": "docs.speedtest-tracker.dev",
-                                                    "name": "Speedtest",
-                                                    "port": 8080,
-                                                    "country": "United States",
-                                                    "location": "New York City, NY"
-                                                },
-                                                "upload": {
-                                                    "bytes": 124297377,
-                                                    "elapsed": 9628,
-                                                    "latency": {
-                                                        "iqm": 341.111,
-                                                        "low": 16.663,
-                                                        "high": 529.86,
-                                                        "jitter": 37.587
-                                                    },
-                                                    "bandwidth": 113750000
-                                                },
-                                                "download": {
-                                                    "bytes": 230789788,
-                                                    "elapsed": 14301,
-                                                    "latency": {
-                                                        "iqm": 104.125,
-                                                        "low": 23.72,
-                                                        "high": 269.563,
-                                                        "jitter": 13.447
-                                                    },
-                                                    "bandwidth": 115625000
-                                                },
-                                                "interface": {
-                                                    "name": "eth0",
-                                                    "isVpn": false,
-                                                    "macAddr": "00:00:00:00:00:00",
-                                                    "externalIp": "127.0.0.1",
-                                                    "internalIp": "127.0.0.1"
-                                                },
-                                                "timestamp": "2025-05-21T12:00:00Z",
-                                                "packetLoss": 11
-                                            },
-                                            "created_at": "2025-05-21T12:00:00Z",
-                                            "updated_at": "2025-05-21T12:00:00Z"
-                                        },
-                                        {
-                                            "id": 1,
-                                            "service": "faker",
-                                            "ping": 19.133,
-                                            "download": 113750000,
-                                            "upload": 113750000,
-                                            "download_bits": 113750000,
-                                            "upload_bits": 113750000,
-                                            "download_bits_human": "113.75 Mbps",
-                                            "upload_bits_human": "113.75 Mbps",
-                                            "benchmarks": null,
-                                            "healthy": null,
-                                            "status": "completed",
-                                            "scheduled": false,
-                                            "comments": null,
-                                            "data": {
-                                                "isp": "Speedtest Communications",
-                                                "ping": {
-                                                    "low": 17.841,
-                                                    "high": 24.077,
-                                                    "jitter": 1.878,
-                                                    "latency": 19.133
-                                                },
-                                                "type": "result",
-                                                "result": {
-                                                    "id": "abc123-uuid",
-                                                    "url": "https://docs.speedtest-tracker.dev",
-                                                    "persisted": true
-                                                },
-                                                "server": {
-                                                    "id": 1234,
-                                                    "ip": "127.0.0.1",
-                                                    "host": "docs.speedtest-tracker.dev",
-                                                    "name": "Speedtest",
-                                                    "port": 8080,
-                                                    "country": "United States",
-                                                    "location": "New York City, NY"
-                                                },
-                                                "upload": {
-                                                    "bytes": 124297377,
-                                                    "elapsed": 9628,
-                                                    "latency": {
-                                                        "iqm": 341.111,
-                                                        "low": 16.663,
-                                                        "high": 529.86,
-                                                        "jitter": 37.587
-                                                    },
-                                                    "bandwidth": 113750000
-                                                },
-                                                "download": {
-                                                    "bytes": 230789788,
-                                                    "elapsed": 14301,
-                                                    "latency": {
-                                                        "iqm": 104.125,
-                                                        "low": 23.72,
-                                                        "high": 269.563,
-                                                        "jitter": 13.447
-                                                    },
-                                                    "bandwidth": 115625000
-                                                },
-                                                "interface": {
-                                                    "name": "eth0",
-                                                    "isVpn": false,
-                                                    "macAddr": "00:00:00:00:00:00",
-                                                    "externalIp": "127.0.0.1",
-                                                    "internalIp": "127.0.0.1"
-                                                },
-                                                "timestamp": "2025-05-21T12:00:00Z",
-                                                "packetLoss": 11
-                                            },
-                                            "created_at": "2025-05-21T12:00:00Z",
-                                            "updated_at": "2025-05-21T12:00:00Z"
-                                        }
-                                    ],
-                                    "meta": {
-                                        "current_page": 1,
-                                        "per_page": 25,
-                                        "total": 2
-                                    },
-                                    "links": {
-                                        "first": "/?page=1",
-                                        "last": "/?page=1",
-                                        "prev": null,
-                                        "next": null
-                                    }
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultsCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
                                 }
                             }
                         }
@@ -287,14 +81,8 @@
                         "description": "Validation failed",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": {
-                                        "per_page": [
-                                            "The per page must be at least 1."
-                                        ]
-                                    },
-                                    "message": "Validation failed."
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
                                 }
                             }
                         }
@@ -304,36 +92,28 @@
         },
         "/api/v1/ookla/list-servers": {
             "get": {
-                "description": "Get a list of available Ookla speedtest servers.",
-                "operationId": "d17884529f3db1e804b33e36fd35adaf",
+                "tags": [
+                    "Servers"
+                ],
+                "summary": "List available Ookla speedtest servers",
+                "operationId": "listSpeedtestServers",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": [
-                                        {
-                                            "id": 12345,
-                                            "host": "speedtest.example.com",
-                                            "port": 8080,
-                                            "name": "Example ISP",
-                                            "location": "Amsterdam",
-                                            "country": "Netherlands",
-                                            "ip": "192.0.2.1"
-                                        },
-                                        {
-                                            "id": 23456,
-                                            "host": "speedtest2.example.com",
-                                            "port": 8080,
-                                            "name": "Another ISP",
-                                            "location": "Rotterdam",
-                                            "country": "Netherlands",
-                                            "ip": "198.51.100.2"
-                                        }
-                                    ],
-                                    "message": "Speedtest servers fetched successfully."
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServersCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
                                 }
                             }
                         }
@@ -342,9 +122,10 @@
                         "description": "Forbidden",
                         "content": {
                             "application/json": {
-                                "schema": {},
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                },
                                 "example": {
-                                    "data": null,
                                     "message": "You do not have permission to view speedtest servers."
                                 }
                             }
@@ -355,8 +136,11 @@
         },
         "/api/v1/speedtests/run": {
             "post": {
-                "description": "Run a new Ookla speedtest. Optionally provide a server_id.",
-                "operationId": "4fbb559a58e0a0e1c22645ec79dc6b15",
+                "tags": [
+                    "Speedtests"
+                ],
+                "summary": "Run a new Ookla speedtest",
+                "operationId": "runSpeedtest",
                 "parameters": [
                     {
                         "name": "server_id",
@@ -373,19 +157,18 @@
                         "description": "Created",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": {
-                                        "id": 99,
-                                        "service": "ookla",
-                                        "status": "queued",
-                                        "scheduled": false,
-                                        "uuid": "queued-uuid-1234",
-                                        "comments": null,
-                                        "created_at": "2025-05-21T12:34:00Z",
-                                        "updated_at": "2025-05-21T12:34:00Z"
-                                    },
-                                    "message": "Speedtest added to the queue."
+                                "schema": {
+                                    "$ref": "#/components/schemas/QueuedResultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
                                 }
                             }
                         }
@@ -394,9 +177,10 @@
                         "description": "Forbidden",
                         "content": {
                             "application/json": {
-                                "schema": {},
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                },
                                 "example": {
-                                    "data": null,
                                     "message": "You do not have permission to run speedtests."
                                 }
                             }
@@ -406,14 +190,8 @@
                         "description": "Validation error",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": {
-                                        "server_id": [
-                                            "The server id must be an integer."
-                                        ]
-                                    },
-                                    "message": "Validation failed."
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
                                 }
                             }
                         }
@@ -423,8 +201,11 @@
         },
         "/api/v1/results/{id}": {
             "get": {
-                "description": "Get result.",
-                "operationId": "bc182a4008f0ff94a6318893359f3adc",
+                "tags": [
+                    "Results"
+                ],
+                "summary": "Fetch a single result by ID",
+                "operationId": "getResult",
                 "parameters": [
                     {
                         "name": "id",
@@ -441,82 +222,18 @@
                         "description": "OK",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": {
-                                        "id": 1,
-                                        "service": "faker",
-                                        "ping": 19.133,
-                                        "download": 113750000,
-                                        "upload": 113750000,
-                                        "download_bits": 113750000,
-                                        "upload_bits": 113750000,
-                                        "download_bits_human": "113.75 Mbps",
-                                        "upload_bits_human": "113.75 Mbps",
-                                        "benchmarks": null,
-                                        "healthy": null,
-                                        "status": "completed",
-                                        "scheduled": false,
-                                        "comments": null,
-                                        "data": {
-                                            "isp": "Speedtest Communications",
-                                            "ping": {
-                                                "low": 17.841,
-                                                "high": 24.077,
-                                                "jitter": 1.878,
-                                                "latency": 19.133
-                                            },
-                                            "type": "result",
-                                            "result": {
-                                                "id": "abc123-uuid",
-                                                "url": "https://docs.speedtest-tracker.dev",
-                                                "persisted": true
-                                            },
-                                            "server": {
-                                                "id": 1234,
-                                                "ip": "127.0.0.1",
-                                                "host": "docs.speedtest-tracker.dev",
-                                                "name": "Speedtest",
-                                                "port": 8080,
-                                                "country": "United States",
-                                                "location": "New York City, NY"
-                                            },
-                                            "upload": {
-                                                "bytes": 124297377,
-                                                "elapsed": 9628,
-                                                "latency": {
-                                                    "iqm": 341.111,
-                                                    "low": 16.663,
-                                                    "high": 529.86,
-                                                    "jitter": 37.587
-                                                },
-                                                "bandwidth": 113750000
-                                            },
-                                            "download": {
-                                                "bytes": 230789788,
-                                                "elapsed": 14301,
-                                                "latency": {
-                                                    "iqm": 104.125,
-                                                    "low": 23.72,
-                                                    "high": 269.563,
-                                                    "jitter": 13.447
-                                                },
-                                                "bandwidth": 115625000
-                                            },
-                                            "interface": {
-                                                "name": "eth0",
-                                                "isVpn": false,
-                                                "macAddr": "00:00:00:00:00:00",
-                                                "externalIp": "127.0.0.1",
-                                                "internalIp": "127.0.0.1"
-                                            },
-                                            "timestamp": "2025-05-21T12:00:00Z",
-                                            "packetLoss": 11
-                                        },
-                                        "created_at": "2025-05-21T12:00:00Z",
-                                        "updated_at": "2025-05-21T12:00:00Z"
-                                    },
-                                    "message": "ok"
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
                                 }
                             }
                         }
@@ -525,10 +242,72 @@
                         "description": "Result not found",
                         "content": {
                             "application/json": {
-                                "schema": {},
-                                "example": {
-                                    "data": null,
-                                    "message": "No result found."
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/stats": {
+            "get": {
+                "tags": [
+                    "Stats"
+                ],
+                "summary": "Fetch aggregated Speedtest statistics",
+                "description": "Handle the incoming request.",
+                "operationId": "getStats",
+                "parameters": [
+                    {
+                        "name": "start_at",
+                        "in": "query",
+                        "description": "ISO‑8601 start datetime filter",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "end_at",
+                        "in": "query",
+                        "description": "ISO‑8601 end datetime filter",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Stats"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
                                 }
                             }
                         }
@@ -538,6 +317,512 @@
         }
     },
     "components": {
+        "schemas": {
+            "ForbiddenError": {
+                "description": "Forbidden error response when user lacks permission",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "description": "Error message indicating lack of permission",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "NotFoundError": {
+                "description": "Error when a requested result is not found",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "description": "Result not found error message",
+                        "type": "string",
+                        "example": "Result not found."
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationLinks": {
+                "description": "Pagination navigation links",
+                "required": [
+                    "first",
+                    "last",
+                    "prev",
+                    "next"
+                ],
+                "properties": {
+                    "first": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "last": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "prev": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "PaginationMeta": {
+                "description": "Pagination metadata",
+                "required": [
+                    "current_page",
+                    "per_page",
+                    "total"
+                ],
+                "properties": {
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "QueuedResultData": {
+                "description": "Additional data for a queued result",
+                "required": [
+                    "server"
+                ],
+                "properties": {
+                    "server": {
+                        "$ref": "#/components/schemas/QueuedResultDataServer"
+                    }
+                },
+                "type": "object"
+            },
+            "QueuedResultDataServer": {
+                "description": "Server info inside queued result data",
+                "required": [
+                    "id"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "QueuedResultResponse": {
+                "description": "Response when a speedtest is queued",
+                "required": [
+                    "data",
+                    "message"
+                ],
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/QueuedResult"
+                    },
+                    "message": {
+                        "description": "Response status message",
+                        "type": "string",
+                        "example": "Speedtest added to the queue."
+                    }
+                },
+                "type": "object"
+            },
+            "QueuedResult": {
+                "description": "A queued speedtest result",
+                "required": [
+                    "id",
+                    "service",
+                    "status",
+                    "scheduled",
+                    "created_at",
+                    "updated_at",
+                    "data"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "service": {
+                        "type": "string"
+                    },
+                    "ping": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "download": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "upload": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "benchmarks": {
+                        "type": "object",
+                        "nullable": true
+                    },
+                    "healthy": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "scheduled": {
+                        "type": "boolean"
+                    },
+                    "comments": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/QueuedResultData"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ResultResponse": {
+                "description": "Envelope for a single result response",
+                "required": [
+                    "data",
+                    "message"
+                ],
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/Result"
+                    },
+                    "message": {
+                        "description": "Response status message",
+                        "type": "string",
+                        "example": "ok"
+                    }
+                },
+                "type": "object"
+            },
+            "Result": {
+                "description": "A single Speedtest result entry",
+                "required": [
+                    "id",
+                    "service",
+                    "ping",
+                    "download",
+                    "upload",
+                    "download_bits",
+                    "upload_bits",
+                    "download_bits_human",
+                    "upload_bits_human",
+                    "benchmarks",
+                    "healthy",
+                    "status",
+                    "scheduled",
+                    "comments",
+                    "data",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 3
+                    },
+                    "service": {
+                        "type": "string",
+                        "example": "ookla"
+                    },
+                    "ping": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 6.246,
+                        "nullable": true
+                    },
+                    "download": {
+                        "type": "integer",
+                        "example": 11784522
+                    },
+                    "upload": {
+                        "type": "integer",
+                        "example": 3596514
+                    },
+                    "download_bits": {
+                        "type": "integer",
+                        "example": 94276176
+                    },
+                    "upload_bits": {
+                        "type": "integer",
+                        "example": 28772112
+                    },
+                    "download_bits_human": {
+                        "type": "string",
+                        "example": "94.28 Mbps"
+                    },
+                    "upload_bits_human": {
+                        "type": "string",
+                        "example": "28.77 Mbps"
+                    },
+                    "benchmarks": {
+                        "type": "object",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "healthy": {
+                        "type": "boolean",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "completed"
+                    },
+                    "scheduled": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "comments": {
+                        "type": "string",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "data": {
+                        "description": "Raw speedtest details",
+                        "type": "object",
+                        "example": {
+                            "id": 1,
+                            "service": "faker",
+                            "ping": 19.133,
+                            "download": 113750000,
+                            "upload": 113750000,
+                            "download_bits": 113750000,
+                            "upload_bits": 113750000,
+                            "download_bits_human": "113.75 Mbps",
+                            "upload_bits_human": "113.75 Mbps",
+                            "benchmarks": null,
+                            "healthy": null,
+                            "status": "completed",
+                            "scheduled": false,
+                            "comments": null,
+                            "data": {
+                                "isp": "Speedtest Communications",
+                                "ping": {
+                                    "low": 17.841,
+                                    "high": 24.077,
+                                    "jitter": 1.878,
+                                    "latency": 19.133
+                                },
+                                "type": "result",
+                                "result": {
+                                    "id": "abc123-uuid",
+                                    "url": "https://docs.speedtest-tracker.dev",
+                                    "persisted": true
+                                },
+                                "server": {
+                                    "id": 1234,
+                                    "ip": "127.0.0.1",
+                                    "host": "docs.speedtest-tracker.dev",
+                                    "name": "Speedtest",
+                                    "port": 8080,
+                                    "country": "United States",
+                                    "location": "New York City, NY"
+                                },
+                                "upload": {
+                                    "bytes": 124297377,
+                                    "elapsed": 9628,
+                                    "latency": {
+                                        "iqm": 341.111,
+                                        "low": 16.663,
+                                        "high": 529.86,
+                                        "jitter": 37.587
+                                    },
+                                    "bandwidth": 113750000
+                                },
+                                "download": {
+                                    "bytes": 230789788,
+                                    "elapsed": 14301,
+                                    "latency": {
+                                        "iqm": 104.125,
+                                        "low": 23.72,
+                                        "high": 269.563,
+                                        "jitter": 13.447
+                                    },
+                                    "bandwidth": 115625000
+                                },
+                                "interface": {
+                                    "name": "eth0",
+                                    "isVpn": false,
+                                    "macAddr": "00:00:00:00:00:00",
+                                    "externalIp": "127.0.0.1",
+                                    "internalIp": "127.0.0.1"
+                                },
+                                "timestamp": "2025-05-21T12:00:00Z",
+                                "packetLoss": 11
+                            },
+                            "created_at": "2025-05-21T12:00:00Z",
+                            "updated_at": "2025-05-21T12:00:00Z"
+                        }
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-05-21 17:44:00"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-05-21 17:44:16"
+                    }
+                },
+                "type": "object"
+            },
+            "ResultsCollection": {
+                "description": "Paginated list of Results",
+                "properties": {
+                    "data": {
+                        "description": "Array of result objects",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Result"
+                        }
+                    },
+                    "meta": {
+                        "$ref": "#/components/schemas/PaginationMeta"
+                    },
+                    "links": {
+                        "$ref": "#/components/schemas/PaginationLinks"
+                    }
+                },
+                "type": "object"
+            },
+            "ServersCollection": {
+                "description": "Mapping of server IDs to display names",
+                "required": [
+                    "data",
+                    "message"
+                ],
+                "properties": {
+                    "data": {
+                        "description": "Map of server ID to server display name",
+                        "type": "object",
+                        "example": {
+                            "20001": "Washington Fiber (Washington, DC, 20001)",
+                            "90001": "LA Connect (Los Angeles, CA, 90001)",
+                            "60601": "ChiTown Broadband (Chicago, IL, 60601)",
+                            "77001": "Houston Net (Houston, TX, 77001)",
+                            "33101": "MiamiLink (Miami, FL, 33101)"
+                        },
+                        "additionalProperties": true
+                    },
+                    "message": {
+                        "description": "Response status message",
+                        "type": "string",
+                        "example": "Speedtest servers fetched successfully."
+                    }
+                },
+                "type": "object"
+            },
+            "Stats": {
+                "description": "Aggregated speedtest statistics",
+                "required": [
+                    "total_results",
+                    "avg_ping",
+                    "avg_download",
+                    "avg_upload",
+                    "min_ping",
+                    "min_download",
+                    "min_upload",
+                    "max_ping",
+                    "max_download",
+                    "max_upload"
+                ],
+                "properties": {
+                    "total_results": {
+                        "type": "integer"
+                    },
+                    "avg_ping": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "avg_download": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "avg_upload": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "min_ping": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "min_download": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "min_upload": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "max_ping": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "max_download": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "max_upload": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
+            },
+            "UnauthenticatedError": {
+                "description": "Error when user is not authenticated",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "description": "Unauthenticated error message",
+                        "type": "string",
+                        "example": "Unauthenticated."
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationError": {
+                "description": "Validation failed due to invalid server_id input",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "description": "Validation failed due to invalid server_id input",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "parameters": {
             "Accept": {
                 "name": "Accept",
@@ -553,7 +838,7 @@
         "securitySchemes": {
             "bearerAuth": {
                 "type": "http",
-                "bearerFormat": "yourtokengoeshere",
+                "bearerFormat": "JWT",
                 "scheme": "bearer"
             }
         }
@@ -561,6 +846,24 @@
     "security": [
         {
             "bearerAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Results",
+            "description": "Operations related to Speedtest results"
+        },
+        {
+            "name": "Speedtests",
+            "description": "Operations to run speedtests"
+        },
+        {
+            "name": "Servers",
+            "description": "Operations for speedtest servers"
+        },
+        {
+            "name": "Stats",
+            "description": "Operations for statistics"
         }
     ]
 }

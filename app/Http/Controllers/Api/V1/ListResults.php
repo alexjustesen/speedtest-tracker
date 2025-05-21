@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Resources\V1\ResultResource;
 use App\Models\Result;
-use App\OpenApi\Support\ResultExamples;
-use App\OpenApi\Support\ValidationErrorExamples;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -18,23 +16,29 @@ class ListResults extends ApiController
 {
     #[OA\Get(
         path: '/api/v1/results',
-        description: 'List results.',
+        summary: 'List results',
+        operationId: 'listResults',
+        tags: ['Results'],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
                 description: 'OK',
                 content: new OA\JsonContent(
-                    example: ResultExamples::COLLECTION
+                    ref: '#/components/schemas/ResultsCollection'
                 )
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNAUTHORIZED,
+                description: 'Unauthenticated',
+                content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
             ),
             new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
                 description: 'Validation failed',
-                content: new OA\JsonContent(
-                    example: ValidationErrorExamples::PER_PAGE
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/ValidationError')
             ),
-        ])]
+        ]
+    )]
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [
