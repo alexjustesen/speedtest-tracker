@@ -8,7 +8,6 @@ use OpenApi\Attributes as OA;
     schema: 'ValidationError',
     type: 'object',
     description: 'Validation failed due to invalid server_id input',
-    required: ['message'],
     properties: [
         new OA\Property(
             property: 'message',

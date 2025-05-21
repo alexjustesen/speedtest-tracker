@@ -8,11 +8,6 @@ use OpenApi\Attributes as OA;
     schema: 'Stats',
     type: 'object',
     description: 'Aggregated speedtest statistics',
-    required: [
-        'total_results', 'avg_ping', 'avg_download', 'avg_upload',
-        'min_ping', 'min_download', 'min_upload',
-        'max_ping', 'max_download', 'max_upload',
-    ],
     properties: [
         new OA\Property(property: 'total_results', type: 'integer'),
         new OA\Property(property: 'avg_ping', type: 'number', format: 'float'),

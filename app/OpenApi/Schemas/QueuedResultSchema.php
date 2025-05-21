@@ -8,7 +8,6 @@ use OpenApi\Attributes as OA;
     schema: 'QueuedResult',
     type: 'object',
     description: 'A queued speedtest result',
-    required: ['id', 'service', 'status', 'scheduled', 'created_at', 'updated_at', 'data'],
     properties: [
         new OA\Property(property: 'id', type: 'integer'),
         new OA\Property(property: 'service', type: 'string'),

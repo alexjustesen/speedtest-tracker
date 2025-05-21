@@ -14,6 +14,7 @@ class RunSpeedtest extends ApiController
     #[OA\Post(
         path: '/api/v1/speedtests/run',
         summary: 'Run a new Ookla speedtest',
+        description: 'Requires an API token with scope `speedtests:run`.',
         operationId: 'runSpeedtest',
         tags: ['Speedtests'],
         parameters: [

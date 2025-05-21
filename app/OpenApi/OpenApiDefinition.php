@@ -9,9 +9,6 @@ use OpenApi\Attributes as OA;
         title: 'Speedtest Tracker API',
         version: '1.0.0',
     ),
-    security: [
-        ['bearerAuth' => []],
-    ],
     components: new OA\Components(
         securitySchemes: [
             new OA\SecurityScheme(

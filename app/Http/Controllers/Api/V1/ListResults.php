@@ -17,6 +17,7 @@ class ListResults extends ApiController
     #[OA\Get(
         path: '/api/v1/results',
         summary: 'List results',
+        description: 'Requires an API token with scope `results:read`.',
         operationId: 'listResults',
         tags: ['Results'],
         responses: [

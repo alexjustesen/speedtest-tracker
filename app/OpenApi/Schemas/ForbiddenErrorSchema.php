@@ -8,7 +8,6 @@ use OpenApi\Attributes as OA;
     schema: 'ForbiddenError',
     type: 'object',
     description: 'Forbidden error response when user lacks permission',
-    required: ['message'],
     properties: [
         new OA\Property(
             property: 'message',

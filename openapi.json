@@ -11,6 +11,7 @@
                     "Results"
                 ],
                 "summary": "Fetch the single most recent result",
+                "description": "Requires an API token with scope `results:read`.",
                 "operationId": "getLatestResult",
                 "responses": {
                     "200": {
@@ -42,9 +43,6 @@
                                 }
                             }
                         }
-                    },
-                    "500": {
-                        "description": "Server error"
                     }
                 }
             }
@@ -55,6 +53,7 @@
                     "Results"
                 ],
                 "summary": "List results",
+                "description": "Requires an API token with scope `results:read`.",
                 "operationId": "listResults",
                 "responses": {
                     "200": {
@@ -96,6 +95,7 @@
                     "Servers"
                 ],
                 "summary": "List available Ookla speedtest servers",
+                "description": "Requires an API token with scope `ookla:list-servers`.",
                 "operationId": "listSpeedtestServers",
                 "responses": {
                     "200": {
@@ -140,6 +140,7 @@
                     "Speedtests"
                 ],
                 "summary": "Run a new Ookla speedtest",
+                "description": "Requires an API token with scope `speedtests:run`.",
                 "operationId": "runSpeedtest",
                 "parameters": [
                     {
@@ -205,6 +206,7 @@
                     "Results"
                 ],
                 "summary": "Fetch a single result by ID",
+                "description": "Requires an API token with scope `results:read`.",
                 "operationId": "getResult",
                 "parameters": [
                     {
@@ -257,7 +259,7 @@
                     "Stats"
                 ],
                 "summary": "Fetch aggregated Speedtest statistics",
-                "description": "Handle the incoming request.",
+                "description": "Requires an API token with scope `results:read`.",
                 "operationId": "getStats",
                 "parameters": [
                     {
@@ -320,9 +322,6 @@
         "schemas": {
             "ForbiddenError": {
                 "description": "Forbidden error response when user lacks permission",
-                "required": [
-                    "message"
-                ],
                 "properties": {
                     "message": {
                         "description": "Error message indicating lack of permission",
@@ -333,9 +332,6 @@
             },
             "NotFoundError": {
                 "description": "Error when a requested result is not found",
-                "required": [
-                    "message"
-                ],
                 "properties": {
                     "message": {
                         "description": "Result not found error message",
@@ -347,12 +343,6 @@
             },
             "PaginationLinks": {
                 "description": "Pagination navigation links",
-                "required": [
-                    "first",
-                    "last",
-                    "prev",
-                    "next"
-                ],
                 "properties": {
                     "first": {
                         "type": "string",
@@ -375,11 +365,6 @@
             },
             "PaginationMeta": {
                 "description": "Pagination metadata",
-                "required": [
-                    "current_page",
-                    "per_page",
-                    "total"
-                ],
                 "properties": {
                     "current_page": {
                         "type": "integer"
@@ -395,9 +380,6 @@
             },
             "QueuedResultData": {
                 "description": "Additional data for a queued result",
-                "required": [
-                    "server"
-                ],
                 "properties": {
                     "server": {
                         "$ref": "#/components/schemas/QueuedResultDataServer"
@@ -407,9 +389,6 @@
             },
             "QueuedResultDataServer": {
                 "description": "Server info inside queued result data",
-                "required": [
-                    "id"
-                ],
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -439,15 +418,6 @@
             },
             "QueuedResult": {
                 "description": "A queued speedtest result",
-                "required": [
-                    "id",
-                    "service",
-                    "status",
-                    "scheduled",
-                    "created_at",
-                    "updated_at",
-                    "data"
-                ],
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -502,43 +472,19 @@
             },
             "ResultResponse": {
                 "description": "Envelope for a single result response",
-                "required": [
-                    "data",
-                    "message"
-                ],
                 "properties": {
                     "data": {
                         "$ref": "#/components/schemas/Result"
                     },
                     "message": {
                         "description": "Response status message",
-                        "type": "string",
-                        "example": "ok"
+                        "type": "string"
                     }
                 },
                 "type": "object"
             },
             "Result": {
                 "description": "A single Speedtest result entry",
-                "required": [
-                    "id",
-                    "service",
-                    "ping",
-                    "download",
-                    "upload",
-                    "download_bits",
-                    "upload_bits",
-                    "download_bits_human",
-                    "upload_bits_human",
-                    "benchmarks",
-                    "healthy",
-                    "status",
-                    "scheduled",
-                    "comments",
-                    "data",
-                    "created_at",
-                    "updated_at"
-                ],
                 "properties": {
                     "id": {
                         "type": "integer",
@@ -606,77 +552,59 @@
                         "description": "Raw speedtest details",
                         "type": "object",
                         "example": {
-                            "id": 1,
-                            "service": "faker",
-                            "ping": 19.133,
-                            "download": 113750000,
-                            "upload": 113750000,
-                            "download_bits": 113750000,
-                            "upload_bits": 113750000,
-                            "download_bits_human": "113.75 Mbps",
-                            "upload_bits_human": "113.75 Mbps",
-                            "benchmarks": null,
-                            "healthy": null,
-                            "status": "completed",
-                            "scheduled": false,
-                            "comments": null,
-                            "data": {
-                                "isp": "Speedtest Communications",
-                                "ping": {
-                                    "low": 17.841,
-                                    "high": 24.077,
-                                    "jitter": 1.878,
-                                    "latency": 19.133
-                                },
-                                "type": "result",
-                                "result": {
-                                    "id": "abc123-uuid",
-                                    "url": "https://docs.speedtest-tracker.dev",
-                                    "persisted": true
-                                },
-                                "server": {
-                                    "id": 1234,
-                                    "ip": "127.0.0.1",
-                                    "host": "docs.speedtest-tracker.dev",
-                                    "name": "Speedtest",
-                                    "port": 8080,
-                                    "country": "United States",
-                                    "location": "New York City, NY"
-                                },
-                                "upload": {
-                                    "bytes": 124297377,
-                                    "elapsed": 9628,
-                                    "latency": {
-                                        "iqm": 341.111,
-                                        "low": 16.663,
-                                        "high": 529.86,
-                                        "jitter": 37.587
-                                    },
-                                    "bandwidth": 113750000
-                                },
-                                "download": {
-                                    "bytes": 230789788,
-                                    "elapsed": 14301,
-                                    "latency": {
-                                        "iqm": 104.125,
-                                        "low": 23.72,
-                                        "high": 269.563,
-                                        "jitter": 13.447
-                                    },
-                                    "bandwidth": 115625000
-                                },
-                                "interface": {
-                                    "name": "eth0",
-                                    "isVpn": false,
-                                    "macAddr": "00:00:00:00:00:00",
-                                    "externalIp": "127.0.0.1",
-                                    "internalIp": "127.0.0.1"
-                                },
-                                "timestamp": "2025-05-21T12:00:00Z",
-                                "packetLoss": 11
+                            "isp": "Speedtest Communications",
+                            "ping": {
+                                "low": 17.841,
+                                "high": 24.077,
+                                "jitter": 1.878,
+                                "latency": 19.133
                             },
-                            "created_at": "2025-05-21T12:00:00Z",
-                            "updated_at": "2025-05-21T12:00:00Z"
+                            "type": "result",
+                            "result": {
+                                "id": "abc123-uuid",
+                                "url": "https://docs.speedtest-tracker.dev",
+                                "persisted": true
+                            },
+                            "server": {
+                                "id": 1234,
+                                "ip": "127.0.0.1",
+                                "host": "docs.speedtest-tracker.dev",
+                                "name": "Speedtest",
+                                "port": 8080,
+                                "country": "United States",
+                                "location": "New York City, NY"
+                            },
+                            "upload": {
+                                "bytes": 124297377,
+                                "elapsed": 9628,
+                                "latency": {
+                                    "iqm": 341.111,
+                                    "low": 16.663,
+                                    "high": 529.86,
+                                    "jitter": 37.587
+                                },
+                                "bandwidth": 113750000
+                            },
+                            "download": {
+                                "bytes": 230789788,
+                                "elapsed": 14301,
+                                "latency": {
+                                    "iqm": 104.125,
+                                    "low": 23.72,
+                                    "high": 269.563,
+                                    "jitter": 13.447
+                                },
+                                "bandwidth": 115625000
+                            },
+                            "interface": {
+                                "name": "eth0",
+                                "isVpn": false,
+                                "macAddr": "00:00:00:00:00:00",
+                                "externalIp": "127.0.0.1",
+                                "internalIp": "127.0.0.1"
+                            },
+                            "timestamp": "2025-05-21T12:00:00Z",
+                            "packetLoss": 11
                         }
                     },
                     "created_at": {
@@ -713,10 +641,6 @@
             },
             "ServersCollection": {
                 "description": "Mapping of server IDs to display names",
-                "required": [
-                    "data",
-                    "message"
-                ],
                 "properties": {
                     "data": {
                         "description": "Map of server ID to server display name",
@@ -740,18 +664,6 @@
             },
             "Stats": {
                 "description": "Aggregated speedtest statistics",
-                "required": [
-                    "total_results",
-                    "avg_ping",
-                    "avg_download",
-                    "avg_upload",
-                    "min_ping",
-                    "min_download",
-                    "min_upload",
-                    "max_ping",
-                    "max_download",
-                    "max_upload"
-                ],
                 "properties": {
                     "total_results": {
                         "type": "integer"
@@ -797,23 +709,16 @@
             },
             "UnauthenticatedError": {
                 "description": "Error when user is not authenticated",
-                "required": [
-                    "message"
-                ],
                 "properties": {
                     "message": {
                         "description": "Unauthenticated error message",
-                        "type": "string",
-                        "example": "Unauthenticated."
+                        "type": "string"
                     }
                 },
                 "type": "object"
             },
             "ValidationError": {
                 "description": "Validation failed due to invalid server_id input",
-                "required": [
-                    "message"
-                ],
                 "properties": {
                     "message": {
                         "description": "Validation failed due to invalid server_id input",
@@ -843,11 +748,6 @@
             }
         }
     },
-    "security": [
-        {
-            "bearerAuth": []
-        }
-    ],
     "tags": [
         {
             "name": "Results",

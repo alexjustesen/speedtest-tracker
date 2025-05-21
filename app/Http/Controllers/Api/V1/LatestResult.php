@@ -14,6 +14,7 @@ class LatestResult extends ApiController
     #[OA\Get(
         path: '/api/v1/results/latest',
         summary: 'Fetch the single most recent result',
+        description: 'Requires an API token with scope `results:read`.',
         operationId: 'getLatestResult',
         tags: ['Results'],
         responses: [
@@ -31,10 +32,6 @@ class LatestResult extends ApiController
                 response: Response::HTTP_NOT_FOUND,
                 description: 'No result found',
                 content: new OA\JsonContent(ref: '#/components/schemas/NotFoundError')
-            ),
-            new OA\Response(
-                response: Response::HTTP_INTERNAL_SERVER_ERROR,
-                description: 'Server error'
             ),
         ]
     )]

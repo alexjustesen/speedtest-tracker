@@ -8,7 +8,6 @@ use OpenApi\Attributes as OA;
     schema: 'NotFoundError',
     type: 'object',
     description: 'Error when a requested result is not found',
-    required: ['message'],
     properties: [
         new OA\Property(
             property: 'message',

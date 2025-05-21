@@ -8,7 +8,6 @@ use OpenApi\Attributes as OA;
     schema: 'ResultResponse',
     type: 'object',
     description: 'Envelope for a single result response',
-    required: ['data', 'message'],
     properties: [
         new OA\Property(
             property: 'data',
@@ -18,7 +17,6 @@ use OpenApi\Attributes as OA;
             property: 'message',
             type: 'string',
             description: 'Response status message',
-            example: 'ok'
         ),
     ]
 )]

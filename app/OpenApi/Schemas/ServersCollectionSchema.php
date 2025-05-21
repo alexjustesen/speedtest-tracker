@@ -8,7 +8,6 @@ use OpenApi\Attributes as OA;
     schema: 'ServersCollection',
     type: 'object',
     description: 'Mapping of server IDs to display names',
-    required: ['data', 'message'],
     properties: [
         new OA\Property(
             property: 'data',

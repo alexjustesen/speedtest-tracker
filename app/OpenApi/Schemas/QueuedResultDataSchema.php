@@ -8,7 +8,6 @@ use OpenApi\Attributes as OA;
     schema: 'QueuedResultData',
     type: 'object',
     description: 'Additional data for a queued result',
-    required: ['server'],
     properties: [
         new OA\Property(
             property: 'server',
