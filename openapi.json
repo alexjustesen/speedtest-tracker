@@ -308,10 +308,362 @@
                     }
                 }
             }
+        },
+        "/api/v1/app/tokens": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "List API tokens",
+                "description": "Retrieve all API tokens.",
+                "operationId": "listTokens",
+                "responses": {
+                    "200": {
+                        "description": "A list of active API tokens",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "List of API tokens",
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/ApiTokenList"
+                                            }
+                                        },
+                                        "message": {
+                                            "description": "Response status message",
+                                            "type": "string",
+                                            "example": "ok"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Issue a new API token",
+                "description": "Generate a fresh API token with chosen scopes.",
+                "operationId": "createToken",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "scopes"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Label for the token",
+                                        "type": "string"
+                                    },
+                                    "scopes": {
+                                        "description": "Permissions granted to this token",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "expires_at": {
+                                        "description": "Optional expiration date (Y-m-d)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-08-18"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Token successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiTokenCreated"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/app/tokens/{id}": {
+            "delete": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Revoke an existing API token",
+                "description": "Delete an API token by its ID.",
+                "operationId": "revokeToken",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the token to revoke",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token revoked successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "message": "Token revoked."
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Token not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/app/tokens/{id}/edit": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Edit an existing API token (scopes and expiration)",
+                "description": "Update the scopes and optional expiration date for an API token.",
+                "operationId": "editToken",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the token to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "scopes"
+                                ],
+                                "properties": {
+                                    "scopes": {
+                                        "description": "New permissions for the token",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "expires_at": {
+                                        "description": "Optional new expiration date (Y-m-d)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Token scopes updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiTokenEdit"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Token not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {
+            "ApiTokenCreated": {
+                "description": "Response returned when a new API token is issued",
+                "properties": {
+                    "token": {
+                        "description": "The issued API token string",
+                        "type": "string"
+                    },
+                    "scopes": {
+                        "description": "List of permissions granted to this token",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "expires_at": {
+                        "description": "Timestamp when the token expires",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "ApiTokenEdit": {
+                "description": "Response returned when an API token is edited",
+                "properties": {
+                    "data": {
+                        "description": "Updated API token entry",
+                        "properties": {
+                            "id": {
+                                "description": "Token database ID",
+                                "type": "integer"
+                            },
+                            "name": {
+                                "description": "User-assigned name for this token",
+                                "type": "string"
+                            },
+                            "scopes": {
+                                "description": "Permissions granted to this token",
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "expires_at": {
+                                "description": "Expiration timestamp or null if none",
+                                "type": "string",
+                                "format": "date-time",
+                                "nullable": true
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Token scopes updated."
+                    }
+                },
+                "type": "object"
+            },
+            "ApiTokenList": {
+                "description": "An API token entry",
+                "properties": {
+                    "id": {
+                        "description": "Token database ID",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "User-assigned name for this token",
+                        "type": "string"
+                    },
+                    "scopes": {
+                        "description": "Permissions granted to this token",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "expires_at": {
+                        "description": "Expiration timestamp or null if none",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
             "ForbiddenError": {
                 "description": "Forbidden error response when user lacks permission",
                 "properties": {
@@ -323,10 +675,10 @@
                 "type": "object"
             },
             "NotFoundError": {
-                "description": "Error when a requested result is not found",
+                "description": "Error when a requested when the reqeusted data is not found",
                 "properties": {
                     "message": {
-                        "description": "Result not found error message",
+                        "description": "Not found error message",
                         "type": "string"
                     }
                 },
@@ -817,10 +1169,10 @@
                 "type": "object"
             },
             "ValidationError": {
-                "description": "Validation failed due to invalid server_id input",
+                "description": "Validation failed due to invalid data in the reqeust",
                 "properties": {
                     "message": {
-                        "description": "Validation failed due to invalid server_id input",
+                        "description": "Validation failed due to invalid data in the reqeust",
                         "type": "string"
                     }
                 },
@@ -863,6 +1215,10 @@
         {
             "name": "Stats",
             "description": "Operations for statistics.\nRequires an API token with scope `results:read`."
+        },
+        {
+            "name": "Authentication",
+            "description": "Operations for issuing, listing, and revoking API tokens\nRequires an API token with scope `token:read` or `token:write`."
         }
     ]
 }

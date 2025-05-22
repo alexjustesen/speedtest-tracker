@@ -33,6 +33,7 @@ use OpenApi\Attributes as OA;
         new OA\Tag(name: 'Speedtests', description: "Operations to run speedtests.\nRequires an API token with scope `speedtests:run`."),
         new OA\Tag(name: 'Servers', description: "Operations for speedtest servers.\nRequires an API token with scope `ookla:list-servers`."),
         new OA\Tag(name: 'Stats', description: "Operations for statistics.\nRequires an API token with scope `results:read`."),
+        new OA\Tag(name: 'Authentication', description: "Operations for issuing, listing, and revoking API tokens\nRequires an API token with scope `token:read` or `token:write`."),
     ]
 )]
 class OpenApiDefinition {}

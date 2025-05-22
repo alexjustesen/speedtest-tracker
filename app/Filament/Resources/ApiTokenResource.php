@@ -49,6 +49,8 @@ class ApiTokenResource extends Resource
                             'results:read' => 'Read results',
                             'speedtests:run' => 'Run speedtest',
                             'ookla:list-servers' => 'List servers',
+                            'tokens:write' => 'Manage API tokens',
+                            'tokens:read' => 'Read API tokens',
                         ])
                         ->required()
                         ->bulkToggleable()
@@ -56,6 +58,8 @@ class ApiTokenResource extends Resource
                             'results:read' => 'Allow this token to read results.',
                             'speedtests:run' => 'Allow this token to run speedtests.',
                             'ookla:list-servers' => 'Allow this token to list servers.',
+                            'tokens:write' => 'Allow this token create and delete API tokens',
+                            'tokens:read' => 'Allow this token read API token',
                         ]),
                     DateTimePicker::make('expires_at')
                         ->label('Expires at')
@@ -79,8 +83,10 @@ class ApiTokenResource extends Resource
         return $table
             ->query(PersonalAccessToken::query()->where('tokenable_id', Auth::id()))
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('abilities')->badge(),
+                TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('abilities')
+                    ->badge(),
                 TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))

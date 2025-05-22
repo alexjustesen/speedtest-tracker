@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\ListSpeedtestServers;
 use App\Http\Controllers\Api\V1\RunSpeedtest;
 use App\Http\Controllers\Api\V1\ShowResult;
 use App\Http\Controllers\Api\V1\Stats;
+use App\Http\Controllers\Api\V1\TokenController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->group(function () {
@@ -23,6 +24,18 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     Route::get('/ookla/list-servers', ListSpeedtestServers::class)
         ->name('ookla.list-servers');
+
+    Route::post('/app/tokens', [TokenController::class, 'store'])
+        ->name('app.tokens.store');
+
+    Route::post('/app/tokens/{id}/edit', [TokenController::class, 'update'])
+        ->name('app.tokens.updateScopes');
+
+    Route::get('/app/tokens', [TokenController::class, 'index'])
+        ->name('app.tokens.index');
+
+    Route::delete('/app/tokens/{id}', [TokenController::class, 'destroy'])
+        ->name('app.tokens.destroy');
 
     Route::get('/stats', Stats::class)
         ->name('stats');
