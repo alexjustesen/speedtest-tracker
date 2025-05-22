@@ -13,11 +13,36 @@ class ShowResult extends ApiController
 {
     #[OA\Get(
         path: '/api/v1/results/{id}',
-        description: 'Get result.',
+        summary: 'Fetch a single result by ID',
+        operationId: 'getResult',
+        tags: ['Results'],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'integer'),
+                description: 'The ID of the result'
+            ),
+        ],
         responses: [
-            new OA\Response(response: 200, description: 'OK'),
-            new OA\Response(response: Response::HTTP_NOT_FOUND, description: 'Result not found'),
-        ])]
+            new OA\Response(
+                response: Response::HTTP_OK,
+                description: 'OK',
+                content: new OA\JsonContent(ref: '#/components/schemas/ResultResponse')
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNAUTHORIZED,
+                description: 'Unauthenticated',
+                content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_NOT_FOUND,
+                description: 'Result not found',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotFoundError')
+            ),
+        ]
+    )]
     public function __invoke(Request $request, int $id)
     {
         $result = Result::findOr($id, function () {

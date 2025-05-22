@@ -11,10 +11,30 @@ class ListSpeedtestServers extends ApiController
 {
     #[OA\Get(
         path: '/api/v1/ookla/list-servers',
-        description: 'Get a list of available Ookla speedtest servers.',
+        summary: 'List available Ookla speedtest servers',
+        operationId: 'listSpeedtestServers',
+        tags: ['Servers'],
         responses: [
-            new OA\Response(response: Response::HTTP_OK, description: 'OK'),
-            new OA\Response(response: Response::HTTP_FORBIDDEN, description: 'Forbidden'),
+            new OA\Response(
+                response: Response::HTTP_OK,
+                description: 'OK',
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/ServersCollection'
+                )
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNAUTHORIZED,
+                description: 'Unauthenticated',
+                content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_FORBIDDEN,
+                description: 'Forbidden',
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/ForbiddenError',
+                    example: ['message' => 'You do not have permission to view speedtest servers.']
+                )
+            ),
         ]
     )]
     public function __invoke(Request $request)
