@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\V0\GetLatestController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -21,9 +20,6 @@ Route::get('/healthcheck', function () {
  *
  * @deprecated
  */
-Route::get('/speedtest/latest', GetLatestController::class)
-    ->name('speedtest.latest');
-
 Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     require __DIR__.'/api/v1/routes.php';
 });
