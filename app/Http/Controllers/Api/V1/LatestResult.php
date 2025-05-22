@@ -13,11 +13,27 @@ class LatestResult extends ApiController
 {
     #[OA\Get(
         path: '/api/v1/results/latest',
-        description: 'Get the latest result.',
+        summary: 'Fetch the single most recent result',
+        operationId: 'getLatestResult',
+        tags: ['Results'],
         responses: [
-            new OA\Response(response: 200, description: 'OK'),
-            new OA\Response(response: Response::HTTP_NOT_FOUND, description: 'No result found'),
-        ])]
+            new OA\Response(
+                response: Response::HTTP_OK,
+                description: 'OK',
+                content: new OA\JsonContent(ref: '#/components/schemas/Result')
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNAUTHORIZED,
+                description: 'Unauthenticated',
+                content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_NOT_FOUND,
+                description: 'No result found',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotFoundError')
+            ),
+        ]
+    )]
     public function __invoke(Request $request)
     {
         $result = Result::query()
