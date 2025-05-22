@@ -7,7 +7,7 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(
     schema: 'ResultResponse',
     type: 'object',
-    description: 'Envelope for a single result response',
+    description: 'Response for an Single Speedtest result entry',
     properties: [
         new OA\Property(
             property: 'data',

@@ -30,7 +30,7 @@ class RunSpeedtest extends ApiController
             new OA\Response(
                 response: Response::HTTP_CREATED,
                 description: 'Created',
-                content: new OA\JsonContent(ref: '#/components/schemas/QueuedResultResponse')
+                content: new OA\JsonContent(ref: '#/components/schemas/SpeedtestRun')
             ),
             new OA\Response(
                 response: Response::HTTP_UNAUTHORIZED,
@@ -40,10 +40,7 @@ class RunSpeedtest extends ApiController
             new OA\Response(
                 response: Response::HTTP_FORBIDDEN,
                 description: 'Forbidden',
-                content: new OA\JsonContent(
-                    ref: '#/components/schemas/ForbiddenError',
-                    example: ['message' => 'You do not have permission to run speedtests.']
-                )
+                content: new OA\JsonContent(ref: '#/components/schemas/ForbiddenError')
             ),
             new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,

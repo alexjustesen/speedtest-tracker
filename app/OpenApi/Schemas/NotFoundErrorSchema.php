@@ -13,7 +13,6 @@ use OpenApi\Attributes as OA;
             property: 'message',
             type: 'string',
             description: 'Result not found error message',
-            example: 'Result not found.',
         ),
     ],
 )]

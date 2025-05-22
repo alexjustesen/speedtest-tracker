@@ -159,7 +159,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/QueuedResultResponse"
+                                    "$ref": "#/components/schemas/SpeedtestRun"
                                 }
                             }
                         }
@@ -180,9 +180,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ForbiddenError"
-                                },
-                                "example": {
-                                    "message": "You do not have permission to run speedtests."
                                 }
                             }
                         }
@@ -335,89 +332,26 @@
                 "properties": {
                     "message": {
                         "description": "Result not found error message",
-                        "type": "string",
-                        "example": "Result not found."
+                        "type": "string"
                     }
                 },
                 "type": "object"
             },
-            "PaginationLinks": {
-                "description": "Pagination navigation links",
-                "properties": {
-                    "first": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "last": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "prev": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "next": {
-                        "type": "string",
-                        "nullable": true
-                    }
-                },
-                "type": "object"
-            },
-            "PaginationMeta": {
-                "description": "Pagination metadata",
-                "properties": {
-                    "current_page": {
-                        "type": "integer"
-                    },
-                    "per_page": {
-                        "type": "integer"
-                    },
-                    "total": {
-                        "type": "integer"
-                    }
-                },
-                "type": "object"
-            },
-            "QueuedResultData": {
-                "description": "Additional data for a queued result",
-                "properties": {
-                    "server": {
-                        "$ref": "#/components/schemas/QueuedResultDataServer"
-                    }
-                },
-                "type": "object"
-            },
-            "QueuedResultDataServer": {
-                "description": "Server info inside queued result data",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int64",
-                        "nullable": true
-                    }
-                },
-                "type": "object"
-            },
-            "QueuedResultResponse": {
-                "description": "Response when a speedtest is queued",
-                "required": [
-                    "data",
-                    "message"
-                ],
+            "ResultResponse": {
+                "description": "Response for an Single Speedtest result entry",
                 "properties": {
                     "data": {
-                        "$ref": "#/components/schemas/QueuedResult"
+                        "$ref": "#/components/schemas/Result"
                     },
                     "message": {
                         "description": "Response status message",
-                        "type": "string",
-                        "example": "Speedtest added to the queue."
+                        "type": "string"
                     }
                 },
                 "type": "object"
             },
-            "QueuedResult": {
-                "description": "A queued speedtest result",
+            "Result": {
+                "description": "Speedtest result entry",
                 "properties": {
                     "id": {
                         "type": "integer"
@@ -426,20 +360,31 @@
                         "type": "string"
                     },
                     "ping": {
-                        "type": "number",
-                        "format": "float",
-                        "nullable": true
+                        "type": "number"
                     },
                     "download": {
-                        "type": "integer",
-                        "nullable": true
+                        "type": "integer"
                     },
                     "upload": {
-                        "type": "integer",
-                        "nullable": true
+                        "type": "integer"
+                    },
+                    "download_bits": {
+                        "type": "integer"
+                    },
+                    "upload_bits": {
+                        "type": "integer"
+                    },
+                    "download_bits_human": {
+                        "type": "string"
+                    },
+                    "upload_bits_human": {
+                        "type": "string"
                     },
                     "benchmarks": {
-                        "type": "object",
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        },
                         "nullable": true
                     },
                     "healthy": {
@@ -457,171 +402,194 @@
                         "nullable": true
                     },
                     "data": {
-                        "$ref": "#/components/schemas/QueuedResultData"
-                    },
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "updated_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    }
-                },
-                "type": "object"
-            },
-            "ResultResponse": {
-                "description": "Envelope for a single result response",
-                "properties": {
-                    "data": {
-                        "$ref": "#/components/schemas/Result"
-                    },
-                    "message": {
-                        "description": "Response status message",
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "Result": {
-                "description": "A single Speedtest result entry",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "format": "int64",
-                        "example": 3
-                    },
-                    "service": {
-                        "type": "string",
-                        "example": "ookla"
-                    },
-                    "ping": {
-                        "type": "number",
-                        "format": "float",
-                        "example": 6.246,
-                        "nullable": true
-                    },
-                    "download": {
-                        "type": "integer",
-                        "example": 11784522
-                    },
-                    "upload": {
-                        "type": "integer",
-                        "example": 3596514
-                    },
-                    "download_bits": {
-                        "type": "integer",
-                        "example": 94276176
-                    },
-                    "upload_bits": {
-                        "type": "integer",
-                        "example": 28772112
-                    },
-                    "download_bits_human": {
-                        "type": "string",
-                        "example": "94.28 Mbps"
-                    },
-                    "upload_bits_human": {
-                        "type": "string",
-                        "example": "28.77 Mbps"
-                    },
-                    "benchmarks": {
-                        "type": "object",
-                        "example": null,
-                        "nullable": true
-                    },
-                    "healthy": {
-                        "type": "boolean",
-                        "example": null,
-                        "nullable": true
-                    },
-                    "status": {
-                        "type": "string",
-                        "example": "completed"
-                    },
-                    "scheduled": {
-                        "type": "boolean",
-                        "example": false
-                    },
-                    "comments": {
-                        "type": "string",
-                        "example": null,
-                        "nullable": true
-                    },
-                    "data": {
-                        "description": "Raw speedtest details",
-                        "type": "object",
-                        "example": {
-                            "isp": "Speedtest Communications",
-                            "ping": {
-                                "low": 17.841,
-                                "high": 24.077,
-                                "jitter": 1.878,
-                                "latency": 19.133
+                        "description": "Nested speedtest data payload",
+                        "properties": {
+                            "isp": {
+                                "type": "string"
                             },
-                            "type": "result",
+                            "ping": {
+                                "properties": {
+                                    "low": {
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "high": {
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "jitter": {
+                                        "type": "number",
+                                        "format": "float"
+                                    },
+                                    "latency": {
+                                        "type": "number",
+                                        "format": "float"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
                             "result": {
-                                "id": "abc123-uuid",
-                                "url": "https://docs.speedtest-tracker.dev",
-                                "persisted": true
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "url": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "persisted": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
                             },
                             "server": {
-                                "id": 1234,
-                                "ip": "127.0.0.1",
-                                "host": "docs.speedtest-tracker.dev",
-                                "name": "Speedtest",
-                                "port": 8080,
-                                "country": "United States",
-                                "location": "New York City, NY"
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "ip": {
+                                        "type": "string",
+                                        "format": "ipv4"
+                                    },
+                                    "host": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "port": {
+                                        "type": "integer"
+                                    },
+                                    "country": {
+                                        "type": "string"
+                                    },
+                                    "location": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
                             },
                             "upload": {
-                                "bytes": 124297377,
-                                "elapsed": 9628,
-                                "latency": {
-                                    "iqm": 341.111,
-                                    "low": 16.663,
-                                    "high": 529.86,
-                                    "jitter": 37.587
+                                "properties": {
+                                    "bytes": {
+                                        "type": "integer"
+                                    },
+                                    "elapsed": {
+                                        "type": "integer"
+                                    },
+                                    "latency": {
+                                        "properties": {
+                                            "iqm": {
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "low": {
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "high": {
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "jitter": {
+                                                "type": "number",
+                                                "format": "float"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "bandwidth": {
+                                        "type": "integer"
+                                    }
                                 },
-                                "bandwidth": 113750000
+                                "type": "object"
                             },
                             "download": {
-                                "bytes": 230789788,
-                                "elapsed": 14301,
-                                "latency": {
-                                    "iqm": 104.125,
-                                    "low": 23.72,
-                                    "high": 269.563,
-                                    "jitter": 13.447
+                                "properties": {
+                                    "bytes": {
+                                        "type": "integer"
+                                    },
+                                    "elapsed": {
+                                        "type": "integer"
+                                    },
+                                    "latency": {
+                                        "properties": {
+                                            "iqm": {
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "low": {
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "high": {
+                                                "type": "number",
+                                                "format": "float"
+                                            },
+                                            "jitter": {
+                                                "type": "number",
+                                                "format": "float"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "bandwidth": {
+                                        "type": "integer"
+                                    }
                                 },
-                                "bandwidth": 115625000
+                                "type": "object"
                             },
                             "interface": {
-                                "name": "eth0",
-                                "isVpn": false,
-                                "macAddr": "00:00:00:00:00:00",
-                                "externalIp": "127.0.0.1",
-                                "internalIp": "127.0.0.1"
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "isVpn": {
+                                        "type": "boolean"
+                                    },
+                                    "macAddr": {
+                                        "type": "string",
+                                        "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$"
+                                    },
+                                    "externalIp": {
+                                        "type": "string",
+                                        "format": "ipv4"
+                                    },
+                                    "internalIp": {
+                                        "type": "string",
+                                        "format": "ipv4"
+                                    }
+                                },
+                                "type": "object"
                             },
-                            "timestamp": "2025-05-21T12:00:00Z",
-                            "packetLoss": 11
-                        }
+                            "timestamp": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "packetLoss": {
+                                "type": "number"
+                            }
+                        },
+                        "type": "object"
                     },
                     "created_at": {
                         "type": "string",
-                        "format": "date-time",
-                        "example": "2025-05-21 17:44:00"
+                        "format": "date-time"
                     },
                     "updated_at": {
                         "type": "string",
-                        "format": "date-time",
-                        "example": "2025-05-21 17:44:16"
+                        "format": "date-time"
                     }
                 },
-                "type": "object"
+                "type": "object",
+                "additionalProperties": false
             },
             "ResultsCollection": {
-                "description": "Paginated list of Results",
+                "description": "Paginated list of Speedtest results",
                 "properties": {
                     "data": {
                         "description": "Array of result objects",
@@ -630,37 +598,171 @@
                             "$ref": "#/components/schemas/Result"
                         }
                     },
-                    "meta": {
-                        "$ref": "#/components/schemas/PaginationMeta"
-                    },
                     "links": {
-                        "$ref": "#/components/schemas/PaginationLinks"
+                        "properties": {
+                            "first": {
+                                "type": "string"
+                            },
+                            "last": {
+                                "type": "string"
+                            },
+                            "prev": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "next": {
+                                "type": "string",
+                                "nullable": true
+                            }
+                        },
+                        "type": "object",
+                        "additionalProperties": false
+                    },
+                    "meta": {
+                        "properties": {
+                            "current_page": {
+                                "type": "integer"
+                            },
+                            "from": {
+                                "type": "integer"
+                            },
+                            "last_page": {
+                                "type": "integer"
+                            },
+                            "links": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "url": {
+                                            "type": "string",
+                                            "nullable": true
+                                        },
+                                        "label": {
+                                            "type": "string"
+                                        },
+                                        "active": {
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "type": "object",
+                                    "additionalProperties": false
+                                }
+                            },
+                            "path": {
+                                "type": "string"
+                            },
+                            "per_page": {
+                                "type": "integer"
+                            },
+                            "to": {
+                                "type": "integer"
+                            },
+                            "total": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object",
+                        "additionalProperties": false
                     }
                 },
-                "type": "object"
+                "type": "object",
+                "additionalProperties": false
             },
             "ServersCollection": {
                 "description": "Mapping of server IDs to display names",
                 "properties": {
                     "data": {
-                        "description": "Map of server ID to server display name",
+                        "description": "Map of server ID to display name",
                         "type": "object",
-                        "example": {
-                            "20001": "Washington Fiber (Washington, DC, 20001)",
-                            "90001": "LA Connect (Los Angeles, CA, 90001)",
-                            "60601": "ChiTown Broadband (Chicago, IL, 60601)",
-                            "77001": "Houston Net (Houston, TX, 77001)",
-                            "33101": "MiamiLink (Miami, FL, 33101)"
-                        },
-                        "additionalProperties": true
+                        "additionalProperties": {
+                            "type": "string"
+                        }
                     },
                     "message": {
                         "description": "Response status message",
-                        "type": "string",
-                        "example": "Speedtest servers fetched successfully."
+                        "type": "string"
                     }
                 },
-                "type": "object"
+                "type": "object",
+                "additionalProperties": false
+            },
+            "SpeedtestRun": {
+                "description": "A queued speedtest result",
+                "properties": {
+                    "data": {
+                        "description": "Queued speedtest result payload",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "service": {
+                                "type": "string"
+                            },
+                            "ping": {
+                                "type": "number",
+                                "format": "float",
+                                "nullable": true
+                            },
+                            "download": {
+                                "type": "integer",
+                                "nullable": true
+                            },
+                            "upload": {
+                                "type": "integer",
+                                "nullable": true
+                            },
+                            "benchmarks": {
+                                "type": "object",
+                                "nullable": true
+                            },
+                            "healthy": {
+                                "type": "boolean",
+                                "nullable": true
+                            },
+                            "status": {
+                                "type": "string"
+                            },
+                            "scheduled": {
+                                "type": "boolean"
+                            },
+                            "comments": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "data": {
+                                "description": "Additional data for queued result",
+                                "properties": {
+                                    "server": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "nullable": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "created_at": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "updated_at": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "type": "object",
+                        "additionalProperties": false
+                    },
+                    "message": {
+                        "description": "Response status message",
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
             },
             "Stats": {
                 "description": "Aggregated speedtest statistics",

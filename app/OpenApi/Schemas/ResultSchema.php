@@ -7,156 +7,117 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(
     schema: 'Result',
     type: 'object',
-    description: 'A single Speedtest result entry',
+    description: 'Speedtest result entry',
     properties: [
-        new OA\Property(
-            property: 'id',
-            type: 'integer',
-            format: 'int64',
-            example: 3
-        ),
-        new OA\Property(
-            property: 'service',
-            type: 'string',
-            example: 'ookla'
-        ),
-        new OA\Property(
-            property: 'ping',
-            type: 'number',
-            format: 'float',
-            nullable: true,
-            example: 6.246
-        ),
-        new OA\Property(
-            property: 'download',
-            type: 'integer',
-            example: 11784522
-        ),
-        new OA\Property(
-            property: 'upload',
-            type: 'integer',
-            example: 3596514
-        ),
-        new OA\Property(
-            property: 'download_bits',
-            type: 'integer',
-            example: 94276176
-        ),
-        new OA\Property(
-            property: 'upload_bits',
-            type: 'integer',
-            example: 28772112
-        ),
-        new OA\Property(
-            property: 'download_bits_human',
-            type: 'string',
-            example: '94.28 Mbps'
-        ),
-        new OA\Property(
-            property: 'upload_bits_human',
-            type: 'string',
-            example: '28.77 Mbps'
-        ),
-        new OA\Property(
-            property: 'benchmarks',
-            type: 'object',
-            nullable: true,
-            example: null
-        ),
-        new OA\Property(
-            property: 'healthy',
-            type: 'boolean',
-            nullable: true,
-            example: null
-        ),
-        new OA\Property(
-            property: 'status',
-            type: 'string',
-            example: 'completed'
-        ),
-        new OA\Property(
-            property: 'scheduled',
-            type: 'boolean',
-            example: false
-        ),
-        new OA\Property(
-            property: 'comments',
-            type: 'string',
-            nullable: true,
-            example: null
-        ),
+        new OA\Property(property: 'id', type: 'integer'),
+        new OA\Property(property: 'service', type: 'string'),
+        new OA\Property(property: 'ping', type: 'number'),
+        new OA\Property(property: 'download', type: 'integer'),
+        new OA\Property(property: 'upload', type: 'integer'),
+        new OA\Property(property: 'download_bits', type: 'integer'),
+        new OA\Property(property: 'upload_bits', type: 'integer'),
+        new OA\Property(property: 'download_bits_human', type: 'string'),
+        new OA\Property(property: 'upload_bits_human', type: 'string'),
+        new OA\Property(property: 'benchmarks', type: 'array', nullable: true, items: new OA\Items(type: 'object')),
+        new OA\Property(property: 'healthy', type: 'boolean', nullable: true),
+        new OA\Property(property: 'status', type: 'string'),
+        new OA\Property(property: 'scheduled', type: 'boolean'),
+        new OA\Property(property: 'comments', type: 'string', nullable: true),
         new OA\Property(
             property: 'data',
             type: 'object',
-            description: 'Raw speedtest details',
-            example: [
-                'isp' => 'Speedtest Communications',
-                'ping' => [
-                    'low' => 17.841,
-                    'high' => 24.077,
-                    'jitter' => 1.878,
-                    'latency' => 19.133,
-                ],
-                'type' => 'result',
-                'result' => [
-                    'id' => 'abc123-uuid',
-                    'url' => 'https://docs.speedtest-tracker.dev',
-                    'persisted' => true,
-                ],
-                'server' => [
-                    'id' => 1234,
-                    'ip' => '127.0.0.1',
-                    'host' => 'docs.speedtest-tracker.dev',
-                    'name' => 'Speedtest',
-                    'port' => 8080,
-                    'country' => 'United States',
-                    'location' => 'New York City, NY',
-                ],
-                'upload' => [
-                    'bytes' => 124297377,
-                    'elapsed' => 9628,
-                    'latency' => [
-                        'iqm' => 341.111,
-                        'low' => 16.663,
-                        'high' => 529.86,
-                        'jitter' => 37.587,
-                    ],
-                    'bandwidth' => 113750000,
-                ],
-                'download' => [
-                    'bytes' => 230789788,
-                    'elapsed' => 14301,
-                    'latency' => [
-                        'iqm' => 104.125,
-                        'low' => 23.72,
-                        'high' => 269.563,
-                        'jitter' => 13.447,
-                    ],
-                    'bandwidth' => 115625000,
-                ],
-                'interface' => [
-                    'name' => 'eth0',
-                    'isVpn' => false,
-                    'macAddr' => '00:00:00:00:00:00',
-                    'externalIp' => '127.0.0.1',
-                    'internalIp' => '127.0.0.1',
-                ],
-                'timestamp' => '2025-05-21T12:00:00Z',
-                'packetLoss' => 11,
-            ],
+            description: 'Nested speedtest data payload',
+            properties: [
+                new OA\Property(property: 'isp', type: 'string'),
+                new OA\Property(
+                    property: 'ping',
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'low', type: 'number', format: 'float'),
+                        new OA\Property(property: 'high', type: 'number', format: 'float'),
+                        new OA\Property(property: 'jitter', type: 'number', format: 'float'),
+                        new OA\Property(property: 'latency', type: 'number', format: 'float'),
+                    ]
+                ),
+                new OA\Property(property: 'type', type: 'string'),
+                new OA\Property(
+                    property: 'result',
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'string'),
+                        new OA\Property(property: 'url', type: 'string', format: 'uri'),
+                        new OA\Property(property: 'persisted', type: 'boolean'),
+                    ]
+                ),
+                new OA\Property(
+                    property: 'server',
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer'),
+                        new OA\Property(property: 'ip', type: 'string', format: 'ipv4'),
+                        new OA\Property(property: 'host', type: 'string'),
+                        new OA\Property(property: 'name', type: 'string'),
+                        new OA\Property(property: 'port', type: 'integer'),
+                        new OA\Property(property: 'country', type: 'string'),
+                        new OA\Property(property: 'location', type: 'string'),
+                    ]
+                ),
+                new OA\Property(
+                    property: 'upload',
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'bytes', type: 'integer'),
+                        new OA\Property(property: 'elapsed', type: 'integer'),
+                        new OA\Property(
+                            property: 'latency',
+                            type: 'object',
+                            properties: [
+                                new OA\Property(property: 'iqm', type: 'number', format: 'float'),
+                                new OA\Property(property: 'low', type: 'number', format: 'float'),
+                                new OA\Property(property: 'high', type: 'number', format: 'float'),
+                                new OA\Property(property: 'jitter', type: 'number', format: 'float'),
+                            ]
+                        ),
+                        new OA\Property(property: 'bandwidth', type: 'integer'),
+                    ]
+                ),
+                new OA\Property(
+                    property: 'download',
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'bytes', type: 'integer'),
+                        new OA\Property(property: 'elapsed', type: 'integer'),
+                        new OA\Property(
+                            property: 'latency',
+                            type: 'object',
+                            properties: [
+                                new OA\Property(property: 'iqm', type: 'number', format: 'float'),
+                                new OA\Property(property: 'low', type: 'number', format: 'float'),
+                                new OA\Property(property: 'high', type: 'number', format: 'float'),
+                                new OA\Property(property: 'jitter', type: 'number', format: 'float'),
+                            ]
+                        ),
+                        new OA\Property(property: 'bandwidth', type: 'integer'),
+                    ]
+                ),
+                new OA\Property(
+                    property: 'interface',
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'name', type: 'string'),
+                        new OA\Property(property: 'isVpn', type: 'boolean'),
+                        new OA\Property(property: 'macAddr', type: 'string', pattern: '^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$'),
+                        new OA\Property(property: 'externalIp', type: 'string', format: 'ipv4'),
+                        new OA\Property(property: 'internalIp', type: 'string', format: 'ipv4'),
+                    ]
+                ),
+                new OA\Property(property: 'timestamp', type: 'string', format: 'date-time'),
+                new OA\Property(property: 'packetLoss', type: 'number'),
+            ]
         ),
-        new OA\Property(
-            property: 'created_at',
-            type: 'string',
-            format: 'date-time',
-            example: '2025-05-21 17:44:00'
-        ),
-        new OA\Property(
-            property: 'updated_at',
-            type: 'string',
-            format: 'date-time',
-            example: '2025-05-21 17:44:16'
-        ),
-    ]
+        new OA\Property(property: 'created_at', type: 'string', format: 'date-time'),
+        new OA\Property(property: 'updated_at', type: 'string', format: 'date-time'),
+    ],
+    additionalProperties: false
 )]
 class ResultSchema {}
