@@ -14,7 +14,6 @@ class LatestResult extends ApiController
     #[OA\Get(
         path: '/api/v1/results/latest',
         summary: 'Fetch the single most recent result',
-        description: 'Requires an API token with scope `results:read`.',
         operationId: 'getLatestResult',
         tags: ['Results'],
         responses: [

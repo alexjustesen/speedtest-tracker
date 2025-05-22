@@ -29,10 +29,10 @@ use OpenApi\Attributes as OA;
         ]
     ),
     tags: [
-        new OA\Tag(name: 'Results', description: 'Operations related to Speedtest results'),
-        new OA\Tag(name: 'Speedtests', description: 'Operations to run speedtests'),
-        new OA\Tag(name: 'Servers', description: 'Operations for speedtest servers'),
-        new OA\Tag(name: 'Stats', description: 'Operations for statistics'),
+        new OA\Tag(name: 'Results', description: "Operations related to Speedtest results.\nRequires an API token with scope `results:read`."),
+        new OA\Tag(name: 'Speedtests', description: "Operations to run speedtests.\nRequires an API token with scope `speedtests:run`."),
+        new OA\Tag(name: 'Servers', description: "Operations for speedtest servers.\nRequires an API token with scope `ookla:list-servers`."),
+        new OA\Tag(name: 'Stats', description: "Operations for statistics.\nRequires an API token with scope `results:read`."),
     ]
 )]
 class OpenApiDefinition {}

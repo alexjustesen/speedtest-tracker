@@ -11,7 +11,6 @@
                     "Results"
                 ],
                 "summary": "Fetch the single most recent result",
-                "description": "Requires an API token with scope `results:read`.",
                 "operationId": "getLatestResult",
                 "responses": {
                     "200": {
@@ -53,7 +52,6 @@
                     "Results"
                 ],
                 "summary": "List results",
-                "description": "Requires an API token with scope `results:read`.",
                 "operationId": "listResults",
                 "responses": {
                     "200": {
@@ -95,7 +93,6 @@
                     "Servers"
                 ],
                 "summary": "List available Ookla speedtest servers",
-                "description": "Requires an API token with scope `ookla:list-servers`.",
                 "operationId": "listSpeedtestServers",
                 "responses": {
                     "200": {
@@ -140,7 +137,6 @@
                     "Speedtests"
                 ],
                 "summary": "Run a new Ookla speedtest",
-                "description": "Requires an API token with scope `speedtests:run`.",
                 "operationId": "runSpeedtest",
                 "parameters": [
                     {
@@ -203,7 +199,6 @@
                     "Results"
                 ],
                 "summary": "Fetch a single result by ID",
-                "description": "Requires an API token with scope `results:read`.",
                 "operationId": "getResult",
                 "parameters": [
                     {
@@ -256,7 +251,7 @@
                     "Stats"
                 ],
                 "summary": "Fetch aggregated Speedtest statistics",
-                "description": "Requires an API token with scope `results:read`.",
+                "description": "Handle the incoming request.",
                 "operationId": "getStats",
                 "parameters": [
                     {
@@ -674,8 +669,10 @@
                     "data": {
                         "description": "Map of server ID to display name",
                         "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
+                        "example": {
+                            "data": {
+                                "12345": "Fibernet (New York, 12345)"
+                            }
                         }
                     },
                     "message": {
@@ -853,19 +850,19 @@
     "tags": [
         {
             "name": "Results",
-            "description": "Operations related to Speedtest results"
+            "description": "Operations related to Speedtest results.\nRequires an API token with scope `results:read`."
         },
         {
             "name": "Speedtests",
-            "description": "Operations to run speedtests"
+            "description": "Operations to run speedtests.\nRequires an API token with scope `speedtests:run`."
         },
         {
             "name": "Servers",
-            "description": "Operations for speedtest servers"
+            "description": "Operations for speedtest servers.\nRequires an API token with scope `ookla:list-servers`."
         },
         {
             "name": "Stats",
-            "description": "Operations for statistics"
+            "description": "Operations for statistics.\nRequires an API token with scope `results:read`."
         }
     ]
 }

@@ -14,7 +14,6 @@ class ShowResult extends ApiController
     #[OA\Get(
         path: '/api/v1/results/{id}',
         summary: 'Fetch a single result by ID',
-        description: 'Requires an API token with scope `results:read`.',
         operationId: 'getResult',
         tags: ['Results'],
         parameters: [

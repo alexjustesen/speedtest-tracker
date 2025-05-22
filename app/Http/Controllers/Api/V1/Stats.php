@@ -20,7 +20,6 @@ class Stats extends ApiController
     #[OA\Get(
         path: '/api/v1/stats',
         summary: 'Fetch aggregated Speedtest statistics',
-        description: 'Requires an API token with scope `results:read`.',
         operationId: 'getStats',
         tags: ['Stats'],
         parameters: [

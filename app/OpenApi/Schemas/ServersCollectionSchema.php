@@ -13,7 +13,11 @@ use OpenApi\Attributes as OA;
             property: 'data',
             type: 'object',
             description: 'Map of server ID to display name',
-            additionalProperties: new OA\AdditionalProperties(type: 'string')
+            example: [
+                'data' => [
+                    '12345' => 'Fibernet (New York, 12345)',
+                ],
+            ],
         ),
         new OA\Property(
             property: 'message',

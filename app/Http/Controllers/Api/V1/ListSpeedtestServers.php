@@ -12,7 +12,6 @@ class ListSpeedtestServers extends ApiController
     #[OA\Get(
         path: '/api/v1/ookla/list-servers',
         summary: 'List available Ookla speedtest servers',
-        description: 'Requires an API token with scope `ookla:list-servers`.',
         operationId: 'listSpeedtestServers',
         tags: ['Servers'],
         responses: [
