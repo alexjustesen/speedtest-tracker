@@ -170,7 +170,7 @@ class TokenController extends ApiController
     }
 
     #[OA\Put(
-        path: '/api/v1/app/tokens/{id}/edit',
+        path: '/api/v1/app/tokens/{id}',
         summary: 'Edit an existing API token',
         description: 'Update the scopes and optional expiration date for an API token.',
         operationId: 'editToken',
