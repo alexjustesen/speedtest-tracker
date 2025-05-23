@@ -483,11 +483,11 @@
             }
         },
         "/api/v1/app/tokens/{id}/edit": {
-            "post": {
+            "put": {
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Edit an existing API token (scopes and expiration)",
+                "summary": "Edit an existing API token",
                 "description": "Update the scopes and optional expiration date for an API token.",
                 "operationId": "editToken",
                 "parameters": [

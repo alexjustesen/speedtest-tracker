@@ -28,7 +28,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::post('/app/tokens', [TokenController::class, 'store'])
         ->name('app.tokens.store');
 
-    Route::post('/app/tokens/{id}/edit', [TokenController::class, 'update'])
+    Route::put('/app/tokens/{id}/edit', [TokenController::class, 'update'])
         ->name('app.tokens.update');
 
     Route::get('/app/tokens', [TokenController::class, 'index'])
