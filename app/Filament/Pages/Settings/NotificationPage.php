@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Actions\Notifications\SendAppriseTestNotification;
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
@@ -17,6 +18,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class NotificationPage extends SettingsPage
 {
@@ -55,11 +57,13 @@ class NotificationPage extends SettingsPage
                             'default' => 1,
                         ])
                             ->schema([
+                                Forms\Components\View::make('filament.forms.notifications-deprecation')
+                                    ->columnSpanFull(),
                                 Forms\Components\Section::make('Database')
                                     ->description('Notifications sent to this channel will show up under the 🔔 icon in the header.')
                                     ->schema([
                                         Forms\Components\Toggle::make('database_enabled')
-                                            ->label('Enable database notifications')
+                                            ->label('Enable Database Notifications')
                                             ->reactive()
                                             ->columnSpanFull(),
                                         Forms\Components\Grid::make([
@@ -80,6 +84,149 @@ class NotificationPage extends SettingsPage
                                                     Forms\Components\Actions\Action::make('test database')
                                                         ->label('Test database channel')
                                                         ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Apprise')
+                                    ->description('The Apprise Notification Library enables sending notifications to a wide range of services.')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('apprise_enabled')
+                                            ->label('Enable Apprise Notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('apprise_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('apprise_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('apprise_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('apprise_webhooks')
+                                                    ->label('Apprise Webhooks')
+                                                    ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">Apprise Documentation</a>'))
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->label('URL')
+                                                            ->placeholder('http://apprise:8000/notify')
+                                                            ->helperText('The URL to your Apprise instance.')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                        Forms\Components\TextInput::make('service_url')
+                                                            ->label('Service URL')
+                                                            ->placeholder('discord://WebhookID/WebhookToken')
+                                                            ->helperText('The service URL where the notification will be sent.')
+                                                            ->maxLength(200)
+                                                            ->required(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test apprise')
+                                                        ->label('Test Apprise')
+                                                        ->action(fn (Forms\Get $get) => SendAppriseTestNotification::run(
+                                                            webhooks: $get('apprise_webhooks')
+                                                        ))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('apprise_webhooks'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Mail')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('mail_enabled')
+                                            ->label('Enable Mail Notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('mail_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Forms\Components\Toggle::make('mail_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Forms\Components\Repeater::make('mail_recipients')
+                                                    ->label('Recipients')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('email_address')
+                                                            ->placeholder('your@email.com')
+                                                            ->email()
+                                                            ->required(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test mail')
+                                                        ->label('Test mail channel')
+                                                        ->action(fn (Forms\Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('mail_recipients'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
+                                Forms\Components\Section::make('Webhook')
+                                    ->schema([
+                                        Forms\Components\Toggle::make('webhook_enabled')
+                                            ->label('Enable Webhook Notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Forms\Components\Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
+                                            ->schema([
+                                                Forms\Components\Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Forms\Components\Toggle::make('webhook_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpan(2),
+                                                        Forms\Components\Toggle::make('webhook_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpan(2),
+                                                    ]),
+                                                Forms\Components\Repeater::make('webhook_urls')
+                                                    ->label('Recipients')
+                                                    ->schema([
+                                                        Forms\Components\TextInput::make('url')
+                                                            ->placeholder('https://webhook.site/longstringofcharacters')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Forms\Components\Actions::make([
+                                                    Forms\Components\Actions\Action::make('test webhook')
+                                                        ->label('Test webhook channel')
+                                                        ->action(fn (Forms\Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('webhook_urls'))),
                                                 ]),
                                             ]),
                                     ])
@@ -111,6 +258,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('pushover_webhooks')
                                                     ->label('Pushover Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->label('URL')
@@ -168,6 +316,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('discord_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
@@ -212,6 +361,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('gotify_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://example.com/message?token=<apptoken>')
@@ -256,6 +406,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('slack_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://hooks.slack.com/services/abc/xyz')
@@ -300,6 +451,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('ntfy_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->maxLength(2000)
@@ -336,49 +488,6 @@ class NotificationPage extends SettingsPage
                                         'md' => 2,
                                     ]),
 
-                                Forms\Components\Section::make('Mail')
-                                    ->schema([
-                                        Forms\Components\Toggle::make('mail_enabled')
-                                            ->label('Enable mail notifications')
-                                            ->reactive()
-                                            ->columnSpanFull(),
-                                        Forms\Components\Grid::make([
-                                            'default' => 1,
-                                        ])
-                                            ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true)
-                                            ->schema([
-                                                Forms\Components\Fieldset::make('Triggers')
-                                                    ->schema([
-                                                        Forms\Components\Toggle::make('mail_on_speedtest_run')
-                                                            ->label('Notify on every speedtest run')
-                                                            ->columnSpanFull(),
-                                                        Forms\Components\Toggle::make('mail_on_threshold_failure')
-                                                            ->label('Notify on threshold failures')
-                                                            ->columnSpanFull(),
-                                                    ]),
-                                                Forms\Components\Repeater::make('mail_recipients')
-                                                    ->label('Recipients')
-                                                    ->schema([
-                                                        Forms\Components\TextInput::make('email_address')
-                                                            ->placeholder('your@email.com')
-                                                            ->email()
-                                                            ->required(),
-                                                    ])
-                                                    ->columnSpanFull(),
-                                                Forms\Components\Actions::make([
-                                                    Forms\Components\Actions\Action::make('test mail')
-                                                        ->label('Test mail channel')
-                                                        ->action(fn (Forms\Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('mail_recipients'))),
-                                                ]),
-                                            ]),
-                                    ])
-                                    ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
-
                                 Forms\Components\Section::make('Healthcheck.io')
                                     ->schema([
                                         Forms\Components\Toggle::make('healthcheck_enabled')
@@ -402,6 +511,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('healthcheck_webhooks')
                                                     ->label('webhooks')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('url')
                                                             ->placeholder('https://hc-ping.com/your-uuid-here')
@@ -452,6 +562,7 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Forms\Components\Repeater::make('telegram_recipients')
                                                     ->label('Recipients')
+                                                    ->addable(false)
                                                     ->schema([
                                                         Forms\Components\TextInput::make('telegram_chat_id')
                                                             ->placeholder('12345678910')
@@ -465,50 +576,6 @@ class NotificationPage extends SettingsPage
                                                         ->label('Test Telegram channel')
                                                         ->action(fn (Forms\Get $get) => SendTelegramTestNotification::run(recipients: $get('telegram_recipients')))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('telegram_recipients')) || blank(config('telegram.bot'))),
-                                                ]),
-                                            ]),
-                                    ])
-                                    ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
-
-                                Forms\Components\Section::make('Webhook')
-                                    ->schema([
-                                        Forms\Components\Toggle::make('webhook_enabled')
-                                            ->label('Enable webhook notifications')
-                                            ->reactive()
-                                            ->columnSpanFull(),
-                                        Forms\Components\Grid::make([
-                                            'default' => 1,
-                                        ])
-                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
-                                            ->schema([
-                                                Forms\Components\Fieldset::make('Triggers')
-                                                    ->schema([
-                                                        Forms\Components\Toggle::make('webhook_on_speedtest_run')
-                                                            ->label('Notify on every speedtest run')
-                                                            ->columnSpan(2),
-                                                        Forms\Components\Toggle::make('webhook_on_threshold_failure')
-                                                            ->label('Notify on threshold failures')
-                                                            ->columnSpan(2),
-                                                    ]),
-                                                Forms\Components\Repeater::make('webhook_urls')
-                                                    ->label('Recipients')
-                                                    ->schema([
-                                                        Forms\Components\TextInput::make('url')
-                                                            ->placeholder('https://webhook.site/longstringofcharacters')
-                                                            ->maxLength(2000)
-                                                            ->required()
-                                                            ->url(),
-                                                    ])
-                                                    ->columnSpanFull(),
-                                                Forms\Components\Actions::make([
-                                                    Forms\Components\Actions\Action::make('test webhook')
-                                                        ->label('Test webhook channel')
-                                                        ->action(fn (Forms\Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('webhook_urls'))),
                                                 ]),
                                             ]),
                                     ])
