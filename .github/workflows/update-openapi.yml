@@ -1,0 +1,45 @@
+name: Validate OpenAPI JSON Is Up-to-Date
+
+on:
+  pull_request:
+    paths:
+      - 'app/Http/Controllers/Api/**/*.php'
+      - 'app/OpenApi/**/*.php'
+
+jobs:
+  check-openapi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure openapi.json is present in PR
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+          echo "$CHANGED"
+          if echo "$CHANGED" | grep -Eq '^(app/Http/Controllers/Api/|app/OpenApi/)'; then
+            if ! echo "$CHANGED" | grep -q '^openapi.json$'; then
+              echo "::error ::API sources changed but openapi.json not updated. Please include it in this PR."
+              exit 1
+            fi
+          fi
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Generate fresh OpenAPI JSON
+        run: ./vendor/bin/openapi app -o openapi_temp.json -f json
+
+      - name: Compare against committed openapi.json
+        run: |
+          if ! diff -u openapi.json openapi_temp.json; then
+            echo "::error ::Your openapi.json is stale – please regenerate and commit the updated file."
+            exit 1
+          fi
