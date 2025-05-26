@@ -16,12 +16,21 @@ class CreateClient
         // Fetch the row where `type = 'InfluxDBv2'`
         $settings = DataIntegrationSetting::firstWhere('type', 'InfluxDBv2');
 
+        $config = $settings->config ?? [];
+
+        // Extract required fields, throwing if absent
+        $url = $config['url'];
+        $org = $config['org'];
+        $bucket = $config['bucket'];
+        $token = $config['token'];
+        $verifySsl = $config['verify_ssl'];
+
         return new Client([
-            'url' => $settings->url,
-            'token' => $settings->token,
-            'org' => $settings->org,
-            'bucket' => $settings->bucket,
-            'verifySSL' => $settings->verify_ssl,
+            'url' => $url,
+            'token' => $token,
+            'org' => $org,
+            'bucket' => $bucket,
+            'verifySSL' => $verifySsl,
             'precision' => WritePrecision::S,
         ]);
     }

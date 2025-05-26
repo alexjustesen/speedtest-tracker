@@ -9,11 +9,6 @@ class DataIntegrationSetting extends Model
     protected $fillable = [
         'name',
         'type',
-        'enabled',
-        'url',
-        'org',
-        'bucket',
-        'token',
-        'verify_ssl',
+        'config',
     ];
 }

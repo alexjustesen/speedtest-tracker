@@ -68,26 +68,24 @@ class DataIntegrationSettingResource extends Resource
                         ->schema([
                             Grid::make(2)
                                 ->schema([
-                                    TextInput::make('url')
+                                    TextInput::make('config.url')
                                         ->label('URL')
-                                        ->url()
-                                        ->required()
-                                        ->placeholder('http://your-influxdb-instance'),
-                                    TextInput::make('org')
+                                        ->placeholder('http://your-influxdb-instance')
+                                        ->required(),
+                                    TextInput::make('config.org')
                                         ->label('Org')
                                         ->required(),
-                                    TextInput::make('bucket')
+                                    TextInput::make('config.bucket')
                                         ->label('Bucket')
-                                        ->required()
-                                        ->placeholder('speedtest-tracker'),
-                                    TextInput::make('token')
+                                        ->required(),
+                                    TextInput::make('config.token')
                                         ->label('Token')
-                                        ->required()
-                                        ->password(),
+                                        ->password()
+                                        ->required(),
+                                    Checkbox::make('config.verify_ssl')
+                                        ->label('Verify SSL')
+                                        ->required(),
                                 ]),
-                            Checkbox::make('verify_ssl')
-                                ->label('Verify SSL')
-                                ->hidden(fn ($get) => ! $get('enabled')),
                             Actions::make([
                                 Action::make('export')
                                     ->label('Export current results')

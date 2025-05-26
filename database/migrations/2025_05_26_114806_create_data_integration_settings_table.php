@@ -13,11 +13,7 @@ class CreateDataIntegrationSettingsTable extends Migration
             $table->string('name');
             $table->string('type');
             $table->boolean('enabled')->default(false);
-            $table->string('url')->nullable();
-            $table->string('org')->nullable();
-            $table->string('bucket')->nullable();
-            $table->string('token')->nullable();
-            $table->boolean('verify_ssl')->default(true);
+            $table->json('config')->nullable();
             $table->timestamps();
         });
     }
