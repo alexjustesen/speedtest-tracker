@@ -54,7 +54,7 @@ class DataIntegrationResource extends Resource
                         ->schema([
                             Toggle::make('enabled')
                                 ->label('Enable integration')
-                                ->helperText('Turn this on to start sending data to InfluxDB.')
+                                ->helperText('When enabled, all new Speedtest results will also be sent to InfluxDB.')
                                 ->required(),
                             TextInput::make('name')
                                 ->label('Integration Name')
@@ -128,7 +128,7 @@ class DataIntegrationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDataIntegrations::route('/'),
+            'index' => Pages\ListDataIntegration::route('/'),
         ];
     }
 }

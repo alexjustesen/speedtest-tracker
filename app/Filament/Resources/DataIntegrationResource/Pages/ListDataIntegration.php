@@ -6,7 +6,7 @@ use App\Filament\Resources\DataIntegrationResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListDataIntegrations extends ListRecords
+class ListDataIntegration extends ListRecords
 {
     protected static string $resource = DataIntegrationResource::class;
 
