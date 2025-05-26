@@ -8,7 +8,7 @@ class CreateDataIntegrationsTable extends Migration
 {
     public function up()
     {
-        Schema::create('data_integration', function (Blueprint $table) {
+        Schema::create('data_integrations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('type');
@@ -20,6 +20,6 @@ class CreateDataIntegrationsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('data_integration');
+        Schema::dropIfExists('data_integrations');
     }
 }

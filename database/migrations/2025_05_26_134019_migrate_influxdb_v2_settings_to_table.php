@@ -24,7 +24,7 @@ class MigrateInfluxdbV2SettingsToTable extends Migration
             'verify_ssl' => $old->influxdb_v2_verify_ssl ?? true,
         ];
 
-        DB::table('data_integration')->insert([
+        DB::table('data_integrations')->insert([
             'type' => 'InfluxDBv2',
             'name' => 'Default InfluxDBv2 Exporter',
             'enabled' => $old->influxdb_v2_enabled ?? false,
@@ -36,7 +36,7 @@ class MigrateInfluxdbV2SettingsToTable extends Migration
 
     public function down(): void
     {
-        DB::table('data_integration')
+        DB::table('data_integrations')
             ->where('type', 'influxdb_v2')
             ->delete();
     }
