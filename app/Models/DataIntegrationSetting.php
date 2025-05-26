@@ -11,4 +11,9 @@ class DataIntegrationSetting extends Model
         'type',
         'config',
     ];
+
+    protected $casts = [
+        'enabled' => 'boolean',
+        'config' => 'array',
+    ];
 }

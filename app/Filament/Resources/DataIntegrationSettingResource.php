@@ -64,7 +64,7 @@ class DataIntegrationSettingResource extends Resource
                                 ->unique(ignoreRecord: true),
                         ])
                         ->columnSpanFull(),
-                    Section::make('InfluxDB Connection')
+                    Section::make('Configuration')
                         ->schema([
                             Grid::make(2)
                                 ->schema([
