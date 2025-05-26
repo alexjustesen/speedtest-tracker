@@ -2,7 +2,7 @@
 
 namespace App\Actions\Influxdb\v2;
 
-use App\Models\DataIntegrationSetting;
+use App\Models\DataIntegration;
 use InfluxDB2\Client;
 use InfluxDB2\Model\WritePrecision;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -14,7 +14,7 @@ class CreateClient
     public function handle(): Client
     {
         // Fetch the row where `type = 'InfluxDBv2'`
-        $settings = DataIntegrationSetting::firstWhere('type', 'InfluxDBv2');
+        $settings = DataIntegration::firstWhere('type', 'InfluxDBv2');
 
         $config = $settings->config ?? [];
 

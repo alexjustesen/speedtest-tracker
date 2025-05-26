@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDataIntegrationSettingsTable extends Migration
+class CreateDataIntegrationsTable extends Migration
 {
     public function up()
     {
-        Schema::create('data_integration_settings', function (Blueprint $table) {
+        Schema::create('data_integration', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('type');
@@ -20,6 +20,6 @@ class CreateDataIntegrationSettingsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('data_integration_settings');
+        Schema::dropIfExists('data_integration');
     }
 }

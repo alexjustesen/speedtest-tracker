@@ -4,7 +4,7 @@ namespace App\Settings;
 
 use Spatie\LaravelSettings\Settings;
 
-class DataIntegrationSettings extends Settings
+class DataIntegrations extends Settings
 {
     public bool $influxdb_v2_enabled;
 

@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use App\Jobs\Influxdb\v2\WriteResult;
-use App\Models\DataIntegrationSetting;
+use App\Models\DataIntegration;
 use Illuminate\Events\Dispatcher;
 
 class SpeedtestEventSubscriber
@@ -16,7 +16,7 @@ class SpeedtestEventSubscriber
     public function handleSpeedtestFailed(SpeedtestFailed $event): void
     {
         if (
-            $settings = DataIntegrationSetting::firstWhere([
+            $settings = DataIntegration::firstWhere([
                 ['type', '=', 'InfluxDBv2'],
                 ['enabled', '=', true],
             ])
@@ -31,7 +31,7 @@ class SpeedtestEventSubscriber
     public function handleSpeedtestCompleted(SpeedtestCompleted $event): void
     {
         if (
-            $settings = DataIntegrationSetting::firstWhere([
+            $settings = DataIntegration::firstWhere([
                 ['type', '=', 'InfluxDBv2'],
                 ['enabled', '=', true],
             ])

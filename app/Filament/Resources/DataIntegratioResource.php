@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DataIntegrationSettingResource\Pages;
+use App\Filament\Resources\DataIntegrationResource\Pages;
 use App\Jobs\Influxdb\v2\BulkWriteResults;
 use App\Jobs\Influxdb\v2\TestConnectionJob;
-use App\Models\DataIntegrationSetting;
+use App\Models\DataIntegration;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
@@ -22,9 +22,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 
-class DataIntegrationSettingResource extends Resource
+class DataIntegrationResource extends Resource
 {
-    protected static ?string $model = DataIntegrationSetting::class;
+    protected static ?string $model = DataIntegration::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
@@ -91,7 +91,7 @@ class DataIntegrationSettingResource extends Resource
                                     ->label('Export current results')
                                     ->icon('heroicon-o-cloud-arrow-up')
                                     ->action(fn () => BulkWriteResults::dispatch(Auth::user()))
-                                    ->visible(fn (?DataIntegrationSetting $record, Get $get): bool => $record?->exists === true && $get('enabled')),
+                                    ->visible(fn (?DataIntegration $record, Get $get): bool => $record?->exists === true && $get('enabled')),
                                 Action::make('test_connection')
                                     ->label('Test connection')
                                     ->icon('heroicon-o-check-circle')
@@ -128,7 +128,7 @@ class DataIntegrationSettingResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDataIntegrationSettings::route('/'),
+            'index' => Pages\ListDataIntegrations::route('/'),
         ];
     }
 }

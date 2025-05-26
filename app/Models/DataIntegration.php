@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DataIntegrationSetting extends Model
+class DataIntegration extends Model
 {
     protected $fillable = [
         'name',
