@@ -1,45 +1,40 @@
-name: Validate OpenAPI JSON Is Up-to-Date
+name: Update OpenAPI JSON
 
 on:
-  pull_request:
+  push:
     paths:
       - 'app/Http/Controllers/Api/**/*.php'
       - 'app/OpenApi/**/*.php'
 
 jobs:
-  check-openapi:
-    runs-on: ubuntu-latest
+  update-openapi:
+    runs-on: ubuntu-24.04
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
 
-      - name: Ensure openapi.json is present in PR
-        run: |
-          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
-          echo "$CHANGED"
-          if echo "$CHANGED" | grep -Eq '^(app/Http/Controllers/Api/|app/OpenApi/)'; then
-            if ! echo "$CHANGED" | grep -q '^openapi.json$'; then
-              echo "::error ::API sources changed but openapi.json not updated. Please include it in this PR."
-              exit 1
-            fi
-          fi
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
+    - name: Install dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
 
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist --no-progress
+    - name: Generate OpenAPI JSON
+      run: ./vendor/bin/openapi app -o openapi_temp.json -f json
 
-      - name: Generate fresh OpenAPI JSON
-        run: ./vendor/bin/openapi app -o openapi_temp.json -f json
-
-      - name: Compare against committed openapi.json
-        run: |
-          if ! diff -u openapi.json openapi_temp.json; then
-            echo "::error ::Your openapi.json is stale – please regenerate and commit the updated file."
-            exit 1
-          fi
+    - name: Commit OpenAPI JSON if changed
+      run: |
+        if ! diff -q openapi.json openapi_temp.json; then
+          mv openapi_temp.json openapi.json
+          git config user.name "GitHub Action"
+          git config user.email "actions@github.com"
+          git add openapi.json
+          git commit -m "Update OpenAPI JSON"
+          git push
+        fi
