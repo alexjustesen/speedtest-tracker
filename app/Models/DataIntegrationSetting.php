@@ -8,6 +8,7 @@ class DataIntegrationSetting extends Model
 {
     protected $fillable = [
         'name',
+        'enabled',
         'type',
         'config',
     ];
