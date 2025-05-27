@@ -5,10 +5,18 @@ namespace App\Filament\Resources;
 use App\Enums\UserRole;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
-use Filament\Forms;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,29 +35,29 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Grid::make([
+                Grid::make([
                     'default' => 1,
                 ])->columnSpan([
                     'lg' => 2,
                 ])->schema([
-                    Forms\Components\Section::make('Details')
+                    Section::make('Details')
                         ->columns([
                             'default' => 1,
                             'lg' => 2,
                         ])
                         ->schema([
-                            Forms\Components\TextInput::make('name')
+                            TextInput::make('name')
                                 ->required()
                                 ->maxLength(255)
                                 ->columnSpanFull(),
 
-                            Forms\Components\TextInput::make('email')
+                            TextInput::make('email')
                                 ->email()
                                 ->required()
                                 ->maxLength(255)
                                 ->columnSpanFull(),
 
-                            Forms\Components\TextInput::make('password')
+                            TextInput::make('password')
                                 ->confirmed()
                                 ->password()
                                 ->revealable()
@@ -57,7 +65,7 @@ class UserResource extends Resource
                                 ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                                 ->dehydrated(fn ($state) => filled($state)),
 
-                            Forms\Components\TextInput::make('password_confirmation')
+                            TextInput::make('password_confirmation')
                                 ->password()
                                 ->revealable(),
 
@@ -65,12 +73,12 @@ class UserResource extends Resource
                         ]),
                 ]),
 
-                Forms\Components\Grid::make(1)
+                Grid::make(1)
                     ->columnSpan(1)
                     ->schema([
-                        Forms\Components\Section::make('Platform')
+                        Section::make('Platform')
                             ->schema([
-                                Forms\Components\Select::make('role')
+                                Select::make('role')
                                     ->label('Role')
                                     ->default(UserRole::User)
                                     ->options(UserRole::class)
@@ -80,12 +88,12 @@ class UserResource extends Resource
                                 // ...
                             ]),
 
-                        Forms\Components\Section::make()
+                        Section::make()
                             ->schema([
-                                Forms\Components\Placeholder::make('created_at')
+                                Placeholder::make('created_at')
                                     ->content(fn (?User $record): string => $record ? $record->created_at->diffForHumans() : '-'),
 
-                                Forms\Components\Placeholder::make('updated_at')
+                                Placeholder::make('updated_at')
                                     ->content(fn (?User $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
 
                                 // ...
@@ -102,27 +110,27 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('ID')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('role')
+                TextColumn::make('role')
                     ->badge(),
 
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->alignEnd()
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
 
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->alignEnd()
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
@@ -132,12 +140,13 @@ class UserResource extends Resource
                 // ...
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('role')
+                SelectFilter::make('role')
                     ->options(UserRole::class),
             ])
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    EditAction::make(),
+                    DeleteAction::make(),
                 ]),
             ])
             ->bulkActions([
@@ -156,8 +165,6 @@ class UserResource extends Resource
     {
         return [
             'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
 }
