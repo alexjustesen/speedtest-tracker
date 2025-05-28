@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Actions\Notifications\SendAppriseTestNotification;
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
@@ -20,10 +21,13 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\View;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class NotificationPage extends SettingsPage
 {
@@ -96,10 +100,66 @@ class NotificationPage extends SettingsPage
                                         'md' => 2,
                                     ]),
 
+                                Section::make('Apprise')
+                                    ->description('The Apprise Notification Library enables sending notifications to a wide range of services.')
+                                    ->schema([
+                                        Toggle::make('apprise_enabled')
+                                            ->label('Enable Apprise Notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Forms\Get $get) => $get('apprise_enabled') !== true)
+                                            ->schema([
+                                                Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Toggle::make('apprise_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Toggle::make('apprise_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Repeater::make('apprise_webhooks')
+                                                    ->label('Apprise Webhooks')
+                                                    ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">Apprise Documentation</a>'))
+                                                    ->schema([
+                                                        TextInput::make('url')
+                                                            ->label('URL')
+                                                            ->placeholder('http://apprise:8000/notify')
+                                                            ->helperText('Specify the URL of your Apprise instance — it must end with /notify.')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                        TextInput::make('service_url')
+                                                            ->label('Service URL')
+                                                            ->placeholder('discord://WebhookID/WebhookToken')
+                                                            ->helperText('Provide the service endpoint URL for notifications — this URL must already be defined in your Apprise configuration.')
+                                                            ->maxLength(200)
+                                                            ->required(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Actions::make([
+                                                    Action::make('test apprise')
+                                                        ->label('Test Apprise')
+                                                        ->action(fn (Forms\Get $get) => SendAppriseTestNotification::run(
+                                                            webhooks: $get('apprise_webhooks')
+                                                        ))
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('apprise_webhooks'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
+
                                 Section::make('Mail')
                                     ->schema([
                                         Toggle::make('mail_enabled')
-                                            ->label('Enable mail notifications')
+                                            ->label('Enable Mail Notifications')
                                             ->reactive()
                                             ->columnSpanFull(),
                                         Grid::make([
@@ -119,7 +179,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('mail_recipients')
                                                     ->label('Recipients')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('email_address')
+                                                        TextInput::make('email_address')
                                                             ->placeholder('your@email.com')
                                                             ->email()
                                                             ->required(),
@@ -142,7 +202,7 @@ class NotificationPage extends SettingsPage
                                 Section::make('Webhook')
                                     ->schema([
                                         Toggle::make('webhook_enabled')
-                                            ->label('Enable webhook notifications')
+                                            ->label('Enable Webhook Notifications')
                                             ->reactive()
                                             ->columnSpanFull(),
                                         Grid::make([
@@ -162,7 +222,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('webhook_urls')
                                                     ->label('Recipients')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://webhook.site/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -206,19 +266,20 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Repeater::make('pushover_webhooks')
                                                     ->label('Pushover Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->label('URL')
                                                             ->placeholder('http://api.pushover.net/1/messages.json')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
-                                                        Forms\Components\TextInput::make('user_key')
+                                                        TextInput::make('user_key')
                                                             ->label('User Key')
                                                             ->placeholder('Your Pushover User Key')
                                                             ->maxLength(200)
                                                             ->required(),
-                                                        Forms\Components\TextInput::make('api_token')
+                                                        TextInput::make('api_token')
                                                             ->label('API Token')
                                                             ->placeholder('Your Pushover API Token')
                                                             ->maxLength(200)
@@ -264,8 +325,9 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Repeater::make('discord_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -309,8 +371,9 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Repeater::make('gotify_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://example.com/message?token=<apptoken>')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -354,8 +417,9 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Repeater::make('slack_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://hooks.slack.com/services/abc/xyz')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -399,22 +463,23 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Repeater::make('ntfy_webhooks')
                                                     ->label('Webhooks')
+                                                    ->addable(false)
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->maxLength(2000)
                                                             ->placeholder('Your ntfy server url')
                                                             ->required()
                                                             ->url(),
-                                                        Forms\Components\TextInput::make('topic')
+                                                        TextInput::make('topic')
                                                             ->label('Topic')
                                                             ->placeholder('Your ntfy Topic')
                                                             ->maxLength(200)
                                                             ->required(),
-                                                        Forms\Components\TextInput::make('username')
+                                                        TextInput::make('username')
                                                             ->label('Username')
                                                             ->placeholder('Username for Basic Auth (optional)')
                                                             ->maxLength(200),
-                                                        Forms\Components\TextInput::make('password')
+                                                        TextInput::make('password')
                                                             ->label('Password')
                                                             ->placeholder('Password for Basic Auth (optional)')
                                                             ->password()
@@ -459,8 +524,9 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Repeater::make('healthcheck_webhooks')
                                                     ->label('webhooks')
+                                                    ->addable(false)
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://hc-ping.com/your-uuid-here')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -510,8 +576,9 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Repeater::make('telegram_recipients')
                                                     ->label('Recipients')
+                                                    ->addable(false)
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('telegram_chat_id')
+                                                        TextInput::make('telegram_chat_id')
                                                             ->placeholder('12345678910')
                                                             ->label('Telegram Chat ID')
                                                             ->maxLength(50)
@@ -538,7 +605,7 @@ class NotificationPage extends SettingsPage
 
                         Section::make()
                             ->schema([
-                                Forms\Components\View::make('filament.forms.notifications-helptext'),
+                                View::make('filament.forms.notifications-helptext'),
                             ])
                             ->columnSpan([
                                 'md' => 1,
