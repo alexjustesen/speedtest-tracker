@@ -246,6 +246,7 @@ class NotificationPage extends SettingsPage
                                     ]),
 
                                 Section::make('Pushover')
+                                    ->description('⚠️ Pushover is deprecated and will be removed in a future release.')
                                     ->schema([
                                         Toggle::make('pushover_enabled')
                                             ->label('Enable Pushover webhook notifications')
@@ -304,6 +305,7 @@ class NotificationPage extends SettingsPage
                                     ]),
 
                                 Section::make('Discord')
+                                    ->description('⚠️ Discord is deprecated and will be removed in a future release.')
                                     ->schema([
                                         Toggle::make('discord_enabled')
                                             ->label('Enable Discord webhook notifications')
@@ -349,6 +351,7 @@ class NotificationPage extends SettingsPage
                                     ]),
 
                                 Section::make('Gotify')
+                                    ->description('⚠️ Gotify is deprecated and will be removed in a future release.')
                                     ->schema([
                                         Toggle::make('gotify_enabled')
                                             ->label('Enable Gotify webhook notifications')
@@ -394,6 +397,7 @@ class NotificationPage extends SettingsPage
                                     ]),
 
                                 Section::make('Slack')
+                                    ->description('⚠️ Slack is deprecated and will be removed in a future release.')
                                     ->schema([
                                         Toggle::make('slack_enabled')
                                             ->label('Enable Slack webhook notifications')
@@ -439,6 +443,7 @@ class NotificationPage extends SettingsPage
                                     ]),
 
                                 Section::make('Ntfy')
+                                    ->description('⚠️ Ntfy is deprecated and will be removed in a future release.')
                                     ->schema([
                                         Toggle::make('ntfy_enabled')
                                             ->label('Enable Ntfy webhook notifications')
@@ -498,6 +503,7 @@ class NotificationPage extends SettingsPage
                                     ]),
 
                                 Section::make('Healthcheck.io')
+                                    ->description('⚠️ Healthcheck.io is deprecated and will be removed in a future release.')
                                     ->schema([
                                         Toggle::make('healthcheck_enabled')
                                             ->label('Enable healthcheck.io webhook notifications')
@@ -544,6 +550,7 @@ class NotificationPage extends SettingsPage
                                     ]),
 
                                 Section::make('Telegram')
+                                    ->description('⚠️ Telegram is deprecated and will be removed in a future release.')
                                     ->schema([
                                         Toggle::make('telegram_enabled')
                                             ->label('Enable telegram notifications')
