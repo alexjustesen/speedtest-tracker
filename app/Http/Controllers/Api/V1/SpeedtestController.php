@@ -62,7 +62,7 @@ class SpeedtestController extends ApiController
             );
         }
 
-        $servers = GetOoklaSpeedtestServers::run();
+        $servers = GetOoklaSpeedtestServers::forApi();
 
         return $this->sendResponse(
             data: $servers,

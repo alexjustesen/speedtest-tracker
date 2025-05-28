@@ -13,6 +13,18 @@ class GetOoklaSpeedtestServers
 
     public function handle(): array
     {
+        return collect(self::fetch())->mapWithKeys(function (array $item) {
+            return [
+                $item['id'] => ($item['sponsor'] ?? 'Unknown').' ('.($item['name'] ?? 'Unknown').', '.$item['id'].')',
+            ];
+        })->toArray();
+    }
+
+    /**
+     * Fetch the raw Ookla server array from the Ookla API.
+     */
+    public static function fetch(): array
+    {
         $query = [
             'engine' => 'js',
             'https_functional' => true,
@@ -22,18 +34,28 @@ class GetOoklaSpeedtestServers
         try {
             $response = Http::retry(3, 250)
                 ->timeout(5)
-                ->get(url: 'https://www.speedtest.net/api/js/servers', query: $query);
+                ->get('https://www.speedtest.net/api/js/servers', $query);
+
+            return $response->json();
         } catch (Throwable $e) {
             Log::error('Unable to retrieve Ookla servers.', [$e->getMessage()]);
 
-            return [
-                '⚠️ Unable to retrieve Ookla servers, check internet connection and see logs.',
-            ];
+            return [];
         }
+    }
 
-        return $response->collect()->mapWithKeys(function (array $item, int $key) {
+    /**
+     * For API: return array of structured server objects
+     */
+    public static function forApi(): array
+    {
+        return collect(self::fetch())->map(function (array $item) {
             return [
-                $item['id'] => $item['sponsor'].' ('.$item['name'].', '.$item['id'].')',
+                'id' => $item['id'],
+                'host' => $item['host'] ?? null,
+                'name' => ($item['sponsor'] ?? 'Unknown'),
+                'location' => $item['name'] ?? 'Unknown',
+                'country' => $item['country'] ?? 'Unknown',
             ];
         })->toArray();
     }

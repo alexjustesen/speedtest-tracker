@@ -705,15 +705,30 @@
                 "additionalProperties": false
             },
             "ServersCollection": {
-                "description": "Mapping of server IDs to display names",
+                "description": "Collection of Ookla speedtest servers",
                 "properties": {
                     "data": {
-                        "description": "Map of server ID to display name",
-                        "type": "object",
-                        "example": {
-                            "data": {
-                                "12345": "Fibernet (New York, 12345)"
-                            }
+                        "description": "List of server objects",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "host": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "location": {
+                                    "type": "string"
+                                },
+                                "country": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
                         }
                     },
                     "message": {
