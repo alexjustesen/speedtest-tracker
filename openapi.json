@@ -5,53 +5,13 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/v1/results/latest": {
-            "get": {
-                "tags": [
-                    "Results"
-                ],
-                "summary": "Fetch the single most recent result",
-                "operationId": "getLatestResult",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Result"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UnauthenticatedError"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "No result found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/NotFoundError"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/results": {
+            "description": "Endpoints for retrieving speedtest results.",
             "get": {
                 "tags": [
                     "Results"
                 ],
-                "summary": "List results",
+                "summary": "List all results",
                 "operationId": "listResults",
                 "responses": {
                     "200": {
@@ -60,6 +20,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ResultsCollection"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
                                 }
                             }
                         }
@@ -87,20 +57,43 @@
                 }
             }
         },
-        "/api/v1/ookla/list-servers": {
+        "/api/v1/stats": {
+            "description": "Endpoints for viewing performance statistics.",
             "get": {
                 "tags": [
-                    "Servers"
+                    "Stats"
                 ],
-                "summary": "List available Ookla speedtest servers",
-                "operationId": "listSpeedtestServers",
+                "summary": "Fetch aggregated Speedtest statistics",
+                "operationId": "getStats",
+                "parameters": [
+                    {
+                        "name": "start_at",
+                        "in": "query",
+                        "description": "Filter stats from this date/time (ISO 8601)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "end_at",
+                        "in": "query",
+                        "description": "Filter stats up to this date/time (ISO 8601)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Statistics fetched successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ServersCollection"
+                                    "$ref": "#/components/schemas/Stats"
                                 }
                             }
                         }
@@ -121,9 +114,129 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ForbiddenError"
-                                },
-                                "example": {
-                                    "message": "You do not have permission to view speedtest servers."
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/results/{id}": {
+            "get": {
+                "tags": [
+                    "Results"
+                ],
+                "summary": "Get a single result",
+                "operationId": "getResult",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the result",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ResultResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Result not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/results/latest": {
+            "get": {
+                "tags": [
+                    "Results"
+                ],
+                "summary": "Get the most recent result",
+                "operationId": "getLatestResult",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Result"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No result found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
                                 }
                             }
                         }
@@ -193,31 +306,20 @@
                 }
             }
         },
-        "/api/v1/results/{id}": {
+        "/api/v1/speedtests/list-servers": {
             "get": {
                 "tags": [
-                    "Results"
+                    "Speedtests"
                 ],
-                "summary": "Fetch a single result by ID",
-                "operationId": "getResult",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "The ID of the result",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
+                "summary": "List available Ookla speedtest servers",
+                "operationId": "listSpeedtestServers",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ResultResponse"
+                                    "$ref": "#/components/schemas/ServersCollection"
                                 }
                             }
                         }
@@ -232,76 +334,15 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Result not found",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/NotFoundError"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/stats": {
-            "get": {
-                "tags": [
-                    "Stats"
-                ],
-                "summary": "Fetch aggregated Speedtest statistics",
-                "description": "Handle the incoming request.",
-                "operationId": "getStats",
-                "parameters": [
-                    {
-                        "name": "start_at",
-                        "in": "query",
-                        "description": "ISO‑8601 start datetime filter",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date-time"
-                        }
-                    },
-                    {
-                        "name": "end_at",
-                        "in": "query",
-                        "description": "ISO‑8601 end datetime filter",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date-time"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Stats"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UnauthenticatedError"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation failed",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ValidationError"
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                },
+                                "example": {
+                                    "message": "You do not have permission to view speedtest servers."
                                 }
                             }
                         }
@@ -850,19 +891,15 @@
     "tags": [
         {
             "name": "Results",
-            "description": "Operations related to Speedtest results.\nRequires an API token with scope `results:read`."
+            "description": "Endpoints for retrieving speedtest results. Requires token scope `results:read`."
         },
         {
             "name": "Speedtests",
-            "description": "Operations to run speedtests.\nRequires an API token with scope `speedtests:run`."
-        },
-        {
-            "name": "Servers",
-            "description": "Operations for speedtest servers.\nRequires an API token with scope `ookla:list-servers`."
+            "description": "Endpoints for running speedtests and listing servers."
         },
         {
             "name": "Stats",
-            "description": "Operations for statistics.\nRequires an API token with scope `results:read`."
+            "description": "Endpoints for viewing performance statistics. Requires token scope `speedtests:read`."
         }
     ]
 }
