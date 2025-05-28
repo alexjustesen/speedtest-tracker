@@ -66,8 +66,6 @@ class NotificationPage extends SettingsPage
                             'default' => 1,
                         ])
                             ->schema([
-                                View::make('filament.forms.notifications-deprecation')
-                                    ->columnSpanFull(),
                                 Section::make('Database')
                                     ->description('Notifications sent to this channel will show up under the 🔔 icon in the header.')
                                     ->schema([
@@ -130,14 +128,14 @@ class NotificationPage extends SettingsPage
                                                         TextInput::make('url')
                                                             ->label('URL')
                                                             ->placeholder('http://apprise:8000/notify')
-                                                            ->helperText('The URL to your Apprise instance.')
+                                                            ->helperText('Specify the URL of your Apprise instance — it must end with /notify.')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
                                                         TextInput::make('service_url')
                                                             ->label('Service URL')
                                                             ->placeholder('discord://WebhookID/WebhookToken')
-                                                            ->helperText('The service URL where the notification will be sent.')
+                                                            ->helperText('Provide the service endpoint URL for notifications — this URL must already be defined in your Apprise configuration.')
                                                             ->maxLength(200)
                                                             ->required(),
                                                     ])
