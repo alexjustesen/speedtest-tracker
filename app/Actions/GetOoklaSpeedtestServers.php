@@ -42,7 +42,7 @@ class GetOoklaSpeedtestServers
 
             return [
                 '⚠️ Unable to retrieve Ookla servers, check internet connection and see logs.',
-             ];
+            ];
         }
     }
 
