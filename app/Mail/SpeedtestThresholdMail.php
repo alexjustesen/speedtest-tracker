@@ -3,13 +3,13 @@
 namespace App\Mail;
 
 use App\Models\Result;
-use App\Services\Notifications\SpeedtestNotificationData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class SpeedtestThresholdMail extends Mailable implements ShouldQueue
 {
@@ -42,7 +42,16 @@ class SpeedtestThresholdMail extends Mailable implements ShouldQueue
     {
         return new Content(
             markdown: 'emails.speedtest-threshold',
-            with: SpeedtestNotificationData::make($this->result)
+            with: [
+                'id' => $this->result->id,
+                'service' => Str::title($this->result->service->getLabel()),
+                'serverName' => $this->result->server_name,
+                'serverId' => $this->result->server_id,
+                'isp' => $this->result->isp,
+                'speedtest_url' => $this->result->result_url,
+                'url' => url('/admin/results'),
+                'metrics' => $this->metrics,
+            ],
         );
     }
 }
