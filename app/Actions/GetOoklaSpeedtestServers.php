@@ -40,7 +40,9 @@ class GetOoklaSpeedtestServers
         } catch (Throwable $e) {
             Log::error('Unable to retrieve Ookla servers.', [$e->getMessage()]);
 
-            return [];
+            return [
+                 '⚠️ Unable to retrieve Ookla servers, check internet connection and see logs.',
+             ];
         }
     }
 
