@@ -52,7 +52,7 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
 
             $webhookPayload = [
                 'body' => $payload,
-                'title' => 'Speedtest Completed - #{$this->result->id}',
+                'title' => 'Speedtest Completed - #'.$this->result->id,
                 'type' => 'info',
                 'urls' => $webhook['service_url'],
             ];
