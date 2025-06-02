@@ -18,7 +18,7 @@ class ResultsController extends ApiController
      * GET /results
      * List or filter results with optional pagination.
      */
-    public function index(Request $request)
+    public function list(Request $request)
     {
         if ($request->user()->tokenCant('results:read')) {
             return $this->sendResponse(
