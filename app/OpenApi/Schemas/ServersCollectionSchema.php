@@ -7,17 +7,22 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(
     schema: 'ServersCollection',
     type: 'object',
-    description: 'Mapping of server IDs to display names',
+    description: 'Collection of Ookla speedtest servers',
     properties: [
         new OA\Property(
             property: 'data',
-            type: 'object',
-            description: 'Map of server ID to display name',
-            example: [
-                'data' => [
-                    '12345' => 'Fibernet (New York, 12345)',
-                ],
-            ],
+            type: 'array',
+            description: 'List of server objects',
+            items: new OA\Items(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'id', type: 'string'),
+                    new OA\Property(property: 'host', type: 'string'),
+                    new OA\Property(property: 'name', type: 'string'),
+                    new OA\Property(property: 'location', type: 'string'),
+                    new OA\Property(property: 'country', type: 'string'),
+                ]
+            )
         ),
         new OA\Property(
             property: 'message',
