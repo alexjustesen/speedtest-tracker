@@ -29,27 +29,26 @@ class CheckCronOverlap
         // Find other active schedules that have cron expressions
         $existingCrons = Schedule::query()
             ->where('is_active', true)
-            ->where('id', '!=', $scheduleId)  // Exclude the modified schedule
-            ->get(['id', 'options']) // Get schedule ID and cron expression
-            ->pluck('options.cron_expression', 'id'); // Map cron expression by schedule ID
+            ->where('id', '!=', $scheduleId)
+            ->get(['id', 'options'])
+            ->pluck('options.cron_expression', 'id');
 
         // Check for overlaps with the modified schedule's cron expression
         foreach ($existingCrons as $existingScheduleId => $existingCron) {
             if (Cron::hasOverlap($existingCron, $cronExpression)) {
-                $overlappingSchedules[] = $existingScheduleId; // Store overlapping schedule IDs
+                $overlappingSchedules[] = $existingScheduleId;
             }
         }
 
         // Send a notification if overlaps exist
         if (count($overlappingSchedules) > 0) {
-            // Generate a list of overlapping schedule IDs (or names if you prefer)
             $overlapList = implode(', ', $overlappingSchedules);
 
             // Send a single notification for all overlaps
             Notification::make()
                 ->title('Schedule Overlap Detected')
                 ->warning()
-                ->body("The cron expression for this schedule overlaps with the following active schedules: $overlapList.")
+                ->body("The cron expression for this schedule overlaps with the following active schedule ids: $overlapList.")
                 ->send();
         }
     }
