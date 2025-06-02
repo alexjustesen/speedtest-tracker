@@ -31,15 +31,19 @@ use OpenApi\Attributes as OA;
     tags: [
         new OA\Tag(
             name: 'Results',
-            description: 'Endpoints for retrieving speedtest results. Requires token scope `results:read`.'
+            description: 'Endpoints for accessing and filtering speedtest results. Requires API token with `results:read` scope.'
         ),
         new OA\Tag(
             name: 'Speedtests',
-            description: 'Endpoints for running speedtests and listing servers. Requires token scopes `speedtests:run` and/or `speedtests:read`.'
+            description: 'Endpoints for initiating speedtests and retrieving available servers. Requires `speedtests:run` or `speedtests:read` token scopes.'
         ),
         new OA\Tag(
             name: 'Stats',
-            description: 'Endpoints for viewing performance statistics. Requires token scope `speedtests:read`.'
+            description: 'Endpoints for retrieving aggregated statistics and performance metrics. Requires `speedtests:read` token scope.'
+        ),
+        new OA\Tag(
+            name: 'Application',
+            description: 'Endpoints for application-level operations such as health checks. No authentication required.'
         ),
     ]
 )]
