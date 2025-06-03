@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Log;
-use OpenApi\Attributes as OA;
 
-#[OA\Info(title: 'Speedtest Tracker API', version: '1.0.0')]
 abstract class ApiController
 {
     /**
      * Send a response.
      *
      * @param  mixed  $data
+     * @param  array  $filters
      * @param  string  $message
      * @param  int  $code
      * @return \Illuminate\Http\JsonResponse
@@ -29,7 +28,10 @@ abstract class ApiController
             $response['message'] = $message;
         }
 
-        return response()->json($response, $code);
+        return response()->json(
+            data: $response,
+            status: $code,
+        );
     }
 
     /**
@@ -44,10 +46,15 @@ abstract class ApiController
     {
         Log::info($e);
 
+        $response = [
+            'message' => $e->getMessage(),
+        ];
+
         throw new HttpResponseException(
-            response: response()->json([
-                'message' => $e->getMessage(),
-            ], $code)
+            response: response()->json(
+                data: $response,
+                status: $code,
+            ),
         );
     }
 }
