@@ -49,12 +49,12 @@ class ScheduleResource extends Resource
 
     public static function canAccess(): bool
     {
-        return auth()->user()->is_admin;
+        return Auth::check() && Auth::user()->is_admin;
     }
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()->is_admin;
+        return Auth::check() && Auth::user()->is_admin;
     }
 
     public static function form(Form $form): Form
