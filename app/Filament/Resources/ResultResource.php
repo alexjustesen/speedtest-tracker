@@ -393,8 +393,7 @@ class ResultResource extends Resource
                             ->toArray();
                     })
                     ->attribute('data->server->name'),
-<<<<<<< HEAD
-                Tables\Filters\SelectFilter::make('schedule_id')
+                SelectFilter::make('schedule_id')
                     ->label('Schedule')
                     ->multiple()
                     ->attribute('schedule_id')
@@ -404,10 +403,7 @@ class ResultResource extends Resource
                             ->pluck('name', 'id')
                             ->toArray();
                     }),
-                Tables\Filters\TernaryFilter::make('scheduled')
-=======
                 TernaryFilter::make('scheduled')
->>>>>>> origin/main
                     ->nullable()
                     ->trueLabel('Only scheduled speedtests')
                     ->falseLabel('Only manual speedtests')
