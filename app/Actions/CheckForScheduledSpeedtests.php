@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Actions\Ookla\StartSpeedtest;
+use App\Actions\Ookla\RunSpeedtest;
 use App\Models\Schedule;
 use Cron\CronExpression;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -25,7 +25,7 @@ class CheckForScheduledSpeedtests
                 $skipIps = data_get($schedule->options, 'skip_ips', []);
                 $interface = data_get($schedule->options, 'interface');
 
-                StartSpeedtest::dispatch(
+                RunSpeedtest::dispatch(
                     scheduled: true,
                     schedule: $schedule,
                     scheduleOptions: [
