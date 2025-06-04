@@ -2,14 +2,16 @@
 
 namespace App\Jobs\Notifications\Apprise;
 
+use App\Enums\UserRole;
 use App\Models\Result;
+use App\Models\User;
 use App\Services\Notifications\SpeedtestNotificationData;
 use App\Settings\NotificationSettings;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class SendSpeedtestCompletedNotification implements ShouldQueue
@@ -58,17 +60,21 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
             ];
 
             try {
-                $client = new Client;
-                $response = $client->post($webhook['url'], [
-                    'json' => $webhookPayload,
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]);
+                Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                ])->post($webhook['url'], $webhookPayload)->throw();
 
-                Log::info('Apprise notification sent successfully to '.$webhook['url']);
-            } catch (RequestException $e) {
-                Log::error('Apprise notification failed: '.$e->getMessage());
+                Log::info('Apprise notification sent successfully to instance '.$webhook['url'].' and service url '.$webhook['service_url']);
+            } catch (\Throwable $e) {
+                Log::error('Apprise notification failed for instance '.$webhook['url'].' and service URL '.$webhook['service_url'].': '.$e->getMessage());
+
+                // Notify admins if notifications fail.
+                $admins = User::where('role', UserRole::Admin)->get();
+                Notification::make()
+                    ->title('Apprise Notification Failure')
+                    ->danger()
+                    ->body('Failed to send notification. Please check the logs.')
+                    ->sendToDatabase($admins);
             }
         }
     }
