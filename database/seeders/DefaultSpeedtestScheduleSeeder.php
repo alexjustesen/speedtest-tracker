@@ -103,13 +103,14 @@ class DefaultSpeedtestScheduleSeeder extends Seeder
             $options['server_preference'] = 'ignore';
         }
 
+        // Leaving this here for when we add them to schedules
         // Build thresholds array from config (fallback to defaults if missing)
-        $thresholds = [
-            'enabled' => (bool) config('speedtest.threshold_enabled', false),
-            'download' => (int) config('speedtest.threshold_download', 0),
-            'upload' => (int) config('speedtest.threshold_upload', 0),
-            'ping' => (int) config('speedtest.threshold_ping', 0),
-        ];
+        //    $thresholds = [
+        //       'enabled' => (bool) config('speedtest.threshold_enabled', false),
+        //        'download' => (int) config('speedtest.threshold_download', 0),
+        //        'upload' => (int) config('speedtest.threshold_upload', 0),
+        //        'ping' => (int) config('speedtest.threshold_ping', 0),
+        //    ];
 
         // Create or update the “Default Speedtest Schedule” record
         Schedule::firstOrCreate(
@@ -120,7 +121,7 @@ class DefaultSpeedtestScheduleSeeder extends Seeder
             [
                 'description' => 'Auto‐created from environment variables.',
                 'options' => $options,
-                'thresholds' => $thresholds,
+                //   'thresholds' => $thresholds,
                 'token' => strtolower(Str::random(16)),
                 'owned_by_id' => 1,
                 'is_active' => true,
