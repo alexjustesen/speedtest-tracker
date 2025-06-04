@@ -38,9 +38,13 @@ class SendAppriseTestNotification
             ];
 
             try {
-                Http::withHeaders([
+                $request = Http::withHeaders([
                     'Content-Type' => 'application/json',
-                ])->post(rtrim($webhook['url'], '/'), $payload)
+                ]);
+                if (empty($webhook['ssl_verify'])) {
+                    $request = $request->withoutVerifying();
+                }
+                $request->post(rtrim($webhook['url'], '/'), $payload)
                     ->throw();
 
                 Notification::make()

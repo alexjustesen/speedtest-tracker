@@ -17,6 +17,7 @@ use App\Settings\NotificationSettings;
 use Filament\Forms;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
@@ -125,18 +126,26 @@ class NotificationPage extends SettingsPage
                                                     ->label('Apprise Webhooks')
                                                     ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">Apprise Documentation</a>'))
                                                     ->schema([
-                                                        TextInput::make('url')
-                                                            ->label('URL')
-                                                            ->placeholder('http://apprise:8000/notify')
-                                                            ->helperText('Specify the URL of your Apprise instance — it must end with /notify.')
-                                                            ->maxLength(2000)
-                                                            ->required()
-                                                            ->url(),
+                                                        Fieldset::make('Apprise Sidecar')
+                                                            ->schema([
+                                                                TextInput::make('url')
+                                                                    ->label('URL')
+                                                                    ->placeholder('http://apprise:8000/notify')
+                                                                    ->helperText('Specify the URL of your Apprise instance — it must end with /notify.')
+                                                                    ->maxLength(2000)
+                                                                    ->required()
+                                                                    ->url()
+                                                                    ->columnSpanFull(),
+                                                                Checkbox::make('ssl_verify')
+                                                                    ->label('Verify SSL')
+                                                                    ->default(true)
+                                                                    ->columnSpanFull(),
+                                                            ]),
                                                         TextInput::make('service_url')
                                                             ->label('Service URL')
                                                             ->placeholder('discord://WebhookID/WebhookToken')
                                                             ->helperText('Provide the service endpoint URL for notifications — this URL must already be defined in your Apprise configuration.')
-                                                            ->maxLength(200)
+                                                            ->maxLength(2000)
                                                             ->required(),
                                                     ])
                                                     ->columnSpanFull(),

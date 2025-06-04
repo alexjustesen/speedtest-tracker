@@ -60,9 +60,14 @@ class SendSpeedtestCompletedNotification implements ShouldQueue
             ];
 
             try {
-                Http::withHeaders([
+                $request = Http::withHeaders([
                     'Content-Type' => 'application/json',
-                ])->post($webhook['url'], $webhookPayload)->throw();
+                ]);
+                if (empty($webhook['ssl_verify'])) {
+                    $request = $request->withoutVerifying();
+                }
+                $request->post(rtrim($webhook['url'], '/'), $webhookPayload)
+                    ->throw();
 
                 Log::info('Apprise notification sent successfully to instance '.$webhook['url'].' and service url '.$webhook['service_url']);
             } catch (\Throwable $e) {
