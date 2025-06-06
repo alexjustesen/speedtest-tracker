@@ -2,17 +2,14 @@
 
 namespace App\Jobs\Notifications\Apprise;
 
-use App\Enums\UserRole;
 use App\Helpers\Number;
 use App\Models\Result;
-use App\Models\User;
+use App\Services\Notifications\AppriseService;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
-use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -35,10 +32,11 @@ class SendSpeedtestThresholdNotification implements ShouldQueue
      */
     public function handle(): void
     {
-        $notificationSettings = app(NotificationSettings::class);
+        $settings = app(NotificationSettings::class);
 
-        if (! count($notificationSettings->apprise_webhooks)) {
-            Log::warning('Apprise URLs not found, check Apprise notification channel settings.');
+        // If apprise_channel_urls is empty or not an array, skip
+        if (empty($settings->apprise_channel_urls) || ! is_array($settings->apprise_channel_urls)) {
+            Log::warning('Apprise service URLs not found; check Apprise notification settings.');
 
             return;
         }
@@ -72,52 +70,25 @@ class SendSpeedtestThresholdNotification implements ShouldQueue
             return;
         }
 
-        foreach ($notificationSettings->apprise_webhooks as $webhook) {
-            if (empty($webhook['service_url']) || empty($webhook['url'])) {
-                Log::warning('Webhook is missing service URL or URL, skipping.');
+        $payloadBody = view('apprise.speedtest-threshold', [
+            'id' => $this->result->id,
+            'service' => Str::title($this->result->service->getLabel()),
+            'serverName' => $this->result->server_name,
+            'serverId' => $this->result->server_id,
+            'isp' => $this->result->isp,
+            'metrics' => $failed,
+            'speedtest_url' => $this->result->result_url,
+            'url' => url('/admin/results'),
+        ])->render();
 
-                continue;
-            }
+        $payload = [
+            'body' => $payloadBody,
+            'title' => 'Speedtest Threshold Breach – #'.$this->result->id,
+            'type' => 'info',
+        ];
 
-            $webhookPayload = [
-                'body' => view('apprise.speedtest-threshold', [
-                    'id' => $this->result->id,
-                    'service' => Str::title($this->result->service->getLabel()),
-                    'serverName' => $this->result->server_name,
-                    'serverId' => $this->result->server_id,
-                    'isp' => $this->result->isp,
-                    'metrics' => $failed,
-                    'speedtest_url' => $this->result->result_url,
-                    'url' => url('/admin/results'),
-                ])->render(),
-                'title' => 'Speedtest Threshold Breach - #'.$this->result->id,
-                'type' => 'info',
-                'urls' => $webhook['service_url'],
-            ];
-
-            try {
-                $request = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                ]);
-                if (empty($webhook['ssl_verify'])) {
-                    $request = $request->withoutVerifying();
-                }
-                $request->post(rtrim($webhook['url'], '/'), $webhookPayload)
-                    ->throw();
-
-                Log::info('Apprise notification sent successfully to instance '.$webhook['url'].' and service url '.$webhook['service_url']);
-            } catch (\Throwable $e) {
-                Log::error('Apprise notification failed for instance '.$webhook['url'].' and service URL '.$webhook['service_url'].': '.$e->getMessage());
-
-                // Notify admins if notifications fail.
-                $admins = User::where('role', UserRole::Admin)->get();
-                Notification::make()
-                    ->title('Apprise Notification Failure')
-                    ->danger()
-                    ->body('Failed to send notification. Please check the logs.')
-                    ->sendToDatabase($admins);
-            }
-        }
+        // Send it!
+        AppriseService::send($payload);
     }
 
     protected function absoluteDownloadThreshold(ThresholdSettings $thresholdSettings): bool|array

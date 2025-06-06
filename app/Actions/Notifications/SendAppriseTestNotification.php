@@ -11,21 +11,22 @@ class SendAppriseTestNotification
 {
     use AsAction;
 
-    public function handle(array $webhooks)
+    public function handle(string $apprise_url, bool $apprise_verify_ssl, array $channel_urls)
     {
-        if (! count($webhooks)) {
+        if (! $apprise_url) {
             Notification::make()
-                ->title('You need to add Apprise webhooks!')
+                ->title('You need to configure an Apprise URL!')
                 ->warning()
                 ->send();
 
             return;
         }
 
-        foreach ($webhooks as $webhook) {
-            if (empty($webhook['url'])) {
+        foreach ($channel_urls as $row) {
+            $serviceUrl = $row['channel_url'] ?? null;
+            if (! $serviceUrl) {
                 Notification::make()
-                    ->title('Webhook is missing service URL!')
+                    ->title('Skipping missing Service URL!')
                     ->warning()
                     ->send();
 
@@ -33,18 +34,21 @@ class SendAppriseTestNotification
             }
 
             $payload = [
-                'body' => '👋 Testing the Apprise notification channel.',
-                'urls' => $webhook['service_url'],
+                'body' => '👋 Testing Apprise channel.',
+                'urls' => $serviceUrl,
             ];
 
             try {
                 $request = Http::withHeaders([
                     'Content-Type' => 'application/json',
                 ]);
-                if (empty($webhook['ssl_verify'])) {
+
+                if (! $apprise_verify_ssl) {
                     $request = $request->withoutVerifying();
                 }
-                $request->post(rtrim($webhook['url'], '/'), $payload)
+
+                $request
+                    ->post(rtrim($apprise_url, '/'), $payload)
                     ->throw();
 
                 Notification::make()
@@ -52,7 +56,7 @@ class SendAppriseTestNotification
                     ->success()
                     ->send();
             } catch (\Throwable $e) {
-                Log::error('Apprise notification failed for URL '.$webhook['url'].': '.$e->getMessage());
+                Log::error('Apprise notification failed for service URL '.$serviceUrl.': '.$e->getMessage());
 
                 Notification::make()
                     ->title('Failed to send Apprise notification.')

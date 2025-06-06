@@ -122,30 +122,31 @@ class NotificationPage extends SettingsPage
                                                             ->label('Notify on threshold failures')
                                                             ->columnSpanFull(),
                                                     ]),
-                                                Repeater::make('apprise_webhooks')
-                                                    ->label('Apprise Webhooks')
+                                                Fieldset::make('Apprise Sidecar')
+                                                    ->schema([
+                                                        TextInput::make('apprise_url')
+                                                            ->label('URL')
+                                                            ->placeholder('http://apprise:8000/notify')
+                                                            ->helperText('Specify the URL of your Apprise instance.')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url()
+                                                            ->columnSpanFull(),
+                                                        Checkbox::make('apprise_verify_ssl')
+                                                            ->label('Verify SSL')
+                                                            ->default(true)
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Repeater::make('apprise_channel_urls')
+                                                    ->label('Apprise Channels')
                                                     ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">Apprise Documentation</a>'))
                                                     ->schema([
-                                                        Fieldset::make('Apprise Sidecar')
-                                                            ->schema([
-                                                                TextInput::make('url')
-                                                                    ->label('URL')
-                                                                    ->placeholder('http://apprise:8000/notify')
-                                                                    ->helperText('Specify the URL of your Apprise instance — it must end with /notify.')
-                                                                    ->maxLength(2000)
-                                                                    ->required()
-                                                                    ->url()
-                                                                    ->columnSpanFull(),
-                                                                Checkbox::make('ssl_verify')
-                                                                    ->label('Verify SSL')
-                                                                    ->default(true)
-                                                                    ->columnSpanFull(),
-                                                            ]),
-                                                        TextInput::make('service_url')
-                                                            ->label('Service URL')
+                                                        TextInput::make('channel_url')
+                                                            ->label('Channel URL')
                                                             ->placeholder('discord://WebhookID/WebhookToken')
-                                                            ->helperText('Provide the service endpoint URL for notifications — this URL must already be defined in your Apprise configuration.')
+                                                            ->helperText('Provide the service endpoint URL for notifications.')
                                                             ->maxLength(2000)
+                                                            ->distinct()
                                                             ->required(),
                                                     ])
                                                     ->columnSpanFull(),
@@ -153,9 +154,11 @@ class NotificationPage extends SettingsPage
                                                     Action::make('test apprise')
                                                         ->label('Test Apprise')
                                                         ->action(fn (Forms\Get $get) => SendAppriseTestNotification::run(
-                                                            webhooks: $get('apprise_webhooks')
+                                                            apprise_url: $get('apprise_url'),
+                                                            apprise_verify_ssl: $get('apprise_verify_ssl'),
+                                                            channel_urls: $get('apprise_channel_urls'),
                                                         ))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('apprise_webhooks'))),
+                                                        ->hidden(fn (Forms\Get $get) => ! count($get('apprise_channel_urls'))),
                                                 ]),
                                             ]),
                                     ])
