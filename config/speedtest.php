@@ -40,12 +40,11 @@ return [
     /**
      * Threshold settings.
      */
+    'threshold_enabled' => env('THRESHOLD_ENABLED', false),
 
-     'threshold_enabled' => env('THRESHOLD_ENABLED', false),
+    'threshold_download' => env('THRESHOLD_DOWNLOAD', 0),
 
-     'threshold_download' => env('THRESHOLD_DOWNLOAD', 0),
+    'threshold_upload' => env('THRESHOLD_UPLOAD', 0),
 
-     'threshold_upload' => env('THRESHOLD_UPLOAD', 0),
-
-     'threshold_ping' => env('THRESHOLD_PING', 0) ,
+    'threshold_ping' => env('THRESHOLD_PING', 0) ,
 ];

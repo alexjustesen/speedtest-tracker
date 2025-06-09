@@ -8,6 +8,7 @@ use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
+use App\Models\Schedule;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
@@ -328,6 +329,7 @@ class ResultResource extends Resource
                     ->boolean()
                     ->toggleable()
                     ->toggledHiddenByDefault()
+                    ->tooltip(fn ($record) => $record->schedule->name ?? null)
                     ->alignment(Alignment::Center),
                 IconColumn::make('healthy')
                     ->boolean()
@@ -391,10 +393,21 @@ class ResultResource extends Resource
                             ->toArray();
                     })
                     ->attribute('data->server->name'),
+                SelectFilter::make('schedule_id')
+                    ->label('Schedule')
+                    ->multiple()
+                    ->attribute('schedule_id')
+                    ->options(function (): array {
+                        return Schedule::query()
+                            ->orderBy('name')
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    }),
                 TernaryFilter::make('scheduled')
                     ->nullable()
                     ->trueLabel('Only scheduled speedtests')
                     ->falseLabel('Only manual speedtests')
+                    ->native(false)
                     ->queries(
                         true: fn (Builder $query) => $query->where('scheduled', true),
                         false: fn (Builder $query) => $query->where('scheduled', false),
@@ -411,7 +424,8 @@ class ResultResource extends Resource
                         true: fn (Builder $query) => $query->where('healthy', true),
                         false: fn (Builder $query) => $query->where('healthy', false),
                         blank: fn (Builder $query) => $query,
-                    ),
+                    )
+                    ->native(false),
             ])
             ->actions([
                 ActionGroup::make([

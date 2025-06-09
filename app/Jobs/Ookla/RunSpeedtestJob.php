@@ -26,12 +26,18 @@ class RunSpeedtestJob implements ShouldQueue
      */
     public $timeout = 120;
 
+    public $interface;
+
+    public $result;
+
     /**
      * Create a new job instance.
      */
-    public function __construct(
-        public Result $result,
-    ) {}
+    public function __construct(Result $result, ?string $interface = null)
+    {
+        $this->result = $result;
+        $this->interface = $interface; // Allow null interface
+    }
 
     /**
      * Get the middleware the job should pass through.
@@ -62,7 +68,7 @@ class RunSpeedtestJob implements ShouldQueue
             '--accept-gdpr',
             '--format=json',
             $this->result->server_id ? '--server-id='.$this->result->server_id : null,
-            config('speedtest.interface') ? '--interface='.config('speedtest.interface') : null,
+            $this->interface ? '--interface='.$this->interface : null,
         ]);
 
         $process = new Process($command);
