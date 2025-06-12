@@ -3,21 +3,20 @@
 use Carbon\Carbon;
 
 return [
-
-    'build_date' => Carbon::parse('2025-05-19'),
-
-    'build_version' => 'v1.6.0',
-
     /**
      * General settings.
      */
-    'allowed_ips' => env('ALLOWED_IPS'),
+
+    'build_date' => Carbon::parse('2025-06-12'),
+
+    'build_version' => 'v1.6.1',
 
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
     'prune_results_older_than' => (int) env('PRUNE_RESULTS_OLDER_THAN', 0),
 
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
+
 
     /**
      * Speedtest settings.
@@ -32,10 +31,15 @@ return [
 
     'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
 
+
     /**
      * IP filtering settings.
      */
+
+    'allowed_ips' => env('ALLOWED_IPS'),
+
     'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''),
+
 
     /**
      * Threshold settings.
