@@ -48,14 +48,14 @@ class ApiTokenResource extends Resource
                         ->options([
                             'results:read' => 'Read results',
                             'speedtests:run' => 'Run speedtest',
-                            'ookla:list-servers' => 'List servers',
+                            'speedtests:read' => 'List servers',
                         ])
                         ->required()
                         ->bulkToggleable()
                         ->descriptions([
-                            'results:read' => 'Allow this token to read results.',
-                            'speedtests:run' => 'Allow this token to run speedtests.',
-                            'ookla:list-servers' => 'Allow this token to list servers.',
+                            'results:read' => 'Grant this token read access to results and statistics.',
+                            'speedtests:run' => 'Grant this token permission to run speedtests.',
+                            'speedtests:read' => 'Grant this token permission to list available servers.',
                         ]),
                     DateTimePicker::make('expires_at')
                         ->label('Expires at')
@@ -126,7 +126,7 @@ class ApiTokenResource extends Resource
                     ->options([
                         'results:read' => 'Read results',
                         'speedtests:run' => 'Run speedtest',
-                        'ookla:list-servers' => 'List servers',
+                        'speedtests:read' => 'List servers',
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         foreach ($data['values'] ?? [] as $value) {
