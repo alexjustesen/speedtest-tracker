@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\V0\GetLatestController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,11 +9,8 @@ use Illuminate\Support\Facades\Route;
  *
  * @deprecated
  */
-Route::get('/healthcheck', function () {
-    return response()->json([
-        'message' => 'Speedtest Tracker is running!',
-    ]);
-})->name('healthcheck');
+Route::get('/healthcheck', [AppController::class, 'healthcheck'])
+    ->name('healthcheck');
 
 /**
  * This route provides backwards compatibility from https://github.com/henrywhitaker3/Speedtest-Tracker
