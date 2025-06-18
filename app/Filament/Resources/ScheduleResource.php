@@ -238,12 +238,6 @@ class ScheduleResource extends Resource
                     ->alignCenter()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->boolean(),
-                IconColumn::make('thresholds.enabled')
-                    ->label('Thresholds')
-                    ->alignCenter()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->tooltip(fn ($record) => $record->getThresholdTooltip())
-                    ->boolean(),
                 TextColumn::make('ownedBy.name')
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('next_run_at')
