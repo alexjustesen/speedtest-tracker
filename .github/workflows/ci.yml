@@ -25,12 +25,14 @@ jobs:
     needs: lint-app
     runs-on: ubuntu-24.04
 
-    # 1. define each “profile” you want to test against
     strategy:
       matrix:
         include:
           - name: sqlite
             driver: sqlite
+            port: ''
+            user: ''
+            password: ''
           - name: mysql
             driver: mysql
             image: mysql:8.0
@@ -60,8 +62,8 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, bcmath, pdo, pdo_mysql, pdo_pgsql
 
-      # 2. start your chosen DB in Docker (skip for sqlite)
-      - name: Start Docker DB
+      # Start a Docker DB container for non-SQLite
+      - name: Start DB container
         if: matrix.driver != 'sqlite'
         run: |
           docker run -d --name db \
@@ -71,44 +73,54 @@ jobs:
             -p ${{ matrix.port }}:${{ matrix.port }} \
             ${{ matrix.image }}
 
-      # 3. create sqlite file if needed
-      - name: Create SQLite Database
+      # Create the SQLite file if needed
+      - name: Create SQLite file
         if: matrix.driver == 'sqlite'
-        run: touch database/testing.sqlite
+        run: mkdir -p database && touch database/testing.sqlite
 
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           npm ci && npm run build
 
-      - name: Copy Environment File
+      - name: Copy and configure .env
         run: cp .env.example .env
 
       - name: Generate App Key
         run: php artisan key:generate --quiet
 
-      # 4. tweak DB settings in .env on the fly
-      - name: Configure database env
+      # Wait for MySQL/MariaDB/Postgres to accept connections
+      - name: Wait for database
+        if: matrix.driver != 'sqlite'
         run: |
-          php -r "
-          \$env = file_get_contents('.env');
-          if ('${{matrix.driver}}' === 'sqlite') {
-            \$env = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=sqlite', \$env);
-            \$env = preg_replace('/DB_DATABASE=.*/',  'DB_DATABASE=' . realpath('database/testing.sqlite'), \$env);
-          } else {
-            \$env = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=${{matrix.driver}}', \$env);
-            \$env = preg_replace('/DB_HOST=.*/',       'DB_HOST=127.0.0.1',        \$env);
-            \$env = preg_replace('/DB_PORT=.*/',       'DB_PORT=${{matrix.port}}',  \$env);
-            \$env = preg_replace('/DB_DATABASE=.*/',   'DB_DATABASE=testing',      \$env);
-            \$env = preg_replace('/DB_USERNAME=.*/',   'DB_USERNAME=${{matrix.user}}', \$env);
-            \$env = preg_replace('/DB_PASSWORD=.*/',   'DB_PASSWORD=${{matrix.password}}', \$env);
-          }
-          file_put_contents('.env', \$env);
-          "
+          echo "Waiting for ${{ matrix.name }} to be ready…"
+          until \
+            ( [ "${{ matrix.driver }}" = "pgsql" ] && docker exec db pg_isready -U ${{ matrix.user }} ) || \
+            ( [ "${{ matrix.driver }}" != "pgsql" ] && docker exec db mysqladmin ping -h localhost -u${{ matrix.user }} -p${{ matrix.password }} --silent ); \
+          do
+            sleep 2
+          done
 
-      # 5. migrate & test
+      # Run migrations
       - name: Run Migrations
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: ${{ matrix.driver }}
+          DB_HOST: 127.0.0.1
+          DB_PORT: ${{ matrix.port }}
+          DB_DATABASE: ${{ matrix.driver == 'sqlite' && 'database/testing.sqlite' || 'testing' }}
+          DB_USERNAME: ${{ matrix.user }}
+          DB_PASSWORD: ${{ matrix.password }}
         run: php artisan migrate --force
 
+      # Run tests
       - name: Run Tests
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: ${{ matrix.driver }}
+          DB_HOST: 127.0.0.1
+          DB_PORT: ${{ matrix.port }}
+          DB_DATABASE: ${{ matrix.driver == 'sqlite' && 'database/testing.sqlite' || 'testing' }}
+          DB_USERNAME: ${{ matrix.user }}
+          DB_PASSWORD: ${{ matrix.password }}
         run: php artisan test --parallel
