@@ -30,27 +30,32 @@ jobs:
         include:
           - name: sqlite
             driver: sqlite
+            image: ''
             port: ''
             user: ''
             password: ''
+            database: database/testing.sqlite
           - name: mysql
             driver: mysql
             image: mysql:8.0
             port: 3306
             user: root
             password: password
+            database: testing
           - name: mariadb
             driver: mysql
-            image: mariadb:11
+            image: mariadb:10.5
             port: 3306
             user: root
             password: password
+            database: testing
           - name: postgres
             driver: pgsql
-            image: postgres:17
+            image: postgres:13
             port: 5432
             user: postgres
             password: password
+            database: testing
 
     steps:
       - name: Checkout
@@ -62,7 +67,6 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, bcmath, pdo, pdo_mysql, pdo_pgsql
 
-      # Start a Docker DB container for non-SQLite
       - name: Start DB container
         if: matrix.driver != 'sqlite'
         run: |
@@ -73,10 +77,9 @@ jobs:
             -p ${{ matrix.port }}:${{ matrix.port }} \
             ${{ matrix.image }}
 
-      # Create the SQLite file if needed
       - name: Create SQLite file
         if: matrix.driver == 'sqlite'
-        run: mkdir -p database && touch database/testing.sqlite
+        run: mkdir -p database && touch ${{ matrix.database }}
 
       - name: Install Dependencies
         run: |
@@ -89,38 +92,37 @@ jobs:
       - name: Generate App Key
         run: php artisan key:generate --quiet
 
-      # Wait for MySQL/MariaDB/Postgres to accept connections
       - name: Wait for database
         if: matrix.driver != 'sqlite'
         run: |
           echo "Waiting for ${{ matrix.name }} to be ready…"
           until \
             ( [ "${{ matrix.driver }}" = "pgsql" ] && docker exec db pg_isready -U ${{ matrix.user }} ) || \
-            ( [ "${{ matrix.driver }}" != "pgsql" ] && docker exec db mysqladmin ping -h localhost -u${{ matrix.user }} -p${{ matrix.password }} --silent ); \
+            ( [ "${{ matrix.driver }}" != "pgsql" ] && \
+              docker exec db sh -c "mysql -h 127.0.0.1 -P${{ matrix.port }} -u${{ matrix.user }} -p${{ matrix.password }} -e 'SELECT 1'" ); \
           do
             sleep 2
           done
 
-      # Run migrations
       - name: Run Migrations
         env:
           APP_ENV: testing
           DB_CONNECTION: ${{ matrix.driver }}
           DB_HOST: 127.0.0.1
           DB_PORT: ${{ matrix.port }}
-          DB_DATABASE: ${{ matrix.driver == 'sqlite' && 'database/testing.sqlite' || 'testing' }}
+          DB_DATABASE: ${{ matrix.database }}
           DB_USERNAME: ${{ matrix.user }}
           DB_PASSWORD: ${{ matrix.password }}
         run: php artisan migrate --force
 
-      # Run tests
       - name: Run Tests
         env:
           APP_ENV: testing
           DB_CONNECTION: ${{ matrix.driver }}
           DB_HOST: 127.0.0.1
           DB_PORT: ${{ matrix.port }}
-          DB_DATABASE: ${{ matrix.driver == 'sqlite' && 'database/testing.sqlite' || 'testing' }}
+          DB_DATABASE: ${{ matrix.database }}
           DB_USERNAME: ${{ matrix.user }}
           DB_PASSWORD: ${{ matrix.password }}
         run: php artisan test --parallel
+
