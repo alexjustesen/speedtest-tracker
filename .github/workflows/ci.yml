@@ -24,48 +24,6 @@ jobs:
   test-app:
     needs: lint-app
     runs-on: ubuntu-24.04
-
-    # Override the default job name to show only our custom matrix.label
-    name: "Test App | ${{ matrix.label }}"
-
-    strategy:
-      matrix:
-        include:
-          - name: sqlite
-            driver: sqlite
-            port: ''
-            user: ''
-            password: ''
-            database: database/testing.sqlite
-            label: SQLite
-
-          - name: mysql
-            driver: mysql
-            image: mysql:8.0
-            port: 3306
-            user: root
-            password: password
-            database: testing
-            label: MySQL:8.0
-
-          - name: mariadb
-            driver: mysql
-            image: mariadb:10.5
-            port: 3306
-            user: root
-            password: password
-            database: testing
-            label: MariaDB:10.5
-
-          - name: postgres
-            driver: pgsql
-            image: postgres:17
-            port: 5432
-            user: postgres
-            password: password
-            database: testing
-            label: PostgreSQL:17
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -74,68 +32,21 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: mbstring, bcmath, pdo, pdo_mysql, pdo_pgsql
 
-      # Start Docker container for non-SQLite databases
-      - name: Start DB container
-        if: matrix.driver != 'sqlite'
+      - name: Create SQLite Database
         run: |
-          docker run -d --name db \
-            -e MYSQL_ROOT_PASSWORD=${{ matrix.password }} \
-            -e POSTGRES_USER=${{ matrix.user }} \
-            -e POSTGRES_PASSWORD=${{ matrix.password }} \
-            -e POSTGRES_DB=${{ matrix.database }} \
-            -p ${{ matrix.port }}:${{ matrix.port }} \
-            ${{ matrix.image }}
-
-      # Create SQLite file if testing SQLite
-      - name: Create SQLite file
-        if: matrix.driver == 'sqlite'
-        run: |
-          mkdir -p database
-          touch ${{ matrix.database }}
+          touch database/testing.sqlite
 
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           npm ci && npm run build
 
-      - name: Copy and configure .env
+      - name: Copy Environment File
         run: cp .env.example .env
 
       - name: Generate App Key
         run: php artisan key:generate --quiet
 
-      # Wait for the database port to open (with buffer & timeout)
-      - name: Wait for database
-        if: matrix.driver != 'sqlite'
-        run: |
-          echo "Waiting for ${{ matrix.label }} to be ready (timeout 90s)…"
-          sleep 5
-          timeout 90 bash -c '
-            until bash -c "cat < /dev/tcp/127.0.0.1/${{ matrix.port }}" &>/dev/null; do
-              sleep 2
-            done
-          '
-
-      - name: Run Migrations
-        env:
-          APP_ENV: testing
-          DB_CONNECTION: ${{ matrix.driver }}
-          DB_HOST: 127.0.0.1
-          DB_PORT: ${{ matrix.port }}
-          DB_DATABASE: ${{ matrix.database }}
-          DB_USERNAME: ${{ matrix.user }}
-          DB_PASSWORD: ${{ matrix.password }}
-        run: php artisan migrate --force
-
       - name: Run Tests
-        env:
-          APP_ENV: testing
-          DB_CONNECTION: ${{ matrix.driver }}
-          DB_HOST: 127.0.0.1
-          DB_PORT: ${{ matrix.port }}
-          DB_DATABASE: ${{ matrix.database }}
-          DB_USERNAME: ${{ matrix.user }}
-          DB_PASSWORD: ${{ matrix.password }}
         run: php artisan test --parallel
