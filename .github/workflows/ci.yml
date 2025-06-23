@@ -25,16 +25,16 @@ jobs:
     needs: lint-app
     runs-on: ubuntu-24.04
 
+    name: Test App │ ${{ matrix.label }}
+
     strategy:
       matrix:
         include:
           - name: sqlite
             driver: sqlite
-            image: ''
-            port: ''
-            user: ''
-            password: ''
             database: database/testing.sqlite
+            label: SQLite
+
           - name: mysql
             driver: mysql
             image: mysql:8.0
@@ -42,6 +42,8 @@ jobs:
             user: root
             password: password
             database: testing
+            label: MySQL:8.0
+
           - name: mariadb
             driver: mysql
             image: mariadb:10.5
@@ -49,6 +51,8 @@ jobs:
             user: root
             password: password
             database: testing
+            label: MariaDB:10.5
+
           - name: postgres
             driver: pgsql
             image: postgres:13
@@ -56,6 +60,7 @@ jobs:
             user: postgres
             password: password
             database: testing
+            label: PostgreSQL:13
 
     steps:
       - name: Checkout
@@ -95,7 +100,7 @@ jobs:
       - name: Wait for database
         if: matrix.driver != 'sqlite'
         run: |
-          echo "Waiting for ${{ matrix.name }} to be ready…"
+          echo "Waiting for ${{ matrix.label }} to be ready…"
           until \
             ( [ "${{ matrix.driver }}" = "pgsql" ] && docker exec db pg_isready -U ${{ matrix.user }} ) || \
             ( [ "${{ matrix.driver }}" != "pgsql" ] && \
@@ -125,4 +130,3 @@ jobs:
           DB_USERNAME: ${{ matrix.user }}
           DB_PASSWORD: ${{ matrix.password }}
         run: php artisan test --parallel
-
