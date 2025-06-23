@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Ookla\RunSpeedtest as RunSpeedtestAction;
 use App\Http\Resources\V1\ResultResource;
 use Illuminate\Http\Request;
@@ -45,28 +44,6 @@ class SpeedtestController extends ApiController
             data: new ResultResource($result),
             message: 'Speedtest added to the queue.',
             code: Response::HTTP_CREATED,
-        );
-    }
-
-    /**
-     * GET /api/v1/speedtest/list-servers
-     * List available Ookla speedtest servers.
-     */
-    public function listServers(Request $request)
-    {
-        if ($request->user()->tokenCant('speedtests:read')) {
-            return $this->sendResponse(
-                data: null,
-                message: 'You do not have permission to view speedtest servers.',
-                code: Response::HTTP_FORBIDDEN,
-            );
-        }
-
-        $servers = GetOoklaSpeedtestServers::forApi();
-
-        return $this->sendResponse(
-            data: $servers,
-            message: 'Speedtest servers fetched successfully.'
         );
     }
 }

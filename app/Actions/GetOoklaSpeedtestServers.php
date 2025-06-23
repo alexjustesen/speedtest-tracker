@@ -11,6 +11,9 @@ class GetOoklaSpeedtestServers
 {
     use AsAction;
 
+    /**
+     * For UI: return the ID, Sponsor, and Name to start a manual test
+     */
     public function handle(): array
     {
         return collect(self::fetch())->mapWithKeys(function (array $item) {

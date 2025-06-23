@@ -5,6 +5,9 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/v1/ookla": {
+            "description": "Endpoints for retrieving Ookla speedtest servers and related resources."
+        },
         "/api/v1/results": {
             "description": "Endpoints for retrieving speedtest results.",
             "get": {
@@ -151,6 +154,48 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/ookla/list-servers": {
+            "get": {
+                "tags": [
+                    "Servers"
+                ],
+                "summary": "List available Ookla speedtest servers",
+                "description": "Returns an array of available Ookla speedtest servers. Requires an API token with `ookla:list-servers` scope.",
+                "operationId": "listOoklaServers",
+                "responses": {
+                    "200": {
+                        "description": "Servers retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServersCollection"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
                                 }
                             }
                         }
@@ -946,6 +991,10 @@
         {
             "name": "Application",
             "description": "Endpoints for application-level operations such as health checks. No authentication required."
+        },
+        {
+            "name": "Servers",
+            "description": "Servers"
         }
     ]
 }

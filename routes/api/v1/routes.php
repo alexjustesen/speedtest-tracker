@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\OoklaController;
 use App\Http\Controllers\Api\V1\ResultsController;
 use App\Http\Controllers\Api\V1\SpeedtestController;
 use App\Http\Controllers\Api\V1\StatsController;
@@ -18,8 +19,8 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::post('/speedtests/run', [SpeedtestController::class, 'run'])
         ->name('speedtests.run');
 
-    Route::get('/speedtests/list-servers', [SpeedtestController::class, 'listServers'])
-        ->name('speedtests.list-servers');
+    Route::get('/ookla/list-servers', [OoklaController::class, 'listServers'])
+        ->name('ookla.list-servers');
 
     Route::get('/stats', [StatsController::class, 'aggregated'])
         ->name('stats.aggregated');
