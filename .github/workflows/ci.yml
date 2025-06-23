@@ -101,7 +101,7 @@ jobs:
         if: matrix.driver != 'sqlite'
         run: |
           echo "Waiting for ${{ matrix.label }} to be ready…"
-          # Loop until the DB port is open on localhost
+          timeout 60 bash -c '
           until bash -c "cat < /dev/tcp/127.0.0.1/${{ matrix.port }}"; do
             sleep 2
           done
