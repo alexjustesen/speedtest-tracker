@@ -46,21 +46,21 @@ jobs:
 
           - name: mariadb
             driver: mysql
-            image: mariadb:10.5
+            image: mariadb:11
             port: 3306
             user: root
             password: password
             database: testing
-            label: MariaDB:10.5
+            label: MariaDB:11
 
           - name: postgres
             driver: pgsql
-            image: postgres:13
+            image: postgres:17
             port: 5432
             user: postgres
             password: password
             database: testing
-            label: PostgreSQL:13
+            label: PostgreSQL:17
 
     steps:
       - name: Checkout
