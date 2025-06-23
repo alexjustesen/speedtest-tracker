@@ -25,6 +25,7 @@ jobs:
     needs: lint-app
     runs-on: ubuntu-24.04
 
+    # Override the default job name to show only our custom matrix.label
     name: Test App │ ${{ matrix.label }}
 
     strategy:
@@ -32,6 +33,9 @@ jobs:
         include:
           - name: sqlite
             driver: sqlite
+            port: ''
+            user: ''
+            password: ''
             database: database/testing.sqlite
             label: SQLite
 
@@ -46,12 +50,12 @@ jobs:
 
           - name: mariadb
             driver: mysql
-            image: mariadb:11
+            image: mariadb:10.5
             port: 3306
             user: root
             password: password
             database: testing
-            label: MariaDB:11
+            label: MariaDB:10.5
 
           - name: postgres
             driver: pgsql
@@ -72,6 +76,7 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, bcmath, pdo, pdo_mysql, pdo_pgsql
 
+      # Start Docker container for non-SQLite databases
       - name: Start DB container
         if: matrix.driver != 'sqlite'
         run: |
@@ -79,12 +84,16 @@ jobs:
             -e MYSQL_ROOT_PASSWORD=${{ matrix.password }} \
             -e POSTGRES_USER=${{ matrix.user }} \
             -e POSTGRES_PASSWORD=${{ matrix.password }} \
+            -e POSTGRES_DB=${{ matrix.database }} \
             -p ${{ matrix.port }}:${{ matrix.port }} \
             ${{ matrix.image }}
 
+      # Create SQLite file if testing SQLite
       - name: Create SQLite file
         if: matrix.driver == 'sqlite'
-        run: mkdir -p database && touch ${{ matrix.database }}
+        run: |
+          mkdir -p database
+          touch ${{ matrix.database }}
 
       - name: Install Dependencies
         run: |
@@ -97,11 +106,13 @@ jobs:
       - name: Generate App Key
         run: php artisan key:generate --quiet
 
+      # Wait for the database port to open (with buffer & timeout)
       - name: Wait for database
         if: matrix.driver != 'sqlite'
         run: |
-          echo "Waiting for ${{ matrix.label }} to be ready (timeout 60s)…"
-          timeout 60 bash -c '
+          echo "Waiting for ${{ matrix.label }} to be ready (timeout 90s)…"
+          sleep 5
+          timeout 90 bash -c '
             until bash -c "cat < /dev/tcp/127.0.0.1/${{ matrix.port }}" &>/dev/null; do
               sleep 2
             done
