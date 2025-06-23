@@ -24,6 +24,32 @@ jobs:
   test-app:
     needs: lint-app
     runs-on: ubuntu-24.04
+
+    # 1. define each “profile” you want to test against
+    strategy:
+      matrix:
+        include:
+          - name: sqlite
+            driver: sqlite
+          - name: mysql
+            driver: mysql
+            image: mysql:8.0
+            port: 3306
+            user: root
+            password: password
+          - name: mariadb
+            driver: mysql
+            image: mariadb:11
+            port: 3306
+            user: root
+            password: password
+          - name: postgres
+            driver: pgsql
+            image: postgres:17
+            port: 5432
+            user: postgres
+            password: password
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,10 +58,23 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
+          extensions: mbstring, bcmath, pdo, pdo_mysql, pdo_pgsql
 
-      - name: Create SQLite Database
+      # 2. start your chosen DB in Docker (skip for sqlite)
+      - name: Start Docker DB
+        if: matrix.driver != 'sqlite'
         run: |
-          touch database/testing.sqlite
+          docker run -d --name db \
+            -e MYSQL_ROOT_PASSWORD=${{ matrix.password }} \
+            -e POSTGRES_USER=${{ matrix.user }} \
+            -e POSTGRES_PASSWORD=${{ matrix.password }} \
+            -p ${{ matrix.port }}:${{ matrix.port }} \
+            ${{ matrix.image }}
+
+      # 3. create sqlite file if needed
+      - name: Create SQLite Database
+        if: matrix.driver == 'sqlite'
+        run: touch database/testing.sqlite
 
       - name: Install Dependencies
         run: |
@@ -47,6 +86,29 @@ jobs:
 
       - name: Generate App Key
         run: php artisan key:generate --quiet
+
+      # 4. tweak DB settings in .env on the fly
+      - name: Configure database env
+        run: |
+          php -r "
+          \$env = file_get_contents('.env');
+          if ('${{matrix.driver}}' === 'sqlite') {
+            \$env = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=sqlite', \$env);
+            \$env = preg_replace('/DB_DATABASE=.*/',  'DB_DATABASE=' . realpath('database/testing.sqlite'), \$env);
+          } else {
+            \$env = preg_replace('/DB_CONNECTION=.*/', 'DB_CONNECTION=${{matrix.driver}}', \$env);
+            \$env = preg_replace('/DB_HOST=.*/',       'DB_HOST=127.0.0.1',        \$env);
+            \$env = preg_replace('/DB_PORT=.*/',       'DB_PORT=${{matrix.port}}',  \$env);
+            \$env = preg_replace('/DB_DATABASE=.*/',   'DB_DATABASE=testing',      \$env);
+            \$env = preg_replace('/DB_USERNAME=.*/',   'DB_USERNAME=${{matrix.user}}', \$env);
+            \$env = preg_replace('/DB_PASSWORD=.*/',   'DB_PASSWORD=${{matrix.password}}', \$env);
+          }
+          file_put_contents('.env', \$env);
+          "
+
+      # 5. migrate & test
+      - name: Run Migrations
+        run: php artisan migrate --force
 
       - name: Run Tests
         run: php artisan test --parallel
