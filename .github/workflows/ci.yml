@@ -100,11 +100,12 @@ jobs:
       - name: Wait for database
         if: matrix.driver != 'sqlite'
         run: |
-          echo "Waiting for ${{ matrix.label }} to be ready…"
+          echo "Waiting for ${{ matrix.label }} to be ready (timeout 60s)…"
           timeout 60 bash -c '
-          until bash -c "cat < /dev/tcp/127.0.0.1/${{ matrix.port }}"; do
-            sleep 2
-          done
+            until bash -c "cat < /dev/tcp/127.0.0.1/${{ matrix.port }}" &>/dev/null; do
+              sleep 2
+            done
+          '
 
       - name: Run Migrations
         env:
