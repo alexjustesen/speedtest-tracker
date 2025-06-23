@@ -101,11 +101,8 @@ jobs:
         if: matrix.driver != 'sqlite'
         run: |
           echo "Waiting for ${{ matrix.label }} to be ready…"
-          until \
-            ( [ "${{ matrix.driver }}" = "pgsql" ] && docker exec db pg_isready -U ${{ matrix.user }} ) || \
-            ( [ "${{ matrix.driver }}" != "pgsql" ] && \
-              docker exec db sh -c "mysql -h 127.0.0.1 -P${{ matrix.port }} -u${{ matrix.user }} -p${{ matrix.password }} -e 'SELECT 1'" ); \
-          do
+          # Loop until the DB port is open on localhost
+          until bash -c "cat < /dev/tcp/127.0.0.1/${{ matrix.port }}"; do
             sleep 2
           done
 
