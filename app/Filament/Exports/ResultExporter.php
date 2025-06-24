@@ -21,7 +21,6 @@ class ResultExporter extends Exporter
 
     public static function getColumns(): array
     {
-        // Basic known columns
         $columns = [
             ExportColumn::make('id')->label('ID'),
             ExportColumn::make('service')->state(fn (Result $r) => $r->service->getLabel()),
@@ -33,7 +32,6 @@ class ResultExporter extends Exporter
             ExportColumn::make('comments'),
         ];
 
-        // Append all flattened `data.*` keys
         $columns = array_merge($columns, self::generateDataColumns());
 
         return $columns;
@@ -41,10 +39,9 @@ class ResultExporter extends Exporter
 
     protected static function generateDataColumns(): array
     {
-        // Get first Result with usable `data`
+
         $sample = Result::query()->whereNotNull('data')->first()?->data ?? [];
 
-        // Flatten without the "data_" prefix
         $flattened = self::flatten($sample);
 
         $columns = [];
@@ -83,8 +80,8 @@ class ResultExporter extends Exporter
     {
         $body = 'Your result export has completed and '.number_format($export->successful_rows).' '.str('row')->plural($export->successful_rows).' exported.';
 
-        if ($failed = $export->getFailedRowsCount()) {
-            $body .= ' '.number_format($failed).' '.str('row')->plural($failed).' failed to export.';
+        if ($failedRowsCount = $export->getFailedRowsCount()) {
+            $body .= ' '.number_format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to export.';
         }
 
         return $body;
