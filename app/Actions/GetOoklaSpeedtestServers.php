@@ -54,7 +54,15 @@ class GetOoklaSpeedtestServers
      */
     public static function forApi(): array
     {
-        return collect(self::fetch())->map(function (array $item) {
+        $servers = self::fetch();
+
+        // If the first item is not an array, treat as error or empty
+        if (empty($servers) || ! is_array($servers) || (isset($servers[0]) && ! is_array($servers[0]))) {
+            // Optionally, you could return an error message here, but to match the controller's behavior, return an empty array
+            return [];
+        }
+
+        return collect($servers)->map(function (array $item) {
             return [
                 'id' => $item['id'],
                 'host' => $item['host'] ?? null,

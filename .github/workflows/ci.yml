@@ -49,4 +49,42 @@ jobs:
         run: php artisan key:generate --quiet
 
       - name: Run Tests
-        run: php artisan test --parallel
+        run: php artisan test --parallel --exclude-filter="Api"
+
+  test-api:
+    needs: lint-app
+    runs-on: ubuntu-24.04
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.head_commit.modified, 'app/Http/Controllers/Api/') ||
+      contains(github.event.head_commit.modified, 'routes/api.php') ||
+      contains(github.event.head_commit.modified, 'tests/Feature/Api/') ||
+      contains(github.event.head_commit.modified, 'app/Actions/') ||
+      contains(github.event.head_commit.modified, 'app/Http/Resources/') ||
+      contains(github.event.head_commit.modified, '.github/workflows/ci.yml')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Create SQLite Database
+        run: |
+          touch database/testing.sqlite
+
+      - name: Install Dependencies
+        run: |
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          npm ci && npm run build
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate App Key
+        run: php artisan key:generate --quiet
+
+      - name: Run API Tests
+        run: php -d memory_limit=512M artisan test --testsuite=Feature --filter="Api"
