@@ -1,28 +1,21 @@
-# .github/workflows/tests.yml
-name: Tests
+name: API Tests
 
 on:
   push:
     branches:
       - '!main'
       - '!release-**'
+    paths:
+      - 'app/Http/Controllers/Api/**'
+      - 'routes/api.php'
   pull_request:
+    paths:
+      - 'app/Http/Controllers/Api/**'
+      - 'routes/api.php'
   workflow_dispatch:
 
 jobs:
-  lint-app:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: "duster"
-        uses: tighten/duster-action@v3
-        with:
-          args: lint --using=pint -v
-
-  test-app:
-    needs: lint-app
+  test-api:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -48,5 +41,5 @@ jobs:
       - name: Generate App Key
         run: php artisan key:generate --quiet
 
-      - name: Run Tests
-        run: php artisan test --parallel --testsuite=Unit --testsuite=Feature
+      - name: Run API Tests
+        run: php -d memory_limit=512M artisan test --parallel --testsuite=Api 
