@@ -465,8 +465,7 @@ class ResultResource extends Resource
                 ExportAction::make()
                     ->exporter(ResultExporter::class)
                     ->columnMapping(false)
-                    ->requiresConfirmation()
-                    ->modalHeading('Export all results?')
+                    ->modalHeading('Export all Results')
                     ->modalDescription('This will export all columns for all results.')
                     ->fileName(fn (): string => 'results-'.now()->timestamp),
                 ActionGroup::make([
