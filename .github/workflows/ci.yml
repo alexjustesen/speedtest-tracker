@@ -49,7 +49,7 @@ jobs:
         run: php artisan key:generate --quiet
 
       - name: Run Tests
-        run: php artisan test --parallel --exclude-filter="Api"
+        run: php -d memory_limit=512M artisan test --parallel --testsuite=NonApi
 
   test-api:
     needs: lint-app
@@ -87,4 +87,4 @@ jobs:
         run: php artisan key:generate --quiet
 
       - name: Run API Tests
-        run: php -d memory_limit=512M artisan test --testsuite=Feature --filter="Api"
+        run: php -d memory_limit=512M artisan test --parallel --testsuite=Api
