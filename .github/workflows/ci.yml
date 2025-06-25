@@ -50,3 +50,32 @@ jobs:
 
       - name: Run Tests
         run: php artisan test --parallel
+
+  test-notifications:
+    needs: lint-app
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Create SQLite Database
+        run: |
+          touch database/testing.sqlite
+
+      - name: Install Dependencies
+        run: |
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate App Key
+        run: php artisan key:generate --quiet
+
+      - name: Run Notification Tests
+        run: php artisan test --testsuite=Notification
