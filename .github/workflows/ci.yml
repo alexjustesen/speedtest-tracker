@@ -22,8 +22,35 @@ jobs:
           args: lint --using=pint -v
 
   test-app:
+    name: test-app (${{ matrix.label }})
     needs: lint-app
     runs-on: ubuntu-24.04
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+
+      mariadb:
+        image: mariadb:10.5
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: testing
+        ports:
+          - 5432:5432
 
     strategy:
       matrix:
@@ -73,24 +100,25 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, bcmath, pdo, pdo_mysql, pdo_pgsql
 
-      # Start Docker container for non-SQLite databases
-      - name: Start DB container
-        if: matrix.driver != 'sqlite'
-        run: |
-          docker run -d --name db \
-            -e MYSQL_ROOT_PASSWORD=${{ matrix.password }} \
-            -e POSTGRES_USER=${{ matrix.user }} \
-            -e POSTGRES_PASSWORD=${{ matrix.password }} \
-            -e POSTGRES_DB=${{ matrix.database }} \
-            -p ${{ matrix.port }}:${{ matrix.port }} \
-            ${{ matrix.image }}
-
-      # Create SQLite file if testing SQLite
       - name: Create SQLite file
         if: matrix.driver == 'sqlite'
         run: |
           mkdir -p database
           touch ${{ matrix.database }}
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+          restore-keys: composer-
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-${{ hashFiles('package-lock.json') }}
+          restore-keys: node-
 
       - name: Install Dependencies
         run: |
