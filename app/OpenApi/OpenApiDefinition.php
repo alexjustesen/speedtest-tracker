@@ -41,10 +41,6 @@ use OpenApi\Attributes as OA;
             name: 'Stats',
             description: 'Endpoints for retrieving aggregated statistics and performance metrics. Requires `speedtests:read` token scope.'
         ),
-        new OA\Tag(
-            name: 'Application',
-            description: 'Endpoints for application-level operations such as health checks. No authentication required.'
-        ),
     ]
 )]
 class OpenApiDefinition {}

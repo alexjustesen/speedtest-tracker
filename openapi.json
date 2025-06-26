@@ -134,33 +134,6 @@
                 }
             }
         },
-        "/api//healthcheck": {
-            "get": {
-                "tags": [
-                    "Application"
-                ],
-                "summary": "App Healthcheck",
-                "description": "Simple liveness check for Speedtest Tracker.",
-                "operationId": "healthcheck",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/ookla/list-servers": {
             "get": {
                 "tags": [
@@ -987,10 +960,6 @@
         {
             "name": "Stats",
             "description": "Endpoints for retrieving aggregated statistics and performance metrics. Requires `speedtests:read` token scope."
-        },
-        {
-            "name": "Application",
-            "description": "Endpoints for application-level operations such as health checks. No authentication required."
         },
         {
             "name": "Servers",

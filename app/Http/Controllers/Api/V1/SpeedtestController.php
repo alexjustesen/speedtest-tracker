@@ -14,7 +14,7 @@ class SpeedtestController extends ApiController
      * POST /api/v1/speedtests/run
      * Run a new Ookla speedtest.
      */
-    public function run(Request $request)
+    public function __invoke(Request $request)
     {
         if ($request->user()->tokenCant('speedtests:run')) {
             return $this->sendResponse(

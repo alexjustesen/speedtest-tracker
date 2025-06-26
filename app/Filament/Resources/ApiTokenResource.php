@@ -53,7 +53,7 @@ class ApiTokenResource extends Resource
                         ->required()
                         ->bulkToggleable()
                         ->descriptions([
-                            'results:read' => 'Grant this token read access to results and statistics.',
+                            'results:read' => 'Grant this token permission to read results and statistics.',
                             'speedtests:run' => 'Grant this token permission to run speedtests.',
                             'ookla:list-servers' => 'Grant this token permission to list available servers.',
                         ]),
@@ -126,7 +126,7 @@ class ApiTokenResource extends Resource
                     ->options([
                         'results:read' => 'Read results',
                         'speedtests:run' => 'Run speedtest',
-                        'speedtests:read' => 'List servers',
+                        'ookla:list-servers' => 'List servers',
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         foreach ($data['values'] ?? [] as $value) {

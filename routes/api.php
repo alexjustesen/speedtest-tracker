@@ -1,16 +1,16 @@
 <?php
 
-use App\Http\Controllers\Api\AppController;
 use App\Http\Controllers\Api\V0\GetLatestController;
 use Illuminate\Support\Facades\Route;
 
 /**
  * Health check route to ensure the API is up and running.
- *
- * @deprecated
  */
-Route::get('/healthcheck', [AppController::class, 'healthcheck'])
-    ->name('healthcheck');
+Route::get('/healthcheck', function () {
+    return response()->json([
+        'message' => 'Speedtest Tracker is running!',
+    ]);
+})->name('healthcheck');
 
 /**
  * This route provides backwards compatibility from https://github.com/henrywhitaker3/Speedtest-Tracker

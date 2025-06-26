@@ -16,7 +16,7 @@ class StatsController extends ApiController
      * GET /api/v1/stats
      * Fetch aggregated Speedtest statistics with optional start/end filters.
      */
-    public function aggregated(Request $request)
+    public function __invoke(Request $request)
     {
         if ($request->user()->tokenCant('results:read')) {
             return $this->sendResponse(

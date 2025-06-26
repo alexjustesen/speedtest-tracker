@@ -12,7 +12,7 @@ class OoklaController extends ApiController
      * GET /api/v1/ookla/list-servers
      * List available Ookla speedtest servers.
      */
-    public function listServers(Request $request)
+    public function __invoke(Request $request)
     {
         if ($request->user()->tokenCant('ookla:list-servers')) {
             return $this->sendResponse(

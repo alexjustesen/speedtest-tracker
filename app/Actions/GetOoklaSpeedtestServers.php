@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -37,7 +38,7 @@ class GetOoklaSpeedtestServers
         try {
             $response = Http::retry(3, 250)
                 ->timeout(5)
-                ->get('https://www.speedtest.net/api/js/servers', query: $query);
+                ->get(url: 'https://www.speedtest.net/api/js/servers', query: $query);
 
             return $response->json();
         } catch (Throwable $e) {
@@ -65,10 +66,10 @@ class GetOoklaSpeedtestServers
         return collect($servers)->map(function (array $item) {
             return [
                 'id' => $item['id'],
-                'host' => $item['host'] ?? null,
-                'name' => ($item['sponsor'] ?? 'Unknown'),
-                'location' => $item['name'] ?? 'Unknown',
-                'country' => $item['country'] ?? 'Unknown',
+                'host' => Arr::get($item, 'host', 'Unknown'),
+                'name' => Arr::get($item, 'sponsor', 'Unknown'),
+                'location' => Arr::get($item, 'name', 'Unknown'),
+                'country' => Arr::get($item, 'country', 'Unknown'),
             ];
         })->toArray();
     }

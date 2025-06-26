@@ -16,12 +16,12 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
     Route::get('/results/{id}', [ResultsController::class, 'show'])
         ->name('results.show');
 
-    Route::post('/speedtests/run', [SpeedtestController::class, 'run'])
+    Route::post('/speedtests/run', SpeedtestController::class)
         ->name('speedtests.run');
 
-    Route::get('/ookla/list-servers', [OoklaController::class, 'listServers'])
+    Route::get('/ookla/list-servers', OoklaController::class)
         ->name('ookla.list-servers');
 
-    Route::get('/stats', [StatsController::class, 'aggregated'])
+    Route::get('/stats', StatsController::class)
         ->name('stats.aggregated');
 });
