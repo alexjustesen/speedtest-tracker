@@ -464,6 +464,9 @@ class ResultResource extends Resource
             ->headerActions([
                 ExportAction::make()
                     ->exporter(ResultExporter::class)
+                    ->columnMapping(false)
+                    ->modalHeading('Export all Results')
+                    ->modalDescription('This will export all columns for all results.')
                     ->fileName(fn (): string => 'results-'.now()->timestamp),
                 ActionGroup::make([
                     Action::make('truncate')
