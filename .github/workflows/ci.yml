@@ -25,9 +25,6 @@ jobs:
     needs: lint-app
     runs-on: ubuntu-24.04
 
-    # Override the default job name to show only our custom matrix.label
-    name: "Test App | ${{ matrix.label }}"
-
     strategy:
       matrix:
         include:
