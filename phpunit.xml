@@ -11,14 +11,6 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
-        <testsuite name="Notification">
-            <file>tests/Unit/NotificationListenersTest.php</file>
-            <file>tests/Unit/MailNotificationListenersTest.php</file>
-            <file>tests/Unit/WebhookNotificationListenersTest.php</file>
-            <file>tests/Unit/AppriseNotificationJobsTest.php</file>
-            <file>tests/Unit/NotificationTest.php</file>
-            <file>tests/Feature/NotificationActionsTest.php</file>
-        </testsuite>
     </testsuites>
     <source>
         <include>
