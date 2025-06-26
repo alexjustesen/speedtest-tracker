@@ -1,24 +1,41 @@
-name: 'Close stale issues'
+name: 'Issue and PR Maintenance'
 
 on:
   schedule:
-    - cron: '0 10 * * *'  # Runs daily at 10:00 AM UTC
+    - cron: '0 0 * * *'   # runs at midnight UTC
   workflow_dispatch:
 
 permissions:
   issues: write
+  pull-requests: write
 
 jobs:
-  manage-stale-issues:
+  lock-inactive:
+    name: Lock Inactive Issues
     runs-on: ubuntu-24.04
+    steps:
+      - uses: klaasnicolaas/action-inactivity-lock@v1.1.3
+        id: lock
+        with:
+          days-inactive-issues: 14
+          lock-reason-issues: ""
+          # Action can not skip PRs, set it to 100 years to cover it.
+          days-inactive-prs: 36524
+          lock-reason-prs: ""
+      - name: 🔍 Display locked issues
+        run: |
+          echo "Locked issues: $(echo '${{ steps.lock.outputs.locked-issues }}' | jq)"
 
+  close-stale:
+    name: Close Stale Issues
+    runs-on: ubuntu-24.04
     steps:
       - name: Close Stale Issues
         uses: actions/stale@v9
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-          # Stale messaging
+          # Messaging
           stale-issue-message: >
             👋 This issue has been automatically marked as stale due to inactivity.
             If this issue is still relevant, please comment to keep it open.
@@ -32,17 +49,15 @@ jobs:
           days-before-issue-stale: 14
           days-before-issue-close: 7
 
-          # Label management
+          # Labels
           stale-issue-label: 'stale'
           remove-stale-when-updated: true
-
-          # Targeting only `question`-labeled issues
           only-issue-labels: 'question'
           exempt-issue-labels: >
             bug, chore, confirmed, dependencies, help wanted,
             documentation, duplicate, feature, good first issue,
             needs review, wontfix
 
-          # Skip assigned or milestone-tracked issues
+          # Exemptions
           exempt-assignees: true
           exempt-milestones: true
