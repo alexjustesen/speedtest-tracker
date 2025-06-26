@@ -49,4 +49,4 @@ jobs:
         run: php artisan key:generate --quiet
 
       - name: Run Tests
-        run: php artisan test --parallel --testsuite=Unit --testsuite=Feature
+        run: php artisan test --parallel
