@@ -249,6 +249,26 @@ trait ResultDataAttributes
     }
 
     /**
+     * Get the result's uploaded bytes.
+     */
+    public function uploadedBytes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'upload.bytes'),
+        );
+    }
+
+    /**
+     * Get the result's downloaded bytes.
+     */
+    public function downloadedBytes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'download.bytes'),
+        );
+    }
+
+    /**
      * Get the result's server port.
      */
     protected function serverPort(): Attribute
