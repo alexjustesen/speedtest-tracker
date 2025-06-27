@@ -6,14 +6,12 @@ use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
 use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
-use App\Helpers\Time;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -37,7 +35,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\Number as LaravelNumber;
 
 class ResultResource extends Resource
 {
@@ -112,27 +109,6 @@ class ResultResource extends Resource
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
                         ])
                         ->columns(2)
-                        ->collapsed(),
-
-                    Section::make('Other')
-                        ->schema([
-                            Fieldset::make('Test Duration')->schema([
-                                TextInput::make('download_elapsed')->label('Download')
-                                    ->afterStateHydrated(fn ($component, Result $record) => $component->state(Time::formatElapsed($record->downloadElapsed ?? 0))),
-                                TextInput::make('upload_elapsed')->label('Upload')
-                                    ->afterStateHydrated(fn ($component, Result $record) => $component->state(Time::formatElapsed($record->uploadElapsed ?? 0))),
-                            ])->columns(2),
-                            Fieldset::make('Transferred Data')->schema([
-                                TextInput::make('downloaded.bytes')->label('Download')
-                                    ->afterStateHydrated(function (TextInput $component, Result $record) {
-                                        $component->state(! blank($record->downloaded_bytes) ? LaravelNumber::fileSize(bytes: $record->downloaded_bytes, precision: 2) : '');
-                                    }),
-                                TextInput::make('uploaded.bytes')->label('Upload')
-                                    ->afterStateHydrated(function (TextInput $component, Result $record) {
-                                        $component->state(! blank($record->uploaded_bytes) ? LaravelNumber::fileSize(bytes: $record->uploaded_bytes, precision: 2) : '');
-                                    }),
-                            ])->columns(2),
-                        ])
                         ->collapsed(),
 
                     Textarea::make('data.message')
