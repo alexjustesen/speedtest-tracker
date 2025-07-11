@@ -5,6 +5,7 @@ namespace App\Actions\Notifications;
 use App\Models\Result;
 use App\Services\SpeedtestFakeResultGenerator;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Str;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Spatie\WebhookServer\WebhookCall;
 
@@ -30,7 +31,7 @@ class SendWebhookTestNotification
             WebhookCall::create()
                 ->url($webhook['url'])
                 ->payload([
-                    'result_id' => fake()->uuid(),
+                    'result_id' => Str::uuid()->toString(),
                     'site_name' => 'Webhook Notification Testing',
                     'isp' => $fakeResult->data['isp'],
                     'ping' => $fakeResult->ping,
