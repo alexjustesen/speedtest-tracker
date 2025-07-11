@@ -31,7 +31,7 @@ class SendWebhookTestNotification
             WebhookCall::create()
                 ->url($webhook['url'])
                 ->payload([
-                    'result_id' => Str::uuid()->toString(),
+                    'result_id' => Str::uuid(),
                     'site_name' => 'Webhook Notification Testing',
                     'isp' => $fakeResult->data['isp'],
                     'ping' => $fakeResult->ping,
