@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 /**
  * Health check route to ensure the API is up and running.
- *
- * @deprecated
  */
 Route::get('/healthcheck', function () {
     return response()->json([
