@@ -22,9 +22,6 @@ jobs:
           # Action can not skip PRs, set it to 100 years to cover it.
           days-inactive-prs: 36524
           lock-reason-prs: ""
-      - name: 🔍 Display locked issues
-        run: |
-          echo "Locked issues: $(echo '${{ steps.lock.outputs.locked-issues }}' | jq)"
 
   close-stale:
     name: Close Stale Issues
