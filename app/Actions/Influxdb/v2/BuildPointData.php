@@ -39,6 +39,8 @@ class BuildPointData
             ->addField('ping', Number::castToType($result->ping, 'float'))
             ->addField('download_bits', ! blank($result->download) ? Number::castToType(Bitrate::bytesToBits($result->download), 'int') : null)
             ->addField('upload_bits', ! blank($result->upload) ? Number::castToType(Bitrate::bytesToBits($result->upload), 'int') : null)
+            ->addField('download_elapsed', Number::castToType(Arr::get($result->data, 'download.elapsed'), 'float'))
+            ->addField('upload_elapsed', Number::castToType(Arr::get($result->data, 'upload.elapsed'), 'float'))
             ->addField('download_jitter', Number::castToType(Arr::get($result->data, 'download.latency.jitter'), 'float'))
             ->addField('upload_jitter', Number::castToType(Arr::get($result->data, 'upload.latency.jitter'), 'float'))
             ->addField('ping_jitter', Number::castToType(Arr::get($result->data, 'ping.jitter'), 'float'))
@@ -48,6 +50,8 @@ class BuildPointData
             ->addField('upload_latency_avg', Number::castToType(Arr::get($result->data, 'upload.latency.iqm'), 'float'))
             ->addField('upload_latency_high', Number::castToType(Arr::get($result->data, 'upload.latency.high'), 'float'))
             ->addField('upload_latency_low', Number::castToType(Arr::get($result->data, 'upload.latency.low'), 'float'))
+            ->addField('downloaded_bytes', Number::castToType(Arr::get($result->data, 'downloaded_bytes'), 'float'))
+            ->addField('uploaded_bytes', Number::castToType(Arr::get($result->data, 'uploaded_bytes'), 'float'))
             ->addField('packet_loss', Number::castToType(Arr::get($result->data, 'packetLoss'), 'float'))
             ->addField('log_message', Arr::get($result->data, 'message'));
 
