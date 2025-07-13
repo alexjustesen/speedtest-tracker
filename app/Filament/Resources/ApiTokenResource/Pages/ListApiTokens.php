@@ -3,10 +3,12 @@
 namespace App\Filament\Resources\ApiTokenResource\Pages;
 
 use App\Filament\Resources\ApiTokenResource;
+use App\Filament\Resources\ApiTokenResource\ApiTokenSchema;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Facades\Auth;
 
 class ListApiTokens extends ListRecords
 {
@@ -17,9 +19,9 @@ class ListApiTokens extends ListRecords
         return [
             Action::make('createToken')
                 ->label('Create API Token')
-                ->schema(ApiTokenResource::getTokenFormSchema())
+                ->schema(ApiTokenSchema::schema())
                 ->action(function (array $data): void {
-                    $token = auth()->user()->createToken(
+                    $token = Auth::user()->createToken(
                         $data['name'],
                         $data['abilities'],
                         $data['expires_at'] ? Carbon::parse($data['expires_at']) : null
