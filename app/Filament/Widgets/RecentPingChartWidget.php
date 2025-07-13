@@ -9,13 +9,13 @@ use Filament\Widgets\ChartWidget;
 
 class RecentPingChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Ping (ms)';
+    protected ?string $heading = 'Ping (ms)';
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $maxHeight = '250px';
+    protected ?string $maxHeight = '250px';
 
-    protected static ?string $pollingInterval = '60s';
+    protected ?string $pollingInterval = '60s';
 
     public ?string $filter = '24h';
 

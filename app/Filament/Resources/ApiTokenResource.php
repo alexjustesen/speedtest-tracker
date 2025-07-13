@@ -2,17 +2,18 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Schema;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\ApiTokenResource\Pages\ListApiTokens;
 use App\Filament\Resources\ApiTokenResource\Pages;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -25,9 +26,9 @@ class ApiTokenResource extends Resource
 {
     protected static ?string $model = PersonalAccessToken::class;
 
-    protected static ?string $navigationIcon = 'tabler-api';
+    protected static string | \BackedEnum | null $navigationIcon = 'tabler-api';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
 
     protected static ?string $label = 'API Token';
 
@@ -69,9 +70,9 @@ class ApiTokenResource extends Resource
         ];
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema(static::getTokenFormSchema());
+        return $schema->components(static::getTokenFormSchema());
     }
 
     public static function table(Table $table): Table
@@ -136,7 +137,7 @@ class ApiTokenResource extends Resource
                         return $query;
                     }),
             ])
-            ->actions([
+            ->recordActions([
                 ActionGroup::make([
                     EditAction::make()
                         ->disabled(fn ($record) => $record->expires_at !== null && $record->expires_at->isPast())
@@ -144,7 +145,7 @@ class ApiTokenResource extends Resource
                     DeleteAction::make(),
                 ]),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ]);
     }
@@ -152,7 +153,7 @@ class ApiTokenResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListApiTokens::route('/'),
+            'index' => ListApiTokens::route('/'),
         ];
     }
 }

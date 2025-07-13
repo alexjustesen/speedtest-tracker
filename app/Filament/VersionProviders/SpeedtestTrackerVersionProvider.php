@@ -2,7 +2,7 @@
 
 namespace App\Filament\VersionProviders;
 
-use Awcodes\FilamentVersions\Providers\Contracts\VersionProvider;
+use Awcodes\Versions\Providers\Contracts\VersionProvider;
 
 class SpeedtestTrackerVersionProvider implements VersionProvider
 {

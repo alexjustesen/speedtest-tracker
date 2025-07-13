@@ -10,13 +10,13 @@ use Filament\Widgets\ChartWidget;
 
 class RecentDownloadChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Download (Mbps)';
+    protected ?string $heading = 'Download (Mbps)';
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $maxHeight = '250px';
+    protected ?string $maxHeight = '250px';
 
-    protected static ?string $pollingInterval = '60s';
+    protected ?string $pollingInterval = '60s';
 
     public ?string $filter = '24h';
 

@@ -2,6 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportAction;
+use App\Filament\Resources\ResultResource\Pages\ListResults;
 use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
 use App\Filament\Resources\ResultResource\Pages;
@@ -12,20 +22,11 @@ use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\Alignment;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ExportAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -40,11 +41,11 @@ class ResultResource extends Resource
 {
     protected static ?string $model = Result::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-table-cells';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-table-cells';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
             Grid::make(['default' => 2, 'md' => 3])->schema([
                 Grid::make()->schema([
                     Section::make('Result Overview')->schema([
@@ -360,7 +361,7 @@ class ResultResource extends Resource
             ])
             ->filters([
                 Filter::make('created_at')
-                    ->form([
+                    ->schema([
                         DatePicker::make('created_from'),
                         DatePicker::make('created_until'),
                     ])
@@ -431,7 +432,7 @@ class ResultResource extends Resource
                         blank: fn (Builder $query) => $query,
                     ),
             ])
-            ->actions([
+            ->recordActions([
                 ActionGroup::make([
                     Action::make('view result')
                         ->label('View on Speedtest.net')
@@ -443,14 +444,14 @@ class ResultResource extends Resource
                     Action::make('updateComments')
                         ->icon('heroicon-o-chat-bubble-bottom-center-text')
                         ->hidden(fn (): bool => ! (Auth::user()?->is_admin ?? false) && ! (Auth::user()?->is_user ?? false))
-                        ->mountUsing(fn (Forms\ComponentContainer $form, Result $record) => $form->fill([
+                        ->mountUsing(fn (Schema $schema, Result $record) => $schema->fill([
                             'comments' => $record->comments,
                         ]))
                         ->action(function (Result $record, array $data): void {
                             $record->comments = $data['comments'];
                             $record->save();
                         })
-                        ->form([
+                        ->schema([
                             Textarea::make('comments')
                                 ->rows(6)
                                 ->maxLength(500),
@@ -458,7 +459,7 @@ class ResultResource extends Resource
                     DeleteAction::make(),
                 ]),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ])
             ->headerActions([
@@ -487,7 +488,7 @@ class ResultResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListResults::route('/'),
+            'index' => ListResults::route('/'),
         ];
     }
 }

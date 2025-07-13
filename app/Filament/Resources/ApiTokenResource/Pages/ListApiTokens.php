@@ -17,7 +17,7 @@ class ListApiTokens extends ListRecords
         return [
             Action::make('createToken')
                 ->label('Create API Token')
-                ->form(ApiTokenResource::getTokenFormSchema())
+                ->schema(ApiTokenResource::getTokenFormSchema())
                 ->action(function (array $data): void {
                     $token = auth()->user()->createToken(
                         $data['name'],

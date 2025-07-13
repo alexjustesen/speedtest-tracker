@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Throwable;
 use App\Models\User;
 use Filament\Notifications\Notification;
 use Illuminate\Bus\Queueable;
@@ -33,7 +34,7 @@ class TruncateResults implements ShouldQueue
     {
         try {
             DB::table('results')->truncate();
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->fail($th);
 
             return;

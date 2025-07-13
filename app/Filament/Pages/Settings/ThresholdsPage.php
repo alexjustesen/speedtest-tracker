@@ -2,23 +2,24 @@
 
 namespace App\Filament\Pages\Settings;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\View;
 use App\Settings\ThresholdSettings;
 use Filament\Forms;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\View;
-use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Auth;
 
 class ThresholdsPage extends SettingsPage
 {
-    protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-exclamation-triangle';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 4;
 
@@ -38,10 +39,10 @@ class ThresholdsPage extends SettingsPage
         return Auth::check() && Auth::user()->is_admin;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Grid::make([
                     'default' => 1,
                     'md' => 3,
@@ -61,7 +62,7 @@ class ThresholdsPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('absolute_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('absolute_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Metrics')
                                                     ->schema([

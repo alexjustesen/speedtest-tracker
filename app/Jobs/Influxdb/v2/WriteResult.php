@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Influxdb\v2;
 
+use Exception;
 use App\Actions\Influxdb\v2\BuildPointData;
 use App\Actions\Influxdb\v2\CreateClient;
 use App\Models\Result;
@@ -33,7 +34,7 @@ class WriteResult implements ShouldQueue
 
         try {
             $writeApi->write($point);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Failed to write to InfluxDB.', [
                 'error' => $e->getMessage(),
                 'result_id' => $this->result->id,

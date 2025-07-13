@@ -8,13 +8,13 @@ use Filament\Widgets\ChartWidget;
 
 class RecentJitterChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Jitter';
+    protected ?string $heading = 'Jitter';
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $maxHeight = '250px';
+    protected ?string $maxHeight = '250px';
 
-    protected static ?string $pollingInterval = '60s';
+    protected ?string $pollingInterval = '60s';
 
     public ?string $filter = '24h';
 

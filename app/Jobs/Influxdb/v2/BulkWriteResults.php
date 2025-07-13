@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Influxdb\v2;
 
+use Exception;
 use App\Actions\Influxdb\v2\BuildPointData;
 use App\Actions\Influxdb\v2\CreateClient;
 use App\Enums\ResultStatus;
@@ -51,7 +52,7 @@ class BulkWriteResults implements ShouldQueue
 
                 try {
                     $writeApi->write($points);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::error('Failed to bulk write to InfluxDB.', [
                         'error' => $e->getMessage(),
                     ]);
