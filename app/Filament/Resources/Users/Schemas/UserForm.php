@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Schemas;
+namespace App\Filament\Resources\Users\Schemas;
 
 use App\Enums\UserRole;
 use App\Models\User;

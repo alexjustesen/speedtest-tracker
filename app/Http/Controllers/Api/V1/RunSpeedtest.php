@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Ookla\RunSpeedtest as RunSpeedtestAction;
-use App\Http\Resources\V1\ResultResource;
+use App\Http\Resources\V1\Results;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -75,7 +75,7 @@ class RunSpeedtest extends ApiController
         );
 
         return self::sendResponse(
-            data: new ResultResource($result),
+            data: new Results($result),
             message: 'Speedtest added to the queue.',
             code: Response::HTTP_CREATED,
         );

@@ -84,7 +84,6 @@ class DataIntegrationPage extends SettingsPage
                                             ->maxLength(255)
                                             ->password()
                                             ->required(fn (Get $get) => $get('influxdb_v2_enabled') === true)
-                                            ->disableAutocomplete()
                                             ->columnSpan(['md' => 2]),
                                         Checkbox::make('influxdb_v2_verify_ssl')
                                             ->label('Verify SSL')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Tables;
+namespace App\Filament\Resources\Users\Tables;
 
 use App\Enums\UserRole;
 use Filament\Actions\ActionGroup;

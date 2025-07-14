@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\ApiTokenResource\Pages;
+namespace App\Filament\Resources\ApiTokens\Pages;
 
-use App\Filament\Resources\ApiTokenResource;
-use App\Filament\Resources\ApiTokenResource\ApiTokenSchema;
+use App\Filament\Resources\ApiTokens\ApiTokenResource;
+use App\Filament\Resources\ApiTokens\Schemas\ApiTokenForm;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -19,7 +19,7 @@ class ListApiTokens extends ListRecords
         return [
             Action::make('createToken')
                 ->label('Create API Token')
-                ->schema(ApiTokenSchema::schema())
+                ->schema(ApiTokenForm::schema())
                 ->action(function (array $data): void {
                     $token = Auth::user()->createToken(
                         $data['name'],

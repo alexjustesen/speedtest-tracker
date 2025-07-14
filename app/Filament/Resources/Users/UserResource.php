@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Users;
 
-use App\Filament\Resources\UserResource\Pages\ListUsers;
-use App\Filament\Resources\UserResource\Schemas\UserForm;
-use App\Filament\Resources\UserResource\Tables\UserTable;
+use App\Filament\Resources\Users\Pages\ListUsers;
+use App\Filament\Resources\Users\Schemas\UserForm;
+use App\Filament\Resources\Users\Tables\UserTable;
 use App\Models\User;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;

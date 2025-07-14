@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\ApiTokenResource\Schemas;
+namespace App\Filament\Resources\ApiTokens\Schemas;
 
 use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;

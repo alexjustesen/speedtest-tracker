@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\ApiTokens;
 
-use App\Filament\Resources\ApiTokenResource\Pages\ListApiTokens;
-use App\Filament\Resources\ApiTokenResource\Schemas\ApiTokenForm;
-use App\Filament\Resources\ApiTokenResource\Tables\ApiTokenTable;
+use App\Filament\Resources\ApiTokens\Pages\ListApiTokens;
+use App\Filament\Resources\ApiTokens\Schemas\ApiTokenForm;
+use App\Filament\Resources\ApiTokens\Tables\ApiTokenTable;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;

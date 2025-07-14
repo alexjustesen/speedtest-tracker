@@ -6,7 +6,7 @@ use App\Helpers\Bitrate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ResultResource extends JsonResource
+class Results extends JsonResource
 {
     /**
      * Transform the resource into an array.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\ApiTokenResource\Tables;
+namespace App\Filament\Resources\ApiTokens\Tables;
 
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
