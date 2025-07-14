@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Resources\V1\Results;
+use App\Http\Resources\V1\ResultResource;
 use App\Models\Result;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -81,6 +81,6 @@ class ListResults extends ApiController
             ])
             ->jsonPaginate($request->input('per_page', 25));
 
-        return Results::collection($results);
+        return ResultResource::collection($results);
     }
 }

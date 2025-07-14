@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Resources\V1\Results;
+use App\Http\Resources\V1\ResultResource;
 use App\Models\Result;
 use Http\Discovery\Exception\NotFoundException;
 use Illuminate\Http\Request;
@@ -53,7 +53,7 @@ class ShowResult extends ApiController
         });
 
         return self::sendResponse(
-            data: new Results($result),
+            data: new ResultResource($result),
         );
     }
 }
