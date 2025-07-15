@@ -6,20 +6,18 @@ use App\Helpers\Number;
 use App\Models\Result;
 use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Schema;
 use Illuminate\Support\HtmlString;
 
 class ResultForm
 {
     public static function schema(): array
     {
-        return ([
+        return [
             Grid::make(['default' => 1, 'md' => 5])
                 ->columnSpan('full')
                 ->schema([
@@ -123,6 +121,6 @@ class ResultForm
                         Checkbox::make('healthy'),
                     ])->columns(1)->columnSpan(['md' => 2]),
                 ]),
-        ]);
+        ];
     }
-} 
+}

@@ -2,15 +2,6 @@
 
 namespace App\Filament\Pages\Settings;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Components\Actions;
-use Filament\Actions\Action;
-use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\View;
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
@@ -22,17 +13,25 @@ use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Settings\NotificationSettings;
-use Filament\Forms;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\View;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationPage extends SettingsPage
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-bell';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bell';
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
+    protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 3;
 
@@ -60,7 +59,7 @@ class NotificationPage extends SettingsPage
                     'default' => 1,
                     'md' => 3,
                 ])
-                ->columnSpan('full')
+                    ->columnSpan('full')
                     ->schema([
                         Grid::make([
                             'default' => 1,

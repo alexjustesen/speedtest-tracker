@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\Results\Tables;
 
+use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
+use App\Helpers\Number;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
-use App\Helpers\Number;
-use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
@@ -14,16 +14,16 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Table;
+use Filament\Forms\Components\Textarea;
 use Filament\Support\Enums\Alignment;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\HtmlString;
-use App\Enums\ResultStatus;
 
 class ResultTable
 {
@@ -73,7 +73,7 @@ class ResultTable
                     }),
                 TextColumn::make('download')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : null)
-                    ->toggleable()                    
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('upload')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
@@ -173,6 +173,28 @@ class ResultTable
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 2, '.', '').' %';
                     }),
+                TextColumn::make('status')
+                    ->badge()
+                    ->toggleable()
+                    ->sortable(),
+                IconColumn::make('scheduled')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->alignment(Alignment::Center),
+                IconColumn::make('healthy')
+                    ->boolean()
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable()
+                    ->alignment(Alignment::Center),
+                TextColumn::make('data.message')
+                    ->label('Error Message')
+                    ->limit(15)
+                    ->tooltip(fn ($state) => $state)
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
@@ -187,11 +209,18 @@ class ResultTable
                     ->sortable()
                     ->alignment(Alignment::End),
             ])
+            ->reorderableColumns()
+            ->deferFilters(false)
+            ->deferColumnManager(false)
             ->filters([
                 Filter::make('created_at')
                     ->schema([
-                        DatePicker::make('created_from'),
-                        DatePicker::make('created_until'),
+                        DatePicker::make('created_from')
+                            ->closeOnDateSelection()
+                            ->native(false),
+                        DatePicker::make('created_until')
+                            ->closeOnDateSelection()
+                            ->native(false),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -207,16 +236,58 @@ class ResultTable
                 SelectFilter::make('ip_address')
                     ->label('IP address')
                     ->multiple()
-                    ->options([]), // You may want to fill this in
-                TernaryFilter::make('status')
-                    ->label('Status')
-                    ->placeholder('All')
-                    ->trueLabel('Active')
-                    ->falseLabel('Inactive')
+                    ->options(function (): array {
+                        return Result::query()
+                            ->select('data->interface->externalIp AS public_ip_address')
+                            ->whereNotNull('data->interface->externalIp')
+                            ->where('status', '=', ResultStatus::Completed)
+                            ->distinct()
+                            ->orderBy('data->interface->externalIp')
+                            ->get()
+                            ->mapWithKeys(function (Result $item, int $key) {
+                                return [$item['public_ip_address'] => $item['public_ip_address']];
+                            })
+                            ->toArray();
+                    })
+                    ->attribute('data->interface->externalIp'),
+                SelectFilter::make('server_name')
+                    ->label('Server name')
+                    ->multiple()
+                    ->options(function (): array {
+                        return Result::query()
+                            ->select('data->server->name AS data_server_name')
+                            ->whereNotNull('data->server->name')
+                            ->where('status', '=', ResultStatus::Completed)
+                            ->distinct()
+                            ->orderBy('data->server->name')
+                            ->get()
+                            ->mapWithKeys(function (Result $item, int $key) {
+                                return [$item['data_server_name'] => $item['data_server_name']];
+                            })
+                            ->toArray();
+                    })
+                    ->attribute('data->server->name'),
+                TernaryFilter::make('scheduled')
+                    ->nullable()
                     ->native(false)
+                    ->trueLabel('Only scheduled speedtests')
+                    ->falseLabel('Only manual speedtests')
                     ->queries(
-                        true: fn (Builder $query) => $query->where('status', ResultStatus::Completed),
-                        false: fn (Builder $query) => $query->where('status', ResultStatus::Failed),
+                        true: fn (Builder $query) => $query->where('scheduled', true),
+                        false: fn (Builder $query) => $query->where('scheduled', false),
+                        blank: fn (Builder $query) => $query,
+                    ),
+                SelectFilter::make('status')
+                    ->multiple()
+                    ->options(ResultStatus::class),
+                TernaryFilter::make('healthy')
+                    ->nullable()
+                    ->native(false)
+                    ->trueLabel('Only healthy speedtests')
+                    ->falseLabel('Only unhealthy speedtests')
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('healthy', true),
+                        false: fn (Builder $query) => $query->where('healthy', false),
                         blank: fn (Builder $query) => $query,
                     ),
             ])
@@ -224,27 +295,53 @@ class ResultTable
                 ActionGroup::make([
                     ViewAction::make(),
                     DeleteAction::make(),
+                    Action::make('view result')
+                        ->label('View on Speedtest.net')
+                        ->icon('heroicon-o-link')
+                        ->url(fn (Result $record): ?string => $record->result_url)
+                        ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Completed)
+                        ->openUrlInNewTab(),
+                    Action::make('updateComments')
+                        ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                        ->hidden(fn (): bool => ! (Auth::user()?->is_admin ?? false) && ! (Auth::user()?->is_user ?? false))
+                        ->mountUsing(fn ($form, Result $record) => $form->fill([
+                            'comments' => $record->comments,
+                        ]))
+                        ->action(function (Result $record, array $data): void {
+                            $record->comments = $data['comments'];
+                            $record->save();
+                        })
+                        ->schema([
+                            Textarea::make('comments')
+                                ->rows(6)
+                                ->maxLength(500),
+                        ]),
                 ]),
             ])
             ->toolbarActions([
                 DeleteBulkAction::make(),
+            ])
+            ->headerActions([
                 ExportAction::make()
                     ->exporter(ResultExporter::class)
                     ->columnMapping(false)
                     ->modalHeading('Export all Results')
                     ->modalDescription('This will export all columns for all results.')
                     ->fileName(fn (): string => 'results-'.now()->timestamp),
-                Action::make('truncate')
-                    ->action(fn () => TruncateResults::dispatch(Auth::user()))
-                    ->requiresConfirmation()
-                    ->modalHeading('Truncate Results')
-                    ->modalDescription('Are you sure you want to truncate all results data? This can\'t be undone.')
-                    ->color('danger')
-                    ->icon('heroicon-o-trash')
-                    ->hidden(fn (): bool => ! Auth::user()->is_admin),
+                ActionGroup::make([
+                    Action::make('truncate')
+                        ->action(fn () => TruncateResults::dispatch(Auth::user()))
+                        ->requiresConfirmation()
+                        ->modalHeading('Truncate Results')
+                        ->modalDescription('Are you sure you want to truncate all results data? This can\'t be undone.')
+                        ->color('danger')
+                        ->icon('heroicon-o-trash')
+                        ->hidden(fn (): bool => ! Auth::user()->is_admin),
+                ]),
             ])
             ->defaultSort('id', 'desc')
+            ->paginationPageOptions([5, 10, 25, 50, 'all'])
             ->deferLoading()
             ->poll('60s');
     }
-} 
+}

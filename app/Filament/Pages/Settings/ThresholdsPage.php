@@ -2,24 +2,23 @@
 
 namespace App\Filament\Pages\Settings;
 
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Components\View;
 use App\Settings\ThresholdSettings;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\View;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
 class ThresholdsPage extends SettingsPage
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-exclamation-triangle';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-exclamation-triangle';
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
+    protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 4;
 
@@ -47,7 +46,7 @@ class ThresholdsPage extends SettingsPage
                     'default' => 1,
                     'md' => 3,
                 ])
-                ->columnSpan('full')
+                    ->columnSpan('full')
                     ->schema([
                         Grid::make([
                             'default' => 1,

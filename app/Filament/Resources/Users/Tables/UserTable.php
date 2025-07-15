@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Users\Tables;
 
 use App\Enums\UserRole;
 use Filament\Actions\ActionGroup;
-use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;

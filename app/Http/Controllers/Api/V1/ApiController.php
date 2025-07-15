@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use Illuminate\Http\JsonResponse;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 abstract class ApiController
@@ -39,7 +39,7 @@ abstract class ApiController
     /**
      * Throw an exception.
      *
-     * @param Exception $e
+     * @param  Exception  $e
      * @param  int  $code
      *
      * @throws HttpResponseException

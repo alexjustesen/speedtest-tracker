@@ -2,10 +2,10 @@
 
 namespace App\Jobs\Influxdb\v2;
 
-use Exception;
 use App\Actions\Influxdb\v2\BuildPointData;
 use App\Actions\Influxdb\v2\CreateClient;
 use App\Models\Result;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;

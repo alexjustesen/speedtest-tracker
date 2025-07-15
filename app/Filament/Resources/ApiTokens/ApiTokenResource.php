@@ -14,9 +14,9 @@ class ApiTokenResource extends Resource
 {
     protected static ?string $model = PersonalAccessToken::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'tabler-api';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-api';
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
+    protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
     protected static ?string $label = 'API Token';
 

@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources\ApiTokens\Schemas;
 
-use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
 
 class ApiTokenForm
 {
