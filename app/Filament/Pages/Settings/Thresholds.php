@@ -14,7 +14,7 @@ use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
-class ThresholdsPage extends SettingsPage
+class Thresholds extends SettingsPage
 {
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-exclamation-triangle';
 

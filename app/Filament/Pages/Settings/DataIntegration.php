@@ -18,7 +18,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
-class DataIntegrationPage extends SettingsPage
+class DataIntegration extends SettingsPage
 {
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-circle-stack';
 
