@@ -60,6 +60,7 @@ class NotificationPage extends SettingsPage
                     'default' => 1,
                     'md' => 3,
                 ])
+                ->columnSpan('full')
                     ->schema([
                         Grid::make([
                             'default' => 1,
@@ -94,10 +95,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Mail')
                                     ->schema([
@@ -137,10 +135,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Webhook')
                                     ->schema([
@@ -181,10 +176,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Pushover')
                                     ->description('⚠️ Pushover is deprecated and will be removed in a future release.')
@@ -239,10 +231,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Discord')
                                     ->description('⚠️ Discord is deprecated and will be removed in a future release.')
@@ -284,10 +273,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Gotify')
                                     ->description('⚠️ Gotify is deprecated and will be removed in a future release.')
@@ -329,10 +315,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Slack')
                                     ->description('⚠️ Slack is deprecated and will be removed in a future release.')
@@ -374,10 +357,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Ntfy')
                                     ->description('⚠️ Ntfy is deprecated and will be removed in a future release.')
@@ -433,10 +413,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Healthcheck.io')
                                     ->description('⚠️ Healthcheck.io is deprecated and will be removed in a future release.')
@@ -479,10 +456,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Telegram')
                                     ->description('⚠️ Telegram is deprecated and will be removed in a future release.')
@@ -530,10 +504,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
                             ])
                             ->columnSpan([
                                 'md' => 2,

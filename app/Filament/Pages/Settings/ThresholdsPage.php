@@ -47,6 +47,7 @@ class ThresholdsPage extends SettingsPage
                     'default' => 1,
                     'md' => 3,
                 ])
+                ->columnSpan('full')
                     ->schema([
                         Grid::make([
                             'default' => 1,
@@ -98,10 +99,7 @@ class ThresholdsPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
                             ])
                             ->columnSpan([
                                 'md' => 2,

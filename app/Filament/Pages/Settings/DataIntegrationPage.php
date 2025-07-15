@@ -123,11 +123,9 @@ class DataIntegrationPage extends SettingsPage
                                     ]),
                             ])
                             ->compact()
-                            ->columns([
-                                'default' => 1,
-                                'md' => 2,
-                            ]),
-                    ]),
+                            ->columnSpanFull(),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 }
