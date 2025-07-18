@@ -53,9 +53,9 @@ class ApiTokenResource extends Resource
                         ->required()
                         ->bulkToggleable()
                         ->descriptions([
-                            'results:read' => 'Allow this token to read results.',
-                            'speedtests:run' => 'Allow this token to run speedtests.',
-                            'ookla:list-servers' => 'Allow this token to list servers.',
+                            'results:read' => 'Grant this token permission to read results and statistics.',
+                            'speedtests:run' => 'Grant this token permission to run speedtests.',
+                            'ookla:list-servers' => 'Grant this token permission to list available servers.',
                         ]),
                     DateTimePicker::make('expires_at')
                         ->label('Expires at')

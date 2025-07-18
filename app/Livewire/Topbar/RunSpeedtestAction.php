@@ -13,6 +13,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\IconPosition;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class RunSpeedtestAction extends Component implements HasActions, HasForms
@@ -68,7 +69,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
             ->label('Speedtest')
             ->icon('heroicon-o-rocket-launch')
             ->iconPosition(IconPosition::Before)
-            ->hidden(! auth()->user()->is_admin)
+            ->hidden(! Auth::check() && Auth::user()->is_admin)
             ->extraAttributes([
                 'id' => 'speedtestAction',
             ]);
