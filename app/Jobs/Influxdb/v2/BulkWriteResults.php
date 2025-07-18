@@ -7,6 +7,7 @@ use App\Actions\Influxdb\v2\CreateClient;
 use App\Enums\ResultStatus;
 use App\Models\Result;
 use App\Models\User;
+use Exception;
 use Filament\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -51,7 +52,7 @@ class BulkWriteResults implements ShouldQueue
 
                 try {
                     $writeApi->write($points);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::error('Failed to bulk write to InfluxDB.', [
                         'error' => $e->getMessage(),
                     ]);

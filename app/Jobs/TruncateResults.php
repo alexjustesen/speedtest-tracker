@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class TruncateResults implements ShouldQueue
 {
@@ -33,7 +34,7 @@ class TruncateResults implements ShouldQueue
     {
         try {
             DB::table('results')->truncate();
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             $this->fail($th);
 
             return;

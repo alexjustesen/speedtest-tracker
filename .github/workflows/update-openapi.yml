@@ -26,7 +26,7 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
 
     - name: Generate OpenAPI JSON
-      run: ./vendor/bin/openapi app -o openapi_temp.json -f json
+      run: ./vendor/bin/openapi ./app/Http/Controllers/Api ./app/OpenApi -o openapi_temp.json -f json
 
     - name: Commit OpenAPI JSON if changed
       run: |

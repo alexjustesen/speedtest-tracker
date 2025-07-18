@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 abstract class ApiController
@@ -14,7 +16,7 @@ abstract class ApiController
      * @param  array  $filters
      * @param  string  $message
      * @param  int  $code
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public static function sendResponse($data, $filters = [], $message = 'ok', $code = 200)
     {
@@ -37,10 +39,10 @@ abstract class ApiController
     /**
      * Throw an exception.
      *
-     * @param  \Exception  $e
+     * @param  Exception  $e
      * @param  int  $code
      *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws HttpResponseException
      */
     public static function throw($e, $code = 500)
     {

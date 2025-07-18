@@ -3,7 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\VersionProviders\SpeedtestTrackerVersionProvider;
-use Awcodes\FilamentVersions\VersionsPlugin;
+use Awcodes\Versions\VersionsPlugin;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
