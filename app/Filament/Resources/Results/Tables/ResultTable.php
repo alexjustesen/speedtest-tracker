@@ -320,7 +320,7 @@ class ResultTable
                         ->icon('heroicon-o-trash')
                         ->hidden(fn (): bool => ! Auth::user()->is_admin),
                 ])
-                ->dropdownPlacement('left-start'),
+                    ->dropdownPlacement('left-start'),
             ])
             ->defaultSort('id', 'desc')
             ->paginationPageOptions([5, 10, 25, 50, 'all'])
