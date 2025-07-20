@@ -18,24 +18,23 @@ class UserTable
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
-                    ->sortable(),
-
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('name')
-                    ->searchable(),
-
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('email')
-                    ->searchable(),
-
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('role')
-                    ->badge(),
-
+                    ->badge()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('created_at')
                     ->alignEnd()
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
-
                 TextColumn::make('updated_at')
                     ->alignEnd()
                     ->dateTime(config('app.datetime_format'))
@@ -45,6 +44,7 @@ class UserTable
             ])
             ->filters([
                 SelectFilter::make('role')
+                    ->native(false)
                     ->options(UserRole::class),
             ])
             ->recordActions([

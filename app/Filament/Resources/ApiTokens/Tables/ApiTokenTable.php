@@ -26,20 +26,19 @@ class ApiTokenTable
                 TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('last_used_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('expires_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignEnd(),
             ])

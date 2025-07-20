@@ -33,62 +33,57 @@ class ResultTable
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('data.interface.externalIp')
                     ->label('IP address')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->interface->externalIp', $direction);
                     }),
                 TextColumn::make('service')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('data.server.id')
                     ->label('Server ID')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->id', $direction);
                     }),
                 TextColumn::make('data.isp')
                     ->label('ISP')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->isp', $direction);
                     }),
                 TextColumn::make('data.server.location')
                     ->label('Server Location')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->location', $direction);
                     }),
                 TextColumn::make('data.server.name')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->name', $direction);
                     }),
                 TextColumn::make('download')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : null)
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('upload')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('ping')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.jitter')
                     ->label('Download jitter')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->jitter', $direction);
                     })
@@ -97,8 +92,7 @@ class ResultTable
                     }),
                 TextColumn::make('data.download.latency.high')
                     ->label('Download latency high')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->high', $direction);
                     })
@@ -107,8 +101,7 @@ class ResultTable
                     }),
                 TextColumn::make('data.download.latency.low')
                     ->label('Download latency low')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->low', $direction);
                     })
@@ -117,8 +110,7 @@ class ResultTable
                     }),
                 TextColumn::make('data.download.latency.iqm')
                     ->label('Download latency iqm')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->iqm', $direction);
                     })
@@ -127,8 +119,7 @@ class ResultTable
                     }),
                 TextColumn::make('data.upload.latency.jitter')
                     ->label('Upload jitter')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->jitter', $direction);
                     })
@@ -137,8 +128,7 @@ class ResultTable
                     }),
                 TextColumn::make('data.upload.latency.high')
                     ->label('Upload latency high')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->high', $direction);
                     })
@@ -147,8 +137,7 @@ class ResultTable
                     }),
                 TextColumn::make('data.upload.latency.low')
                     ->label('Upload latency low')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->low', $direction);
                     })
@@ -157,8 +146,7 @@ class ResultTable
                     }),
                 TextColumn::make('data.upload.latency.iqm')
                     ->label('Upload latency iqm')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->iqm', $direction);
                     })
@@ -167,49 +155,43 @@ class ResultTable
                     }),
                 TextColumn::make('data.packetLoss')
                     ->label('Packet Loss')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 2, '.', '').' %';
                     }),
                 TextColumn::make('status')
                     ->badge()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 IconColumn::make('scheduled')
                     ->boolean()
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->alignment(Alignment::Center),
                 IconColumn::make('healthy')
                     ->boolean()
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignment(Alignment::Center),
                 TextColumn::make('data.message')
                     ->label('Error Message')
                     ->limit(15)
                     ->tooltip(fn ($state) => $state)
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignment(Alignment::End),
                 TextColumn::make('updated_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignment(Alignment::End),
             ])
-            ->reorderableColumns()
             ->deferFilters(false)
             ->deferColumnManager(false)
             ->filters([
@@ -337,7 +319,8 @@ class ResultTable
                         ->color('danger')
                         ->icon('heroicon-o-trash')
                         ->hidden(fn (): bool => ! Auth::user()->is_admin),
-                ]),
+                ])
+                ->dropdownPlacement('left-start'),
             ])
             ->defaultSort('id', 'desc')
             ->paginationPageOptions([5, 10, 25, 50, 'all'])
