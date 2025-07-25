@@ -46,8 +46,16 @@ RUN apt-get update && apt-get upgrade -y \
     && apt-get update \
     && apt-get install -y $MYSQL_CLIENT \
     && apt-get install -y postgresql-client-$POSTGRES_VERSION \
+    && ARCH=$(uname -m) \
+    && if [ "$ARCH" = "x86_64" ]; then \
+         PLATFORM="x86_64"; \
+       elif [ "$ARCH" = "aarch64" ]; then \
+         PLATFORM="aarch64"; \
+       else \
+         echo "Unsupported architecture: $ARCH"; exit 1; \
+       fi \
     && curl -o /tmp/speedtest-cli.tgz -L \
-        "https://install.speedtest.net/app/cli/ookla-speedtest-$SPEEDTEST_VERSION-linux-x86_64.tgz" \
+         "https://install.speedtest.net/app/cli/ookla-speedtest-$SPEEDTEST_VERSION-linux-$PLATFORM.tgz" \
     && tar -xzf /tmp/speedtest-cli.tgz -C /usr/bin \
     && apt-get -y autoremove \
     && apt-get clean \

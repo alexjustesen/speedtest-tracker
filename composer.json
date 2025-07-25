@@ -18,14 +18,14 @@
         "awcodes/filament-versions": "^2.0.1",
         "chrisullyott/php-filesize": "^4.2.1",
         "dragonmantank/cron-expression": "^3.4.0",
-        "filament/filament": "^3.3.21",
-        "filament/spatie-laravel-settings-plugin": "^3.3.21",
+        "filament/filament": "^3.3.31",
+        "filament/spatie-laravel-settings-plugin": "^3.3.31",
         "geerlingguy/ping": "^1.2.1",
-        "influxdata/influxdb-client-php": "^3.7",
+        "influxdata/influxdb-client-php": "^3.8",
         "laravel-notification-channels/telegram": "^6.0",
-        "laravel/framework": "^12.18.0",
-        "laravel/prompts": "^0.3.5",
-        "laravel/sanctum": "^4.1.1",
+        "laravel/framework": "^12.20.0",
+        "laravel/prompts": "^0.3.6",
+        "laravel/sanctum": "^4.1.2",
         "livewire/livewire": "^3.6.3",
         "lorisleiva/laravel-actions": "^2.9",
         "maennchen/zipstream-php": "^2.4",
@@ -39,12 +39,12 @@
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
         "laravel/pail": "^1.2.3",
-        "laravel/pint": "^1.22.1",
+        "laravel/pint": "^1.24.0",
         "laravel/sail": "^1.43.1",
-        "laravel/telescope": "^5.9.1",
+        "laravel/telescope": "^5.10.0",
         "laravel/tinker": "^2.10.1",
         "mockery/mockery": "^1.6.12",
-        "nunomaduro/collision": "^8.8.1",
+        "nunomaduro/collision": "^8.8.2",
         "pestphp/pest": "^3.8.2",
         "pestphp/pest-plugin-laravel": "^3.2",
         "spatie/laravel-ignition": "^2.9.1",
@@ -72,7 +72,8 @@
             "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php artisan vendor:publish --tag=livewire:assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
