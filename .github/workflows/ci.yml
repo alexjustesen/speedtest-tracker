@@ -21,7 +21,7 @@ jobs:
         with:
           args: lint --using=pint -v
 
-  test-app:
+  test-sqlite:
     needs: lint-app
     runs-on: ubuntu-24.04
     steps:
@@ -50,3 +50,46 @@ jobs:
 
       - name: Run Tests
         run: php artisan test --parallel
+
+  test-mysql:
+    needs: lint-app
+    runs-on: ubuntu-24.04
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Install Dependencies
+        run: |
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+          npm ci && npm run build
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate App Key
+        run: php artisan key:generate --quiet
+
+      - name: Run Tests
+        run: php artisan test --parallel
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: localhost
+          DB_DATABASE: laravel
+          DB_USERNAME: laravel
+          DB_PASSWORD: password
