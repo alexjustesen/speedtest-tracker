@@ -21,15 +21,18 @@ return [
     /**
      * Speedtest settings.
      */
+
     'schedule' => env('SPEEDTEST_SCHEDULE', false),
 
     'servers' => env('SPEEDTEST_SERVERS'),
 
     'blocked_servers' => env('SPEEDTEST_BLOCKED_SERVERS'),
 
-    'interface' => env('SPEEDTEST_INTERFACE'),
-
     'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
+
+    'data_cap' => env('SPEEDTEST_DATA_CAP'),
+
+    'interface' => env('SPEEDTEST_INTERFACE'),
 
 
     /**
