@@ -31,12 +31,13 @@ class SyncResultBytes extends Command
         $results = Result::whereNotNull('data')
             ->where(function ($query) {
                 $query->whereNull('downloaded_bytes')
-                      ->orWhereNull('uploaded_bytes');
+                    ->orWhereNull('uploaded_bytes');
             })
             ->get();
 
         if ($results->isEmpty()) {
             $this->info('No results found that need bytes synchronization.');
+
             return 0;
         }
 
