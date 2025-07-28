@@ -43,7 +43,7 @@ jobs:
           npm ci && npm run build
 
       - name: Copy Environment File
-        run: cp .env.example .env
+        run: cp .env.ci .env
 
       - name: Generate App Key
         run: php artisan key:generate --quiet
@@ -58,14 +58,12 @@ jobs:
     runs-on: ubuntu-24.04
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:8
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: laravel
-          MYSQL_USER: laravel
-          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
         ports:
-          - 33306:3306
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout
@@ -82,7 +80,7 @@ jobs:
           npm ci && npm run build
 
       - name: Copy Environment File
-        run: cp .env.example .env
+        run: cp .env.ci .env
 
       - name: Generate App Key
         run: php artisan key:generate --quiet
@@ -91,8 +89,8 @@ jobs:
         run: php artisan test
         env:
           DB_CONNECTION: mysql
-          DB_HOST: localhost
-          DB_PORT: 33306
-          DB_DATABASE: laravel
-          DB_USERNAME: laravel
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: root
           DB_PASSWORD: password
