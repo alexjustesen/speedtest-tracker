@@ -16,60 +16,6 @@ use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiTokenTable
 {
-<<<<<<< HEAD:app/Filament/Resources/ApiTokens/Tables/ApiTokenTable.php
-=======
-    protected static ?string $model = PersonalAccessToken::class;
-
-    protected static ?string $navigationIcon = 'tabler-api';
-
-    protected static ?string $navigationGroup = 'Settings';
-
-    protected static ?string $label = 'API Token';
-
-    protected static ?string $pluralLabel = 'API Tokens';
-
-    public static function getTokenFormSchema(): array
-    {
-        return [
-            Grid::make()
-                ->schema([
-                    TextInput::make('name')
-                        ->label('Name')
-                        ->unique(ignoreRecord: true)
-                        ->maxLength(100)
-                        ->required(),
-                    CheckboxList::make('abilities')
-                        ->label('Abilities')
-                        ->options([
-                            'results:read' => 'Read results',
-                            'speedtests:run' => 'Run speedtest',
-                            'ookla:list-servers' => 'List servers',
-                        ])
-                        ->required()
-                        ->bulkToggleable()
-                        ->descriptions([
-                            'results:read' => 'Grant this token permission to read results and statistics.',
-                            'speedtests:run' => 'Grant this token permission to run speedtests.',
-                            'ookla:list-servers' => 'Grant this token permission to list available servers.',
-                        ]),
-                    DateTimePicker::make('expires_at')
-                        ->label('Expires at')
-                        ->nullable()
-                        ->native(false)
-                        ->helperText('Leave empty for no expiration'),
-                ])
-                ->columns([
-                    'lg' => 1,
-                ]),
-        ];
-    }
-
-    public static function form(Form $form): Form
-    {
-        return $form->schema(static::getTokenFormSchema());
-    }
-
->>>>>>> origin/main:app/Filament/Resources/ApiTokenResource.php
     public static function table(Table $table): Table
     {
         return $table
