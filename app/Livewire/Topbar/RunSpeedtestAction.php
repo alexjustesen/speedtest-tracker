@@ -3,7 +3,7 @@
 namespace App\Livewire\Topbar;
 
 use App\Actions\GetOoklaSpeedtestServers;
-use App\Actions\Ookla\StartSpeedtest;
+use App\Actions\Ookla\RunSpeedtest;
 use App\Helpers\Ookla;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -39,7 +39,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
             ->form([
                 Select::make('server_id')
                     ->label('Select Server')
-                    ->helperText('Leave empty to run the speedtest without specifying a server.')
+                    ->helperText('Leave empty to run the speedtest without specifying a server. Blocked servers will be skipped.')
                     ->options(function (): array {
                         return array_filter([
                             'Manual servers' => Ookla::getConfigServers(),
@@ -51,8 +51,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
             ->action(function (array $data) {
                 $serverId = $data['server_id'] ?? null;
 
-                StartSpeedtest::run(
-                    scheduled: false,
+                RunSpeedtest::run(
                     serverId: $serverId,
                 );
 

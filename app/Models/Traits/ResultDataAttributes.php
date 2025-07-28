@@ -207,4 +207,94 @@ trait ResultDataAttributes
             get: fn () => Arr::get($this->data, 'upload.latency.iqm'),
         );
     }
+
+    /**
+     * Get the result's ping low latency in milliseconds.
+     */
+    protected function pingLow(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'ping.low'),
+        );
+    }
+
+    /**
+     * Get the result's ping high latency in milliseconds.
+     */
+    protected function pingHigh(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'ping.high'),
+        );
+    }
+
+    /**
+     * Get the result's download elapsed time in milliseconds.
+     */
+    protected function downloadElapsed(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'download.elapsed'),
+        );
+    }
+
+    /**
+     * Get the result's upload elapsed time in milliseconds.
+     */
+    protected function uploadElapsed(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'upload.elapsed'),
+        );
+    }
+
+    /**
+     * Get the result's uploaded bytes.
+     */
+    public function uploadedBytes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'upload.bytes'),
+        );
+    }
+
+    /**
+     * Get the result's downloaded bytes.
+     */
+    public function downloadedBytes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'download.bytes'),
+        );
+    }
+
+    /**
+     * Get the result's server port.
+     */
+    protected function serverPort(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'server.port'),
+        );
+    }
+
+    /**
+     * Get the result's server IP address.
+     */
+    protected function serverIp(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'server.ip'),
+        );
+    }
+
+    /**
+     * Get the result's server country.
+     */
+    protected function serverCountry(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Arr::get($this->data, 'server.country'),
+        );
+    }
 }

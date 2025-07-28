@@ -43,8 +43,9 @@ class SelectSpeedtestServerJob implements ShouldQueue
             return;
         }
 
-        // If preferred servers are set in the config, we can use that.
-        if (! blank(config('speedtest.servers'))) {
+        // If preferred servers are set in the config, we can use that,
+        // but only if the test is scheduled.
+        if ($this->result->scheduled && ! blank(config('speedtest.servers'))) {
             $this->updateServerId(
                 result: $this->result,
                 serverId: $this->getConfigServer(),

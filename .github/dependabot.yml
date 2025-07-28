@@ -3,11 +3,9 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "thursday"
     labels:
-      - "😑 dependencies"
-    reviewers:
-      - "alexjustesen"
+      - "dependencies"
     commit-message:
       prefix: "gh actions"
