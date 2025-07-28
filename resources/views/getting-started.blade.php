@@ -29,7 +29,7 @@
     <body class="h-full antialiased bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-white">
         <main class="flex flex-col justify-center min-h-full p-4 space-y-4 sm:mx-auto sm:p-6 lg:p-8 sm:max-w-3xl sm:space-y-8">
             <header>
-                <h1 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">{{ __("Getting Started") }} - {{ config('app.name') }}</h1>
+                <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">{{ __("Getting Started") }} - {{ config('app.name') }}</h1>
             </header>
 
             <div>
@@ -41,7 +41,7 @@
                                     <div class="w-2 h-2 bg-current rounded-full"></div>
                                 </div>
 
-                                <h2 class="min-w-0 text-sm font-semibold leading-6 text-white">
+                                <h2 class="min-w-0 text-sm font-semibold leading-6">
                                     @auth
                                         <a href="{{ url('/admin') }}" class="flex gap-x-2">
                                             <span class="truncate">Dashboard</span>
@@ -79,7 +79,7 @@
                                     <div class="w-2 h-2 bg-current rounded-full"></div>
                                 </div>
 
-                                <h2 class="min-w-0 text-sm font-semibold leading-6 text-white">
+                                <h2 class="min-w-0 text-sm font-semibold leading-6">
                                     <a href="https://docs.speedtest-tracker.dev/" target="_blank" rel="nofollow" class="flex gap-x-2">
                                         <span class="truncate">Getting Started</span>
                                         <span class="text-amber-400">/</span>
@@ -108,7 +108,7 @@
                                     <div class="w-2 h-2 bg-current rounded-full"></div>
                                 </div>
 
-                                <h2 class="min-w-0 text-sm font-semibold leading-6 text-white">
+                                <h2 class="min-w-0 text-sm font-semibold leading-6">
                                     <a href="https://github.com/alexjustesen/speedtest-tracker" target="_blank" rel="nofollow" class="flex gap-x-2">
                                         <span class="truncate">GitHub</span>
                                         <span class="text-amber-400">/</span>
@@ -131,7 +131,7 @@
                                     <div class="w-2 h-2 bg-current rounded-full"></div>
                                 </div>
 
-                                <h2 class="min-w-0 text-sm font-semibold leading-6 text-white">
+                                <h2 class="min-w-0 text-sm font-semibold leading-6">
                                     <a href="https://github.com/alexjustesen/speedtest-tracker/discussions" target="_blank" rel="nofollow" class="flex gap-x-2">
                                         <span class="truncate">Discussions</span>
                                         <span class="text-amber-400">/</span>
