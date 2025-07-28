@@ -78,6 +78,7 @@ jobs:
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           npm ci && npm run build
+          touch database/database.sqlite
 
       - name: Copy Environment File
         run: cp .env.example .env
