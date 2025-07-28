@@ -21,7 +21,7 @@ jobs:
         with:
           args: lint --using=pint -v
 
-test-mariadb-11:
+  test-mariadb-11:
     needs: lint-app
     runs-on: ubuntu-24.04
     services:
