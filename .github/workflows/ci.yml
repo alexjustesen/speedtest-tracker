@@ -105,7 +105,7 @@ test-mariadb-11:
           DB_USERNAME: root
           DB_PASSWORD: password
 
-  test-postgres:
+  test-postgres-15:
     needs: lint-app
     runs-on: ubuntu-24.04
     services:
