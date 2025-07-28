@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\OpenApi\Annotations\V1;
 
-use App\Actions\Ookla\RunSpeedtest as RunSpeedtestAction;
-use App\Http\Resources\V1\ResultResource;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
-class RunSpeedtest extends ApiController
+#[OA\Tag(
+    name: 'Speedtests',
+    description: 'Endpoints for running speedtests and listing servers.'
+)]
+class SpeedtestAnnotations
 {
     #[OA\Post(
         path: '/api/v1/speedtests/run',
@@ -48,36 +48,36 @@ class RunSpeedtest extends ApiController
             ),
         ]
     )]
-    public function __invoke(Request $request)
+    public function run(): void
     {
-        if ($request->user()->tokenCant('speedtests:run')) {
-            return self::sendResponse(
-                data: null,
-                message: 'You do not have permission to run speedtests.',
-                code: Response::HTTP_FORBIDDEN,
-            );
-        }
-
-        $validator = Validator::make($request->all(), [
-            'server_id' => 'sometimes|integer',
-        ]);
-
-        if ($validator->fails()) {
-            return ApiController::sendResponse(
-                data: $validator->errors(),
-                message: 'Validation failed.',
-                code: Response::HTTP_UNPROCESSABLE_ENTITY,
-            );
-        }
-
-        $result = RunSpeedtestAction::run(
-            serverId: $request->input('server_id'),
-        );
-
-        return self::sendResponse(
-            data: new ResultResource($result),
-            message: 'Speedtest added to the queue.',
-            code: Response::HTTP_CREATED,
-        );
+        // Annotation placeholder for runSpeedtest
     }
+
+    #[OA\Get(
+        path: '/api/v1/speedtests/list-servers',
+        summary: 'List available Ookla speedtest servers',
+        operationId: 'listSpeedtestServers',
+        tags: ['Speedtests'],
+        responses: [
+            new OA\Response(
+                response: Response::HTTP_OK,
+                description: 'OK',
+                content: new OA\JsonContent(ref: '#/components/schemas/ServersCollection')
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNAUTHORIZED,
+                description: 'Unauthenticated',
+                content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_FORBIDDEN,
+                description: 'Forbidden',
+                content: new OA\JsonContent(
+                    ref: '#/components/schemas/ForbiddenError',
+                    example: ['message' => 'You do not have permission to view speedtest servers.']
+                )
+            ),
+        ]
+    )]
+    public function listServers(): void {}
 }

@@ -1,11 +1,18 @@
 <?php
 
-namespace App\Filament\Resources\ApiTokens\Tables;
+namespace App\Filament\Resources;
 
-use Filament\Actions\ActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use App\Filament\Resources\ApiTokenResource\Pages;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -14,10 +21,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
 
-class ApiTokenTable
+class ApiTokenResource extends Resource
 {
-<<<<<<< HEAD:app/Filament/Resources/ApiTokens/Tables/ApiTokenTable.php
-=======
     protected static ?string $model = PersonalAccessToken::class;
 
     protected static ?string $navigationIcon = 'tabler-api';
@@ -69,7 +74,6 @@ class ApiTokenTable
         return $form->schema(static::getTokenFormSchema());
     }
 
->>>>>>> origin/main:app/Filament/Resources/ApiTokenResource.php
     public static function table(Table $table): Table
     {
         return $table
@@ -80,19 +84,20 @@ class ApiTokenTable
                 TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->toggleable()
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('last_used_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('expires_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->toggleable()
                     ->sortable()
                     ->alignEnd(),
             ])
@@ -131,7 +136,7 @@ class ApiTokenTable
                         return $query;
                     }),
             ])
-            ->recordActions([
+            ->actions([
                 ActionGroup::make([
                     EditAction::make()
                         ->disabled(fn ($record) => $record->expires_at !== null && $record->expires_at->isPast())
@@ -139,8 +144,15 @@ class ApiTokenTable
                     DeleteAction::make(),
                 ]),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 DeleteBulkAction::make(),
             ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListApiTokens::route('/'),
+        ];
     }
 }
