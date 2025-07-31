@@ -1,31 +1,21 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\Results\Tables;
 
 use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
-use App\Filament\Resources\ResultResource\Pages;
 use App\Helpers\Number;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
-use Carbon\Carbon;
-use Filament\Forms;
-use Filament\Forms\Components\Checkbox;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Support\Enums\Alignment;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\ExportAction;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -34,179 +24,66 @@ use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\HtmlString;
 
-class ResultResource extends Resource
+class ResultTable
 {
-    protected static ?string $model = Result::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-table-cells';
-
-    public static function form(Form $form): Form
-    {
-        return $form->schema([
-            Grid::make(['default' => 2, 'md' => 3])->schema([
-                Grid::make()->schema([
-                    Section::make('Result Overview')->schema([
-                        TextInput::make('id')
-                            ->label('ID'),
-                        TextInput::make('created_at')
-                            ->label('Created')
-                            ->afterStateHydrated(function (TextInput $component, $state) {
-                                $component->state(Carbon::parse($state)
-                                    ->timezone(config('app.display_timezone'))
-                                    ->format(config('app.datetime_format')));
-                            }),
-                        TextInput::make('download')
-                            ->label('Download')
-                            ->afterStateHydrated(fn ($component, Result $record) => $component->state(! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : '')),
-                        TextInput::make('upload')
-                            ->label('Upload')
-                            ->afterStateHydrated(fn ($component, Result $record) => $component->state(! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : '')),
-                        TextInput::make('ping')
-                            ->label('Ping')
-                            ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                        TextInput::make('data.packetLoss')
-                            ->label('Packet Loss')
-                            ->formatStateUsing(fn ($state) => number_format((float) $state, 2, '.', '').' %'),
-                    ])->columns(2),
-
-                    Section::make('Download Latency')
-                        ->schema([
-                            TextInput::make('data.download.latency.jitter')->label('Jitter')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.download.latency.high')->label('High')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.download.latency.low')->label('Low')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.download.latency.iqm')->label('IQM')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                        ])
-                        ->columns(2)
-                        ->collapsed(),
-
-                    Section::make('Upload Latency')
-                        ->schema([
-                            TextInput::make('data.upload.latency.jitter')->label('Jitter')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.upload.latency.high')->label('High')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.upload.latency.low')->label('Low')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.upload.latency.iqm')->label('IQM')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                        ])
-                        ->columns(2)
-                        ->collapsed(),
-
-                    Section::make('Ping Details')
-                        ->schema([
-                            TextInput::make('data.ping.jitter')->label('Jitter')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.ping.low')->label('Low')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.ping.high')->label('High')
-                                ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                        ])
-                        ->columns(2)
-                        ->collapsed(),
-
-                    Textarea::make('data.message')
-                        ->label('Message')
-                        ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))
-                        ->columnSpanFull(),
-                ])->columnSpan([
-                    'default' => 2,
-                    'md' => 2,
-                ]),
-
-                Section::make('Server & Metadata')->schema([
-                    Placeholder::make('service')
-                        ->content(fn (Result $result): string => $result->service->getLabel()),
-                    Placeholder::make('server_name')
-                        ->content(fn (Result $result): ?string => $result->server_name),
-                    Placeholder::make('server_id')
-                        ->label('Server ID')
-                        ->content(fn (Result $result): ?string => $result->server_id),
-                    Placeholder::make('isp')
-                        ->label('ISP')
-                        ->content(fn (Result $result): ?string => $result->isp),
-                    Placeholder::make('server_location')
-                        ->label('Server Location')
-                        ->content(fn (Result $result): ?string => $result->server_location),
-                    Placeholder::make('server_host')
-                        ->content(fn (Result $result): ?string => $result->server_host),
-                    Placeholder::make('comment')
-                        ->content(fn (Result $result): ?string => $result->comments),
-                    Checkbox::make('scheduled'),
-                    Checkbox::make('healthy'),
-                ])->columns(1)->columnSpan([
-                    'default' => 2,
-                    'md' => 1,
-                ]),
-            ]),
-        ]);
-    }
-
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('data.interface.externalIp')
                     ->label('IP address')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->interface->externalIp', $direction);
                     }),
                 TextColumn::make('service')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('data.server.id')
                     ->label('Server ID')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->id', $direction);
                     }),
                 TextColumn::make('data.isp')
                     ->label('ISP')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->isp', $direction);
                     }),
                 TextColumn::make('data.server.location')
                     ->label('Server Location')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->location', $direction);
                     }),
                 TextColumn::make('data.server.name')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->name', $direction);
                     }),
                 TextColumn::make('download')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : null)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('upload')
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('ping')
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.jitter')
                     ->label('Download jitter')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->jitter', $direction);
                     })
@@ -215,8 +92,7 @@ class ResultResource extends Resource
                     }),
                 TextColumn::make('data.download.latency.high')
                     ->label('Download latency high')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->high', $direction);
                     })
@@ -225,8 +101,7 @@ class ResultResource extends Resource
                     }),
                 TextColumn::make('data.download.latency.low')
                     ->label('Download latency low')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->low', $direction);
                     })
@@ -235,8 +110,7 @@ class ResultResource extends Resource
                     }),
                 TextColumn::make('data.download.latency.iqm')
                     ->label('Download latency iqm')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->iqm', $direction);
                     })
@@ -245,8 +119,7 @@ class ResultResource extends Resource
                     }),
                 TextColumn::make('data.upload.latency.jitter')
                     ->label('Upload jitter')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->jitter', $direction);
                     })
@@ -255,8 +128,7 @@ class ResultResource extends Resource
                     }),
                 TextColumn::make('data.upload.latency.high')
                     ->label('Upload latency high')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->high', $direction);
                     })
@@ -265,8 +137,7 @@ class ResultResource extends Resource
                     }),
                 TextColumn::make('data.upload.latency.low')
                     ->label('Upload latency low')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->low', $direction);
                     })
@@ -275,94 +146,63 @@ class ResultResource extends Resource
                     }),
                 TextColumn::make('data.upload.latency.iqm')
                     ->label('Upload latency iqm')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->iqm', $direction);
                     })
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
-                TextColumn::make('data.ping.jitter')
-                    ->label('Ping jitter')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->ping->jitter', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-                TextColumn::make('data.ping.low')
-                    ->label('Ping low')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->ping->low', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-                TextColumn::make('data.ping.high')
-                    ->label('Ping high')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->ping->high', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-                TextColumn::make('packet_loss')
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->packetLoss', $direction);
-                    })
+                TextColumn::make('data.packetLoss')
+                    ->label('Packet Loss')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable()
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 2, '.', '').' %';
                     }),
                 TextColumn::make('status')
                     ->badge()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 IconColumn::make('scheduled')
                     ->boolean()
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->alignment(Alignment::Center),
                 IconColumn::make('healthy')
                     ->boolean()
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignment(Alignment::Center),
                 TextColumn::make('data.message')
                     ->label('Error Message')
                     ->limit(15)
                     ->tooltip(fn ($state) => $state)
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignment(Alignment::End),
                 TextColumn::make('updated_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignment(Alignment::End),
             ])
+            ->deferFilters(false)
+            ->deferColumnManager(false)
             ->filters([
                 Filter::make('created_at')
-                    ->form([
-                        DatePicker::make('created_from'),
-                        DatePicker::make('created_until'),
+                    ->schema([
+                        DatePicker::make('created_from')
+                            ->closeOnDateSelection()
+                            ->native(false),
+                        DatePicker::make('created_until')
+                            ->closeOnDateSelection()
+                            ->native(false),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -411,6 +251,7 @@ class ResultResource extends Resource
                     ->attribute('data->server->name'),
                 TernaryFilter::make('scheduled')
                     ->nullable()
+                    ->native(false)
                     ->trueLabel('Only scheduled speedtests')
                     ->falseLabel('Only manual speedtests')
                     ->queries(
@@ -423,6 +264,7 @@ class ResultResource extends Resource
                     ->options(ResultStatus::class),
                 TernaryFilter::make('healthy')
                     ->nullable()
+                    ->native(false)
                     ->trueLabel('Only healthy speedtests')
                     ->falseLabel('Only unhealthy speedtests')
                     ->queries(
@@ -431,34 +273,34 @@ class ResultResource extends Resource
                         blank: fn (Builder $query) => $query,
                     ),
             ])
-            ->actions([
+            ->recordActions([
                 ActionGroup::make([
+                    ViewAction::make(),
+                    DeleteAction::make(),
                     Action::make('view result')
                         ->label('View on Speedtest.net')
                         ->icon('heroicon-o-link')
                         ->url(fn (Result $record): ?string => $record->result_url)
                         ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Completed)
                         ->openUrlInNewTab(),
-                    ViewAction::make(),
                     Action::make('updateComments')
                         ->icon('heroicon-o-chat-bubble-bottom-center-text')
                         ->hidden(fn (): bool => ! (Auth::user()?->is_admin ?? false) && ! (Auth::user()?->is_user ?? false))
-                        ->mountUsing(fn (Forms\ComponentContainer $form, Result $record) => $form->fill([
+                        ->mountUsing(fn ($form, Result $record) => $form->fill([
                             'comments' => $record->comments,
                         ]))
                         ->action(function (Result $record, array $data): void {
                             $record->comments = $data['comments'];
                             $record->save();
                         })
-                        ->form([
+                        ->schema([
                             Textarea::make('comments')
                                 ->rows(6)
                                 ->maxLength(500),
                         ]),
-                    DeleteAction::make(),
                 ]),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ])
             ->headerActions([
@@ -477,17 +319,12 @@ class ResultResource extends Resource
                         ->color('danger')
                         ->icon('heroicon-o-trash')
                         ->hidden(fn (): bool => ! Auth::user()->is_admin),
-                ])->dropdownPlacement('bottom-end'),
+                ])
+                    ->dropdownPlacement('left-start'),
             ])
             ->defaultSort('id', 'desc')
+            ->paginationPageOptions([5, 10, 25, 50, 'all'])
             ->deferLoading()
             ->poll('60s');
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListResults::route('/'),
-        ];
     }
 }

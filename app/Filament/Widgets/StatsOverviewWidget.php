@@ -12,7 +12,7 @@ class StatsOverviewWidget extends BaseWidget
 {
     public ?Result $result = null;
 
-    protected static ?string $pollingInterval = '60s';
+    protected ?string $pollingInterval = '60s';
 
     protected function getCards(): array
     {

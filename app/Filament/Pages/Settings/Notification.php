@@ -13,23 +13,25 @@ use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Settings\NotificationSettings;
-use Filament\Forms;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Grid;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
+use Filament\Schemas\Components\Actions;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\View;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 
-class NotificationPage extends SettingsPage
+class Notification extends SettingsPage
 {
-    protected static ?string $navigationIcon = 'heroicon-o-bell';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bell';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 3;
 
@@ -49,14 +51,15 @@ class NotificationPage extends SettingsPage
         return Auth::check() && Auth::user()->is_admin;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Grid::make([
                     'default' => 1,
                     'md' => 3,
                 ])
+                    ->columnSpan('full')
                     ->schema([
                         Grid::make([
                             'default' => 1,
@@ -72,7 +75,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('database_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('database_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -91,10 +94,7 @@ class NotificationPage extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Mail')
                                     ->schema([
@@ -105,7 +105,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('mail_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -119,7 +119,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('mail_recipients')
                                                     ->label('Recipients')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('email_address')
+                                                        TextInput::make('email_address')
                                                             ->placeholder('your@email.com')
                                                             ->email()
                                                             ->required(),
@@ -128,16 +128,13 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test mail')
                                                         ->label('Test mail channel')
-                                                        ->action(fn (Forms\Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('mail_recipients'))),
+                                                        ->action(fn (Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
+                                                        ->hidden(fn (Get $get) => ! count($get('mail_recipients'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Webhook')
                                     ->schema([
@@ -148,7 +145,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('webhook_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -162,7 +159,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('webhook_urls')
                                                     ->label('Recipients')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://webhook.site/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -172,16 +169,13 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test webhook')
                                                         ->label('Test webhook channel')
-                                                        ->action(fn (Forms\Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('webhook_urls'))),
+                                                        ->action(fn (Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
+                                                        ->hidden(fn (Get $get) => ! count($get('webhook_urls'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Pushover')
                                     ->description('⚠️ Pushover is deprecated and will be removed in a future release.')
@@ -193,7 +187,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('pushover_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('pushover_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -207,18 +201,18 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('pushover_webhooks')
                                                     ->label('Pushover Webhooks')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->label('URL')
                                                             ->placeholder('http://api.pushover.net/1/messages.json')
                                                             ->maxLength(2000)
                                                             ->required()
                                                             ->url(),
-                                                        Forms\Components\TextInput::make('user_key')
+                                                        TextInput::make('user_key')
                                                             ->label('User Key')
                                                             ->placeholder('Your Pushover User Key')
                                                             ->maxLength(200)
                                                             ->required(),
-                                                        Forms\Components\TextInput::make('api_token')
+                                                        TextInput::make('api_token')
                                                             ->label('API Token')
                                                             ->placeholder('Your Pushover API Token')
                                                             ->maxLength(200)
@@ -228,18 +222,15 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test pushover')
                                                         ->label('Test Pushover webhook')
-                                                        ->action(fn (Forms\Get $get) => SendPushoverTestNotification::run(
+                                                        ->action(fn (Get $get) => SendPushoverTestNotification::run(
                                                             webhooks: $get('pushover_webhooks')
                                                         ))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('pushover_webhooks'))),
+                                                        ->hidden(fn (Get $get) => ! count($get('pushover_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Discord')
                                     ->description('⚠️ Discord is deprecated and will be removed in a future release.')
@@ -251,7 +242,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('discord_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('discord_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -265,7 +256,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('discord_webhooks')
                                                     ->label('Webhooks')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -275,16 +266,13 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test discord')
                                                         ->label('Test Discord webhook')
-                                                        ->action(fn (Forms\Get $get) => SendDiscordTestNotification::run(webhooks: $get('discord_webhooks')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('discord_webhooks'))),
+                                                        ->action(fn (Get $get) => SendDiscordTestNotification::run(webhooks: $get('discord_webhooks')))
+                                                        ->hidden(fn (Get $get) => ! count($get('discord_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Gotify')
                                     ->description('⚠️ Gotify is deprecated and will be removed in a future release.')
@@ -296,7 +284,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('gotify_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('gotify_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -310,7 +298,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('gotify_webhooks')
                                                     ->label('Webhooks')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://example.com/message?token=<apptoken>')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -320,16 +308,13 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test gotify')
                                                         ->label('Test Gotify webhook')
-                                                        ->action(fn (Forms\Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('gotify_webhooks'))),
+                                                        ->action(fn (Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
+                                                        ->hidden(fn (Get $get) => ! count($get('gotify_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Slack')
                                     ->description('⚠️ Slack is deprecated and will be removed in a future release.')
@@ -341,7 +326,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('slack_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('slack_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -355,7 +340,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('slack_webhooks')
                                                     ->label('Webhooks')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://hooks.slack.com/services/abc/xyz')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -365,16 +350,13 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test Slack')
                                                         ->label('Test slack webhook')
-                                                        ->action(fn (Forms\Get $get) => SendSlackTestNotification::run(webhooks: $get('slack_webhooks')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('slack_webhooks'))),
+                                                        ->action(fn (Get $get) => SendSlackTestNotification::run(webhooks: $get('slack_webhooks')))
+                                                        ->hidden(fn (Get $get) => ! count($get('slack_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Ntfy')
                                     ->description('⚠️ Ntfy is deprecated and will be removed in a future release.')
@@ -386,7 +368,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('ntfy_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('ntfy_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -400,21 +382,21 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('ntfy_webhooks')
                                                     ->label('Webhooks')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->maxLength(2000)
                                                             ->placeholder('Your ntfy server url')
                                                             ->required()
                                                             ->url(),
-                                                        Forms\Components\TextInput::make('topic')
+                                                        TextInput::make('topic')
                                                             ->label('Topic')
                                                             ->placeholder('Your ntfy Topic')
                                                             ->maxLength(200)
                                                             ->required(),
-                                                        Forms\Components\TextInput::make('username')
+                                                        TextInput::make('username')
                                                             ->label('Username')
                                                             ->placeholder('Username for Basic Auth (optional)')
                                                             ->maxLength(200),
-                                                        Forms\Components\TextInput::make('password')
+                                                        TextInput::make('password')
                                                             ->label('Password')
                                                             ->placeholder('Password for Basic Auth (optional)')
                                                             ->password()
@@ -424,16 +406,13 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test ntfy')
                                                         ->label('Test Ntfy webhook')
-                                                        ->action(fn (Forms\Get $get) => SendNtfyTestNotification::run(webhooks: $get('ntfy_webhooks')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('ntfy_webhooks'))),
+                                                        ->action(fn (Get $get) => SendNtfyTestNotification::run(webhooks: $get('ntfy_webhooks')))
+                                                        ->hidden(fn (Get $get) => ! count($get('ntfy_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Healthcheck.io')
                                     ->description('⚠️ Healthcheck.io is deprecated and will be removed in a future release.')
@@ -445,7 +424,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('healthcheck_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('healthcheck_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Triggers')
                                                     ->schema([
@@ -460,7 +439,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('healthcheck_webhooks')
                                                     ->label('webhooks')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('url')
+                                                        TextInput::make('url')
                                                             ->placeholder('https://hc-ping.com/your-uuid-here')
                                                             ->maxLength(2000)
                                                             ->required()
@@ -470,16 +449,13 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test healthcheck')
                                                         ->label('Test healthcheck.io webhook')
-                                                        ->action(fn (Forms\Get $get) => SendHealthCheckTestNotification::run(webhooks: $get('healthcheck_webhooks')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('healthcheck_webhooks'))),
+                                                        ->action(fn (Get $get) => SendHealthCheckTestNotification::run(webhooks: $get('healthcheck_webhooks')))
+                                                        ->hidden(fn (Get $get) => ! count($get('healthcheck_webhooks'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make('Telegram')
                                     ->description('⚠️ Telegram is deprecated and will be removed in a future release.')
@@ -491,7 +467,7 @@ class NotificationPage extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                            ->hidden(fn (Forms\Get $get) => $get('telegram_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('telegram_enabled') !== true)
                                             ->schema([
                                                 Fieldset::make('Options')
                                                     ->schema([
@@ -511,7 +487,7 @@ class NotificationPage extends SettingsPage
                                                 Repeater::make('telegram_recipients')
                                                     ->label('Recipients')
                                                     ->schema([
-                                                        Forms\Components\TextInput::make('telegram_chat_id')
+                                                        TextInput::make('telegram_chat_id')
                                                             ->placeholder('12345678910')
                                                             ->label('Telegram Chat ID')
                                                             ->maxLength(50)
@@ -521,16 +497,13 @@ class NotificationPage extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test telegram')
                                                         ->label('Test Telegram channel')
-                                                        ->action(fn (Forms\Get $get) => SendTelegramTestNotification::run(recipients: $get('telegram_recipients')))
-                                                        ->hidden(fn (Forms\Get $get) => ! count($get('telegram_recipients')) || blank(config('telegram.bot'))),
+                                                        ->action(fn (Get $get) => SendTelegramTestNotification::run(recipients: $get('telegram_recipients')))
+                                                        ->hidden(fn (Get $get) => ! count($get('telegram_recipients')) || blank(config('telegram.bot'))),
                                                 ]),
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
                             ])
                             ->columnSpan([
                                 'md' => 2,
@@ -538,7 +511,7 @@ class NotificationPage extends SettingsPage
 
                         Section::make()
                             ->schema([
-                                Forms\Components\View::make('filament.forms.notifications-helptext'),
+                                View::make('filament.forms.notifications-helptext'),
                             ])
                             ->columnSpan([
                                 'md' => 1,

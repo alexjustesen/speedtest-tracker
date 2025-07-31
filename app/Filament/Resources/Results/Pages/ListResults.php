@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\ResultResource\Pages;
+namespace App\Filament\Resources\Results\Pages;
 
-use App\Filament\Resources\ResultResource;
+use App\Filament\Resources\Results\ResultResource;
 use Filament\Resources\Pages\ListRecords;
 
 class ListResults extends ListRecords

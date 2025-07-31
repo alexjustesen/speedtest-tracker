@@ -1,18 +1,11 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\ApiTokens\Tables;
 
-use App\Filament\Resources\ApiTokenResource\Pages;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -21,59 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
 
-class ApiTokenResource extends Resource
+class ApiTokenTable
 {
-    protected static ?string $model = PersonalAccessToken::class;
-
-    protected static ?string $navigationIcon = 'tabler-api';
-
-    protected static ?string $navigationGroup = 'Settings';
-
-    protected static ?string $label = 'API Token';
-
-    protected static ?string $pluralLabel = 'API Tokens';
-
-    public static function getTokenFormSchema(): array
-    {
-        return [
-            Grid::make()
-                ->schema([
-                    TextInput::make('name')
-                        ->label('Name')
-                        ->unique(ignoreRecord: true)
-                        ->maxLength(100)
-                        ->required(),
-                    CheckboxList::make('abilities')
-                        ->label('Abilities')
-                        ->options([
-                            'results:read' => 'Read results',
-                            'speedtests:run' => 'Run speedtest',
-                            'ookla:list-servers' => 'List servers',
-                        ])
-                        ->required()
-                        ->bulkToggleable()
-                        ->descriptions([
-                            'results:read' => 'Grant this token permission to read results and statistics.',
-                            'speedtests:run' => 'Grant this token permission to run speedtests.',
-                            'ookla:list-servers' => 'Grant this token permission to list available servers.',
-                        ]),
-                    DateTimePicker::make('expires_at')
-                        ->label('Expires at')
-                        ->nullable()
-                        ->native(false)
-                        ->helperText('Leave empty for no expiration'),
-                ])
-                ->columns([
-                    'lg' => 1,
-                ]),
-        ];
-    }
-
-    public static function form(Form $form): Form
-    {
-        return $form->schema(static::getTokenFormSchema());
-    }
-
     public static function table(Table $table): Table
     {
         return $table
@@ -84,20 +26,19 @@ class ApiTokenResource extends Resource
                 TextColumn::make('created_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('last_used_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
-                    ->toggledHiddenByDefault()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('expires_at')
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignEnd(),
             ])
@@ -136,7 +77,7 @@ class ApiTokenResource extends Resource
                         return $query;
                     }),
             ])
-            ->actions([
+            ->recordActions([
                 ActionGroup::make([
                     EditAction::make()
                         ->disabled(fn ($record) => $record->expires_at !== null && $record->expires_at->isPast())
@@ -144,15 +85,8 @@ class ApiTokenResource extends Resource
                     DeleteAction::make(),
                 ]),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListApiTokens::route('/'),
-        ];
     }
 }
