@@ -15,7 +15,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "awcodes/filament-versions": "^3.0",
         "chrisullyott/php-filesize": "^4.2.1",
         "dragonmantank/cron-expression": "^3.4.0",
         "filament/filament": "^4.0",
