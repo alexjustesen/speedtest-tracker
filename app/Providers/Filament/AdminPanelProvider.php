@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Services\GitHub\Repository;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -76,9 +77,10 @@ class AdminPanelProvider extends PanelProvider
                     ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-banknotes')
                     ->group('Links'),
-                NavigationItem::make('GitHub')
+                NavigationItem::make(config('speedtest.build_version'))
                     ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
-                    ->icon('heroicon-o-code-bracket')
+                    ->icon('tabler-brand-github')
+                    ->badge(fn (): string => Repository::updateAvailable() ? 'Update Available!' : 'Up to Date')
                     ->group('Links'),
             ]);
     }
