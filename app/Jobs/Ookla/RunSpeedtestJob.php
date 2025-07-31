@@ -89,9 +89,9 @@ class RunSpeedtestJob implements ShouldQueue
         $this->result->update([
             'ping' => Arr::get($output, 'ping.latency'),
             'download' => Arr::get($output, 'download.bandwidth'),
-            'downloaded_bytes' => Arr::get($output, 'download.bytes'),
             'upload' => Arr::get($output, 'upload.bandwidth'),
-            'uploaded_bytes' => Arr::get($output, 'upload.bytes'),
+            'download_bytes' => Arr::get($output, 'download.bytes'),
+            'upload_bytes' => Arr::get($output, 'upload.bytes'),
             'data' => $output,
         ]);
     }
