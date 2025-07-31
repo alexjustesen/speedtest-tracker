@@ -2,8 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\VersionProviders\SpeedtestTrackerVersionProvider;
-use Awcodes\FilamentVersions\VersionsPlugin;
+use App\Services\GitHub\Repository;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -44,13 +43,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([])
-            ->plugins([
-                VersionsPlugin::make()
-                    ->hasDefaults(false)
-                    ->items([
-                        new SpeedtestTrackerVersionProvider,
-                    ]),
-            ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([])
             ->databaseNotifications()
@@ -85,9 +77,10 @@ class AdminPanelProvider extends PanelProvider
                     ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-banknotes')
                     ->group('Links'),
-                NavigationItem::make('GitHub')
+                NavigationItem::make(config('speedtest.build_version'))
                     ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
-                    ->icon('heroicon-o-code-bracket')
+                    ->icon('tabler-brand-github')
+                    ->badge(fn (): string => Repository::updateAvailable() ? 'Update Available!' : 'Up to Date')
                     ->group('Links'),
             ]);
     }
