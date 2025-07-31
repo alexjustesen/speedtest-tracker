@@ -26,10 +26,10 @@ class Repository
                     ])
                     ->get('https://api.github.com/repos/alexjustesen/speedtest-tracker/releases/latest');
 
-                if (!$response->successful()) {
+                if (! $response->successful()) {
                     Log::warning('Failed to fetch latest version from GitHub API', [
                         'status' => $response->status(),
-                        'response' => $response->body()
+                        'response' => $response->body(),
                     ]);
 
                     return false;
@@ -37,7 +37,7 @@ class Repository
 
                 $data = $response->json();
 
-                if (!isset($data['tag_name'])) {
+                if (! isset($data['tag_name'])) {
                     Log::warning('GitHub API response missing tag_name field', ['response' => $data]);
 
                     return false;
@@ -48,7 +48,7 @@ class Repository
                 Log::error('Exception occurred while fetching latest version from GitHub', [
                     'message' => $e->getMessage(),
                     'file' => $e->getFile(),
-                    'line' => $e->getLine()
+                    'line' => $e->getLine(),
                 ]);
 
                 return false;
@@ -79,6 +79,4 @@ class Repository
 
         return $comparison > 0; // 1 = latest is newer, 0 = equal, -1 = latest is older
     }
-
-
 }
