@@ -30,10 +30,6 @@ return [
 
     'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
 
-    'data_cap' => env('SPEEDTEST_DATA_CAP'),
-
-    'interface' => env('SPEEDTEST_INTERFACE'),
-
 
     /**
      * IP filtering settings.
@@ -42,6 +38,19 @@ return [
     'allowed_ips' => env('ALLOWED_IPS'),
 
     'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''),
+
+
+    /**
+     * Quota settings.
+     */
+
+    'quota_enabled' => (bool) env('SPEEDTEST_QUOTA_ENABLED', false), // enable quota tracking
+
+    'quota_size' => (string) env('SPEEDTEST_QUOTA_SIZE', '500G'), // like 500G or 1T
+
+    'quota_period' => (string) env('SPEEDTEST_QUOTA_PERIOD', 'month'), // like month or week
+
+    'quota_reset_day' => (int) env('SPEEDTEST_QUOTA_RESET_DAY', 0), // day of the month or week
 
 
     /**
