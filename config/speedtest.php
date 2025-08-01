@@ -50,9 +50,9 @@ return [
 
     'quota_size' => (string) env('SPEEDTEST_QUOTA_SIZE', '500 GB'), // like 500 GB or 1 TB
 
-    'quota_period' => (string) env('SPEEDTEST_QUOTA_PERIOD', 'month'), // like month or week
+    'quota_period' => (string) env('SPEEDTEST_QUOTA_PERIOD', 'month'), // like day, month or week
 
-    'quota_reset_day' => (int) env('SPEEDTEST_QUOTA_RESET_DAY', 0), // day of the month or week
+    'quota_reset_day' => (int) env('SPEEDTEST_QUOTA_RESET_DAY', 1), // day of the month or week
 
 
     /**
