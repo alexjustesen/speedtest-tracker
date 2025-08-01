@@ -28,6 +28,8 @@ return [
 
     'blocked_servers' => env('SPEEDTEST_BLOCKED_SERVERS'),
 
+    'interface' => env('SPEEDTEST_INTERFACE'),
+
     'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
 
 
