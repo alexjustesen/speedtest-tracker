@@ -29,6 +29,8 @@ class ApiTokenResource extends Resource
 
     protected static ?string $navigationGroup = 'Settings';
 
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $label = 'API Token';
 
     protected static ?string $pluralLabel = 'API Tokens';

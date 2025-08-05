@@ -79,4 +79,38 @@ class Number extends SupportNumber
 
         return sprintf('%s %s', static::format($bits, $precision, $maxPrecision), $units[$i]);
     }
+
+    /**
+     * Convert a file size string (e.g., "100 MB", "1 TB") to bytes.
+     */
+    public static function fileSizeToBytes(string $fileSize): int
+    {
+        $fileSize = trim($fileSize);
+
+        // Extract the numeric value and unit
+        if (!preg_match('/^(\d+(?:\.\d+)?)\s*([KMGTPEZY]?B)$/i', $fileSize, $matches)) {
+            throw new \InvalidArgumentException("Invalid file size format: {$fileSize}");
+        }
+
+        $value = (float) $matches[1];
+        $unit = strtoupper($matches[2]);
+
+        $multipliers = [
+            'B' => 1,
+            'KB' => 1000,
+            'MB' => 1000 ** 2,
+            'GB' => 1000 ** 3,
+            'TB' => 1000 ** 4,
+            'PB' => 1000 ** 5,
+            'EB' => 1000 ** 6,
+            'ZB' => 1000 ** 7,
+            'YB' => 1000 ** 8,
+        ];
+
+        if (!isset($multipliers[$unit])) {
+            throw new \InvalidArgumentException("Unsupported unit: {$unit}");
+        }
+
+        return (int) ($value * $multipliers[$unit]);
+    }
 }
