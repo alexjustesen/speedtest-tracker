@@ -9,7 +9,6 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\View;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Filament\Support\Enums\MaxWidth;
@@ -58,7 +57,7 @@ class ThresholdsPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('absolute_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('absolute_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Metrics')
                                     ->schema([

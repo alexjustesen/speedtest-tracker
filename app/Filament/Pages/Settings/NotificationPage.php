@@ -69,7 +69,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('database_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('database_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -83,7 +83,7 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test database')
                                         ->label('Test database channel')
-                                        ->action(fn() => SendDatabaseTestNotification::run(user: Auth::user())),
+                                        ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
                                 ]),
                             ]),
                     ])
@@ -102,7 +102,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('mail_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -125,8 +125,8 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test mail')
                                         ->label('Test mail channel')
-                                        ->action(fn(Forms\Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('mail_recipients'))),
+                                        ->action(fn (Forms\Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('mail_recipients'))),
                                 ]),
                             ]),
                     ])
@@ -145,7 +145,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('webhook_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -169,8 +169,8 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test webhook')
                                         ->label('Test webhook channel')
-                                        ->action(fn(Forms\Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('webhook_urls'))),
+                                        ->action(fn (Forms\Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('webhook_urls'))),
                                 ]),
                             ]),
                     ])
@@ -189,7 +189,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('pushover_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('pushover_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -224,10 +224,10 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test pushover')
                                         ->label('Test Pushover webhook')
-                                        ->action(fn(Forms\Get $get) => SendPushoverTestNotification::run(
+                                        ->action(fn (Forms\Get $get) => SendPushoverTestNotification::run(
                                             webhooks: $get('pushover_webhooks')
                                         ))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('pushover_webhooks'))),
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('pushover_webhooks'))),
                                 ]),
                             ]),
                     ])
@@ -246,7 +246,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('discord_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('discord_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -270,8 +270,8 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test discord')
                                         ->label('Test Discord webhook')
-                                        ->action(fn(Forms\Get $get) => SendDiscordTestNotification::run(webhooks: $get('discord_webhooks')))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('discord_webhooks'))),
+                                        ->action(fn (Forms\Get $get) => SendDiscordTestNotification::run(webhooks: $get('discord_webhooks')))
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('discord_webhooks'))),
                                 ]),
                             ]),
                     ])
@@ -290,7 +290,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('gotify_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('gotify_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -314,8 +314,8 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test gotify')
                                         ->label('Test Gotify webhook')
-                                        ->action(fn(Forms\Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('gotify_webhooks'))),
+                                        ->action(fn (Forms\Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('gotify_webhooks'))),
                                 ]),
                             ]),
                     ])
@@ -334,7 +334,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('slack_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('slack_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -358,8 +358,8 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test Slack')
                                         ->label('Test slack webhook')
-                                        ->action(fn(Forms\Get $get) => SendSlackTestNotification::run(webhooks: $get('slack_webhooks')))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('slack_webhooks'))),
+                                        ->action(fn (Forms\Get $get) => SendSlackTestNotification::run(webhooks: $get('slack_webhooks')))
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('slack_webhooks'))),
                                 ]),
                             ]),
                     ])
@@ -378,7 +378,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('ntfy_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('ntfy_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -416,8 +416,8 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test ntfy')
                                         ->label('Test Ntfy webhook')
-                                        ->action(fn(Forms\Get $get) => SendNtfyTestNotification::run(webhooks: $get('ntfy_webhooks')))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('ntfy_webhooks'))),
+                                        ->action(fn (Forms\Get $get) => SendNtfyTestNotification::run(webhooks: $get('ntfy_webhooks')))
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('ntfy_webhooks'))),
                                 ]),
                             ]),
                     ])
@@ -436,7 +436,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('healthcheck_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('healthcheck_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
                                     ->schema([
@@ -461,8 +461,8 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test healthcheck')
                                         ->label('Test healthcheck.io webhook')
-                                        ->action(fn(Forms\Get $get) => SendHealthCheckTestNotification::run(webhooks: $get('healthcheck_webhooks')))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('healthcheck_webhooks'))),
+                                        ->action(fn (Forms\Get $get) => SendHealthCheckTestNotification::run(webhooks: $get('healthcheck_webhooks')))
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('healthcheck_webhooks'))),
                                 ]),
                             ]),
                     ])
@@ -481,7 +481,7 @@ class NotificationPage extends SettingsPage
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn(Forms\Get $get) => $get('telegram_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('telegram_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Options')
                                     ->schema([
@@ -511,8 +511,8 @@ class NotificationPage extends SettingsPage
                                 Actions::make([
                                     Action::make('test telegram')
                                         ->label('Test Telegram channel')
-                                        ->action(fn(Forms\Get $get) => SendTelegramTestNotification::run(recipients: $get('telegram_recipients')))
-                                        ->hidden(fn(Forms\Get $get) => ! count($get('telegram_recipients')) || blank(config('telegram.bot'))),
+                                        ->action(fn (Forms\Get $get) => SendTelegramTestNotification::run(recipients: $get('telegram_recipients')))
+                                        ->hidden(fn (Forms\Get $get) => ! count($get('telegram_recipients')) || blank(config('telegram.bot'))),
                                 ]),
                             ]),
                     ])

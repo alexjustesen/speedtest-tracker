@@ -60,30 +60,30 @@ class DataIntegrationPage extends SettingsPage
                             ->columnSpanFull(),
 
                         Grid::make(['default' => 1, 'md' => 2])
-                            ->hidden(fn(Forms\Get $get) => $get('influxdb_v2_enabled') !== true)
+                            ->hidden(fn (Forms\Get $get) => $get('influxdb_v2_enabled') !== true)
                             ->schema([
                                 TextInput::make('influxdb_v2_url')
                                     ->label('URL')
                                     ->placeholder('http://your-influxdb-instance')
                                     ->maxLength(255)
-                                    ->required(fn(Forms\Get $get) => $get('influxdb_v2_enabled') === true)
+                                    ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                     ->columnSpan(['md' => 1]),
                                 TextInput::make('influxdb_v2_org')
                                     ->label('Org')
                                     ->maxLength(255)
-                                    ->required(fn(Forms\Get $get) => $get('influxdb_v2_enabled') === true)
+                                    ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                     ->columnSpan(['md' => 1]),
                                 TextInput::make('influxdb_v2_bucket')
                                     ->placeholder('speedtest-tracker')
                                     ->label('Bucket')
                                     ->maxLength(255)
-                                    ->required(fn(Forms\Get $get) => $get('influxdb_v2_enabled') === true)
+                                    ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                     ->columnSpan(['md' => 2]),
                                 TextInput::make('influxdb_v2_token')
                                     ->label('Token')
                                     ->maxLength(255)
                                     ->password()
-                                    ->required(fn(Forms\Get $get) => $get('influxdb_v2_enabled') === true)
+                                    ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                     ->autocomplete(false)
                                     ->columnSpan(['md' => 2]),
                                 Checkbox::make('influxdb_v2_verify_ssl')
@@ -103,7 +103,7 @@ class DataIntegrationPage extends SettingsPage
                                         })
                                         ->color('primary')
                                         ->icon('heroicon-o-cloud-arrow-up')
-                                        ->visible(fn(): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
+                                        ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
                                 ]),
                                 // Button to test InfluxDB connection
                                 Actions::make([
@@ -119,7 +119,7 @@ class DataIntegrationPage extends SettingsPage
                                         })
                                         ->color('primary')
                                         ->icon('heroicon-o-check-circle')
-                                        ->visible(fn(): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
+                                        ->visible(fn (): bool => app(DataIntegrationSettings::class)->influxdb_v2_enabled),
                                 ]),
                             ]),
                     ])
