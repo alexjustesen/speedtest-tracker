@@ -16,6 +16,115 @@
                 ],
                 "summary": "List all results",
                 "operationId": "listResults",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of results per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 25,
+                            "maximum": 500,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "filter[ping]",
+                        "in": "query",
+                        "description": "Filter by ping value (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "filter[download]",
+                        "in": "query",
+                        "description": "Filter by download speed (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[upload]",
+                        "in": "query",
+                        "description": "Filter by upload speed (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[healthy]",
+                        "in": "query",
+                        "description": "Filter by healthy status",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "filter[status]",
+                        "in": "query",
+                        "description": "Filter by status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter[scheduled]",
+                        "in": "query",
+                        "description": "Filter by scheduled status",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "filter[start_at]",
+                        "in": "query",
+                        "description": "Filter results created on or after this date (alias for created_at>=)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "filter[end_at]",
+                        "in": "query",
+                        "description": "Filter results created on or before this date (alias for created_at<=)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort results by field (prefix with - for descending)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ping",
+                                "-ping",
+                                "download",
+                                "-download",
+                                "upload",
+                                "-upload",
+                                "created_at",
+                                "-created_at",
+                                "updated_at",
+                                "-updated_at"
+                            ]
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
