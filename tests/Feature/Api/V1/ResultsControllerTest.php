@@ -35,7 +35,7 @@ test('it can filter results by date range using start_at and end_at', function (
 });
 
 test('it validates date filter parameters', function () {
-    $response = $this->getJson('/api/v1/results?filter[start_at]=>invalid-date');
+    $response = $this->getJson('/api/v1/results?filter[start_at]=invalid-date');
 
     $response->assertStatus(422)
         ->assertJson([
