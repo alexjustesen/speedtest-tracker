@@ -29,6 +29,8 @@ class ResultsController extends ApiController
         }
         $validator = Validator::make($request->all(), [
             'per_page' => 'integer|min:1|max:500',
+            'filter.start_at' => 'date',
+            'filter.end_at' => 'date|after_or_equal:filter.start_at',
         ]);
 
         if ($validator->fails()) {
