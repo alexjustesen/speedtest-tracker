@@ -13,30 +13,30 @@ beforeEach(function () {
 test('it can filter results by date range using start_at and end_at', function () {
     // Create results on different dates
     $result1 = Result::factory()->create([
-        'created_at' => Carbon::now()->subDays(10)
+        'created_at' => Carbon::now()->subDays(10),
     ]);
-    
+
     $result2 = Result::factory()->create([
-        'created_at' => Carbon::now()->subDays(5)
+        'created_at' => Carbon::now()->subDays(5),
     ]);
-    
+
     $result3 = Result::factory()->create([
-        'created_at' => Carbon::now()->subDays(1)
+        'created_at' => Carbon::now()->subDays(1),
     ]);
 
     // Filter by date range
     $startDate = Carbon::now()->subDays(7)->format('Y-m-d');
     $endDate = Carbon::now()->format('Y-m-d');
-    
+
     $response = $this->getJson("/api/v1/results?filter[start_at]={$startDate}&filter[end_at]={$endDate}");
-    
+
     $response->assertStatus(200)
         ->assertJsonCount(2, 'data'); // Should return result2 and result3
 });
 
 test('it validates date filter parameters', function () {
     $response = $this->getJson('/api/v1/results?filter[start_at]=invalid-date');
-    
+
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['filter.start_at']);
 });
@@ -44,9 +44,9 @@ test('it validates date filter parameters', function () {
 test('it validates end_at is after or equal to start_at', function () {
     $startDate = Carbon::now()->format('Y-m-d');
     $endDate = Carbon::now()->subDays(1)->format('Y-m-d');
-    
+
     $response = $this->getJson("/api/v1/results?filter[start_at]={$startDate}&filter[end_at]={$endDate}");
-    
+
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['filter.end_at']);
 });
@@ -60,6 +60,6 @@ test('it returns forbidden when user lacks permission', function () {
 
     $response->assertStatus(403)
         ->assertJson([
-            'message' => 'You do not have permission to view results.'
+            'message' => 'You do not have permission to view results.',
         ]);
 });
