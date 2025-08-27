@@ -40,9 +40,9 @@ test('it validates date filter parameters', function () {
     $response->assertStatus(422)
         ->assertJson([
             'data' => [
-                'filter.start_at' => ['The filter.start at field must be a valid date.']
+                'filter.start_at' => ['The filter.start at field must be a valid date.'],
             ],
-            'message' => 'Validation failed.'
+            'message' => 'Validation failed.',
         ]);
 });
 
@@ -55,9 +55,9 @@ test('it validates end_at is after or equal to start_at', function () {
     $response->assertStatus(422)
         ->assertJson([
             'data' => [
-                'filter.end_at' => ['The filter.end at field must be a date after or equal to filter.start at.']
+                'filter.end_at' => ['The filter.end at field must be a date after or equal to filter.start at.'],
             ],
-            'message' => 'Validation failed.'
+            'message' => 'Validation failed.',
         ]);
 });
 
