@@ -5,6 +5,27 @@ if [ "$SUPERVISOR_PHP_USER" != "root" ] && [ "$SUPERVISOR_PHP_USER" != "sail" ];
     exit 1
 fi
 
+function show_variable_value() {
+  name=$1
+  value=$(set | grep -v name | grep ^"${name}="  | awk -F= '{ print $2 }' )
+  echo "${value}"
+}
+
+# Iterate over all environment variables ending with _SECRETFILE
+for env_var in $(env | grep '_SECRETFILE=' | awk -F= '{print $1}'); do
+  # Extract the base name of the variable 
+  base_var_name="${env_var%_SECRETFILE}"
+
+  # Read the content of the file
+  file_path=$(show_variable_value $env_var)
+  if [ -f "$file_path" ]; then
+    # Export the new environment variable with the file's content
+    export $base_var_name="$(cat "$file_path")"
+  else
+    echo "Warning: File '$file_path' specified in $env_var does not exist or is not a file."
+  fi
+done
+
 if [ ! -z "$WWWUSER" ]; then
     usermod -u $WWWUSER sail
 fi
