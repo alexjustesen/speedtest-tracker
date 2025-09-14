@@ -20,11 +20,12 @@ use OpenApi\Attributes as OA;
         ],
         parameters: [
             new OA\Parameter(
+                parameter: 'AcceptHeader',
                 name: 'Accept',
                 in: 'header',
                 required: true,
                 schema: new OA\Schema(type: 'string', default: 'application/json'),
-                description: 'Expected response format'
+                description: 'Must be "application/json" - this API only accepts and returns JSON'
             ),
         ]
     ),
