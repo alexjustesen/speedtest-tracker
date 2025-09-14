@@ -21,6 +21,4 @@ use OpenApi\Attributes as OA;
         ),
     ]
 )]
-class NotAcceptableErrorSchema
-{
-}
+class NotAcceptableErrorSchema {}

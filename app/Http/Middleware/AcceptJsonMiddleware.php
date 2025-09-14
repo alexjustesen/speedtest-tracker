@@ -12,9 +12,7 @@ class AcceptJsonMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next): SymfonyResponse
     {
@@ -30,7 +28,7 @@ class AcceptJsonMiddleware
         $response = $next($request);
 
         // Force JSON content type if not already set
-        if (! $response->headers->has('Content-Type') || 
+        if (! $response->headers->has('Content-Type') ||
             ! str_contains($response->headers->get('Content-Type'), 'application/json')) {
             $response->headers->set('Content-Type', 'application/json');
         }

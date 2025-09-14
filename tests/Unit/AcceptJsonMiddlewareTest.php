@@ -2,7 +2,7 @@
 
 test('AcceptJsonMiddleware accepts requests without Accept header (Laravel default)', function () {
     // Laravel's acceptsJson() returns true when no Accept header is present
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET');
 
@@ -17,10 +17,10 @@ test('AcceptJsonMiddleware accepts requests without Accept header (Laravel defau
 });
 
 test('AcceptJsonMiddleware accepts requests with Accept: application/json header', function () {
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => 'application/json'
+        'HTTP_ACCEPT' => 'application/json',
     ]);
 
     $response = $middleware->handle($request, function () {
@@ -35,10 +35,10 @@ test('AcceptJsonMiddleware accepts requests with Accept: application/json header
 
 test('AcceptJsonMiddleware rejects requests with Accept: */json header', function () {
     // Laravel's acceptsJson() returns false for */json
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => '*/json'
+        'HTTP_ACCEPT' => '*/json',
     ]);
 
     $response = $middleware->handle($request, function () {
@@ -53,10 +53,10 @@ test('AcceptJsonMiddleware rejects requests with Accept: */json header', functio
 });
 
 test('AcceptJsonMiddleware accepts requests with Accept: application/* header', function () {
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => 'application/*'
+        'HTTP_ACCEPT' => 'application/*',
     ]);
 
     $response = $middleware->handle($request, function () {
@@ -67,10 +67,10 @@ test('AcceptJsonMiddleware accepts requests with Accept: application/* header', 
 });
 
 test('AcceptJsonMiddleware accepts requests with multiple Accept headers including application/json', function () {
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => 'text/html,application/json,application/xml;q=0.9,*/*;q=0.8'
+        'HTTP_ACCEPT' => 'text/html,application/json,application/xml;q=0.9,*/*;q=0.8',
     ]);
 
     $response = $middleware->handle($request, function () {
@@ -81,10 +81,10 @@ test('AcceptJsonMiddleware accepts requests with multiple Accept headers includi
 });
 
 test('AcceptJsonMiddleware rejects requests with only non-JSON Accept headers', function () {
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => 'text/html,application/xml'
+        'HTTP_ACCEPT' => 'text/html,application/xml',
     ]);
 
     $response = $middleware->handle($request, function () {
@@ -99,10 +99,10 @@ test('AcceptJsonMiddleware rejects requests with only non-JSON Accept headers', 
 });
 
 test('AcceptJsonMiddleware sets Content-Type header to application/json when not already set', function () {
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => 'application/json'
+        'HTTP_ACCEPT' => 'application/json',
     ]);
 
     $response = $middleware->handle($request, function () {
@@ -113,10 +113,10 @@ test('AcceptJsonMiddleware sets Content-Type header to application/json when not
 });
 
 test('AcceptJsonMiddleware preserves existing application/json Content-Type header', function () {
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => 'application/json'
+        'HTTP_ACCEPT' => 'application/json',
     ]);
 
     $response = $middleware->handle($request, function () {
@@ -127,10 +127,10 @@ test('AcceptJsonMiddleware preserves existing application/json Content-Type head
 });
 
 test('AcceptJsonMiddleware rejects requests that only accept HTML', function () {
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => 'text/html'
+        'HTTP_ACCEPT' => 'text/html',
     ]);
 
     $response = $middleware->handle($request, function () {
@@ -146,10 +146,10 @@ test('AcceptJsonMiddleware rejects requests that only accept HTML', function () 
 
 test('AcceptJsonMiddleware accepts requests with */* Accept header', function () {
     // Laravel's acceptsJson() returns true for */*
-    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware();
+    $middleware = new \App\Http\Middleware\AcceptJsonMiddleware;
 
     $request = \Illuminate\Http\Request::create('/api/test', 'GET', [], [], [], [
-        'HTTP_ACCEPT' => '*/*'
+        'HTTP_ACCEPT' => '*/*',
     ]);
 
     $response = $middleware->handle($request, function () {
