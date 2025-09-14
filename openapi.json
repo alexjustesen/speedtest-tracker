@@ -18,6 +18,9 @@
                 "operationId": "listResults",
                 "parameters": [
                     {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    },
+                    {
                         "name": "per_page",
                         "in": "query",
                         "description": "Number of results per page",
@@ -156,6 +159,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation failed",
                         "content": {
@@ -178,6 +191,9 @@
                 "summary": "Fetch aggregated Speedtest statistics",
                 "operationId": "getStats",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    },
                     {
                         "name": "start_at",
                         "in": "query",
@@ -230,6 +246,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation error",
                         "content": {
@@ -251,6 +277,11 @@
                 "summary": "List available Ookla speedtest servers",
                 "description": "Returns an array of available Ookla speedtest servers. Requires an API token with `ookla:list-servers` scope.",
                 "operationId": "listOoklaServers",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Servers retrieved successfully",
@@ -281,6 +312,16 @@
                                 }
                             }
                         }
+                    },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -293,6 +334,9 @@
                 "summary": "Get a single result",
                 "operationId": "getResult",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -334,6 +378,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Result not found",
                         "content": {
@@ -354,6 +408,11 @@
                 ],
                 "summary": "Get the most recent result",
                 "operationId": "getLatestResult",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -385,6 +444,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "No result found",
                         "content": {
@@ -406,6 +475,9 @@
                 "summary": "Run a new Ookla speedtest",
                 "operationId": "runSpeedtest",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    },
                     {
                         "name": "server_id",
                         "in": "query",
@@ -447,6 +519,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation error",
                         "content": {
@@ -467,6 +549,11 @@
                 ],
                 "summary": "List available Ookla speedtest servers",
                 "operationId": "listSpeedtestServers",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -500,6 +587,16 @@
                                 }
                             }
                         }
+                    },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -513,6 +610,20 @@
                     "message": {
                         "description": "Error message indicating lack of permission",
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "NotAcceptableError": {
+                "description": "Error response when the Accept header is missing or invalid",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "This endpoint only accepts JSON. Please include \"Accept: application/json\" in your request headers."
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Unsupported Media Type"
                     }
                 },
                 "type": "object"
@@ -1038,10 +1149,10 @@
             }
         },
         "parameters": {
-            "Accept": {
+            "AcceptHeader": {
                 "name": "Accept",
                 "in": "header",
-                "description": "Expected response format",
+                "description": "Must be \"application/json\" - this API only accepts and returns JSON",
                 "required": true,
                 "schema": {
                     "type": "string",

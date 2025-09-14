@@ -17,6 +17,7 @@ class ResultsAnnotations
         operationId: 'listResults',
         tags: ['Results'],
         parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
             new OA\Parameter(
                 name: 'per_page',
                 in: 'query',
@@ -105,6 +106,11 @@ class ResultsAnnotations
                 content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
             ),
             new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
+            ),
+            new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
                 description: 'Validation failed',
                 content: new OA\JsonContent(ref: '#/components/schemas/ValidationError')
@@ -119,6 +125,7 @@ class ResultsAnnotations
         operationId: 'getResult',
         tags: ['Results'],
         parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -144,6 +151,11 @@ class ResultsAnnotations
                 content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
             ),
             new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
+            ),
+            new OA\Response(
                 response: Response::HTTP_NOT_FOUND,
                 description: 'Result not found',
                 content: new OA\JsonContent(ref: '#/components/schemas/NotFoundError')
@@ -157,6 +169,9 @@ class ResultsAnnotations
         summary: 'Get the most recent result',
         operationId: 'getLatestResult',
         tags: ['Results'],
+        parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
+        ],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
@@ -172,6 +187,11 @@ class ResultsAnnotations
                 response: Response::HTTP_UNAUTHORIZED,
                 description: 'Unauthenticated',
                 content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
             ),
             new OA\Response(
                 response: Response::HTTP_NOT_FOUND,
