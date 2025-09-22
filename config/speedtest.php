@@ -7,7 +7,7 @@ return [
      * General settings.
      */
 
-    'build_date' => Carbon::parse('2025-09-20'),
+    'build_date' => Carbon::parse('2025-09-22'),
 
     'build_version' => 'v1.6.7',
 
