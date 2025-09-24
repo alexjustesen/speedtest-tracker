@@ -10,6 +10,7 @@
             </div>
         @endisset
 
+
         <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentDownloadChartWidget::class)
         </div>
@@ -32,6 +33,9 @@
 
         <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentUploadLatencyChartWidget::class)
+        </div>
+        <div class="col-span-full">
+            @livewire(\App\Filament\Widgets\RecentPacketLossChartWidget::class)
         </div>
 
     </div>

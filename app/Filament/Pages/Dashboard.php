@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Filament\Pages;
-
+use App\Filament\Widgets\RecentPacketLossChartWidget;
 use App\Filament\Widgets\RecentDownloadChartWidget;
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentJitterChartWidget;
@@ -44,6 +44,7 @@ class Dashboard extends BasePage
             RecentJitterChartWidget::make(),
             RecentDownloadLatencyChartWidget::make(),
             RecentUploadLatencyChartWidget::make(),
+            RecentPacketLossChartWidget::make(),
         ];
     }
 }

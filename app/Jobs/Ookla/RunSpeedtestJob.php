@@ -92,6 +92,7 @@ class RunSpeedtestJob implements ShouldQueue
             'upload' => Arr::get($output, 'upload.bandwidth'),
             'download_bytes' => Arr::get($output, 'download.bytes'),
             'upload_bytes' => Arr::get($output, 'upload.bytes'),
+            'packetLoss' => Arr::get($output, 'packetLoss'),
             'data' => $output,
         ]);
     }
