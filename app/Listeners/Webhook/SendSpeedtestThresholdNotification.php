@@ -4,6 +4,7 @@ namespace App\Listeners\Webhook;
 
 use App\Events\SpeedtestCompleted;
 use App\Helpers\Number;
+use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use App\Settings\ThresholdSettings;
 use Illuminate\Support\Facades\Log;
@@ -65,7 +66,7 @@ class SendSpeedtestThresholdNotification
                 ->url($url['url'])
                 ->payload([
                     'result_id' => $event->result->id,
-                    'site_name' => config('app.name'),
+                    'site_name' => app(GeneralSettings::class)->app_name,
                     'isp' => $event->result->isp,
                     'metrics' => $failed,
                     'speedtest_url' => $event->result->result_url,

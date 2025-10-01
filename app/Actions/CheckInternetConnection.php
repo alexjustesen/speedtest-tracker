@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Settings\GeneralSettings;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -17,7 +18,7 @@ class CheckInternetConnection
         try {
             $response = Http::retry(3, 100)
                 ->timeout(5)
-                ->get(config('speedtest.checkinternet_url'));
+                ->get(app(GeneralSettings::class)->speedtest_checkinternet_url);
 
             if (! $response->ok()) {
                 return false;

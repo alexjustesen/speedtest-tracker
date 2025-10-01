@@ -5,6 +5,7 @@ namespace App\Actions\Influxdb\v2;
 use App\Helpers\Bitrate;
 use App\Helpers\Number;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Illuminate\Support\Arr;
 use InfluxDB2\Point;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -16,7 +17,7 @@ class BuildPointData
     public function handle(Result $result): Point
     {
         $point = Point::measurement('speedtest')
-            ->addTag('app_name', config('app.name'))
+            ->addTag('app_name', app(GeneralSettings::class)->app_name)
             ->time($result->created_at->timestamp ?? time());
 
         // Qualitative tags

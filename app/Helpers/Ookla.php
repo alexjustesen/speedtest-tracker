@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Settings\GeneralSettings;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class Ookla
@@ -34,13 +35,13 @@ class Ookla
     {
         $list = [];
 
-        if (blank(config('speedtest.servers'))) {
+        if (blank(app(GeneralSettings::class)->speedtest_servers)) {
             return null;
         }
 
         $servers = collect(array_map(
             'trim',
-            explode(',', config('speedtest.servers'))
+            explode(',', app(GeneralSettings::class)->speedtest_servers)
         ));
 
         if (! count($servers)) {

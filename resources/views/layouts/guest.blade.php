@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>{{ $title }} - {{ config('app.name') }}</title>
+        <title>{{ $title }} - {{ app(GeneralSettings::class)->app_name }}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
         {{-- Fonts --}}

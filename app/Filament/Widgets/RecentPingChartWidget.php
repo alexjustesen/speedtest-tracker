@@ -5,12 +5,11 @@ namespace App\Filament\Widgets;
 use App\Enums\ResultStatus;
 use App\Helpers\Average;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentPingChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Ping (ms)';
-
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '250px';
@@ -19,12 +18,17 @@ class RecentPingChartWidget extends ChartWidget
 
     public ?string $filter = '24h';
 
+    public function getHeading(): string
+    {
+        return __('translations.ping_ms');
+    }
+
     protected function getFilters(): ?array
     {
         return [
-            '24h' => 'Last 24h',
-            'week' => 'Last week',
-            'month' => 'Last month',
+            '24h' => __('translations.last_24h'),
+            'week' => __('translations.last_week'),
+            'month' => __('translations.last_month'),
         ];
     }
 
@@ -48,7 +52,7 @@ class RecentPingChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Ping',
+                    'label' => __('translations.ping'),
                     'data' => $results->map(fn ($item) => $item->ping),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
@@ -59,7 +63,7 @@ class RecentPingChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Average',
+                    'label' => __('translations.average'),
                     'data' => array_fill(0, count($results), Average::averagePing($results)),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
@@ -69,7 +73,7 @@ class RecentPingChartWidget extends ChartWidget
                     'pointRadius' => 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(app(GeneralSettings::class)->display_timezone)->format(app(GeneralSettings::class)->chart_datetime_format)),
         ];
     }
 
@@ -89,7 +93,7 @@ class RecentPingChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'beginAtZero' => app(GeneralSettings::class)->chart_begin_at_zero,
                     'grace' => 2,
                 ],
             ],

@@ -1,6 +1,6 @@
 *Speedtest Completed - #{{ $id }}*
 
-A new speedtest on *{{ config('app.name') }}* was completed using *{{ $service }}*.
+A new speedtest on *{{ app(GeneralSettings::class)->app_name }}* was completed using *{{ $service }}*.
 
 - *Server name:* {{ $serverName }}
 - *Server ID:* {{ $serverId }}

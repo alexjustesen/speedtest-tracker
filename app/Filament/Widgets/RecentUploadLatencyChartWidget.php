@@ -4,12 +4,11 @@ namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentUploadLatencyChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Upload Latency';
-
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '250px';
@@ -18,12 +17,17 @@ class RecentUploadLatencyChartWidget extends ChartWidget
 
     public ?string $filter = '24h';
 
+    public function getHeading(): string
+    {
+        return __('translations.upload_latency');
+    }
+
     protected function getFilters(): ?array
     {
         return [
-            '24h' => 'Last 24h',
-            'week' => 'Last week',
-            'month' => 'Last month',
+            '24h' => __('translations.last_24h'),
+            'week' => __('translations.last_week'),
+            'month' => __('translations.last_month'),
         ];
     }
 
@@ -47,7 +51,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Average (ms)',
+                    'label' => __('translations.average_ms'),
                     'data' => $results->map(fn ($item) => $item->upload_latency_iqm),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
@@ -58,7 +62,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'High (ms)',
+                    'label' => __('translations.high_ms'),
                     'data' => $results->map(fn ($item) => $item->upload_latency_high),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
@@ -69,7 +73,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Low (ms)',
+                    'label' => __('translations.low_ms'),
                     'data' => $results->map(fn ($item) => $item->upload_latency_low),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
@@ -80,7 +84,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(app(GeneralSettings::class)->display_timezone)->format(app(GeneralSettings::class)->chart_datetime_format)),
         ];
     }
 
@@ -100,7 +104,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'beginAtZero' => app(GeneralSettings::class)->chart_begin_at_zero,
                     'grace' => 2,
                 ],
             ],

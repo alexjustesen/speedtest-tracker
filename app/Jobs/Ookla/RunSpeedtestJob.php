@@ -7,6 +7,7 @@ use App\Events\SpeedtestFailed;
 use App\Events\SpeedtestRunning;
 use App\Helpers\Ookla;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -62,7 +63,7 @@ class RunSpeedtestJob implements ShouldQueue
             '--accept-gdpr',
             '--format=json',
             $this->result->server_id ? '--server-id='.$this->result->server_id : null,
-            config('speedtest.interface') ? '--interface='.config('speedtest.interface') : null,
+            app(GeneralSettings::class)->speedtest_interface ? '--interface='.app(GeneralSettings::class)->speedtest_interface : null,
         ]);
 
         $process = new Process($command);

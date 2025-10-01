@@ -3,6 +3,7 @@
 namespace App\Jobs\Ookla;
 
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -45,7 +46,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
 
         // If preferred servers are set in the config, we can use that,
         // but only if the test is scheduled.
-        if ($this->result->scheduled && ! blank(config('speedtest.servers'))) {
+        if ($this->result->scheduled && ! blank(app(GeneralSettings::class)->speedtest_servers)) {
             $this->updateServerId(
                 result: $this->result,
                 serverId: $this->getConfigServer(),
@@ -55,7 +56,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         }
 
         // If blocked servers config is blank, we can skip picking a server.
-        if (blank(config('speedtest.blocked_servers'))) {
+        if (blank(app(GeneralSettings::class)->speedtest_blocked_servers)) {
             return;
         }
 
@@ -77,7 +78,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
      */
     private function getConfigBlockedServers(): array
     {
-        $blocked = config('speedtest.blocked_servers');
+        $blocked = app(GeneralSettings::class)->speedtest_blocked_servers;
 
         $blocked = array_filter(
             array_map(
@@ -100,7 +101,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
      */
     private function getConfigServer(): ?string
     {
-        $servers = config('speedtest.servers');
+        $servers = app(GeneralSettings::class)->speedtest_servers;
 
         $servers = array_filter(
             array_map(

@@ -7,6 +7,7 @@ use App\Enums\ResultStatus;
 use App\Events\SpeedtestSkipped;
 use App\Helpers\Network;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -76,7 +77,7 @@ class SkipSpeedtestJob implements ShouldQueue
         $skipIPs = array_filter(
             array_map(
                 'trim',
-                explode(',', config('speedtest.skip_ips')),
+                explode(',', app(GeneralSettings::class)->speedtest_skip_ips),
             ),
         );
 

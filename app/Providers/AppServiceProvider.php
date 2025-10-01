@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Settings\GeneralSettings;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Request;
@@ -47,6 +48,9 @@ class AppServiceProvider extends ServiceProvider
         AboutCommand::add('Speedtest Tracker', fn () => [
             'Version' => config('speedtest.build_version'),
         ]);
+
+        $settings = resolve(GeneralSettings::class)->refresh();
+        config(['app.name' => $settings->app_name]);
     }
 
     /**
@@ -74,7 +78,7 @@ class AppServiceProvider extends ServiceProvider
     protected function setApiRateLimit(): void
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(config('api.rate_limit'));
+            return Limit::perMinute(app(GeneralSettings::class)->rate_limit);
         });
     }
 }

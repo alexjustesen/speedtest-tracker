@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\UserRole;
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use App\Settings\GeneralSettings;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -27,9 +28,32 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = 'Settings';
-
     protected static ?int $navigationSort = 4;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('translations.settings');
+    }
+
+    public function getTitle(): string
+    {
+        return __('translations.users');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('translations.users');
+    }
+
+    public static function getLabel(): string
+    {
+        return __('translations.users');
+    }
+
+    public static function getPluralLabel(): string
+    {
+        return __('translations.users');
+    }
 
     public static function form(Form $form): Form
     {
@@ -40,24 +64,27 @@ class UserResource extends Resource
                 ])->columnSpan([
                     'lg' => 2,
                 ])->schema([
-                    Section::make('Details')
+                    Section::make(__('translations.details'))
                         ->columns([
                             'default' => 1,
                             'lg' => 2,
                         ])
                         ->schema([
                             TextInput::make('name')
+                                ->label(__('translations.name'))
                                 ->required()
                                 ->maxLength(255)
                                 ->columnSpanFull(),
 
                             TextInput::make('email')
+                                ->label(__('translations.email'))
                                 ->email()
                                 ->required()
                                 ->maxLength(255)
                                 ->columnSpanFull(),
 
                             TextInput::make('password')
+                                ->label(__('translations.password'))
                                 ->confirmed()
                                 ->password()
                                 ->revealable()
@@ -66,6 +93,7 @@ class UserResource extends Resource
                                 ->dehydrated(fn ($state) => filled($state)),
 
                             TextInput::make('password_confirmation')
+                                ->label(__('translations.password_confirmation'))
                                 ->password()
                                 ->revealable(),
 
@@ -76,10 +104,10 @@ class UserResource extends Resource
                 Grid::make(1)
                     ->columnSpan(1)
                     ->schema([
-                        Section::make('Platform')
+                        Section::make(__('translations.platform'))
                             ->schema([
                                 Select::make('role')
-                                    ->label('Role')
+                                    ->label(__('translations.role'))
                                     ->default(UserRole::User)
                                     ->options(UserRole::class)
                                     ->required()
@@ -91,9 +119,11 @@ class UserResource extends Resource
                         Section::make()
                             ->schema([
                                 Placeholder::make('created_at')
+                                    ->label(__('translations.created_at'))
                                     ->content(fn (?User $record): string => $record ? $record->created_at->diffForHumans() : '-'),
 
                                 Placeholder::make('updated_at')
+                                    ->label(__('translations.updated_at'))
                                     ->content(fn (?User $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
 
                                 // ...
@@ -115,32 +145,37 @@ class UserResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('name')
+                    ->label(__('translations.name'))
                     ->searchable(),
 
                 TextColumn::make('email')
+                    ->label(__('translations.email'))
                     ->searchable(),
 
                 TextColumn::make('role')
+                    ->label(__('translations.role'))
                     ->badge(),
 
                 TextColumn::make('created_at')
+                    ->label(__('translations.created_at'))
                     ->alignEnd()
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('updated_at')
+                    ->label(__('translations.updated_at'))
                     ->alignEnd()
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 // ...
             ])
             ->filters([
-                SelectFilter::make('role')
+                SelectFilter::make(__('translations.role'))
                     ->options(UserRole::class),
             ])
             ->actions([

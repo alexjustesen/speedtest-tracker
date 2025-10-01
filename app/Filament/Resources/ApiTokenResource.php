@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ApiTokenResource\Pages;
+use App\Settings\GeneralSettings;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Grid;
@@ -27,11 +28,20 @@ class ApiTokenResource extends Resource
 
     protected static ?string $navigationIcon = 'tabler-api';
 
-    protected static ?string $navigationGroup = 'Settings';
+    public static function getNavigationGroup(): string
+    {
+        return __('translations.settings');
+    }
 
-    protected static ?string $label = 'API Token';
+    public static function getLabel(): string
+    {
+        return __('translations.api_token');
+    }
 
-    protected static ?string $pluralLabel = 'API Tokens';
+    public static function getPluralLabel(): string
+    {
+        return __('translations.api_tokens');
+    }
 
     public static function getTokenFormSchema(): array
     {
@@ -39,29 +49,29 @@ class ApiTokenResource extends Resource
             Grid::make()
                 ->schema([
                     TextInput::make('name')
-                        ->label('Name')
+                        ->label(__('translations.name'))
                         ->unique(ignoreRecord: true)
                         ->maxLength(100)
                         ->required(),
                     CheckboxList::make('abilities')
-                        ->label('Abilities')
+                        ->label(__('translations.abilities'))
                         ->options([
-                            'results:read' => 'Read results',
-                            'speedtests:run' => 'Run speedtest',
-                            'ookla:list-servers' => 'List servers',
+                            'results:read' => __('translations.read_results'),
+                            'speedtests:run' => __('translations.run_speedtest'),
+                            'ookla:list-servers' => __('translations.list_servers'),
                         ])
                         ->required()
                         ->bulkToggleable()
                         ->descriptions([
-                            'results:read' => 'Grant this token permission to read results and statistics.',
-                            'speedtests:run' => 'Grant this token permission to run speedtests.',
-                            'ookla:list-servers' => 'Grant this token permission to list available servers.',
+                            'results:read' => __('translations.read_results_description'),
+                            'speedtests:run' => __('translations.run_speedtest_description'),
+                            'ookla:list-servers' => __('translations.list_servers_description'),
                         ]),
                     DateTimePicker::make('expires_at')
-                        ->label('Expires at')
+                        ->label(__('translations.expires_at'))
                         ->nullable()
                         ->native(false)
-                        ->helperText('Leave empty for no expiration'),
+                        ->helperText(__('translations.expires_at_helper_text')),
                 ])
                 ->columns([
                     'lg' => 1,
@@ -79,34 +89,48 @@ class ApiTokenResource extends Resource
         return $table
             ->query(PersonalAccessToken::query()->where('tokenable_id', Auth::id()))
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('abilities')->badge(),
+                TextColumn::make('name')
+                    ->label(__('translations.name'))->searchable(),
+                TextColumn::make('abilities')
+                    ->label(__('translations.abilities'))
+                    ->formatStateUsing(function (string $state) {
+                        return match ($state) {
+                            'results:read' => __('translations.read_results'),
+                            'speedtests:run' => __('translations.run_speedtest'),
+                            'ookla:list-servers' => __('translations.list_servers'),
+                            'default' => $state,
+                        };
+                    })
+                    ->badge(),
                 TextColumn::make('created_at')
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->label(__('translations.created_at'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->toggleable()
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('last_used_at')
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->label(__('translations.last_used_at'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('expires_at')
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->label(__('translations.expires_at'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->toggleable()
                     ->sortable()
                     ->alignEnd(),
             ])
             ->filters([
                 TernaryFilter::make('expired')
-                    ->label('Token Status')
-                    ->placeholder('All tokens')
-                    ->falseLabel('Active tokens')
-                    ->trueLabel('Expired tokens')
+                    ->label(__('translations.token_status'))
+                    ->placeholder(__('translations.all_tokens'))
+                    ->falseLabel(__('translations.active_tokens'))
+                    ->trueLabel(__('translations.expired_tokens'))
                     ->native(false)
                     ->queries(
                         true: fn (Builder $query) => $query
@@ -121,12 +145,12 @@ class ApiTokenResource extends Resource
                         blank: fn (Builder $query) => $query,
                     ),
                 SelectFilter::make('abilities')
-                    ->label('Abilities')
+                    ->label(__('translations.abilities'))
                     ->multiple()
                     ->options([
-                        'results:read' => 'Read results',
-                        'speedtests:run' => 'Run speedtest',
-                        'ookla:list-servers' => 'List servers',
+                        'results:read' => __('translations.read_results'),
+                        'speedtests:run' => __('translations.run_speedtest'),
+                        'ookla:list-servers' => __('translations.list_servers'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         foreach ($data['values'] ?? [] as $value) {

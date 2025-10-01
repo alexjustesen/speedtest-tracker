@@ -22,4 +22,8 @@ return [
 
     'admin_password' => env('ADMIN_PASSWORD', 'password'),
 
+    'asset_url' => env('ASSET_URL', ''),
+
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
+
 ];

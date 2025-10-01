@@ -20,5 +20,5 @@ View Results on Ookla
 </x-mail::button>
 
 Thanks,<br>
-{{ config('app.name') }}
+{{ app(GeneralSettings::class)->app_name }}
 </x-mail::message>

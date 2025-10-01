@@ -3,6 +3,7 @@
 namespace App\Listeners\Webhook;
 
 use App\Events\SpeedtestCompleted;
+use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +37,7 @@ class SendSpeedtestCompletedNotification
                 ->url($url['url'])
                 ->payload([
                     'result_id' => $event->result->id,
-                    'site_name' => config('app.name'),
+                    'site_name' => app(GeneralSettings::class)->app_name,
                     'server_name' => Arr::get($event->result->data, 'server.name'),
                     'server_id' => Arr::get($event->result->data, 'server.id'),
                     'isp' => Arr::get($event->result->data, 'isp'),

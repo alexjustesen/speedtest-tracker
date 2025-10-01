@@ -6,12 +6,11 @@ use App\Enums\ResultStatus;
 use App\Helpers\Average;
 use App\Helpers\Number;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentDownloadChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Download (Mbps)';
-
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '250px';
@@ -20,12 +19,17 @@ class RecentDownloadChartWidget extends ChartWidget
 
     public ?string $filter = '24h';
 
+    public function getHeading(): string
+    {
+        return __('translations.download_mbps');
+    }
+
     protected function getFilters(): ?array
     {
         return [
-            '24h' => 'Last 24h',
-            'week' => 'Last week',
-            'month' => 'Last month',
+            '24h' => __('translations.last_24h'),
+            'week' => __('translations.last_week'),
+            'month' => __('translations.last_month'),
         ];
     }
 
@@ -49,7 +53,7 @@ class RecentDownloadChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download',
+                    'label' => __('translations.download'),
                     'data' => $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : null),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
@@ -60,7 +64,7 @@ class RecentDownloadChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Average',
+                    'label' => __('translations.average'),
                     'data' => array_fill(0, count($results), Average::averageDownload($results)),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
@@ -70,7 +74,7 @@ class RecentDownloadChartWidget extends ChartWidget
                     'pointRadius' => 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(app(GeneralSettings::class)->display_timezone)->format(app(GeneralSettings::class)->chart_datetime_format)),
         ];
     }
 
@@ -91,7 +95,7 @@ class RecentDownloadChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'beginAtZero' => app(GeneralSettings::class)->chart_begin_at_zero,
                     'grace' => 2,
                 ],
             ],

@@ -3,6 +3,7 @@
 namespace App\Listeners\HealthCheck;
 
 use App\Events\SpeedtestCompleted;
+use App\Settings\GeneralSettings;
 use App\Settings\NotificationSettings;
 use Illuminate\Support\Facades\Log;
 use Spatie\WebhookServer\WebhookCall;
@@ -35,7 +36,7 @@ class SendSpeedtestCompletedNotification
                 ->url($url['url'])
                 ->payload([
                     'result_id' => $event->result->id,
-                    'site_name' => config('app.name'),
+                    'site_name' => app(GeneralSettings::class)->app_name,
                     'isp' => $event->result->isp,
                     'ping' => $event->result->ping,
                     'download' => $event->result->downloadBits,

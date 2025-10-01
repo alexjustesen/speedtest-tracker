@@ -4,12 +4,11 @@ namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentJitterChartWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Jitter';
-
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $maxHeight = '250px';
@@ -18,12 +17,17 @@ class RecentJitterChartWidget extends ChartWidget
 
     public ?string $filter = '24h';
 
+    public function getHeading(): string
+    {
+        return __('translations.jitter');
+    }
+
     protected function getFilters(): ?array
     {
         return [
-            '24h' => 'Last 24h',
-            'week' => 'Last week',
-            'month' => 'Last month',
+            '24h' => __('translations.last_24h'),
+            'week' => __('translations.last_week'),
+            'month' => __('translations.last_month'),
         ];
     }
 
@@ -47,7 +51,7 @@ class RecentJitterChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download (ms)',
+                    'label' => __('translations.download_ms'),
                     'data' => $results->map(fn ($item) => $item->download_jitter),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
@@ -58,7 +62,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Upload (ms)',
+                    'label' => __('translations.upload_ms'),
                     'data' => $results->map(fn ($item) => $item->upload_jitter),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
@@ -69,7 +73,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Ping (ms)',
+                    'label' => __('translations.ping_ms'),
                     'data' => $results->map(fn ($item) => $item->ping_jitter),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
@@ -80,7 +84,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(app(GeneralSettings::class)->display_timezone)->format(app(GeneralSettings::class)->chart_datetime_format)),
         ];
     }
 
@@ -100,7 +104,7 @@ class RecentJitterChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'beginAtZero' => app(GeneralSettings::class)->chart_begin_at_zero,
                 ],
             ],
         ];

@@ -5,6 +5,7 @@ namespace App\Livewire\Topbar;
 use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Ookla\RunSpeedtest;
 use App\Helpers\Ookla;
+use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -27,7 +28,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
             ->icon('heroicon-o-chart-bar')
             ->iconPosition(IconPosition::Before)
             ->color('gray')
-            ->hidden(fn (): bool => ! config('speedtest.public_dashboard'))
+            ->hidden(fn (): bool => ! app(GeneralSettings::class)->public_dashboard)
             ->url(shouldOpenInNewTab: true, url: '/')
             ->extraAttributes([
                 'id' => 'dashboardAction',
