@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Services\GitHub\Repository;
+use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -18,10 +19,19 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\File;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot()
+    {
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $switch
+                ->locales(collect(File::directories(lang_path()))->map(fn ($dir) => basename($dir))->toArray());
+        });
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -63,25 +73,30 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('Settings'),
+                    ->label(__('translations.settings')),
                 NavigationGroup::make()
-                    ->label('Links')
+                    ->label(__('translations.links'))
                     ->collapsible(false),
             ])
             ->navigationItems([
-                NavigationItem::make('Documentation')
+                NavigationItem::make()
+                    ->label(fn () => __('translations.documentation'))
                     ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-book-open')
-                    ->group('Links'),
-                NavigationItem::make('Donate')
+                    ->group(fn () => __('translations.links'))
+                    ->sort(97),
+                NavigationItem::make()
+                    ->label(fn () => __('translations.donate'))
                     ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-banknotes')
-                    ->group('Links'),
+                    ->group(fn () => __('translations.links'))
+                    ->sort(98),
                 NavigationItem::make(config('speedtest.build_version'))
                     ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
                     ->icon('tabler-brand-github')
-                    ->badge(fn (): string => Repository::updateAvailable() ? 'Update Available!' : 'Up to Date')
-                    ->group('Links'),
+                    ->badge(fn (): string => Repository::updateAvailable() ? __('translations.update_available') : __('translations.up_to_date'))
+                    ->group(fn () => __('translations.links'))
+                    ->sort(99),
             ]);
     }
 }

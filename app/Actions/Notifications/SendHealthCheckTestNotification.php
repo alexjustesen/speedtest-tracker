@@ -14,7 +14,7 @@ class SendHealthCheckTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title('You need to add HealthCheck.io urls!')
+                ->title(__('translations.notifications.health_check.add'))
                 ->warning()
                 ->send();
 
@@ -24,13 +24,13 @@ class SendHealthCheckTestNotification
         foreach ($webhooks as $webhook) {
             WebhookCall::create()
                 ->url($webhook['url'])
-                ->payload(['message' => '👋 Testing the HealthCheck.io notification channel.'])
+                ->payload(['message' => __('translations.notifications.health_check.payload')])
                 ->doNotSign()
                 ->dispatch();
         }
 
         Notification::make()
-            ->title('Test HealthCheck.io notification sent.')
+            ->title(__('translations.notifications.health_check.sent'))
             ->success()
             ->send();
     }

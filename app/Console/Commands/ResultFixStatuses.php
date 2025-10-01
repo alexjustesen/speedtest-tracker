@@ -30,11 +30,11 @@ class ResultFixStatuses extends Command
     {
         $this->newLine();
 
-        $this->info('This will check each result and correct the status to "completed" or "failed" based on the data column.');
-        $this->info('📖 Read the docs: https://docs.speedtest-tracker.dev/other/commands');
+        $this->info(__('translations.status_fix.info_1'));
+        $this->info(__('translations.status_fix.info_2'));
 
-        if (! $this->confirm('Do you want to continue?')) {
-            $this->fail('Command cancelled.');
+        if (! $this->confirm(__('translations.confirm'))) {
+            $this->fail(__('translations.fail'));
         }
 
         /**
@@ -63,6 +63,6 @@ class ResultFixStatuses extends Command
                 'status' => ResultStatus::Failed,
             ]);
 
-        $this->line('✅ finished!');
+        $this->line(__('translations.status_fix.finished'));
     }
 }

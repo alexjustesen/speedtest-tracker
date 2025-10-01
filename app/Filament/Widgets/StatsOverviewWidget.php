@@ -24,11 +24,11 @@ class StatsOverviewWidget extends BaseWidget
 
         if (blank($this->result)) {
             return [
-                Stat::make('Latest download', '-')
+                Stat::make(__('translations.latest_download'), '-')
                     ->icon('heroicon-o-arrow-down-tray'),
-                Stat::make('Latest upload', '-')
+                Stat::make(__('translations.latest_upload'), '-')
                     ->icon('heroicon-o-arrow-up-tray'),
-                Stat::make('Latest ping', '-')
+                Stat::make(__('translations.latest_ping'), '-')
                     ->icon('heroicon-o-clock'),
             ];
         }
@@ -42,11 +42,11 @@ class StatsOverviewWidget extends BaseWidget
 
         if (! $previous) {
             return [
-                Stat::make('Latest download', fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
+                Stat::make(__('translations.latest_download'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
                     ->icon('heroicon-o-arrow-down-tray'),
-                Stat::make('Latest upload', fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
+                Stat::make(__('translations.latest_upload'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
                     ->icon('heroicon-o-arrow-up-tray'),
-                Stat::make('Latest ping', fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
+                Stat::make(__('translations.latest_ping'), fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
                     ->icon('heroicon-o-clock'),
             ];
         }
@@ -56,19 +56,19 @@ class StatsOverviewWidget extends BaseWidget
         $pingChange = percentChange($this->result->ping, $previous->ping, 2);
 
         return [
-            Stat::make('Latest download', fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
+            Stat::make(__('translations.latest_download'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
                 ->icon('heroicon-o-arrow-down-tray')
-                ->description($downloadChange > 0 ? $downloadChange.'% faster' : abs($downloadChange).'% slower')
+                ->description($downloadChange > 0 ? $downloadChange.'% '.__('translations.faster') : abs($downloadChange).'% '.__('translations.slower'))
                 ->descriptionIcon($downloadChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($downloadChange > 0 ? 'success' : 'danger'),
-            Stat::make('Latest upload', fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
+            Stat::make(__('translations.latest_upload'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
                 ->icon('heroicon-o-arrow-up-tray')
-                ->description($uploadChange > 0 ? $uploadChange.'% faster' : abs($uploadChange).'% slower')
+                ->description($uploadChange > 0 ? $uploadChange.'% '.__('translations.faster') : abs($uploadChange).'% '.__('translations.slower'))
                 ->descriptionIcon($uploadChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($uploadChange > 0 ? 'success' : 'danger'),
-            Stat::make('Latest ping', fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
+            Stat::make(__('translations.latest_ping'), fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
                 ->icon('heroicon-o-clock')
-                ->description($pingChange > 0 ? $pingChange.'% slower' : abs($pingChange).'% faster')
+                ->description($pingChange > 0 ? $pingChange.'% '.__('translations.slower') : abs($pingChange).'% '.__('translations.faster'))
                 ->descriptionIcon($pingChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($pingChange > 0 ? 'danger' : 'success'),
         ];
