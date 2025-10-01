@@ -31,6 +31,8 @@ return [
 
     'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
 
+    'schedule_paused_until' => env('SPEEDTEST_PAUSED_UNTIL'),
+
 
     /**
      * IP filtering settings.

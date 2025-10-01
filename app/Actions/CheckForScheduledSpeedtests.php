@@ -19,7 +19,7 @@ class CheckForScheduledSpeedtests
         }
 
         RunSpeedtest::runIf(
-            $this->isSpeedtestDue(schedule: $schedule),
+            $this->isSpeedtestDue(schedule: $schedule) && ! $this->isSpeedtestIsPaused(),
             scheduled: true,
         );
     }
@@ -35,5 +35,12 @@ class CheckForScheduledSpeedtests
             currentTime: now(),
             timeZone: config('app.display_timezone')
         );
+    }
+
+    private function isSpeedtestIsPaused(): bool
+    {
+        $paseDate = config('speedtest.schedule_paused_until');
+
+        return ! blank($paseDate) && Carbon::createFromFormat('Y-m-d H:i:s', $paseDate)->isBefore(now());
     }
 }
