@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'password' => 'The password and confirmation must match and contain at least six characters.',
+    'reset' => 'Vaša lozinka je poništena!',
+    'sent' => 'Poslali smo vam poveznicu za poništavanje lozinke e-mailom!',
+    'password' => 'Lozinka i potvrda moraju se podudarati i sadržavati najmanje šest znakova.',
 
 ];

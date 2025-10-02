@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Services\GitHub\Repository;
-use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -19,18 +18,11 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\File;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
-    public function boot()
-    {
-        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
-            $switch
-                ->locales(collect(File::directories(lang_path()))->map(fn ($dir) => basename($dir))->toArray());
-        });
-    }
+    public function boot() {}
 
     public function panel(Panel $panel): Panel
     {
