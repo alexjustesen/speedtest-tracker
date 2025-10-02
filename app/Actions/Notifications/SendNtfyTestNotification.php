@@ -14,7 +14,7 @@ class SendNtfyTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title('You need to add ntfy urls!')
+                ->title(__('translations.notifications.ntfy.add'))
                 ->warning()
                 ->send();
 
@@ -26,7 +26,7 @@ class SendNtfyTestNotification
                 ->url($webhook['url'])
                 ->payload([
                     'topic' => $webhook['topic'],
-                    'message' => '👋 Testing the ntfy notification channel.',
+                    'message' => __('translations.notifications.ntfy.payload'),
                 ])
                 ->doNotSign();
 
@@ -42,7 +42,7 @@ class SendNtfyTestNotification
         }
 
         Notification::make()
-            ->title('Test ntfy notification sent.')
+            ->title(__('translations.notifications.ntfy.sent'))
             ->success()
             ->send();
     }
