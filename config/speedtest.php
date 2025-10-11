@@ -17,6 +17,8 @@ return [
 
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
 
+    'default_view_range' => env('DEFAULT_VIEW_RANGE', '24h'),
+
 
     /**
      * Speedtest settings.
