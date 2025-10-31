@@ -16,15 +16,28 @@ class RecentUploadLatencyChartWidget extends ChartWidget
 
     protected static ?string $pollingInterval = '60s';
 
-    public ?string $filter = '24h';
+    public ?string $filter = null;
 
     protected function getFilters(): ?array
     {
-        return [
+        $default = config('speedtest.default_view_range');
+        $filters = [
+            $default => 'Default (' . ucfirst($default) . ')',
             '24h' => 'Last 24h',
             'week' => 'Last week',
             'month' => 'Last month',
         ];
+
+        // Remove duplicate if default is one of the others
+        $filters = array_unique($filters);
+
+        // Ensure default is first
+        $filters = array_merge(
+            [$default => $filters[$default]],
+            array_diff_key($filters, [$default => null])
+        );
+
+        return $filters;
     }
 
     protected function getData(): array
