@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
+use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Helpers\Average;
 use App\Helpers\Number;
 use App\Models\Result;
@@ -10,6 +11,8 @@ use Filament\Widgets\ChartWidget;
 
 class RecentDownloadChartWidget extends ChartWidget
 {
+    use HasChartFilters;
+
     protected static ?string $heading = 'Download (Mbps)';
 
     protected int|string|array $columnSpan = 'full';
@@ -20,26 +23,9 @@ class RecentDownloadChartWidget extends ChartWidget
 
     public ?string $filter = null;
 
-    protected function getFilters(): ?array
+    public function mount(): void
     {
-        $default = config('speedtest.default_view_range');
-        $filters = [
-            $default => 'Default (' . ucfirst($default) . ')',
-            '24h' => 'Last 24h',
-            'week' => 'Last week',
-            'month' => 'Last month',
-        ];
-
-        // Remove duplicate if default is one of the others
-        $filters = array_unique($filters);
-
-        // Ensure default is first
-        $filters = array_merge(
-            [$default => $filters[$default]],
-            array_diff_key($filters, [$default => null])
-        );
-
-        return $filters;
+        $this->filter = $this->filter ?? config('speedtest.default_chart_range', '24h');
     }
 
     protected function getData(): array
