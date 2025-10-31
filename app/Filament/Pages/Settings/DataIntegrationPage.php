@@ -28,17 +28,17 @@ class DataIntegrationPage extends SettingsPage
 
     public static function getNavigationGroup(): string
     {
-        return __('translations.settings');
+        return __('settings.settings');
     }
 
     public function getTitle(): string
     {
-        return __('translations.data_integration');
+        return __('settings.data_integration');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('translations.data_integration');
+        return __('settings.data_integration');
     }
 
     public static function canAccess(): bool
@@ -60,11 +60,11 @@ class DataIntegrationPage extends SettingsPage
     {
         return $form
             ->schema([
-                Section::make(__('translations.infoluxdb'))
-                    ->description(__('translations.infoluxdb_description'))
+                Section::make(__('settings.influxdb'))
+                    ->description(__('settings.influxdb_description'))
                     ->schema([
                         Forms\Components\Toggle::make('influxdb_v2_enabled')
-                            ->label(__('translations.enable'))
+                            ->label(__('settings.enable_influxdb'))
                             ->reactive()
                             ->columnSpanFull(),
 
@@ -72,31 +72,31 @@ class DataIntegrationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('influxdb_v2_enabled') !== true)
                             ->schema([
                                 TextInput::make('influxdb_v2_url')
-                                    ->label(__('translations.url'))
+                                    ->label(__('common.url'))
                                     ->placeholder('http://your-influxdb-instance')
                                     ->maxLength(255)
                                     ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                     ->columnSpan(['md' => 1]),
                                 TextInput::make('influxdb_v2_org')
-                                    ->label(__('translations.org'))
+                                    ->label(__('settings.organization'))
                                     ->maxLength(255)
                                     ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                     ->columnSpan(['md' => 1]),
                                 TextInput::make('influxdb_v2_bucket')
-                                    ->placeholder(__('translations.speedtest_tracker'))
-                                    ->label(__('translations.bucket'))
+                                    ->label(__('settings.bucket'))
+                                    ->placeholder(__('common.speedtest_tracker'))
                                     ->maxLength(255)
                                     ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                     ->columnSpan(['md' => 2]),
                                 TextInput::make('influxdb_v2_token')
-                                    ->label(__('translations.token'))
+                                    ->label(__('api.token'))
                                     ->maxLength(255)
                                     ->password()
                                     ->required(fn (Forms\Get $get) => $get('influxdb_v2_enabled') === true)
                                     ->autocomplete(false)
                                     ->columnSpan(['md' => 2]),
                                 Checkbox::make('influxdb_v2_verify_ssl')
-                                    ->label(__('translations.verify_ssl'))
+                                    ->label(__('settings.verify_ssl'))
                                     ->columnSpanFull(),
                                 // Button to send old data to InfluxDB
                                 Actions::make([
