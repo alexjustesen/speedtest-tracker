@@ -16,7 +16,7 @@ class ListApiTokens extends ListRecords
     {
         return [
             Action::make('createToken')
-                ->label('Create API Token')
+                ->label(__('translations.create_api_token'))
                 ->form(ApiTokenResource::getTokenFormSchema())
                 ->action(function (array $data): void {
                     $token = auth()->user()->createToken(
@@ -26,8 +26,8 @@ class ListApiTokens extends ListRecords
                     );
 
                     Notification::make()
-                        ->title('Token Created')
-                        ->body('Your token: `'.explode('|', $token->plainTextToken)[1].'`')
+                        ->title(__('translations.token_created'))
+                        ->body(__('translations.your_token').': `'.explode('|', $token->plainTextToken)[1].'`')
                         ->success()
                         ->persistent()
                         ->send();

@@ -18,15 +18,24 @@ class ThresholdsPage extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
 
-    protected static ?string $navigationGroup = 'Settings';
-
     protected static ?int $navigationSort = 4;
 
-    protected static ?string $title = 'Thresholds';
-
-    protected static ?string $navigationLabel = 'Thresholds';
-
     protected static string $settings = ThresholdSettings::class;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('translations.settings');
+    }
+
+    public function getTitle(): string
+    {
+        return __('translations.thresholds');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('translations.thresholds');
+    }
 
     public static function canAccess(): bool
     {

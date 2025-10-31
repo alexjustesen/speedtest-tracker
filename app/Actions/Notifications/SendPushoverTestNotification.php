@@ -14,7 +14,7 @@ class SendPushoverTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title('You need to add Pushover URLs!')
+                ->title(__('translations.notifications.pushover.add'))
                 ->warning()
                 ->send();
 
@@ -27,14 +27,14 @@ class SendPushoverTestNotification
                 ->payload([
                     'token' => $webhook['api_token'],
                     'user' => $webhook['user_key'],
-                    'message' => '👋 Testing the Pushover notification channel.',
+                    'message' => __('translations.notifications.pushover.payload'),
                 ])
                 ->doNotSign()
                 ->dispatch();
         }
 
         Notification::make()
-            ->title('Test Pushover notification sent.')
+            ->title(__('translations.notifications.pushover.sent'))
             ->success()
             ->send();
     }

@@ -40,7 +40,7 @@ class OoklaListServers extends Command
         );
 
         if ($response->failed()) {
-            $this->fail('There was an issue retrieving a list of speedtest servers, check the logs.');
+            $this->fail(__('translations.ookla_error'));
         }
 
         $fields = ['id', 'sponsor', 'name', 'country', 'distance'];
