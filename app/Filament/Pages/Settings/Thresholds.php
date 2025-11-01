@@ -11,7 +11,7 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Support\Enums\Width;
 use Illuminate\Support\Facades\Auth;
 
 class Thresholds extends SettingsPage
@@ -38,9 +38,9 @@ class Thresholds extends SettingsPage
         return Auth::check() && Auth::user()->is_admin;
     }
 
-    public function getMaxContentWidth(): MaxWidth
+    public function getMaxContentWidth(): Width|string
     {
-        return MaxWidth::ThreeExtraLarge;
+        return Width::ExtraExtraExtraLarge;
     }
 
     public function form(Schema $schema): Schema
