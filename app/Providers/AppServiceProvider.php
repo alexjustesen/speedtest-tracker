@@ -81,7 +81,7 @@ class AppServiceProvider extends ServiceProvider
             return in_array($user->platform_role, [UserRole::Admin, UserRole::User]);
         });
 
-        Gate::define('access-dashboard', function (?User $user) {
+        Gate::define('view-dashboard', function (?User $user) {
             if (blank($user) && ! config('speedtest.public_dashboard')) {
                 return false;
             }
