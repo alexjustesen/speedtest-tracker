@@ -37,6 +37,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
+        "laravel/boost": "^1.6",
         "laravel/pail": "^1.2.3",
         "laravel/pint": "^1.25.1",
         "laravel/sail": "^1.46.0",
@@ -72,7 +73,8 @@
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan vendor:publish --tag=livewire:assets --ansi --force"
+            "@php artisan vendor:publish --tag=livewire:assets --ansi --force",
+            "@php artisan boost:update --ansi"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
