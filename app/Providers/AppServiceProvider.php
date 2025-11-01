@@ -82,7 +82,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('view-dashboard', function (?User $user) {
-            if ($user === null || ! config('speedtest.public_dashboard')) {
+            if (config('speedtest.public_dashboard')) {
+                return true;
+            }
+
+            if ($user === null) {
                 return false;
             }
 
