@@ -13,7 +13,7 @@ class RecentDownloadChartWidget extends ChartWidget
 {
     use HasChartFilters;
 
-    protected static ?string $heading = 'Download (Mbps)';
+    protected ?string $heading = 'Download (Mbps)';
 
     protected int|string|array $columnSpan = 'full';
 

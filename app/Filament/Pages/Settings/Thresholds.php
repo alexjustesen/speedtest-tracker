@@ -10,8 +10,8 @@ use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Width;
 use Illuminate\Support\Facades\Auth;
 
 class Thresholds extends SettingsPage
@@ -38,70 +38,72 @@ class Thresholds extends SettingsPage
         return Auth::check() && Auth::user()->is_admin;
     }
 
-    public function getMaxContentWidth(): Width|string
-    {
-        return Width::ExtraExtraExtraLarge;
-    }
-
     public function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Section::make('Absolute')
-                    ->description('Absolute thresholds do not take into account previous history and could be triggered on each test.')
+                Grid::make([
+                    'default' => 1,
+                    'md' => 3,
+                ])
+                    ->columnSpan('full')
                     ->schema([
-                        Toggle::make('absolute_enabled')
-                            ->label('Enable absolute thresholds')
-                            ->reactive()
-                            ->columnSpan(2),
                         Grid::make([
                             'default' => 1,
                         ])
-                            ->hidden(fn (Get $get) => $get('absolute_enabled') !== true)
                             ->schema([
-                                Fieldset::make('Metrics')
+                                Section::make('Absolute')
+                                    ->description('Absolute thresholds do not take into account previous history and could be triggered on each test.')
                                     ->schema([
-                                        TextInput::make('absolute_download')
-                                            ->label('Download')
-                                            ->hint('Mbps')
-                                            ->helperText('Set to zero to disable this metric.')
-                                            ->default(0)
-                                            ->minValue(0)
-                                            ->numeric()
-                                            ->required(),
-
-                                        TextInput::make('absolute_upload')
-                                            ->label('Upload')
-                                            ->hint('Mbps')
-                                            ->helperText('Set to zero to disable this metric.')
-                                            ->default(0)
-                                            ->minValue(0)
-                                            ->numeric()
-                                            ->required(),
-
-                                        TextInput::make('absolute_ping')
-                                            ->label('Ping')
-                                            ->hint('ms')
-                                            ->helperText('Set to zero to disable this metric.')
-                                            ->default(0)
-                                            ->minValue(0)
-                                            ->numeric()
-                                            ->required(),
+                                        Toggle::make('absolute_enabled')
+                                            ->label('Enable absolute thresholds')
+                                            ->reactive()
+                                            ->columnSpan(2),
+                                        Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Get $get) => $get('absolute_enabled') !== true)
+                                            ->schema([
+                                                Fieldset::make('Metrics')
+                                                    ->schema([
+                                                        TextInput::make('absolute_download')
+                                                            ->label('Download')
+                                                            ->hint('Mbps')
+                                                            ->helperText('Set to zero to disable this metric.')
+                                                            ->default(0)
+                                                            ->minValue(0)
+                                                            ->numeric()
+                                                            ->required(),
+                                                        TextInput::make('absolute_upload')
+                                                            ->label('Upload')
+                                                            ->hint('Mbps')
+                                                            ->helperText('Set to zero to disable this metric.')
+                                                            ->default(0)
+                                                            ->minValue(0)
+                                                            ->numeric()
+                                                            ->required(),
+                                                        TextInput::make('absolute_ping')
+                                                            ->label('Ping')
+                                                            ->hint('ms')
+                                                            ->helperText('Set to zero to disable this metric.')
+                                                            ->default(0)
+                                                            ->minValue(0)
+                                                            ->numeric()
+                                                            ->required(),
+                                                    ])
+                                                    ->columns([
+                                                        'default' => 1,
+                                                        'md' => 2,
+                                                    ]),
+                                            ]),
                                     ])
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->compact()
+                                    ->columnSpan('full'),
+                            ])
+                            ->columnSpan([
+                                'md' => 2,
                             ]),
-                    ])
-                    ->compact()
-                    ->columns([
-                        'default' => 1,
-                        'md' => 2,
                     ]),
-            ])
-            ->columns([
-                'default' => 1,
             ]);
     }
 }

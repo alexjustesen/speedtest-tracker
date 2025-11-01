@@ -15,15 +15,15 @@ class ListOoklaServers extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-server-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-server-stack';
 
-    protected static ?string $navigationGroup = 'Tools';
+    protected static string|\UnitEnum|null $navigationGroup = 'Tools';
 
     protected static ?string $title = 'List Ookla Servers';
 
     protected static ?string $navigationLabel = 'List Ookla Servers';
 
-    protected static string $view = 'filament.pages.tools.list-ookla-servers';
+    protected string $view = 'filament.pages.tools.list-ookla-servers';
 
     protected static ?string $slug = 'tools/list-ookla-servers';
 
