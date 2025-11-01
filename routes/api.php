@@ -20,8 +20,9 @@ Route::get('/healthcheck', function () {
  * @deprecated
  */
 Route::get('/speedtest/latest', GetLatestController::class)
+    ->middleware('accept-json')
     ->name('speedtest.latest');
 
-Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:api', 'accept-json'])->group(function () {
     require __DIR__.'/api/v1/routes.php';
 });

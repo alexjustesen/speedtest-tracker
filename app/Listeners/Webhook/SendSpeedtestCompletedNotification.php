@@ -4,6 +4,7 @@ namespace App\Listeners\Webhook;
 
 use App\Events\SpeedtestCompleted;
 use App\Settings\NotificationSettings;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Spatie\WebhookServer\WebhookCall;
 
@@ -36,12 +37,14 @@ class SendSpeedtestCompletedNotification
                 ->payload([
                     'result_id' => $event->result->id,
                     'site_name' => config('app.name'),
-                    'isp' => $event->result->isp,
+                    'server_name' => Arr::get($event->result->data, 'server.name'),
+                    'server_id' => Arr::get($event->result->data, 'server.id'),
+                    'isp' => Arr::get($event->result->data, 'isp'),
                     'ping' => $event->result->ping,
                     'download' => $event->result->downloadBits,
                     'upload' => $event->result->uploadBits,
-                    'packetLoss' => $event->result->packet_loss,
-                    'speedtest_url' => $event->result->result_url,
+                    'packet_loss' => Arr::get($event->result->data, 'packetLoss'),
+                    'speedtest_url' => Arr::get($event->result->data, 'result.url'),
                     'url' => url('/admin/results'),
                 ])
                 ->doNotSign()

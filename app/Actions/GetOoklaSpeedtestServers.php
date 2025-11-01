@@ -17,7 +17,15 @@ class GetOoklaSpeedtestServers
      */
     public function handle(): array
     {
-        return collect(self::fetch())->mapWithKeys(function (array $item) {
+        $servers = self::fetch();
+
+        // If the first item is not an array, treat as error or empty
+        if (empty($servers) || ! is_array($servers) || (isset($servers[0]) && ! is_array($servers[0]))) {
+            // Return error message as a single option so user can see the error
+            return ['error' => $servers[0] ?? 'Unable to retrieve servers'];
+        }
+
+        return collect($servers)->mapWithKeys(function (array $item) {
             return [
                 $item['id'] => ($item['sponsor'] ?? 'Unknown').' ('.($item['name'] ?? 'Unknown').', '.$item['id'].')',
             ];

@@ -16,6 +16,79 @@ class ResultsAnnotations
         summary: 'List all results',
         operationId: 'listResults',
         tags: ['Results'],
+        parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
+            new OA\Parameter(
+                name: 'per_page',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer', minimum: 1, maximum: 500, default: 25),
+                description: 'Number of results per page'
+            ),
+            new OA\Parameter(
+                name: 'filter[ping]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'number'),
+                description: 'Filter by ping value (supports operators like >=, <=, etc.)'
+            ),
+            new OA\Parameter(
+                name: 'filter[download]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer'),
+                description: 'Filter by download speed (supports operators like >=, <=, etc.)'
+            ),
+            new OA\Parameter(
+                name: 'filter[upload]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer'),
+                description: 'Filter by upload speed (supports operators like >=, <=, etc.)'
+            ),
+            new OA\Parameter(
+                name: 'filter[healthy]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'boolean'),
+                description: 'Filter by healthy status'
+            ),
+            new OA\Parameter(
+                name: 'filter[status]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string'),
+                description: 'Filter by status'
+            ),
+            new OA\Parameter(
+                name: 'filter[scheduled]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'boolean'),
+                description: 'Filter by scheduled status'
+            ),
+            new OA\Parameter(
+                name: 'filter[start_at]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', format: 'date'),
+                description: 'Filter results created on or after this date (alias for created_at>=)'
+            ),
+            new OA\Parameter(
+                name: 'filter[end_at]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', format: 'date'),
+                description: 'Filter results created on or before this date (alias for created_at<=)'
+            ),
+            new OA\Parameter(
+                name: 'sort',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', enum: ['ping', '-ping', 'download', '-download', 'upload', '-upload', 'created_at', '-created_at', 'updated_at', '-updated_at']),
+                description: 'Sort results by field (prefix with - for descending)'
+            ),
+        ],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
@@ -33,6 +106,11 @@ class ResultsAnnotations
                 content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
             ),
             new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
+            ),
+            new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
                 description: 'Validation failed',
                 content: new OA\JsonContent(ref: '#/components/schemas/ValidationError')
@@ -47,6 +125,7 @@ class ResultsAnnotations
         operationId: 'getResult',
         tags: ['Results'],
         parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',
@@ -72,6 +151,11 @@ class ResultsAnnotations
                 content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
             ),
             new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
+            ),
+            new OA\Response(
                 response: Response::HTTP_NOT_FOUND,
                 description: 'Result not found',
                 content: new OA\JsonContent(ref: '#/components/schemas/NotFoundError')
@@ -85,6 +169,9 @@ class ResultsAnnotations
         summary: 'Get the most recent result',
         operationId: 'getLatestResult',
         tags: ['Results'],
+        parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
+        ],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
@@ -100,6 +187,11 @@ class ResultsAnnotations
                 response: Response::HTTP_UNAUTHORIZED,
                 description: 'Unauthenticated',
                 content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
             ),
             new OA\Response(
                 response: Response::HTTP_NOT_FOUND,

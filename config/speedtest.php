@@ -6,10 +6,9 @@ return [
     /**
      * General settings.
      */
+    'build_date' => Carbon::parse('2025-10-31'),
 
-    'build_date' => Carbon::parse('2025-07-18'),
-
-    'build_version' => 'v1.6.5',
+    'build_version' => 'v1.6.10',
 
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
@@ -17,6 +16,7 @@ return [
 
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
 
+    'default_chart_range' => env('DEFAULT_CHART_RANGE', '24h'),
 
     /**
      * Speedtest settings.
@@ -31,25 +31,21 @@ return [
 
     'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
 
-
     /**
      * IP filtering settings.
      */
-
     'allowed_ips' => env('ALLOWED_IPS'),
 
     'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''),
 
-
     /**
      * Threshold settings.
      */
+    'threshold_enabled' => env('THRESHOLD_ENABLED', false),
 
-     'threshold_enabled' => env('THRESHOLD_ENABLED', false),
+    'threshold_download' => env('THRESHOLD_DOWNLOAD', 0),
 
-     'threshold_download' => env('THRESHOLD_DOWNLOAD', 0),
+    'threshold_upload' => env('THRESHOLD_UPLOAD', 0),
 
-     'threshold_upload' => env('THRESHOLD_UPLOAD', 0),
-
-     'threshold_ping' => env('THRESHOLD_PING', 0) ,
+    'threshold_ping' => env('THRESHOLD_PING', 0),
 ];

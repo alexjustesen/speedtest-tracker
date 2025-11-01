@@ -16,6 +16,118 @@
                 ],
                 "summary": "List all results",
                 "operationId": "listResults",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of results per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 25,
+                            "maximum": 500,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "filter[ping]",
+                        "in": "query",
+                        "description": "Filter by ping value (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "filter[download]",
+                        "in": "query",
+                        "description": "Filter by download speed (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[upload]",
+                        "in": "query",
+                        "description": "Filter by upload speed (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[healthy]",
+                        "in": "query",
+                        "description": "Filter by healthy status",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "filter[status]",
+                        "in": "query",
+                        "description": "Filter by status",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter[scheduled]",
+                        "in": "query",
+                        "description": "Filter by scheduled status",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "filter[start_at]",
+                        "in": "query",
+                        "description": "Filter results created on or after this date (alias for created_at>=)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "filter[end_at]",
+                        "in": "query",
+                        "description": "Filter results created on or before this date (alias for created_at<=)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Sort results by field (prefix with - for descending)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ping",
+                                "-ping",
+                                "download",
+                                "-download",
+                                "upload",
+                                "-upload",
+                                "created_at",
+                                "-created_at",
+                                "updated_at",
+                                "-updated_at"
+                            ]
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -47,6 +159,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation failed",
                         "content": {
@@ -69,6 +191,9 @@
                 "summary": "Fetch aggregated Speedtest statistics",
                 "operationId": "getStats",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    },
                     {
                         "name": "start_at",
                         "in": "query",
@@ -121,6 +246,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation error",
                         "content": {
@@ -142,6 +277,11 @@
                 "summary": "List available Ookla speedtest servers",
                 "description": "Returns an array of available Ookla speedtest servers. Requires an API token with `ookla:list-servers` scope.",
                 "operationId": "listOoklaServers",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Servers retrieved successfully",
@@ -172,6 +312,16 @@
                                 }
                             }
                         }
+                    },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -184,6 +334,9 @@
                 "summary": "Get a single result",
                 "operationId": "getResult",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -225,6 +378,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "Result not found",
                         "content": {
@@ -245,6 +408,11 @@
                 ],
                 "summary": "Get the most recent result",
                 "operationId": "getLatestResult",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -276,6 +444,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "404": {
                         "description": "No result found",
                         "content": {
@@ -297,6 +475,9 @@
                 "summary": "Run a new Ookla speedtest",
                 "operationId": "runSpeedtest",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    },
                     {
                         "name": "server_id",
                         "in": "query",
@@ -338,6 +519,16 @@
                             }
                         }
                     },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Validation error",
                         "content": {
@@ -358,6 +549,11 @@
                 ],
                 "summary": "List available Ookla speedtest servers",
                 "operationId": "listSpeedtestServers",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -391,6 +587,16 @@
                                 }
                             }
                         }
+                    },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -404,6 +610,20 @@
                     "message": {
                         "description": "Error message indicating lack of permission",
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "NotAcceptableError": {
+                "description": "Error response when the Accept header is missing or invalid",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "This endpoint only accepts JSON. Please include \"Accept: application/json\" in your request headers."
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Unsupported Media Type"
                     }
                 },
                 "type": "object"
@@ -929,10 +1149,10 @@
             }
         },
         "parameters": {
-            "Accept": {
+            "AcceptHeader": {
                 "name": "Accept",
                 "in": "header",
-                "description": "Expected response format",
+                "description": "Must be \"application/json\" - this API only accepts and returns JSON",
                 "required": true,
                 "schema": {
                     "type": "string",

@@ -17,6 +17,7 @@ class SpeedtestAnnotations
         operationId: 'runSpeedtest',
         tags: ['Speedtests'],
         parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
             new OA\Parameter(
                 name: 'server_id',
                 in: 'query',
@@ -42,6 +43,11 @@ class SpeedtestAnnotations
                 content: new OA\JsonContent(ref: '#/components/schemas/ForbiddenError')
             ),
             new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
+            ),
+            new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
                 description: 'Validation error',
                 content: new OA\JsonContent(ref: '#/components/schemas/ValidationError')
@@ -58,6 +64,9 @@ class SpeedtestAnnotations
         summary: 'List available Ookla speedtest servers',
         operationId: 'listSpeedtestServers',
         tags: ['Speedtests'],
+        parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
+        ],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
@@ -76,6 +85,11 @@ class SpeedtestAnnotations
                     ref: '#/components/schemas/ForbiddenError',
                     example: ['message' => 'You do not have permission to view speedtest servers.']
                 )
+            ),
+            new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
             ),
         ]
     )]

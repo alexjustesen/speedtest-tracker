@@ -45,6 +45,8 @@ class ResultFactory extends Factory
             'ping' => Arr::get($output, 'ping.latency'),
             'download' => Arr::get($output, 'download.bandwidth'),
             'upload' => Arr::get($output, 'upload.bandwidth'),
+            'download_bytes' => Arr::get($output, 'download.bytes'),
+            'upload_bytes' => Arr::get($output, 'upload.bytes'),
             'data' => $output,
             'status' => ResultStatus::Completed,
             'scheduled' => false,
