@@ -16,7 +16,7 @@ class Cron implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (! CronExpression::isValidExpression($value)) {
-            $fail('Cron expression is not valid');
+            $fail(__('translations.cron_invalid'));
         }
     }
 }

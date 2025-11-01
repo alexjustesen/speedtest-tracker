@@ -22,14 +22,15 @@ class ResultExporter extends Exporter
     public static function getColumns(): array
     {
         $columns = [
-            ExportColumn::make('id')->label('ID'),
+            ExportColumn::make('id')
+                ->label(__('translations.id')),
             ExportColumn::make('service')->state(fn (Result $r) => $r->service->getLabel()),
             ExportColumn::make('status')->state(fn (Result $r) => $r->status->getLabel()),
-            ExportColumn::make('scheduled')->state(fn (Result $r) => $r->scheduled ? 'Yes' : 'No'),
-            ExportColumn::make('healthy')->state(fn (Result $r) => $r->healthy ? 'Yes' : 'No'),
-            ExportColumn::make('created_at'),
-            ExportColumn::make('updated_at'),
-            ExportColumn::make('comments'),
+            ExportColumn::make('scheduled')->state(fn (Result $r) => $r->scheduled ? __('translations.yes') : __('translations.no')),
+            ExportColumn::make('healthy')->state(fn (Result $r) => $r->healthy ? __('translations.yes') : __('translations.no')),
+            ExportColumn::make('created_at')->label(__('translations.created_at')),
+            ExportColumn::make('updated_at')->label(__('translations.updated_at')),
+            ExportColumn::make('comments')->label(__('translations.comments')),
         ];
 
         $columns = array_merge($columns, self::generateDataColumns());
@@ -78,10 +79,20 @@ class ResultExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your result export has completed and '.number_format($export->successful_rows).' '.str('row')->plural($export->successful_rows).' exported.';
+        $body = __('translations.export_completed', [
+            'count' => number_format($export->successful_rows),
+            'rows' => trans_choice('translations.row', $export->successful_rows, [
+                'count' => number_format($export->successful_rows),
+            ]),
+        ]);
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' '.number_format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to export.';
+            $body .= __('translations.failed_export', [
+                'count' => $failedRowsCount,
+                'rows' => trans_choice('translations.row', $export->$failedRowsCount, [
+                    'count' => number_format($export->$failedRowsCount),
+                ]),
+            ]);
         }
 
         return $body;

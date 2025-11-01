@@ -14,7 +14,7 @@ class SendSlackTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title('You need to add Slack URLs!')
+                ->title(__('translations.notifications.slack.add'))
                 ->warning()
                 ->send();
 
@@ -24,13 +24,13 @@ class SendSlackTestNotification
         foreach ($webhooks as $webhook) {
             WebhookCall::create()
                 ->url($webhook['url'])
-                ->payload(['text' => '👋 Testing the Slack notification channel.'])
+                ->payload(['text' => __('translations.notifications.slack.payload')])
                 ->doNotSign()
                 ->dispatch();
         }
 
         Notification::make()
-            ->title('Test Slack notification sent.')
+            ->title(__('translations.notifications.slack.sent'))
             ->success()
             ->send();
     }

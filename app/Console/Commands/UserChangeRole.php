@@ -31,7 +31,7 @@ class UserChangeRole extends Command
     public function handle(): void
     {
         $email = text(
-            label: 'What is the email address?',
+            label: __('translations.user_change.what_is_the_email_address'),
             required: true,
             validate: fn (string $value) => match (true) {
                 ! User::firstWhere('email', $value) => 'User not found.',
@@ -40,10 +40,10 @@ class UserChangeRole extends Command
         );
 
         $role = select(
-            label: 'What role should the user have?',
+            label: __('translations.user_change.what_role'),
             options: [
-                'admin' => 'Admin',
-                'user' => 'User',
+                'admin' => __('translations.Admin'),
+                'user' => __('translations.User'),
             ],
             default: 'user'
         );
@@ -53,6 +53,6 @@ class UserChangeRole extends Command
                 'role' => $role,
             ]);
 
-        info('User role updated.');
+        info(__('translations.user_change.info'));
     }
 }
