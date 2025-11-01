@@ -27,6 +27,11 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - Use descriptive names for variables and methods. For example, `isRegisteredForDiscounts`, not `discount()`.
 - Check for existing components to reuse before writing a new one.
 
+## Final Steps After All AI Work
+- **CRITICAL**: You must ALWAYS run `./vendor/bin/pint --dirty` after completing ALL code changes, edits, or additions. This ensures all PHP code matches the project's expected formatting style.
+- This is a mandatory final step for every task that involves PHP code modifications.
+- Run Pint before considering any work complete.
+
 ## Verification Scripts
 - Do not create verification scripts or tinker when tests cover that functionality and prove it works. Unit and feature tests are more important.
 
