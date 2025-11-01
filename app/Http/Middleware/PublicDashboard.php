@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class PublicDashboard
@@ -15,7 +16,7 @@ class PublicDashboard
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! config('speedtest.public_dashboard')) {
+        if (Gate::denies('view-dashboard')) {
             return redirect()->route('filament.admin.auth.login');
         }
 
