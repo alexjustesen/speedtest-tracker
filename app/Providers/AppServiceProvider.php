@@ -78,15 +78,15 @@ class AppServiceProvider extends ServiceProvider
     protected function defineGates(): void
     {
         Gate::define('access-admin-panel', function (User $user) {
-            return in_array($user->platform_role, [UserRole::Admin, UserRole::User]);
+            return in_array($user->role, [UserRole::Admin, UserRole::User]);
         });
 
         Gate::define('view-dashboard', function (?User $user) {
-            if (blank($user) && ! config('speedtest.public_dashboard')) {
+            if ($user === null || ! config('speedtest.public_dashboard')) {
                 return false;
             }
 
-            return in_array($user->platform_role, [UserRole::Admin, UserRole::User]);
+            return in_array($user->role, [UserRole::Admin, UserRole::User]);
         });
     }
 
