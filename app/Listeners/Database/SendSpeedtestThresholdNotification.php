@@ -56,7 +56,7 @@ class SendSpeedtestThresholdNotification
 
         foreach (User::all() as $user) {
             Notification::make()
-                ->title('Download threshold breached!')
+                ->title(__('translations.speedtest.download_threshold_breached'))
                 ->body('Speedtest #'.$event->result->id.' breached the download threshold of '.$thresholdSettings->absolute_download.' Mbps at '.Number::toBitRate($event->result->download_bits).'.')
                 ->warning()
                 ->sendToDatabase($user);
@@ -74,7 +74,7 @@ class SendSpeedtestThresholdNotification
 
         foreach (User::all() as $user) {
             Notification::make()
-                ->title('Upload threshold breached!')
+                ->title(__('translations.speedtest.upload_threshold_breached'))
                 ->body('Speedtest #'.$event->result->id.' breached the upload threshold of '.$thresholdSettings->absolute_upload.' Mbps at '.Number::toBitRate($event->result->upload_bits).'.')
                 ->warning()
                 ->sendToDatabase($user);
@@ -92,7 +92,7 @@ class SendSpeedtestThresholdNotification
 
         foreach (User::all() as $user) {
             Notification::make()
-                ->title('Ping threshold breached!')
+                ->title(__('translations.speedtest.ping_threshold_breached'))
                 ->body('Speedtest #'.$event->result->id.' breached the ping threshold of '.$thresholdSettings->absolute_ping.'ms at '.$event->result->ping.'ms.')
                 ->warning()
                 ->sendToDatabase($user);

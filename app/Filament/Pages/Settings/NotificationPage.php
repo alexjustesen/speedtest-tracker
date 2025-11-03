@@ -160,13 +160,13 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label('translations.triggers')
+                                    ->label(__('translations.settings.triggers'))
                                     ->schema([
                                         Toggle::make('webhook_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('translations.settings.notify_on_every_speedtest_run'))
                                             ->columnSpan(2),
                                         Toggle::make('webhook_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('translations.settings.notify_on_threshold_failures'))
                                             ->columnSpan(2),
                                     ]),
                                 Repeater::make('webhook_urls')
@@ -355,7 +355,7 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('slack_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label('translations.triggers')
+                                    ->label(__('translations.settings.triggers'))
                                     ->schema([
                                         Toggle::make('slack_on_speedtest_run')
                                             ->label(__('translations.notify_on_every_speedtest_run'))
@@ -401,7 +401,7 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('ntfy_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label('translations.triggers')
+                                    ->label(__('translations.settings.triggers'))
                                     ->schema([
                                         Toggle::make('ntfy_on_speedtest_run')
                                             ->label(__('translations.notify_on_every_speedtest_run'))
@@ -461,7 +461,7 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('healthcheck_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label('translations.triggers')
+                                    ->label(__('translations.settings.triggers'))
                                     ->schema([
                                         Toggle::make('healthcheck_on_speedtest_run')
                                             ->label(__('translations.notify_on_every_speedtest_run'))

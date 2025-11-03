@@ -101,7 +101,7 @@ class DataIntegrationPage extends SettingsPage
                                 // Button to send old data to InfluxDB
                                 Actions::make([
                                     Action::make('Export current results')
-                                        ->label(__('translations.export_current_results'))
+                                        ->label(__('translations.settings.export_current_results'))
                                         ->action(function () {
                                             Notification::make()
                                                 ->title(__('translations.starting_bulk_data_write_to_influxdb'))
@@ -117,7 +117,7 @@ class DataIntegrationPage extends SettingsPage
                                 // Button to test InfluxDB connection
                                 Actions::make([
                                     Action::make('Test connection')
-                                        ->label(__('translations.test_connection'))
+                                        ->label(__('translations.settings.test_connection'))
                                         ->action(function () {
                                             Notification::make()
                                                 ->title(__('translations.sending_test_data_to_influxdb'))
