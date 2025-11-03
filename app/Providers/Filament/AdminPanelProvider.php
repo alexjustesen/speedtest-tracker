@@ -63,7 +63,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label(__('settings')),
+                    ->label(__('common.settings')),
                 NavigationGroup::make()
                     ->label(__('common.links'))
                     ->collapsible(false),

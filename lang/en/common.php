@@ -102,6 +102,7 @@ return [
 
     // Navigation
     'links' => 'Links',
+    'settings' => 'Settings',
     'donate' => 'Donate',
     'update_available' => 'Update Available',
     'up_to_date' => 'Up to Date',
