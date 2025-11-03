@@ -17,8 +17,8 @@
         "php": "^8.2",
         "chrisullyott/php-filesize": "^4.2.1",
         "dragonmantank/cron-expression": "^3.4.0",
-        "filament/filament": "^3.3.43",
-        "filament/spatie-laravel-settings-plugin": "^3.3.43",
+        "filament/filament": "^4.0",
+        "filament/spatie-laravel-settings-plugin": "^4.0",
         "geerlingguy/ping": "^1.2.1",
         "influxdata/influxdb-client-php": "^3.8",
         "laravel-notification-channels/telegram": "^6.0",
@@ -37,6 +37,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
+        "filament/upgrade": "^4.0",
         "laravel/boost": "^1.6",
         "laravel/pail": "^1.2.3",
         "laravel/pint": "^1.25.1",
