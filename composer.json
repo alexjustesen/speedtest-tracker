@@ -37,7 +37,6 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
-        "filament/upgrade": "^4.0",
         "laravel/boost": "^1.6",
         "laravel/pail": "^1.2.3",
         "laravel/pint": "^1.25.1",
