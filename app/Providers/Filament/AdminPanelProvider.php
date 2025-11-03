@@ -3,7 +3,6 @@
 namespace App\Providers\Filament;
 
 use App\Services\GitHub\Repository;
-use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -34,11 +33,6 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->favicon(asset('img/speedtest-tracker-icon.png'))
-            ->font(
-                'Inter',
-                url: asset('fonts/inter/inter.css'),
-                provider: LocalFontProvider::class,
-            )
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
