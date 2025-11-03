@@ -24,7 +24,6 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\View;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Auth;
@@ -124,14 +123,6 @@ class NotificationPage extends SettingsPage
                                                     ]),
                                                 Fieldset::make('Apprise Sidecar')
                                                     ->schema([
-                                                        TextInput::make('apprise_url')
-                                                            ->label('URL')
-                                                            ->placeholder('http://apprise:8000/notify')
-                                                            ->helperText('Specify the URL of your Apprise instance.')
-                                                            ->maxLength(2000)
-                                                            ->required()
-                                                            ->url()
-                                                            ->columnSpanFull(),
                                                         Checkbox::make('apprise_verify_ssl')
                                                             ->label('Verify SSL')
                                                             ->default(true)
@@ -154,8 +145,6 @@ class NotificationPage extends SettingsPage
                                                     Action::make('test apprise')
                                                         ->label('Test Apprise')
                                                         ->action(fn (Forms\Get $get) => SendAppriseTestNotification::run(
-                                                            apprise_url: $get('apprise_url'),
-                                                            apprise_verify_ssl: $get('apprise_verify_ssl'),
                                                             channel_urls: $get('apprise_channel_urls'),
                                                         ))
                                                         ->hidden(fn (Forms\Get $get) => ! count($get('apprise_channel_urls'))),
@@ -613,14 +602,6 @@ class NotificationPage extends SettingsPage
                             ])
                             ->columnSpan([
                                 'md' => 2,
-                            ]),
-
-                        Section::make()
-                            ->schema([
-                                View::make('filament.forms.notifications-helptext'),
-                            ])
-                            ->columnSpan([
-                                'md' => 1,
                             ]),
                     ]),
             ]);

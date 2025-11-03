@@ -92,8 +92,6 @@ class NotificationSettings extends Settings
 
     public bool $apprise_on_threshold_failure;
 
-    public ?string $apprise_url;
-
     public bool $apprise_verify_ssl;
 
     public ?array $apprise_channel_urls;

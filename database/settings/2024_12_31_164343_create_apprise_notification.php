@@ -9,7 +9,6 @@ return new class extends SettingsMigration
         $this->migrator->add('notification.apprise_enabled', false);
         $this->migrator->add('notification.apprise_on_speedtest_run', false);
         $this->migrator->add('notification.apprise_on_threshold_failure', false);
-        $this->migrator->add('notification.apprise_url', null);
         $this->migrator->add('notification.apprise_verify_ssl', true);
         $this->migrator->add('notification.apprise_channel_urls', null);
     }
