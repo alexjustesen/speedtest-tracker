@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Safelist max-width utilities to always generate them */
+@source inline("max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,full,min,max,fit,prose,screen-sm,screen-md,screen-lg,screen-xl,screen-2xl}");
+
 /* Required by all components */
 @import '../../vendor/filament/support/resources/css/index.css';
 
@@ -13,13 +16,13 @@
 @import '../../vendor/filament/infolists/resources/css/index.css';
 
 /* Required by notifications */
-@import '../../vendor/filament/notifications/resources/css/index.css';
+/* @import '../../vendor/filament/notifications/resources/css/index.css'; */
 
 /* Required by actions, infolists, forms, schemas and tables */
 @import '../../vendor/filament/schemas/resources/css/index.css';
 
 /* Required by tables */
-@import '../../vendor/filament/tables/resources/css/index.css';
+/* @import '../../vendor/filament/tables/resources/css/index.css'; */
 
 /* Required by widgets */
 @import '../../vendor/filament/widgets/resources/css/index.css';
