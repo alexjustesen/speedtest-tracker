@@ -11,13 +11,13 @@ class RecentUploadLatencyChartWidget extends ChartWidget
 {
     use HasChartFilters;
 
-    protected static ?string $heading = 'Upload Latency';
+    protected ?string $heading = 'Upload Latency';
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $maxHeight = '250px';
+    protected ?string $maxHeight = '250px';
 
-    protected static ?string $pollingInterval = '60s';
+    protected ?string $pollingInterval = '60s';
 
     public ?string $filter = null;
 

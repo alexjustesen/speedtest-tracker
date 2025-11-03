@@ -15,9 +15,9 @@ use Filament\Pages\Dashboard as BasePage;
 
 class Dashboard extends BasePage
 {
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
 
-    protected static string $view = 'filament.pages.dashboard';
+    protected string $view = 'filament.pages.dashboard';
 
     public function getSubheading(): ?string
     {
