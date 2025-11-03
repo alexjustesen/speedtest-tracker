@@ -3,6 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
+use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Helpers\Average;
 use App\Helpers\Number;
 use App\Models\Result;
@@ -10,6 +11,8 @@ use Filament\Widgets\ChartWidget;
 
 class RecentUploadChartWidget extends ChartWidget
 {
+    use HasChartFilters;
+
     protected static ?string $heading = 'Upload (Mbps)';
 
     protected int|string|array $columnSpan = 'full';
@@ -18,15 +21,11 @@ class RecentUploadChartWidget extends ChartWidget
 
     protected static ?string $pollingInterval = '60s';
 
-    public ?string $filter = '24h';
+    public ?string $filter = null;
 
-    protected function getFilters(): ?array
+    public function mount(): void
     {
-        return [
-            '24h' => 'Last 24h',
-            'week' => 'Last week',
-            'month' => 'Last month',
-        ];
+        $this->filter = $this->filter ?? config('speedtest.default_chart_range', '24h');
     }
 
     protected function getData(): array

@@ -17,34 +17,35 @@
         "php": "^8.2",
         "chrisullyott/php-filesize": "^4.2.1",
         "dragonmantank/cron-expression": "^3.4.0",
-        "filament/filament": "^3.3.34",
-        "filament/spatie-laravel-settings-plugin": "^3.3.34",
+        "filament/filament": "^3.3.43",
+        "filament/spatie-laravel-settings-plugin": "^3.3.43",
         "geerlingguy/ping": "^1.2.1",
         "influxdata/influxdb-client-php": "^3.8",
         "laravel-notification-channels/telegram": "^6.0",
-        "laravel/framework": "^12.21.0",
-        "laravel/prompts": "^0.3.6",
+        "laravel/framework": "^12.35.1",
+        "laravel/prompts": "^0.3.7",
         "laravel/sanctum": "^4.2.0",
         "livewire/livewire": "^3.6.4",
-        "lorisleiva/laravel-actions": "^2.9",
+        "lorisleiva/laravel-actions": "^2.9.1",
         "maennchen/zipstream-php": "^2.4",
-        "secondnetwork/blade-tabler-icons": "^3.34.1",
+        "secondnetwork/blade-tabler-icons": "^3.35.0",
         "spatie/laravel-json-api-paginate": "^1.16.3",
-        "spatie/laravel-query-builder": "^6.3.4",
-        "spatie/laravel-settings": "^3.4.4",
+        "spatie/laravel-query-builder": "^6.3.6",
+        "spatie/laravel-settings": "^3.5.0",
         "spatie/laravel-webhook-server": "^3.8.3",
-        "zircote/swagger-php": "^5.1.4"
+        "zircote/swagger-php": "^5.5.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
+        "laravel/boost": "^1.6",
         "laravel/pail": "^1.2.3",
-        "laravel/pint": "^1.24.0",
-        "laravel/sail": "^1.44.0",
-        "laravel/telescope": "^5.10.2",
+        "laravel/pint": "^1.25.1",
+        "laravel/sail": "^1.46.0",
+        "laravel/telescope": "^5.14.1",
         "laravel/tinker": "^2.10.1",
         "mockery/mockery": "^1.6.12",
         "nunomaduro/collision": "^8.8.2",
-        "pestphp/pest": "^3.8.2",
+        "pestphp/pest": "^3.8.4",
         "pestphp/pest-plugin-laravel": "^3.2",
         "spatie/laravel-ignition": "^2.9.1",
         "tightenco/duster": "^3.2.0"
@@ -72,7 +73,8 @@
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan vendor:publish --tag=livewire:assets --ansi --force"
+            "@php artisan vendor:publish --tag=livewire:assets --ansi --force",
+            "@php artisan boost:update --ansi"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -100,7 +102,7 @@
     "config": {
         "optimize-autoloader": true,
         "platform": {
-            "php": "8.3"
+            "php": "8.4"
         },
         "preferred-install": "dist",
         "sort-packages": true,

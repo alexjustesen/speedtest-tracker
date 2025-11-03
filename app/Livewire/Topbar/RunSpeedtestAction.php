@@ -27,8 +27,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
             ->icon('heroicon-o-chart-bar')
             ->iconPosition(IconPosition::Before)
             ->color('gray')
-            ->hidden(fn (): bool => ! config('speedtest.public_dashboard'))
-            ->url(shouldOpenInNewTab: true, url: '/')
+            ->url(shouldOpenInNewTab: true, url: route('home'))
             ->extraAttributes([
                 'id' => 'dashboardAction',
             ]);

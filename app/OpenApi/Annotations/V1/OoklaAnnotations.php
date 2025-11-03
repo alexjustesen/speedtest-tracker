@@ -17,6 +17,9 @@ class OoklaAnnotations
         description: 'Returns an array of available Ookla speedtest servers. Requires an API token with `ookla:list-servers` scope.',
         operationId: 'listOoklaServers',
         tags: ['Servers'],
+        parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
+        ],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
@@ -32,6 +35,11 @@ class OoklaAnnotations
                 response: Response::HTTP_FORBIDDEN,
                 description: 'Forbidden',
                 content: new OA\JsonContent(ref: '#/components/schemas/ForbiddenError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
             ),
         ]
     )]

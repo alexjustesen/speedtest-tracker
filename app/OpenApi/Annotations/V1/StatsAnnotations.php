@@ -17,6 +17,7 @@ class StatsAnnotations
         operationId: 'getStats',
         tags: ['Stats'],
         parameters: [
+            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
             new OA\Parameter(
                 name: 'start_at',
                 in: 'query',
@@ -47,6 +48,11 @@ class StatsAnnotations
                 response: Response::HTTP_FORBIDDEN,
                 description: 'Forbidden',
                 content: new OA\JsonContent(ref: '#/components/schemas/ForbiddenError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_NOT_ACCEPTABLE,
+                description: 'Not Acceptable - Missing or invalid Accept header',
+                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
             ),
             new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
