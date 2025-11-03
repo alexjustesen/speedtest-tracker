@@ -17,7 +17,7 @@
         "php": "^8.2",
         "chrisullyott/php-filesize": "^4.2.1",
         "dragonmantank/cron-expression": "^3.4.0",
-        "filament/filament": "^4.0",
+        "filament/filament": "4.1.0",
         "filament/spatie-laravel-settings-plugin": "^4.0",
         "geerlingguy/ping": "^1.2.1",
         "influxdata/influxdb-client-php": "^3.8",
