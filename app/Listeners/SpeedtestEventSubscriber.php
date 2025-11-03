@@ -29,6 +29,7 @@ class SpeedtestEventSubscriber
     {
         $settings = app(DataIntegrationSettings::class);
 
+        // Write to InfluxDB if enabled
         if ($settings->influxdb_v2_enabled) {
             WriteResult::dispatch($event->result);
         }
