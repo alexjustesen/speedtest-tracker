@@ -40,7 +40,7 @@ class TruncateResults implements ShouldQueue
         }
 
         Notification::make()
-            ->title(__('translations.jobs.results_truncated'))
+            ->title(__('jobs.results_truncated'))
             ->success()
             ->sendToDatabase($this->user);
     }

@@ -14,7 +14,7 @@ class SendGotifyTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title(__('translations.notifications.gotfy.add'))
+                ->title(__('notifications.gotfy.add'))
                 ->warning()
                 ->send();
 
@@ -24,13 +24,13 @@ class SendGotifyTestNotification
         foreach ($webhooks as $webhook) {
             WebhookCall::create()
                 ->url($webhook['url'])
-                ->payload(['message' => __('translations.notifications.gotfy.payload')])
+                ->payload(['message' => __('notifications.gotfy.payload')])
                 ->doNotSign()
                 ->dispatch();
         }
 
         Notification::make()
-            ->title(__('translations.notifications.gotfy.sent'))
+            ->title(__('notifications.gotfy.sent'))
             ->success()
             ->send();
     }

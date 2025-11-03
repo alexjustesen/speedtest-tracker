@@ -63,29 +63,29 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label(__('translations.settings')),
+                    ->label(__('settings')),
                 NavigationGroup::make()
-                    ->label(__('translations.links'))
+                    ->label(__('common.links'))
                     ->collapsible(false),
             ])
             ->navigationItems([
                 NavigationItem::make()
-                    ->label(fn () => __('translations.documentation'))
+                    ->label(fn () => __('documentation'))
                     ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-book-open')
-                    ->group(fn () => __('translations.links'))
+                    ->group(fn () => __('common.links'))
                     ->sort(97),
                 NavigationItem::make()
-                    ->label(fn () => __('translations.donate'))
+                    ->label(fn () => __('common.donate'))
                     ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-banknotes')
-                    ->group(fn () => __('translations.links'))
+                    ->group(fn () => __('common.links'))
                     ->sort(98),
                 NavigationItem::make(config('speedtest.build_version'))
                     ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
                     ->icon('tabler-brand-github')
-                    ->badge(fn (): string => Repository::updateAvailable() ? __('translations.update_available') : __('translations.up_to_date'))
-                    ->group(fn () => __('translations.links'))
+                    ->badge(fn (): string => Repository::updateAvailable() ? __('common.update_available') : __('common.up_to_date'))
+                    ->group(fn () => __('common.links'))
                     ->sort(99),
             ]);
     }

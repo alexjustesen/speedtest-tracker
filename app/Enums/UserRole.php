@@ -21,6 +21,6 @@ enum UserRole: string implements HasColor, HasLabel
 
     public function getLabel(): ?string
     {
-        return Str::title(__('translations.'.$this->name));
+        return Str::title(__(''.$this->name));
     }
 }

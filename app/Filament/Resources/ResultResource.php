@@ -47,72 +47,72 @@ class ResultResource extends Resource
         return $form->schema([
             Grid::make(['default' => 2, 'md' => 3])->schema([
                 Grid::make()->schema([
-                    Section::make(__('translations.common.result_overview'))->schema([
+                    Section::make(__('common.result_overview'))->schema([
                         TextInput::make('id')
-                            ->label(__('translations.common.id')),
+                            ->label(__('common.id')),
                         TextInput::make('created_at')
-                            ->label(__('translations.common.created'))
+                            ->label(__('common.created'))
                             ->afterStateHydrated(function (TextInput $component, $state) {
                                 $component->state(Carbon::parse($state)
                                     ->timezone(config('app.display_timezone'))
                                     ->format(config('app.datetime_format')));
                             }),
                         TextInput::make('download')
-                            ->label(__('translations.common.download'))
+                            ->label(__('common.download'))
                             ->afterStateHydrated(fn ($component, Result $record) => $component->state(! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : '')),
                         TextInput::make('upload')
-                            ->label(__('translations.common.upload'))
+                            ->label(__('common.upload'))
                             ->afterStateHydrated(fn ($component, Result $record) => $component->state(! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : '')),
                         TextInput::make('ping')
-                            ->label(__('translations.common.ping'))
+                            ->label(__('common.ping'))
                             ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
                         TextInput::make('data.packetLoss')
-                            ->label(__('translations.common.packet_loss'))
+                            ->label(__('common.packet_loss'))
                             ->formatStateUsing(fn ($state) => number_format((float) $state, 2, '.', '').' %'),
                     ])->columns(2),
 
-                    Section::make(__('translations.common.download_latency'))
+                    Section::make(__('common.download_latency'))
                         ->schema([
-                            TextInput::make('data.download.latency.jitter')->label(__('translations.common.jitter'))
+                            TextInput::make('data.download.latency.jitter')->label(__('common.jitter'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.download.latency.high')->label(__('translations.common.high'))
+                            TextInput::make('data.download.latency.high')->label(__('common.high'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.download.latency.low')->label(__('translations.common.low'))
+                            TextInput::make('data.download.latency.low')->label(__('common.low'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.download.latency.iqm')->label(__('translations.common.iqm'))
+                            TextInput::make('data.download.latency.iqm')->label(__('common.iqm'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
                         ])
                         ->columns(2)
                         ->collapsed(),
 
-                    Section::make(__('translations.common.upload_latency'))
+                    Section::make(__('common.upload_latency'))
                         ->schema([
-                            TextInput::make('data.upload.latency.jitter')->label(__('translations.common.jitter'))
+                            TextInput::make('data.upload.latency.jitter')->label(__('common.jitter'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.upload.latency.high')->label(__('translations.common.high'))
+                            TextInput::make('data.upload.latency.high')->label(__('common.high'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.upload.latency.low')->label(__('translations.common.low'))
+                            TextInput::make('data.upload.latency.low')->label(__('common.low'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.upload.latency.iqm')->label(__('translations.common.iqm'))
+                            TextInput::make('data.upload.latency.iqm')->label(__('common.iqm'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
                         ])
                         ->columns(2)
                         ->collapsed(),
 
-                    Section::make(__('translations.common.ping_details'))
+                    Section::make(__('common.ping_details'))
                         ->schema([
-                            TextInput::make('data.ping.jitter')->label(__('translations.common.jitter'))
+                            TextInput::make('data.ping.jitter')->label(__('common.jitter'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.ping.low')->label(__('translations.common.low'))
+                            TextInput::make('data.ping.low')->label(__('common.low'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                            TextInput::make('data.ping.high')->label(__('translations.common.high'))
+                            TextInput::make('data.ping.high')->label(__('common.high'))
                                 ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
                         ])
                         ->columns(2)
                         ->collapsed(),
 
                     Textarea::make('data.message')
-                        ->label(__('translations.common.message'))
+                        ->label(__('common.message'))
                         ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))
                         ->columnSpanFull(),
                 ])->columnSpan([
@@ -120,19 +120,19 @@ class ResultResource extends Resource
                     'md' => 2,
                 ]),
 
-                Section::make(__('translations.common.server_metadata'))->schema([
+                Section::make(__('common.server_metadata'))->schema([
                     Placeholder::make('service')
                         ->content(fn (Result $result): string => $result->service->getLabel()),
                     Placeholder::make('server_name')
                         ->content(fn (Result $result): ?string => $result->server_name),
                     Placeholder::make('server_id')
-                        ->label(__('translations.common.server_id'))
+                        ->label(__('common.server_id'))
                         ->content(fn (Result $result): ?string => $result->server_id),
                     Placeholder::make('isp')
-                        ->label(__('translations.common.isp'))
+                        ->label(__('common.isp'))
                         ->content(fn (Result $result): ?string => $result->isp),
                     Placeholder::make('server_location')
-                        ->label(__('translations.common.server_location'))
+                        ->label(__('common.server_location'))
                         ->content(fn (Result $result): ?string => $result->server_location),
                     Placeholder::make('server_host')
                         ->content(fn (Result $result): ?string => $result->server_host),
@@ -153,10 +153,10 @@ class ResultResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label(__('translations.common.id'))
+                    ->label(__('common.id'))
                     ->sortable(),
                 TextColumn::make('data.interface.externalIp')
-                    ->label(__('translations.common.ip_address'))
+                    ->label(__('common.ip_address'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -167,20 +167,20 @@ class ResultResource extends Resource
                     ->toggledHiddenByDefault()
                     ->sortable(),
                 TextColumn::make('data.server.id')
-                    ->label(__('translations.common.server_id'))
+                    ->label(__('common.server_id'))
                     ->toggleable()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->id', $direction);
                     }),
                 TextColumn::make('data.isp')
-                    ->label(__('translations.common.isp'))
+                    ->label(__('common.isp'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->isp', $direction);
                     }),
                 TextColumn::make('data.server.location')
-                    ->label(__('translations.common.server_location'))
+                    ->label(__('common.server_location'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -204,7 +204,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.jitter')
-                    ->label(__('translations.common.download_jitter'))
+                    ->label(__('common.download_jitter'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -214,7 +214,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.high')
-                    ->label(__('translations.common.download_latency_high'))
+                    ->label(__('common.download_latency_high'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -224,7 +224,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.low')
-                    ->label(__('translations.common.download_latency_low'))
+                    ->label(__('common.download_latency_low'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -234,7 +234,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.iqm')
-                    ->label(__('translations.common.download_latency_iqm'))
+                    ->label(__('common.download_latency_iqm'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -244,7 +244,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.upload.latency.jitter')
-                    ->label(__('translations.common.upload_jitter'))
+                    ->label(__('common.upload_jitter'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -254,7 +254,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.upload.latency.high')
-                    ->label(__('translations.common.upload_latency_high'))
+                    ->label(__('common.upload_latency_high'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -264,7 +264,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.upload.latency.low')
-                    ->label(__('translations.common.upload_latency_low'))
+                    ->label(__('common.upload_latency_low'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -274,7 +274,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.upload.latency.iqm')
-                    ->label(__('translations.common.upload_latency_iqm'))
+                    ->label(__('common.upload_latency_iqm'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -284,7 +284,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.ping.jitter')
-                    ->label(__('translations.common.ping_jitter'))
+                    ->label(__('common.ping_jitter'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -294,7 +294,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.ping.low')
-                    ->label(__('translations.common.ping_low'))
+                    ->label(__('common.ping_low'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -304,7 +304,7 @@ class ResultResource extends Resource
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.ping.high')
-                    ->label(__('translations.common.ping_high'))
+                    ->label(__('common.ping_high'))
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable(query: function (Builder $query, string $direction): Builder {
@@ -338,7 +338,7 @@ class ResultResource extends Resource
                     ->sortable()
                     ->alignment(Alignment::Center),
                 TextColumn::make('data.message')
-                    ->label(__('translations.common.error_message'))
+                    ->label(__('common.error_message'))
                     ->limit(15)
                     ->tooltip(fn ($state) => $state)
                     ->toggleable()
@@ -376,7 +376,7 @@ class ResultResource extends Resource
                             );
                     }),
                 SelectFilter::make('ip_address')
-                    ->label(__('translations.common.ip_address'))
+                    ->label(__('common.ip_address'))
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
@@ -393,7 +393,7 @@ class ResultResource extends Resource
                     })
                     ->attribute('data->interface->externalIp'),
                 SelectFilter::make('server_name')
-                    ->label(__('translations.common.server_name'))
+                    ->label(__('common.server_name'))
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
@@ -411,8 +411,8 @@ class ResultResource extends Resource
                     ->attribute('data->server->name'),
                 TernaryFilter::make('scheduled')
                     ->nullable()
-                    ->trueLabel(__('translations.common.only_scheduled_speedtests'))
-                    ->falseLabel(__('translations.common.only_manual_speedtests'))
+                    ->trueLabel(__('common.only_scheduled_speedtests'))
+                    ->falseLabel(__('common.only_manual_speedtests'))
                     ->queries(
                         true: fn (Builder $query) => $query->where('scheduled', true),
                         false: fn (Builder $query) => $query->where('scheduled', false),
@@ -423,8 +423,8 @@ class ResultResource extends Resource
                     ->options(ResultStatus::class),
                 TernaryFilter::make('healthy')
                     ->nullable()
-                    ->trueLabel(__('translations.common.only_healthy_speedtests'))
-                    ->falseLabel(__('translations.common.only_unhealthy_speedtests'))
+                    ->trueLabel(__('common.only_healthy_speedtests'))
+                    ->falseLabel(__('common.only_unhealthy_speedtests'))
                     ->queries(
                         true: fn (Builder $query) => $query->where('healthy', true),
                         false: fn (Builder $query) => $query->where('healthy', false),
@@ -434,7 +434,7 @@ class ResultResource extends Resource
             ->actions([
                 ActionGroup::make([
                     Action::make('view result')
-                        ->label(__('translations.common.view_on_speedtest_net'))
+                        ->label(__('common.view_on_speedtest_net'))
                         ->icon('heroicon-o-link')
                         ->url(fn (Result $record): ?string => $record->result_url)
                         ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Completed)
@@ -465,15 +465,15 @@ class ResultResource extends Resource
                 ExportAction::make()
                     ->exporter(ResultExporter::class)
                     ->columnMapping(false)
-                    ->modalHeading(__('translations.common.export_all_results'))
-                    ->modalDescription(__('translations.common.export_all_results_description'))
+                    ->modalHeading(__('common.export_all_results'))
+                    ->modalDescription(__('common.export_all_results_description'))
                     ->fileName(fn (): string => 'results-'.now()->timestamp),
                 ActionGroup::make([
                     Action::make('truncate')
                         ->action(fn () => TruncateResults::dispatch(Auth::user()))
                         ->requiresConfirmation()
-                        ->modalHeading(__('translations.common.truncate_results'))
-                        ->modalDescription(__('translations.common.truncate_results_confirmation'))
+                        ->modalHeading(__('common.truncate_results'))
+                        ->modalDescription(__('common.truncate_results_confirmation'))
                         ->color('danger')
                         ->icon('heroicon-o-trash')
                         ->hidden(fn (): bool => ! Auth::user()->is_admin),

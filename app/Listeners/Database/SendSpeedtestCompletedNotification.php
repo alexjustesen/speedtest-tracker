@@ -26,7 +26,7 @@ class SendSpeedtestCompletedNotification
 
         foreach (User::all() as $user) {
             Notification::make()
-                ->title(__('translations.speedtest.speedtest_completed'))
+                ->title(__('speedtest.speedtest_completed'))
                 ->success()
                 ->sendToDatabase($user);
         }

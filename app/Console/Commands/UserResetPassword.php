@@ -32,7 +32,7 @@ class UserResetPassword extends Command
     public function handle(): void
     {
         $email = text(
-            label: __('translations.user_change.welcome_email'),
+            label: __('user_change.welcome_email'),
             required: true,
             validate: fn (string $value) => match (true) {
                 ! User::firstWhere('email', $value) => 'User not found.',
@@ -41,7 +41,7 @@ class UserResetPassword extends Command
         );
 
         $password = password(
-            label: __('translations.user_change.what_is_password'),
+            label: __('user_change.what_is_password'),
             required: true,
         );
 
@@ -50,6 +50,6 @@ class UserResetPassword extends Command
                 'password' => Hash::make($password),
             ]);
 
-        info(__('translations.user_change.password_updated_info', ['email' => $email]));
+        info(__('user_change.password_updated_info', ['email' => $email]));
     }
 }

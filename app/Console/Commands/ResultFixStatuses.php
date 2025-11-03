@@ -30,11 +30,11 @@ class ResultFixStatuses extends Command
     {
         $this->newLine();
 
-        $this->info(__('translations.status_fix.info_1'));
-        $this->info(__('translations.status_fix.info_2'));
+        $this->info(__('status_fix.info_1'));
+        $this->info(__('status_fix.info_2'));
 
-        if (! $this->confirm(__('translations.confirm'))) {
-            $this->fail(__('translations.fail'));
+        if (! $this->confirm(__('confirm'))) {
+            $this->fail(__('fail'));
         }
 
         /**
@@ -63,6 +63,6 @@ class ResultFixStatuses extends Command
                 'status' => ResultStatus::Failed,
             ]);
 
-        $this->line(__('translations.status_fix.finished'));
+        $this->line(__('status_fix.finished'));
     }
 }

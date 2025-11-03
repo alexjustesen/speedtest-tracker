@@ -15,7 +15,7 @@ class SendMailTestNotification
     {
         if (! count($recipients)) {
             Notification::make()
-                ->title(__('translations.notifications.mail.add'))
+                ->title(__('notifications.mail.add'))
                 ->warning()
                 ->send();
 
@@ -28,7 +28,7 @@ class SendMailTestNotification
         }
 
         Notification::make()
-            ->title(__('translations.notifications.mail.sent'))
+            ->title(__('notifications.mail.sent'))
             ->success()
             ->send();
     }

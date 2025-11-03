@@ -100,4 +100,10 @@ return [
     'truncate_results' => 'Truncate Results',
     'truncate_results_confirmation' => 'Are you sure you want to truncate all results data? This can\'t be undone.',
 
+    // Navigation
+    'links' => 'Links',
+    'donate' => 'Donate',
+    'update_available' => 'Update Available',
+    'up_to_date' => 'Up to Date',
+
 ];

@@ -15,7 +15,7 @@ class SendTelegramTestNotification
     {
         if (! count($recipients)) {
             Notification::make()
-                ->title(__('translations.notifications.telegram.add'))
+                ->title(__('notifications.telegram.add'))
                 ->warning()
                 ->send();
 
@@ -28,7 +28,7 @@ class SendTelegramTestNotification
         }
 
         Notification::make()
-            ->title(__('translations.notifications.telegram.sent'))
+            ->title(__('notifications.telegram.sent'))
             ->success()
             ->send();
     }

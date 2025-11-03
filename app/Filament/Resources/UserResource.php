@@ -76,10 +76,10 @@ class UserResource extends Resource
                 Grid::make(1)
                     ->columnSpan(1)
                     ->schema([
-                        Section::make(__('translations.users.platform'))
+                        Section::make(__('users.platform'))
                             ->schema([
                                 Select::make('role')
-                                    ->label(__('translations.users.role'))
+                                    ->label(__('users.role'))
                                     ->default(UserRole::User)
                                     ->options(UserRole::class)
                                     ->required()
@@ -111,7 +111,7 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label(__('translations.users.id'))
+                    ->label(__('users.id'))
                     ->sortable(),
 
                 TextColumn::make('name')

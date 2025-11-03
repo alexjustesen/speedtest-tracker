@@ -24,17 +24,17 @@ class ThresholdsPage extends SettingsPage
 
     public static function getNavigationGroup(): string
     {
-        return __('translations.settings');
+        return __('settings');
     }
 
     public function getTitle(): string
     {
-        return __('translations.thresholds');
+        return __('thresholds');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('translations.thresholds');
+        return __('thresholds');
     }
 
     public static function canAccess(): bool
@@ -57,10 +57,10 @@ class ThresholdsPage extends SettingsPage
         return $form
             ->schema([
                 Section::make('Absolute')
-                    ->description(__('translations.settings.absolute_thresholds_description'))
+                    ->description(__('settings.absolute_thresholds_description'))
                     ->schema([
                         Toggle::make('absolute_enabled')
-                            ->label(__('translations.settings.enable_absolute_thresholds'))
+                            ->label(__('settings.enable_absolute_thresholds'))
                             ->reactive()
                             ->columnSpan(2),
                         Grid::make([
@@ -71,7 +71,7 @@ class ThresholdsPage extends SettingsPage
                                 Fieldset::make('Metrics')
                                     ->schema([
                                         TextInput::make('absolute_download')
-                                            ->label(__('translations.settings.download'))
+                                            ->label(__('settings.download'))
                                             ->hint('Mbps')
                                             ->helperText('Set to zero to disable this metric.')
                                             ->default(0)
@@ -80,7 +80,7 @@ class ThresholdsPage extends SettingsPage
                                             ->required(),
 
                                         TextInput::make('absolute_upload')
-                                            ->label(__('translations.settings.upload'))
+                                            ->label(__('settings.upload'))
                                             ->hint('Mbps')
                                             ->helperText('Set to zero to disable this metric.')
                                             ->default(0)
@@ -89,7 +89,7 @@ class ThresholdsPage extends SettingsPage
                                             ->required(),
 
                                         TextInput::make('absolute_ping')
-                                            ->label(__('translations.settings.ping'))
+                                            ->label(__('settings.ping'))
                                             ->hint('ms')
                                             ->helperText('Set to zero to disable this metric.')
                                             ->default(0)

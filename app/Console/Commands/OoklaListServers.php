@@ -40,7 +40,7 @@ class OoklaListServers extends Command
         );
 
         if ($response->failed()) {
-            $this->fail(__('translations.ookla_error'));
+            $this->fail(__('ookla_error'));
         }
 
         $fields = ['id', 'sponsor', 'name', 'country', 'distance'];

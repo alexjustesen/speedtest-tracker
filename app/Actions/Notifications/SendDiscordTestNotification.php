@@ -14,7 +14,7 @@ class SendDiscordTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title(__('translations.notifications.discord.add'))
+                ->title(__('notifications.discord.add'))
                 ->warning()
                 ->send();
 
@@ -24,13 +24,13 @@ class SendDiscordTestNotification
         foreach ($webhooks as $webhook) {
             WebhookCall::create()
                 ->url($webhook['url'])
-                ->payload(['content' => __('translations.notifications.discord.payload')])
+                ->payload(['content' => __('notifications.discord.payload')])
                 ->doNotSign()
                 ->dispatch();
         }
 
         Notification::make()
-            ->title(__('translations.notifications.discord.sent'))
+            ->title(__('notifications.discord.sent'))
             ->success()
             ->send();
     }
