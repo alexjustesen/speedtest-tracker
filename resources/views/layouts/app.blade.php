@@ -8,11 +8,17 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
         {{-- Fonts --}}
-        <link href="{{ asset('fonts/inter/inter.css') }}" rel="stylesheet" />
+        <link href="{{ asset('fonts/filament/filament/inter/index.css') }}" rel="stylesheet" />
+
 
         {{-- Styles --}}
-        @filamentStyles
+        <style>
+            [x-cloak] {
+                display: none !important;
+            }
+        </style>
         @vite('resources/css/app.css')
+        @filamentStyles
 
         <script>
             const theme = localStorage.getItem('theme') ?? 'system'
