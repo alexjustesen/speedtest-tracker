@@ -7,5 +7,6 @@
         "claude_code",
         "vscode"
     ],
-    "guidelines": []
+    "guidelines": [],
+    "sail": true
 }
