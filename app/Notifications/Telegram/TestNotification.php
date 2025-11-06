@@ -44,6 +44,6 @@ class TestNotification extends Notification implements ShouldQueue
         return TelegramMessage::create()
             ->to($notifiable->routes['telegram_chat_id'])
             ->disableNotification($this->settings->telegram_disable_notification)
-            ->content('👋 Testing the Telegram notification channel.');
+            ->content(__('notifications.telegram.test_message'));
     }
 }

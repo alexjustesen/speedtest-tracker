@@ -14,15 +14,15 @@ class SendDatabaseTestNotification
     {
         $user->notify(
             Notification::make()
-                ->title(__('translations.notifications.database.received'))
-                ->body(__('translations.notifications.database.pong'))
+                ->title(__('notifications.database.received'))
+                ->body(__('notifications.database.pong'))
                 ->success()
                 ->toDatabase(),
         );
 
         Notification::make()
-            ->title(__('translations.notifications.database.sent'))
-            ->body(__('translations.notifications.database.ping'))
+            ->title(__('notifications.database.sent'))
+            ->body(__('notifications.database.ping'))
             ->success()
             ->send();
     }

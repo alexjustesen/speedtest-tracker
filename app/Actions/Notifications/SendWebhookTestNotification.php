@@ -17,7 +17,7 @@ class SendWebhookTestNotification
     {
         if (! count($webhooks)) {
             Notification::make()
-                ->title(__('translations.notifications.webhook.add'))
+                ->title(__('notifications.webhook.add'))
                 ->warning()
                 ->send();
 
@@ -32,7 +32,7 @@ class SendWebhookTestNotification
                 ->url($webhook['url'])
                 ->payload([
                     'result_id' => Str::uuid(),
-                    'site_name' => __('translations.notifications.webhook.payload'),
+                    'site_name' => __('notifications.webhook.payload'),
                     'isp' => $fakeResult->data['isp'],
                     'ping' => $fakeResult->ping,
                     'download' => $fakeResult->download,
@@ -46,7 +46,7 @@ class SendWebhookTestNotification
         }
 
         Notification::make()
-            ->title(__('translations.notifications.webhook.sent'))
+            ->title(__('notifications.webhook.sent'))
             ->success()
             ->send();
     }

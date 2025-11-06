@@ -23,14 +23,14 @@ class ResultExporter extends Exporter
     {
         $columns = [
             ExportColumn::make('id')
-                ->label(__('translations.id')),
+                ->label(__('id')),
             ExportColumn::make('service')->state(fn (Result $r) => $r->service->getLabel()),
             ExportColumn::make('status')->state(fn (Result $r) => $r->status->getLabel()),
-            ExportColumn::make('scheduled')->state(fn (Result $r) => $r->scheduled ? __('translations.yes') : __('translations.no')),
-            ExportColumn::make('healthy')->state(fn (Result $r) => $r->healthy ? __('translations.yes') : __('translations.no')),
-            ExportColumn::make('created_at')->label(__('translations.created_at')),
-            ExportColumn::make('updated_at')->label(__('translations.updated_at')),
-            ExportColumn::make('comments')->label(__('translations.comments')),
+            ExportColumn::make('scheduled')->state(fn (Result $r) => $r->scheduled ? __('yes') : __('no')),
+            ExportColumn::make('healthy')->state(fn (Result $r) => $r->healthy ? __('yes') : __('no')),
+            ExportColumn::make('created_at')->label(__('created_at')),
+            ExportColumn::make('updated_at')->label(__('updated_at')),
+            ExportColumn::make('comments')->label(__('comments')),
         ];
 
         $columns = array_merge($columns, self::generateDataColumns());
@@ -79,7 +79,7 @@ class ResultExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = __('translations.export_completed', [
+        $body = __('export_completed', [
             'count' => number_format($export->successful_rows),
             'rows' => trans_choice('translations.row', $export->successful_rows, [
                 'count' => number_format($export->successful_rows),
@@ -87,7 +87,7 @@ class ResultExporter extends Exporter
         ]);
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= __('translations.failed_export', [
+            $body .= __('failed_export', [
                 'count' => $failedRowsCount,
                 'rows' => trans_choice('translations.row', $export->$failedRowsCount, [
                     'count' => number_format($export->$failedRowsCount),

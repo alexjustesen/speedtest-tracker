@@ -46,7 +46,7 @@ class TestConnectionJob implements ShouldQueue
             ]);
 
             Notification::make()
-                ->title('Influxdb test failed')
+                ->title(__('jobs.influxdb_test_failed'))
                 ->body('Check the logs for more details.')
                 ->danger()
                 ->sendToDatabase($this->user);
@@ -59,7 +59,7 @@ class TestConnectionJob implements ShouldQueue
         $writeApi->close();
 
         Notification::make()
-            ->title('Successfully sent test data to Influxdb')
+            ->title(__('jobs.influxdb_test_success'))
             ->body('Test data has been sent to InfluxDB, check if the data was received.')
             ->success()
             ->sendToDatabase($this->user);
