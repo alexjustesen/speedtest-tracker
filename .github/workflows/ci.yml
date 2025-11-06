@@ -60,7 +60,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative --no-audit
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative
           npm ci --no-audit && npm run build
 
       - name: Copy Environment File
@@ -118,7 +118,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative --no-audit
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative
           npm ci --no-audit && npm run build
 
       - name: Copy Environment File
@@ -176,7 +176,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative --no-audit
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative
           npm ci --no-audit && npm run build
 
       - name: Copy Environment File
@@ -234,7 +234,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative --no-audit
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative
           npm ci --no-audit && npm run build
 
       - name: Copy Environment File
@@ -292,7 +292,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative --no-audit
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative
           npm ci --no-audit && npm run build
 
       - name: Copy Environment File
@@ -350,7 +350,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative --no-audit
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative
           npm ci --no-audit && npm run build
 
       - name: Copy Environment File
@@ -408,7 +408,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative --no-audit
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative
           npm ci --no-audit && npm run build
 
       - name: Copy Environment File
@@ -461,7 +461,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative --no-audit
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --classmap-authoritative
           npm ci --no-audit && npm run build
 
       - name: Copy Environment File
