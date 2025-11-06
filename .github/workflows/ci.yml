@@ -45,7 +45,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci && npm run build
+          npm ci --no-audit && npm run build
 
       - name: Copy Environment File
         run: cp .env.ci .env
@@ -87,7 +87,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci && npm run build
+          npm ci --no-audit && npm run build
 
       - name: Copy Environment File
         run: cp .env.ci .env
@@ -129,7 +129,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci && npm run build
+          npm ci --no-audit && npm run build
 
       - name: Copy Environment File
         run: cp .env.ci .env
@@ -171,7 +171,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci && npm run build
+          npm ci --no-audit && npm run build
 
       - name: Copy Environment File
         run: cp .env.ci .env
@@ -213,7 +213,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci && npm run build
+          npm ci --no-audit && npm run build
 
       - name: Copy Environment File
         run: cp .env.ci .env
@@ -255,7 +255,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci && npm run build
+          npm ci --no-audit && npm run build
 
       - name: Copy Environment File
         run: cp .env.ci .env
@@ -297,7 +297,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci && npm run build
+          npm ci --no-audit && npm run build
 
       - name: Copy Environment File
         run: cp .env.ci .env
@@ -334,7 +334,7 @@ jobs:
       - name: Install Dependencies
         run: |
           composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-          npm ci && npm run build
+          npm ci --no-audit && npm run build
 
       - name: Copy Environment File
         run: cp .env.ci .env
