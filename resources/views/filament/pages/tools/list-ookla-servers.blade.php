@@ -7,8 +7,8 @@
             </div>
         </div>
     @else
-        <x-filament-panels::form wire:submit.prevent>
+        <form wire:submit.prevent>
             {{ $this->form }}
-        </x-filament-panels::form>
+        </form>
     @endif
 </x-filament-panels::page>
