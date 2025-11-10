@@ -8,6 +8,7 @@ use App\Filament\Resources\ApiTokens\Tables\ApiTokenTable;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class ApiTokenResource extends Resource
@@ -21,6 +22,16 @@ class ApiTokenResource extends Resource
     protected static ?string $label = 'API Token';
 
     protected static ?string $pluralLabel = 'API Tokens';
+
+    public static function canAccess(): bool
+    {
+        return Auth::check() && Auth::user()->is_admin;
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::check() && Auth::user()->is_admin;
+    }
 
     public static function form(Schema $schema): Schema
     {
