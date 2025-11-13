@@ -19,6 +19,7 @@ return [
     'token' => 'Token',
     'speedtest' => 'Speedtest',
     'speedtest_tracker' => 'Speedtest Tracker',
+    'no_schedule' => 'No speedtests scheduled.',
 
     // Result Overview
     'result_overview' => 'Result Overview',
@@ -106,5 +107,6 @@ return [
     'donate' => 'Donate',
     'update_available' => 'Update Available',
     'up_to_date' => 'Up to Date',
+    'documentation' => 'Documentation',
 
 ];

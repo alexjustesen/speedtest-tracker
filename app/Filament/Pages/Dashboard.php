@@ -24,7 +24,7 @@ class Dashboard extends BasePage
         $schedule = config('speedtest.schedule');
 
         if (blank($schedule) || $schedule === false) {
-            return __('No speedtests scheduled.');
+            return __('common.no_schedule');
         }
 
         $cronExpression = new CronExpression($schedule);
