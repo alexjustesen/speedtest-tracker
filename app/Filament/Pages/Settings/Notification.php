@@ -34,9 +34,15 @@ class Notification extends SettingsPage
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $title = 'Notifications';
+    public function getTitle(): string
+    {
+        return __('settings/notifications.title');
+    }
 
-    protected static ?string $navigationLabel = 'Notifications';
+    public static function getNavigationLabel(): string
+    {
+        return __('settings/notifications.label');
+    }
 
     protected static string $settings = NotificationSettings::class;
 
@@ -64,11 +70,11 @@ class Notification extends SettingsPage
                             'default' => 1,
                         ])
                             ->schema([
-                                Section::make('Database')
-                                    ->description('Notifications sent to this channel will show up under the 🔔 icon in the header.')
+                                Section::make(__('settings/notifications.database'))
+                                    ->description(__('settings/notifications.database_description'))
                                     ->schema([
                                         Toggle::make('database_enabled')
-                                            ->label('Enable database notifications')
+                                            ->label(__('settings/notifications.enable_database_notifications'))
                                             ->reactive()
                                             ->columnSpanFull(),
                                         Grid::make([
@@ -76,18 +82,18 @@ class Notification extends SettingsPage
                                         ])
                                             ->hidden(fn (Get $get) => $get('database_enabled') !== true)
                                             ->schema([
-                                                Fieldset::make('Triggers')
+                                                Fieldset::make(__('settings.triggers'))
                                                     ->schema([
                                                         Toggle::make('database_on_speedtest_run')
-                                                            ->label('Notify on every speedtest run')
+                                                            ->label(__('settings/notifications.database_on_speedtest_run'))
                                                             ->columnSpanFull(),
                                                         Toggle::make('database_on_threshold_failure')
-                                                            ->label('Notify on threshold failures')
+                                                            ->label(__('settings/notifications.database_on_threshold_failure'))
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Actions::make([
                                                     Action::make('test database')
-                                                        ->label('Test database channel')
+                                                        ->label(__('settings/notifications.test_database_channel'))
                                                         ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
                                                 ]),
                                             ]),
@@ -95,10 +101,10 @@ class Notification extends SettingsPage
                                     ->compact()
                                     ->columnSpan('full'),
 
-                                Section::make('Mail')
+                                Section::make(__('settings/notifications.mail'))
                                     ->schema([
                                         Toggle::make('mail_enabled')
-                                            ->label('Enable mail notifications')
+                                            ->label(__('settings/notifications.enable_mail_notifications'))
                                             ->reactive()
                                             ->columnSpanFull(),
                                         Grid::make([
