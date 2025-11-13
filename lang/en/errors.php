@@ -4,6 +4,9 @@ return [
     'server_error' => 'Server Error',
     'oops_server_error' => 'Oops, server error!',
     'error_message' => 'Error message',
+    'error_fetching_servers' => 'Error fetching servers',
+    'servers_refreshed_successfully' => 'Servers refreshed successfully',
+    'copied_to_clipboard' => 'Copied to clipboard',
 
     // Speedtest specific errors
     'ookla_error' => 'An error occurred when listing speedtest servers, check the logs.',
