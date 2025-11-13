@@ -22,7 +22,7 @@
         "geerlingguy/ping": "^1.2.1",
         "influxdata/influxdb-client-php": "^3.8",
         "laravel-notification-channels/telegram": "^6.0",
-        "laravel/framework": "^12.37.0",
+        "laravel/framework": "^12.38.1",
         "laravel/prompts": "^0.3.7",
         "laravel/sanctum": "^4.2.0",
         "livewire/livewire": "^3.6.4",
@@ -33,14 +33,14 @@
         "spatie/laravel-query-builder": "^6.3.6",
         "spatie/laravel-settings": "^3.5.0",
         "spatie/laravel-webhook-server": "^3.8.3",
-        "zircote/swagger-php": "^5.5.2"
+        "zircote/swagger-php": "^5.7.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24.1",
-        "laravel/boost": "^1.7",
+        "laravel/boost": "^1.8",
         "laravel/pail": "^1.2.3",
         "laravel/pint": "^1.25.1",
-        "laravel/sail": "^1.47.0",
+        "laravel/sail": "^1.48.0",
         "laravel/telescope": "^5.15.0",
         "laravel/tinker": "^2.10.1",
         "mockery/mockery": "^1.6.12",
@@ -48,7 +48,7 @@
         "pestphp/pest": "^3.8.4",
         "pestphp/pest-plugin-laravel": "^3.2",
         "spatie/laravel-ignition": "^2.9.1",
-        "tightenco/duster": "^3.2.0"
+        "tightenco/duster": "^3.3.0"
     },
     "autoload": {
         "files": [
