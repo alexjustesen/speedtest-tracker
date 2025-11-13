@@ -24,7 +24,7 @@ class ThresholdsPage extends SettingsPage
 
     public static function getNavigationGroup(): string
     {
-        return __('settings');
+        return __('common.settings');
     }
 
     public function getTitle(): string
