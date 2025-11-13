@@ -69,7 +69,15 @@ return [
     'update_comments' => 'Update comments',
     'truncate_results' => 'Truncate results',
     'truncate_results_description' => 'Are you sure you want to truncate all results? This action is irreversible.',
+    'truncate_results_success' => 'Results table truncated!',
     'view_on_speedtest_net' => 'View on Speedtest.net',
+
+    // Notifications
+    'speedtest_started' => 'Speedtest started',
+    'speedtest_completed' => 'Speedtest completed',
+    'download_threshold_breached' => 'Download threshold breached!',
+    'upload_threshold_breached' => 'Upload threshold breached!',
+    'ping_threshold_breached' => 'Ping threshold breached!',
 
     // Error messages
     'error_message' => 'Error message',

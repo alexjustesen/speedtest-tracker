@@ -56,7 +56,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
                 );
 
                 Notification::make()
-                    ->title('Speedtest started')
+                    ->title(__('results.speedtest_started'))
                     ->success()
                     ->send();
             })

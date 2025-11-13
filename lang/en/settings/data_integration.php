@@ -22,6 +22,18 @@ return [
     'starting_bulk_data_write_to_influxdb' => 'Starting bulk data write to InfluxDB',
     'sending_test_data_to_influxdb' => 'Sending test data to InfluxDB',
 
+    // Test connection notifications
+    'influxdb_test_failed' => 'Influxdb test failed',
+    'influxdb_test_failed_body' => 'Check the logs for more details.',
+    'influxdb_test_success' => 'Successfully sent test data to Influxdb',
+    'influxdb_test_success_body' => 'Test data has been sent to InfluxDB, check if the data was received.',
+
+    // Bulk write notifications
+    'influxdb_bulk_write_failed' => 'Failed to build write to Influxdb.',
+    'influxdb_bulk_write_failed_body' => 'Check the logs for more details.',
+    'influxdb_bulk_write_success' => 'Finished bulk data load to Influxdb.',
+    'influxdb_bulk_write_success_body' => 'Data has been sent to InfluxDB, check if the data was received.',
+
     // Common labels (can be removed if they're in general.php)
     'org' => 'Org',
     'bucket' => 'Bucket',

@@ -28,7 +28,7 @@ class ListApiTokens extends ListRecords
                     );
 
                     Notification::make()
-                        ->title('Token Created')
+                        ->title(__('general.token_created'))
                         ->body('Your token: `'.explode('|', $token->plainTextToken)[1].'`')
                         ->success()
                         ->persistent()

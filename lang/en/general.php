@@ -66,4 +66,7 @@ return [
     // Update status
     'update_available' => 'Update available!',
     'up_to_date' => 'Up to date',
+
+    // Notifications
+    'token_created' => 'Token Created',
 ];
