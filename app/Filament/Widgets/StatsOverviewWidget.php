@@ -24,11 +24,11 @@ class StatsOverviewWidget extends BaseWidget
 
         if (blank($this->result)) {
             return [
-                Stat::make(__('latest_download'), '-')
+                Stat::make(__('common.latest_download'), '-')
                     ->icon('heroicon-o-arrow-down-tray'),
-                Stat::make(__('latest_upload'), '-')
+                Stat::make(__('common.latest_upload'), '-')
                     ->icon('heroicon-o-arrow-up-tray'),
-                Stat::make(__('latest_ping'), '-')
+                Stat::make(__('common.latest_ping'), '-')
                     ->icon('heroicon-o-clock'),
             ];
         }
@@ -42,11 +42,11 @@ class StatsOverviewWidget extends BaseWidget
 
         if (! $previous) {
             return [
-                Stat::make(__('latest_download'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
+                Stat::make(__('common.latest_download'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
                     ->icon('heroicon-o-arrow-down-tray'),
-                Stat::make(__('latest_upload'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
+                Stat::make(__('common.latest_upload'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
                     ->icon('heroicon-o-arrow-up-tray'),
-                Stat::make(__('latest_ping'), fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
+                Stat::make(__('common.latest_ping'), fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
                     ->icon('heroicon-o-clock'),
             ];
         }
@@ -56,17 +56,17 @@ class StatsOverviewWidget extends BaseWidget
         $pingChange = percentChange($this->result->ping, $previous->ping, 2);
 
         return [
-            Stat::make(__('latest_download'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
+            Stat::make(__('common.latest_download'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->download_bits, precision: 2) : 'n/a')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->description($downloadChange > 0 ? $downloadChange.'% '.__('faster') : abs($downloadChange).'% '.__('slower'))
                 ->descriptionIcon($downloadChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($downloadChange > 0 ? 'success' : 'danger'),
-            Stat::make(__('latest_upload'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
+            Stat::make(__('common.latest_upload'), fn (): string => ! blank($this->result) ? Number::toBitRate(bits: $this->result->upload_bits, precision: 2) : 'n/a')
                 ->icon('heroicon-o-arrow-up-tray')
                 ->description($uploadChange > 0 ? $uploadChange.'% '.__('faster') : abs($uploadChange).'% '.__('slower'))
                 ->descriptionIcon($uploadChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($uploadChange > 0 ? 'success' : 'danger'),
-            Stat::make(__('latest_ping'), fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
+            Stat::make(__('common.latest_ping'), fn (): string => ! blank($this->result) ? number_format($this->result->ping, 2).' ms' : 'n/a')
                 ->icon('heroicon-o-clock')
                 ->description($pingChange > 0 ? $pingChange.'% '.__('slower') : abs($pingChange).'% '.__('faster'))
                 ->descriptionIcon($pingChange > 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')

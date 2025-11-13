@@ -36,7 +36,7 @@ class NotificationPage extends SettingsPage
 
     public static function getNavigationGroup(): string
     {
-        return __('settings');
+        return __('common.settings');
     }
 
     public function getTitle(): string
@@ -68,11 +68,11 @@ class NotificationPage extends SettingsPage
     {
         return $form
             ->schema([
-                Section::make(__('database'))
-                    ->description(__('database_description'))
+                Section::make(__('notifications.database.title'))
+                    ->description(__('notifications.database.description'))
                     ->schema([
                         Toggle::make('database_enabled')
-                            ->label(__('enable_database_notifications'))
+                            ->label(__('notifications.database.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -81,18 +81,18 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('database_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label(__('triggers'))
+                                    ->label(__('notifications.triggers'))
                                     ->schema([
                                         Toggle::make('database_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('database_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
                                             ->columnSpanFull(),
                                     ]),
                                 Actions::make([
                                     Action::make('test database')
-                                        ->label(__('test_database_channel'))
+                                        ->label(__('notifications.database.test'))
                                         ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
                                 ]),
                             ]),
@@ -103,10 +103,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('mail'))
+                Section::make(__('notifications.mail.title'))
                     ->schema([
                         Toggle::make('mail_enabled')
-                            ->label(__('enable_mail_notifications'))
+                            ->label(__('notifications.mail.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -115,20 +115,20 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('mail_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label(__('triggers'))
+                                    ->label(__('notifications.triggers'))
                                     ->schema([
                                         Toggle::make('mail_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('mail_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
                                             ->columnSpanFull(),
                                     ]),
                                 Repeater::make('mail_recipients')
                                     ->label(__('recipients'))
                                     ->schema([
                                         Forms\Components\TextInput::make('email_address')
-                                            ->label(__('email_address'))
+                                            ->label(__('notifications.mail.address'))
                                             ->placeholder('your@email.com')
                                             ->email()
                                             ->required(),
@@ -136,7 +136,7 @@ class NotificationPage extends SettingsPage
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test mail')
-                                        ->label(__('test_mail_channel'))
+                                        ->label(__('notifications.mail.test'))
                                         ->action(fn (Forms\Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
                                         ->hidden(fn (Forms\Get $get) => ! count($get('mail_recipients'))),
                                 ]),
@@ -148,10 +148,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('webhook'))
+                Section::make(__('notifications.webhook.title'))
                     ->schema([
                         Toggle::make('webhook_enabled')
-                            ->label(__('enable_webhook_notifications'))
+                            ->label(__('notifications.webook.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -160,20 +160,20 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('webhook_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label(__('settings.triggers'))
+                                    ->label(__('notifications.triggers'))
                                     ->schema([
                                         Toggle::make('webhook_on_speedtest_run')
-                                            ->label(__('settings.notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpan(2),
                                         Toggle::make('webhook_on_threshold_failure')
-                                            ->label(__('settings.notify_on_threshold_failures'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
                                             ->columnSpan(2),
                                     ]),
                                 Repeater::make('webhook_urls')
-                                    ->label(__('recipients'))
+                                    ->label(__('notifications.recipients'))
                                     ->schema([
                                         Forms\Components\TextInput::make('url')
-                                            ->label(__('url'))
+                                            ->label(__('notifications.url'))
                                             ->placeholder('https://webhook.site/longstringofcharacters')
                                             ->maxLength(2000)
                                             ->required()
@@ -182,7 +182,7 @@ class NotificationPage extends SettingsPage
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test webhook')
-                                        ->label(__('test_webhook_channel'))
+                                        ->label(__('notifications.webhook.test'))
                                         ->action(fn (Forms\Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
                                         ->hidden(fn (Forms\Get $get) => ! count($get('webhook_urls'))),
                                 ]),
@@ -194,10 +194,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('pushover'))
+                Section::make(__('notifications.pushover.title'))
                     ->schema([
                         Toggle::make('pushover_enabled')
-                            ->label(__('enable_pushover_webhook_notifications'))
+                            ->label(__('notifications.pushover.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -206,39 +206,39 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('pushover_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label(__('triggers'))
+                                    ->label(__('notifications.triggers'))
                                     ->schema([
                                         Toggle::make('pushover_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('pushover_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
                                             ->columnSpanFull(),
                                     ]),
                                 Repeater::make('pushover_webhooks')
-                                    ->label(__('pushover_webhooks'))
+                                    ->label(__('notifications.pushover.webhooks'))
                                     ->schema([
                                         Forms\Components\TextInput::make('url')
-                                            ->label(__('url'))
+                                            ->label(__('notifications.url'))
                                             ->placeholder('http://api.pushover.net/1/messages.json')
                                             ->maxLength(2000)
                                             ->required()
                                             ->url(),
                                         Forms\Components\TextInput::make('user_key')
-                                            ->label(__('user_key'))
-                                            ->placeholder(__('your_pushover_user_key'))
+                                            ->label(__('notifications.pushover.user_key'))
+                                            ->placeholder(__('notifications.pushover.your_pushover_user_key'))
                                             ->maxLength(200)
                                             ->required(),
                                         Forms\Components\TextInput::make('api_token')
-                                            ->label(__('api_token'))
-                                            ->placeholder(__('your_pushover_api_token'))
+                                            ->label(__('notifications.pushover.api_token'))
+                                            ->placeholder(__('notifications.pushover.your_pushover_api_token'))
                                             ->maxLength(200)
                                             ->required(),
                                     ])
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test pushover')
-                                        ->label(__('test_pushover_webhook'))
+                                        ->label(__('notifications.test_pushover_webhook'))
                                         ->action(fn (Forms\Get $get) => SendPushoverTestNotification::run(
                                             webhooks: $get('pushover_webhooks')
                                         ))
@@ -252,10 +252,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('discord'))
+                Section::make(__('notifications.discord.title'))
                     ->schema([
                         Toggle::make('discord_enabled')
-                            ->label(__('enable_discord_webhook_notifications'))
+                            ->label(__('notifications.discord.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -264,20 +264,20 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('discord_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label(__('triggers'))
+                                    ->label(__('notifications.triggers'))
                                     ->schema([
                                         Toggle::make('discord_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('discord_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
                                             ->columnSpanFull(),
                                     ]),
                                 Repeater::make('discord_webhooks')
-                                    ->label(__('webhooks'))
+                                    ->label(__('notifications.discord.webhooks'))
                                     ->schema([
                                         Forms\Components\TextInput::make('url')
-                                            ->label(__('url'))
+                                            ->label(__('notifications.url'))
                                             ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
                                             ->maxLength(2000)
                                             ->required()
@@ -286,7 +286,7 @@ class NotificationPage extends SettingsPage
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test discord')
-                                        ->label(__('test_discord_webhook'))
+                                        ->label(__('notifications.test_discord_webhook'))
                                         ->action(fn (Forms\Get $get) => SendDiscordTestNotification::run(webhooks: $get('discord_webhooks')))
                                         ->hidden(fn (Forms\Get $get) => ! count($get('discord_webhooks'))),
                                 ]),
@@ -298,10 +298,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('gotify'))
+                Section::make(__('notifications.gotfy.title'))
                     ->schema([
                         Toggle::make('gotify_enabled')
-                            ->label(__('gotify_enabled'))
+                            ->label(__('notifications.gotfy.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -312,17 +312,17 @@ class NotificationPage extends SettingsPage
                                 Fieldset::make('Triggers')
                                     ->schema([
                                         Toggle::make('gotify_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('gotify_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
                                             ->columnSpanFull(),
                                     ]),
                                 Repeater::make('gotify_webhooks')
-                                    ->label(__('webhooks'))
+                                    ->label(__('notifications.gotfy.webhooks'))
                                     ->schema([
                                         Forms\Components\TextInput::make('url')
-                                            ->label(__('url'))
+                                            ->label(__('notifications.url'))
                                             ->placeholder('https://example.com/message?token=<apptoken>')
                                             ->maxLength(2000)
                                             ->required()
@@ -331,7 +331,7 @@ class NotificationPage extends SettingsPage
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test gotify')
-                                        ->label(__('test_gotify_webhook'))
+                                        ->label(__('notifications.test_gotfy_webhook'))
                                         ->action(fn (Forms\Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
                                         ->hidden(fn (Forms\Get $get) => ! count($get('gotify_webhooks'))),
                                 ]),
@@ -343,10 +343,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('slack'))
+                Section::make(__('notifications.slack.title'))
                     ->schema([
                         Toggle::make('slack_enabled')
-                            ->label(__('slack_enabled'))
+                            ->label(__('notifications.slack.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -355,20 +355,20 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('slack_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label(__('settings.triggers'))
+                                    ->label(__('notifications.triggers'))
                                     ->schema([
                                         Toggle::make('slack_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('slack_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
                                             ->columnSpanFull(),
                                     ]),
                                 Repeater::make('slack_webhooks')
-                                    ->label(__('webhooks'))
+                                    ->label(__('notifications.slack.webhooks'))
                                     ->schema([
                                         Forms\Components\TextInput::make('url')
-                                            ->label(__('url'))
+                                            ->label(__('notifications.url'))
                                             ->placeholder('https://hooks.slack.com/services/abc/xyz')
                                             ->maxLength(2000)
                                             ->required()
@@ -377,7 +377,7 @@ class NotificationPage extends SettingsPage
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test Slack')
-                                        ->label(__('test_slack_webhook'))
+                                        ->label(__('notifications.slack.test'))
                                         ->action(fn (Forms\Get $get) => SendSlackTestNotification::run(webhooks: $get('slack_webhooks')))
                                         ->hidden(fn (Forms\Get $get) => ! count($get('slack_webhooks'))),
                                 ]),
@@ -389,10 +389,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('ntfy'))
+                Section::make(__('notifications.ntfy.title'))
                     ->schema([
                         Toggle::make('ntfy_enabled')
-                            ->label(__('ntfy_enabled'))
+                            ->label(__('notifications.ntfy.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -401,43 +401,43 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('ntfy_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label(__('settings.triggers'))
+                                    ->label(__('notifications.triggers'))
                                     ->schema([
                                         Toggle::make('ntfy_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('ntfy_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
                                             ->columnSpanFull(),
                                     ]),
                                 Repeater::make('ntfy_webhooks')
-                                    ->label(__('webhooks'))
+                                    ->label(__('notifications.webhooks'))
                                     ->schema([
                                         Forms\Components\TextInput::make('url')
-                                            ->label(__('url'))
+                                            ->label(__('notification.url'))
                                             ->maxLength(2000)
-                                            ->placeholder(__('your_ntfy_server_url'))
+                                            ->placeholder(__('notifications.ntfy.server_url'))
                                             ->required()
                                             ->url(),
                                         Forms\Components\TextInput::make('topic')
-                                            ->label(__('topic'))
-                                            ->placeholder(__('your_ntfy_topic'))
+                                            ->label(__('notifications.ntfy.topic'))
+                                            ->placeholder(__('notifications.ntfy.topic_url'))
                                             ->maxLength(200)
                                             ->required(),
                                         Forms\Components\TextInput::make('username')
-                                            ->label(__('username'))
-                                            ->placeholder(__('username_placeholder'))
+                                            ->label(__('notifications.username'))
+                                            ->placeholder(__('unotifications.username_placeholder'))
                                             ->maxLength(200),
                                         Forms\Components\TextInput::make('password')
-                                            ->label(__('password'))
-                                            ->placeholder(__('password_placeholder'))
+                                            ->label(__('notifications.password'))
+                                            ->placeholder(__('notifications.password_placeholder'))
                                             ->password()
                                             ->maxLength(200),
                                     ])
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test ntfy')
-                                        ->label(__('test_ntfy_webhook'))
+                                        ->label(__('notifications.test_ntfy_webhook'))
                                         ->action(fn (Forms\Get $get) => SendNtfyTestNotification::run(webhooks: $get('ntfy_webhooks')))
                                         ->hidden(fn (Forms\Get $get) => ! count($get('ntfy_webhooks'))),
                                 ]),
@@ -449,10 +449,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('healthcheck_io'))
+                Section::make(__('notifications.health_check.title'))
                     ->schema([
                         Toggle::make('healthcheck_enabled')
-                            ->label(__('healthcheck_enabled'))
+                            ->label(__('notifications.health_check.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -461,21 +461,21 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('healthcheck_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Triggers')
-                                    ->label(__('settings.triggers'))
+                                    ->label(__('notifications.triggers'))
                                     ->schema([
                                         Toggle::make('healthcheck_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('healthcheck_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
-                                            ->helperText(__('threshold_helper_text'))
+                                            ->label(__('notifications.notify_on_threshold_failures'))
+                                            ->helperText(__('notifications.health_check.helper_text'))
                                             ->columnSpanFull(),
                                     ]),
                                 Repeater::make('healthcheck_webhooks')
-                                    ->label(__('webhooks'))
+                                    ->label(__('health_check.webhooks'))
                                     ->schema([
                                         Forms\Components\TextInput::make('url')
-                                            ->label(__('url'))
+                                            ->label(__('notifications.url'))
                                             ->placeholder('https://hc-ping.com/your-uuid-here')
                                             ->maxLength(2000)
                                             ->required()
@@ -484,7 +484,7 @@ class NotificationPage extends SettingsPage
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test healthcheck')
-                                        ->label(__('test_healthcheck_webhook'))
+                                        ->label(__('notifications.test_healthcheck_webhook'))
                                         ->action(fn (Forms\Get $get) => SendHealthCheckTestNotification::run(webhooks: $get('healthcheck_webhooks')))
                                         ->hidden(fn (Forms\Get $get) => ! count($get('healthcheck_webhooks'))),
                                 ]),
@@ -496,10 +496,10 @@ class NotificationPage extends SettingsPage
                         'md' => 2,
                     ]),
 
-                Section::make(__('telegram'))
+                Section::make(__('notifications.telegram.title'))
                     ->schema([
                         Toggle::make('telegram_enabled')
-                            ->label(__('enable_telegram'))
+                            ->label(__('notifications.telegram.enable'))
                             ->reactive()
                             ->columnSpanFull(),
                         Grid::make([
@@ -508,35 +508,36 @@ class NotificationPage extends SettingsPage
                             ->hidden(fn (Forms\Get $get) => $get('telegram_enabled') !== true)
                             ->schema([
                                 Fieldset::make('Options')
-                                    ->label(__('options'))
+                                    ->label(__('notifications.options'))
                                     ->schema([
                                         Toggle::make('telegram_disable_notification')
-                                            ->label(__('telegram_disable_notification'))
+                                            ->label(__('notifications.telegram.disable_notification'))
                                             ->columnSpanFull(),
                                     ]),
                                 Fieldset::make('Triggers')
-                                    ->label(__('triggers'))
+                                    ->label(__('notfications.triggers'))
                                     ->schema([
                                         Toggle::make('telegram_on_speedtest_run')
-                                            ->label(__('notify_on_every_speedtest_run'))
+                                            ->label(__('notifications.telegram.disable_notification'))
+                                            ->label(__('notifications.notify_on_every_speedtest_run'))
                                             ->columnSpanFull(),
                                         Toggle::make('telegram_on_threshold_failure')
-                                            ->label(__('notify_on_threshold_failures'))
+                                            ->label(__('notifications.telegram.disable_notification'))
                                             ->columnSpanFull(),
                                     ]),
                                 Repeater::make('telegram_recipients')
-                                    ->label(__('recipients'))
+                                    ->label(__('notifications.recipients'))
                                     ->schema([
                                         Forms\Components\TextInput::make('telegram_chat_id')
                                             ->placeholder('12345678910')
-                                            ->label('')
+                                            ->label(__('notifications.telegram.chat_id'))
                                             ->maxLength(50)
                                             ->required(),
                                     ])
                                     ->columnSpanFull(),
                                 Actions::make([
                                     Action::make('test telegram')
-                                        ->label(__('test_telegram_webhook'))
+                                        ->label(__('notifications.test_telegram_webhook'))
                                         ->action(fn (Forms\Get $get) => SendTelegramTestNotification::run(recipients: $get('telegram_recipients')))
                                         ->hidden(fn (Forms\Get $get) => ! count($get('telegram_recipients')) || blank(config('telegram.bot'))),
                                 ]),

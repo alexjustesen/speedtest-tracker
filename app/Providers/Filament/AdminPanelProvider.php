@@ -70,7 +70,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make()
-                    ->label(fn () => __('documentation'))
+                    ->label(fn () => __('common.documentation'))
                     ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-book-open')
                     ->group(fn () => __('common.links'))

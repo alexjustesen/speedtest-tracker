@@ -17,6 +17,8 @@ return [
     'api_tokens' => 'API Tokens',
     'create_token' => 'Create API Token',
     'token' => 'Token',
+    'token_created' => 'API token created successfully.',
+    'your_token' => 'Your API Token:', 
 
     // Form Fields
     'name' => 'Name',

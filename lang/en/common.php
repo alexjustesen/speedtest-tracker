@@ -13,15 +13,13 @@ return [
     |
     */
 
-    'api_token' => 'API Token',
-    'api_tokens' => 'API Tokens',
     'dashboard' => 'Dashboard',
     'disable' => 'Disable',
     'enable' => 'Enable',
     'token' => 'Token',
     'speedtest' => 'Speedtest',
     'speedtest_tracker' => 'Speedtest Tracker',
-    'url' => 'URL',
+    'no_schedule' => 'No speedtests scheduled.',
 
     // Result Overview
     'result_overview' => 'Result Overview',
@@ -37,6 +35,9 @@ return [
     'upload' => 'Upload',
     'ping' => 'Ping',
     'packet_loss' => 'Packet Loss',
+    'latest_download' => 'Latest Download',
+    'latest_upload' => 'Latest Upload',
+    'latest_ping' => 'Latest Ping',
 
     // Latency Sections
     'download_latency' => 'Download Latency',
@@ -106,5 +107,6 @@ return [
     'donate' => 'Donate',
     'update_available' => 'Update Available',
     'up_to_date' => 'Up to Date',
+    'documentation' => 'Documentation',
 
 ];
