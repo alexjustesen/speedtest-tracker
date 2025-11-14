@@ -1,30 +1,30 @@
 <?php
 
 return [
-    'title' => 'Tokens API',
-    'label' => 'Tokens API',
+    'title' => 'API Tokens',
+    'label' => 'API Tokens',
 
     // Token management
     'api_token' => 'API token',
-    'api_tokens' => 'Tokens de API',
-    'create_api_token' => 'Crear token API',
-    'your_token' => 'Tu token',
-    'token_status' => 'Estado del token',
+    'api_tokens' => 'API tokens',
+    'create_api_token' => 'Create API token',
+    'your_token' => 'Your token',
+    'token_status' => 'Token status',
 
     // Token lists
-    'active_tokens' => 'Tokens activos',
-    'expired_tokens' => 'Tokens caducados',
-    'all_tokens' => 'Todos los tokens',
+    'active_tokens' => 'Active tokens',
+    'expired_tokens' => 'Expired tokens',
+    'all_tokens' => 'All tokens',
 
     // Token properties
-    'expires_at' => 'Expira el',
-    'expires_at_helper_text' => 'Dejar en blanco si no desea una fecha de caducidad',
-    'last_used_at' => 'Último usado en',
+    'expires_at' => 'Expires at',
+    'expires_at_helper_text' => 'Leave empty if you don\'t want an expiration date',
+    'last_used_at' => 'Last used at',
 
     // Abilities/Permissions
-    'abilities' => 'Habilidades',
-    'read_results' => 'Leer resultados',
-    'read_results_description' => 'El token tendrá permiso para leer resultados y estadísticas.',
-    'run_speedtest_description' => 'El token tendrá permiso para ejecutar el test de velocidad.',
-    'list_servers_description' => 'El token tendrá permiso para listar servidores.',
+    'abilities' => 'Abilities',
+    'read_results' => 'Read results',
+    'read_results_description' => 'The token will have permission to read results and statistics.',
+    'run_speedtest_description' => 'The token will have permission to run speedtest.',
+    'list_servers_description' => 'The token will have permission to list servers.',
 ];
