@@ -1,30 +1,30 @@
 <?php
 
 return [
-    'title' => 'Jetons API',
-    'label' => 'Jetons API',
+    'title' => 'API Tokens',
+    'label' => 'API Tokens',
 
     // Token management
     'api_token' => 'API token',
-    'api_tokens' => 'Jetons API',
-    'create_api_token' => 'Créer un jeton API',
-    'your_token' => 'Votre jeton',
-    'token_status' => 'Statut du jeton',
+    'api_tokens' => 'API tokens',
+    'create_api_token' => 'Create API token',
+    'your_token' => 'Your token',
+    'token_status' => 'Token status',
 
     // Token lists
-    'active_tokens' => 'Jetons actifs',
-    'expired_tokens' => 'Jetons expirés',
-    'all_tokens' => 'Tous les jetons',
+    'active_tokens' => 'Active tokens',
+    'expired_tokens' => 'Expired tokens',
+    'all_tokens' => 'All tokens',
 
     // Token properties
-    'expires_at' => 'Expire le',
-    'expires_at_helper_text' => 'Laisser vide si vous ne voulez pas de date d\'expiration',
-    'last_used_at' => 'Dernière utilisation le',
+    'expires_at' => 'Expires at',
+    'expires_at_helper_text' => 'Leave empty if you don\'t want an expiration date',
+    'last_used_at' => 'Last used at',
 
     // Abilities/Permissions
-    'abilities' => 'Capacités',
-    'read_results' => 'Lire les résultats',
-    'read_results_description' => 'Le jeton aura la permission de lire les résultats et les statistiques.',
-    'run_speedtest_description' => 'Le jeton aura la permission d\'exécuter le test de vitesse.',
-    'list_servers_description' => 'Le jeton aura la permission de lister les serveurs.',
+    'abilities' => 'Abilities',
+    'read_results' => 'Read results',
+    'read_results_description' => 'The token will have permission to read results and statistics.',
+    'run_speedtest_description' => 'The token will have permission to run speedtest.',
+    'list_servers_description' => 'The token will have permission to list servers.',
 ];
