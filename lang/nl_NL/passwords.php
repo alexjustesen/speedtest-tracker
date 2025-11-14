@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'reset' => 'Uw wachtwoord is gereset!',
-    'sent' => 'We hebben uw wachtwoord reset link gemaild!',
-    'password' => 'Het wachtwoord en de bevestiging moeten overeenkomen en minimaal zes tekens bevatten.',
+    'reset' => 'Your password has been reset!',
+    'sent' => 'We have emailed your password reset link!',
+    'password' => 'The password and confirmation must match and contain at least six characters.',
 
 ];
