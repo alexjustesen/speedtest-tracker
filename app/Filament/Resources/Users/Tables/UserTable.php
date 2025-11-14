@@ -17,25 +17,30 @@ class UserTable
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label('ID')
+                    ->label(__('general.id'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('email')
+                    ->label(__('general.email'))
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('role')
+                    ->label(__('general.role'))
                     ->badge()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('created_at')
+                    ->label(__('general.created_at'))
                     ->alignEnd()
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('updated_at')
+                    ->label(__('general.updated_at'))
                     ->alignEnd()
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
@@ -44,6 +49,7 @@ class UserTable
             ])
             ->filters([
                 SelectFilter::make('role')
+                    ->label(__('general.role'))
                     ->native(false)
                     ->options(UserRole::class),
             ])

@@ -8,17 +8,10 @@ return [
     'absolute' => 'Absolute',
     'absolute_description' => 'Absolute thresholds do not take into account previous history and could be triggered on each test.',
     'absolute_enabled' => 'Enable absolute thresholds',
-    'absolute_download' => 'Download',
-    'absolute_upload' => 'Upload',
-    'absolute_ping' => 'Ping',
 
     // Metrics section
     'metrics' => 'Metrics',
     'metrics_helper_text' => 'Set to zero to disable this metric.',
-
-    // Units
-    'mbps' => 'Mbps',
-    'ms' => 'ms',
 
     // General threshold labels
     'thresholds' => 'Thresholds',

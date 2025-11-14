@@ -5,38 +5,23 @@ return [
     'result_overview' => 'Result overview',
 
     // Metrics
-    'download' => 'Download',
-    'download_mbps' => 'Download (Mbps)',
-    'download_ms' => 'Download (ms)',
-    'download_latency' => 'Download latency',
     'download_latency_high' => 'Download latency high',
     'download_latency_low' => 'Download latency low',
     'download_latency_iqm' => 'Download latency IQM',
     'download_latency_jitter' => 'Download latency jitter',
 
-    'upload' => 'Upload',
-    'upload_mbps' => 'Upload (Mbps)',
-    'upload_ms' => 'Upload (ms)',
-    'upload_latency' => 'Upload latency',
     'upload_latency_high' => 'Upload latency high',
     'upload_latency_low' => 'Upload latency low',
     'upload_latency_iqm' => 'Upload latency IQM',
     'upload_latency_jitter' => 'Upload latency jitter',
 
-    'ping' => 'Ping',
-    'ping_ms' => 'Ping (ms)',
     'ping_details' => 'Ping details',
     'ping_jitter' => 'Ping jitter',
     'ping_high' => 'Ping high',
     'ping_low' => 'Ping low',
 
-    'jitter' => 'Jitter',
     'packet_loss' => 'Packet loss',
     'iqm' => 'IQM',
-    'ms' => 'ms',
-    'average_ms' => 'Average (ms)',
-    'high_ms' => 'High (ms)',
-    'low_ms' => 'Low (ms)',
 
     // Server & metadata
     'server_&_metadata' => 'Server & Metadata',
@@ -60,7 +45,6 @@ return [
     // Export
     'export_all_results' => 'Export all results',
     'export_all_results_description' => 'Will export every column for all results.',
-    'export_current_results' => 'Export current results',
     'export_completed' => 'Export completed, :count :rows exported.',
     'failed_export' => ':count :rows failed to export.',
     'row' => '{1} :count row|[2,*] :count rows',
@@ -79,6 +63,11 @@ return [
     'upload_threshold_breached' => 'Upload threshold breached!',
     'ping_threshold_breached' => 'Ping threshold breached!',
 
-    // Error messages
-    'error_message' => 'Error message',
+    // Run Speedtest Action
+    'speedtest' => 'Speedtest',
+    'public_dashboard' => 'Public Dashboard',
+    'select_server' => 'Select Server',
+    'select_server_helper' => 'Leave empty to run the speedtest without specifying a server. Blocked servers will be skipped.',
+    'manual_servers' => 'Manual servers',
+    'closest_servers' => 'Closest servers',
 ];

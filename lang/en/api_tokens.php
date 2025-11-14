@@ -8,9 +8,7 @@ return [
     'api_token' => 'API token',
     'api_tokens' => 'API tokens',
     'create_api_token' => 'Create API token',
-    'token' => 'Token',
     'your_token' => 'Your token',
-    'token_created' => 'Token created',
     'token_status' => 'Token status',
 
     // Token lists
@@ -27,8 +25,6 @@ return [
     'abilities' => 'Abilities',
     'read_results' => 'Read results',
     'read_results_description' => 'The token will have permission to read results and statistics.',
-    'run_speedtest' => 'Run speedtest',
     'run_speedtest_description' => 'The token will have permission to run speedtest.',
-    'list_servers' => 'List servers',
     'list_servers_description' => 'The token will have permission to list servers.',
 ];

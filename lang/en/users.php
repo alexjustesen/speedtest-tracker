@@ -4,12 +4,6 @@ return [
     'title' => 'Users',
     'label' => 'Users',
 
-    // User management
-    'user' => 'User',
-    'users' => 'Users',
-    'admin' => 'Admin',
-    'role' => 'Role',
-
     // User prompts and messages
     'user_change' => [
         'info' => 'User role updated.',

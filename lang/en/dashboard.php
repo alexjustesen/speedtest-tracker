@@ -11,7 +11,4 @@ return [
     'latest_download' => 'Latest download',
     'latest_upload' => 'Latest upload',
     'latest_ping' => 'Latest ping',
-
-    // Actions
-    'run_speedtest' => 'Run speedtest',
 ];

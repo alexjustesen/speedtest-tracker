@@ -96,7 +96,7 @@ class DataIntegration extends SettingsPage
                                         // Button to send old data to InfluxDB
                                         Actions::make([
                                             Action::make('Export current results')
-                                                ->label(__('settings/data_integration.export_current_results'))
+                                                ->label(__('general.export_current_results'))
                                                 ->action(function () {
                                                     Notification::make()
                                                         ->title(__('settings/data_integration.starting_bulk_data_write_to_influxdb'))

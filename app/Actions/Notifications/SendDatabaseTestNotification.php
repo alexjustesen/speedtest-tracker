@@ -12,13 +12,11 @@ class SendDatabaseTestNotification
 
     public function handle(User $user)
     {
-        $user->notify(
-            Notification::make()
-                ->title(__('settings/notifications.test_notifications.database.received'))
-                ->body(__('settings/notifications.test_notifications.database.pong'))
-                ->success()
-                ->toDatabase(),
-        );
+        Notification::make()
+            ->title(__('settings/notifications.test_notifications.database.received'))
+            ->body(__('settings/notifications.test_notifications.database.pong'))
+            ->success()
+            ->sendToDatabase($user);
 
         Notification::make()
             ->title(__('settings/notifications.test_notifications.database.sent'))

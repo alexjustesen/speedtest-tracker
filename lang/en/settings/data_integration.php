@@ -17,7 +17,6 @@ return [
     'influxdb_v2_verify_ssl' => 'Verify SSL',
 
     // Actions
-    'export_current_results' => 'Export current results',
     'test_connection' => 'Test connection',
     'starting_bulk_data_write_to_influxdb' => 'Starting bulk data write to InfluxDB',
     'sending_test_data_to_influxdb' => 'Sending test data to InfluxDB',
@@ -34,8 +33,7 @@ return [
     'influxdb_bulk_write_success' => 'Finished bulk data load to Influxdb.',
     'influxdb_bulk_write_success_body' => 'Data has been sent to InfluxDB, check if the data was received.',
 
-    // Common labels (can be removed if they're in general.php)
+    // Common labels
     'org' => 'Org',
     'bucket' => 'Bucket',
-    'token' => 'Token',
 ];

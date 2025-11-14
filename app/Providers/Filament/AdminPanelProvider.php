@@ -57,25 +57,25 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('Settings'),
+                    ->label(__('general.settings')),
                 NavigationGroup::make()
-                    ->label('Links')
+                    ->label(__('general.links'))
                     ->collapsible(false),
             ])
             ->navigationItems([
-                NavigationItem::make('Documentation')
+                NavigationItem::make(__('general.documentation'))
                     ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-book-open')
-                    ->group('Links'),
-                NavigationItem::make('Donate')
+                    ->group(__('general.links')),
+                NavigationItem::make(__('general.donate'))
                     ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
                     ->icon('heroicon-o-banknotes')
-                    ->group('Links'),
+                    ->group(__('general.links')),
                 NavigationItem::make(config('speedtest.build_version'))
                     ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
                     ->icon('tabler-brand-github')
-                    ->badge(fn (): string => Repository::updateAvailable() ? 'Update Available!' : 'Up to Date')
-                    ->group('Links'),
+                    ->badge(fn (): string => Repository::updateAvailable() ? __('general.update_available') : __('general.up_to_date'))
+                    ->group(__('general.links')),
             ]);
     }
 }

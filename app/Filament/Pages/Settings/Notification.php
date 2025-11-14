@@ -112,17 +112,17 @@ class Notification extends SettingsPage
                                         ])
                                             ->hidden(fn (Get $get) => $get('mail_enabled') !== true)
                                             ->schema([
-                                                Fieldset::make('Triggers')
+                                                Fieldset::make(__('settings.triggers'))
                                                     ->schema([
                                                         Toggle::make('mail_on_speedtest_run')
-                                                            ->label('Notify on every speedtest run')
+                                                            ->label(__('settings/notifications.mail_on_speedtest_run'))
                                                             ->columnSpanFull(),
                                                         Toggle::make('mail_on_threshold_failure')
-                                                            ->label('Notify on threshold failures')
+                                                            ->label(__('settings/notifications.mail_on_threshold_failure'))
                                                             ->columnSpanFull(),
                                                     ]),
                                                 Repeater::make('mail_recipients')
-                                                    ->label('Recipients')
+                                                    ->label(__('settings/notifications.recipients'))
                                                     ->schema([
                                                         TextInput::make('email_address')
                                                             ->placeholder('your@email.com')
@@ -132,7 +132,7 @@ class Notification extends SettingsPage
                                                     ->columnSpanFull(),
                                                 Actions::make([
                                                     Action::make('test mail')
-                                                        ->label('Test mail channel')
+                                                        ->label(__('settings/notifications.test_mail_channel'))
                                                         ->action(fn (Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
                                                         ->hidden(fn (Get $get) => ! count($get('mail_recipients'))),
                                                 ]),
@@ -141,10 +141,10 @@ class Notification extends SettingsPage
                                     ->compact()
                                     ->columnSpan('full'),
 
-                                Section::make('Webhook')
+                                Section::make(__('settings/notifications.webhook'))
                                     ->schema([
                                         Toggle::make('webhook_enabled')
-                                            ->label('Enable webhook notifications')
+                                            ->label(__('settings/notifications.enable_webhook_notifications'))
                                             ->reactive()
                                             ->columnSpanFull(),
                                         Grid::make([
@@ -152,17 +152,17 @@ class Notification extends SettingsPage
                                         ])
                                             ->hidden(fn (Get $get) => $get('webhook_enabled') !== true)
                                             ->schema([
-                                                Fieldset::make('Triggers')
+                                                Fieldset::make(__('settings.triggers'))
                                                     ->schema([
                                                         Toggle::make('webhook_on_speedtest_run')
-                                                            ->label('Notify on every speedtest run')
+                                                            ->label(__('settings/notifications.webhook_on_speedtest_run'))
                                                             ->columnSpan(2),
                                                         Toggle::make('webhook_on_threshold_failure')
-                                                            ->label('Notify on threshold failures')
+                                                            ->label(__('settings/notifications.webhook_on_threshold_failure'))
                                                             ->columnSpan(2),
                                                     ]),
                                                 Repeater::make('webhook_urls')
-                                                    ->label('Recipients')
+                                                    ->label(__('settings/notifications.recipients'))
                                                     ->schema([
                                                         TextInput::make('url')
                                                             ->placeholder('https://webhook.site/longstringofcharacters')
@@ -173,7 +173,7 @@ class Notification extends SettingsPage
                                                     ->columnSpanFull(),
                                                 Actions::make([
                                                     Action::make('test webhook')
-                                                        ->label('Test webhook channel')
+                                                        ->label(__('settings/notifications.test_webhook_channel'))
                                                         ->action(fn (Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
                                                         ->hidden(fn (Get $get) => ! count($get('webhook_urls'))),
                                                 ]),
