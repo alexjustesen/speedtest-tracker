@@ -1,23 +1,23 @@
 <?php
 
 return [
-    'server_error' => 'Erreur serveur',
-    'oops_server_error' => 'Oups, erreur de serveur!',
-    'error_message' => 'Message d\'erreur',
-    'error_fetching_servers' => 'Erreur lors de la récupération des serveurs',
-    'servers_refreshed_successfully' => 'Serveurs actualisés avec succès',
-    'copied_to_clipboard' => 'Copié dans le presse-papiers',
+    'server_error' => 'Server Error',
+    'oops_server_error' => 'Oops, server error!',
+    'error_message' => 'Error message',
+    'error_fetching_servers' => 'Error fetching servers',
+    'servers_refreshed_successfully' => 'Servers refreshed successfully',
+    'copied_to_clipboard' => 'Copied to clipboard',
 
     // Speedtest specific errors
-    'ookla_error' => 'Une erreur s\'est produite lors de la liste des serveurs de test de vitesse, vérifiez les logs.',
-    'cron_invalid' => 'Expression cron invalide',
+    'ookla_error' => 'An error occurred when listing speedtest servers, check the logs.',
+    'cron_invalid' => 'Invalid cron expression',
 
     // Status fix command
     'status_fix' => [
-        'confirm' => 'Voulez-vous continuer ?',
-        'fail' => 'Commande abandonnée.',
-        'finished' => '✅ terminé !',
-        'info_1' => 'Cela vérifiera tous les résultats et corrigera le statut à "terminé" ou "échoué" en fonction des données.',
-        'info_2' => '📖 Lisez la documentation: https://docs.speedtest-tracker.dev/other/commands',
+        'confirm' => 'Do you wish to continue?',
+        'fail' => 'Command aborted.',
+        'finished' => '✅ done!',
+        'info_1' => 'This will check all results and fix the status to "completed" or "failed" based on the data.',
+        'info_2' => '📖 Read the documentation: https://docs.speedtest-tracker.dev/other/commands',
     ],
 ];
