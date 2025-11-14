@@ -3,14 +3,14 @@
 return [
     // Status enum values
     'status' => [
-        'benchmarking' => 'Benchmarking',
-        'checking' => 'Checking',
-        'completed' => 'Completed',
-        'failed' => 'Failed',
-        'running' => 'Running',
-        'started' => 'Started',
-        'skipped' => 'Skipped',
-        'waiting' => 'Waiting',
+        'benchmarking' => 'Évaluation comparative',
+        'checking' => 'En cours de vérification',
+        'completed' => 'Terminé',
+        'failed' => 'Echoué',
+        'running' => 'En cours d\'exécution',
+        'started' => 'Démarré',
+        'skipped' => 'Ignoré',
+        'waiting' => 'En attente',
     ],
 
     // Service enum values
