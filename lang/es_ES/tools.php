@@ -2,5 +2,5 @@
 
 return [
     // Ookla server list
-    'ookla_servers' => 'Servidores Ookla',
+    'ookla_servers' => 'Ookla servers',
 ];
