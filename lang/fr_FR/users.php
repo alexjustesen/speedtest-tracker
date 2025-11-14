@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'title' => 'Utilisateurs',
-    'label' => 'Utilisateurs',
+    'title' => 'Users',
+    'label' => 'Users',
 
     // User prompts and messages
     'user_change' => [
-        'info' => 'Rôle de l\'utilisateur mis à jour.',
-        'password_updated_info' => ':email mot de passe mis à jour.',
-        'what_is_password' => 'Quel est le nouveau mot de passe ?',
-        'what_is_the_email_address' => 'Quelle est l\'adresse e-mail ?',
-        'what_role' => 'Quel doit être le rôle de l\'utilisateur ?',
+        'info' => 'User role updated.',
+        'password_updated_info' => ':email password updated.',
+        'what_is_password' => 'What is the new password?',
+        'what_is_the_email_address' => 'What is the email address?',
+        'what_role' => 'What role should the user have?',
     ],
 ];
