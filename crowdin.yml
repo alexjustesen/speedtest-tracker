@@ -1,0 +1,11 @@
+base_path: /lang
+preserve_hierarchy: true
+
+files:
+  # PHP language files - root level
+  - source: /en/*.php
+    translation: /%locale_with_underscore%/%original_file_name%
+
+  # PHP language files - settings subdirectory
+  - source: /en/settings/*.php
+    translation: /%locale_with_underscore%/settings/%original_file_name%

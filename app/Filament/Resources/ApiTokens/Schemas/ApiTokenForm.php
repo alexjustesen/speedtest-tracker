@@ -15,29 +15,29 @@ class ApiTokenForm
             Grid::make()
                 ->schema([
                     TextInput::make('name')
-                        ->label('Name')
+                        ->label(__('general.name'))
                         ->unique(ignoreRecord: true)
                         ->maxLength(100)
                         ->required(),
                     CheckboxList::make('abilities')
-                        ->label('Abilities')
+                        ->label(__('api_tokens.abilities'))
                         ->options([
-                            'results:read' => 'Read results',
-                            'speedtests:run' => 'Run speedtest',
-                            'ookla:list-servers' => 'List servers',
+                            'results:read' => __('api_tokens.read_results'),
+                            'speedtests:run' => __('general.run_speedtest'),
+                            'ookla:list-servers' => __('general.list_servers'),
                         ])
                         ->required()
                         ->bulkToggleable()
                         ->descriptions([
-                            'results:read' => 'Allow this token to read results.',
-                            'speedtests:run' => 'Allow this token to run speedtests.',
-                            'ookla:list-servers' => 'Allow this token to list servers.',
+                            'results:read' => __('api_tokens.read_results_description'),
+                            'speedtests:run' => __('api_tokens.run_speedtest_description'),
+                            'ookla:list-servers' => __('api_tokens.list_servers_description'),
                         ]),
                     DateTimePicker::make('expires_at')
-                        ->label('Expires at')
+                        ->label(__('api_tokens.expires_at'))
                         ->nullable()
                         ->native(false)
-                        ->helperText('Leave empty for no expiration'),
+                        ->helperText(__('api_tokens.expires_at_helper_text')),
                 ])
                 ->columns([
                     'lg' => 1,

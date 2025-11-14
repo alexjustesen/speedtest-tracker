@@ -13,7 +13,12 @@ class RecentDownloadChartWidget extends ChartWidget
 {
     use HasChartFilters;
 
-    protected ?string $heading = 'Download (Mbps)';
+    protected ?string $heading = null;
+
+    public function getHeading(): ?string
+    {
+        return __('general.download_mbps');
+    }
 
     protected int|string|array $columnSpan = 'full';
 
@@ -48,7 +53,7 @@ class RecentDownloadChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download',
+                    'label' => __('general.download'),
                     'data' => $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : null),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
@@ -59,7 +64,7 @@ class RecentDownloadChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Average',
+                    'label' => __('general.average'),
                     'data' => array_fill(0, count($results), Average::averageDownload($results)),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',

@@ -19,19 +19,29 @@ class Dashboard extends BasePage
 
     protected string $view = 'filament.pages.dashboard';
 
+    public function getTitle(): string
+    {
+        return __('dashboard.title');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('dashboard.title');
+    }
+
     public function getSubheading(): ?string
     {
         $schedule = config('speedtest.schedule');
 
         if (blank($schedule) || $schedule === false) {
-            return __('No speedtests scheduled.');
+            return __('dashboard.no_speedtests_scheduled');
         }
 
         $cronExpression = new CronExpression($schedule);
 
         $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
 
-        return 'Next speedtest at: '.$nextRunDate;
+        return __('dashboard.next_speedtest_at').': '.$nextRunDate;
     }
 
     protected function getHeaderWidgets(): array

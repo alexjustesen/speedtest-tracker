@@ -7,6 +7,7 @@ body:
     attributes:
       value: |
         You should only use this form to request a change or new feature, to report a bug or issue use the [bug report form](https://github.com/alexjustesen/speedtest-tracker).
+        Any reqeusts for new translations should be reqeusted within the [crowdin project](https://crowdin.com/project/speedtest-tracker).
   - type: checkboxes
     attributes:
       label: Pre-work

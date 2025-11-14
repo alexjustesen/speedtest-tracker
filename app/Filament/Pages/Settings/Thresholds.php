@@ -21,9 +21,15 @@ class Thresholds extends SettingsPage
 
     protected static ?int $navigationSort = 4;
 
-    protected static ?string $title = 'Thresholds';
+    public function getTitle(): string
+    {
+        return __('settings/thresholds.title');
+    }
 
-    protected static ?string $navigationLabel = 'Thresholds';
+    public static function getNavigationLabel(): string
+    {
+        return __('settings/thresholds.label');
+    }
 
     protected static string $settings = ThresholdSettings::class;
 
@@ -51,11 +57,11 @@ class Thresholds extends SettingsPage
                             'default' => 1,
                         ])
                             ->schema([
-                                Section::make('Absolute')
-                                    ->description('Absolute thresholds do not take into account previous history and could be triggered on each test.')
+                                Section::make(__('settings/thresholds.absolute'))
+                                    ->description(__('settings/thresholds.absolute_description'))
                                     ->schema([
                                         Toggle::make('absolute_enabled')
-                                            ->label('Enable absolute thresholds')
+                                            ->label(__('settings/thresholds.absolute_enabled'))
                                             ->reactive()
                                             ->columnSpan(2),
                                         Grid::make([
@@ -63,28 +69,28 @@ class Thresholds extends SettingsPage
                                         ])
                                             ->hidden(fn (Get $get) => $get('absolute_enabled') !== true)
                                             ->schema([
-                                                Fieldset::make('Metrics')
+                                                Fieldset::make(__('settings/thresholds.metrics'))
                                                     ->schema([
                                                         TextInput::make('absolute_download')
-                                                            ->label('Download')
-                                                            ->hint('Mbps')
-                                                            ->helperText('Set to zero to disable this metric.')
+                                                            ->label(__('general.download'))
+                                                            ->hint(__('general.mbps'))
+                                                            ->helperText(__('settings/thresholds.metrics_helper_text'))
                                                             ->default(0)
                                                             ->minValue(0)
                                                             ->numeric()
                                                             ->required(),
                                                         TextInput::make('absolute_upload')
-                                                            ->label('Upload')
-                                                            ->hint('Mbps')
-                                                            ->helperText('Set to zero to disable this metric.')
+                                                            ->label(__('general.upload'))
+                                                            ->hint(__('general.mbps'))
+                                                            ->helperText(__('settings/thresholds.metrics_helper_text'))
                                                             ->default(0)
                                                             ->minValue(0)
                                                             ->numeric()
                                                             ->required(),
                                                         TextInput::make('absolute_ping')
-                                                            ->label('Ping')
-                                                            ->hint('ms')
-                                                            ->helperText('Set to zero to disable this metric.')
+                                                            ->label(__('general.ping'))
+                                                            ->hint(__('general.ms'))
+                                                            ->helperText(__('settings/thresholds.metrics_helper_text'))
                                                             ->default(0)
                                                             ->minValue(0)
                                                             ->numeric()

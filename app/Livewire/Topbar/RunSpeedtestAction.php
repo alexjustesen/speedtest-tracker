@@ -23,7 +23,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
     public function dashboardAction(): Action
     {
         return Action::make('home')
-            ->label('Public Dashboard')
+            ->label(__('results.public_dashboard'))
             ->icon('heroicon-o-chart-bar')
             ->iconPosition(IconPosition::Before)
             ->color('gray')
@@ -38,12 +38,12 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
         return Action::make('speedtest')
             ->schema([
                 Select::make('server_id')
-                    ->label('Select Server')
-                    ->helperText('Leave empty to run the speedtest without specifying a server. Blocked servers will be skipped.')
+                    ->label(__('results.select_server'))
+                    ->helperText(__('results.select_server_helper'))
                     ->options(function (): array {
                         return array_filter([
-                            'Manual servers' => Ookla::getConfigServers(),
-                            'Closest servers' => GetOoklaSpeedtestServers::run(),
+                            __('results.manual_servers') => Ookla::getConfigServers(),
+                            __('results.closest_servers') => GetOoklaSpeedtestServers::run(),
                         ]);
                     })
                     ->searchable(),
@@ -56,16 +56,16 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
                 );
 
                 Notification::make()
-                    ->title('Speedtest started')
+                    ->title(__('results.speedtest_started'))
                     ->success()
                     ->send();
             })
-            ->modalHeading('Run Speedtest')
+            ->modalHeading(__('results.run_speedtest'))
             ->modalWidth('lg')
-            ->modalSubmitActionLabel('Start')
+            ->modalSubmitActionLabel(__('results.start'))
             ->button()
             ->color('primary')
-            ->label('Speedtest')
+            ->label(__('results.speedtest'))
             ->icon('heroicon-o-rocket-launch')
             ->iconPosition(IconPosition::Before)
             ->hidden(! Auth::check() && Auth::user()->is_admin)

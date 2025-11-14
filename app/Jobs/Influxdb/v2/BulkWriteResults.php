@@ -58,8 +58,8 @@ class BulkWriteResults implements ShouldQueue
                     ]);
 
                     Notification::make()
-                        ->title('Failed to build write to Influxdb.')
-                        ->body('Check the logs for more details.')
+                        ->title(__('settings/data_integration.influxdb_bulk_write_failed'))
+                        ->body(__('settings/data_integration.influxdb_bulk_write_failed_body'))
                         ->danger()
                         ->sendToDatabase($this->user);
 
@@ -74,8 +74,8 @@ class BulkWriteResults implements ShouldQueue
         $writeApi->close();
 
         Notification::make()
-            ->title('Finished bulk data load to Influxdb.')
-            ->body('Data has been sent to InfluxDB, check if the data was received.')
+            ->title(__('settings/data_integration.influxdb_bulk_write_success'))
+            ->body(__('settings/data_integration.influxdb_bulk_write_success_body'))
             ->success()
             ->sendToDatabase($this->user);
     }

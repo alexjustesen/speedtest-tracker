@@ -3,7 +3,6 @@
 namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
-use Illuminate\Support\Str;
 
 enum ResultService: string implements HasLabel
 {
@@ -12,6 +11,9 @@ enum ResultService: string implements HasLabel
 
     public function getLabel(): ?string
     {
-        return Str::title($this->name);
+        return match ($this) {
+            self::Faker => __('enums.service.faker'),
+            self::Ookla => __('enums.service.ookla'),
+        };
     }
 }

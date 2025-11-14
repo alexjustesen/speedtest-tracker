@@ -13,7 +13,12 @@ class RecentUploadChartWidget extends ChartWidget
 {
     use HasChartFilters;
 
-    protected ?string $heading = 'Upload (Mbps)';
+    protected ?string $heading = null;
+
+    public function getHeading(): ?string
+    {
+        return __('general.upload_mbps');
+    }
 
     protected int|string|array $columnSpan = 'full';
 
@@ -48,7 +53,7 @@ class RecentUploadChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Upload',
+                    'label' => __('general.upload'),
                     'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : null),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
@@ -59,7 +64,7 @@ class RecentUploadChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Average',
+                    'label' => __('general.average'),
                     'data' => array_fill(0, count($results), Average::averageUpload($results)),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',

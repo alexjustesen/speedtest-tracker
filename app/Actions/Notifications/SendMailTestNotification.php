@@ -15,7 +15,7 @@ class SendMailTestNotification
     {
         if (! count($recipients)) {
             Notification::make()
-                ->title('You need to add mail recipients!')
+                ->title(__('settings/notifications.test_notifications.mail.add'))
                 ->warning()
                 ->send();
 
@@ -28,7 +28,7 @@ class SendMailTestNotification
         }
 
         Notification::make()
-            ->title('Test mail notification sent.')
+            ->title(__('settings/notifications.test_notifications.mail.sent'))
             ->success()
             ->send();
     }

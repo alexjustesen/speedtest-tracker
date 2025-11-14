@@ -20,6 +20,16 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+    public static function getLabel(): ?string
+    {
+        return __('general.user');
+    }
+
+    public static function getPluralLabel(): ?string
+    {
+        return __('general.users');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema->components(UserForm::schema());

@@ -32,57 +32,62 @@ class ResultTable
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label('ID')
+                    ->label(__('general.id'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('data.interface.externalIp')
-                    ->label('IP address')
+                    ->label(__('results.ip_address'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->interface->externalIp', $direction);
                     }),
                 TextColumn::make('service')
+                    ->label(__('results.service'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('data.server.id')
-                    ->label('Server ID')
+                    ->label(__('results.server_id'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->id', $direction);
                     }),
                 TextColumn::make('data.isp')
-                    ->label('ISP')
+                    ->label(__('results.isp'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->isp', $direction);
                     }),
                 TextColumn::make('data.server.location')
-                    ->label('Server Location')
+                    ->label(__('results.server_location'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->location', $direction);
                     }),
                 TextColumn::make('data.server.name')
+                    ->label(__('results.server_name'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->server->name', $direction);
                     }),
                 TextColumn::make('download')
+                    ->label(__('results.download'))
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : null)
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('upload')
+                    ->label(__('results.upload'))
                     ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 TextColumn::make('ping')
+                    ->label(__('results.ping'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.jitter')
-                    ->label('Download jitter')
+                    ->label(__('results.download_latency_jitter'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->jitter', $direction);
@@ -91,7 +96,7 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.high')
-                    ->label('Download latency high')
+                    ->label(__('results.download_latency_high'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->high', $direction);
@@ -100,7 +105,7 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.low')
-                    ->label('Download latency low')
+                    ->label(__('results.download_latency_low'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->low', $direction);
@@ -109,7 +114,7 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.download.latency.iqm')
-                    ->label('Download latency iqm')
+                    ->label(__('results.download_latency_iqm'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->download->latency->iqm', $direction);
@@ -118,7 +123,7 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.upload.latency.jitter')
-                    ->label('Upload jitter')
+                    ->label(__('results.upload_latency_jitter'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->jitter', $direction);
@@ -127,7 +132,7 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.upload.latency.high')
-                    ->label('Upload latency high')
+                    ->label(__('results.upload_latency_high'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->high', $direction);
@@ -136,7 +141,7 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.upload.latency.low')
-                    ->label('Upload latency low')
+                    ->label(__('results.upload_latency_low'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->low', $direction);
@@ -145,7 +150,7 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.upload.latency.iqm')
-                    ->label('Upload latency iqm')
+                    ->label(__('results.upload_latency_iqm'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->iqm', $direction);
@@ -154,38 +159,43 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
                 TextColumn::make('data.packetLoss')
-                    ->label('Packet Loss')
+                    ->label(__('results.packet_loss'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 2, '.', '').' %';
                     }),
                 TextColumn::make('status')
+                    ->label(__('general.status'))
                     ->badge()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
                 IconColumn::make('scheduled')
+                    ->label(__('results.scheduled'))
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->alignment(Alignment::Center),
                 IconColumn::make('healthy')
+                    ->label(__('general.healthy'))
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignment(Alignment::Center),
                 TextColumn::make('data.message')
-                    ->label('Error Message')
+                    ->label(__('results.error_message'))
                     ->limit(15)
                     ->tooltip(fn ($state) => $state)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label(__('general.created_at'))
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignment(Alignment::End),
                 TextColumn::make('updated_at')
+                    ->label(__('general.updated_at'))
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -196,11 +206,14 @@ class ResultTable
             ->deferColumnManager(false)
             ->filters([
                 Filter::make('created_at')
+                    ->label(__('general.created_at'))
                     ->schema([
                         DatePicker::make('created_from')
+                            ->label(__('results.created_from'))
                             ->closeOnDateSelection()
                             ->native(false),
                         DatePicker::make('created_until')
+                            ->label(__('results.created_until'))
                             ->closeOnDateSelection()
                             ->native(false),
                     ])
@@ -216,7 +229,7 @@ class ResultTable
                             );
                     }),
                 SelectFilter::make('ip_address')
-                    ->label('IP address')
+                    ->label(__('results.ip_address'))
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
@@ -233,7 +246,7 @@ class ResultTable
                     })
                     ->attribute('data->interface->externalIp'),
                 SelectFilter::make('server_name')
-                    ->label('Server name')
+                    ->label(__('results.server_name'))
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
@@ -250,23 +263,26 @@ class ResultTable
                     })
                     ->attribute('data->server->name'),
                 TernaryFilter::make('scheduled')
+                    ->label(__('results.scheduled'))
                     ->nullable()
                     ->native(false)
-                    ->trueLabel('Only scheduled speedtests')
-                    ->falseLabel('Only manual speedtests')
+                    ->trueLabel(__('results.only_scheduled_speedtests'))
+                    ->falseLabel(__('results.only_manual_speedtests'))
                     ->queries(
                         true: fn (Builder $query) => $query->where('scheduled', true),
                         false: fn (Builder $query) => $query->where('scheduled', false),
                         blank: fn (Builder $query) => $query,
                     ),
                 SelectFilter::make('status')
+                    ->label(__('general.status'))
                     ->multiple()
                     ->options(ResultStatus::class),
                 TernaryFilter::make('healthy')
+                    ->label(__('general.healthy'))
                     ->nullable()
                     ->native(false)
-                    ->trueLabel('Only healthy speedtests')
-                    ->falseLabel('Only unhealthy speedtests')
+                    ->trueLabel(__('results.only_healthy_speedtests'))
+                    ->falseLabel(__('results.only_unhealthy_speedtests'))
                     ->queries(
                         true: fn (Builder $query) => $query->where('healthy', true),
                         false: fn (Builder $query) => $query->where('healthy', false),
@@ -278,12 +294,13 @@ class ResultTable
                     ViewAction::make(),
                     DeleteAction::make(),
                     Action::make('view result')
-                        ->label('View on Speedtest.net')
+                        ->label(__('results.view_on_speedtest_net'))
                         ->icon('heroicon-o-link')
                         ->url(fn (Result $record): ?string => $record->result_url)
                         ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Completed)
                         ->openUrlInNewTab(),
                     Action::make('updateComments')
+                        ->label(__('results.update_comments'))
                         ->icon('heroicon-o-chat-bubble-bottom-center-text')
                         ->hidden(fn (): bool => ! (Auth::user()?->is_admin ?? false) && ! (Auth::user()?->is_user ?? false))
                         ->mountUsing(fn ($form, Result $record) => $form->fill([
@@ -295,6 +312,7 @@ class ResultTable
                         })
                         ->schema([
                             Textarea::make('comments')
+                                ->label(__('general.comments'))
                                 ->rows(6)
                                 ->maxLength(500),
                         ]),
@@ -307,15 +325,16 @@ class ResultTable
                 ExportAction::make()
                     ->exporter(ResultExporter::class)
                     ->columnMapping(false)
-                    ->modalHeading('Export all Results')
-                    ->modalDescription('This will export all columns for all results.')
+                    ->modalHeading(__('results.export_all_results'))
+                    ->modalDescription(__('results.export_all_results_description'))
                     ->fileName(fn (): string => 'results-'.now()->timestamp),
                 ActionGroup::make([
                     Action::make('truncate')
+                        ->label(__('results.truncate_results'))
                         ->action(fn () => TruncateResults::dispatch(Auth::user()))
                         ->requiresConfirmation()
-                        ->modalHeading('Truncate Results')
-                        ->modalDescription('Are you sure you want to truncate all results data? This can\'t be undone.')
+                        ->modalHeading(__('results.truncate_results'))
+                        ->modalDescription(__('results.truncate_results_description'))
                         ->color('danger')
                         ->icon('heroicon-o-trash')
                         ->hidden(fn (): bool => ! Auth::user()->is_admin),

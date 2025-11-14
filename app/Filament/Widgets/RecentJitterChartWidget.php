@@ -11,7 +11,12 @@ class RecentJitterChartWidget extends ChartWidget
 {
     use HasChartFilters;
 
-    protected ?string $heading = 'Jitter';
+    protected ?string $heading = null;
+
+    public function getHeading(): ?string
+    {
+        return __('general.jitter');
+    }
 
     protected int|string|array $columnSpan = 'full';
 
@@ -46,7 +51,7 @@ class RecentJitterChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Download (ms)',
+                    'label' => __('general.download_ms'),
                     'data' => $results->map(fn ($item) => $item->download_jitter),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
@@ -57,7 +62,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Upload (ms)',
+                    'label' => __('general.upload_ms'),
                     'data' => $results->map(fn ($item) => $item->upload_jitter),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
@@ -68,7 +73,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Ping (ms)',
+                    'label' => __('general.ping_ms_label'),
                     'data' => $results->map(fn ($item) => $item->ping_jitter),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',

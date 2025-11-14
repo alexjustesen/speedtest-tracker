@@ -21,21 +21,28 @@ class ApiTokenTable
         return $table
             ->query(PersonalAccessToken::query()->where('tokenable_id', Auth::id()))
             ->columns([
-                TextColumn::make('name')->searchable(),
-                TextColumn::make('abilities')->badge(),
+                TextColumn::make('name')
+                    ->label(__('general.name'))
+                    ->searchable(),
+                TextColumn::make('abilities')
+                    ->label(__('api_tokens.abilities'))
+                    ->badge(),
                 TextColumn::make('created_at')
+                    ->label(__('general.created_at'))
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('last_used_at')
+                    ->label(__('api_tokens.last_used_at'))
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('expires_at')
+                    ->label(__('api_tokens.expires_at'))
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->toggleable(isToggledHiddenByDefault: false)
@@ -44,10 +51,10 @@ class ApiTokenTable
             ])
             ->filters([
                 TernaryFilter::make('expired')
-                    ->label('Token Status')
-                    ->placeholder('All tokens')
-                    ->falseLabel('Active tokens')
-                    ->trueLabel('Expired tokens')
+                    ->label(__('api_tokens.token_status'))
+                    ->placeholder(__('api_tokens.all_tokens'))
+                    ->falseLabel(__('api_tokens.active_tokens'))
+                    ->trueLabel(__('api_tokens.expired_tokens'))
                     ->native(false)
                     ->queries(
                         true: fn (Builder $query) => $query
@@ -62,12 +69,12 @@ class ApiTokenTable
                         blank: fn (Builder $query) => $query,
                     ),
                 SelectFilter::make('abilities')
-                    ->label('Abilities')
+                    ->label(__('api_tokens.abilities'))
                     ->multiple()
                     ->options([
-                        'results:read' => 'Read results',
-                        'speedtests:run' => 'Run speedtest',
-                        'ookla:list-servers' => 'List servers',
+                        'results:read' => __('api_tokens.read_results'),
+                        'speedtests:run' => __('general.run_speedtest'),
+                        'ookla:list-servers' => __('general.list_servers'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         foreach ($data['values'] ?? [] as $value) {
