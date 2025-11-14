@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'title' => 'Instellingen',
-    'label' => 'Instellingen',
+    'title' => 'Settings',
+    'label' => 'Settings',
 
     // Common settings labels
-    'triggers' => 'Trigger',
-    'verify_ssl' => 'Controleer SSL',
-    'username' => 'Gebruikersnaam',
-    'username_placeholder' => 'Gebruikersnaam voor Basis Auth (optioneel)',
-    'password_placeholder' => 'Wachtwoord voor basis authenticatie (optioneel)',
+    'triggers' => 'Triggers',
+    'verify_ssl' => 'Verify SSL',
+    'username' => 'Username',
+    'username_placeholder' => 'Username for Basic Auth (optional)',
+    'password_placeholder' => 'Password for Basic Auth (optional)',
 ];
