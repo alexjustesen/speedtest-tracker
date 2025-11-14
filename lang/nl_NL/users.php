@@ -1,15 +1,15 @@
 <?php
 
 return [
-    'title' => 'Gebruikers',
-    'label' => 'Gebruikers',
+    'title' => 'Users',
+    'label' => 'Users',
 
     // User prompts and messages
     'user_change' => [
-        'info' => 'Gebruikersrol bijgewerkt.',
-        'password_updated_info' => ':email wachtwoord bijgewerkt.',
-        'what_is_password' => 'Wat is het nieuwe wachtwoord?',
-        'what_is_the_email_address' => 'Wat is het e-mailadres?',
-        'what_role' => 'Welke rol moet de gebruiker hebben?',
+        'info' => 'User role updated.',
+        'password_updated_info' => ':email password updated.',
+        'what_is_password' => 'What is the new password?',
+        'what_is_the_email_address' => 'What is the email address?',
+        'what_role' => 'What role should the user have?',
     ],
 ];
