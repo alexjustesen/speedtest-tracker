@@ -2,105 +2,105 @@
 
 return [
     // Common actions
-    'save' => 'Save',
-    'cancel' => 'Cancel',
-    'delete' => 'Delete',
-    'edit' => 'Edit',
-    'create' => 'Create',
-    'search' => 'Search',
-    'filter' => 'Filter',
-    'export' => 'Export',
+    'save' => 'Enregistrer',
+    'cancel' => 'Abandonner',
+    'delete' => 'Supprimez',
+    'edit' => 'Editer',
+    'create' => 'Créer',
+    'search' => 'Chercher',
+    'filter' => 'Filtre',
+    'export' => 'Exportation',
     'actions' => 'Actions',
-    'enable' => 'Enable',
-    'yes' => 'Yes',
-    'no' => 'No',
+    'enable' => 'Activer',
+    'yes' => 'Oui',
+    'no' => 'Non',
     'options' => 'Options',
-    'details' => 'Details',
+    'details' => 'Détails du produit',
 
     // Common labels
-    'name' => 'Name',
-    'email' => 'Email',
-    'email_address' => 'Email address',
-    'password' => 'Password',
-    'password_confirmation' => 'Password confirmation',
+    'name' => 'Nom',
+    'email' => 'Courriel',
+    'email_address' => 'Adresse e-mail',
+    'password' => 'Mot de passe',
+    'password_confirmation' => 'Confirmation du mot de passe',
     'id' => 'ID',
-    'status' => 'Status',
+    'status' => 'Statut',
     'message' => 'Message',
-    'comment' => 'Comment',
-    'comments' => 'Comments',
-    'created_at' => 'Created at',
-    'updated_at' => 'Updated at',
+    'comment' => 'Commenter',
+    'comments' => 'Commentaires',
+    'created_at' => 'Créé le',
+    'updated_at' => 'Mis à jour le',
     'url' => 'URL',
 
     // Navigation
-    'dashboard' => 'Dashboard',
-    'results' => 'Results',
-    'settings' => 'Settings',
-    'users' => 'Users',
+    'dashboard' => 'Tableau de bord',
+    'results' => 'Résultats',
+    'settings' => 'Réglages',
+    'users' => 'Utilisateurs',
     'documentation' => 'Documentation',
-    'links' => 'Links',
-    'donate' => 'Donate',
+    'links' => 'Liens',
+    'donate' => 'Faire un don',
 
     // Roles
-    'admin' => 'Admin',
-    'user' => 'User',
-    'role' => 'Role',
+    'admin' => 'Administrateur',
+    'user' => 'Utilisateur',
+    'role' => 'Rôle',
 
     // Date ranges
-    'last_24h' => 'Last 24 hours',
-    'last_week' => 'Last week',
-    'last_month' => 'Last month',
+    'last_24h' => 'Dernières 24 heures',
+    'last_week' => 'La semaine dernière',
+    'last_month' => 'Le mois dernier',
 
     // Metrics
-    'average' => 'Average',
-    'high' => 'High',
-    'low' => 'Low',
-    'faster' => 'faster',
-    'slower' => 'slower',
-    'healthy' => 'Healthy',
+    'average' => 'Moyenne',
+    'high' => 'Élevé',
+    'low' => 'Bas',
+    'faster' => 'plus rapide',
+    'slower' => 'plus lent',
+    'healthy' => 'Sain',
 
     // Units
-    'ms' => 'ms',
-    'mbps' => 'Mbps',
+    'ms' => 'Mms',
+    'mbps' => 'Mbit/s',
 
     // Speed test metrics
-    'download' => 'Download',
-    'upload' => 'Upload',
+    'download' => 'Télécharger',
+    'upload' => 'Charger',
     'ping' => 'Ping',
     'jitter' => 'Jitter',
 
     // Metric labels with units
-    'download_mbps' => 'Download (Mbps)',
-    'upload_mbps' => 'Upload (Mbps)',
+    'download_mbps' => 'Télécharger (Mbps)',
+    'upload_mbps' => 'Charger (Mbps)',
     'ping_ms' => 'Ping (ms)',
-    'download_ms' => 'Download (ms)',
-    'upload_ms' => 'Upload (ms)',
-    'average_ms' => 'Average (ms)',
-    'high_ms' => 'High (ms)',
-    'low_ms' => 'Low (ms)',
+    'download_ms' => 'Télécharger (ms)',
+    'upload_ms' => 'Envoi (ms)',
+    'average_ms' => 'Moyenne (ms)',
+    'high_ms' => 'Haut (ms)',
+    'low_ms' => 'Bas (ms)',
     'ping_ms_label' => 'Ping (ms)',
 
     // Latency
-    'download_latency' => 'Download latency',
-    'upload_latency' => 'Upload latency',
+    'download_latency' => 'Délai de téléchargement',
+    'upload_latency' => 'Délai d\'envoi',
 
     // Actions
-    'run_speedtest' => 'Run speedtest',
-    'list_servers' => 'List servers',
-    'export_current_results' => 'Export current results',
-    'test' => 'Test',
+    'run_speedtest' => 'Test de vitesse de course',
+    'list_servers' => 'Liste des serveurs',
+    'export_current_results' => 'Exporter les résultats actuels',
+    'test' => 'Tester',
 
     // Common
-    'token' => 'Token',
+    'token' => 'Jeton',
 
     // Application
-    'speedtest_tracker' => 'Speedtest Tracker',
-    'platform' => 'Platform',
+    'speedtest_tracker' => 'Tracker de test de vitesse',
+    'platform' => 'Plateforme',
 
     // Update status
-    'update_available' => 'Update available!',
-    'up_to_date' => 'Up to date',
+    'update_available' => 'Mise à jour disponible !',
+    'up_to_date' => 'À jour',
 
     // Notifications
-    'token_created' => 'Token Created',
+    'token_created' => 'Jeton créé',
 ];
