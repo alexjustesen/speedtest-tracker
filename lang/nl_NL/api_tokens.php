@@ -2,29 +2,29 @@
 
 return [
     'title' => 'API Tokens',
-    'label' => 'API Token',
+    'label' => 'API Tokens',
 
     // Token management
-    'api_token' => 'API Token',
-    'api_tokens' => 'API Tokens',
-    'create_api_token' => 'API-Token aanmaken',
-    'your_token' => 'Jouw Token',
+    'api_token' => 'API token',
+    'api_tokens' => 'API tokens',
+    'create_api_token' => 'Create API token',
+    'your_token' => 'Your token',
     'token_status' => 'Token status',
 
     // Token lists
-    'active_tokens' => 'Actieve tokens',
-    'expired_tokens' => 'Verlopen tokens',
-    'all_tokens' => 'Alle tokens',
+    'active_tokens' => 'Active tokens',
+    'expired_tokens' => 'Expired tokens',
+    'all_tokens' => 'All tokens',
 
     // Token properties
-    'expires_at' => 'Verloopt op',
-    'expires_at_helper_text' => 'Laat leeg als u geen vervaldatum wilt',
-    'last_used_at' => 'Laatst gebruikt op',
+    'expires_at' => 'Expires at',
+    'expires_at_helper_text' => 'Leave empty if you don\'t want an expiration date',
+    'last_used_at' => 'Last used at',
 
     // Abilities/Permissions
-    'abilities' => 'Vaardigheden',
-    'read_results' => 'Lees resultaten',
-    'read_results_description' => 'De token zal toestemming hebben om resultaten en statistieken te lezen.',
-    'run_speedtest_description' => 'Het token zal toestemming hebben om snelheidstest uit te voeren.',
-    'list_servers_description' => 'De token zal toestemming hebben om servers weer te geven.',
+    'abilities' => 'Abilities',
+    'read_results' => 'Read results',
+    'read_results_description' => 'The token will have permission to read results and statistics.',
+    'run_speedtest_description' => 'The token will have permission to run speedtest.',
+    'list_servers_description' => 'The token will have permission to list servers.',
 ];
