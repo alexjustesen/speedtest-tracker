@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Dashboard',
-    'no_speedtests_scheduled' => 'Geen snelheden gepland.',
+    'no_speedtests_scheduled' => 'Geen snelheidtests gepland.',
     'next_speedtest_at' => 'Volgende snelheidstest op',
 
     // Widgets
