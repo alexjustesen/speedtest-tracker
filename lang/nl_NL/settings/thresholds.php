@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Drempels',
+    'title' => 'Grenswaarden',
     'label' => 'Drempels',
 
     // Absolute thresholds
@@ -14,7 +14,7 @@ return [
     'metrics_helper_text' => 'Ingesteld op nul om deze meting uit te schakelen.',
 
     // General threshold labels
-    'thresholds' => 'Drempels',
+    'thresholds' => 'Grenswaarden',
     'threshold_enabled' => 'Drempel ingeschakeld',
     'threshold_download' => 'Drempel downloaden',
     'threshold_upload' => 'Drempel uploaden',
