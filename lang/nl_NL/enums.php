@@ -4,18 +4,18 @@ return [
     // Status enum values
     'status' => [
         'benchmarking' => 'Benchmarking',
-        'checking' => 'Checking',
-        'completed' => 'Completed',
-        'failed' => 'Failed',
-        'running' => 'Running',
-        'started' => 'Started',
-        'skipped' => 'Skipped',
-        'waiting' => 'Waiting',
+        'checking' => 'Controleren',
+        'completed' => 'Voltooid',
+        'failed' => 'Mislukt',
+        'running' => 'Lopend',
+        'started' => 'Gestart',
+        'skipped' => 'Overgeslagen',
+        'waiting' => 'Wachten',
     ],
 
     // Service enum values
     'service' => [
-        'faker' => 'Faker',
+        'faker' => 'Zakker',
         'ookla' => 'Ookla',
     ],
 ];
