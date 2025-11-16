@@ -2,62 +2,62 @@
 
 return [
     // Common actions
-    'save' => 'Save',
-    'cancel' => 'Cancel',
-    'delete' => 'Delete',
-    'edit' => 'Edit',
-    'create' => 'Create',
-    'search' => 'Search',
-    'filter' => 'Filter',
-    'export' => 'Export',
-    'actions' => 'Actions',
-    'enable' => 'Enable',
-    'yes' => 'Yes',
-    'no' => 'No',
-    'options' => 'Options',
-    'details' => 'Details',
+    'save' => 'Opslaan',
+    'cancel' => 'Annuleren',
+    'delete' => 'Verwijderen',
+    'edit' => 'Bewerken',
+    'create' => 'Aanmaken',
+    'search' => 'Zoeken',
+    'filter' => 'Filteren',
+    'export' => 'Exporteren',
+    'actions' => 'Acties',
+    'enable' => 'Inschakelen',
+    'yes' => 'Ja',
+    'no' => 'Neen',
+    'options' => 'Instellingen',
+    'details' => 'Beschrijving',
 
     // Common labels
-    'name' => 'Name',
-    'email' => 'Email',
-    'email_address' => 'Email address',
-    'password' => 'Password',
-    'password_confirmation' => 'Password confirmation',
+    'name' => 'Naam',
+    'email' => 'E-mailadres',
+    'email_address' => 'E-mail adres',
+    'password' => 'Wachtwoord',
+    'password_confirmation' => 'Wachtwoord bevestiging',
     'id' => 'ID',
     'status' => 'Status',
-    'message' => 'Message',
-    'comment' => 'Comment',
-    'comments' => 'Comments',
-    'created_at' => 'Created at',
-    'updated_at' => 'Updated at',
+    'message' => 'Bericht',
+    'comment' => 'Opmerking',
+    'comments' => 'Opmerkingen',
+    'created_at' => 'Aangemaakt op',
+    'updated_at' => 'Bijgewerkt op',
     'url' => 'URL',
 
     // Navigation
     'dashboard' => 'Dashboard',
-    'results' => 'Results',
-    'settings' => 'Settings',
-    'users' => 'Users',
-    'documentation' => 'Documentation',
-    'links' => 'Links',
-    'donate' => 'Donate',
+    'results' => 'Resultaten',
+    'settings' => 'Instellingen',
+    'users' => 'Gebruikers',
+    'documentation' => 'Documentatie',
+    'links' => 'Koppelingen',
+    'donate' => 'Doneren',
 
     // Roles
-    'admin' => 'Admin',
-    'user' => 'User',
-    'role' => 'Role',
+    'admin' => 'Beheerder',
+    'user' => 'Gebruiker',
+    'role' => 'Functie',
 
     // Date ranges
-    'last_24h' => 'Last 24 hours',
-    'last_week' => 'Last week',
-    'last_month' => 'Last month',
+    'last_24h' => 'Afgelopen 24 uur',
+    'last_week' => 'Vorige week',
+    'last_month' => 'Vorige maand',
 
     // Metrics
-    'average' => 'Average',
-    'high' => 'High',
-    'low' => 'Low',
-    'faster' => 'faster',
-    'slower' => 'slower',
-    'healthy' => 'Healthy',
+    'average' => 'Gemiddeld',
+    'high' => 'Hoog',
+    'low' => 'Laag',
+    'faster' => 'sneller',
+    'slower' => 'langzamer',
+    'healthy' => 'Gezond',
 
     // Units
     'ms' => 'ms',
@@ -65,29 +65,29 @@ return [
 
     // Speed test metrics
     'download' => 'Download',
-    'upload' => 'Upload',
+    'upload' => 'Uploaden',
     'ping' => 'Ping',
     'jitter' => 'Jitter',
 
     // Metric labels with units
-    'download_mbps' => 'Download (Mbps)',
+    'download_mbps' => 'Downloaden (Mbps)',
     'upload_mbps' => 'Upload (Mbps)',
     'ping_ms' => 'Ping (ms)',
-    'download_ms' => 'Download (ms)',
-    'upload_ms' => 'Upload (ms)',
-    'average_ms' => 'Average (ms)',
-    'high_ms' => 'High (ms)',
-    'low_ms' => 'Low (ms)',
+    'download_ms' => 'Downloaden (ms)',
+    'upload_ms' => 'Uploaden (ms)',
+    'average_ms' => 'Gemiddelde (ms)',
+    'high_ms' => 'Hoog (ms)',
+    'low_ms' => 'Laag (ms)',
     'ping_ms_label' => 'Ping (ms)',
 
     // Latency
-    'download_latency' => 'Download latency',
-    'upload_latency' => 'Upload latency',
+    'download_latency' => 'Download latentie',
+    'upload_latency' => 'Upload latentie',
 
     // Actions
-    'run_speedtest' => 'Run speedtest',
-    'list_servers' => 'List servers',
-    'export_current_results' => 'Export current results',
+    'run_speedtest' => 'Snelheidstest uitvoeren',
+    'list_servers' => 'Toon servers',
+    'export_current_results' => 'Huidige resultaten exporteren',
     'test' => 'Test',
 
     // Common
@@ -98,9 +98,9 @@ return [
     'platform' => 'Platform',
 
     // Update status
-    'update_available' => 'Update available!',
-    'up_to_date' => 'Up to date',
+    'update_available' => 'Update beschikbaar!',
+    'up_to_date' => 'Bijgewerkt tot',
 
     // Notifications
-    'token_created' => 'Token Created',
+    'token_created' => 'Token aangemaakt',
 ];
