@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'title' => 'Grenswaarden',
+    'title' => 'Limieten',
     'label' => 'Drempels',
 
     // Absolute thresholds
     'absolute' => 'Absoluut',
-    'absolute_description' => 'Absolute drempels houden geen rekening met de voorgeschiedenis en kunnen bij elke test worden gebruikt.',
-    'absolute_enabled' => 'Absolute drempels inschakelen',
+    'absolute_description' => 'Limieten houden geen rekening met de voorgeschiedenis en kunnen bij elke test worden gebruikt.',
+    'absolute_enabled' => 'Limieten inschakelen',
 
     // Metrics section
     'metrics' => 'Statistieken',
