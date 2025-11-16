@@ -1,56 +1,56 @@
 <?php
 
 return [
-    'title' => 'Notifications',
-    'label' => 'Notifications',
+    'title' => 'Notificaties',
+    'label' => 'Notificaties',
 
     // Database notifications
     'database' => 'Database',
-    'database_description' => 'Notifications sent to this channel will show up under the 🔔 icon in the header.',
-    'enable_database_notifications' => 'Enable database notifications',
-    'database_on_speedtest_run' => 'Notify on every speedtest run',
-    'database_on_threshold_failure' => 'Notify on threshold failures',
-    'test_database_channel' => 'Test database channel',
+    'database_description' => 'Meldingen die naar dit kanaal worden verzonden worden weergegeven onder de 🔔 icoon in de header.',
+    'enable_database_notifications' => 'Database meldingen inschakelen',
+    'database_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
+    'database_on_threshold_failure' => 'Melding bij drempelfouten',
+    'test_database_channel' => 'Test database notificaties',
 
     // Mail notifications
-    'mail' => 'Mail',
-    'enable_mail_notifications' => 'Enable mail notifications',
-    'recipients' => 'Recipients',
-    'mail_on_speedtest_run' => 'Notify on every speedtest run',
-    'mail_on_threshold_failure' => 'Notify on threshold failures',
-    'test_mail_channel' => 'Test mail channel',
+    'mail' => 'E-mailen',
+    'enable_mail_notifications' => 'Schakel e-mailnotificaties in',
+    'recipients' => 'Ontvangers',
+    'mail_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
+    'mail_on_threshold_failure' => 'Melding bij drempelfouten',
+    'test_mail_channel' => 'Test e-mailkanaal',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Enable webhook notifications',
-    'webhook_on_speedtest_run' => 'Notify on every speedtest run',
-    'webhook_on_threshold_failure' => 'Notify on threshold failures',
-    'test_webhook_channel' => 'Test webhook channel',
+    'enable_webhook_notifications' => 'Webhook meldingen inschakelen',
+    'webhook_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
+    'webhook_on_threshold_failure' => 'Melding bij drempelfouten',
+    'test_webhook_channel' => 'Test webhook kanaal',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notify on every speedtest run',
-    'notify_on_threshold_failures' => 'Notify on threshold failures',
+    'notify_on_every_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
+    'notify_on_threshold_failures' => 'Melding bij drempelfouten',
 
     // Test notification messages
     'test_notifications' => [
         'database' => [
-            'ping' => 'I say: ping',
-            'pong' => 'You say: pong',
-            'received' => 'Test database notification received!',
-            'sent' => 'Test database notification sent.',
+            'ping' => 'Ik zeg: ping',
+            'pong' => 'Jij zegt: pong',
+            'received' => 'Test database melding ontvangen!',
+            'sent' => 'Test database melding verzonden.',
         ],
         'mail' => [
-            'add' => 'Add email recipients!',
-            'sent' => 'Test mail notification sent.',
+            'add' => 'Ontvangers toevoegen!',
+            'sent' => 'Test mail melding verzonden.',
         ],
         'webhook' => [
-            'add' => 'Add webhook URLs!',
-            'sent' => 'Test webhook notification sent.',
-            'payload' => 'Testing webhook notification',
+            'add' => 'Voeg webhook URL\'s toe!',
+            'sent' => 'Test webhook melding verzonden.',
+            'payload' => 'Webhook melding',
         ],
     ],
 
     // Helper text
-    'threshold_helper_text' => 'Threshold notifications will be sent to the /fail route in the URL.',
+    'threshold_helper_text' => 'Drempel meldingen worden verzonden naar de /fail route in de URL.',
 ];
