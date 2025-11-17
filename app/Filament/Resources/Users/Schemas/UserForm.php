@@ -22,24 +22,27 @@ class UserForm
             ])->columnSpan([
                 'lg' => 2,
             ])->schema([
-                Section::make('Details')
+                Section::make(__('general.details'))
                     ->columns([
                         'default' => 1,
                         'lg' => 2,
                     ])
                     ->schema([
                         TextInput::make('name')
+                            ->label(__('general.name'))
                             ->required()
                             ->maxLength(255)
                             ->columnSpanFull(),
 
                         TextInput::make('email')
+                            ->label(__('general.email'))
                             ->email()
                             ->required()
                             ->maxLength(255)
                             ->columnSpanFull(),
 
                         TextInput::make('password')
+                            ->label(__('general.password'))
                             ->confirmed()
                             ->password()
                             ->revealable()
@@ -48,6 +51,7 @@ class UserForm
                             ->dehydrated(fn ($state) => filled($state)),
 
                         TextInput::make('password_confirmation')
+                            ->label(__('general.password_confirmation'))
                             ->password()
                             ->revealable(),
                     ]),
@@ -56,10 +60,10 @@ class UserForm
             Grid::make(1)
                 ->columnSpan(1)
                 ->schema([
-                    Section::make('Platform')
+                    Section::make(__('general.platform'))
                         ->schema([
                             Select::make('role')
-                                ->label('Role')
+                                ->label(__('general.role'))
                                 ->default(UserRole::User)
                                 ->options(UserRole::class)
                                 ->required()
@@ -69,9 +73,11 @@ class UserForm
                     Section::make()
                         ->schema([
                             Placeholder::make('created_at')
+                                ->label(__('general.created_at'))
                                 ->content(fn (?User $record): string => $record ? $record->created_at->diffForHumans() : '-'),
 
                             Placeholder::make('updated_at')
+                                ->label(__('general.updated_at'))
                                 ->content(fn (?User $record): string => $record ? $record->updated_at->diffForHumans() : '-'),
                         ]),
                 ]),

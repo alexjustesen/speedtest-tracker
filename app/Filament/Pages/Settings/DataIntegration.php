@@ -26,9 +26,15 @@ class DataIntegration extends SettingsPage
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $title = 'Data Integration';
+    public function getTitle(): string
+    {
+        return __('settings/data_integration.title');
+    }
 
-    protected static ?string $navigationLabel = 'Data Integration';
+    public static function getNavigationLabel(): string
+    {
+        return __('settings/data_integration.label');
+    }
 
     protected static string $settings = DataIntegrationSettings::class;
 
@@ -51,49 +57,49 @@ class DataIntegration extends SettingsPage
                     'md' => 3,
                 ])
                     ->schema([
-                        Section::make('InfluxDB v2')
-                            ->description('When enabled, all new Speedtest results will also be sent to InfluxDB.')
+                        Section::make(__('settings/data_integration.influxdb_v2'))
+                            ->description(__('settings/data_integration.influxdb_v2_description'))
                             ->schema([
                                 Toggle::make('influxdb_v2_enabled')
-                                    ->label('Enable')
+                                    ->label(__('settings/data_integration.influxdb_v2_enabled'))
                                     ->reactive()
                                     ->columnSpanFull(),
                                 Grid::make(['default' => 1, 'md' => 3])
                                     ->hidden(fn (Get $get) => $get('influxdb_v2_enabled') !== true)
                                     ->schema([
                                         TextInput::make('influxdb_v2_url')
-                                            ->label('URL')
-                                            ->placeholder('http://your-influxdb-instance')
+                                            ->label(__('settings/data_integration.influxdb_v2_url'))
+                                            ->placeholder(__('settings/data_integration.influxdb_v2_url_placeholder'))
                                             ->maxLength(255)
                                             ->required(fn (Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->columnSpan(['md' => 1]),
                                         TextInput::make('influxdb_v2_org')
-                                            ->label('Org')
+                                            ->label(__('settings/data_integration.influxdb_v2_org'))
                                             ->maxLength(255)
                                             ->required(fn (Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->columnSpan(['md' => 1]),
                                         TextInput::make('influxdb_v2_bucket')
-                                            ->placeholder('speedtest-tracker')
-                                            ->label('Bucket')
+                                            ->placeholder(__('settings/data_integration.influxdb_v2_bucket_placeholder'))
+                                            ->label(__('settings/data_integration.influxdb_v2_bucket'))
                                             ->maxLength(255)
                                             ->required(fn (Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->columnSpan(['md' => 2]),
                                         TextInput::make('influxdb_v2_token')
-                                            ->label('Token')
+                                            ->label(__('settings/data_integration.influxdb_v2_token'))
                                             ->maxLength(255)
                                             ->password()
                                             ->required(fn (Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->columnSpan(['md' => 2]),
                                         Checkbox::make('influxdb_v2_verify_ssl')
-                                            ->label('Verify SSL')
+                                            ->label(__('settings/data_integration.influxdb_v2_verify_ssl'))
                                             ->columnSpanFull(),
                                         // Button to send old data to InfluxDB
                                         Actions::make([
                                             Action::make('Export current results')
-                                                ->label('Export current results')
+                                                ->label(__('general.export_current_results'))
                                                 ->action(function () {
                                                     Notification::make()
-                                                        ->title('Starting bulk data write to Influxdb')
+                                                        ->title(__('settings/data_integration.starting_bulk_data_write_to_influxdb'))
                                                         ->info()
                                                         ->send();
 
@@ -106,10 +112,10 @@ class DataIntegration extends SettingsPage
                                         // Button to test InfluxDB connection
                                         Actions::make([
                                             Action::make('Test connection')
-                                                ->label('Test connection')
+                                                ->label(__('settings/data_integration.test_connection'))
                                                 ->action(function () {
                                                     Notification::make()
-                                                        ->title('Sending test data to Influxdb')
+                                                        ->title(__('settings/data_integration.sending_test_data_to_influxdb'))
                                                         ->info()
                                                         ->send();
 

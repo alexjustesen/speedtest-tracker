@@ -19,9 +19,15 @@ class ApiTokenResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
-    protected static ?string $label = 'API Token';
+    public static function getLabel(): ?string
+    {
+        return __('api_tokens.api_token');
+    }
 
-    protected static ?string $pluralLabel = 'API Tokens';
+    public static function getPluralLabel(): ?string
+    {
+        return __('api_tokens.api_tokens');
+    }
 
     public static function canAccess(): bool
     {

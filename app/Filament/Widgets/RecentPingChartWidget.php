@@ -12,7 +12,12 @@ class RecentPingChartWidget extends ChartWidget
 {
     use HasChartFilters;
 
-    protected ?string $heading = 'Ping (ms)';
+    protected ?string $heading = null;
+
+    public function getHeading(): ?string
+    {
+        return __('general.ping_ms');
+    }
 
     protected int|string|array $columnSpan = 'full';
 
@@ -47,7 +52,7 @@ class RecentPingChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Ping',
+                    'label' => __('general.ping'),
                     'data' => $results->map(fn ($item) => $item->ping),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
@@ -58,7 +63,7 @@ class RecentPingChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Average',
+                    'label' => __('general.average'),
                     'data' => array_fill(0, count($results), Average::averagePing($results)),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',

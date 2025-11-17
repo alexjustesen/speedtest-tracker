@@ -11,7 +11,12 @@ class RecentUploadLatencyChartWidget extends ChartWidget
 {
     use HasChartFilters;
 
-    protected ?string $heading = 'Upload Latency';
+    protected ?string $heading = null;
+
+    public function getHeading(): ?string
+    {
+        return __('general.upload_latency');
+    }
 
     protected int|string|array $columnSpan = 'full';
 
@@ -46,7 +51,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Average (ms)',
+                    'label' => __('general.average_ms'),
                     'data' => $results->map(fn ($item) => $item->upload_latency_iqm),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
@@ -57,7 +62,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'High (ms)',
+                    'label' => __('general.high_ms'),
                     'data' => $results->map(fn ($item) => $item->upload_latency_high),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
@@ -68,7 +73,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
-                    'label' => 'Low (ms)',
+                    'label' => __('general.low_ms'),
                     'data' => $results->map(fn ($item) => $item->upload_latency_low),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',

@@ -10,6 +10,7 @@ Speedtest Tracker is a self-hosted application that monitors the performance and
 - **Detailed Metrics**: Capture download and upload speeds, ping, packet loss and more.
 - **Historical Data**: View historical data and trends to identify patterns and issues with your internet connection.
 - **Notifications**: Receive notifications when your internet performance drops below a certain threshold.
+- **Multi-Language Support**: Available in multiple languages with community translations via [Crowdin](https://crowdin.com/project/speedtest-tracker).
 
 ## Getting Started
 
@@ -19,5 +20,13 @@ Speedtest Tracker is containerized so you can run it anywhere you run your conta
 - [Configurations](https://docs.speedtest-tracker.dev/getting-started/environment-variables) are used to tailor Speedtest Tracker to your needs.
 - [Notifications](https://docs.speedtest-tracker.dev/settings/notifications) channels alert you when issues happen.
 - [Frequently Asked Questions](https://docs.speedtest-tracker.dev/help/faqs) are common questions that can help you resolve issues.
+
+## Translations
+
+Speedtest Tracker supports multiple languages thanks to our community translators!
+
+**Request a new language**: Visit our [Crowdin project](https://crowdin.com/project/speedtest-tracker) and request a new language directly in crowdin.
+
+**Help translate**: Join our [Crowdin project](https://crowdin.com/project/speedtest-tracker) to contribute translations in your language. All translation levels are welcome!
 
 [![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)

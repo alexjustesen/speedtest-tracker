@@ -4,7 +4,6 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
-use Illuminate\Support\Str;
 
 enum ResultStatus: string implements HasColor, HasLabel
 {
@@ -33,6 +32,15 @@ enum ResultStatus: string implements HasColor, HasLabel
 
     public function getLabel(): ?string
     {
-        return Str::title($this->name);
+        return match ($this) {
+            self::Benchmarking => __('enums.status.benchmarking'),
+            self::Checking => __('enums.status.checking'),
+            self::Completed => __('enums.status.completed'),
+            self::Failed => __('enums.status.failed'),
+            self::Running => __('enums.status.running'),
+            self::Started => __('enums.status.started'),
+            self::Skipped => __('enums.status.skipped'),
+            self::Waiting => __('enums.status.waiting'),
+        };
     }
 }

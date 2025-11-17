@@ -55,7 +55,7 @@ class ListOoklaServers extends Page implements HasForms
             ]);
         } catch (\Exception $e) {
             Notification::make()
-                ->title('Error fetching servers')
+                ->title(__('errors.error_fetching_servers'))
                 ->body($e->getMessage())
                 ->danger()
                 ->send();
@@ -92,7 +92,7 @@ class ListOoklaServers extends Page implements HasForms
                     $this->fetchServers();
 
                     Notification::make()
-                        ->title('Servers refreshed successfully')
+                        ->title(__('errors.servers_refreshed_successfully'))
                         ->success()
                         ->send();
                 }),
@@ -106,7 +106,7 @@ class ListOoklaServers extends Page implements HasForms
                     $this->js('navigator.clipboard.writeText('.json_encode($this->servers).')');
 
                     Notification::make()
-                        ->title('Copied to clipboard')
+                        ->title(__('errors.copied_to_clipboard'))
                         ->success()
                         ->send();
                 }),
