@@ -1,14 +1,14 @@
 <?php
 
 return [
-    'title' => 'Dashboard',
-    'no_speedtests_scheduled' => 'No speedtests scheduled.',
-    'next_speedtest_at' => 'Next speedtest at',
+    'title' => 'Tableau de bord',
+    'no_speedtests_scheduled' => 'Aucun test de vitesse programmé.',
+    'next_speedtest_at' => 'Prochain test de vitesse à',
 
     // Widgets
-    'recent_results' => 'Recent Results',
-    'statistics' => 'Statistics',
-    'latest_download' => 'Latest download',
-    'latest_upload' => 'Latest upload',
-    'latest_ping' => 'Latest ping',
+    'recent_results' => 'Résultats récents',
+    'statistics' => 'Statistiques',
+    'latest_download' => 'Dernier téléchargement',
+    'latest_upload' => 'Dernier téléversement',
+    'latest_ping' => 'Dernier ping',
 ];
