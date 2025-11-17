@@ -3,18 +3,22 @@
 return [
     'title' => 'Resultaten',
     'result_overview' => 'Overzicht van resultaten',
+    'error_message_title' => 'Error message',
 
     // Metrics
+    'download' => 'Download',
     'download_latency_high' => 'Download latency hoog',
     'download_latency_low' => 'Download latency laag',
     'download_latency_iqm' => 'Download latency IQM',
     'download_latency_jitter' => 'Download latency jitter',
 
+    'upload' => 'Upload',
     'upload_latency_high' => 'Upload latentie hoog',
     'upload_latency_low' => 'Upload latency laag',
     'upload_latency_iqm' => 'Upload latency IQM',
     'upload_latency_jitter' => 'Upload latency Jitter',
 
+    'ping' => 'Ping',
     'ping_details' => 'Ping details',
     'ping_jitter' => 'Ping jitter',
     'ping_high' => 'Ping hoog',
@@ -70,4 +74,6 @@ return [
     'select_server_helper' => 'Laat leeg om de snelheidstest uit te voeren zonder een server op te geven. Geblokkeerde servers zullen worden overgeslagen.',
     'manual_servers' => 'Handmatige servers',
     'closest_servers' => 'Dichtstbijzijnde servers',
+    'run_speedtest' => 'Snelheidstest uitvoeren',
+    'start' => 'Begin test',
 ];
