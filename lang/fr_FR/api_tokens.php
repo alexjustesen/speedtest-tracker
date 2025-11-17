@@ -25,6 +25,6 @@ return [
     'abilities' => 'Capacités',
     'read_results' => 'Lire les résultats',
     'read_results_description' => 'Le jeton aura la permission de lire les résultats et les statistiques.',
-    'run_speedtest_description' => 'Le jeton aura la permission d\'exécuter des test de vitesse.',
+    'run_speedtest_description' => 'Le jeton aura la permission d\'exécuter des tests de vitesse.',
     'list_servers_description' => 'Le jeton aura la permission de lister les serveurs.',
 ];
