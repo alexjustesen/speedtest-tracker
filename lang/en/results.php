@@ -3,18 +3,22 @@
 return [
     'title' => 'Results',
     'result_overview' => 'Result overview',
+    'error_message_title' => 'Error message',
 
     // Metrics
+    'download' => 'Download',
     'download_latency_high' => 'Download latency high',
     'download_latency_low' => 'Download latency low',
     'download_latency_iqm' => 'Download latency IQM',
     'download_latency_jitter' => 'Download latency jitter',
 
+    'upload' => 'Upload',
     'upload_latency_high' => 'Upload latency high',
     'upload_latency_low' => 'Upload latency low',
     'upload_latency_iqm' => 'Upload latency IQM',
     'upload_latency_jitter' => 'Upload latency jitter',
 
+    'ping' => 'Ping',
     'ping_details' => 'Ping details',
     'ping_jitter' => 'Ping jitter',
     'ping_high' => 'Ping high',
