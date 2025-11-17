@@ -21,3 +21,5 @@ yarn-error.log
 /.nova
 /.phpunit.cache
 /.vscode
+/lang/*
+!/lang/en
