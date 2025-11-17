@@ -1,56 +1,56 @@
 <?php
 
 return [
-    'title' => 'Notifications',
-    'label' => 'Notifications',
+    'title' => 'Benachrichtigungen',
+    'label' => 'Benachrichtigungen',
 
     // Database notifications
-    'database' => 'Database',
-    'database_description' => 'Notifications sent to this channel will show up under the 🔔 icon in the header.',
-    'enable_database_notifications' => 'Enable database notifications',
-    'database_on_speedtest_run' => 'Notify on every speedtest run',
-    'database_on_threshold_failure' => 'Notify on threshold failures',
-    'test_database_channel' => 'Test database channel',
+    'database' => 'Datenbank',
+    'database_description' => 'Benachrichtigungen, die an diesen Kanal gesendet werden, werden unter 🔔 Symbol in der Kopfzeile angezeigt.',
+    'enable_database_notifications' => 'Datenbank-Benachrichtigungen aktivieren',
+    'database_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
+    'database_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
+    'test_database_channel' => 'Datenbankkanal testen',
 
     // Mail notifications
     'mail' => 'Mail',
-    'enable_mail_notifications' => 'Enable mail notifications',
-    'recipients' => 'Recipients',
-    'mail_on_speedtest_run' => 'Notify on every speedtest run',
-    'mail_on_threshold_failure' => 'Notify on threshold failures',
-    'test_mail_channel' => 'Test mail channel',
+    'enable_mail_notifications' => 'E-Mail-Benachrichtigungen aktivieren',
+    'recipients' => 'Empfänger',
+    'mail_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
+    'mail_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
+    'test_mail_channel' => 'Mail-Kanal testen',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Enable webhook notifications',
-    'webhook_on_speedtest_run' => 'Notify on every speedtest run',
-    'webhook_on_threshold_failure' => 'Notify on threshold failures',
-    'test_webhook_channel' => 'Test webhook channel',
+    'enable_webhook_notifications' => 'Webhook Benachrichtigungen aktivieren',
+    'webhook_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
+    'webhook_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
+    'test_webhook_channel' => 'Webhook-Kanal testen',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notify on every speedtest run',
-    'notify_on_threshold_failures' => 'Notify on threshold failures',
+    'notify_on_every_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
+    'notify_on_threshold_failures' => 'Benachrichtigen bei Schwellenausfällen',
 
     // Test notification messages
     'test_notifications' => [
         'database' => [
-            'ping' => 'I say: ping',
-            'pong' => 'You say: pong',
-            'received' => 'Test database notification received!',
-            'sent' => 'Test database notification sent.',
+            'ping' => 'Ich sage: Ping',
+            'pong' => 'Sie sagen: Pong',
+            'received' => 'Testdatenbank-Benachrichtigung erhalten!',
+            'sent' => 'Testdatenbank-Benachrichtigung gesendet.',
         ],
         'mail' => [
-            'add' => 'Add email recipients!',
-            'sent' => 'Test mail notification sent.',
+            'add' => 'E-Mail-Empfänger hinzufügen!',
+            'sent' => 'Test-E-Mail-Benachrichtigung gesendet.',
         ],
         'webhook' => [
-            'add' => 'Add webhook URLs!',
-            'sent' => 'Test webhook notification sent.',
-            'payload' => 'Testing webhook notification',
+            'add' => 'Webhook URLs hinzufügen!',
+            'sent' => 'Webhook Benachrichtigung gesendet.',
+            'payload' => 'Teste Webhook-Benachrichtigung',
         ],
     ],
 
     // Helper text
-    'threshold_helper_text' => 'Threshold notifications will be sent to the /fail route in the URL.',
+    'threshold_helper_text' => 'Grenzwert-Benachrichtigungen werden an die /fail Route in der URL gesendet.',
 ];
