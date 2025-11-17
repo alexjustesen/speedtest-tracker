@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Actions\Notifications\SendAppriseTestNotification;
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
@@ -14,6 +15,7 @@ use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Settings\NotificationSettings;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -25,6 +27,8 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
+
 
 class Notification extends SettingsPage
 {
@@ -100,6 +104,63 @@ class Notification extends SettingsPage
                                     ])
                                     ->compact()
                                     ->columnSpan('full'),
+
+                                Section::make('Apprise')
+                                    ->description('The Apprise Notification Library enables sending notifications to a wide range of services.')
+                                    ->schema([
+                                        Toggle::make('apprise_enabled')
+                                            ->label('Enable Apprise Notifications')
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Grid::make([
+                                            'default' => 1,
+                                        ])
+                                            ->hidden(fn (Get $get) => $get('apprise_enabled') !== true)
+                                            ->schema([
+                                                Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Toggle::make('apprise_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Toggle::make('apprise_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Fieldset::make('Apprise Sidecar')
+                                                    ->schema([
+                                                        Checkbox::make('apprise_verify_ssl')
+                                                            ->label('Verify SSL')
+                                                            ->default(true)
+                                                            ->columnSpanFull(),
+                                                    ]),
+                                                Repeater::make('apprise_channel_urls')
+                                                    ->label('Apprise Channels')
+                                                    ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">Apprise Documentation</a>'))
+                                                    ->schema([
+                                                        TextInput::make('channel_url')
+                                                            ->label('Channel URL')
+                                                            ->placeholder('discord://WebhookID/WebhookToken')
+                                                            ->helperText('Provide the service endpoint URL for notifications.')
+                                                            ->maxLength(2000)
+                                                            ->distinct()
+                                                            ->required(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Actions::make([
+                                                    Action::make('test apprise')
+                                                        ->label('Test Apprise')
+                                                        ->action(fn (Get $get) => SendAppriseTestNotification::run(
+                                                            channel_urls: $get('apprise_channel_urls'),
+                                                        ))
+                                                        ->hidden(fn (Get $get) => ! count($get('apprise_channel_urls'))),
+                                                ]),
+                                            ]),
+                                    ])
+                                    ->compact()
+                                    ->columns([
+                                        'default' => 1,
+                                        'md' => 2,
+                                    ]),
 
                                 Section::make(__('settings/notifications.mail'))
                                     ->schema([
