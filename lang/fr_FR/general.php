@@ -2,8 +2,8 @@
 
 return [
     // Common actions
-    'save' => 'Save',
-    'cancel' => 'Cancel',
+    'save' => 'Enregistrer',
+    'cancel' => 'Abandonner',
     'delete' => 'Delete',
     'edit' => 'Edit',
     'create' => 'Create',
