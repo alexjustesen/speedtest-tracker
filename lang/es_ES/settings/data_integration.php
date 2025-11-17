@@ -1,39 +1,39 @@
 <?php
 
 return [
-    'title' => 'Data Integration',
-    'label' => 'Data Integration',
+    'title' => 'Integración de datos',
+    'label' => 'Integración de datos',
 
     // InfluxDB v2
     'influxdb_v2' => 'InfluxDB v2',
-    'influxdb_v2_description' => 'When enabled, all new Speedtest results will also be sent to InfluxDB.',
-    'influxdb_v2_enabled' => 'Enable',
+    'influxdb_v2_description' => 'Cuando está activado, todos los nuevos resultados de Speedtest también serán enviados a InfluxDB.',
+    'influxdb_v2_enabled' => 'Activar',
     'influxdb_v2_url' => 'URL',
-    'influxdb_v2_url_placeholder' => 'http://your-influxdb-instance',
+    'influxdb_v2_url_placeholder' => 'http://su-instancia-influxdb',
     'influxdb_v2_org' => 'Org',
-    'influxdb_v2_bucket' => 'Bucket',
-    'influxdb_v2_bucket_placeholder' => 'speedtest-tracker',
+    'influxdb_v2_bucket' => 'Cubo',
+    'influxdb_v2_bucket_placeholder' => 'rastreador de velocidad',
     'influxdb_v2_token' => 'Token',
-    'influxdb_v2_verify_ssl' => 'Verify SSL',
+    'influxdb_v2_verify_ssl' => 'Verificar SSL',
 
     // Actions
-    'test_connection' => 'Test connection',
-    'starting_bulk_data_write_to_influxdb' => 'Starting bulk data write to InfluxDB',
-    'sending_test_data_to_influxdb' => 'Sending test data to InfluxDB',
+    'test_connection' => 'Probar conexión',
+    'starting_bulk_data_write_to_influxdb' => 'Iniciando escritura masiva de datos en InfluxDB',
+    'sending_test_data_to_influxdb' => 'Enviando datos de prueba a InfluxDB',
 
     // Test connection notifications
-    'influxdb_test_failed' => 'Influxdb test failed',
-    'influxdb_test_failed_body' => 'Check the logs for more details.',
-    'influxdb_test_success' => 'Successfully sent test data to Influxdb',
-    'influxdb_test_success_body' => 'Test data has been sent to InfluxDB, check if the data was received.',
+    'influxdb_test_failed' => 'Prueba de Influxdb fallida',
+    'influxdb_test_failed_body' => 'Revisa los registros para más detalles.',
+    'influxdb_test_success' => 'Datos de prueba enviados con éxito a Influxdb',
+    'influxdb_test_success_body' => 'Los datos de prueba han sido enviados a InfluxDB, compruebe si los datos han sido recibidos.',
 
     // Bulk write notifications
-    'influxdb_bulk_write_failed' => 'Failed to build write to Influxdb.',
-    'influxdb_bulk_write_failed_body' => 'Check the logs for more details.',
-    'influxdb_bulk_write_success' => 'Finished bulk data load to Influxdb.',
-    'influxdb_bulk_write_success_body' => 'Data has been sent to InfluxDB, check if the data was received.',
+    'influxdb_bulk_write_failed' => 'Error al construir escritura en Influxdb.',
+    'influxdb_bulk_write_failed_body' => 'Revisa los registros para más detalles.',
+    'influxdb_bulk_write_success' => 'Carga de datos en masa a Influxdb.',
+    'influxdb_bulk_write_success_body' => 'Los datos han sido enviados a InfluxDB, compruebe si los datos han sido recibidos.',
 
     // Common labels
     'org' => 'Org',
-    'bucket' => 'Bucket',
+    'bucket' => 'Cubo',
 ];
