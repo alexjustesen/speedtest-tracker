@@ -1,22 +1,22 @@
 <?php
 
 return [
-    'title' => 'Thresholds',
-    'label' => 'Thresholds',
+    'title' => 'Umbrales',
+    'label' => 'Umbrales',
 
     // Absolute thresholds
-    'absolute' => 'Absolute',
-    'absolute_description' => 'Absolute thresholds do not take into account previous history and could be triggered on each test.',
-    'absolute_enabled' => 'Enable absolute thresholds',
+    'absolute' => 'Absoluto',
+    'absolute_description' => 'Los umbrales absolutos no tienen en cuenta la historia anterior y podrían ser activados en cada prueba.',
+    'absolute_enabled' => 'Habilitar umbrales absolutos',
 
     // Metrics section
-    'metrics' => 'Metrics',
-    'metrics_helper_text' => 'Set to zero to disable this metric.',
+    'metrics' => 'Métricas',
+    'metrics_helper_text' => 'Establecer en cero para desactivar esta métrica.',
 
     // General threshold labels
-    'thresholds' => 'Thresholds',
-    'threshold_enabled' => 'Threshold enabled',
-    'threshold_download' => 'Threshold download',
-    'threshold_upload' => 'Threshold upload',
-    'threshold_ping' => 'Threshold ping',
+    'thresholds' => 'Umbrales',
+    'threshold_enabled' => 'Umbral habilitado',
+    'threshold_download' => 'Umbral de descarga',
+    'threshold_upload' => 'Umbral de subida',
+    'threshold_ping' => 'Umbral de ping',
 ];
