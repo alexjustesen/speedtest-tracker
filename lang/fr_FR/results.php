@@ -70,4 +70,6 @@ return [
     'select_server_helper' => 'Laisser vide pour exécuter le test de vitesse sans spécifier de serveur. Les serveurs bloqués seront ignorés.',
     'manual_servers' => 'Serveurs manuels',
     'closest_servers' => 'Serveurs les plus proches',
+    'run_speedtest' => 'Run Speedtest',
+    'start' => 'Start',
 ];
