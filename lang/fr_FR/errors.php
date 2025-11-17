@@ -9,7 +9,7 @@ return [
     'copied_to_clipboard' => 'Copié dans le presse-papiers',
 
     // Speedtest specific errors
-    'ookla_error' => 'Une erreur s’est produite pendant la création de la liste des serveurs speedtest., vérifiez les logs.',
+    'ookla_error' => 'Une erreur s’est produite pendant la création de la liste des serveurs, vérifiez les logs.',
     'cron_invalid' => 'Expression cron invalide',
 
     // Status fix command
