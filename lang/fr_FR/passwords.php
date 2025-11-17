@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have emailed your password reset link!',
-    'password' => 'The password and confirmation must match and contain at least six characters.',
+    'reset' => 'Votre mot de passe a été réinitialisé !',
+    'sent' => 'Nous avons envoyé un e-mail pour réinitialiser votre mot de passe !',
+    'password' => 'Le mot de passe et la confirmation doivent correspondre et contenir au moins six caractères.',
 
 ];
