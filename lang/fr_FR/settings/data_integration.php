@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title' => 'Data Integration',
-    'label' => 'Data Integration',
+    'title' => 'Intégration des données',
+    'label' => 'Intégration des données',
 
     // InfluxDB v2
     'influxdb_v2' => 'InfluxDB v2',
