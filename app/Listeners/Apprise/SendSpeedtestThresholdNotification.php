@@ -14,44 +14,48 @@ use Illuminate\Support\Str;
 class SendSpeedtestThresholdNotification
 {
     /**
+     * Create a new listener instance.
+     */
+    public function __construct(
+        protected NotificationSettings $notificationSettings,
+        protected ThresholdSettings $thresholdSettings
+    ) {}
+
+    /**
      * Handle the event.
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings;
-
-        if (! $notificationSettings->apprise_enabled) {
+        if (! $this->notificationSettings->apprise_enabled) {
             return;
         }
 
-        if (! $notificationSettings->apprise_on_threshold_failure) {
+        if (! $this->notificationSettings->apprise_on_threshold_failure) {
             return;
         }
 
-        if (empty($notificationSettings->apprise_channel_urls) || ! is_array($notificationSettings->apprise_channel_urls)) {
+        if (empty($this->notificationSettings->apprise_channel_urls) || ! is_array($this->notificationSettings->apprise_channel_urls)) {
             Log::warning('Apprise service URLs not found; check Apprise notification settings.');
 
             return;
         }
 
-        $thresholdSettings = new ThresholdSettings;
-
-        if (! $thresholdSettings->absolute_enabled) {
+        if (! $this->thresholdSettings->absolute_enabled) {
             return;
         }
 
         $failed = [];
 
-        if ($thresholdSettings->absolute_download > 0) {
-            array_push($failed, $this->absoluteDownloadThreshold(event: $event, thresholdSettings: $thresholdSettings));
+        if ($this->thresholdSettings->absolute_download > 0) {
+            $failed[] = $this->absoluteDownloadThreshold(event: $event);
         }
 
-        if ($thresholdSettings->absolute_upload > 0) {
-            array_push($failed, $this->absoluteUploadThreshold(event: $event, thresholdSettings: $thresholdSettings));
+        if ($this->thresholdSettings->absolute_upload > 0) {
+            $failed[] = $this->absoluteUploadThreshold(event: $event);
         }
 
-        if ($thresholdSettings->absolute_ping > 0) {
-            array_push($failed, $this->absolutePingThreshold(event: $event, thresholdSettings: $thresholdSettings));
+        if ($this->thresholdSettings->absolute_ping > 0) {
+            $failed[] = $this->absolutePingThreshold(event: $event);
         }
 
         $failed = array_filter($failed);
@@ -76,7 +80,7 @@ class SendSpeedtestThresholdNotification
         $title = 'Speedtest Threshold Breach – #'.$event->result->id;
 
         // Send notification to each configured channel URL
-        foreach ($notificationSettings->apprise_channel_urls as $row) {
+        foreach ($this->notificationSettings->apprise_channel_urls as $row) {
             $channelUrl = $row['channel_url'] ?? null;
             if (! $channelUrl) {
                 Log::warning('Skipping entry with missing channel_url.');
@@ -92,15 +96,15 @@ class SendSpeedtestThresholdNotification
     /**
      * Build Apprise notification if absolute download threshold is breached.
      */
-    protected function absoluteDownloadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
+    protected function absoluteDownloadThreshold(SpeedtestCompleted $event): bool|array
     {
-        if (! absoluteDownloadThresholdFailed($thresholdSettings->absolute_download, $event->result->download)) {
+        if (! absoluteDownloadThresholdFailed($this->thresholdSettings->absolute_download, $event->result->download)) {
             return false;
         }
 
         return [
             'name' => 'Download',
-            'threshold' => $thresholdSettings->absolute_download.' Mbps',
+            'threshold' => $this->thresholdSettings->absolute_download.' Mbps',
             'value' => Number::toBitRate(bits: $event->result->download_bits, precision: 2),
         ];
     }
@@ -108,15 +112,15 @@ class SendSpeedtestThresholdNotification
     /**
      * Build Apprise notification if absolute upload threshold is breached.
      */
-    protected function absoluteUploadThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
+    protected function absoluteUploadThreshold(SpeedtestCompleted $event): bool|array
     {
-        if (! absoluteUploadThresholdFailed($thresholdSettings->absolute_upload, $event->result->upload)) {
+        if (! absoluteUploadThresholdFailed($this->thresholdSettings->absolute_upload, $event->result->upload)) {
             return false;
         }
 
         return [
             'name' => 'Upload',
-            'threshold' => $thresholdSettings->absolute_upload.' Mbps',
+            'threshold' => $this->thresholdSettings->absolute_upload.' Mbps',
             'value' => Number::toBitRate(bits: $event->result->upload_bits, precision: 2),
         ];
     }
@@ -124,15 +128,15 @@ class SendSpeedtestThresholdNotification
     /**
      * Build Apprise notification if absolute ping threshold is breached.
      */
-    protected function absolutePingThreshold(SpeedtestCompleted $event, ThresholdSettings $thresholdSettings): bool|array
+    protected function absolutePingThreshold(SpeedtestCompleted $event): bool|array
     {
-        if (! absolutePingThresholdFailed($thresholdSettings->absolute_ping, $event->result->ping)) {
+        if (! absolutePingThresholdFailed($this->thresholdSettings->absolute_ping, $event->result->ping)) {
             return false;
         }
 
         return [
             'name' => 'Ping',
-            'threshold' => $thresholdSettings->absolute_ping.' ms',
+            'threshold' => $this->thresholdSettings->absolute_ping.' ms',
             'value' => round($event->result->ping, 2).' ms',
         ];
     }

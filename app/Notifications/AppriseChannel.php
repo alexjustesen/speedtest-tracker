@@ -57,7 +57,7 @@ class AppriseChannel
                     'instance' => $appriseUrl,
                 ]);
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Apprise notification exception', [
                 'channel' => $message->urls ?? 'unknown',
                 'instance' => $appriseUrl,

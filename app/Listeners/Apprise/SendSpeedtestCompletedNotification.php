@@ -12,21 +12,26 @@ use Illuminate\Support\Facades\Notification;
 class SendSpeedtestCompletedNotification
 {
     /**
+     * Create a new listener instance.
+     */
+    public function __construct(
+        protected NotificationSettings $notificationSettings
+    ) {}
+
+    /**
      * Handle the event.
      */
     public function handle(SpeedtestCompleted $event): void
     {
-        $notificationSettings = new NotificationSettings;
-
-        if (! $notificationSettings->apprise_enabled) {
+        if (! $this->notificationSettings->apprise_enabled) {
             return;
         }
 
-        if (! $notificationSettings->apprise_on_speedtest_run) {
+        if (! $this->notificationSettings->apprise_on_speedtest_run) {
             return;
         }
 
-        if (empty($notificationSettings->apprise_channel_urls) || ! is_array($notificationSettings->apprise_channel_urls)) {
+        if (empty($this->notificationSettings->apprise_channel_urls) || ! is_array($this->notificationSettings->apprise_channel_urls)) {
             Log::warning('Apprise service URLs not found; check Apprise notification settings.');
 
             return;
@@ -39,7 +44,7 @@ class SendSpeedtestCompletedNotification
         $title = 'Speedtest Completed – #'.$event->result->id;
 
         // Send notification to each configured channel URL
-        foreach ($notificationSettings->apprise_channel_urls as $row) {
+        foreach ($this->notificationSettings->apprise_channel_urls as $row) {
             $channelUrl = $row['channel_url'] ?? null;
             if (! $channelUrl) {
                 Log::warning('Skipping entry with missing channel_url.');
