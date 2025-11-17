@@ -2,70 +2,70 @@
 
 return [
     // Common actions
-    'save' => 'Save',
-    'cancel' => 'Cancel',
-    'delete' => 'Delete',
-    'edit' => 'Edit',
-    'create' => 'Create',
-    'search' => 'Search',
-    'filter' => 'Filter',
-    'export' => 'Export',
-    'actions' => 'Actions',
-    'enable' => 'Enable',
-    'yes' => 'Yes',
-    'no' => 'No',
-    'options' => 'Options',
+    'save' => 'Speichern',
+    'cancel' => 'Abbrechen',
+    'delete' => 'Löschen',
+    'edit' => 'Bearbeiten',
+    'create' => 'Anlegen',
+    'search' => 'Suchen',
+    'filter' => 'Filtern',
+    'export' => 'Exportieren',
+    'actions' => 'Aktionen',
+    'enable' => 'Aktivieren',
+    'yes' => 'Ja',
+    'no' => 'Nein',
+    'options' => 'Optionen',
     'details' => 'Details',
 
     // Common labels
     'name' => 'Name',
-    'email' => 'Email',
-    'email_address' => 'Email address',
-    'password' => 'Password',
-    'password_confirmation' => 'Password confirmation',
+    'email' => 'E-Mail',
+    'email_address' => 'E-Mail-Adresse',
+    'password' => 'Passwort',
+    'password_confirmation' => 'Passwortbestätigung',
     'id' => 'ID',
     'status' => 'Status',
-    'message' => 'Message',
-    'comment' => 'Comment',
-    'comments' => 'Comments',
-    'created_at' => 'Created at',
-    'updated_at' => 'Updated at',
+    'message' => 'Nachricht',
+    'comment' => 'Kommentar',
+    'comments' => 'Kommentare',
+    'created_at' => 'Erstellt am',
+    'updated_at' => 'Aktualisiert am',
     'url' => 'URL',
 
     // Navigation
     'dashboard' => 'Dashboard',
-    'results' => 'Results',
-    'settings' => 'Settings',
-    'users' => 'Users',
-    'documentation' => 'Documentation',
+    'results' => 'Ergebnisse',
+    'settings' => 'Einstellungen',
+    'users' => 'Benutzer',
+    'documentation' => 'Dokumentation',
     'links' => 'Links',
-    'donate' => 'Donate',
+    'donate' => 'Spenden',
 
     // Roles
     'admin' => 'Admin',
-    'user' => 'User',
-    'role' => 'Role',
+    'user' => 'Benutzer',
+    'role' => 'Rolle',
 
     // Date ranges
-    'last_24h' => 'Last 24 hours',
-    'last_week' => 'Last week',
-    'last_month' => 'Last month',
+    'last_24h' => 'Letzte 24 Stunden',
+    'last_week' => 'Letzte Woche',
+    'last_month' => 'Letzten Monat',
 
     // Metrics
-    'average' => 'Average',
-    'high' => 'High',
-    'low' => 'Low',
-    'faster' => 'faster',
-    'slower' => 'slower',
-    'healthy' => 'Healthy',
+    'average' => 'Durchschnitt',
+    'high' => 'Hoch',
+    'low' => 'Niedrig',
+    'faster' => 'schneller',
+    'slower' => 'langsamer',
+    'healthy' => 'Gesund',
 
     // Units
-    'ms' => 'ms',
+    'ms' => 'M',
     'mbps' => 'Mbps',
 
     // Speed test metrics
     'download' => 'Download',
-    'upload' => 'Upload',
+    'upload' => 'Hochladen',
     'ping' => 'Ping',
     'jitter' => 'Jitter',
 
@@ -75,32 +75,32 @@ return [
     'ping_ms' => 'Ping (ms)',
     'download_ms' => 'Download (ms)',
     'upload_ms' => 'Upload (ms)',
-    'average_ms' => 'Average (ms)',
-    'high_ms' => 'High (ms)',
-    'low_ms' => 'Low (ms)',
+    'average_ms' => 'Durchschnitt (ms)',
+    'high_ms' => 'Hoch (ms)',
+    'low_ms' => 'Niedrig (ms)',
     'ping_ms_label' => 'Ping (ms)',
 
     // Latency
-    'download_latency' => 'Download latency',
-    'upload_latency' => 'Upload latency',
+    'download_latency' => 'Download-Latenz',
+    'upload_latency' => 'Upload-Latenz',
 
     // Actions
-    'run_speedtest' => 'Run speedtest',
-    'list_servers' => 'List servers',
-    'export_current_results' => 'Export current results',
-    'test' => 'Test',
+    'run_speedtest' => 'Schnelltest ausführen',
+    'list_servers' => 'Server auflisten',
+    'export_current_results' => 'Aktuelle Ergebnisse exportieren',
+    'test' => 'Testen',
 
     // Common
     'token' => 'Token',
 
     // Application
     'speedtest_tracker' => 'Speedtest Tracker',
-    'platform' => 'Platform',
+    'platform' => 'Plattform',
 
     // Update status
-    'update_available' => 'Update available!',
-    'up_to_date' => 'Up to date',
+    'update_available' => 'Update verfügbar!',
+    'up_to_date' => 'Aktuell',
 
     // Notifications
-    'token_created' => 'Token Created',
+    'token_created' => 'Token erstellt',
 ];
