@@ -1,56 +1,56 @@
 <?php
 
 return [
-    'title' => 'Notifications',
-    'label' => 'Notifications',
+    'title' => 'Notificaciones',
+    'label' => 'Notificaciones',
 
     // Database notifications
-    'database' => 'Database',
-    'database_description' => 'Notifications sent to this channel will show up under the 🔔 icon in the header.',
-    'enable_database_notifications' => 'Enable database notifications',
-    'database_on_speedtest_run' => 'Notify on every speedtest run',
-    'database_on_threshold_failure' => 'Notify on threshold failures',
-    'test_database_channel' => 'Test database channel',
+    'database' => 'Base de datos',
+    'database_description' => 'Las notificaciones enviadas a este canal se mostrarán bajo el icono :belell: en el encabezado.',
+    'enable_database_notifications' => 'Habilitar notificaciones de base de datos',
+    'database_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
+    'database_on_threshold_failure' => 'Notificar en los umbrales de fallos',
+    'test_database_channel' => 'Probar canal de base de datos',
 
     // Mail notifications
-    'mail' => 'Mail',
-    'enable_mail_notifications' => 'Enable mail notifications',
-    'recipients' => 'Recipients',
-    'mail_on_speedtest_run' => 'Notify on every speedtest run',
-    'mail_on_threshold_failure' => 'Notify on threshold failures',
-    'test_mail_channel' => 'Test mail channel',
+    'mail' => 'Correo',
+    'enable_mail_notifications' => 'Habilitar notificaciones de correo',
+    'recipients' => 'Destinatarios',
+    'mail_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
+    'mail_on_threshold_failure' => 'Notificar en los umbrales de fallos',
+    'test_mail_channel' => 'Canal de prueba de correo',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Enable webhook notifications',
-    'webhook_on_speedtest_run' => 'Notify on every speedtest run',
-    'webhook_on_threshold_failure' => 'Notify on threshold failures',
-    'test_webhook_channel' => 'Test webhook channel',
+    'enable_webhook_notifications' => 'Habilitar notificaciones de webhook',
+    'webhook_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
+    'webhook_on_threshold_failure' => 'Notificar en los umbrales de fallos',
+    'test_webhook_channel' => 'Probar canal webhook',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notify on every speedtest run',
-    'notify_on_threshold_failures' => 'Notify on threshold failures',
+    'notify_on_every_speedtest_run' => 'Notificar en cada prueba de velocidad',
+    'notify_on_threshold_failures' => 'Notificar en los umbrales de fallos',
 
     // Test notification messages
     'test_notifications' => [
         'database' => [
-            'ping' => 'I say: ping',
-            'pong' => 'You say: pong',
-            'received' => 'Test database notification received!',
-            'sent' => 'Test database notification sent.',
+            'ping' => 'Yo digo: ping',
+            'pong' => 'Dice usted: pong',
+            'received' => 'Notificación de la base de datos de prueba recibida!',
+            'sent' => 'Notificación de prueba de base de datos enviada.',
         ],
         'mail' => [
-            'add' => 'Add email recipients!',
-            'sent' => 'Test mail notification sent.',
+            'add' => '¡Añadir destinatarios de correo!',
+            'sent' => 'Notificación de correo de prueba enviada.',
         ],
         'webhook' => [
-            'add' => 'Add webhook URLs!',
-            'sent' => 'Test webhook notification sent.',
-            'payload' => 'Testing webhook notification',
+            'add' => '¡Añadir URL de webhook!',
+            'sent' => 'Prueba de notificación de webhook enviada.',
+            'payload' => 'Probando notificación de webhook',
         ],
     ],
 
     // Helper text
-    'threshold_helper_text' => 'Threshold notifications will be sent to the /fail route in the URL.',
+    'threshold_helper_text' => 'Las notificaciones de umbral se enviarán a la ruta /fail en la URL.',
 ];
