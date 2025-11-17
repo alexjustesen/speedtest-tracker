@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'title' => 'API Tokens',
-    'label' => 'API Tokens',
+    'title' => 'Jetons API',
+    'label' => 'Jetons API',
 
     // Token management
-    'api_token' => 'API token',
-    'api_tokens' => 'API tokens',
+    'api_token' => 'Jeton API',
+    'api_tokens' => 'Jetons API',
     'create_api_token' => 'Create API token',
     'your_token' => 'Your token',
     'token_status' => 'Token status',
