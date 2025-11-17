@@ -9,6 +9,6 @@ return [
     'recent_results' => 'Résultats récents',
     'statistics' => 'Statistiques',
     'latest_download' => 'Dernier téléchargement',
-    'latest_upload' => 'Dernier téléversement',
-    'latest_ping' => 'Dernier ping',
+    'latest_upload' => 'Dernier envoi',
+    'latest_ping' => 'Dernière latence',
 ];
