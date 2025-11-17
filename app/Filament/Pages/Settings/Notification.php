@@ -262,7 +262,6 @@ class Notification extends SettingsPage
                                                     ]),
                                                 Repeater::make('pushover_webhooks')
                                                     ->label('Pushover Webhooks')
-                                                    ->addable(false)
                                                     ->schema([
                                                         TextInput::make('url')
                                                             ->label('URL')
@@ -318,7 +317,6 @@ class Notification extends SettingsPage
                                                     ]),
                                                 Repeater::make('discord_webhooks')
                                                     ->label('Webhooks')
-                                                    ->addable(false)
                                                     ->schema([
                                                         TextInput::make('url')
                                                             ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
@@ -361,7 +359,6 @@ class Notification extends SettingsPage
                                                     ]),
                                                 Repeater::make('gotify_webhooks')
                                                     ->label('Webhooks')
-                                                    ->addable(false)
                                                     ->schema([
                                                         TextInput::make('url')
                                                             ->placeholder('https://example.com/message?token=<apptoken>')
@@ -404,7 +401,6 @@ class Notification extends SettingsPage
                                                     ]),
                                                 Repeater::make('slack_webhooks')
                                                     ->label('Webhooks')
-                                                    ->addable(false)
                                                     ->schema([
                                                         TextInput::make('url')
                                                             ->placeholder('https://hooks.slack.com/services/abc/xyz')
@@ -447,7 +443,6 @@ class Notification extends SettingsPage
                                                     ]),
                                                 Repeater::make('ntfy_webhooks')
                                                     ->label('Webhooks')
-                                                    ->addable(false)
                                                     ->schema([
                                                         TextInput::make('url')
                                                             ->maxLength(2000)
@@ -505,7 +500,6 @@ class Notification extends SettingsPage
                                                     ]),
                                                 Repeater::make('healthcheck_webhooks')
                                                     ->label('webhooks')
-                                                    ->addable(false)
                                                     ->schema([
                                                         TextInput::make('url')
                                                             ->placeholder('https://hc-ping.com/your-uuid-here')
@@ -554,7 +548,6 @@ class Notification extends SettingsPage
                                                     ]),
                                                 Repeater::make('telegram_recipients')
                                                     ->label('Recipients')
-                                                    ->addable(false)
                                                     ->schema([
                                                         TextInput::make('telegram_chat_id')
                                                             ->placeholder('12345678910')
