@@ -182,7 +182,7 @@ class ResultTable
                     ->sortable()
                     ->alignment(Alignment::Center),
                 TextColumn::make('data.message')
-                    ->label(__('results.error_message'))
+                    ->label(__('results.error_message_title'))
                     ->limit(15)
                     ->tooltip(fn ($state) => $state)
                     ->toggleable(isToggledHiddenByDefault: true)
