@@ -46,15 +46,23 @@ class AppriseChannel
 
             if ($response->failed()) {
                 Log::error('Apprise notification failed', [
+                    'channel' => $message->urls,
+                    'instance' => $appriseUrl,
                     'status' => $response->status(),
                     'body' => $response->body(),
                 ]);
             } else {
-                Log::info("Apprise notification sent → instance: {$appriseUrl}");
+                Log::info('Apprise notification sent', [
+                    'channel' => $message->urls,
+                    'instance' => $appriseUrl,
+                ]);
             }
         } catch (\Exception $e) {
             Log::error('Apprise notification exception', [
+                'channel' => $message->urls ?? 'unknown',
+                'instance' => $appriseUrl,
                 'message' => $e->getMessage(),
+                'exception' => get_class($e),
             ]);
         }
     }

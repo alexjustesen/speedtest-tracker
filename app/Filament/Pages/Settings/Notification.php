@@ -157,10 +157,7 @@ class Notification extends SettingsPage
                                             ]),
                                     ])
                                     ->compact()
-                                    ->columns([
-                                        'default' => 1,
-                                        'md' => 2,
-                                    ]),
+                                    ->columnSpan('full'),
 
                                 Section::make(__('settings/notifications.mail'))
                                     ->schema([
