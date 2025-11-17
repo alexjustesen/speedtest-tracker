@@ -1,22 +1,22 @@
 <?php
 
 return [
-    'title' => 'Thresholds',
-    'label' => 'Thresholds',
+    'title' => 'Grenzwerte',
+    'label' => 'Grenzwerte',
 
     // Absolute thresholds
-    'absolute' => 'Absolute',
-    'absolute_description' => 'Absolute thresholds do not take into account previous history and could be triggered on each test.',
-    'absolute_enabled' => 'Enable absolute thresholds',
+    'absolute' => 'Absolut',
+    'absolute_description' => 'Absolute Schwellenwerte berücksichtigen nicht den vorherigen Verlauf und könnten bei jedem Test ausgelöst werden.',
+    'absolute_enabled' => 'absolute Schwellenwerte aktivieren',
 
     // Metrics section
-    'metrics' => 'Metrics',
-    'metrics_helper_text' => 'Set to zero to disable this metric.',
+    'metrics' => 'Metriken',
+    'metrics_helper_text' => 'Setze Null, um diese Metrik zu deaktivieren.',
 
     // General threshold labels
-    'thresholds' => 'Thresholds',
-    'threshold_enabled' => 'Threshold enabled',
-    'threshold_download' => 'Threshold download',
-    'threshold_upload' => 'Threshold upload',
-    'threshold_ping' => 'Threshold ping',
+    'thresholds' => 'Grenzwerte',
+    'threshold_enabled' => 'Grenzwert aktiviert',
+    'threshold_download' => 'Schwellen-Download',
+    'threshold_upload' => 'Schwellenwert hochladen',
+    'threshold_ping' => 'Grenzwert Ping',
 ];
