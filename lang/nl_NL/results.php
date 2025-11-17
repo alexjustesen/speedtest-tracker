@@ -70,4 +70,6 @@ return [
     'select_server_helper' => 'Laat leeg om de snelheidstest uit te voeren zonder een server op te geven. Geblokkeerde servers zullen worden overgeslagen.',
     'manual_servers' => 'Handmatige servers',
     'closest_servers' => 'Dichtstbijzijnde servers',
+    'run_speedtest' => 'Run Speedtest',
+    'start' => 'Start',
 ];
