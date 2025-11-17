@@ -55,8 +55,8 @@ return [
     'average' => 'Moyenne',
     'high' => 'Élevé',
     'low' => 'Bas',
-    'faster' => 'plus rapide',
-    'slower' => 'plus lent',
+    'faster' => 'rapide',
+    'slower' => 'lent',
     'healthy' => 'Sain',
 
     // Units
@@ -70,8 +70,8 @@ return [
     'jitter' => 'Gigue',
 
     // Metric labels with units
-    'download_mbps' => 'Téléchargement (Mbps)',
-    'upload_mbps' => 'Envoi (Mbps)',
+    'download_mbps' => 'Téléchargement (Mbit/s)',
+    'upload_mbps' => 'Envoi (Mbit/s)',
     'ping_ms' => 'Latence (ms)',
     'download_ms' => 'Téléchargement (ms)',
     'upload_ms' => 'Envoi (ms)',
