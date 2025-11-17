@@ -29,7 +29,6 @@ use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
-
 class Notification extends SettingsPage
 {
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bell';

@@ -49,7 +49,6 @@ class AppServiceProvider extends ServiceProvider
         $this->setApiRateLimit();
         $this->registerNotificationChannels();
 
-
         AboutCommand::add('Speedtest Tracker', fn () => [
             'Version' => config('speedtest.build_version'),
         ]);
