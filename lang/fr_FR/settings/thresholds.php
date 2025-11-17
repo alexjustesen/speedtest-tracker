@@ -1,22 +1,22 @@
 <?php
 
 return [
-    'title' => 'Thresholds',
-    'label' => 'Thresholds',
+    'title' => 'Seuils',
+    'label' => 'Seuils',
 
     // Absolute thresholds
-    'absolute' => 'Absolute',
-    'absolute_description' => 'Absolute thresholds do not take into account previous history and could be triggered on each test.',
-    'absolute_enabled' => 'Enable absolute thresholds',
+    'absolute' => 'Absolu',
+    'absolute_description' => 'Les seuils absolus ne tiennent pas compte de l\'historique précédent et peuvent être déclenchés à chaque test.',
+    'absolute_enabled' => 'Activer les seuils absolus',
 
     // Metrics section
-    'metrics' => 'Metrics',
-    'metrics_helper_text' => 'Set to zero to disable this metric.',
+    'metrics' => 'Métriques',
+    'metrics_helper_text' => 'Mettre à zéro pour désactiver cette métrique.',
 
     // General threshold labels
-    'thresholds' => 'Thresholds',
-    'threshold_enabled' => 'Threshold enabled',
-    'threshold_download' => 'Threshold download',
-    'threshold_upload' => 'Threshold upload',
-    'threshold_ping' => 'Threshold ping',
+    'thresholds' => 'Seuils',
+    'threshold_enabled' => 'Seuil activé',
+    'threshold_download' => 'Seuil de téléchargement',
+    'threshold_upload' => 'Seuil d\'envoi',
+    'threshold_ping' => 'Seuil de ping',
 ];
