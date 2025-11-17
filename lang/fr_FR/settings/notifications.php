@@ -5,52 +5,52 @@ return [
     'label' => 'Notifications',
 
     // Database notifications
-    'database' => 'Database',
-    'database_description' => 'Notifications sent to this channel will show up under the 🔔 icon in the header.',
-    'enable_database_notifications' => 'Enable database notifications',
-    'database_on_speedtest_run' => 'Notify on every speedtest run',
-    'database_on_threshold_failure' => 'Notify on threshold failures',
-    'test_database_channel' => 'Test database channel',
+    'database' => 'Base de données',
+    'database_description' => 'Les notifications envoyées à ce salon apparaîtront sous l\'icône 🔔 dans l\'entête.',
+    'enable_database_notifications' => 'Activer les notifications de base de données',
+    'database_on_speedtest_run' => 'Notifier à chaque test de vitesse',
+    'database_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
+    'test_database_channel' => 'Tester le canal de base de données',
 
     // Mail notifications
-    'mail' => 'Mail',
-    'enable_mail_notifications' => 'Enable mail notifications',
-    'recipients' => 'Recipients',
-    'mail_on_speedtest_run' => 'Notify on every speedtest run',
-    'mail_on_threshold_failure' => 'Notify on threshold failures',
-    'test_mail_channel' => 'Test mail channel',
+    'mail' => 'Courrier',
+    'enable_mail_notifications' => 'Activer les notifications par courriel',
+    'recipients' => 'Destinataires',
+    'mail_on_speedtest_run' => 'Notifier à chaque test de vitesse',
+    'mail_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
+    'test_mail_channel' => 'Tester le canal de messagerie',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Enable webhook notifications',
-    'webhook_on_speedtest_run' => 'Notify on every speedtest run',
-    'webhook_on_threshold_failure' => 'Notify on threshold failures',
-    'test_webhook_channel' => 'Test webhook channel',
+    'enable_webhook_notifications' => 'Activer les notifications webhook',
+    'webhook_on_speedtest_run' => 'Notifier à chaque test de vitesse',
+    'webhook_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
+    'test_webhook_channel' => 'Tester le canal webhook',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notify on every speedtest run',
-    'notify_on_threshold_failures' => 'Notify on threshold failures',
+    'notify_on_every_speedtest_run' => 'Notifier à chaque test de vitesse',
+    'notify_on_threshold_failures' => 'Notifier en cas de dépassement de seuil',
 
     // Test notification messages
     'test_notifications' => [
         'database' => [
-            'ping' => 'I say: ping',
-            'pong' => 'You say: pong',
-            'received' => 'Test database notification received!',
-            'sent' => 'Test database notification sent.',
+            'ping' => 'Je dis: ping',
+            'pong' => 'Vous dites: pong',
+            'received' => 'Notification de base de données de test reçue !',
+            'sent' => 'Notification de base de données de test envoyée.',
         ],
         'mail' => [
-            'add' => 'Add email recipients!',
-            'sent' => 'Test mail notification sent.',
+            'add' => 'Ajouter des destinataires d\'e-mail!',
+            'sent' => 'Notification de test envoyée par e-mail.',
         ],
         'webhook' => [
-            'add' => 'Add webhook URLs!',
-            'sent' => 'Test webhook notification sent.',
-            'payload' => 'Testing webhook notification',
+            'add' => 'Ajouter des URL de webhook !',
+            'sent' => 'Notification de test du webhook envoyée.',
+            'payload' => 'Test de la notification de webhook',
         ],
     ],
 
     // Helper text
-    'threshold_helper_text' => 'Threshold notifications will be sent to the /fail route in the URL.',
+    'threshold_helper_text' => 'Les notifications de seuil seront envoyées à la route /fail dans l\'URL.',
 ];
