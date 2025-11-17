@@ -2,13 +2,13 @@
 
 return [
     'title' => 'Dashboard',
-    'no_speedtests_scheduled' => 'No speedtests scheduled.',
-    'next_speedtest_at' => 'Next speedtest at',
+    'no_speedtests_scheduled' => 'Keine Geschwindigkeitstests geplant.',
+    'next_speedtest_at' => 'Nächster Geschwindigkeitstest um',
 
     // Widgets
-    'recent_results' => 'Recent Results',
-    'statistics' => 'Statistics',
-    'latest_download' => 'Latest download',
-    'latest_upload' => 'Latest upload',
-    'latest_ping' => 'Latest ping',
+    'recent_results' => 'Neueste Ergebnisse',
+    'statistics' => 'Statistiken',
+    'latest_download' => 'Letzter Download',
+    'latest_upload' => 'Letzter Upload',
+    'latest_ping' => 'Letztes Ping',
 ];
