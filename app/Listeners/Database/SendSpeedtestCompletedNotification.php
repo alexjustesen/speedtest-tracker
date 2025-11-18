@@ -6,7 +6,6 @@ use App\Events\SpeedtestCompleted;
 use App\Models\User;
 use App\Settings\NotificationSettings;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 
 class SendSpeedtestCompletedNotification
 {
@@ -26,7 +25,6 @@ class SendSpeedtestCompletedNotification
         }
 
         foreach (User::all() as $user) {
-            Log::info('Notifying user', ['id' => $user->id, 'email' => $user->email]);
             Notification::make()
                 ->title(__('results.speedtest_completed'))
                 ->success()
