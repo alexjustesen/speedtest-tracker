@@ -34,10 +34,6 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - Stick to existing directory structure - don't create new base folders without approval.
 - Do not change the application's dependencies without approval.
 
-## Localization
-- Only create or update language files in the `lang/en` directory. Do not create or modify language files for other locales.
-- All translation strings should be added only to the English language files.
-
 ## Frontend Bundling
 - If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
 
@@ -403,12 +399,4 @@ it('has emails', function (string $email) {
 
 - Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
 - Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test` with a specific filename or filter.
-
-
-=== tightenco/duster rules ===
-
-## Duster Code Formatter
-
-- You must run `vendor/bin/duster fix --dirty` before finalizing changes to ensure your code matches the project's expected style.
-- Duster wraps Laravel Pint and other formatters, so never run Pint directly. Always prefer Duster for formatting tasks.
 </laravel-boost-guidelines>
