@@ -38,6 +38,11 @@ class Result extends Model
         ];
     }
 
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
     /**
      * Get the prunable model query.
      */
