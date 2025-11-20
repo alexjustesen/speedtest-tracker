@@ -1,7 +1,7 @@
 base_path: /lang
 preserve_hierarchy: true
 pull_request_labels:
-  - ":earth_africa: Translations"
+  - "chore"
 
 files:
   # PHP language files - root level
