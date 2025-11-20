@@ -3,7 +3,7 @@
 return [
     'title' => 'Resultaten',
     'result_overview' => 'Overzicht van resultaten',
-    'error_message_title' => 'Error message',
+    'error_message_title' => 'Fout melding',
 
     // Metrics
     'download' => 'Download',
