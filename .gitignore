@@ -21,3 +21,11 @@ yarn-error.log
 /.nova
 /.phpunit.cache
 /.vscode
+
+# AI and Boost assets
+/.claude
+/.github/copilot-instructions.md
+/.mcp.json
+/boost.json
+/AGENTS.md
+/CLAUDE.md
