@@ -20,6 +20,21 @@ return [
     'mail_on_threshold_failure' => 'Notify on threshold failures',
     'test_mail_channel' => 'Test mail channel',
 
+    // Apprise notifications
+    'apprise' => 'Apprise',
+    'apprise_description' => 'The Apprise Notification Library enables sending notifications to a wide range of services.',
+    'enable_apprise_notifications' => 'Enable Apprise notifications',
+    'apprise_on_speedtest_run' => 'Notify on every speedtest run',
+    'apprise_on_threshold_failure' => 'Notify on threshold failures',
+    'apprise_sidecar' => 'Apprise Sidecar',
+    'apprise_verify_ssl' => 'Verify SSL',
+    'apprise_channels' => 'Apprise Channels',
+    'apprise_channel_url' => 'Channel URL',
+    'apprise_channel_url_placeholder' => 'discord://WebhookID/WebhookToken',
+    'apprise_channel_url_helper' => 'Provide the service endpoint URL for notifications.',
+    'apprise_documentation' => 'Apprise Documentation',
+    'test_apprise_channel' => 'Test Apprise',
+
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
