@@ -32,7 +32,6 @@ class Schedule extends Model
             'options' => 'array',
             'is_active' => 'boolean',
             'next_run_at' => 'datetime',
-            'thresholds' => 'array',
         ];
     }
 
@@ -52,21 +51,5 @@ class Schedule extends Model
         return $servers
             ->map(fn ($id) => $lookup[$id] ?? "Unknown ($id)")
             ->implode(', ');
-    }
-
-    public function getThresholdTooltip(): ?string
-    {
-        $thresholds = $this->thresholds;
-
-        if (! ($thresholds['enabled'] ?? false)) {
-            return null;
-        }
-
-        return sprintf(
-            "Download: %s Mbps\nUpload: %s Mbps\nPing: %s ms",
-            $thresholds['download'] ?? '—',
-            $thresholds['upload'] ?? '—',
-            $thresholds['ping'] ?? '—',
-        );
     }
 }
