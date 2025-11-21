@@ -7,6 +7,7 @@ use App\Filament\Exports\ResultExporter;
 use App\Helpers\Number;
 use App\Jobs\TruncateResults;
 use App\Models\Result;
+use App\Models\Schedule;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
@@ -174,6 +175,7 @@ class ResultTable
                     ->label(__('results.scheduled'))
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: true)
+                    ->tooltip(fn ($record) => $record->schedule->name ?? null)
                     ->alignment(Alignment::Center),
                 IconColumn::make('healthy')
                     ->label(__('general.healthy'))
@@ -262,6 +264,16 @@ class ResultTable
                             ->toArray();
                     })
                     ->attribute('data->server->name'),
+                SelectFilter::make('schedule_id')
+                    ->label('Schedule')
+                    ->multiple()
+                    ->attribute('schedule_id')
+                    ->options(function (): array {
+                        return Schedule::query()
+                            ->orderBy('name')
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    }),
                 TernaryFilter::make('scheduled')
                     ->label(__('results.scheduled'))
                     ->nullable()

@@ -76,6 +76,8 @@ class ScheduleTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->deferFilters(false)
+            ->deferColumnManager(false)
             ->filters([
                 SelectFilter::make('type')
                     ->label('Type')

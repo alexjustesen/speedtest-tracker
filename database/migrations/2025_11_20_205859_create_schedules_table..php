@@ -18,15 +18,9 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->json('options')->nullable();
-            $table->string('token')->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('next_run_at')->nullable();
             $table->timestamps();
-
-            $table->foreign('owned_by_id')
-                ->references('id')
-                ->on('users')
-                ->nullOnDelete();
         });
     }
 

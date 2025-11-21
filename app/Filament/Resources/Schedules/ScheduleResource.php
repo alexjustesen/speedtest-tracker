@@ -18,6 +18,8 @@ class ScheduleResource extends Resource
     protected static ?string $model = Schedule::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-calendar';
+    
+    protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
     public static function getNavigationLabel(): string
     {
@@ -58,8 +60,8 @@ class ScheduleResource extends Resource
     {
         return [
             'index' => ListSchedules::route('/'),
-            'create' => CreateSchedule::route('/create'),
-            'edit' => EditSchedule::route('/{record}/edit'),
+           # 'create' => CreateSchedule::route('/create'),
+           # 'edit' => EditSchedule::route('/{record}/edit'),
         ];
     }
 }

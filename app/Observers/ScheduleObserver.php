@@ -14,11 +14,7 @@ class ScheduleObserver
      */
     public function creating(Schedule $schedule): void
     {
-        do {
-            $token = Str::lower(Str::random(16));
-        } while (Schedule::where('token', $token)->exists());
-
-        $schedule->token = $token;
+        //
     }
 
     /**
