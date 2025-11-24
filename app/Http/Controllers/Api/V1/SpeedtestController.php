@@ -38,6 +38,7 @@ class SpeedtestController extends ApiController
 
         $result = RunSpeedtestAction::run(
             serverId: $request->input('server_id'),
+            dispatchedBy: $request->user()->id,
         );
 
         return $this->sendResponse(
