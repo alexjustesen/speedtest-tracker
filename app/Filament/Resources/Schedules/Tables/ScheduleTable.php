@@ -31,7 +31,7 @@ class ScheduleTable
                 TextColumn::make('name'),
                 TextColumn::make('type')
                     ->label('Type')
-                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('description')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -58,8 +58,6 @@ class ScheduleTable
                     ->alignCenter()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->boolean(),
-                TextColumn::make('ownedBy.name')
-                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('next_run_at')
                     ->alignEnd()
                     ->dateTime()

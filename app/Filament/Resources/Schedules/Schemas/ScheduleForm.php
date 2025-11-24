@@ -41,6 +41,7 @@ class ScheduleForm
                         ->maxLength(255),
                     Select::make('type')
                         ->label('Type')
+                        ->hidden(true)
                         ->options([
                             'Ookla' => 'Ookla',
                         ])
@@ -95,17 +96,11 @@ class ScheduleForm
 
                             Repeater::make('options.servers')
                                 ->schema([
-                                    Select::make('server_id')
+                                    TextInput::make('server_id')
                                         ->label('Server ID')
-                                        ->placeholder('Select the ID of the server.')
-                                        ->options(function (): array {
-                                            return GetOoklaSpeedtestServers::run();
-                                        })
-                                        ->searchable()
+                                        ->placeholder('Enter the ID of the server.')
                                         ->required(),
                                 ])
-                                ->minItems(1)
-                                ->maxItems(20)
                                 ->hidden(fn (Get $get) => $get('options.server_preference') === 'auto'),
                         ]),
 
