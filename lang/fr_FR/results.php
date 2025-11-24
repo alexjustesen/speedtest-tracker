@@ -3,22 +3,22 @@
 return [
     'title' => 'Résultats',
     'result_overview' => 'Aperçu des résultats',
-    'error_message_title' => 'Error message',
+    'error_message_title' => 'Message d\'erreur',
 
     // Metrics
-    'download' => 'Download',
+    'download' => 'Téléchargement',
     'download_latency_high' => 'Latence de téléchargement élevée',
     'download_latency_low' => 'Latence de téléchargement bas',
     'download_latency_iqm' => 'Latence de téléchargement MIQ',
     'download_latency_jitter' => 'Latence de téléchargement gigue',
 
-    'upload' => 'Upload',
+    'upload' => 'Envoi',
     'upload_latency_high' => 'Latence d\'envoi élevée',
     'upload_latency_low' => 'Latence d\'envoi faible',
     'upload_latency_iqm' => 'Latence d\'envoi MIQ',
     'upload_latency_jitter' => 'Latence d\'envoi gigue',
 
-    'ping' => 'Ping',
+    'ping' => 'Latence',
     'ping_details' => 'Détails des latences',
     'ping_jitter' => 'Latence gigue',
     'ping_high' => 'Latence élevée',
@@ -74,6 +74,6 @@ return [
     'select_server_helper' => 'Laisser vide pour exécuter le test de vitesse sans spécifier de serveur. Les serveurs bloqués seront ignorés.',
     'manual_servers' => 'Serveurs manuels',
     'closest_servers' => 'Serveurs les plus proches',
-    'run_speedtest' => 'Run Speedtest',
-    'start' => 'Start',
+    'run_speedtest' => 'Lancer le test de vitesse',
+    'start' => 'Démarrer',
 ];
