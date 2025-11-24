@@ -129,6 +129,15 @@ class DataIntegration extends SettingsPage
                             ])
                             ->compact()
                             ->columnSpanFull(),
+                        Section::make(__('settings/data_integration.prometheus'))
+                            ->description(__('settings/data_integration.prometheus_description'))
+                            ->schema([
+                                Toggle::make('prometheus_enabled')
+                                    ->label(__('settings/data_integration.prometheus_enabled'))
+                                    ->columnSpanFull(),
+                            ])
+                            ->compact()
+                            ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
             ]);

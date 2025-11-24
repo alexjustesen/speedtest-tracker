@@ -33,6 +33,11 @@ return [
     'influxdb_bulk_write_success' => 'Finished bulk data load to Influxdb.',
     'influxdb_bulk_write_success_body' => 'Data has been sent to InfluxDB, check if the data was received.',
 
+    // Prometheus
+    'prometheus' => 'Prometheus',
+    'prometheus_description' => 'When enabled, the /metrics endpoint will expose the last speedtest result in Prometheus format with server, ISP, and metadata labels.',
+    'prometheus_enabled' => 'Enable',
+
     // Common labels
     'org' => 'Org',
     'bucket' => 'Bucket',
