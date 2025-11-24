@@ -23,13 +23,14 @@ class RunSpeedtest
 {
     use AsAction;
 
-    public function handle(bool $scheduled = false, ?int $serverId = null): mixed
+    public function handle(bool $scheduled = false, ?int $serverId = null, ?int $dispatchedBy = null): mixed
     {
         $result = Result::create([
             'data->server->id' => $serverId,
             'service' => ResultService::Ookla,
             'status' => ResultStatus::Waiting,
             'scheduled' => $scheduled,
+            'dispatched_by' => $dispatchedBy,
         ]);
 
         SpeedtestWaiting::dispatch($result);
