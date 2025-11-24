@@ -63,6 +63,7 @@ return [
     // Notifications
     'speedtest_started' => 'Snelheidstest gestart',
     'speedtest_completed' => 'Snelheidstest voltooid',
+    'speedtest_failed' => 'Speedtest mislukt',
     'download_threshold_breached' => 'Drempelwaarde voor downloaden doorbroken!',
     'upload_threshold_breached' => 'Upload drempelwaarde gelekt!',
     'ping_threshold_breached' => 'Ping drempelwaarde doorgedrukt!',
