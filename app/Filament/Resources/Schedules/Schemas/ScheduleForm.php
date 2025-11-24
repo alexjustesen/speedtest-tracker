@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\Schedules\Schemas;
 
 use App\Actions\ExplainCronExpression;
-use App\Actions\GetOoklaSpeedtestServers;
+use App\Models\Schedule;
 use App\Rules\Cron;
 use Carbon\Carbon;
 use Cron\CronExpression;
@@ -14,13 +14,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\HtmlString;
 
 class ScheduleForm
 {
@@ -101,6 +98,10 @@ class ScheduleForm
                                         ->placeholder('Enter the ID of the server.')
                                         ->required(),
                                 ])
+                                ->itemLabel(fn (array $state): ?string => isset($state['server_id'])
+                                    ? Schedule::getServerLabel($state['server_id'])
+                                    : null
+                                )
                                 ->hidden(fn (Get $get) => $get('options.server_preference') === 'auto'),
                         ]),
 

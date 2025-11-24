@@ -35,6 +35,13 @@ class Schedule extends Model
         ];
     }
 
+    public static function getServerLabel(string|int $serverId): string
+    {
+        $lookup = GetOoklaSpeedtestServers::run();
+
+        return $lookup[$serverId] ?? "Server ID: {$serverId}";
+    }
+
     public function getServerTooltip(): ?string
     {
         $preference = $this->options['server_preference'] ?? 'auto';
@@ -46,10 +53,8 @@ class Schedule extends Model
         $servers = collect($this->options['servers'] ?? [])
             ->pluck('server_id');
 
-        $lookup = GetOoklaSpeedtestServers::run();
-
         return $servers
-            ->map(fn ($id) => $lookup[$id] ?? "Unknown ($id)")
+            ->map(fn ($id) => self::getServerLabel($id))
             ->implode(', ');
     }
 }
