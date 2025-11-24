@@ -3,7 +3,7 @@
 return [
     'title' => 'Ergebnisse',
     'result_overview' => 'Ergebnisübersicht',
-    'error_message_title' => 'Error message',
+    'error_message_title' => 'Fehlermeldung',
 
     // Metrics
     'download' => 'Download',
@@ -74,6 +74,6 @@ return [
     'select_server_helper' => 'Leer lassen, um den Speedtest auszuführen, ohne einen Server anzugeben. Blockierte Server werden übersprungen.',
     'manual_servers' => 'Manuelle Server',
     'closest_servers' => 'Closest Server',
-    'run_speedtest' => 'Run Speedtest',
+    'run_speedtest' => 'Speedtest ausführen',
     'start' => 'Start',
 ];
