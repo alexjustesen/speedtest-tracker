@@ -16,10 +16,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: "duster"
-        uses: tighten/duster-action@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          args: lint --using=pint -v
+          php-version: '8.4'
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Run Pint
+        run: vendor/bin/pint --test
 
   test-mariadb-11:
     needs: lint-app

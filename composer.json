@@ -47,8 +47,7 @@
         "nunomaduro/collision": "^8.8.2",
         "pestphp/pest": "^3.8.4",
         "pestphp/pest-plugin-laravel": "^3.2",
-        "spatie/laravel-ignition": "^2.9.1",
-        "tightenco/duster": "^3.3.0"
+        "spatie/laravel-ignition": "^2.9.1"
     },
     "autoload": {
         "files": [

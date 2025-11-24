@@ -53,6 +53,7 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
 
                 RunSpeedtest::run(
                     serverId: $serverId,
+                    dispatchedBy: Auth::id(),
                 );
 
                 Notification::make()
