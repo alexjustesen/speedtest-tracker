@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use App\Events\SpeedtestFailed;
 use App\Models\Result;
-use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
@@ -17,9 +16,23 @@ class ProcessFailedSpeedtest
     {
         $result = $event->result;
 
-        if ($result->dispatched_by && ! $result->scheduled) {
-            $this->notifyDispatchingUser($result);
+        $result->loadMissing(['dispatchedBy']);
+
+        // $this->notifyAppriseChannels($result);
+        $this->notifyDispatchingUser($result);
+    }
+
+    /**
+     * Notify Apprise channels.
+     */
+    private function notifyAppriseChannels(Result $result): void
+    {
+        // Don't send Apprise notification if dispatched by a user or test is unhealthy.
+        if (filled($result->dispatched_by) || ! $result->healthy) {
+            return;
         }
+
+        //
     }
 
     /**
@@ -27,9 +40,11 @@ class ProcessFailedSpeedtest
      */
     private function notifyDispatchingUser(Result $result): void
     {
-        $user = User::find($result->dispatched_by);
+        if (empty($result->dispatched_by)) {
+            return;
+        }
 
-        $user->notify(
+        $result->dispatchedBy->notify(
             Notification::make()
                 ->title(__('results.speedtest_failed'))
                 ->actions([
