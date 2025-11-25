@@ -14,7 +14,4 @@ A new speedtest was completed using **{{ $service }}** on **{{ $isp }}** but a t
 <x-mail::button :url="$url">
 {{ __('general.view') }}
 </x-mail::button>
-
-Thanks,<br>
-{{ config('app.name') }}
 </x-mail::message>
