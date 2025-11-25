@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Result;
 use App\Settings\DataIntegrationSettings;
+use Illuminate\Support\Facades\Cache;
 use Prometheus\CollectorRegistry;
 use Prometheus\RenderTextFormat;
 use Prometheus\Storage\InMemory;
@@ -18,9 +19,13 @@ class PrometheusMetricsService
     {
         $registry = new CollectorRegistry(new InMemory);
 
-        $lastResult = Result::query()
-            ->latest()
-            ->first();
+        $resultId = Cache::get('prometheus:latest_result');
+
+        if (! $resultId) {
+            return $this->emptyMetrics();
+        }
+
+        $lastResult = Result::find($resultId);
 
         if (! $lastResult) {
             return $this->emptyMetrics();
@@ -227,6 +232,7 @@ class PrometheusMetricsService
         return [
             'server_id' => (string) ($result->server_id ?? ''),
             'server_name' => $result->server_name ?? '',
+            'server_country' => $result->server_country ?? '',
             'server_location' => $result->server_location ?? '',
             'isp' => $result->isp ?? '',
             'scheduled' => $result->scheduled ? 'true' : 'false',
