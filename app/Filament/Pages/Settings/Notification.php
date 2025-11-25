@@ -214,46 +214,46 @@ class Notification extends SettingsPage
                                         Grid::make([
                                             'default' => 1,
                                         ])
-                                                ->hidden(fn (Get $get) => $get('pushover_enabled') !== true)
-                                                ->schema([
-                                                    Fieldset::make('Triggers')
-                                                        ->schema([
-                                                            Toggle::make('pushover_on_speedtest_run')
-                                                                ->label('Notify on every speedtest run')
-                                                                ->columnSpanFull(),
-                                                            Toggle::make('pushover_on_threshold_failure')
-                                                                ->label('Notify on threshold failures')
-                                                                ->columnSpanFull(),
-                                                        ]),
-                                                    Repeater::make('pushover_webhooks')
-                                                        ->label('Pushover Webhooks')
-                                                        ->schema([
-                                                            TextInput::make('url')
-                                                                ->label('URL')
-                                                                ->placeholder('http://api.pushover.net/1/messages.json')
-                                                                ->maxLength(2000)
-                                                                ->required()
-                                                                ->url(),
-                                                            TextInput::make('user_key')
-                                                                ->label('User Key')
-                                                                ->placeholder('Your Pushover User Key')
-                                                                ->maxLength(200)
-                                                                ->required(),
-                                                            TextInput::make('api_token')
-                                                                ->label('API Token')
-                                                                ->placeholder('Your Pushover API Token')
-                                                                ->maxLength(200)
-                                                                ->required(),
-                                                        ])
-                                                        ->columnSpanFull(),
-                                                    Actions::make([
-                                                        Action::make('test pushover')
-                                                            ->label('Test Pushover webhook')
-                                                            ->action(fn (Get $get) => SendPushoverTestNotification::run(
-                                                                webhooks: $get('pushover_webhooks')
-                                                            ))
-                                                            ->hidden(fn (Get $get) => ! count($get('pushover_webhooks'))),
+                                            ->hidden(fn (Get $get) => $get('pushover_enabled') !== true)
+                                            ->schema([
+                                                Fieldset::make('Triggers')
+                                                    ->schema([
+                                                        Toggle::make('pushover_on_speedtest_run')
+                                                            ->label('Notify on every speedtest run')
+                                                            ->columnSpanFull(),
+                                                        Toggle::make('pushover_on_threshold_failure')
+                                                            ->label('Notify on threshold failures')
+                                                            ->columnSpanFull(),
                                                     ]),
+                                                Repeater::make('pushover_webhooks')
+                                                    ->label('Pushover Webhooks')
+                                                    ->schema([
+                                                        TextInput::make('url')
+                                                            ->label('URL')
+                                                            ->placeholder('http://api.pushover.net/1/messages.json')
+                                                            ->maxLength(2000)
+                                                            ->required()
+                                                            ->url(),
+                                                        TextInput::make('user_key')
+                                                            ->label('User Key')
+                                                            ->placeholder('Your Pushover User Key')
+                                                            ->maxLength(200)
+                                                            ->required(),
+                                                        TextInput::make('api_token')
+                                                            ->label('API Token')
+                                                            ->placeholder('Your Pushover API Token')
+                                                            ->maxLength(200)
+                                                            ->required(),
+                                                    ])
+                                                    ->columnSpanFull(),
+                                                Actions::make([
+                                                    Action::make('test pushover')
+                                                        ->label('Test Pushover webhook')
+                                                        ->action(fn (Get $get) => SendPushoverTestNotification::run(
+                                                            webhooks: $get('pushover_webhooks')
+                                                        ))
+                                                        ->hidden(fn (Get $get) => ! count($get('pushover_webhooks'))),
+                                                ]),
                                             ]),
                                     ])
                                     ->compact()

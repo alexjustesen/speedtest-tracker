@@ -62,7 +62,7 @@ class UnhealthySpeedtestMail extends Mailable implements ShouldQueue
     {
         $metricName = str($metric)->title();
         $type = str($benchmark['type'])->title();
-        $thresholdValue = $benchmark['value']. ' ' . str($benchmark['unit'])->title();
+        $thresholdValue = $benchmark['value'].' '.str($benchmark['unit'])->title();
 
         // Get the actual result value
         $resultValue = match ($metric) {
