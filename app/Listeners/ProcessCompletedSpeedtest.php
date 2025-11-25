@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\SpeedtestCompleted;
-use App\Mail\SpeedtestCompletedMail;
+use App\Mail\CompletedSpeedtestMail;
 use App\Models\Result;
 use App\Models\User;
 use App\Settings\NotificationSettings;
@@ -120,7 +120,7 @@ class ProcessCompletedSpeedtest
 
         foreach ($this->notificationSettings->mail_recipients as $recipient) {
             Mail::to($recipient)
-                ->send(new SpeedtestCompletedMail($result));
+                ->send(new CompletedSpeedtestMail($result));
         }
     }
 
