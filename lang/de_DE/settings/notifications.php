@@ -7,14 +7,12 @@ return [
     // Database notifications
     'database' => 'Datenbank',
     'database_description' => 'Benachrichtigungen, die an diesen Kanal gesendet werden, werden unter 🔔 Symbol in der Kopfzeile angezeigt.',
-    'enable_database_notifications' => 'Datenbank-Benachrichtigungen aktivieren',
     'database_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
     'database_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
     'test_database_channel' => 'Datenbankkanal testen',
 
     // Mail notifications
     'mail' => 'Mail',
-    'enable_mail_notifications' => 'E-Mail-Benachrichtigungen aktivieren',
     'recipients' => 'Empfänger',
     'mail_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
     'mail_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
@@ -23,7 +21,6 @@ return [
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Webhook Benachrichtigungen aktivieren',
     'webhook_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
     'webhook_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
     'test_webhook_channel' => 'Webhook-Kanal testen',
