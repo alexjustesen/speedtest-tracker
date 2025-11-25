@@ -14,6 +14,7 @@ use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Settings\NotificationSettings;
+use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
@@ -24,14 +25,17 @@ use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
 class Notification extends SettingsPage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bell';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bell-alert';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
@@ -63,6 +67,135 @@ class Notification extends SettingsPage
     {
         return $schema
             ->components([
+                Tabs::make()
+                    ->schema([
+                        Tab::make(__('settings/notifications.database'))
+                            ->icon(Heroicon::OutlinedCircleStack)
+                            ->schema([
+                                Toggle::make('database_enabled')
+                                    ->label(__('general.enable'))
+                                    ->live(),
+
+                                Grid::make([
+                                    'default' => 1,
+                                ])
+                                    ->hidden(fn (Get $get) => $get('database_enabled') !== true)
+                                    ->schema([
+                                        Fieldset::make(__('settings.triggers'))
+                                            ->columns(1)
+                                            ->schema([
+                                                Checkbox::make('database_on_speedtest_run')
+                                                    ->label(__('settings/notifications.database_on_speedtest_run')),
+
+                                                Checkbox::make('database_on_threshold_failure')
+                                                    ->label(__('settings/notifications.database_on_threshold_failure')),
+                                            ]),
+
+                                        Actions::make([
+                                            Action::make('test database')
+                                                ->label(__('settings/notifications.test_database_channel'))
+                                                ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
+                                        ]),
+                                    ]),
+
+                                // ...
+                            ]),
+
+                        Tab::make(__('settings/notifications.mail'))
+                            ->icon(Heroicon::OutlinedEnvelope)
+                            ->schema([
+                                Toggle::make('mail_enabled')
+                                    ->label(__('general.enable'))
+                                    ->live(),
+
+                                Grid::make([
+                                    'default' => 1,
+                                ])
+                                    ->hidden(fn (Get $get) => $get('mail_enabled') !== true)
+                                    ->schema([
+                                        Fieldset::make(__('settings.triggers'))
+                                            ->columns(1)
+                                            ->schema([
+                                                Checkbox::make('mail_on_speedtest_run')
+                                                    ->label(__('settings/notifications.mail_on_speedtest_run')),
+
+                                                Checkbox::make('mail_on_threshold_failure')
+                                                    ->label(__('settings/notifications.mail_on_threshold_failure')),
+                                            ]),
+
+                                        Repeater::make('mail_recipients')
+                                            ->label(__('settings/notifications.recipients'))
+                                            ->schema([
+                                                TextInput::make('email_address')
+                                                    ->placeholder('your@email.com')
+                                                    ->email()
+                                                    ->required(),
+                                            ]),
+
+                                        Actions::make([
+                                            Action::make('test mail')
+                                                ->label(__('settings/notifications.test_mail_channel'))
+                                                ->action(fn (Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
+                                                ->hidden(fn (Get $get) => ! count($get('mail_recipients'))),
+                                        ]),
+                                    ]),
+
+                                // ...
+                            ]),
+
+                        Tab::make(__('settings/notifications.webhook'))
+                            ->icon(Heroicon::OutlinedGlobeAlt)
+                            ->schema([
+                                Toggle::make('webhook_enabled')
+                                    ->label(__('general.enable'))
+                                    ->live(),
+
+                                Grid::make([
+                                    'default' => 1,
+                                ])
+                                    ->hidden(fn (Get $get) => $get('webhook_enabled') !== true)
+                                    ->schema([
+                                        Fieldset::make(__('settings.triggers'))
+                                            ->columns(1)
+                                            ->schema([
+                                                Checkbox::make('webhook_on_speedtest_run')
+                                                    ->label(__('settings/notifications.webhook_on_speedtest_run')),
+
+                                                Checkbox::make('webhook_on_threshold_failure')
+                                                    ->label(__('settings/notifications.webhook_on_threshold_failure')),
+                                            ]),
+
+                                        Repeater::make('webhook_urls')
+                                            ->label(__('settings/notifications.recipients'))
+                                            ->schema([
+                                                TextInput::make('url')
+                                                    ->placeholder('https://webhook.site/longstringofcharacters')
+                                                    ->maxLength(2000)
+                                                    ->required()
+                                                    ->url(),
+                                            ]),
+
+                                        Actions::make([
+                                            Action::make('test webhook')
+                                                ->label(__('settings/notifications.test_webhook_channel'))
+                                                ->action(fn (Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
+                                                ->hidden(fn (Get $get) => ! count($get('webhook_urls'))),
+                                        ]),
+                                    ]),
+
+                                // ...
+                            ]),
+                    ])
+                    ->columnSpanFull(),
+
+                // ! DEPRECATED CHANNELS
+                SimpleAlert::make('deprecation_warning')
+                    ->title('Deprecated Notification Channels')
+                    ->description('The following notification channels are deprecated and will be removed in a future release!')
+                    ->border()
+                    ->warning()
+                    ->columnSpanFull(),
+
                 Grid::make([
                     'default' => 1,
                     'md' => 3,
@@ -73,172 +206,6 @@ class Notification extends SettingsPage
                             'default' => 1,
                         ])
                             ->schema([
-                                Section::make(__('settings/notifications.database'))
-                                    ->description(__('settings/notifications.database_description'))
-                                    ->schema([
-                                        Toggle::make('database_enabled')
-                                            ->label(__('settings/notifications.enable_database_notifications'))
-                                            ->reactive()
-                                            ->columnSpanFull(),
-                                        Grid::make([
-                                            'default' => 1,
-                                        ])
-                                            ->hidden(fn (Get $get) => $get('database_enabled') !== true)
-                                            ->schema([
-                                                Fieldset::make(__('settings.triggers'))
-                                                    ->schema([
-                                                        Toggle::make('database_on_speedtest_run')
-                                                            ->label(__('settings/notifications.database_on_speedtest_run'))
-                                                            ->columnSpanFull(),
-                                                        Toggle::make('database_on_threshold_failure')
-                                                            ->label(__('settings/notifications.database_on_threshold_failure'))
-                                                            ->columnSpanFull(),
-                                                    ]),
-                                                Actions::make([
-                                                    Action::make('test database')
-                                                        ->label(__('settings/notifications.test_database_channel'))
-                                                        ->action(fn () => SendDatabaseTestNotification::run(user: Auth::user())),
-                                                ]),
-                                            ]),
-                                    ])
-                                    ->compact()
-                                    ->columnSpan('full'),
-
-                                Section::make(__('settings/notifications.apprise'))
-                                    ->description(__('settings/notifications.apprise_description'))
-                                    ->schema([
-                                        Toggle::make('apprise_enabled')
-                                            ->label(__('settings/notifications.enable_apprise_notifications'))
-                                            ->reactive()
-                                            ->columnSpanFull(),
-                                        Grid::make([
-                                            'default' => 1,
-                                        ])
-                                            ->hidden(fn (Get $get) => $get('apprise_enabled') !== true)
-                                            ->schema([
-                                                Fieldset::make(__('settings.triggers'))
-                                                    ->schema([
-                                                        Toggle::make('apprise_on_speedtest_run')
-                                                            ->label(__('settings/notifications.apprise_on_speedtest_run'))
-                                                            ->columnSpanFull(),
-                                                        Toggle::make('apprise_on_threshold_failure')
-                                                            ->label(__('settings/notifications.apprise_on_threshold_failure'))
-                                                            ->columnSpanFull(),
-                                                    ]),
-                                                Fieldset::make(__('settings/notifications.apprise_sidecar'))
-                                                    ->schema([
-                                                        Checkbox::make('apprise_verify_ssl')
-                                                            ->label(__('settings/notifications.apprise_verify_ssl'))
-                                                            ->default(true)
-                                                            ->columnSpanFull(),
-                                                    ]),
-                                                Repeater::make('apprise_channel_urls')
-                                                    ->label(__('settings/notifications.apprise_channels'))
-                                                    ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">'.__('settings/notifications.apprise_documentation').'</a>'))
-                                                    ->schema([
-                                                        TextInput::make('channel_url')
-                                                            ->label(__('settings/notifications.apprise_channel_url'))
-                                                            ->placeholder(__('settings/notifications.apprise_channel_url_placeholder'))
-                                                            ->helperText(__('settings/notifications.apprise_channel_url_helper'))
-                                                            ->maxLength(2000)
-                                                            ->distinct()
-                                                            ->required(),
-                                                    ])
-                                                    ->columnSpanFull(),
-                                                Actions::make([
-                                                    Action::make('test apprise')
-                                                        ->label(__('settings/notifications.test_apprise_channel'))
-                                                        ->action(fn (Get $get) => SendAppriseTestNotification::run(
-                                                            channel_urls: $get('apprise_channel_urls'),
-                                                        ))
-                                                        ->hidden(fn (Get $get) => ! count($get('apprise_channel_urls'))),
-                                                ]),
-                                            ]),
-                                    ])
-                                    ->compact()
-                                    ->columnSpan('full'),
-
-                                Section::make(__('settings/notifications.mail'))
-                                    ->schema([
-                                        Toggle::make('mail_enabled')
-                                            ->label(__('settings/notifications.enable_mail_notifications'))
-                                            ->reactive()
-                                            ->columnSpanFull(),
-                                        Grid::make([
-                                            'default' => 1,
-                                        ])
-                                            ->hidden(fn (Get $get) => $get('mail_enabled') !== true)
-                                            ->schema([
-                                                Fieldset::make(__('settings.triggers'))
-                                                    ->schema([
-                                                        Toggle::make('mail_on_speedtest_run')
-                                                            ->label(__('settings/notifications.mail_on_speedtest_run'))
-                                                            ->columnSpanFull(),
-                                                        Toggle::make('mail_on_threshold_failure')
-                                                            ->label(__('settings/notifications.mail_on_threshold_failure'))
-                                                            ->columnSpanFull(),
-                                                    ]),
-                                                Repeater::make('mail_recipients')
-                                                    ->label(__('settings/notifications.recipients'))
-                                                    ->schema([
-                                                        TextInput::make('email_address')
-                                                            ->placeholder('your@email.com')
-                                                            ->email()
-                                                            ->required(),
-                                                    ])
-                                                    ->columnSpanFull(),
-                                                Actions::make([
-                                                    Action::make('test mail')
-                                                        ->label(__('settings/notifications.test_mail_channel'))
-                                                        ->action(fn (Get $get) => SendMailTestNotification::run(recipients: $get('mail_recipients')))
-                                                        ->hidden(fn (Get $get) => ! count($get('mail_recipients'))),
-                                                ]),
-                                            ]),
-                                    ])
-                                    ->compact()
-                                    ->columnSpan('full'),
-
-                                Section::make(__('settings/notifications.webhook'))
-                                    ->schema([
-                                        Toggle::make('webhook_enabled')
-                                            ->label(__('settings/notifications.enable_webhook_notifications'))
-                                            ->reactive()
-                                            ->columnSpanFull(),
-                                        Grid::make([
-                                            'default' => 1,
-                                        ])
-                                            ->hidden(fn (Get $get) => $get('webhook_enabled') !== true)
-                                            ->schema([
-                                                Fieldset::make(__('settings.triggers'))
-                                                    ->schema([
-                                                        Toggle::make('webhook_on_speedtest_run')
-                                                            ->label(__('settings/notifications.webhook_on_speedtest_run'))
-                                                            ->columnSpan(2),
-                                                        Toggle::make('webhook_on_threshold_failure')
-                                                            ->label(__('settings/notifications.webhook_on_threshold_failure'))
-                                                            ->columnSpan(2),
-                                                    ]),
-                                                Repeater::make('webhook_urls')
-                                                    ->label(__('settings/notifications.recipients'))
-                                                    ->schema([
-                                                        TextInput::make('url')
-                                                            ->placeholder('https://webhook.site/longstringofcharacters')
-                                                            ->maxLength(2000)
-                                                            ->required()
-                                                            ->url(),
-                                                    ])
-                                                    ->columnSpanFull(),
-                                                Actions::make([
-                                                    Action::make('test webhook')
-                                                        ->label(__('settings/notifications.test_webhook_channel'))
-                                                        ->action(fn (Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
-                                                        ->hidden(fn (Get $get) => ! count($get('webhook_urls'))),
-                                                ]),
-                                            ]),
-                                    ])
-                                    ->compact()
-                                    ->columnSpan('full'),
-
                                 Section::make('Pushover')
                                     ->description('⚠️ Pushover is deprecated and will be removed in a future release.')
                                     ->schema([

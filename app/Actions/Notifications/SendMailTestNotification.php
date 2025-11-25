@@ -2,7 +2,7 @@
 
 namespace App\Actions\Notifications;
 
-use App\Mail\Test as TestMail;
+use App\Mail\TestMail;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Mail;
 use Lorisleiva\Actions\Concerns\AsAction;
