@@ -20,7 +20,6 @@ return [
 
     // Apprise notifications
     'apprise' => 'Apprise',
-    'apprise_description' => 'The Apprise Notification Library enables sending notifications to a wide range of services.',
     'enable_apprise_notifications' => 'Enable Apprise notifications',
     'apprise_on_speedtest_run' => 'Notify on every speedtest run',
     'apprise_on_threshold_failure' => 'Notify on threshold failures',

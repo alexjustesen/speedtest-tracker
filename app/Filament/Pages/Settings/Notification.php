@@ -185,6 +185,57 @@ class Notification extends SettingsPage
 
                                 // ...
                             ]),
+                        Tab::make(__('settings/notifications.apprise'))
+                            ->icon(Heroicon::CloudArrowUp)
+                            ->schema([
+                                Toggle::make('apprise_enabled')
+                                    ->label(__('settings/notifications.enable_apprise_notifications'))
+                                    ->reactive()
+                                    ->columnSpanFull(),
+                                Grid::make([
+                                    'default' => 1,
+                                ])
+                                    ->hidden(fn (Get $get) => $get('apprise_enabled') !== true)
+                                    ->schema([
+                                        Fieldset::make(__('settings.triggers'))
+                                            ->schema([
+                                                Checkbox::make('apprise_on_speedtest_run')
+                                                    ->label(__('settings/notifications.apprise_on_speedtest_run'))
+                                                    ->columnSpanFull(),
+                                                Checkbox::make('apprise_on_threshold_failure')
+                                                    ->label(__('settings/notifications.apprise_on_threshold_failure'))
+                                                    ->columnSpanFull(),
+                                            ]),
+                                        Fieldset::make(__('settings/notifications.apprise_sidecar'))
+                                            ->schema([
+                                                Checkbox::make('apprise_verify_ssl')
+                                                    ->label(__('settings/notifications.apprise_verify_ssl'))
+                                                    ->default(true)
+                                                    ->columnSpanFull(),
+                                            ]),
+                                        Repeater::make('apprise_channel_urls')
+                                            ->label(__('settings/notifications.apprise_channels'))
+                                            ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">'.__('settings/notifications.apprise_documentation').'</a>'))
+                                            ->schema([
+                                                TextInput::make('channel_url')
+                                                    ->label(__('settings/notifications.apprise_channel_url'))
+                                                    ->placeholder(__('settings/notifications.apprise_channel_url_placeholder'))
+                                                    ->helperText(__('settings/notifications.apprise_channel_url_helper'))
+                                                    ->maxLength(2000)
+                                                    ->distinct()
+                                                    ->required(),
+                                            ])
+                                            ->columnSpanFull(),
+                                        Actions::make([
+                                            Action::make('test apprise')
+                                                ->label(__('settings/notifications.test_apprise_channel'))
+                                                ->action(fn (Get $get) => SendAppriseTestNotification::run(
+                                                    channel_urls: $get('apprise_channel_urls'),
+                                                ))
+                                                ->hidden(fn (Get $get) => ! count($get('apprise_channel_urls'))),
+                                        ]),
+                                    ]),
+                            ])
                     ])
                     ->columnSpanFull(),
 
