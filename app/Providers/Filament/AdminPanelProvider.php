@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([])
             ->databaseNotifications()
+            ->databaseNotificationsPolling('5s')
             ->maxContentWidth(config('speedtest.content_width'))
             ->middleware([
                 EncryptCookies::class,
