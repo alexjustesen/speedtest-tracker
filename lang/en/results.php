@@ -63,6 +63,7 @@ return [
     // Notifications
     'speedtest_started' => 'Speedtest started',
     'speedtest_completed' => 'Speedtest completed',
+    'speedtest_failed' => 'Speedtest failed',
     'download_threshold_breached' => 'Download threshold breached!',
     'upload_threshold_breached' => 'Upload threshold breached!',
     'ping_threshold_breached' => 'Ping threshold breached!',

@@ -34,6 +34,7 @@ class ResultResource extends JsonResource
             'healthy' => $this->healthy,
             'status' => $this->status,
             'scheduled' => $this->scheduled,
+            'dispatched_by' => $this->dispatched_by,
             'comments' => $this->comments,
             'data' => $this->data,
             'created_at' => $this->created_at->toDateTimestring(),

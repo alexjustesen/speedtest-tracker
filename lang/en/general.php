@@ -16,6 +16,7 @@ return [
     'no' => 'No',
     'options' => 'Options',
     'details' => 'Details',
+    'view' => 'View',
 
     // Common labels
     'name' => 'Name',

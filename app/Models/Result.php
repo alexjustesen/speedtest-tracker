@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Result extends Model
 {
@@ -49,5 +50,13 @@ class Result extends Model
     public function prunable(): Builder
     {
         return static::where('created_at', '<=', now()->subDays(config('speedtest.prune_results_older_than')));
+    }
+
+    /**
+     * Get the user who dispatched this speedtest.
+     */
+    public function dispatchedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'dispatched_by');
     }
 }
