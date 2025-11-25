@@ -134,7 +134,28 @@ class DataIntegration extends SettingsPage
                             ->schema([
                                 Toggle::make('prometheus_enabled')
                                     ->label(__('settings/data_integration.prometheus_enabled'))
+                                    ->reactive()
                                     ->columnSpanFull(),
+                                Grid::make(['default' => 1, 'md' => 3])
+                                    ->hidden(fn (Get $get) => $get('prometheus_enabled') !== true)
+                                    ->schema([
+                                        Toggle::make('prometheus_basic_auth_enabled')
+                                            ->label(__('settings/data_integration.prometheus_basic_auth_enabled'))
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        TextInput::make('prometheus_basic_auth_username')
+                                            ->label(__('settings/data_integration.prometheus_basic_auth_username'))
+                                            ->maxLength(255)
+                                            ->required(fn (Get $get) => $get('prometheus_basic_auth_enabled') === true)
+                                            ->hidden(fn (Get $get) => $get('prometheus_basic_auth_enabled') !== true)
+                                            ->columnSpan(['md' => 1]),
+                                        TextInput::make('prometheus_basic_auth_password')
+                                            ->label(__('settings/data_integration.prometheus_basic_auth_password'))
+                                            ->maxLength(255)
+                                            ->password()
+                                            ->required(fn (Get $get) => $get('prometheus_basic_auth_enabled') === true)
+                                            ->hidden(fn (Get $get) => $get('prometheus_basic_auth_enabled') !== true)
+                                    ]),
                             ])
                             ->compact()
                             ->columnSpanFull(),
