@@ -39,6 +39,11 @@ class ProcessCompletedSpeedtest
      */
     private function notifyAppriseChannels(Result $result): void
     {
+        // Don't send Apprise notification if dispatched by a user or test is unhealthy.
+        if (filled($result->dispatched_by) || ! $result->healthy) {
+            return;
+        }
+
         //
     }
 

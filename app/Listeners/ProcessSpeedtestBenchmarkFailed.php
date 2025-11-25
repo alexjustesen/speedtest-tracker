@@ -41,6 +41,11 @@ class ProcessSpeedtestBenchmarkFailed
      */
     private function notifyAppriseChannels(Result $result): void
     {
+        // Don't send Apprise notification if dispatched by a user.
+        if (filled($result->dispatched_by)) {
+            return;
+        }
+
         //
     }
 

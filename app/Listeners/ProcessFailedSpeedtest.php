@@ -18,7 +18,21 @@ class ProcessFailedSpeedtest
 
         $result->loadMissing(['dispatchedBy']);
 
+        // $this->notifyAppriseChannels($result);
         $this->notifyDispatchingUser($result);
+    }
+
+    /**
+     * Notify Apprise channels.
+     */
+    private function notifyAppriseChannels(Result $result): void
+    {
+        // Don't send Apprise notification if dispatched by a user or test is unhealthy.
+        if (filled($result->dispatched_by) || ! $result->healthy) {
+            return;
+        }
+
+        //
     }
 
     /**
