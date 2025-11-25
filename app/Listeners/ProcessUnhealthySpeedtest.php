@@ -3,15 +3,17 @@
 namespace App\Listeners;
 
 use App\Events\SpeedtestBenchmarkFailed;
+use App\Mail\UnhealthySpeedtestMail;
 use App\Models\Result;
 use App\Models\User;
 use App\Settings\NotificationSettings;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Spatie\WebhookServer\WebhookCall;
 
-class ProcessSpeedtestBenchmarkFailed
+class ProcessUnhealthySpeedtest
 {
     /**
      * Create the event listener.
@@ -32,7 +34,7 @@ class ProcessSpeedtestBenchmarkFailed
         // $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
         $this->notifyDispatchingUser($result);
-        // $this->notifyMailChannels($result);
+        $this->notifyMailChannels($result);
         $this->notifyWebhookChannels($result);
     }
 
@@ -104,7 +106,27 @@ class ProcessSpeedtestBenchmarkFailed
      */
     private function notifyMailChannels(Result $result): void
     {
-        //
+        // Don't send webhook if dispatched by a user.
+        if (filled($result->dispatched_by)) {
+            return;
+        }
+
+        // Check if mail notifications are enabled.
+        if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_threshold_failure) {
+            return;
+        }
+
+        // Check if mail recipients are configured.
+        if (! count($this->notificationSettings->mail_recipients)) {
+            Log::warning('Mail recipients not found, check mail notification channel settings.');
+
+            return;
+        }
+
+        foreach ($this->notificationSettings->mail_recipients as $recipient) {
+            Mail::to($recipient)
+                ->send(new UnhealthySpeedtestMail($result));
+        }
     }
 
     /**

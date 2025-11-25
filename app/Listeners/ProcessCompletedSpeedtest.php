@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\SpeedtestCompleted;
+use App\Mail\SpeedtestCompletedMail;
 use App\Models\Result;
 use App\Models\User;
 use App\Settings\NotificationSettings;
@@ -10,6 +11,7 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Spatie\WebhookServer\WebhookCall;
 
 class ProcessCompletedSpeedtest
@@ -30,7 +32,7 @@ class ProcessCompletedSpeedtest
         // $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
         $this->notifyDispatchingUser($result);
-        // $this->notifyMailChannels($result);
+        $this->notifyMailChannels($result);
         $this->notifyWebhookChannels($result);
     }
 
@@ -102,7 +104,24 @@ class ProcessCompletedSpeedtest
      */
     private function notifyMailChannels(Result $result): void
     {
-        //
+        if (empty($result->dispatched_by) || ! $result->healthy) {
+            return;
+        }
+
+        if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_speedtest_run) {
+            return;
+        }
+
+        if (! count($this->notificationSettings->mail_recipients)) {
+            Log::warning('Mail recipients not found, check mail notification channel settings.');
+
+            return;
+        }
+
+        foreach ($this->notificationSettings->mail_recipients as $recipient) {
+            Mail::to($recipient)
+                ->send(new SpeedtestCompletedMail($result));
+        }
     }
 
     /**
