@@ -8,8 +8,10 @@ Create a new "Dashboard V2" as an alternative to the existing Filament-based pub
 - **Frontend**: Alpine.js v3 (installed via npm, NOT from Livewire)
 - **Charts**: Chart.js v4
 - **Backend**: Laravel API endpoints (no Livewire/Filament)
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS with shadcn design reference (https://ui.shadcn.com/)
 - **Build**: Vite
+
+**Important**: shadcn is used as a **design reference only** for UI patterns, component styles, spacing, and color schemes. Do NOT install shadcn as a dependency - we'll implement the styles manually using Tailwind CSS.
 
 **Key Features**:
 - **Enhanced Statistics**: Display Latest, Average, Lowest, and Highest values for Download, Upload, and Ping metrics
@@ -142,8 +144,10 @@ Create a new dashboard (Dashboard V2) at the `/v2` route alongside the existing 
 - **Frontend Framework**: Alpine.js v3 (standalone npm package)
 - **Charting Library**: Chart.js v4
 - **Build Tool**: Vite (existing Laravel setup)
-- **Styling**: Tailwind CSS (existing)
+- **Styling**: Tailwind CSS (existing) with shadcn design reference
 - **Backend**: Laravel API endpoints (no Livewire)
+
+**Note**: shadcn (https://ui.shadcn.com/) is used as a design system reference only - NOT installed as a dependency. We manually implement its design patterns using Tailwind CSS.
 
 **Pros**:
 - ✅ Best performance - data fetched on-demand
@@ -230,11 +234,12 @@ Create a new dashboard (Dashboard V2) at the `/v2` route alongside the existing 
 1. **Standalone Alpine.js**: Installed as explicit npm dependency, completely independent of Livewire
 2. **Best Performance**: Client-side rendering with API-driven data fetching
 3. **Clean Separation**: Zero dependency on Livewire/Filament - pure Alpine.js + vanilla JavaScript
-4. **Maintainability**: Standard JavaScript patterns (fetch API, localStorage, Alpine directives)
-5. **Smaller Bundle**: No Livewire overhead for Dashboard V2
-6. **Flexibility**: Enables future enhancements (WebSockets, advanced filtering, etc.)
-7. **Team Skills**: Alpine.js is lightweight and easy to learn for any JavaScript developer
-8. **Independent Updates**: Dashboard V2 can be updated without affecting V1 (Livewire-based)
+4. **shadcn Design System**: Modern, accessible design patterns (NOT Filament) - manual implementation with Tailwind CSS
+5. **Maintainability**: Standard JavaScript patterns (fetch API, localStorage, Alpine directives)
+6. **Smaller Bundle**: No Livewire overhead for Dashboard V2
+7. **Flexibility**: Enables future enhancements (WebSockets, advanced filtering, etc.)
+8. **Team Skills**: Alpine.js is lightweight and easy to learn for any JavaScript developer
+9. **Independent Updates**: Dashboard V2 can be updated without affecting V1 (Livewire-based)
 
 ## Phased Implementation Plan
 
@@ -334,17 +339,19 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
 #### 1.3 Frontend - Dashboard Layout
 - [ ] Create `resources/views/dashboard-v2.blade.php`
   - [ ] Use standard Blade template (NO Livewire components)
+  - [ ] **Design System**: Use shadcn design patterns (NOT Filament styling)
   - [ ] Add `x-data="dashboard()"` to root element for Alpine.js
-  - [ ] Add header with login button
-  - [ ] Add filters section (time range, server, reset)
-  - [ ] Add latest test status card
-  - [ ] Add test health over time widget (spans 9 columns)
-  - [ ] Add Download section with chart (2 columns) + stats cards (1 column)
+  - [ ] Add header with login button (use `.btn-outline` from shadcn patterns)
+  - [ ] Add filters section (time range, server, reset) with `.filter-select` styles
+  - [ ] Add latest test status card (use `.stat-card` from shadcn patterns)
+  - [ ] Add test health over time widget (spans 9 columns, use `.health-bar` component)
+  - [ ] Add Download section with chart (2 columns) + stats cards (1 column, use `.stat-card`)
   - [ ] Add placeholders for Upload section (hidden/disabled)
   - [ ] Add placeholders for Ping section (hidden/disabled)
-  - [ ] Use `<canvas>` elements for charts (no Filament chart components)
+  - [ ] Use `<canvas>` elements for charts (NO Filament chart components)
   - [ ] Use Alpine directives (`x-model`, `x-text`, `x-show`, `@click`, etc.)
   - [ ] NO `wire:` directives anywhere
+  - [ ] NO Filament components or styling
   - [ ] NO Livewire components (`<livewire:component-name />`)
 
 #### 1.4 Frontend - Alpine.js Component
@@ -365,16 +372,24 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
   - [ ] Implement utility methods: `formatSpeed()`, `formatPing()`, `formatTimestamp()`
 - [ ] Register dashboard component in `resources/js/app.js`
 
-#### 1.5 Styling
-- [ ] Add Dashboard V2 styles to `resources/css/app.css`
+#### 1.5 Styling (Reference shadcn Design System)
+- [ ] Add Dashboard V2 styles to `resources/css/app.css` following shadcn patterns
   - [ ] Chart container styles
-  - [ ] Filter select styles
-  - [ ] Stat card styles
-  - [ ] Health bar styles
-  - [ ] Button styles
-  - [ ] Loading skeleton styles
-  - [ ] Error message styles
+  - [ ] Filter select styles (shadcn Select component pattern)
+  - [ ] Stat card styles (shadcn Card component pattern)
+  - [ ] Health bar styles (custom with shadcn colors)
+  - [ ] Button styles (shadcn Button variants: outline, primary, ghost, destructive)
+  - [ ] Loading skeleton styles (shadcn Skeleton pattern)
+  - [ ] Error message styles (shadcn Alert destructive variant)
+  - [ ] Success message styles (shadcn Alert success variant)
   - [ ] Empty state styles
+- [ ] Verify shadcn design principles applied:
+  - [ ] Subtle borders (`border-gray-200 dark:border-gray-800`)
+  - [ ] Soft shadows (`shadow-sm`)
+  - [ ] Consistent border radius (`rounded-lg` cards, `rounded-md` inputs)
+  - [ ] Proper focus states with rings
+  - [ ] Smooth transitions (`duration-200` or `duration-300`)
+  - [ ] Semantic color usage for states
 
 #### 1.6 Configuration
 - [ ] Update `config/speedtest.php`
@@ -458,6 +473,13 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
   - [ ] Browser console: Alpine.js version logged (should be standalone v3.13+)
   - [ ] `window.Alpine` is defined and working
   - [ ] `window.Livewire` should NOT be defined on Dashboard V2 page
+- [ ] **Design System Verification (shadcn, NOT Filament)**
+  - [ ] All buttons use shadcn button classes (`.btn-outline`, `.btn-primary`, etc.)
+  - [ ] All cards use `.stat-card` with shadcn card styling
+  - [ ] All form inputs use `.filter-select` with shadcn select styling
+  - [ ] NO Filament CSS classes or components
+  - [ ] NO Filament-specific styling patterns
+  - [ ] Visual inspection: UI follows shadcn design (subtle borders, soft shadows, consistent spacing)
 
 ### Phase 1 Completion Criteria
 - [ ] Dashboard V2 accessible at `/v2` when `ENABLE_DASHBOARD_V2=true`
@@ -846,9 +868,12 @@ npm install chart.js chartjs-adapter-date-fns date-fns
 #### 3.1 Dashboard V2 Layout
 **File**: `resources/views/dashboard-v2.blade.php`
 
+**Design System**: All Dashboard V2 components and styles should follow **shadcn design patterns** (https://ui.shadcn.com/), NOT Filament. While we use the existing `<x-app-layout>` wrapper for navigation/header consistency, all internal dashboard components (cards, buttons, inputs, alerts) must use shadcn-inspired styles defined in the styling guide.
+
 **Structure** (Based on Wireframe):
 ```blade
 {{-- Dashboard V2: Pure Alpine.js + Blade (NO Livewire) --}}
+{{-- Design: shadcn patterns, NOT Filament --}}
 <x-app-layout title="Dashboard V2">
     {{-- Alpine.js component initialization - NO wire: directives --}}
     <div x-data="dashboard()" class="space-y-6">
@@ -1444,11 +1469,43 @@ Alpine.start();
 - The dashboard component is registered with `Alpine.data()` for cleaner syntax
 - No Livewire directives or components are used in Dashboard V2
 
-#### 3.5 Styling
+#### 3.5 Styling Guide
+
+**Design System Reference**: Use **shadcn** (https://ui.shadcn.com/) as the design system reference for Dashboard V2:
+- Component patterns and spacing
+- Color palettes and semantic colors
+- Border radius and shadow conventions
+- Typography hierarchy
+- Interactive states (hover, focus, active, disabled)
+- Animation timings and transitions
+
+**Critical Design Rules**:
+- ✅ **DO use shadcn** design patterns as reference
+- ✅ **DO manually implement** shadcn styles with Tailwind CSS
+- ❌ **DO NOT use Filament** components or styling patterns
+- ❌ **DO NOT reference Filament** for design decisions
+- ❌ **DO NOT install shadcn** as a dependency (reference only)
+
+Dashboard V2 is completely independent of Filament's design system. All components should follow shadcn design patterns, NOT Filament.
+
+**shadcn Design Principles to Follow**:
+1. **Subtle borders**: Use `border-gray-200 dark:border-gray-800` for subtle separation
+2. **Soft shadows**: Prefer subtle shadows like `shadow-sm` and `shadow` over heavy shadows
+3. **Rounded corners**: Use consistent border radius (`rounded-lg` for cards, `rounded-md` for inputs)
+4. **Semantic colors**:
+   - Destructive: `red-500` / `red-600`
+   - Success: `green-500` / `green-600`
+   - Warning: `yellow-500` / `yellow-600`
+   - Primary: `blue-500` / `blue-600` (or theme primary)
+   - Muted: `gray-500` / `gray-600`
+5. **Focus states**: Always include visible focus rings with `focus:ring-2` and appropriate color
+6. **Transitions**: Smooth transitions with `duration-200` or `duration-300`
+7. **Spacing**: Follow shadcn's spacing patterns (typically `p-4`, `p-6` for cards)
+
 **File**: `resources/css/app.css`
 
 ```css
-/* Dashboard V2 specific styles */
+/* Dashboard V2 specific styles - following shadcn design patterns */
 
 /* Chart containers */
 .chart-container {
@@ -1461,78 +1518,121 @@ Alpine.start();
     max-height: 300px;
 }
 
-/* Loading states */
+/* Loading states - shadcn skeleton pattern */
 .loading-skeleton {
-    @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+    @apply animate-pulse bg-gray-200 dark:bg-gray-800 rounded-lg;
     height: 250px;
 }
 
-/* Filter selects */
+/* Filter selects - shadcn select style */
 .filter-select {
-    @apply px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600;
-    @apply bg-white dark:bg-gray-800 text-gray-900 dark:text-white;
+    @apply h-10 px-3 py-2 rounded-md border border-gray-200 dark:border-gray-800;
+    @apply bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-50;
     @apply text-sm font-medium;
-    @apply hover:bg-gray-50 dark:hover:bg-gray-700;
+    @apply hover:bg-gray-50 dark:hover:bg-gray-900;
     @apply transition-colors duration-200;
-    @apply focus:outline-none focus:ring-2 focus:ring-blue-500;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 focus:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
 }
 
-/* Stat cards */
+/* Stat cards - shadcn card pattern */
 .stat-card {
-    @apply bg-white dark:bg-gray-800 rounded-lg shadow p-6;
-    @apply border border-gray-200 dark:border-gray-700;
+    @apply bg-white dark:bg-gray-950 rounded-lg shadow-sm p-6;
+    @apply border border-gray-200 dark:border-gray-800;
+    @apply transition-colors duration-200;
 }
 
 .stat-value {
-    @apply text-3xl font-bold text-gray-900 dark:text-white mt-2;
+    @apply text-3xl font-bold text-gray-900 dark:text-gray-50 mt-2;
+    @apply tracking-tight;
 }
 
 .stat-label {
-    @apply text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide;
+    @apply text-sm font-medium text-gray-500 dark:text-gray-400;
+    @apply uppercase tracking-wide;
 }
 
-/* Health bar */
+.stat-unit {
+    @apply text-xl font-normal text-gray-500 dark:text-gray-400 ml-1;
+}
+
+/* Health bar - custom component with shadcn colors */
 .health-bar {
-    @apply flex h-8 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700;
+    @apply flex h-8 rounded-md overflow-hidden bg-gray-100 dark:bg-gray-900;
+    @apply border border-gray-200 dark:border-gray-800;
 }
 
 .health-bar-fill {
-    @apply h-full transition-all duration-300;
+    @apply h-full transition-all duration-500 ease-in-out;
 }
 
-/* Progress bar */
+/* Progress bar - shadcn progress pattern */
 .progress-bar {
-    @apply h-4 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700;
+    @apply h-4 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-900;
+    @apply border border-gray-200 dark:border-gray-800;
 }
 
 .progress-bar-fill {
-    @apply h-full bg-blue-500 dark:bg-blue-600 transition-all duration-300;
+    @apply h-full bg-blue-500 dark:bg-blue-600 transition-all duration-500;
 }
 
-/* Buttons */
+/* Buttons - shadcn button variants */
 .btn {
-    @apply px-4 py-2 rounded-lg font-medium text-sm;
+    @apply inline-flex items-center justify-center rounded-md px-4 py-2;
+    @apply text-sm font-medium;
     @apply transition-colors duration-200;
-    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
 }
 
 .btn-outline {
-    @apply border border-gray-300 dark:border-gray-600;
-    @apply text-gray-700 dark:text-gray-300;
-    @apply hover:bg-gray-50 dark:hover:bg-gray-800;
-    @apply focus:ring-gray-500;
+    @apply border border-gray-200 dark:border-gray-800;
+    @apply bg-white dark:bg-gray-950;
+    @apply text-gray-900 dark:text-gray-50;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-900;
+    @apply focus-visible:ring-gray-400 dark:focus-visible:ring-gray-600;
 }
 
 .btn-primary {
-    @apply bg-blue-500 border-transparent text-white;
-    @apply hover:bg-blue-600;
-    @apply focus:ring-blue-500;
+    @apply border border-transparent;
+    @apply bg-gray-900 dark:bg-gray-50 text-white dark:text-gray-900;
+    @apply hover:bg-gray-800 dark:hover:bg-gray-200;
+    @apply focus-visible:ring-gray-400 dark:focus-visible:ring-gray-600;
 }
 
-/* Error states */
+.btn-destructive {
+    @apply border border-transparent;
+    @apply bg-red-500 dark:bg-red-600 text-white;
+    @apply hover:bg-red-600 dark:hover:bg-red-700;
+    @apply focus-visible:ring-red-400 dark:focus-visible:ring-red-600;
+}
+
+.btn-ghost {
+    @apply border border-transparent;
+    @apply bg-transparent;
+    @apply text-gray-900 dark:text-gray-50;
+    @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+    @apply focus-visible:ring-gray-400 dark:focus-visible:ring-gray-600;
+}
+
+/* Error states - shadcn alert destructive variant */
 .error-message {
-    @apply bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800;
-    @apply text-red-800 dark:text-red-200 rounded-lg p-4;
+    @apply bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800;
+    @apply text-red-900 dark:text-red-50 rounded-lg p-4;
+}
+
+.error-title {
+    @apply font-semibold text-sm mb-1;
+}
+
+.error-description {
+    @apply text-sm opacity-90;
+}
+
+/* Success states - shadcn alert success variant */
+.success-message {
+    @apply bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800;
+    @apply text-green-900 dark:text-green-50 rounded-lg p-4;
 }
 
 /* Beta badge */
@@ -1541,17 +1641,23 @@ Alpine.start();
     @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300;
 }
 
-/* Empty states */
+/* Empty states - shadcn empty state pattern */
 .empty-state {
     @apply text-center py-12 px-4;
+    @apply border border-dashed border-gray-200 dark:border-gray-800 rounded-lg;
+    @apply bg-gray-50 dark:bg-gray-900;
 }
 
 .empty-state-icon {
-    @apply text-gray-400 dark:text-gray-600 text-6xl mb-4;
+    @apply text-gray-400 dark:text-gray-600 text-5xl mb-3;
+}
+
+.empty-state-title {
+    @apply text-sm font-semibold text-gray-900 dark:text-gray-50 mb-1;
 }
 
 .empty-state-text {
-    @apply text-gray-600 dark:text-gray-400 text-lg;
+    @apply text-sm text-gray-500 dark:text-gray-400;
 }
 ```
 
@@ -2727,6 +2833,7 @@ vendor/bin/pint --dirty
 | **Access** | `/` route | `/v2` route (env-gated) |
 | **Status** | Stable, proven | Beta, experimental |
 | **Layout** | Vertical list | Card-based grid |
+| **Design System** | Filament styling | **shadcn design patterns (reference only)** |
 
 ## Questions & Decisions
 
@@ -2759,14 +2866,33 @@ vendor/bin/pint --dirty
 15. ✅ Persist filter state using browser's localStorage (enhance UX by remembering preferences)
 16. ✅ **Use standard JavaScript patterns** - fetch API for requests, Alpine.data() for components
 17. ✅ **Smaller bundle size** - No Livewire overhead, only Alpine.js + Chart.js
-18. ❌ Quota tracking widget - Deferred to future version (not ready for V2)
+18. ✅ **Use shadcn as design system reference** - NOT installed as dependency, reference for UI patterns, colors, spacing, and component styles
+19. ✅ **NO Filament design patterns** - Dashboard V2 does NOT use Filament components, styling, or design patterns; exclusively uses shadcn-inspired design
+20. ❌ Quota tracking widget - Deferred to future version (not ready for V2)
 
 ---
 
-**Document Version**: 2.2
+**Document Version**: 2.4
 **Last Updated**: 2025-11-26
 **Author**: Claude Code
-**Status**: Updated - Alpine.js standalone clarification added
+**Status**: Updated - Filament design reference removed, shadcn is now the exclusive design system
+
+**Changes in v2.4**:
+- **Removed Filament as design reference** - Dashboard V2 does NOT use Filament components or styling
+- **shadcn is the exclusive design system** - All UI components must follow shadcn patterns
+- Added "Critical Design Rules" section explicitly prohibiting Filament styling
+- Updated Phase 1 checklist to verify NO Filament components or CSS classes
+- Added design system verification checklist (shadcn YES, Filament NO)
+- Updated dashboard layout section to clarify shadcn-only styling
+- Updated frontend checklist with specific shadcn class examples
+
+**Changes in v2.3**:
+- **Added shadcn as design system reference** - Use shadcn (https://ui.shadcn.com/) for UI patterns, component styles, colors, and spacing
+- **NOT a dependency** - shadcn is reference only, manually implement styles with Tailwind CSS
+- Updated styling section with comprehensive shadcn design principles
+- Added shadcn-based CSS classes for buttons, cards, alerts, and form controls
+- Updated comparison table to highlight shadcn design patterns
+- Added verification checklist for shadcn design principles
 
 **Changes in v2.2**:
 - **Clarified Alpine.js is standalone** - Explicit npm dependency, NOT from Livewire
