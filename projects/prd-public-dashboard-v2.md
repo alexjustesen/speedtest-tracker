@@ -243,46 +243,53 @@ Create a new dashboard (Dashboard V2) at the `/v2` route alongside the existing 
 
 ## Phased Implementation Plan
 
-Dashboard V2 will be implemented in three phases to allow for incremental development and testing:
+Dashboard V2 will be implemented in four phases to allow for incremental development and testing:
 
 ### Phase Overview
 
 | Phase | Focus | Deliverables | Est. Time |
 |-------|-------|--------------|-----------|
-| **Phase 1** | Core infrastructure, filters, health monitoring, and Download metrics | Functional dashboard with 1 metric | 3-5 days |
-| **Phase 2** | Upload metrics | Add second metric to existing dashboard | 1-2 days |
-| **Phase 3** | Ping metrics | Complete all metrics | 1-2 days |
+| **Phase 1** | Core infrastructure, filters, and health monitoring | Foundation without metrics | 2-3 days |
+| **Phase 2** | Download metrics | Add Download chart and statistics | 1-2 days |
+| **Phase 3** | Upload metrics | Add Upload chart and statistics | 1-2 days |
+| **Phase 4** | Ping metrics | Complete all metrics | 1-2 days |
+
+**Total Estimated Time**: 5-9 days
 
 ### Why Phased Approach?
 
-1. **Incremental Value**: Dashboard is functional after Phase 1 with Download metrics
+1. **Clear Separation**: Core infrastructure (Phase 1) is separate from metric implementations
 2. **Reduced Risk**: Each phase can be tested and validated independently
-3. **Faster Feedback**: Get user feedback on Phase 1 before building subsequent phases
+3. **Faster Feedback**: Get user feedback on infrastructure before building metrics
 4. **Easier Debugging**: Isolate issues to specific phases
-5. **Flexible Delivery**: Can deploy Phase 1 to production while developing Phase 2/3
+5. **Flexible Delivery**: Can deploy Phase 1 to production, then add metrics incrementally
 6. **Team Collaboration**: Different team members can work on different phases
+7. **Parallel Development**: After Phase 1, metrics can be developed in parallel if needed
 
 ### Phase Dependencies
 
 - **Phase 1** is standalone and creates all infrastructure
-- **Phase 2** depends on Phase 1 completion
-- **Phase 3** depends on Phase 2 completion
-- Each phase adds metric-specific functionality without modifying core infrastructure
+- **Phase 2** depends on Phase 1 completion (adds Download metrics)
+- **Phase 3** depends on Phase 2 completion (adds Upload metrics)
+- **Phase 4** depends on Phase 3 completion (adds Ping metrics)
+- Each metric phase adds functionality without modifying core infrastructure
 
-Each phase can be developed, tested, and deployed independently. The dashboard will be functional after Phase 1, with subsequent phases adding additional metrics.
+Each phase can be developed, tested, and deployed independently. The dashboard infrastructure will be complete after Phase 1, with subsequent phases adding metrics one at a time.
 
 ---
 
-## Phase 1: Core Infrastructure + Download Metrics
+## Phase 1: Core Infrastructure
 
-**Goal**: Establish the foundation of Dashboard V2 with filtering, health monitoring, and complete Download metric visualization.
+**Goal**: Establish the complete foundation of Dashboard V2 including routing, API structure, filtering, health monitoring, and Alpine.js framework. No metrics are implemented in this phase.
 
 **Deliverables**:
-- Dashboard V2 route and layout
-- All API endpoints (with download metric fully implemented)
-- Filter system with persistence
-- Health monitoring
-- Download chart and statistics
+- Dashboard V2 route and controller
+- API endpoint structure (controllers and resources created, but only Stats, Health, and Servers endpoints fully implemented)
+- Filter system with localStorage persistence
+- Health monitoring widget
+- Alpine.js dashboard component with all state management
+- Complete styling with shadcn design patterns
+- Dashboard layout with placeholders for all three metrics (Download, Upload, Ping)
 - Complete test coverage for Phase 1 features
 
 ### Phase 1 Checklist
@@ -305,20 +312,20 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
 - [ ] Register API routes in `bootstrap/app.php`
 - [ ] Add public API middleware group
 
-#### 1.2 API Controllers & Resources
+#### 1.2 API Controllers & Resources (Infrastructure Only)
 - [ ] Create `app/Http/Controllers/Api/Public/StatsController.php`
   - [ ] Implement stats endpoint with server filtering
   - [ ] Add cache layer (1 minute TTL)
-- [ ] Create `app/Http/Controllers/Api/Public/StatisticsController.php`
-  - [ ] Implement statistics endpoint for download metric
-  - [ ] Support time range and server filtering
-  - [ ] Calculate latest, average, lowest, highest
-  - [ ] Add cache layer
-- [ ] Create `app/Http/Controllers/Api/Public/ChartDataController.php`
-  - [ ] Implement chart data endpoint for download metric
-  - [ ] Support time range and server filtering
-  - [ ] Calculate average line data
-  - [ ] Add cache layer
+- [ ] Create `app/Http/Controllers/Api/Public/StatisticsController.php` (scaffold only)
+  - [ ] Create controller structure
+  - [ ] Add method signature for statistics endpoint
+  - [ ] Support time range and server filtering parameters
+  - [ ] **Note**: Metric-specific logic will be added in Phases 2-4
+- [ ] Create `app/Http/Controllers/Api/Public/ChartDataController.php` (scaffold only)
+  - [ ] Create controller structure
+  - [ ] Add method signature for chart data endpoint
+  - [ ] Support time range and server filtering parameters
+  - [ ] **Note**: Metric-specific logic will be added in Phases 2-4
 - [ ] Create `app/Http/Controllers/Api/Public/HealthController.php`
   - [ ] Query results by status
   - [ ] Calculate health percentage
@@ -329,14 +336,14 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
   - [ ] Include test count per server
   - [ ] Order by most frequently used
   - [ ] Add cache layer
-- [ ] Create API Resources
+- [ ] Create API Resources (structure only for Statistics and ChartData)
   - [ ] `app/Http/Resources/Public/StatResource.php`
-  - [ ] `app/Http/Resources/Public/StatisticsResource.php`
-  - [ ] `app/Http/Resources/Public/ChartDataResource.php`
+  - [ ] `app/Http/Resources/Public/StatisticsResource.php` (structure only)
+  - [ ] `app/Http/Resources/Public/ChartDataResource.php` (structure only)
   - [ ] `app/Http/Resources/Public/HealthResource.php`
   - [ ] `app/Http/Resources/Public/ServerResource.php`
 
-#### 1.3 Frontend - Dashboard Layout
+#### 1.3 Frontend - Dashboard Layout (Placeholders Only)
 - [ ] Create `resources/views/dashboard-v2.blade.php`
   - [ ] Use standard Blade template (NO Livewire components)
   - [ ] **Design System**: Use shadcn design patterns (NOT Filament styling)
@@ -345,32 +352,34 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
   - [ ] Add filters section (time range, server, reset) with `.filter-select` styles
   - [ ] Add latest test status card (use `.stat-card` from shadcn patterns)
   - [ ] Add test health over time widget (spans 9 columns, use `.health-bar` component)
-  - [ ] Add Download section with chart (2 columns) + stats cards (1 column, use `.stat-card`)
-  - [ ] Add placeholders for Upload section (hidden/disabled)
-  - [ ] Add placeholders for Ping section (hidden/disabled)
-  - [ ] Use `<canvas>` elements for charts (NO Filament chart components)
+  - [ ] Add placeholder sections for ALL three metrics (Download, Upload, Ping)
+    - [ ] Each section has: chart container (2 columns) + stats cards container (1 column)
+    - [ ] Use `<canvas>` elements for charts (NO Filament chart components)
+    - [ ] All sections initially empty/skeleton state - actual charts added in Phases 2-4
   - [ ] Use Alpine directives (`x-model`, `x-text`, `x-show`, `@click`, etc.)
   - [ ] NO `wire:` directives anywhere
   - [ ] NO Filament components or styling
   - [ ] NO Livewire components (`<livewire:component-name />`)
 
-#### 1.4 Frontend - Alpine.js Component
+#### 1.4 Frontend - Alpine.js Component (Framework Only)
 - [ ] Create `resources/js/dashboard.js`
-  - [ ] Initialize state variables
+  - [ ] Initialize state variables (stats, health, servers, filters, charts object)
   - [ ] Implement `loadFilterState()` - Load from localStorage
   - [ ] Implement `saveFilterState()` - Save to localStorage with error handling
-  - [ ] Implement `loadServers()` - Fetch server list
-  - [ ] Implement `loadStats()` - Fetch latest stats
-  - [ ] Implement `loadHealth()` - Fetch health data
-  - [ ] Implement `loadStatistics('download')` - Fetch download statistics
-  - [ ] Implement `loadChartData('download')` - Fetch download chart data
-  - [ ] Implement `initChart('download')` - Initialize download chart with ChartJS
-  - [ ] Implement `updateChart('download')` - Update download chart
+  - [ ] Implement `loadServers()` - Fetch server list from API
+  - [ ] Implement `loadStats()` - Fetch latest stats from API
+  - [ ] Implement `loadHealth()` - Fetch health data from API
+  - [ ] Create method stubs for metrics (to be implemented in Phases 2-4):
+    - [ ] `loadStatistics(metric)` - Stub method
+    - [ ] `loadChartData(metric)` - Stub method
+    - [ ] `initChart(metric)` - Stub method
+    - [ ] `updateChart(metric)` - Stub method
   - [ ] Implement `onFilterChange()` - Save state and reload data
   - [ ] Implement `resetFilters()` - Clear filters and localStorage
-  - [ ] Implement `startAutoRefresh()` - Refresh every 60 seconds
+  - [ ] Implement `startAutoRefresh()` - Refresh every 60 seconds (calls stats and health only in Phase 1)
   - [ ] Implement utility methods: `formatSpeed()`, `formatPing()`, `formatTimestamp()`
 - [ ] Register dashboard component in `resources/js/app.js`
+- [ ] **Note**: Chart initialization and metric-specific logic will be added in Phases 2-4
 
 #### 1.5 Styling (Reference shadcn Design System)
 - [ ] Add Dashboard V2 styles to `resources/css/app.css` following shadcn patterns
@@ -401,45 +410,46 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
   - [ ] Cache TTL variables
   - [ ] Rate limit variables
 
-#### 1.7 Testing - API Tests
+#### 1.7 Testing - API Tests (Infrastructure Only)
 - [ ] Create `tests/Feature/Api/Public/StatsControllerTest.php`
   - [ ] Test returns latest stats
   - [ ] Test filters by server
   - [ ] Test returns null when no results
-- [ ] Create `tests/Feature/Api/Public/StatisticsControllerTest.php`
-  - [ ] Test returns download statistics
-  - [ ] Test calculates correct statistics
-  - [ ] Test filters by server and range
+  - [ ] Test caching works correctly
+- [ ] Create `tests/Feature/Api/Public/StatisticsControllerTest.php` (structure only)
   - [ ] Test validates metric parameter
-- [ ] Create `tests/Feature/Api/Public/ChartDataControllerTest.php`
-  - [ ] Test returns download chart data
-  - [ ] Test filters by time range
-  - [ ] Test filters by server
-  - [ ] Test validates metric and range parameters
+  - [ ] Test returns proper error for invalid metric
+  - [ ] **Note**: Metric-specific tests will be added in Phases 2-4
+- [ ] Create `tests/Feature/Api/Public/ChartDataControllerTest.php` (structure only)
+  - [ ] Test validates metric parameter
+  - [ ] Test returns proper error for invalid metric
+  - [ ] **Note**: Metric-specific tests will be added in Phases 2-4
 - [ ] Create `tests/Feature/Api/Public/HealthControllerTest.php`
   - [ ] Test returns health data
   - [ ] Test calculates correct health percentage
   - [ ] Test filters by server and range
+  - [ ] Test caching works correctly
 - [ ] Create `tests/Feature/Api/Public/ServersControllerTest.php`
   - [ ] Test returns server list
   - [ ] Test orders by test count
+  - [ ] Test caching works correctly
 - [ ] Create `tests/Feature/DashboardV2Test.php`
   - [ ] Test dashboard loads when enabled
   - [ ] Test redirects to home when disabled
 
-#### 1.8 Testing - Frontend Tests
-- [ ] Test download chart renders correctly
+#### 1.8 Testing - Frontend Tests (Infrastructure Only)
+- [ ] Test dashboard layout renders correctly with placeholders
 - [ ] Test time range filter changes
 - [ ] Test server filter changes
 - [ ] Test reset filters functionality
 - [ ] Test filter state persists in localStorage
 - [ ] Test filter state is restored on page reload
 - [ ] Test health bar visualization displays correct percentage
-- [ ] Test download statistics cards display correct values
-- [ ] Test auto-refresh updates data
-- [ ] Test loading states
+- [ ] Test auto-refresh updates stats and health data
+- [ ] Test loading states for stats and health
 - [ ] Test error handling
 - [ ] Test dark mode compatibility
+- [ ] **Note**: Metric-specific chart and statistics tests will be added in Phases 2-4
 
 #### 1.9 Performance & Optimization
 - [ ] Implement caching for all API endpoints
@@ -485,141 +495,256 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
 - [ ] Dashboard V2 accessible at `/v2` when `ENABLE_DASHBOARD_V2=true`
 - [ ] **Alpine.js standalone verified** - No Livewire dependencies or assets
 - [ ] All filters (time range, server, reset) working correctly
-- [ ] Filter state persists across page reloads
-- [ ] Health monitoring displays test success rate
-- [ ] Download chart displays data with average line
-- [ ] Download statistics show latest, average, lowest, highest
-- [ ] All API endpoints functional and cached
+- [ ] Filter state persists across page reloads using localStorage
+- [ ] Health monitoring displays test success rate with visualization
+- [ ] Dashboard layout complete with placeholder sections for all three metrics
+- [ ] Stats, Health, and Servers API endpoints functional and cached
+- [ ] Statistics and ChartData controller scaffolds created (metric logic deferred to Phases 2-4)
+- [ ] Alpine.js component framework complete with method stubs
+- [ ] All shadcn-based styling implemented
 - [ ] Test coverage > 95% for Phase 1 code
 - [ ] All Phase 1 tests passing
 - [ ] Dark mode working correctly
 - [ ] Mobile responsive
 - [ ] **No Livewire JavaScript loaded** on Dashboard V2 page
 - [ ] **No wire: attributes** in Dashboard V2 HTML
+- [ ] **No Filament components or styling** in Dashboard V2
 - [ ] Bundle size reasonable (< 500KB for V2-specific assets)
 
 ---
 
-## Phase 2: Upload Metrics
+## Phase 2: Download Metrics
+
+**Goal**: Implement complete Download metric visualization including chart and statistics.
+
+**Deliverables**:
+- Download statistics endpoint fully implemented
+- Download chart endpoint fully implemented
+- Download chart with average line
+- Download statistics cards (Latest, Average, Lowest, Highest)
+- Complete test coverage for Download features
+
+### Phase 2 Checklist
+
+#### 2.1 Backend - API Implementation
+- [ ] Update `app/Http/Controllers/Api/Public/StatisticsController.php`
+  - [ ] Implement full logic for `download` metric
+  - [ ] Calculate latest, average, lowest, highest for download speeds
+  - [ ] Support time range and server filtering
+  - [ ] Add cache layer (5 minute TTL)
+- [ ] Update `app/Http/Controllers/Api/Public/ChartDataController.php`
+  - [ ] Implement full logic for `download` metric
+  - [ ] Return time series data for download speeds
+  - [ ] Calculate average line data for download
+  - [ ] Support time range and server filtering
+  - [ ] Add cache layer (5 minute TTL)
+- [ ] Update `app/Http/Resources/Public/StatisticsResource.php`
+  - [ ] Format download statistics response
+- [ ] Update `app/Http/Resources/Public/ChartDataResource.php`
+  - [ ] Format download chart data response
+
+#### 2.2 Frontend - Layout
+- [ ] Update `resources/views/dashboard-v2.blade.php`
+  - [ ] Enable Download section (previously placeholder)
+  - [ ] Add Download chart canvas (2 columns)
+  - [ ] Add Download statistics cards (1 column): Latest, Average, Lowest, Highest
+  - [ ] Use shadcn `.stat-card` styling
+
+#### 2.3 Frontend - Alpine.js Component
+- [ ] Update `resources/js/dashboard.js`
+  - [ ] Implement `loadStatistics('download')` - Fetch download statistics from API
+  - [ ] Implement `loadChartData('download')` - Fetch download chart data from API
+  - [ ] Implement `initChart('download')` - Initialize Chart.js for download
+    - [ ] Configure line chart
+    - [ ] Add dataset for download speeds
+    - [ ] Add average line dataset
+    - [ ] Configure time-based X-axis
+    - [ ] Configure speed Y-axis (Mbps)
+  - [ ] Implement `updateChart('download')` - Update download chart with new data
+  - [ ] Update `init()` to call download methods on page load
+  - [ ] Update `startAutoRefresh()` to refresh download data
+
+#### 2.4 Testing
+- [ ] Update `tests/Feature/Api/Public/StatisticsControllerTest.php`
+  - [ ] Test returns download statistics
+  - [ ] Test calculates correct statistics (latest, average, lowest, highest)
+  - [ ] Test filters by server and range
+  - [ ] Test caching works correctly
+- [ ] Update `tests/Feature/Api/Public/ChartDataControllerTest.php`
+  - [ ] Test returns download chart data
+  - [ ] Test filters by time range and server
+  - [ ] Test calculates average line correctly
+  - [ ] Test caching works correctly
+- [ ] Add frontend tests for Download
+  - [ ] Test download chart renders correctly
+  - [ ] Test download statistics cards display correct values
+  - [ ] Test download chart updates on filter change
+  - [ ] Test download data refreshes on auto-refresh
+
+#### 2.5 Code Quality
+- [ ] Run `vendor/bin/pint --dirty` to format PHP code
+- [ ] Run `npm run build` to compile assets
+- [ ] Run `php artisan test --filter=Download` to verify download tests pass
+- [ ] Verify download chart displays correctly in browser
+- [ ] Test download statistics are accurate
+- [ ] Verify dark mode works for download section
+
+### Phase 2 Completion Criteria
+- [ ] Download statistics endpoint returns correct data
+- [ ] Download chart endpoint returns time series data
+- [ ] Download chart displays with average line
+- [ ] Download statistics cards show latest, average, lowest, highest
+- [ ] All Download-related tests passing
+- [ ] Test coverage > 95% for Phase 2 code
+- [ ] Download section fully functional and integrated with filters
+
+---
+
+## Phase 3: Upload Metrics
 
 **Goal**: Add complete Upload metric visualization to Dashboard V2.
 
 **Deliverables**:
 - Upload statistics endpoint fully implemented
 - Upload chart endpoint fully implemented
-- Upload chart and statistics cards
+- Upload chart with average line
+- Upload statistics cards (Latest, Average, Lowest, Highest)
 - Complete test coverage for Upload features
 
-### Phase 2 Checklist
+### Phase 3 Checklist
 
-#### 2.1 Backend - API Implementation
+#### 3.1 Backend - API Implementation
 - [ ] Update `app/Http/Controllers/Api/Public/StatisticsController.php`
   - [ ] Add support for `upload` metric
-  - [ ] Calculate latest, average, lowest, highest for upload
+  - [ ] Calculate latest, average, lowest, highest for upload speeds
+  - [ ] Add cache layer (same as download)
 - [ ] Update `app/Http/Controllers/Api/Public/ChartDataController.php`
   - [ ] Add support for `upload` metric
+  - [ ] Return time series data for upload speeds
   - [ ] Calculate average line data for upload
+  - [ ] Add cache layer (same as download)
 
-#### 2.2 Frontend - Layout
+#### 3.2 Frontend - Layout
 - [ ] Update `resources/views/dashboard-v2.blade.php`
-  - [ ] Enable Upload section
-  - [ ] Add Upload chart (2 columns)
+  - [ ] Enable Upload section (previously placeholder)
+  - [ ] Add Upload chart canvas (2 columns)
   - [ ] Add Upload statistics cards (1 column): Latest, Average, Lowest, Highest
+  - [ ] Use shadcn `.stat-card` styling
 
-#### 2.3 Frontend - Alpine.js Component
+#### 3.3 Frontend - Alpine.js Component
 - [ ] Update `resources/js/dashboard.js`
   - [ ] Add `loadStatistics('upload')` to initialization
+  - [ ] Add `loadChartData('upload')` to initialization
   - [ ] Add `initChart('upload')` to initialization
-  - [ ] Ensure `updateAllCharts()` includes upload
+    - [ ] Configure line chart (similar to download)
+    - [ ] Configure Y-axis for upload speeds (Mbps)
+  - [ ] Ensure `updateChart('upload')` works correctly
   - [ ] Ensure auto-refresh updates upload data
 
-#### 2.4 Testing - API Tests
+#### 3.4 Testing
 - [ ] Update `tests/Feature/Api/Public/StatisticsControllerTest.php`
   - [ ] Add tests for upload metric
   - [ ] Test calculates correct upload statistics
   - [ ] Test filters work for upload
+  - [ ] Test caching works correctly
 - [ ] Update `tests/Feature/Api/Public/ChartDataControllerTest.php`
   - [ ] Add tests for upload chart data
   - [ ] Test filters work for upload
+  - [ ] Test caching works correctly
+- [ ] Add frontend tests for Upload
+  - [ ] Test upload chart renders correctly
+  - [ ] Test upload statistics cards display correct values
+  - [ ] Test upload data updates on filter change
+  - [ ] Test upload data updates on auto-refresh
 
-#### 2.5 Testing - Frontend Tests
-- [ ] Test upload chart renders correctly
-- [ ] Test upload statistics cards display correct values
-- [ ] Test upload data updates on filter change
-- [ ] Test upload data updates on auto-refresh
-
-#### 2.6 Code Quality
+#### 3.5 Code Quality
 - [ ] Run `vendor/bin/pint --dirty`
 - [ ] Run `npm run build`
-- [ ] Run `php artisan test --filter=Public`
-- [ ] Verify no console errors
+- [ ] Run `php artisan test --filter=Upload` to verify upload tests pass
+- [ ] Verify upload chart displays correctly in browser
+- [ ] Test upload statistics are accurate
+- [ ] Verify dark mode works for upload section
 
-### Phase 2 Completion Criteria
-- [ ] Upload chart displays data with average line
-- [ ] Upload statistics show latest, average, lowest, highest
+### Phase 3 Completion Criteria
+- [ ] Upload statistics endpoint returns correct data
+- [ ] Upload chart endpoint returns time series data
+- [ ] Upload chart displays with average line
+- [ ] Upload statistics cards show latest, average, lowest, highest
 - [ ] Upload data respects time range and server filters
 - [ ] Upload data updates on auto-refresh
-- [ ] All Phase 2 tests passing
-- [ ] Test coverage maintained > 95%
+- [ ] All Upload-related tests passing
+- [ ] Test coverage > 95% for Phase 3 code
+- [ ] Upload section fully functional and integrated with filters
 
 ---
 
-## Phase 3: Ping Metrics
+## Phase 4: Ping Metrics
 
 **Goal**: Add complete Ping metric visualization to Dashboard V2.
 
 **Deliverables**:
 - Ping statistics endpoint fully implemented
 - Ping chart endpoint fully implemented
-- Ping chart and statistics cards
+- Ping chart with average line
+- Ping statistics cards (Latest, Average, Lowest, Highest)
 - Complete test coverage for Ping features
 - Full Dashboard V2 completion
 
-### Phase 3 Checklist
+### Phase 4 Checklist
 
-#### 3.1 Backend - API Implementation
+#### 4.1 Backend - API Implementation
 - [ ] Update `app/Http/Controllers/Api/Public/StatisticsController.php`
   - [ ] Add support for `ping` metric
-  - [ ] Calculate latest, average, lowest, highest for ping
+  - [ ] Calculate latest, average, lowest, highest for ping latency
+  - [ ] Add cache layer (same as download/upload)
 - [ ] Update `app/Http/Controllers/Api/Public/ChartDataController.php`
   - [ ] Add support for `ping` metric
+  - [ ] Return time series data for ping latency
   - [ ] Calculate average line data for ping
+  - [ ] Add cache layer (same as download/upload)
 
-#### 3.2 Frontend - Layout
+#### 4.2 Frontend - Layout
 - [ ] Update `resources/views/dashboard-v2.blade.php`
-  - [ ] Enable Ping section
-  - [ ] Add Ping chart (2 columns)
+  - [ ] Enable Ping section (previously placeholder)
+  - [ ] Add Ping chart canvas (2 columns)
   - [ ] Add Ping statistics cards (1 column): Latest, Average, Lowest, Highest
+  - [ ] Use shadcn `.stat-card` styling
 
-#### 3.3 Frontend - Alpine.js Component
+#### 4.3 Frontend - Alpine.js Component
 - [ ] Update `resources/js/dashboard.js`
   - [ ] Add `loadStatistics('ping')` to initialization
+  - [ ] Add `loadChartData('ping')` to initialization
   - [ ] Add `initChart('ping')` to initialization
-  - [ ] Ensure `updateAllCharts()` includes ping
+    - [ ] Configure line chart (similar to download/upload)
+    - [ ] Configure Y-axis for ping latency (ms)
+  - [ ] Ensure `updateChart('ping')` works correctly
   - [ ] Ensure auto-refresh updates ping data
 
-#### 3.4 Testing - API Tests
+#### 4.4 Testing
 - [ ] Update `tests/Feature/Api/Public/StatisticsControllerTest.php`
   - [ ] Add tests for ping metric
   - [ ] Test calculates correct ping statistics
   - [ ] Test filters work for ping
+  - [ ] Test caching works correctly
 - [ ] Update `tests/Feature/Api/Public/ChartDataControllerTest.php`
   - [ ] Add tests for ping chart data
   - [ ] Test filters work for ping
+  - [ ] Test caching works correctly
+- [ ] Add frontend tests for Ping
+  - [ ] Test ping chart renders correctly
+  - [ ] Test ping statistics cards display correct values
+  - [ ] Test ping data updates on filter change
+  - [ ] Test ping data updates on auto-refresh
 
-#### 3.5 Testing - Frontend Tests
-- [ ] Test ping chart renders correctly
-- [ ] Test ping statistics cards display correct values
-- [ ] Test ping data updates on filter change
-- [ ] Test ping data updates on auto-refresh
-
-#### 3.6 Code Quality
+#### 4.5 Code Quality
 - [ ] Run `vendor/bin/pint --dirty`
 - [ ] Run `npm run build`
-- [ ] Run `php artisan test --filter=Public`
-- [ ] Verify no console errors
+- [ ] Run `php artisan test --filter=Ping` to verify ping tests pass
+- [ ] Verify ping chart displays correctly in browser
+- [ ] Test ping statistics are accurate
+- [ ] Verify dark mode works for ping section
 
-#### 3.7 Final Integration Testing
+#### 4.6 Final Integration Testing
 - [ ] Test all three metrics (download, upload, ping) working together
 - [ ] Test filters apply to all metrics
 - [ ] Test auto-refresh updates all metrics
@@ -629,20 +754,24 @@ Each phase can be developed, tested, and deployed independently. The dashboard w
 - [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
 - [ ] Mobile responsiveness testing
 - [ ] Dark mode testing for all sections
+- [ ] Test with various data volumes (empty, small, large datasets)
 
-#### 3.8 Documentation
+#### 4.7 Documentation
 - [ ] Update README with complete Dashboard V2 features
-- [ ] Document all API endpoints
+- [ ] Document all 5 API endpoints with examples
 - [ ] Create user guide for Dashboard V2
 - [ ] Document differences between V1 and V2
+- [ ] Add inline code comments where needed
 
-### Phase 3 Completion Criteria
-- [ ] Ping chart displays data with average line
-- [ ] Ping statistics show latest, average, lowest, highest
+### Phase 4 Completion Criteria
+- [ ] Ping statistics endpoint returns correct data
+- [ ] Ping chart endpoint returns time series data
+- [ ] Ping chart displays with average line
+- [ ] Ping statistics cards show latest, average, lowest, highest
 - [ ] Ping data respects time range and server filters
 - [ ] Ping data updates on auto-refresh
 - [ ] All three metrics (download, upload, ping) working correctly
-- [ ] All tests passing (Phase 1, 2, and 3)
+- [ ] All tests passing (Phases 1, 2, 3, and 4)
 - [ ] Test coverage > 95% overall
 - [ ] Performance targets met
 - [ ] Dashboard V2 feature complete and ready for production testing
@@ -2203,20 +2332,25 @@ All API responses follow this structure:
 
 ## Rollout Plan
 
-### Phase 1: Development (Days 1-5)
-- Complete all implementation phases
-- Achieve test coverage goals
+### Stage 1: Development (Days 1-9)
+- Complete all 4 implementation phases:
+  - Phase 1: Core Infrastructure (2-3 days)
+  - Phase 2: Download Metrics (1-2 days)
+  - Phase 3: Upload Metrics (1-2 days)
+  - Phase 4: Ping Metrics (1-2 days)
+- Achieve test coverage goals (>95%)
 - Performance testing
 
-### Phase 2: Internal Testing (Day 5)
+### Stage 2: Internal Testing (Day 9-10)
 - Deploy to staging environment
 - Set `ENABLE_DASHBOARD_V2=true` in staging
 - Manual testing of `/v2` route
+- Verify all metrics (download, upload, ping) working correctly
 - Performance validation
 - Cross-browser testing
 - V1 at `/` remains default and unchanged
 
-### Phase 3: Testing in Production (Week 1-2)
+### Stage 3: Production Testing (Week 2-3)
 - Deploy to production with `ENABLE_DASHBOARD_V2=false` (disabled by default)
 - Enable for testing: Set `ENABLE_DASHBOARD_V2=true`
 - Access V2 via direct URL: `/v2`
@@ -2224,12 +2358,12 @@ All API responses follow this structure:
 - Fix any issues reported
 - V1 remains primary dashboard for users
 
-### Phase 4: Gradual Rollout (Week 3-4)
+### Stage 4: Gradual Rollout (Week 4-5)
 - Keep `ENABLE_DASHBOARD_V2=true` for continued testing
 - Consider making V2 the primary dashboard if stable
 - V1 remains available at `/` for fallback
 
-### Phase 5: Full Migration (Future)
+### Stage 5: Full Migration (Future)
 - After V2 proves stable for 1+ month
 - Redirect `/` to V2, or replace V1 entirely
 - Optionally remove V1 or keep as legacy option
@@ -2872,10 +3006,25 @@ vendor/bin/pint --dirty
 
 ---
 
-**Document Version**: 2.4
+**Document Version**: 2.5
 **Last Updated**: 2025-11-26
 **Author**: Claude Code
-**Status**: Updated - Filament design reference removed, shadcn is now the exclusive design system
+**Status**: Updated - Reorganized into 4 phases with clear separation of infrastructure and metrics
+
+**Changes in v2.5**:
+- **Restructured implementation into 4 phases** (previously 3 phases)
+  - **Phase 1: Core Infrastructure** (2-3 days) - No metrics, only foundation
+  - **Phase 2: Download Metrics** (1-2 days) - NEW phase
+  - **Phase 3: Upload Metrics** (1-2 days) - Renumbered from Phase 2
+  - **Phase 4: Ping Metrics** (1-2 days) - Renumbered from Phase 3
+- **Total timeline: 5-9 days** (previously 5-8 days)
+- **Clear separation**: Infrastructure (Phase 1) completely separate from metric implementations (Phases 2-4)
+- Updated Phase 1 to scaffold API controllers/resources without metric-specific logic
+- Updated Phase 1 to create Alpine.js method stubs for metrics
+- Updated Phase 1 completion criteria to focus on infrastructure only
+- Created comprehensive new Phase 2 for Download metrics implementation
+- Updated rollout plan to use "Stage" terminology to avoid confusion with implementation phases
+- All phase dependencies clearly defined
 
 **Changes in v2.4**:
 - **Removed Filament as design reference** - Dashboard V2 does NOT use Filament components or styling
@@ -2904,7 +3053,7 @@ vendor/bin/pint --dirty
 - Added bundle size checks and verification steps
 
 **Changes in v2.1**:
-- Reorganized implementation into 3 independent phases
+- Reorganized implementation into 3 independent phases (later expanded to 4 phases in v2.5)
   - Phase 1: Core infrastructure, filters, health monitoring, and Download metrics
   - Phase 2: Upload metrics
   - Phase 3: Ping metrics
