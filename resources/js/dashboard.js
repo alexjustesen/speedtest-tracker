@@ -29,6 +29,27 @@ Chart.register(
 // Make Alpine available globally
 window.Alpine = Alpine;
 
+// Define theme toggle component
+Alpine.data('themeToggle', () => ({
+    theme: localStorage.getItem('theme') ?? 'light',
+    open: false,
+
+    setTheme(newTheme) {
+        this.theme = newTheme;
+        localStorage.setItem('theme', newTheme);
+
+        if (
+            newTheme === 'dark' ||
+            (newTheme === 'system' &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    },
+}));
+
 // Define dashboard component
 Alpine.data('dashboard', () => ({
     // State
@@ -52,12 +73,57 @@ Alpine.data('dashboard', () => ({
     // Health state
     health: null,
 
+    // Auto-refresh state
+    refreshInterval: null,
+
     // Initialization
     async init() {
+        this.loadFilterState();
         await this.loadServers();
         await this.loadStats();
         await this.loadMetrics();
         await this.loadHealth();
+        this.startAutoRefresh();
+    },
+
+    // Load filter state from localStorage
+    loadFilterState() {
+        try {
+            const saved = localStorage.getItem('dashboard_filters');
+            if (saved) {
+                const filters = JSON.parse(saved);
+                this.filters.timeRange = filters.timeRange || '24h';
+                this.filters.server = filters.server || '';
+            }
+        } catch (error) {
+            console.error('Failed to load filter state:', error);
+        }
+    },
+
+    // Save filter state to localStorage
+    saveFilterState() {
+        try {
+            localStorage.setItem('dashboard_filters', JSON.stringify(this.filters));
+        } catch (error) {
+            console.error('Failed to save filter state:', error);
+        }
+    },
+
+    // Start auto-refresh
+    startAutoRefresh() {
+        this.refreshInterval = setInterval(async () => {
+            await this.loadStats();
+            await this.loadHealth();
+            await this.loadMetrics();
+        }, 60000); // 60 seconds
+    },
+
+    // Stop auto-refresh
+    stopAutoRefresh() {
+        if (this.refreshInterval) {
+            clearInterval(this.refreshInterval);
+            this.refreshInterval = null;
+        }
     },
 
     // Load all metrics
@@ -305,6 +371,7 @@ Alpine.data('dashboard', () => ({
 
     // Handle filter changes
     async onFilterChange() {
+        this.saveFilterState();
         await this.loadStats();
         await this.loadMetrics();
         await this.loadHealth();
@@ -314,6 +381,11 @@ Alpine.data('dashboard', () => ({
     async resetFilters() {
         this.filters.timeRange = '24h';
         this.filters.server = '';
+        try {
+            localStorage.removeItem('dashboard_filters');
+        } catch (error) {
+            console.error('Failed to clear filter state:', error);
+        }
         await this.loadStats();
         await this.loadMetrics();
         await this.loadHealth();

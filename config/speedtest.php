@@ -26,6 +26,17 @@ return [
     ],
 
     /**
+     * Public API cache settings (Dashboard V2).
+     */
+    'public_api' => [
+        'stats_cache_ttl' => (int) env('STATS_CACHE_TTL', 60), // 1 minute
+        'servers_cache_ttl' => (int) env('SERVERS_CACHE_TTL', 600), // 10 minutes
+        'health_cache_ttl' => (int) env('HEALTH_CACHE_TTL', 60), // 1 minute
+        'statistics_cache_ttl' => (int) env('STATISTICS_CACHE_TTL', 300), // 5 minutes
+        'chart_cache_ttl' => (int) env('CHART_CACHE_TTL', 60), // 1 minute
+    ],
+
+    /**
      * Speedtest settings.
      */
     'schedule' => env('SPEEDTEST_SCHEDULE', false),

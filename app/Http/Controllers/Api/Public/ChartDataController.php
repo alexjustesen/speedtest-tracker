@@ -8,6 +8,7 @@ use App\Models\Result;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ChartDataController extends Controller
 {
@@ -25,6 +26,22 @@ class ChartDataController extends Controller
 
         $timeRange = $request->query('time_range', '24h');
         $serverId = $request->query('server');
+
+        $cacheKey = 'dashboard_v2_chart_'.$metric.'_'.$timeRange.'_'.($serverId ?: 'all');
+        $cacheTtl = config('speedtest.public_api.chart_cache_ttl', 60);
+
+        $chartData = Cache::remember($cacheKey, $cacheTtl, function () use ($metric, $timeRange, $serverId) {
+            return $this->getChartData($metric, $timeRange, $serverId);
+        });
+
+        return response()->json($chartData);
+    }
+
+    /**
+     * Get chart data for a metric.
+     */
+    protected function getChartData(string $metric, string $timeRange, ?string $serverId): array
+    {
 
         $query = Result::query()
             ->select(['id', $metric, 'created_at'])
@@ -52,11 +69,11 @@ class ChartDataController extends Controller
             ];
         })->values();
 
-        return response()->json([
+        return [
             'metric' => $metric,
             'data' => $data,
             'average' => $average ? round($average, 2) : null,
-        ]);
+        ];
     }
 
     /**

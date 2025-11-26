@@ -6,3 +6,12 @@
 [x-cloak] {
     display: none !important;
 }
+
+/* Ensure Alpine.js x-show works correctly */
+[x-show] {
+    display: revert !important;
+}
+
+[x-show][style*="display: none"] {
+    display: none !important;
+}

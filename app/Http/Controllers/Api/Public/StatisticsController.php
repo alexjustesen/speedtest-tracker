@@ -8,6 +8,7 @@ use App\Models\Result;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class StatisticsController extends Controller
 {
@@ -25,6 +26,22 @@ class StatisticsController extends Controller
 
         $timeRange = $request->query('time_range', '24h');
         $serverId = $request->query('server');
+
+        $cacheKey = 'dashboard_v2_statistics_'.$metric.'_'.$timeRange.'_'.($serverId ?: 'all');
+        $cacheTtl = config('speedtest.public_api.statistics_cache_ttl', 300);
+
+        $statistics = Cache::remember($cacheKey, $cacheTtl, function () use ($metric, $timeRange, $serverId) {
+            return $this->calculateStatistics($metric, $timeRange, $serverId);
+        });
+
+        return response()->json($statistics);
+    }
+
+    /**
+     * Calculate statistics for a metric.
+     */
+    protected function calculateStatistics(string $metric, string $timeRange, ?string $serverId): array
+    {
 
         $query = Result::query()
             ->where('status', ResultStatus::Completed);
@@ -55,13 +72,13 @@ class StatisticsController extends Controller
 
         $latest = $latestQuery->latest()->value($metric);
 
-        return response()->json([
+        return [
             'metric' => $metric,
             'latest' => $latest ? round($latest, 2) : null,
             'average' => $stats->average ? round($stats->average, 2) : null,
             'lowest' => $stats->lowest ? round($stats->lowest, 2) : null,
             'highest' => $stats->highest ? round($stats->highest, 2) : null,
-        ]);
+        ];
     }
 
     /**

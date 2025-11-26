@@ -8,6 +8,7 @@ use App\Models\Result;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class StatsController extends Controller
 {
@@ -19,19 +20,24 @@ class StatsController extends Controller
         $timeRange = $request->query('time_range', '24h');
         $serverId = $request->query('server');
 
-        $query = Result::query()
-            ->select(['id', 'ping', 'download', 'upload', 'server_id', 'server_name', 'created_at'])
-            ->where('status', ResultStatus::Completed);
+        $cacheKey = 'dashboard_v2_stats_'.$timeRange.'_'.($serverId ?: 'all');
+        $cacheTtl = config('speedtest.public_api.stats_cache_ttl', 60);
 
-        // Apply time range filter
-        $query->where('created_at', '>=', $this->getStartDate($timeRange));
+        $latestResult = Cache::remember($cacheKey, $cacheTtl, function () use ($timeRange, $serverId) {
+            $query = Result::query()
+                ->select(['id', 'ping', 'download', 'upload', 'server_id', 'server_name', 'created_at'])
+                ->where('status', ResultStatus::Completed);
 
-        // Apply server filter if provided
-        if ($serverId) {
-            $query->where('server_id', $serverId);
-        }
+            // Apply time range filter
+            $query->where('created_at', '>=', $this->getStartDate($timeRange));
 
-        $latestResult = $query->latest()->first();
+            // Apply server filter if provided
+            if ($serverId) {
+                $query->where('server_id', $serverId);
+            }
+
+            return $query->latest()->first();
+        });
 
         return response()->json($latestResult);
     }

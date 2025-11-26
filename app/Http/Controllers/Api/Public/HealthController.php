@@ -8,6 +8,7 @@ use App\Models\Result;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HealthController extends Controller
 {
@@ -19,42 +20,49 @@ class HealthController extends Controller
         $timeRange = $request->query('time_range', '24h');
         $serverId = $request->query('server');
 
-        $query = Result::query()
-            ->where('created_at', '>=', $this->getStartDate($timeRange));
+        $cacheKey = 'dashboard_v2_health_'.$timeRange.'_'.($serverId ?: 'all');
+        $cacheTtl = config('speedtest.public_api.health_cache_ttl', 60);
 
-        // Apply server filter if provided
-        if ($serverId) {
-            $query->where('server_id', $serverId);
-        }
+        $healthData = Cache::remember($cacheKey, $cacheTtl, function () use ($timeRange, $serverId) {
+            $query = Result::query()
+                ->where('created_at', '>=', $this->getStartDate($timeRange));
 
-        // Get total count
-        $total = $query->count();
+            // Apply server filter if provided
+            if ($serverId) {
+                $query->where('server_id', $serverId);
+            }
 
-        // Get completed count
-        $completed = (clone $query)->where('status', ResultStatus::Completed)->count();
+            // Get total count
+            $total = $query->count();
 
-        // Get failed count
-        $failed = (clone $query)->where('status', ResultStatus::Failed)->count();
+            // Get completed count
+            $completed = (clone $query)->where('status', ResultStatus::Completed)->count();
 
-        // Calculate health percentage
-        $percentage = $total > 0 ? round(($completed / $total) * 100, 1) : null;
+            // Get failed count
+            $failed = (clone $query)->where('status', ResultStatus::Failed)->count();
 
-        // Get latest test status
-        $latestResult = Result::query()
-            ->where('created_at', '>=', $this->getStartDate($timeRange))
-            ->when($serverId, fn ($q) => $q->where('server_id', $serverId))
-            ->latest()
-            ->first();
+            // Calculate health percentage
+            $percentage = $total > 0 ? round(($completed / $total) * 100, 1) : null;
 
-        $latestStatus = $latestResult ? $latestResult->status->value : null;
+            // Get latest test status
+            $latestResult = Result::query()
+                ->where('created_at', '>=', $this->getStartDate($timeRange))
+                ->when($serverId, fn ($q) => $q->where('server_id', $serverId))
+                ->latest()
+                ->first();
 
-        return response()->json([
-            'percentage' => $percentage,
-            'status' => $latestStatus,
-            'total' => $total,
-            'completed' => $completed,
-            'failed' => $failed,
-        ]);
+            $latestStatus = $latestResult ? $latestResult->status->value : null;
+
+            return [
+                'percentage' => $percentage,
+                'status' => $latestStatus,
+                'total' => $total,
+                'completed' => $completed,
+                'failed' => $failed,
+            ];
+        });
+
+        return response()->json($healthData);
     }
 
     /**
