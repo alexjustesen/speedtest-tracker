@@ -13,9 +13,11 @@ use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 
 class DataIntegration extends SettingsPage
@@ -52,13 +54,10 @@ class DataIntegration extends SettingsPage
     {
         return $schema
             ->components([
-                Grid::make([
-                    'default' => 1,
-                    'md' => 3,
-                ])
+                Tabs::make()
                     ->schema([
-                        Section::make(__('settings/data_integration.influxdb_v2'))
-                            ->description(__('settings/data_integration.influxdb_v2_description'))
+                        Tab::make(__('settings/data_integration.influxdb_v2'))
+                            ->icon(Heroicon::OutlinedCircleStack)
                             ->schema([
                                 Toggle::make('influxdb_v2_enabled')
                                     ->label(__('settings/data_integration.influxdb_v2_enabled'))
@@ -127,10 +126,9 @@ class DataIntegration extends SettingsPage
                                         ]),
                                     ]),
                             ])
-                            ->compact()
                             ->columnSpanFull(),
-                        Section::make(__('settings/data_integration.prometheus'))
-                            ->description(__('settings/data_integration.prometheus_description'))
+                        Tab::make(__('settings/data_integration.prometheus'))
+                            ->icon(Heroicon::OutlinedChartBar)
                             ->schema([
                                 Toggle::make('prometheus_enabled')
                                     ->label(__('settings/data_integration.prometheus_enabled'))
@@ -157,7 +155,6 @@ class DataIntegration extends SettingsPage
                                             ->hidden(fn (Get $get) => $get('prometheus_basic_auth_enabled') !== true),
                                     ]),
                             ])
-                            ->compact()
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
