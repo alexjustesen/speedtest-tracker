@@ -15,7 +15,6 @@ permissions:
 jobs:
   lint-app:
     runs-on: ubuntu-24.04
-    if: github.event_name != 'pull_request' || !startsWith(github.event.pull_request.title, 'New Crowdin updates')
     steps:
       - name: Checkout
         uses: actions/checkout@v5
