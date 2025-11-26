@@ -46,6 +46,8 @@ Alpine.data('dashboard', () => ({
     downloadChart: null,
     uploadStats: null,
     uploadChart: null,
+    pingStats: null,
+    pingChart: null,
 
     // Initialization
     async init() {
@@ -58,6 +60,7 @@ Alpine.data('dashboard', () => ({
     async loadMetrics() {
         await this.loadDownloadMetrics();
         await this.loadUploadMetrics();
+        await this.loadPingMetrics();
     },
 
     // Load download metrics
@@ -70,6 +73,12 @@ Alpine.data('dashboard', () => ({
     async loadUploadMetrics() {
         await this.loadStatistics('upload');
         await this.loadChartData('upload');
+    },
+
+    // Load ping metrics
+    async loadPingMetrics() {
+        await this.loadStatistics('ping');
+        await this.loadChartData('ping');
     },
 
     // Load server list
