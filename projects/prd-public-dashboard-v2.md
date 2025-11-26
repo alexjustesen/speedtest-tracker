@@ -243,273 +243,284 @@ Create a new dashboard (Dashboard V2) at the `/v2` route alongside the existing 
 
 ## Phased Implementation Plan
 
-Dashboard V2 will be implemented in four phases to allow for incremental development and testing:
+Dashboard V2 will be implemented in six phases to allow for incremental development and testing:
 
 ### Phase Overview
 
 | Phase | Focus | Deliverables | Est. Time |
 |-------|-------|--------------|-----------|
-| **Phase 1** | Core infrastructure, filters, and health monitoring | Foundation without metrics | 2-3 days |
+| **Phase 1** | Core infrastructure and filters | Minimal foundation without metrics, caching, or health monitoring | 3-4 hours |
 | **Phase 2** | Download metrics | Add Download chart and statistics | 1-2 days |
 | **Phase 3** | Upload metrics | Add Upload chart and statistics | 1-2 days |
-| **Phase 4** | Ping metrics | Complete all metrics | 1-2 days |
+| **Phase 4** | Ping metrics | Add Ping chart and statistics | 1-2 days |
+| **Phase 5** | Health monitoring | Add test health tracking and visualization | 4-6 hours |
+| **Phase 6** | Performance & polish | Caching, filter persistence, auto-refresh, optimizations | 1-2 days |
 
-**Total Estimated Time**: 5-9 days
+**Total Estimated Time**: 6-10 days
 
 ### Why Phased Approach?
 
-1. **Clear Separation**: Core infrastructure (Phase 1) is separate from metric implementations
+1. **Clear Separation**: Core infrastructure (Phase 1) is separate from metrics, features, and optimizations
 2. **Reduced Risk**: Each phase can be tested and validated independently
-3. **Faster Feedback**: Get user feedback on infrastructure before building metrics
-4. **Easier Debugging**: Isolate issues to specific phases
-5. **Flexible Delivery**: Can deploy Phase 1 to production, then add metrics incrementally
+3. **Faster Feedback**: Phase 1 delivers in half a workday - immediate architecture validation
+4. **Easier Debugging**: Isolate issues to specific phases (no caching/polling to debug initially)
+5. **Flexible Delivery**: Can deploy Phase 1 to production, then add features incrementally
 6. **Team Collaboration**: Different team members can work on different phases
 7. **Parallel Development**: After Phase 1, metrics can be developed in parallel if needed
+8. **Simplified Phase 1**: Defers caching, persistence, and health monitoring to later phases
+9. **Performance Focus**: Phase 6 dedicated entirely to optimization after features are complete
 
 ### Phase Dependencies
 
-- **Phase 1** is standalone and creates all infrastructure
+- **Phase 1** is standalone and creates minimal infrastructure (routing, filters, basic API)
 - **Phase 2** depends on Phase 1 completion (adds Download metrics)
 - **Phase 3** depends on Phase 2 completion (adds Upload metrics)
 - **Phase 4** depends on Phase 3 completion (adds Ping metrics)
-- Each metric phase adds functionality without modifying core infrastructure
+- **Phase 5** is independent after Phase 1 (adds Health monitoring feature)
+- **Phase 6** depends on Phases 1-5 completion (adds optimizations to all existing features)
+- Phases 2-4 add metrics without caching or auto-refresh (those come in Phase 6)
 
-Each phase can be developed, tested, and deployed independently. The dashboard infrastructure will be complete after Phase 1, with subsequent phases adding metrics one at a time.
+Each phase can be developed, tested, and deployed independently. Phase 1 delivers the foundation in 3-4 hours, with subsequent phases adding functionality incrementally.
 
 ---
 
-## Phase 1: Core Infrastructure
+## Phase 1: Core Infrastructure (Streamlined)
 
-**Goal**: Establish the complete foundation of Dashboard V2 including routing, API structure, filtering, health monitoring, and Alpine.js framework. No metrics are implemented in this phase.
+**Goal**: Get basic dashboard foundation working in 3-4 hours with filters and API endpoints. Defer caching, persistence, health monitoring, and auto-refresh to later phases.
+
+**Time Estimate**: 3-4 hours
 
 **Deliverables**:
-- Dashboard V2 route and controller
-- API endpoint structure (controllers and resources created, but only Stats, Health, and Servers endpoints fully implemented)
-- Filter system with localStorage persistence
-- Health monitoring widget
-- Alpine.js dashboard component with all state management
-- Complete styling with shadcn design patterns
+- Dashboard V2 route and controller with environment gating
+- 2 basic API endpoints (Stats, Servers) - NO caching
+- Filter system (time range + server selection) - NO localStorage persistence
+- Alpine.js dashboard component with basic state management
+- Basic Tailwind styling (detailed shadcn styling deferred to Phase 6)
 - Dashboard layout with placeholders for all three metrics (Download, Upload, Ping)
-- Complete test coverage for Phase 1 features
+- Minimal test coverage (happy paths only)
+- Manual refresh only (no auto-refresh)
+
+**Explicitly Excluded from Phase 1** (moved to later phases):
+- ❌ Health monitoring widget → Phase 5
+- ❌ Health API endpoint → Phase 5
+- ❌ All caching logic → Phase 6
+- ❌ Filter persistence (localStorage) → Phase 6
+- ❌ Auto-refresh (60-second polling) → Phase 6
+- ❌ Comprehensive testing (edge cases) → Phase 6
+- ❌ Detailed shadcn styling → Phase 6
+- ❌ Statistics and ChartData controllers → Phase 2-4 (created when needed)
 
 ### Phase 1 Checklist
 
-#### 1.1 Setup & Infrastructure
+#### 1.1 Setup & Dependencies (30 minutes)
 - [ ] Install Alpine.js and ChartJS dependencies
   ```bash
   npm install alpinejs chart.js chartjs-adapter-date-fns date-fns
   ```
   **Note**: Alpine.js is installed as a standalone dependency, NOT relying on Livewire's bundled version.
+- [ ] Verify installation
+  ```bash
+  npm list alpinejs chart.js
+  ```
+
+#### 1.2 Backend - Routing & Controller (30 minutes)
 - [ ] Create Dashboard V2 route in `routes/web.php`
-  - [ ] Add `GET /v2` route
-  - [ ] Apply middleware: `['getting-started', 'public-dashboard']`
-  - [ ] Name route: `dashboard.v2`
+  ```php
+  Route::get('/v2', DashboardV2Controller::class)
+      ->middleware(['getting-started', 'public-dashboard'])
+      ->name('dashboard.v2');
+  ```
 - [ ] Create `app/Http/Controllers/DashboardV2Controller.php`
-  - [ ] Check `ENABLE_DASHBOARD_V2` config
-  - [ ] Redirect to home if disabled
-  - [ ] Return `dashboard-v2` view
-- [ ] Create public API routes file `routes/api/public.php`
+  ```bash
+  php artisan make:class Http/Controllers/DashboardV2Controller
+  ```
+  - [ ] Check `config('speedtest.dashboard_v2.enabled')`
+  - [ ] If disabled, redirect to `route('home')`
+  - [ ] If enabled, return `view('dashboard-v2')`
+- [ ] Add configuration to `config/speedtest.php`
+  ```php
+  'dashboard_v2' => [
+      'enabled' => env('ENABLE_DASHBOARD_V2', false),
+  ],
+  ```
+- [ ] Update `.env.example`
+  - [ ] Add: `ENABLE_DASHBOARD_V2=false`
+
+#### 1.3 Backend - Public API Endpoints (60-90 minutes)
+- [ ] Create API routes file `routes/api/public.php`
+  ```bash
+  touch routes/api/public.php
+  ```
+- [ ] Add two routes (NO authentication):
+  - `GET /api/public/stats` → `StatsController`
+  - `GET /api/public/servers` → `ServersController`
 - [ ] Register API routes in `bootstrap/app.php`
-- [ ] Add public API middleware group
-
-#### 1.2 API Controllers & Resources (Infrastructure Only)
 - [ ] Create `app/Http/Controllers/Api/Public/StatsController.php`
-  - [ ] Implement stats endpoint with server filtering
-  - [ ] Add cache layer (1 minute TTL)
-- [ ] Create `app/Http/Controllers/Api/Public/StatisticsController.php` (scaffold only)
-  - [ ] Create controller structure
-  - [ ] Add method signature for statistics endpoint
-  - [ ] Support time range and server filtering parameters
-  - [ ] **Note**: Metric-specific logic will be added in Phases 2-4
-- [ ] Create `app/Http/Controllers/Api/Public/ChartDataController.php` (scaffold only)
-  - [ ] Create controller structure
-  - [ ] Add method signature for chart data endpoint
-  - [ ] Support time range and server filtering parameters
-  - [ ] **Note**: Metric-specific logic will be added in Phases 2-4
-- [ ] Create `app/Http/Controllers/Api/Public/HealthController.php`
-  - [ ] Query results by status
-  - [ ] Calculate health percentage
-  - [ ] Group health data by time buckets
-  - [ ] Add cache layer
+  ```bash
+  php artisan make:class Http/Controllers/Api/Public/StatsController
+  ```
+  - [ ] Create `__invoke(Request $request)` method
+  - [ ] Accept query params: `time_range` (24h, 7d, 30d), `server` (optional)
+  - [ ] Query latest result filtered by time range and server
+  - [ ] Return single latest result as JSON
+  - [ ] **NO caching** in Phase 1
 - [ ] Create `app/Http/Controllers/Api/Public/ServersController.php`
-  - [ ] Query unique servers from results
-  - [ ] Include test count per server
-  - [ ] Order by most frequently used
-  - [ ] Add cache layer
-- [ ] Create API Resources (structure only for Statistics and ChartData)
-  - [ ] `app/Http/Resources/Public/StatResource.php`
-  - [ ] `app/Http/Resources/Public/StatisticsResource.php` (structure only)
-  - [ ] `app/Http/Resources/Public/ChartDataResource.php` (structure only)
-  - [ ] `app/Http/Resources/Public/HealthResource.php`
-  - [ ] `app/Http/Resources/Public/ServerResource.php`
+  ```bash
+  php artisan make:class Http/Controllers/Api/Public/ServersController
+  ```
+  - [ ] Create `__invoke()` method
+  - [ ] Query distinct servers with test counts
+  - [ ] Order by most frequently used (test count DESC)
+  - [ ] Return as JSON array
+  - [ ] **NO caching** in Phase 1
+- [ ] **SKIP** creating Statistics, ChartData, and Health controllers (created in later phases)
 
-#### 1.3 Frontend - Dashboard Layout (Placeholders Only)
+#### 1.4 Frontend - Dashboard Layout (60 minutes)
 - [ ] Create `resources/views/dashboard-v2.blade.php`
-  - [ ] Use standard Blade template (NO Livewire components)
-  - [ ] **Design System**: Use shadcn design patterns (NOT Filament styling)
-  - [ ] Add `x-data="dashboard()"` to root element for Alpine.js
-  - [ ] Add header with login button (use `.btn-outline` from shadcn patterns)
-  - [ ] Add filters section (time range, server, reset) with `.filter-select` styles
-  - [ ] Add latest test status card (use `.stat-card` from shadcn patterns)
-  - [ ] Add test health over time widget (spans 9 columns, use `.health-bar` component)
-  - [ ] Add placeholder sections for ALL three metrics (Download, Upload, Ping)
-    - [ ] Each section has: chart container (2 columns) + stats cards container (1 column)
-    - [ ] Use `<canvas>` elements for charts (NO Filament chart components)
-    - [ ] All sections initially empty/skeleton state - actual charts added in Phases 2-4
-  - [ ] Use Alpine directives (`x-model`, `x-text`, `x-show`, `@click`, etc.)
-  - [ ] NO `wire:` directives anywhere
-  - [ ] NO Filament components or styling
-  - [ ] NO Livewire components (`<livewire:component-name />`)
+  ```bash
+  touch resources/views/dashboard-v2.blade.php
+  ```
+- [ ] Standard Blade template (NO Livewire components)
+- [ ] Root element: `<div x-data="dashboard()" x-init="init()" class="container mx-auto p-6">`
+- [ ] Header section with title "Dashboard V2" (simple, no login button yet)
+- [ ] Filters section:
+  - [ ] Time range select with `x-model="filters.timeRange" @change="onFilterChange"`
+    - Options: 24h, 7d, 30d
+  - [ ] Server select with `x-model="filters.server" @change="onFilterChange"`
+    - Dynamic options loaded from API
+  - [ ] Reset button: `<button @click="resetFilters">Reset</button>`
+- [ ] Latest stats card:
+  - [ ] Display ping, download, upload using `x-text` bindings
+  - [ ] Basic Tailwind card: `bg-white dark:bg-gray-800 rounded-lg shadow p-4`
+- [ ] Three empty metric placeholder sections:
+  - [ ] Download: `<div class="metric-section"><h3>Download</h3><p>Coming in Phase 2</p></div>`
+  - [ ] Upload: `<div class="metric-section"><h3>Upload</h3><p>Coming in Phase 3</p></div>`
+  - [ ] Ping: `<div class="metric-section"><h3>Ping</h3><p>Coming in Phase 4</p></div>`
+- [ ] Use Alpine.js directives: `x-data`, `x-init`, `x-model`, `x-text`, `x-show`, `@click`
+- [ ] **NO** `wire:` directives
+- [ ] **NO** Filament components
+- [ ] **NO** Livewire components
 
-#### 1.4 Frontend - Alpine.js Component (Framework Only)
+#### 1.5 Frontend - Alpine.js Component (45-60 minutes)
 - [ ] Create `resources/js/dashboard.js`
-  - [ ] Initialize state variables (stats, health, servers, filters, charts object)
-  - [ ] Implement `loadFilterState()` - Load from localStorage
-  - [ ] Implement `saveFilterState()` - Save to localStorage with error handling
-  - [ ] Implement `loadServers()` - Fetch server list from API
-  - [ ] Implement `loadStats()` - Fetch latest stats from API
-  - [ ] Implement `loadHealth()` - Fetch health data from API
-  - [ ] Create method stubs for metrics (to be implemented in Phases 2-4):
-    - [ ] `loadStatistics(metric)` - Stub method
-    - [ ] `loadChartData(metric)` - Stub method
-    - [ ] `initChart(metric)` - Stub method
-    - [ ] `updateChart(metric)` - Stub method
-  - [ ] Implement `onFilterChange()` - Save state and reload data
-  - [ ] Implement `resetFilters()` - Clear filters and localStorage
-  - [ ] Implement `startAutoRefresh()` - Refresh every 60 seconds (calls stats and health only in Phase 1)
-  - [ ] Implement utility methods: `formatSpeed()`, `formatPing()`, `formatTimestamp()`
-- [ ] Register dashboard component in `resources/js/app.js`
-- [ ] **Note**: Chart initialization and metric-specific logic will be added in Phases 2-4
+  ```bash
+  touch resources/js/dashboard.js
+  ```
+- [ ] Import Alpine: `import Alpine from 'alpinejs'`
+- [ ] Define `dashboard()` component function
+- [ ] State variables:
+  ```javascript
+  {
+    stats: null,           // Latest result
+    servers: [],           // Server list
+    filters: {
+      timeRange: '24h',    // Default
+      server: '',          // All servers
+    },
+    loading: false,
+    error: null,
+  }
+  ```
+- [ ] Implement methods:
+  - [ ] `init()` - Initial data load
+  - [ ] `loadServers()` - Fetch server list
+  - [ ] `loadStats()` - Fetch latest stats with filters
+  - [ ] `onFilterChange()` - Reload data when filters change
+  - [ ] `resetFilters()` - Reset to defaults
+  - [ ] `formatSpeed(bytes)` - Optional helper
+  - [ ] `formatPing(ms)` - Optional helper
+- [ ] **NO** `loadFilterState()` / `saveFilterState()` (Phase 6)
+- [ ] **NO** `loadHealth()` (Phase 5)
+- [ ] **NO** `startAutoRefresh()` (Phase 6)
+- [ ] **NO** chart-related methods (Phases 2-4)
+- [ ] Register component in `resources/js/app.js`:
+  ```javascript
+  import Alpine from 'alpinejs'
+  import dashboard from './dashboard.js'
 
-#### 1.5 Styling (Reference shadcn Design System)
-- [ ] Add Dashboard V2 styles to `resources/css/app.css` following shadcn patterns
-  - [ ] Chart container styles
-  - [ ] Filter select styles (shadcn Select component pattern)
-  - [ ] Stat card styles (shadcn Card component pattern)
-  - [ ] Health bar styles (custom with shadcn colors)
-  - [ ] Button styles (shadcn Button variants: outline, primary, ghost, destructive)
-  - [ ] Loading skeleton styles (shadcn Skeleton pattern)
-  - [ ] Error message styles (shadcn Alert destructive variant)
-  - [ ] Success message styles (shadcn Alert success variant)
-  - [ ] Empty state styles
-- [ ] Verify shadcn design principles applied:
-  - [ ] Subtle borders (`border-gray-200 dark:border-gray-800`)
-  - [ ] Soft shadows (`shadow-sm`)
-  - [ ] Consistent border radius (`rounded-lg` cards, `rounded-md` inputs)
-  - [ ] Proper focus states with rings
-  - [ ] Smooth transitions (`duration-200` or `duration-300`)
-  - [ ] Semantic color usage for states
+  window.Alpine = Alpine
+  Alpine.data('dashboard', dashboard)
+  Alpine.start()
+  ```
 
-#### 1.6 Configuration
-- [ ] Update `config/speedtest.php`
-  - [ ] Add `dashboard_v2.enabled` config
-  - [ ] Add `public_api` cache TTL configs
-  - [ ] Add `public_api.rate_limit` config
-- [ ] Add environment variables to `.env.example`
-  - [ ] `ENABLE_DASHBOARD_V2=false`
-  - [ ] Cache TTL variables
-  - [ ] Rate limit variables
+#### 1.6 Styling - Basic Tailwind (15-20 minutes)
+- [ ] Use inline Tailwind classes in Blade template (minimal custom CSS)
+- [ ] Basic component styles:
+  - [ ] Cards: `bg-white dark:bg-gray-800 rounded-lg shadow p-6`
+  - [ ] Select: `border border-gray-300 dark:border-gray-700 rounded-md px-3 py-2`
+  - [ ] Button: `bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700`
+  - [ ] Grid: `grid grid-cols-1 md:grid-cols-3 gap-6`
+- [ ] **Detailed shadcn styling deferred to Phase 6**
 
-#### 1.7 Testing - API Tests (Infrastructure Only)
-- [ ] Create `tests/Feature/Api/Public/StatsControllerTest.php`
-  - [ ] Test returns latest stats
-  - [ ] Test filters by server
-  - [ ] Test returns null when no results
-  - [ ] Test caching works correctly
-- [ ] Create `tests/Feature/Api/Public/StatisticsControllerTest.php` (structure only)
-  - [ ] Test validates metric parameter
-  - [ ] Test returns proper error for invalid metric
-  - [ ] **Note**: Metric-specific tests will be added in Phases 2-4
-- [ ] Create `tests/Feature/Api/Public/ChartDataControllerTest.php` (structure only)
-  - [ ] Test validates metric parameter
-  - [ ] Test returns proper error for invalid metric
-  - [ ] **Note**: Metric-specific tests will be added in Phases 2-4
-- [ ] Create `tests/Feature/Api/Public/HealthControllerTest.php`
-  - [ ] Test returns health data
-  - [ ] Test calculates correct health percentage
-  - [ ] Test filters by server and range
-  - [ ] Test caching works correctly
-- [ ] Create `tests/Feature/Api/Public/ServersControllerTest.php`
-  - [ ] Test returns server list
-  - [ ] Test orders by test count
-  - [ ] Test caching works correctly
+#### 1.7 Testing - Minimal Coverage (30 minutes)
 - [ ] Create `tests/Feature/DashboardV2Test.php`
+  ```bash
+  php artisan make:test --pest DashboardV2Test
+  ```
   - [ ] Test dashboard loads when enabled
   - [ ] Test redirects to home when disabled
+- [ ] Create `tests/Feature/Api/Public/StatsControllerTest.php`
+  ```bash
+  php artisan make:test --pest Api/Public/StatsControllerTest
+  ```
+  - [ ] Test returns latest stats (happy path only)
+  - [ ] Test filters by time range
+  - [ ] Test filters by server
+- [ ] Create `tests/Feature/Api/Public/ServersControllerTest.php`
+  ```bash
+  php artisan make:test --pest Api/Public/ServersControllerTest
+  ```
+  - [ ] Test returns server list (happy path only)
+- [ ] **Edge case testing deferred to Phase 6**
 
-#### 1.8 Testing - Frontend Tests (Infrastructure Only)
-- [ ] Test dashboard layout renders correctly with placeholders
-- [ ] Test time range filter changes
-- [ ] Test server filter changes
-- [ ] Test reset filters functionality
-- [ ] Test filter state persists in localStorage
-- [ ] Test filter state is restored on page reload
-- [ ] Test health bar visualization displays correct percentage
-- [ ] Test auto-refresh updates stats and health data
-- [ ] Test loading states for stats and health
-- [ ] Test error handling
-- [ ] Test dark mode compatibility
-- [ ] **Note**: Metric-specific chart and statistics tests will be added in Phases 2-4
-
-#### 1.9 Performance & Optimization
-- [ ] Implement caching for all API endpoints
-- [ ] Add cache tags for easy invalidation
-- [ ] Optimize database queries with proper indexes
-- [ ] Test API response times meet targets
-- [ ] Test cache hit rates
-
-#### 1.10 Documentation
-- [ ] Document Phase 1 API endpoints
-- [ ] Add comments to Alpine component
-- [ ] Update README with Phase 1 features
-- [ ] Document environment variables
-
-#### 1.11 Code Quality
-- [ ] Run `vendor/bin/pint --dirty` to format PHP code
-- [ ] Run `npm run build` to compile assets
-  - [ ] Verify Alpine.js is included in compiled bundle
-  - [ ] Verify Chart.js is included in compiled bundle
-  - [ ] Check bundle size is reasonable (< 500KB for Dashboard V2 assets)
-- [ ] Run `php artisan test --filter=Public` to verify all tests pass
-- [ ] Verify no console errors in browser
-- [ ] Verify no Livewire-related assets are loaded on Dashboard V2 page
-- [ ] Test on multiple browsers
-
-#### 1.12 Verification Checklist
-- [ ] **Alpine.js Independence Verification**
-  - [ ] Inspect page source: NO Livewire JavaScript files loaded
-  - [ ] Inspect page source: NO `wire:id` attributes in HTML
-  - [ ] Browser DevTools Network tab: NO requests to Livewire endpoints
-  - [ ] Browser console: Alpine.js version logged (should be standalone v3.13+)
-  - [ ] `window.Alpine` is defined and working
-  - [ ] `window.Livewire` should NOT be defined on Dashboard V2 page
-- [ ] **Design System Verification (shadcn, NOT Filament)**
-  - [ ] All buttons use shadcn button classes (`.btn-outline`, `.btn-primary`, etc.)
-  - [ ] All cards use `.stat-card` with shadcn card styling
-  - [ ] All form inputs use `.filter-select` with shadcn select styling
-  - [ ] NO Filament CSS classes or components
-  - [ ] NO Filament-specific styling patterns
-  - [ ] Visual inspection: UI follows shadcn design (subtle borders, soft shadows, consistent spacing)
+#### 1.8 Build & Verification (15-20 minutes)
+- [ ] Format code: `vendor/bin/pint --dirty`
+- [ ] Build assets: `npm run build`
+  - [ ] Verify Alpine.js in compiled bundle
+  - [ ] Verify Chart.js in bundle
+- [ ] Run tests: `php artisan test --filter=DashboardV2`
+- [ ] Run tests: `php artisan test --filter=Public`
+- [ ] Manual testing:
+  - [ ] Set `ENABLE_DASHBOARD_V2=true` in `.env`
+  - [ ] Visit `/v2` in browser
+  - [ ] Verify page loads without errors
+  - [ ] Verify filters work and update stats
+  - [ ] Verify reset button works
+  - [ ] Verify three metric placeholders visible
+  - [ ] No console errors
+  - [ ] No Livewire assets loaded (check Network tab)
+- [ ] Alpine.js verification:
+  - [ ] Browser console: `window.Alpine` is defined ✅
+  - [ ] Browser console: `window.Livewire` is undefined ✅
+  - [ ] Network tab: No Livewire endpoints ✅
+  - [ ] View source: No `wire:id` attributes ✅
 
 ### Phase 1 Completion Criteria
-- [ ] Dashboard V2 accessible at `/v2` when `ENABLE_DASHBOARD_V2=true`
-- [ ] **Alpine.js standalone verified** - No Livewire dependencies or assets
-- [ ] All filters (time range, server, reset) working correctly
-- [ ] Filter state persists across page reloads using localStorage
-- [ ] Health monitoring displays test success rate with visualization
-- [ ] Dashboard layout complete with placeholder sections for all three metrics
-- [ ] Stats, Health, and Servers API endpoints functional and cached
-- [ ] Statistics and ChartData controller scaffolds created (metric logic deferred to Phases 2-4)
-- [ ] Alpine.js component framework complete with method stubs
-- [ ] All shadcn-based styling implemented
-- [ ] Test coverage > 95% for Phase 1 code
-- [ ] All Phase 1 tests passing
-- [ ] Dark mode working correctly
-- [ ] Mobile responsive
-- [ ] **No Livewire JavaScript loaded** on Dashboard V2 page
-- [ ] **No wire: attributes** in Dashboard V2 HTML
-- [ ] **No Filament components or styling** in Dashboard V2
-- [ ] Bundle size reasonable (< 500KB for V2-specific assets)
+
+✅ **Core Functionality**:
+- [ ] Dashboard V2 accessible at `/v2` when enabled
+- [ ] Two API endpoints working (Stats, Servers)
+- [ ] Filters working (time range + server selection)
+- [ ] Latest stats displaying correctly
+- [ ] Filter changes update stats immediately
+- [ ] Reset filters button works
+- [ ] Three empty metric placeholders visible
+
+✅ **Technical Requirements**:
+- [ ] Alpine.js standalone verified (no Livewire)
+- [ ] Manual refresh works (reload page or change filters)
+- [ ] Basic tests passing
+- [ ] No console errors
+- [ ] Basic Tailwind styling applied
+
+❌ **Excluded** (coming in later phases):
+- Health monitoring → Phase 5
+- Caching → Phase 6
+- Filter persistence → Phase 6
+- Auto-refresh → Phase 6
+- Metrics (Download, Upload, Ping charts/stats) → Phases 2-4
+- Comprehensive styling → Phase 6
+- Edge case testing → Phase 6
 
 ---
 
@@ -517,31 +528,37 @@ Each phase can be developed, tested, and deployed independently. The dashboard i
 
 **Goal**: Implement complete Download metric visualization including chart and statistics.
 
+**Time Estimate**: 1-2 days
+
 **Deliverables**:
-- Download statistics endpoint fully implemented
-- Download chart endpoint fully implemented
+- Download statistics endpoint fully implemented (NO caching - added in Phase 6)
+- Download chart endpoint fully implemented (NO caching - added in Phase 6)
 - Download chart with average line
 - Download statistics cards (Latest, Average, Lowest, Highest)
-- Complete test coverage for Download features
+- Test coverage for Download features (happy paths)
 
 ### Phase 2 Checklist
 
 #### 2.1 Backend - API Implementation
-- [ ] Update `app/Http/Controllers/Api/Public/StatisticsController.php`
+- [ ] Create `app/Http/Controllers/Api/Public/StatisticsController.php`
+  ```bash
+  php artisan make:class Http/Controllers/Api/Public/StatisticsController
+  ```
   - [ ] Implement full logic for `download` metric
   - [ ] Calculate latest, average, lowest, highest for download speeds
   - [ ] Support time range and server filtering
-  - [ ] Add cache layer (5 minute TTL)
-- [ ] Update `app/Http/Controllers/Api/Public/ChartDataController.php`
+  - [ ] **NO caching** (added in Phase 6)
+- [ ] Create `app/Http/Controllers/Api/Public/ChartDataController.php`
+  ```bash
+  php artisan make:class Http/Controllers/Api/Public/ChartDataController
+  ```
   - [ ] Implement full logic for `download` metric
   - [ ] Return time series data for download speeds
   - [ ] Calculate average line data for download
   - [ ] Support time range and server filtering
-  - [ ] Add cache layer (5 minute TTL)
-- [ ] Update `app/Http/Resources/Public/StatisticsResource.php`
-  - [ ] Format download statistics response
-- [ ] Update `app/Http/Resources/Public/ChartDataResource.php`
-  - [ ] Format download chart data response
+  - [ ] **NO caching** (added in Phase 6)
+- [ ] Create `app/Http/Resources/Public/StatisticsResource.php` (optional)
+- [ ] Create `app/Http/Resources/Public/ChartDataResource.php` (optional)
 
 #### 2.2 Frontend - Layout
 - [ ] Update `resources/views/dashboard-v2.blade.php`
@@ -562,24 +579,18 @@ Each phase can be developed, tested, and deployed independently. The dashboard i
     - [ ] Configure speed Y-axis (Mbps)
   - [ ] Implement `updateChart('download')` - Update download chart with new data
   - [ ] Update `init()` to call download methods on page load
-  - [ ] Update `startAutoRefresh()` to refresh download data
+  - [ ] Update `onFilterChange()` to refresh download data when filters change
 
 #### 2.4 Testing
-- [ ] Update `tests/Feature/Api/Public/StatisticsControllerTest.php`
+- [ ] Create/Update `tests/Feature/Api/Public/StatisticsControllerTest.php`
   - [ ] Test returns download statistics
   - [ ] Test calculates correct statistics (latest, average, lowest, highest)
   - [ ] Test filters by server and range
-  - [ ] Test caching works correctly
-- [ ] Update `tests/Feature/Api/Public/ChartDataControllerTest.php`
+- [ ] Create/Update `tests/Feature/Api/Public/ChartDataControllerTest.php`
   - [ ] Test returns download chart data
   - [ ] Test filters by time range and server
   - [ ] Test calculates average line correctly
-  - [ ] Test caching works correctly
-- [ ] Add frontend tests for Download
-  - [ ] Test download chart renders correctly
-  - [ ] Test download statistics cards display correct values
-  - [ ] Test download chart updates on filter change
-  - [ ] Test download data refreshes on auto-refresh
+- [ ] **Caching tests deferred to Phase 6**
 
 #### 2.5 Code Quality
 - [ ] Run `vendor/bin/pint --dirty` to format PHP code
@@ -590,12 +601,12 @@ Each phase can be developed, tested, and deployed independently. The dashboard i
 - [ ] Verify dark mode works for download section
 
 ### Phase 2 Completion Criteria
-- [ ] Download statistics endpoint returns correct data
-- [ ] Download chart endpoint returns time series data
+- [ ] Download statistics endpoint returns correct data (NO caching yet)
+- [ ] Download chart endpoint returns time series data (NO caching yet)
 - [ ] Download chart displays with average line
 - [ ] Download statistics cards show latest, average, lowest, highest
+- [ ] Download data updates when filters change
 - [ ] All Download-related tests passing
-- [ ] Test coverage > 95% for Phase 2 code
 - [ ] Download section fully functional and integrated with filters
 
 ---
@@ -604,12 +615,14 @@ Each phase can be developed, tested, and deployed independently. The dashboard i
 
 **Goal**: Add complete Upload metric visualization to Dashboard V2.
 
+**Time Estimate**: 1-2 days
+
 **Deliverables**:
-- Upload statistics endpoint fully implemented
-- Upload chart endpoint fully implemented
+- Upload statistics endpoint fully implemented (NO caching - added in Phase 6)
+- Upload chart endpoint fully implemented (NO caching - added in Phase 6)
 - Upload chart with average line
 - Upload statistics cards (Latest, Average, Lowest, Highest)
-- Complete test coverage for Upload features
+- Test coverage for Upload features (happy paths)
 
 ### Phase 3 Checklist
 
@@ -682,13 +695,15 @@ Each phase can be developed, tested, and deployed independently. The dashboard i
 
 **Goal**: Add complete Ping metric visualization to Dashboard V2.
 
+**Time Estimate**: 1-2 days
+
 **Deliverables**:
-- Ping statistics endpoint fully implemented
-- Ping chart endpoint fully implemented
+- Ping statistics endpoint fully implemented (NO caching - added in Phase 6)
+- Ping chart endpoint fully implemented (NO caching - added in Phase 6)
 - Ping chart with average line
 - Ping statistics cards (Latest, Average, Lowest, Highest)
-- Complete test coverage for Ping features
-- Full Dashboard V2 completion
+- Test coverage for Ping features (happy paths)
+- All three core metrics complete (Download, Upload, Ping)
 
 ### Phase 4 Checklist
 
@@ -696,12 +711,14 @@ Each phase can be developed, tested, and deployed independently. The dashboard i
 - [ ] Update `app/Http/Controllers/Api/Public/StatisticsController.php`
   - [ ] Add support for `ping` metric
   - [ ] Calculate latest, average, lowest, highest for ping latency
-  - [ ] Add cache layer (same as download/upload)
+  - [ ] **NO caching** (added in Phase 6)
 - [ ] Update `app/Http/Controllers/Api/Public/ChartDataController.php`
   - [ ] Add support for `ping` metric
   - [ ] Return time series data for ping latency
   - [ ] Calculate average line data for ping
-  - [ ] Add cache layer (same as download/upload)
+  - [ ] **NO caching** (added in Phase 6)
+
+**Note**: Similar to Phases 2 and 3, focus on functionality first. Caching and auto-refresh added in Phase 6.
 
 #### 4.2 Frontend - Layout
 - [ ] Update `resources/views/dashboard-v2.blade.php`
@@ -744,37 +761,309 @@ Each phase can be developed, tested, and deployed independently. The dashboard i
 - [ ] Test ping statistics are accurate
 - [ ] Verify dark mode works for ping section
 
-#### 4.6 Final Integration Testing
+#### 4.6 Integration Testing
 - [ ] Test all three metrics (download, upload, ping) working together
 - [ ] Test filters apply to all metrics
-- [ ] Test auto-refresh updates all metrics
-- [ ] Test filter persistence works for all metrics
-- [ ] Test health monitoring with all metrics
-- [ ] Performance test with all metrics loaded
-- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
-- [ ] Mobile responsiveness testing
+- [ ] Test filter changes update all metrics
+- [ ] Cross-browser testing (Chrome, Firefox, Safari)
 - [ ] Dark mode testing for all sections
 - [ ] Test with various data volumes (empty, small, large datasets)
 
-#### 4.7 Documentation
-- [ ] Update README with complete Dashboard V2 features
-- [ ] Document all 5 API endpoints with examples
-- [ ] Create user guide for Dashboard V2
-- [ ] Document differences between V1 and V2
-- [ ] Add inline code comments where needed
-
 ### Phase 4 Completion Criteria
-- [ ] Ping statistics endpoint returns correct data
-- [ ] Ping chart endpoint returns time series data
+- [ ] Ping statistics endpoint returns correct data (NO caching yet)
+- [ ] Ping chart endpoint returns time series data (NO caching yet)
 - [ ] Ping chart displays with average line
 - [ ] Ping statistics cards show latest, average, lowest, highest
 - [ ] Ping data respects time range and server filters
-- [ ] Ping data updates on auto-refresh
 - [ ] All three metrics (download, upload, ping) working correctly
-- [ ] All tests passing (Phases 1, 2, 3, and 4)
-- [ ] Test coverage > 95% overall
-- [ ] Performance targets met
-- [ ] Dashboard V2 feature complete and ready for production testing
+- [ ] All tests passing (Phases 1-4)
+- [ ] Filters work across all three metrics
+- [ ] Dashboard responsive and functional (NO health monitoring, NO auto-refresh, NO filter persistence yet)
+
+---
+
+## Phase 5: Health Monitoring
+
+**Goal**: Add test health tracking and visualization as a standalone feature.
+
+**Time Estimate**: 4-6 hours
+
+**Deliverables**:
+- Health API endpoint with test success rate calculation
+- Health status card showing latest test status (Healthy/Failed)
+- Test health percentage display
+- Health visualization (simple or time-bucketed)
+- Tests for health endpoint and widget
+
+**Why Separate Phase?**:
+- Health monitoring is a standalone feature, not required for metrics
+- Can be added/removed independently
+- Easier to test after all metrics are working
+- User can validate metrics first, then add health tracking
+
+### Phase 5 Checklist
+
+#### 5.1 Backend - Health API (2-3 hours)
+- [ ] Create `app/Http/Controllers/Api/Public/HealthController.php`
+  ```bash
+  php artisan make:class Http/Controllers/Api/Public/HealthController
+  ```
+  - [ ] Create `__invoke()` method
+  - [ ] Query results by status (Completed vs Failed)
+  - [ ] Calculate health percentage: `(completed / total) * 100`
+  - [ ] Support time range and server filtering
+  - [ ] Return: overall percentage, latest test status, counts
+  - [ ] **NO caching** (added in Phase 6)
+  - [ ] Optional: Group health data by time buckets for visualization
+
+#### 5.2 Frontend - Health Widget (1-2 hours)
+- [ ] Update `resources/views/dashboard-v2.blade.php`
+  - [ ] Add health status card showing:
+    - [ ] Latest test status: "Healthy" (green) or "Failed" (red)
+    - [ ] Health percentage: "95% successful"
+    - [ ] Visual indicator (badge or icon)
+  - [ ] Optional: Add simple health bar visualization
+- [ ] Update `resources/js/dashboard.js`
+  - [ ] Add `health` state variable
+  - [ ] Implement `loadHealth()` method
+  - [ ] Call `loadHealth()` in `init()`
+  - [ ] Update `onFilterChange()` to refresh health data
+  - [ ] Format health percentage and status
+- [ ] Basic Tailwind styling for health widget
+
+#### 5.3 Testing (1 hour)
+- [ ] Create `tests/Feature/Api/Public/HealthControllerTest.php`
+  ```bash
+  php artisan make:test --pest Api/Public/HealthControllerTest
+  ```
+  - [ ] Test returns health data
+  - [ ] Test calculates correct percentage
+  - [ ] Test filters by server and range
+  - [ ] Test handles no results gracefully
+
+#### 5.4 Verification (30 minutes)
+- [ ] Run `vendor/bin/pint --dirty`
+- [ ] Run `npm run build`
+- [ ] Run `php artisan test --filter=Health`
+- [ ] Manual testing:
+  - [ ] Verify health percentage displays correctly
+  - [ ] Verify latest test status shows correct state
+  - [ ] Verify health updates when filters change
+  - [ ] Test with 100% success, 0% success, and mixed scenarios
+
+### Phase 5 Completion Criteria
+- [ ] Health API endpoint returns success rate and status
+- [ ] Health widget displays on dashboard
+- [ ] Health percentage calculated correctly
+- [ ] Latest test status shows Healthy/Failed appropriately
+- [ ] Health data respects time range and server filters
+- [ ] All health-related tests passing
+- [ ] Health widget integrates cleanly with existing dashboard
+
+---
+
+## Phase 6: Performance & Polish
+
+**Goal**: Add all performance optimizations and UX enhancements after features are complete.
+
+**Time Estimate**: 1-2 days
+
+**Deliverables**:
+1. Caching layer for all API endpoints
+2. Filter persistence using localStorage
+3. Auto-refresh (60-second polling)
+4. Performance optimizations (queries, indexes, response times)
+5. Edge case testing and error handling
+6. Detailed shadcn design polish
+
+**Why Last Phase?**:
+- Features work without these optimizations
+- Easier to debug without caching/polling
+- Can optimize based on actual usage patterns
+- Focused optimization phase after functionality proven
+
+### Phase 6 Checklist
+
+#### 6.1 Caching Layer (2-3 hours)
+- [ ] Add caching to all API endpoints:
+  - [ ] `StatsController` - 1 minute TTL
+  - [ ] `ServersController` - 10 minutes TTL
+  - [ ] `HealthController` - 1 minute TTL
+  - [ ] `StatisticsController` - 5 minutes TTL (all metrics)
+  - [ ] `ChartDataController` - 1 minute TTL (all metrics)
+- [ ] Add configuration to `config/speedtest.php`:
+  ```php
+  'public_api' => [
+      'cache_ttl' => env('PUBLIC_API_CACHE_TTL', 300),
+      'stats_cache_ttl' => env('STATS_CACHE_TTL', 60),
+      'chart_cache_ttl' => env('CHART_CACHE_TTL', 60),
+      'health_cache_ttl' => env('HEALTH_CACHE_TTL', 60),
+      'servers_cache_ttl' => env('SERVERS_CACHE_TTL', 600),
+  ],
+  ```
+- [ ] Add environment variables to `.env.example`
+- [ ] Implement cache tags for easy invalidation
+- [ ] Test cache hit rates
+- [ ] Update tests to verify caching works
+
+#### 6.2 Filter Persistence (1-2 hours)
+- [ ] Update `resources/js/dashboard.js`
+  - [ ] Implement `loadFilterState()` method:
+    ```javascript
+    loadFilterState() {
+      try {
+        const saved = localStorage.getItem('dashboard_filters');
+        if (saved) {
+          const filters = JSON.parse(saved);
+          this.filters.timeRange = filters.timeRange || '24h';
+          this.filters.server = filters.server || '';
+        }
+      } catch (error) {
+        console.error('Failed to load filter state:', error);
+      }
+    }
+    ```
+  - [ ] Implement `saveFilterState()` method:
+    ```javascript
+    saveFilterState() {
+      try {
+        localStorage.setItem('dashboard_filters', JSON.stringify(this.filters));
+      } catch (error) {
+        console.error('Failed to save filter state:', error);
+      }
+    }
+    ```
+  - [ ] Call `loadFilterState()` in `init()` before loading data
+  - [ ] Call `saveFilterState()` in `onFilterChange()`
+  - [ ] Update `resetFilters()` to clear localStorage
+- [ ] Test persistence:
+  - [ ] Change filters and reload page - filters should restore
+  - [ ] Reset filters - localStorage should clear
+  - [ ] Test with localStorage disabled (error handling)
+
+#### 6.3 Auto-Refresh (1-2 hours)
+- [ ] Update `resources/js/dashboard.js`
+  - [ ] Add `refreshInterval` state variable
+  - [ ] Implement `startAutoRefresh()` method:
+    ```javascript
+    startAutoRefresh() {
+      this.refreshInterval = setInterval(() => {
+        this.loadStats();
+        this.loadHealth();
+        // For each metric:
+        this.loadStatistics('download');
+        this.loadChartData('download');
+        this.updateChart('download');
+        // Repeat for upload, ping
+      }, 60000); // 60 seconds
+    }
+    ```
+  - [ ] Implement `stopAutoRefresh()` method
+  - [ ] Call `startAutoRefresh()` in `init()`
+  - [ ] Clean up interval on component destroy
+  - [ ] Optional: Add visual refresh indicator
+  - [ ] Optional: Configurable refresh interval
+- [ ] Test auto-refresh:
+  - [ ] Verify data updates every 60 seconds
+  - [ ] Verify no memory leaks
+  - [ ] Verify refresh pauses when page hidden (optional)
+
+#### 6.4 Performance Optimizations (2-3 hours)
+- [ ] Database query optimization:
+  - [ ] Add indexes to `results` table if needed:
+    - `created_at` (for time range filters)
+    - `server_id` (for server filters)
+    - `status` (for health calculations)
+  - [ ] Optimize statistics queries (use aggregation)
+  - [ ] Optimize chart data queries (limit data points)
+- [ ] Response optimization:
+  - [ ] Minimize payload size (remove unnecessary fields)
+  - [ ] Use API resources for consistent formatting
+  - [ ] Implement pagination for large datasets (optional)
+- [ ] Frontend optimization:
+  - [ ] Verify bundle size (should be < 500KB)
+  - [ ] Check for unnecessary re-renders
+  - [ ] Optimize Chart.js configuration
+- [ ] Performance testing:
+  - [ ] Test API response times (should be < 200ms)
+  - [ ] Test with large datasets (10k+ results)
+  - [ ] Test concurrent users (10+ simultaneous)
+  - [ ] Profile slow queries
+
+#### 6.5 Detailed Styling (2-3 hours)
+- [ ] Apply shadcn design patterns throughout:
+  - [ ] Refine button styles (outline, primary, ghost, destructive variants)
+  - [ ] Refine card styles (subtle borders, soft shadows)
+  - [ ] Refine select/input styles (focus states, rings)
+  - [ ] Add loading skeleton components
+  - [ ] Improve error message styling (Alert destructive variant)
+  - [ ] Add empty state styling
+- [ ] Verify shadcn design principles:
+  - [ ] Subtle borders: `border-gray-200 dark:border-gray-800`
+  - [ ] Soft shadows: `shadow-sm`
+  - [ ] Consistent border radius: `rounded-lg` cards, `rounded-md` inputs
+  - [ ] Proper focus states with rings
+  - [ ] Smooth transitions: `duration-200` or `duration-300`
+  - [ ] Semantic color usage
+- [ ] Mobile responsiveness:
+  - [ ] Test on mobile devices
+  - [ ] Verify grid layouts adapt
+  - [ ] Ensure touch targets are adequate
+
+#### 6.6 Edge Case Testing & Error Handling (2-3 hours)
+- [ ] Comprehensive test coverage:
+  - [ ] Test all API endpoints with invalid params
+  - [ ] Test with no results (empty database)
+  - [ ] Test with very large datasets
+  - [ ] Test concurrent requests
+  - [ ] Test cache invalidation scenarios
+  - [ ] Test localStorage edge cases (disabled, quota exceeded)
+- [ ] Error handling improvements:
+  - [ ] Better error messages for users
+  - [ ] Graceful degradation when API fails
+  - [ ] Retry logic for failed requests (optional)
+  - [ ] Toast notifications for errors (optional)
+- [ ] Loading states:
+  - [ ] Skeleton loaders for all sections
+  - [ ] Disable filters during loading
+  - [ ] Show refresh indicator during auto-refresh
+
+#### 6.7 Final Verification
+- [ ] Run `vendor/bin/pint --dirty`
+- [ ] Run `npm run build`
+- [ ] Run full test suite: `php artisan test`
+- [ ] Verify all tests passing
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
+- [ ] Mobile testing (iOS, Android)
+- [ ] Performance validation:
+  - [ ] API response times < 200ms
+  - [ ] Bundle size < 500KB
+  - [ ] Cache hit rate > 80%
+  - [ ] No console errors
+  - [ ] No memory leaks
+- [ ] Documentation:
+  - [ ] Update README with all features
+  - [ ] Document environment variables
+  - [ ] Document API endpoints
+  - [ ] Add deployment notes
+
+### Phase 6 Completion Criteria
+- [ ] All API endpoints cached with appropriate TTLs
+- [ ] Filter preferences persist across page reloads
+- [ ] Auto-refresh updates all data every 60 seconds
+- [ ] Database queries optimized with proper indexes
+- [ ] API response times meet targets (< 200ms)
+- [ ] Bundle size optimized (< 500KB)
+- [ ] Detailed shadcn styling applied throughout
+- [ ] All edge cases tested and handled gracefully
+- [ ] Error handling robust and user-friendly
+- [ ] Loading states polished
+- [ ] Mobile responsive
+- [ ] Cross-browser compatible
+- [ ] Full test coverage (> 95%)
+- [ ] All tests passing
+- [ ] Documentation complete
+- [ ] Dashboard V2 production-ready
 
 ---
 
