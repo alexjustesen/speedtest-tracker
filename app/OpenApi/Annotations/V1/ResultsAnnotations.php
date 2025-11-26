@@ -19,7 +19,7 @@ class ResultsAnnotations
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
             new OA\Parameter(
-                name: 'per_page',
+                name: 'per.page',
                 in: 'query',
                 required: false,
                 schema: new OA\Schema(type: 'integer', minimum: 1, maximum: 500, default: 25),
