@@ -85,6 +85,56 @@
             <div x-show="error" class="text-red-600 dark:text-red-400" x-text="error"></div>
         </div>
 
+        {{-- Health Status Card --}}
+        <div x-show="health" class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
+            <h2 class="text-lg font-semibold mb-4">Test Health</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {{-- Health Percentage --}}
+                <div class="text-center">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Success Rate</div>
+                    <div class="text-2xl font-bold mt-1" x-text="health && health.percentage !== null ? `${health.percentage}%` : '-'"></div>
+                </div>
+
+                {{-- Latest Status --}}
+                <div class="text-center">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Latest Status</div>
+                    <div class="mt-1">
+                        <span
+                            x-show="health && health.status === 'completed'"
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                        >
+                            Healthy
+                        </span>
+                        <span
+                            x-show="health && health.status === 'failed'"
+                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                        >
+                            Failed
+                        </span>
+                        <span
+                            x-show="health && !health.status"
+                            class="text-gray-500 dark:text-gray-400"
+                        >
+                            -
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Test Counts --}}
+                <div class="text-center">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">Tests</div>
+                    <div class="text-2xl font-bold mt-1">
+                        <span x-text="health ? health.total : '-'"></span>
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1" x-show="health && health.total > 0">
+                        <span class="text-green-600 dark:text-green-400" x-text="health.completed"></span> /
+                        <span class="text-red-600 dark:text-red-400" x-text="health.failed"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{-- Metrics Section --}}
         <div class="grid grid-cols-1 gap-6">
             {{-- Download Metrics --}}

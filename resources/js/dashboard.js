@@ -49,11 +49,15 @@ Alpine.data('dashboard', () => ({
     pingStats: null,
     pingChart: null,
 
+    // Health state
+    health: null,
+
     // Initialization
     async init() {
         await this.loadServers();
         await this.loadStats();
         await this.loadMetrics();
+        await this.loadHealth();
     },
 
     // Load all metrics
@@ -79,6 +83,28 @@ Alpine.data('dashboard', () => ({
     async loadPingMetrics() {
         await this.loadStatistics('ping');
         await this.loadChartData('ping');
+    },
+
+    // Load health data
+    async loadHealth() {
+        try {
+            const params = new URLSearchParams({
+                time_range: this.filters.timeRange,
+            });
+
+            if (this.filters.server) {
+                params.append('server', this.filters.server);
+            }
+
+            const response = await fetch(`/api/public/health?${params}`);
+            if (!response.ok) {
+                throw new Error('Failed to load health data');
+            }
+
+            this.health = await response.json();
+        } catch (error) {
+            console.error('Failed to load health data:', error);
+        }
     },
 
     // Load server list
@@ -281,6 +307,7 @@ Alpine.data('dashboard', () => ({
     async onFilterChange() {
         await this.loadStats();
         await this.loadMetrics();
+        await this.loadHealth();
     },
 
     // Reset filters to defaults
@@ -289,6 +316,7 @@ Alpine.data('dashboard', () => ({
         this.filters.server = '';
         await this.loadStats();
         await this.loadMetrics();
+        await this.loadHealth();
     },
 
     // Format speed in Mbps
