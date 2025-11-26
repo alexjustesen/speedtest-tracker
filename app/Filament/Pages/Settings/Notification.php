@@ -235,7 +235,7 @@ class Notification extends SettingsPage
                                                 ->hidden(fn (Get $get) => ! count($get('apprise_channel_urls'))),
                                         ]),
                                     ]),
-                            ])
+                            ]),
                     ])
                     ->columnSpanFull(),
 
