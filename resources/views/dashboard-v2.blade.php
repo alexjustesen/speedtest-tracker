@@ -85,12 +85,45 @@
             <div x-show="error" class="text-red-600 dark:text-red-400" x-text="error"></div>
         </div>
 
-        {{-- Metric Placeholders --}}
+        {{-- Metrics Section --}}
         <div class="grid grid-cols-1 gap-6">
-            {{-- Download Placeholder --}}
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
-                <h3 class="text-lg font-semibold mb-2">Download</h3>
-                <p class="text-gray-500 dark:text-gray-400">Coming in Phase 2</p>
+            {{-- Download Metrics --}}
+            <div x-show="downloadStats" class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
+                <h3 class="text-lg font-semibold mb-4">Download Speed</h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {{-- Chart --}}
+                    <div class="lg:col-span-2">
+                        <canvas id="download-chart" class="w-full" style="height: 300px;"></canvas>
+                    </div>
+
+                    {{-- Statistics Cards --}}
+                    <div class="grid grid-cols-2 lg:grid-cols-1 gap-4">
+                        {{-- Latest --}}
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Latest</div>
+                            <div class="text-xl font-bold mt-1" x-text="downloadStats ? formatSpeed(downloadStats.latest) : '-'"></div>
+                        </div>
+
+                        {{-- Average --}}
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Average</div>
+                            <div class="text-xl font-bold mt-1" x-text="downloadStats ? formatSpeed(downloadStats.average) : '-'"></div>
+                        </div>
+
+                        {{-- Lowest --}}
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Lowest</div>
+                            <div class="text-xl font-bold mt-1" x-text="downloadStats ? formatSpeed(downloadStats.lowest) : '-'"></div>
+                        </div>
+
+                        {{-- Highest --}}
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Highest</div>
+                            <div class="text-xl font-bold mt-1" x-text="downloadStats ? formatSpeed(downloadStats.highest) : '-'"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {{-- Upload Placeholder --}}
