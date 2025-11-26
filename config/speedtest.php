@@ -16,7 +16,7 @@ return [
 
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
 
-    'default_chart_range' => env('DEFAULT_CHART_RANGE', '24h'),
+    'default_chart_range' => strtolower(env('DEFAULT_CHART_RANGE', '24h')),
 
     /**
      * Speedtest settings.
