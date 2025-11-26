@@ -61,6 +61,8 @@ return [
     'view_on_speedtest_net' => 'Bekijk op Speedtest.net',
 
     // Notifications
+    'speedtest_benchmark_passed' => 'Snelheidstest benchmark geslaagd',
+    'speedtest_benchmark_failed' => 'Snelheidstest benchmark mislukt',
     'speedtest_started' => 'Snelheidstest gestart',
     'speedtest_completed' => 'Snelheidstest voltooid',
     'speedtest_failed' => 'Speedtest mislukt',
