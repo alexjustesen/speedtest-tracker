@@ -9,9 +9,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-permissions:
-  pull-requests: read
-
 jobs:
   lint-app:
     runs-on: ubuntu-24.04
@@ -37,20 +34,6 @@ jobs:
 
       - name: Run Pint
         run: vendor/bin/pint --test
-
-  guard-translations:
-    runs-on: ubuntu-24.04
-    needs: lint-app
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Prevent non-English translation changes
-        uses: xalvarez/prevent-file-change-action@v3
-        with:
-          pattern: '^lang/(?!en/).*'
-          trustedAuthors: alexjustesen
-          allowNewFiles: false
 
   test-mariadb-11:
     needs: lint-app
