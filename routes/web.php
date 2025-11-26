@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardV2Controller;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)
     ->middleware(['getting-started', 'public-dashboard'])
     ->name('home');
+
+Route::get('/v2', DashboardV2Controller::class)
+    ->middleware(['getting-started', 'public-dashboard'])
+    ->name('dashboard.v2');
 
 Route::view('/getting-started', 'getting-started')
     ->name('getting-started');

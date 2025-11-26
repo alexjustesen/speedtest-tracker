@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Dashboard V2 Specific Styles */
+
+/* Ensure Alpine.js cloaked elements are hidden */
+[x-cloak] {
+    display: none !important;
+}

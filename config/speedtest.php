@@ -19,6 +19,13 @@ return [
     'default_chart_range' => strtolower(env('DEFAULT_CHART_RANGE', '24h')),
 
     /**
+     * Dashboard V2 settings.
+     */
+    'dashboard_v2' => [
+        'enabled' => env('ENABLE_DASHBOARD_V2', false),
+    ],
+
+    /**
      * Speedtest settings.
      */
     'schedule' => env('SPEEDTEST_SCHEDULE', false),
