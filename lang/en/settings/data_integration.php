@@ -35,7 +35,7 @@ return [
 
     // Prometheus
     'prometheus' => 'Prometheus',
-    'prometheus_description' => 'When enabled, the /metrics endpoint will expose the last speedtest result in Prometheus format with server, ISP, and metadata labels.',
+    'prometheus_description' => 'When enabled, the /metrics endpoint will expose the new speedtest result in Prometheus format with server, ISP, and metadata labels.',
     'prometheus_enabled' => 'Enable',
     'prometheus_basic_auth_enabled' => 'Use Basic Authentication',
     'prometheus_basic_auth_credentials' => 'Basic Authentication Credentials',
