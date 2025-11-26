@@ -12,7 +12,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
-class SpeedtestCompletedMail extends Mailable implements ShouldQueue
+class CompletedSpeedtestMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -41,7 +41,7 @@ class SpeedtestCompletedMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.speedtest-completed',
+            markdown: 'mail.speedtest.completed',
             with: [
                 'id' => $this->result->id,
                 'service' => Str::title($this->result->service->getLabel()),
