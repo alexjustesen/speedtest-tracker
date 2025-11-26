@@ -126,10 +126,43 @@
                 </div>
             </div>
 
-            {{-- Upload Placeholder --}}
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
-                <h3 class="text-lg font-semibold mb-2">Upload</h3>
-                <p class="text-gray-500 dark:text-gray-400">Coming in Phase 3</p>
+            {{-- Upload Metrics --}}
+            <div x-show="uploadStats" class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
+                <h3 class="text-lg font-semibold mb-4">Upload Speed</h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {{-- Chart --}}
+                    <div class="lg:col-span-2">
+                        <canvas id="upload-chart" class="w-full" style="height: 300px;"></canvas>
+                    </div>
+
+                    {{-- Statistics Cards --}}
+                    <div class="grid grid-cols-2 lg:grid-cols-1 gap-4">
+                        {{-- Latest --}}
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Latest</div>
+                            <div class="text-xl font-bold mt-1" x-text="uploadStats ? formatSpeed(uploadStats.latest) : '-'"></div>
+                        </div>
+
+                        {{-- Average --}}
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Average</div>
+                            <div class="text-xl font-bold mt-1" x-text="uploadStats ? formatSpeed(uploadStats.average) : '-'"></div>
+                        </div>
+
+                        {{-- Lowest --}}
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Lowest</div>
+                            <div class="text-xl font-bold mt-1" x-text="uploadStats ? formatSpeed(uploadStats.lowest) : '-'"></div>
+                        </div>
+
+                        {{-- Highest --}}
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                            <div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Highest</div>
+                            <div class="text-xl font-bold mt-1" x-text="uploadStats ? formatSpeed(uploadStats.highest) : '-'"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {{-- Ping Placeholder --}}
