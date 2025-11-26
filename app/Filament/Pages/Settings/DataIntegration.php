@@ -154,7 +154,7 @@ class DataIntegration extends SettingsPage
                                             ->maxLength(255)
                                             ->password()
                                             ->required(fn (Get $get) => $get('prometheus_basic_auth_enabled') === true)
-                                            ->hidden(fn (Get $get) => $get('prometheus_basic_auth_enabled') !== true)
+                                            ->hidden(fn (Get $get) => $get('prometheus_basic_auth_enabled') !== true),
                                     ]),
                             ])
                             ->compact()
