@@ -47,7 +47,7 @@ use OpenApi\Attributes as OA;
                     )
                 ),
                 new OA\Property(property: 'path', type: 'string'),
-                new OA\Property(property: 'per_page', type: 'integer'),
+                new OA\Property(property: 'per.page', type: 'integer'),
                 new OA\Property(property: 'to', type: 'integer'),
                 new OA\Property(property: 'total', type: 'integer'),
             ],
