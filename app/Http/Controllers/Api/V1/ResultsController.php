@@ -28,7 +28,7 @@ class ResultsController extends ApiController
             );
         }
         $validator = Validator::make($request->all(), [
-            'page.size' => 'integer|min:1|max:500',
+            'page.size' => 'integer|min:1|max:'.config('json-api-paginate.max_results'),
         ]);
 
         if ($validator->fails()) {
@@ -65,7 +65,7 @@ class ResultsController extends ApiController
                 'created_at',
                 'updated_at',
             ])
-            ->jsonPaginate(500, 25);;
+            ->jsonPaginate();
 
         return ResultResource::collection($results);
     }
