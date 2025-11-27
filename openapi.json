@@ -952,7 +952,7 @@
                             "path": {
                                 "type": "string"
                             },
-                            "per_page": {
+                            "per.page": {
                                 "type": "integer"
                             },
                             "to": {
