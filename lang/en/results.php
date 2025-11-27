@@ -61,6 +61,8 @@ return [
     'view_on_speedtest_net' => 'View on Speedtest.net',
 
     // Notifications
+    'speedtest_benchmark_passed' => 'Speedtest benchmark passed',
+    'speedtest_benchmark_failed' => 'Speedtest benchmark failed',
     'speedtest_started' => 'Speedtest started',
     'speedtest_completed' => 'Speedtest completed',
     'speedtest_failed' => 'Speedtest failed',

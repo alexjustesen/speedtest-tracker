@@ -7,14 +7,12 @@ return [
     // Database notifications
     'database' => 'Database',
     'database_description' => 'Notifications sent to this channel will show up under the 🔔 icon in the header.',
-    'enable_database_notifications' => 'Enable database notifications',
     'database_on_speedtest_run' => 'Notify on every speedtest run',
     'database_on_threshold_failure' => 'Notify on threshold failures',
     'test_database_channel' => 'Test database channel',
 
     // Mail notifications
     'mail' => 'Mail',
-    'enable_mail_notifications' => 'Enable mail notifications',
     'recipients' => 'Recipients',
     'mail_on_speedtest_run' => 'Notify on every speedtest run',
     'mail_on_threshold_failure' => 'Notify on threshold failures',
@@ -23,7 +21,6 @@ return [
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Enable webhook notifications',
     'webhook_on_speedtest_run' => 'Notify on every speedtest run',
     'webhook_on_threshold_failure' => 'Notify on threshold failures',
     'test_webhook_channel' => 'Test webhook channel',

@@ -21,7 +21,7 @@
                         "$ref": "#/components/parameters/AcceptHeader"
                     },
                     {
-                        "name": "per_page",
+                        "name": "per.page",
                         "in": "query",
                         "description": "Number of results per page",
                         "required": false,

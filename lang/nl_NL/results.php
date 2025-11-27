@@ -61,8 +61,11 @@ return [
     'view_on_speedtest_net' => 'Bekijk op Speedtest.net',
 
     // Notifications
+    'speedtest_benchmark_passed' => 'Snelheidstest benchmark geslaagd',
+    'speedtest_benchmark_failed' => 'Snelheidstest benchmark mislukt',
     'speedtest_started' => 'Snelheidstest gestart',
     'speedtest_completed' => 'Snelheidstest voltooid',
+    'speedtest_failed' => 'Speedtest mislukt',
     'download_threshold_breached' => 'Drempelwaarde voor downloaden doorbroken!',
     'upload_threshold_breached' => 'Upload drempelwaarde gelekt!',
     'ping_threshold_breached' => 'Ping drempelwaarde doorgedrukt!',
