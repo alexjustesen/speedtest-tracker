@@ -7,14 +7,12 @@ return [
     // Database notifications
     'database' => 'Database',
     'database_description' => 'Meldingen die naar dit kanaal worden verzonden worden weergegeven onder de 🔔 icoon in de header.',
-    'enable_database_notifications' => 'Database meldingen inschakelen',
     'database_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
     'database_on_threshold_failure' => 'Melding bij limiet overschrijding',
     'test_database_channel' => 'Test database notificaties',
 
     // Mail notifications
     'mail' => 'E-mailen',
-    'enable_mail_notifications' => 'Schakel e-mailnotificaties in',
     'recipients' => 'Ontvangers',
     'mail_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
     'mail_on_threshold_failure' => 'Melding bij limiet overschrijding',
@@ -23,7 +21,6 @@ return [
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Webhook meldingen inschakelen',
     'webhook_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
     'webhook_on_threshold_failure' => 'Melding bij limiet overschrijding',
     'test_webhook_channel' => 'Test webhook kanaal',

@@ -7,14 +7,12 @@ return [
     // Database notifications
     'database' => 'Base de données',
     'database_description' => 'Les notifications envoyées à ce salon apparaîtront sous l\'icône 🔔 dans l\'entête.',
-    'enable_database_notifications' => 'Activer les notifications de base de données',
     'database_on_speedtest_run' => 'Notifier à chaque test de vitesse',
     'database_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
     'test_database_channel' => 'Tester le canal de base de données',
 
     // Mail notifications
     'mail' => 'Courrier',
-    'enable_mail_notifications' => 'Activer les notifications par courriel',
     'recipients' => 'Destinataires',
     'mail_on_speedtest_run' => 'Notifier à chaque test de vitesse',
     'mail_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
@@ -23,7 +21,6 @@ return [
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Activer les notifications webhook',
     'webhook_on_speedtest_run' => 'Notifier à chaque test de vitesse',
     'webhook_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
     'test_webhook_channel' => 'Tester le canal webhook',
