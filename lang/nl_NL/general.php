@@ -16,6 +16,7 @@ return [
     'no' => 'Neen',
     'options' => 'Instellingen',
     'details' => 'Beschrijving',
+    'view' => 'Bekijk',
 
     // Common labels
     'name' => 'Naam',
