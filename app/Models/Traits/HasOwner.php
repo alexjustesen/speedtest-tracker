@@ -20,7 +20,15 @@ trait HasOwner
      */
     public function ownedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'owned_by_id');
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Creator of the model.
+     */
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**
@@ -36,7 +44,7 @@ trait HasOwner
      */
     public function hasOwner(): bool
     {
-        return ! is_null($this->owned_by_id);
+        return ! is_null($this->created_by);
     }
 
     /**
@@ -48,7 +56,7 @@ trait HasOwner
             return false;
         }
 
-        return $owner->id === $this->owned_by_id;
+        return $owner->id === $this->created_by;
     }
 
     /**
@@ -56,7 +64,7 @@ trait HasOwner
      */
     public function scopeWhereOwnedBy(Builder $query, User $owner): Builder
     {
-        return $query->where('owned_by_id', '=', $owner->id);
+        return $query->where('created_by', '=', $owner->id);
     }
 
     /**
@@ -64,6 +72,6 @@ trait HasOwner
      */
     public function scopeWhereNotOwnedBy(Builder $query, User $owner): Builder
     {
-        return $query->where('owned_by_id', '!=', $owner->id);
+        return $query->where('created_by', '!=', $owner->id);
     }
 }

@@ -13,13 +13,16 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owned_by_id')->nullable();
-            $table->string('type')->nullable();
+            $table->string('type')->default('ookla');
             $table->string('name')->nullable();
             $table->text('description')->nullable();
+            $table->string('schedule')->nullable();
             $table->json('options')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->string('status')->default('not_tested');
             $table->dateTime('next_run_at')->nullable();
+            $table->dateTime('last_run_at')->nullable();
+            $table->foreignId('created_by')->nullable();
             $table->timestamps();
         });
     }

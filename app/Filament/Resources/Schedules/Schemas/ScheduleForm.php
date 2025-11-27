@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Schedules\Schemas;
 
 use App\Actions\ExplainCronExpression;
-use App\Models\Schedule;
 use App\Rules\Cron;
 use Carbon\Carbon;
 use Cron\CronExpression;
@@ -24,44 +23,47 @@ class ScheduleForm
     public static function schema(): array
     {
         return [
-            Section::make('Details')
+            Section::make(__('schedules.details'))
                 ->schema([
                     Toggle::make('is_active')
-                        ->label('Active')
+                        ->label(__('schedules.active'))
                         ->required(),
                     TextInput::make('name')
-                        ->placeholder('Enter a name for the test.')
+                        ->label(__('schedules.name'))
+                        ->placeholder(__('schedules.name_placeholder'))
                         ->maxLength(255)
                         ->unique(ignoreRecord: true)
                         ->required(),
                     TextInput::make('description')
+                        ->label(__('schedules.description'))
                         ->maxLength(255),
                     Select::make('type')
-                        ->label('Type')
+                        ->label(__('schedules.type'))
                         ->hidden(true)
                         ->options([
                             'Ookla' => 'Ookla',
                         ])
-                        ->default('Ookla')
+                        ->default('ookla')
                         ->native(false)
                         ->required(),
                 ])
                 ->columnSpan('full'),
 
-            Tabs::make('Options')
+            Tabs::make(__('schedules.options'))
                 ->tabs([
-                    Tab::make('Schedule')
+                    Tab::make(__('schedules.schedule'))
                         ->schema([
-                            TextInput::make('options.cron_expression')
-                                ->placeholder('Enter a cron expression.')
-                                ->helperText(fn (Get $get) => ExplainCronExpression::run($get('options.cron_expression')))
+                            TextInput::make('schedule')
+                                ->label(__('schedules.schedule'))
+                                ->placeholder(__('schedules.schedule_placeholder'))
+                                ->helperText(fn (Get $get) => ExplainCronExpression::run($get('schedule')))
                                 ->required()
                                 ->rules([new Cron])
                                 ->live(),
                             Placeholder::make('next_run_at')
-                                ->label('Next Run At')
+                                ->label(__('schedules.next_run_at'))
                                 ->content(function (Get $get) {
-                                    $expression = $get('options.cron_expression');
+                                    $expression = $get('schedule');
 
                                     if (! $expression) {
                                         return '—';
@@ -79,13 +81,14 @@ class ScheduleForm
                                 }),
                         ]),
 
-                    Tab::make('Servers')
+                    Tab::make(__('schedules.servers'))
                         ->schema([
                             Radio::make('options.server_preference')
+                                ->label(__('schedules.server_preference'))
                                 ->options([
-                                    'auto' => 'Automatically select a server',
-                                    'prefer' => 'Prefer servers from the list',
-                                    'ignore' => 'Ignore servers from the list',
+                                    'auto' => __('schedules.server_preference_auto'),
+                                    'prefer' => __('schedules.server_preference_prefer'),
+                                    'ignore' => __('schedules.server_preference_ignore'),
                                 ])
                                 ->default('auto')
                                 ->required()
@@ -94,31 +97,27 @@ class ScheduleForm
                             Repeater::make('options.servers')
                                 ->schema([
                                     TextInput::make('server_id')
-                                        ->label('Server ID')
-                                        ->placeholder('Enter the ID of the server.')
+                                        ->label(__('schedules.server_id'))
+                                        ->placeholder(__('schedules.server_id_placeholder'))
                                         ->required(),
                                 ])
-                                ->itemLabel(fn (array $state): ?string => isset($state['server_id'])
-                                    ? Schedule::getServerLabel($state['server_id'])
-                                    : null
-                                )
                                 ->hidden(fn (Get $get) => $get('options.server_preference') === 'auto'),
                         ]),
 
-                    Tab::make('Advanced')
+                    Tab::make(__('schedules.advanced'))
                         ->schema([
                             TagsInput::make('options.skip_ips')
-                                ->label('Skip IP addresses')
-                                ->placeholder('8.8.8.8')
+                                ->label(__('schedules.skip_ips'))
+                                ->placeholder(__('schedules.skip_ips_placeholder'))
                                 ->nestedRecursiveRules([
                                     'ip',
                                 ])
                                 ->live()
-                                ->helpertext('Add external IP addresses that should be skipped.'),
+                                ->helpertext(__('schedules.skip_ips_helper')),
                             TextInput::make('options.interface')
-                                ->label('Network Interface')
-                                ->placeholder('eth0')
-                                ->helpertext('Set the network interface to use for the test. This need to be the network interface available inside the container'),
+                                ->label(__('schedules.network_interface'))
+                                ->placeholder(__('schedules.network_interface_placeholder'))
+                                ->helpertext(__('schedules.network_interface_helper')),
                         ]),
                 ])->columnSpan('full'),
         ];

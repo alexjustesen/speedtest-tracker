@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\Schedules\Tables;
 
 use App\Actions\ExplainCronExpression;
+use App\Enums\ScheduleStatus;
 use App\Models\Schedule;
+use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
@@ -23,52 +25,70 @@ class ScheduleTable
         return $table
             ->columns([
                 TextColumn::make('id')
-                    ->label('ID')
+                    ->label(__('schedules.id'))
                     ->sortable(),
-                TextColumn::make('token')
-                    ->copyable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->label(__('schedules.name'))
+                    ->sortable(),
                 TextColumn::make('type')
-                    ->label('Type')
+                    ->label(__('schedules.type'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('description')
+                    ->label(__('schedules.description'))
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('options.cron_expression')
-                    ->label('Schedule')
+                TextColumn::make('schedule')
+                    ->label(__('schedules.schedule'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->formatStateUsing(fn (?string $state) => ExplainCronExpression::run($state)),
                 TextColumn::make('options.server_preference')
-                    ->label('Server Preference')
+                    ->label(__('schedules.server_preference'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(function (?string $state) {
                         return match ($state) {
-                            'auto' => 'Automatic',
-                            'prefer' => 'Prefer Specific Servers',
-                            'ignore' => 'Ignore Specific Servers',
+                            'auto' => __('schedules.server_preference_auto'),
+                            'prefer' => __('schedules.server_preference_prefer'),
+                            'ignore' => __('schedules.server_preference_ignore'),
                             default => $state,
                         };
                     })
                     ->tooltip(fn ($record) => $record->getServerTooltip()),
                 IconColumn::make('is_active')
-                    ->label('Active')
+                    ->label(__('schedules.active'))
                     ->alignCenter()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->boolean(),
+                TextColumn::make('status')
+                    ->label(__('schedules.status'))
+                    ->badge()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('next_run_at')
+                    ->label(__('schedules.next_run_at'))
                     ->alignEnd()
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
+                TextColumn::make('last_run_at')
+                    ->label(__('schedules.last_run_at'))
+                    ->alignEnd()
+                    ->dateTime()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+                TextColumn::make('createdBy.name')
+                    ->label(__('schedules.created_by'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
                 TextColumn::make('created_at')
+                    ->label(__('general.created_at'))
                     ->alignEnd()
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
                 TextColumn::make('updated_at')
+                    ->label(__('general.updated_at'))
                     ->alignEnd()
                     ->dateTime()
                     ->sortable()
@@ -78,7 +98,7 @@ class ScheduleTable
             ->deferColumnManager(false)
             ->filters([
                 SelectFilter::make('type')
-                    ->label('Type')
+                    ->label(__('schedules.type'))
                     ->options(function () {
                         return Schedule::distinct()
                             ->pluck('type', 'type')
@@ -86,9 +106,10 @@ class ScheduleTable
                     })
                     ->native(false),
                 TernaryFilter::make('Active')
+                    ->label(__('schedules.active'))
                     ->nullable()
-                    ->trueLabel('Active schedules only')
-                    ->falseLabel('Inactive schedules only')
+                    ->trueLabel(__('schedules.active_schedules_only'))
+                    ->falseLabel(__('schedules.inactive_schedules_only'))
                     ->queries(
                         true: fn (Builder $query) => $query->where('is_active', true),
                         false: fn (Builder $query) => $query->where('is_active', false),
@@ -96,9 +117,9 @@ class ScheduleTable
                     )
                     ->native(false),
                 SelectFilter::make('options.server_preference')
-                    ->label('Server Preference')
+                    ->label(__('schedules.server_preference'))
                     ->options(function () {
-                        return Schedule::distinct()
+                        return Schedule::query()
                             ->get()
                             ->pluck('options')
                             ->map(function ($options) {
@@ -109,13 +130,26 @@ class ScheduleTable
                             ->mapWithKeys(function ($value) {
                                 return [
                                     $value => match ($value) {
-                                        'auto' => 'Automatic',
-                                        'prefer' => 'Prefer Specific Servers',
-                                        'ignore' => 'Ignore Specific Servers',
+                                        'auto' => __('schedules.server_preference_auto'),
+                                        'prefer' => __('schedules.server_preference_prefer'),
+                                        'ignore' => __('schedules.server_preference_ignore'),
                                         default => $value,
                                     },
                                 ];
                             })
+                            ->toArray();
+                    })
+                    ->native(false),
+                SelectFilter::make('status')
+                    ->label(__('schedules.status'))
+                    ->options(ScheduleStatus::class)
+                    ->native(false),
+                SelectFilter::make('created_by')
+                    ->label(__('schedules.created_by'))
+                    ->options(function () {
+                        return User::query()
+                            ->orderBy('name')
+                            ->pluck('name', 'id')
                             ->toArray();
                     })
                     ->native(false),
@@ -124,19 +158,11 @@ class ScheduleTable
                 ActionGroup::make([
                     EditAction::make(),
                     Action::make('changeScheduleStatus')
-                        ->label('Change Schedule Status')
+                        ->label(__('schedules.change_schedule_status'))
                         ->action(function ($record) {
                             $record->update(['is_active' => ! $record->is_active]);
                         })
                         ->icon('heroicon-c-arrow-path'),
-                    Action::make('viewResults')
-                        ->label('View Results')
-                        ->action(function ($record) {
-                            return redirect()->route('filament.admin.resources.results.index', [
-                                'tableFilters[schedule_id][values][0]' => $record->id,
-                            ]);
-                        })
-                        ->icon('heroicon-s-eye'),
                     DeleteAction::make(),
                 ]),
             ])

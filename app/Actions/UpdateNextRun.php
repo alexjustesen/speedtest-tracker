@@ -28,8 +28,8 @@ class UpdateNextRun implements ShouldQueue
                 return;
             }
 
-            // Get the cron expression from the schedule options
-            $expression = data_get($schedule, 'options.cron_expression');
+            // Get the cron expression from the schedule column
+            $expression = $schedule->schedule;
 
             if ($expression) {
                 // Calculate the next run time based on the cron expression

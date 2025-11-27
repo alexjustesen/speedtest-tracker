@@ -31,7 +31,7 @@ class NoCronOverlap implements Rule
             ->where('type', $this->schedule->type)  // Dynamically use the type from the schedule
             ->when($this->ignoreId, fn ($q) => $q->where('id', '!=', $this->ignoreId))
             ->get()
-            ->pluck('options.cron_expression');  // Extract cron expressions
+            ->pluck('schedule');  // Extract cron expressions
 
         foreach ($existingCrons as $existingCron) {
             \Log::info('Comparing:', ['existing' => $existingCron, 'new' => $value]);
