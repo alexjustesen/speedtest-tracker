@@ -8,7 +8,7 @@ return [
      */
     'build_date' => Carbon::parse('2025-11-27'),
 
-    'build_version' => 'v1.10.0',
+    'build_version' => 'v1.10.1',
 
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
