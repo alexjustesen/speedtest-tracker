@@ -7,14 +7,12 @@ return [
     // Database notifications
     'database' => 'Base de datos',
     'database_description' => 'Las notificaciones enviadas a este canal se mostrarán bajo el icono :belell: en el encabezado.',
-    'enable_database_notifications' => 'Habilitar notificaciones de base de datos',
     'database_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
     'database_on_threshold_failure' => 'Notificar en los umbrales de fallos',
     'test_database_channel' => 'Probar canal de base de datos',
 
     // Mail notifications
     'mail' => 'Correo',
-    'enable_mail_notifications' => 'Habilitar notificaciones de correo',
     'recipients' => 'Destinatarios',
     'mail_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
     'mail_on_threshold_failure' => 'Notificar en los umbrales de fallos',
@@ -23,7 +21,6 @@ return [
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'enable_webhook_notifications' => 'Habilitar notificaciones de webhook',
     'webhook_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
     'webhook_on_threshold_failure' => 'Notificar en los umbrales de fallos',
     'test_webhook_channel' => 'Probar canal webhook',

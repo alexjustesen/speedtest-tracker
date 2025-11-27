@@ -6,9 +6,9 @@ return [
     /**
      * General settings.
      */
-    'build_date' => Carbon::parse('2025-11-24'),
+    'build_date' => Carbon::parse('2025-11-27'),
 
-    'build_version' => 'v1.9.0',
+    'build_version' => 'v1.10.0',
 
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
