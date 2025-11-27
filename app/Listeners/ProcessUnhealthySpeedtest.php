@@ -2,20 +2,22 @@
 
 namespace App\Listeners;
 
-use App\Events\SpeedtestCompleted;
-use App\Mail\CompletedSpeedtestMail;
+use App\Events\SpeedtestBenchmarkFailed;
+use App\Mail\UnhealthySpeedtestMail;
 use App\Models\Result;
 use App\Models\User;
 use App\Settings\NotificationSettings;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Spatie\WebhookServer\WebhookCall;
 
-class ProcessCompletedSpeedtest
+class ProcessUnhealthySpeedtest
 {
+    /**
+     * Create the event listener.
+     */
     public function __construct(
         public NotificationSettings $notificationSettings,
     ) {}
@@ -23,7 +25,7 @@ class ProcessCompletedSpeedtest
     /**
      * Handle the event.
      */
-    public function handle(SpeedtestCompleted $event): void
+    public function handle(SpeedtestBenchmarkFailed $event): void
     {
         $result = $event->result;
 
@@ -41,8 +43,8 @@ class ProcessCompletedSpeedtest
      */
     private function notifyAppriseChannels(Result $result): void
     {
-        // Don't send Apprise notification if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || ! $result->healthy) {
+        // Don't send Apprise notification if dispatched by a user.
+        if (filled($result->dispatched_by)) {
             return;
         }
 
@@ -54,19 +56,19 @@ class ProcessCompletedSpeedtest
      */
     private function notifyDatabaseChannels(Result $result): void
     {
-        // Don't send database notification if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || ! $result->healthy) {
+        // Don't send database notification if dispatched by a user.
+        if (filled($result->dispatched_by)) {
             return;
         }
 
         // Check if database notifications are enabled.
-        if (! $this->notificationSettings->database_enabled || ! $this->notificationSettings->database_on_speedtest_run) {
+        if (! $this->notificationSettings->database_enabled || ! $this->notificationSettings->database_on_threshold_failure) {
             return;
         }
 
         foreach (User::all() as $user) {
             Notification::make()
-                ->title(__('results.speedtest_completed'))
+                ->title(__('results.speedtest_benchmark_failed'))
                 ->actions([
                     Action::make('view')
                         ->label(__('general.view'))
@@ -82,19 +84,19 @@ class ProcessCompletedSpeedtest
      */
     private function notifyDispatchingUser(Result $result): void
     {
-        if (empty($result->dispatched_by) || ! $result->healthy) {
+        if (empty($result->dispatched_by)) {
             return;
         }
 
         $result->dispatchedBy->notify(
             Notification::make()
-                ->title(__('results.speedtest_completed'))
+                ->title(__('results.speedtest_benchmark_failed'))
                 ->actions([
                     Action::make('view')
                         ->label(__('general.view'))
                         ->url(route('filament.admin.resources.results.index')),
                 ])
-                ->success()
+                ->warning()
                 ->toDatabase(),
         );
     }
@@ -104,14 +106,17 @@ class ProcessCompletedSpeedtest
      */
     private function notifyMailChannels(Result $result): void
     {
-        if (empty($result->dispatched_by) || ! $result->healthy) {
+        // Don't send webhook if dispatched by a user.
+        if (filled($result->dispatched_by)) {
             return;
         }
 
-        if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_speedtest_run) {
+        // Check if mail notifications are enabled.
+        if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_threshold_failure) {
             return;
         }
 
+        // Check if mail recipients are configured.
         if (! count($this->notificationSettings->mail_recipients)) {
             Log::warning('Mail recipients not found, check mail notification channel settings.');
 
@@ -120,7 +125,7 @@ class ProcessCompletedSpeedtest
 
         foreach ($this->notificationSettings->mail_recipients as $recipient) {
             Mail::to($recipient)
-                ->send(new CompletedSpeedtestMail($result));
+                ->send(new UnhealthySpeedtestMail($result));
         }
     }
 
@@ -129,13 +134,13 @@ class ProcessCompletedSpeedtest
      */
     private function notifyWebhookChannels(Result $result): void
     {
-        // Don't send webhook if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || ! $result->healthy) {
+        // Don't send webhook if dispatched by a user.
+        if (filled($result->dispatched_by)) {
             return;
         }
 
         // Check if webhook notifications are enabled.
-        if (! $this->notificationSettings->webhook_enabled || ! $this->notificationSettings->webhook_on_speedtest_run) {
+        if (! $this->notificationSettings->webhook_enabled || ! $this->notificationSettings->webhook_on_threshold_failure) {
             return;
         }
 
@@ -152,14 +157,9 @@ class ProcessCompletedSpeedtest
                 ->payload([
                     'result_id' => $result->id,
                     'site_name' => config('app.name'),
-                    'server_name' => Arr::get($result->data, 'server.name'),
-                    'server_id' => Arr::get($result->data, 'server.id'),
-                    'isp' => Arr::get($result->data, 'isp'),
-                    'ping' => $result->ping,
-                    'download' => $result->downloadBits,
-                    'upload' => $result->uploadBits,
-                    'packet_loss' => Arr::get($result->data, 'packetLoss'),
-                    'speedtest_url' => Arr::get($result->data, 'result.url'),
+                    'isp' => $result->isp,
+                    'benchmarks' => $result->benchmarks,
+                    'speedtest_url' => $result->result_url,
                     'url' => url('/admin/results'),
                 ])
                 ->doNotSign()

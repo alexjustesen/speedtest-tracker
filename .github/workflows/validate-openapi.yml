@@ -1,0 +1,49 @@
+name: Validate OpenAPI JSON
+
+on:
+  pull_request:
+    paths:
+      - 'app/Http/Controllers/Api/**/*.php'
+      - 'app/OpenApi/**/*.php'
+
+jobs:
+  update-openapi:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+
+      - name: Install dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+
+      # Generate OpenAPI file into a temp location
+      - name: Generate OpenAPI JSON
+        run: ./vendor/bin/openapi ./app/Http/Controllers/Api ./app/OpenApi -o openapi_temp.json -f json
+
+      # Compare the generated file to the committed file
+      - name: Validate OpenAPI JSON is up to date
+        run: |
+          if ! diff -q openapi.json openapi_temp.json; then
+            echo "❌ OpenAPI documentation is out of sync!"
+            echo ""
+            echo "API code was modified but openapi.json was NOT updated."
+            echo ""
+            echo "Please regenerate the OpenAPI JSON and commit it:"
+            echo "    ./vendor/bin/openapi ./app/Http/Controllers/Api ./app/OpenApi -o openapi.json -f json"
+            echo ""
+            exit 1
+          fi
+
+      - name: ✓ OpenAPI is up to date
+        if: success()
+        run: echo "✅ OpenAPI documentation matches the committed version!"

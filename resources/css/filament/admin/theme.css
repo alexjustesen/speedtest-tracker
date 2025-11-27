@@ -1,3 +1,13 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+/* Filament Plugins */
+@source '../../../../vendor/codewithdennis/filament-simple-alert/resources/**/*.blade.php';
+@source inline('animate-{spin,pulse,bounce}');
+
+/* Additional styles */
 .fi-topbar #dashboardAction .fi-btn-label,
 .fi-topbar #speedtestAction .fi-btn-label {
     display: none;
