@@ -3,6 +3,7 @@
 namespace App\Actions\Librespeed;
 
 use App\Enums\ResultService;
+use App\Enums\ResultStatus;
 use App\Events\SpeedtestWaiting;
 use App\Models\Result;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -17,7 +18,7 @@ class RunSpeedtest
         $result = Result::create([
             'data->server->url' => $server,
             'service' => ResultService::Librespeed,
-            'status' => 'waiting',
+            'status' => ResultStatus::Waiting,
             'scheduled' => $isScheduled,
             'dispatched_by' => $dispatchedBy,
         ]);
