@@ -104,7 +104,7 @@ class ProcessCompletedSpeedtest
      */
     private function notifyMailChannels(Result $result): void
     {
-        if (filled($result->dispatched_by) || ! $result->healthy) {
+        if (empty($result->dispatched_by) || ! $result->healthy) {
             return;
         }
 
