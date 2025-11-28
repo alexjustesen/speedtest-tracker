@@ -144,29 +144,31 @@ class Notification extends SettingsPage
                         Tab::make(__('settings/notifications.webhook'))
                             ->icon(Heroicon::OutlinedGlobeAlt)
                             ->schema([
+                                SimpleAlert::make('wehbook_info')
+                                    ->title(__('general.documentation'))
+                                    ->description(__('settings/notifications.webhook_hint_description'))
+                                    ->border()
+                                    ->info()
+                                    ->actions([
+                                        Action::make('webhook_docs')
+                                            ->label(__('general.view_documentation'))
+                                            ->icon('heroicon-m-arrow-long-right')
+                                            ->color('info')
+                                            ->link()
+                                            ->url('https://docs.speedtest-tracker.dev/settings/notifications/webhook')
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->columnSpanFull(),
+
                                 Toggle::make('webhook_enabled')
                                     ->label(__('general.enable'))
                                     ->live(),
+
                                 Grid::make([
                                     'default' => 1,
                                 ])
                                     ->hidden(fn (Get $get) => $get('webhook_enabled') !== true)
                                     ->schema([
-                                        SimpleAlert::make('wehbook_info')
-                                            ->title(__('settings/notifications.webhook_hint'))
-                                            ->description(__('settings/notifications.webhook_hint_description'))
-                                            ->border()
-                                            ->warning()
-                                            ->actions([
-                                                Action::make('webhook_docs')
-                                                    ->label('View documentation')
-                                                    ->icon('heroicon-m-arrow-long-right')
-                                                    ->link()
-                                                    ->url('https://docs.speedtest-tracker.dev/settings/notifications/webhook')
-                                                    ->openUrlInNewTab()
-                                                    ->color('warning'),
-                                            ])
-                                            ->columnSpanFull(),
                                         Fieldset::make(__('settings.triggers'))
                                             ->columns(1)
                                             ->schema([
