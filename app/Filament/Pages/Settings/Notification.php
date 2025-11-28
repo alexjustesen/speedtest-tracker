@@ -65,6 +65,11 @@ class Notification extends SettingsPage
     {
         return $schema
             ->components([
+                SimpleAlert::make('manual_tests_info')
+                    ->description(__('settings/notifications.manual_tests_info'))
+                    ->border()
+                    ->info()
+                    ->columnSpanFull(),
                 Tabs::make()
                     ->schema([
                         Tab::make(__('settings/notifications.database'))
@@ -147,12 +152,26 @@ class Notification extends SettingsPage
                                 Toggle::make('webhook_enabled')
                                     ->label(__('general.enable'))
                                     ->live(),
-
                                 Grid::make([
                                     'default' => 1,
                                 ])
                                     ->hidden(fn (Get $get) => $get('webhook_enabled') !== true)
                                     ->schema([
+                                        SimpleAlert::make('wehbook_info')
+                                            ->title(__('settings/notifications.webhook_hint'))
+                                            ->description(__('settings/notifications.webhook_hint_description'))
+                                            ->border()
+                                            ->warning()
+                                            ->actions([
+                                                Action::make('webhook_docs')
+                                                    ->label('View documentation')
+                                                    ->icon('heroicon-m-arrow-long-right')
+                                                    ->link()
+                                                    ->url('https://docs.speedtest-tracker.dev/settings/notifications/webhook')
+                                                    ->openUrlInNewTab()
+                                                    ->color('warning'),
+                                            ])
+                                            ->columnSpanFull(),
                                         Fieldset::make(__('settings.triggers'))
                                             ->columns(1)
                                             ->schema([

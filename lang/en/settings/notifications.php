@@ -24,6 +24,8 @@ return [
     'webhook_on_speedtest_run' => 'Notify on every speedtest run',
     'webhook_on_threshold_failure' => 'Notify on threshold failures',
     'test_webhook_channel' => 'Test webhook channel',
+    'webhook_hint' => 'Payload documentation',
+    'webhook_hint_description' => 'These are generic webhooks. For payload examples and implementation details, view the documentation.',
 
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notify on every speedtest run',
@@ -50,4 +52,5 @@ return [
 
     // Helper text
     'threshold_helper_text' => 'Threshold notifications will be sent to the /fail route in the URL.',
+    'manual_tests_info' => 'Notifications are only sent for scheduled tests, not for manually triggered tests.',
 ];
