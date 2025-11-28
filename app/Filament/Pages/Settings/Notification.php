@@ -65,11 +65,6 @@ class Notification extends SettingsPage
     {
         return $schema
             ->components([
-                SimpleAlert::make('manual_tests_info')
-                    ->description(__('settings/notifications.manual_tests_info'))
-                    ->border()
-                    ->info()
-                    ->columnSpanFull(),
                 Tabs::make()
                     ->schema([
                         Tab::make(__('settings/notifications.database'))

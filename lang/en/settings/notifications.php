@@ -52,5 +52,4 @@ return [
 
     // Helper text
     'threshold_helper_text' => 'Threshold notifications will be sent to the /fail route in the URL.',
-    'manual_tests_info' => 'Notifications are only sent for scheduled tests, not for manually triggered tests.',
 ];
