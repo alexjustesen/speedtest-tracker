@@ -7,6 +7,7 @@ ARG NODE_VERSION=22
 ARG MYSQL_CLIENT="mysql-client"
 ARG POSTGRES_VERSION=17
 ARG SPEEDTEST_VERSION=1.2.0
+ARG LIBRESPEED_VERSION=1.0.12
 
 WORKDIR /var/www/html
 
@@ -49,14 +50,19 @@ RUN apt-get update && apt-get upgrade -y \
     && ARCH=$(uname -m) \
     && if [ "$ARCH" = "x86_64" ]; then \
          PLATFORM="x86_64"; \
+         LIBRESPEED_PLATFORM="amd64"; \
        elif [ "$ARCH" = "aarch64" ]; then \
          PLATFORM="aarch64"; \
+         LIBRESPEED_PLATFORM="arm64"; \
        else \
          echo "Unsupported architecture: $ARCH"; exit 1; \
        fi \
     && curl -o /tmp/speedtest-cli.tgz -L \
          "https://install.speedtest.net/app/cli/ookla-speedtest-$SPEEDTEST_VERSION-linux-$PLATFORM.tgz" \
     && tar -xzf /tmp/speedtest-cli.tgz -C /usr/bin \
+    && curl -o /tmp/librespeed-cli.tar.gz -L \
+         "https://github.com/librespeed/speedtest-cli/releases/download/v$LIBRESPEED_VERSION/librespeed-cli_${LIBRESPEED_VERSION}_linux_${LIBRESPEED_PLATFORM}.tar.gz" \
+    && tar -xzf /tmp/librespeed-cli.tar.gz -C /usr/bin \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

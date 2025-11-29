@@ -146,6 +146,22 @@ class Notification extends SettingsPage
                         Tab::make(__('settings/notifications.webhook'))
                             ->icon(Heroicon::OutlinedGlobeAlt)
                             ->schema([
+                                SimpleAlert::make('wehbook_info')
+                                    ->title(__('general.documentation'))
+                                    ->description(__('settings/notifications.webhook_hint_description'))
+                                    ->border()
+                                    ->info()
+                                    ->actions([
+                                        Action::make('webhook_docs')
+                                            ->label(__('general.view_documentation'))
+                                            ->icon('heroicon-m-arrow-long-right')
+                                            ->color('info')
+                                            ->link()
+                                            ->url('https://docs.speedtest-tracker.dev/settings/notifications/webhook')
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->columnSpanFull(),
+
                                 Toggle::make('webhook_enabled')
                                     ->label(__('general.enable'))
                                     ->live(),
