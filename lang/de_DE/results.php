@@ -61,8 +61,11 @@ return [
     'view_on_speedtest_net' => 'Auf Speedtest.net anzeigen',
 
     // Notifications
+    'speedtest_benchmark_passed' => 'Geschwindigkeits-Benchmark bestanden',
+    'speedtest_benchmark_failed' => 'Geschwindigkeits-Benchmark fehlgeschlagen',
     'speedtest_started' => 'Geschwindigkeit gestartet',
     'speedtest_completed' => 'Geschwindigkeit, abgeschlossen',
+    'speedtest_failed' => 'Geschwindigkeit fehlgeschlagen',
     'download_threshold_breached' => 'Download-Schwelle gebrochen!',
     'upload_threshold_breached' => 'Upload-Schwelle gebrochen!',
     'ping_threshold_breached' => 'Ping-Schwelle gebrochen!',
