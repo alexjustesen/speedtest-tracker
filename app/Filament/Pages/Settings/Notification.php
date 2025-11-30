@@ -216,10 +216,10 @@ class Notification extends SettingsPage
                                         Fieldset::make(__('settings.triggers'))
                                             ->schema([
                                                 Checkbox::make('apprise_on_speedtest_run')
-                                                    ->label(__('settings/notifications.apprise_on_speedtest_run'))
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run'))
                                                     ->columnSpanFull(),
                                                 Checkbox::make('apprise_on_threshold_failure')
-                                                    ->label(__('settings/notifications.apprise_on_threshold_failure'))
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
                                                     ->columnSpanFull(),
                                             ]),
                                         Fieldset::make(__('settings/notifications.apprise_sidecar'))

@@ -21,8 +21,6 @@ return [
     // Apprise notifications
     'apprise' => 'Apprise',
     'enable_apprise_notifications' => 'Enable Apprise notifications',
-    'apprise_on_speedtest_run' => 'Notify on every speedtest run',
-    'apprise_on_threshold_failure' => 'Notify on threshold failures',
     'apprise_sidecar' => 'Apprise Sidecar',
     'apprise_verify_ssl' => 'Verify SSL',
     'apprise_channels' => 'Apprise Channels',
