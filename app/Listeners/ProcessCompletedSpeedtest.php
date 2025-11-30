@@ -98,7 +98,7 @@ class ProcessCompletedSpeedtest
     private function notifyDatabaseChannels(Result $result): void
     {
         // Don't send database notification if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || ! $result->healthy) {
+        if (filled($result->dispatched_by) || ! $result->healthy === false) {
             return;
         }
 
@@ -147,7 +147,7 @@ class ProcessCompletedSpeedtest
      */
     private function notifyMailChannels(Result $result): void
     {
-        if (filled($result->dispatched_by) || ! $result->healthy) {
+        if (filled($result->dispatched_by) || $result->healthy === false) {
             return;
         }
 
@@ -173,7 +173,7 @@ class ProcessCompletedSpeedtest
     private function notifyWebhookChannels(Result $result): void
     {
         // Don't send webhook if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || ! $result->healthy) {
+        if (filled($result->dispatched_by) || $result->healthy === false) {
             return;
         }
 
