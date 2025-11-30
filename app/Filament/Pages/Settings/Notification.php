@@ -32,7 +32,6 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\HtmlString;
 
 class Notification extends SettingsPage
 {
@@ -205,6 +204,22 @@ class Notification extends SettingsPage
                         Tab::make(__('settings/notifications.apprise'))
                             ->icon(Heroicon::CloudArrowUp)
                             ->schema([
+                                SimpleAlert::make('wehbook_info')
+                                    ->title(__('general.documentation'))
+                                    ->description(__('settings/notifications.apprise_hint_description'))
+                                    ->border()
+                                    ->info()
+                                    ->actions([
+                                        Action::make('webhook_docs')
+                                            ->label(__('general.view_documentation'))
+                                            ->icon('heroicon-m-arrow-long-right')
+                                            ->color('info')
+                                            ->link()
+                                            ->url('https://docs.speedtest-tracker.dev/settings/notifications/apprise')
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->columnSpanFull(),
+
                                 Toggle::make('apprise_enabled')
                                     ->label(__('settings/notifications.enable_apprise_notifications'))
                                     ->reactive()
@@ -232,11 +247,10 @@ class Notification extends SettingsPage
                                             ]),
                                         Repeater::make('apprise_channel_urls')
                                             ->label(__('settings/notifications.apprise_channels'))
-                                            ->hint(new HtmlString('<a href="https://github.com/caronc/apprise-api" target="_blank">'.__('settings/notifications.apprise_documentation').'</a>'))
                                             ->schema([
                                                 TextInput::make('channel_url')
                                                     ->label(__('settings/notifications.apprise_channel_url'))
-                                                    ->placeholder(__('settings/notifications.apprise_channel_url_placeholder'))
+                                                    ->placeholder('discord://WebhookID/WebhookToken')
                                                     ->helperText(__('settings/notifications.apprise_channel_url_helper'))
                                                     ->maxLength(2000)
                                                     ->distinct()
