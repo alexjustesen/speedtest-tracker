@@ -29,6 +29,7 @@
         "livewire/livewire": "^3.6.4",
         "lorisleiva/laravel-actions": "^2.9.1",
         "maennchen/zipstream-php": "^2.4",
+        "promphp/prometheus_client_php": "^2.14",
         "saloonphp/laravel-plugin": "^3.0",
         "secondnetwork/blade-tabler-icons": "^3.35.0",
         "spatie/laravel-json-api-paginate": "^1.16.3",

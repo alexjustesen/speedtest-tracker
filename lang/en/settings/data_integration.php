@@ -6,7 +6,6 @@ return [
 
     // InfluxDB v2
     'influxdb_v2' => 'InfluxDB v2',
-    'influxdb_v2_description' => 'When enabled, all new Speedtest results will also be sent to InfluxDB.',
     'influxdb_v2_enabled' => 'Enable',
     'influxdb_v2_url' => 'URL',
     'influxdb_v2_url_placeholder' => 'http://your-influxdb-instance',
@@ -32,6 +31,14 @@ return [
     'influxdb_bulk_write_failed_body' => 'Check the logs for more details.',
     'influxdb_bulk_write_success' => 'Finished bulk data load to Influxdb.',
     'influxdb_bulk_write_success_body' => 'Data has been sent to InfluxDB, check if the data was received.',
+
+    // Prometheus
+    'prometheus' => 'Prometheus',
+    'prometheus_enabled' => 'Enable',
+    'prometheus_basic_auth_enabled' => 'Use Basic Authentication',
+    'prometheus_basic_auth_credentials' => 'Basic Authentication Credentials',
+    'prometheus_basic_auth_username' => 'Username',
+    'prometheus_basic_auth_password' => 'Password',
 
     // Common labels
     'org' => 'Org',

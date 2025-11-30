@@ -6,6 +6,7 @@ use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use App\Jobs\Influxdb\v2\WriteResult;
 use App\Settings\DataIntegrationSettings;
+use Illuminate\Support\Facades\Cache;
 
 class ProcessSpeedtestDataIntegrations
 {
@@ -23,6 +24,10 @@ class ProcessSpeedtestDataIntegrations
     {
         if ($this->settings->influxdb_v2_enabled) {
             WriteResult::dispatch($event->result);
+        }
+
+        if ($this->settings->prometheus_enabled) {
+            Cache::forever('prometheus:latest_result', $event->result->id);
         }
     }
 }

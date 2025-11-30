@@ -18,6 +18,14 @@ class DataIntegrationSettings extends Settings
 
     public bool $influxdb_v2_verify_ssl;
 
+    public bool $prometheus_enabled;
+
+    public bool $prometheus_basic_auth_enabled;
+
+    public ?string $prometheus_basic_auth_username;
+
+    public ?string $prometheus_basic_auth_password;
+
     public static function group(): string
     {
         return 'dataintegration';
