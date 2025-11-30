@@ -23,6 +23,7 @@ services:
         depends_on:
             - pgsql
             - mailpit
+            - apprise
     pgsql:
         image: 'postgres:17-alpine'
         ports:
@@ -55,9 +56,29 @@ services:
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
+    apprise:
+        image: 'caronc/apprise:latest'
+        ports:
+            - '${FORWARD_APPRISE_PORT:-8000}:8000'
+        volumes:
+            - 'sail-apprise:/config'
+        networks:
+            - sail
+        healthcheck:
+            test:
+                - CMD
+                - 'wget'
+                - '--quiet'
+                - '--tries=1'
+                - '--spider'
+                - 'http://localhost:8000/health'
+            retries: 3
+            timeout: 5s
 networks:
     sail:
         driver: bridge
 volumes:
     sail-pgsql:
+        driver: local
+    sail-apprise:
         driver: local

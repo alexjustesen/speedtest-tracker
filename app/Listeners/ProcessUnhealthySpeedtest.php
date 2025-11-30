@@ -3,14 +3,18 @@
 namespace App\Listeners;
 
 use App\Events\SpeedtestBenchmarkFailed;
+use App\Helpers\Number;
 use App\Mail\UnhealthySpeedtestMail;
 use App\Models\Result;
 use App\Models\User;
+use App\Notifications\Apprise\SpeedtestNotification;
 use App\Settings\NotificationSettings;
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
+use Filament\Notifications\Notification as FilamentNotification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Spatie\WebhookServer\WebhookCall;
 
 class ProcessUnhealthySpeedtest
@@ -31,7 +35,7 @@ class ProcessUnhealthySpeedtest
 
         $result->loadMissing(['dispatchedBy']);
 
-        // $this->notifyAppriseChannels($result);
+        $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
         $this->notifyDispatchingUser($result);
         $this->notifyMailChannels($result);
@@ -48,7 +52,79 @@ class ProcessUnhealthySpeedtest
             return;
         }
 
-        //
+        if (! $this->notificationSettings->apprise_enabled || ! $this->notificationSettings->apprise_on_threshold_failure) {
+            return;
+        }
+
+        if (! count($this->notificationSettings->apprise_channel_urls)) {
+            Log::warning('Apprise channel URLs not found, check Apprise notification channel settings.');
+
+            return;
+        }
+
+        if (empty($result->benchmarks)) {
+            Log::warning('Benchmark data not found, won\'t send Apprise notification.');
+
+            return;
+        }
+
+        // Build metrics array from failed benchmarks
+        $failed = [];
+
+        foreach ($result->benchmarks as $metric => $benchmark) {
+            if ($benchmark['passed'] === false) {
+                $failed[] = [
+                    'name' => ucfirst($metric),
+                    'threshold' => $benchmark['value'].' '.$benchmark['unit'],
+                    'value' => $this->formatMetricValue($metric, $result),
+                ];
+            }
+        }
+
+        if (! count($failed)) {
+            Log::warning('No failed thresholds found in benchmarks, won\'t send Apprise notification.');
+
+            return;
+        }
+
+        $body = view('apprise.speedtest-threshold', [
+            'id' => $result->id,
+            'service' => Str::title($result->service->getLabel()),
+            'serverName' => $result->server_name,
+            'serverId' => $result->server_id,
+            'isp' => $result->isp,
+            'metrics' => $failed,
+            'speedtest_url' => $result->result_url,
+            'url' => url('/admin/results'),
+        ])->render();
+
+        $title = 'Speedtest Threshold Breach – #'.$result->id;
+
+        // Send notification to each configured channel URL
+        foreach ($this->notificationSettings->apprise_channel_urls as $row) {
+            $channelUrl = $row['channel_url'] ?? null;
+            if (! $channelUrl) {
+                Log::warning('Skipping entry with missing channel_url.');
+
+                continue;
+            }
+
+            Notification::route('apprise_urls', $channelUrl)
+                ->notify(new SpeedtestNotification($title, $body, 'warning'));
+        }
+    }
+
+    /**
+     * Format metric value for display in notification.
+     */
+    private function formatMetricValue(string $metric, Result $result): string
+    {
+        return match ($metric) {
+            'download' => Number::toBitRate(bits: $result->download_bits, precision: 2),
+            'upload' => Number::toBitRate(bits: $result->upload_bits, precision: 2),
+            'ping' => round($result->ping, 2).' ms',
+            default => '',
+        };
     }
 
     /**
@@ -67,7 +143,7 @@ class ProcessUnhealthySpeedtest
         }
 
         foreach (User::all() as $user) {
-            Notification::make()
+            FilamentNotification::make()
                 ->title(__('results.speedtest_benchmark_failed'))
                 ->actions([
                     Action::make('view')
@@ -89,7 +165,7 @@ class ProcessUnhealthySpeedtest
         }
 
         $result->dispatchedBy->notify(
-            Notification::make()
+            FilamentNotification::make()
                 ->title(__('results.speedtest_benchmark_failed'))
                 ->actions([
                     Action::make('view')
@@ -106,7 +182,7 @@ class ProcessUnhealthySpeedtest
      */
     private function notifyMailChannels(Result $result): void
     {
-        // Don't send webhook if dispatched by a user.
+        // Don't send mail if dispatched by a user.
         if (filled($result->dispatched_by)) {
             return;
         }
