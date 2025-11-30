@@ -24,6 +24,7 @@ return [
     'webhook_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
     'webhook_on_threshold_failure' => 'Melding bij limiet overschrijding',
     'test_webhook_channel' => 'Test webhook kanaal',
+    'webhook_hint_description' => 'Dit zijn generieke webhooks. Raadpleeg de documentatie voor voorbeelden van payloads en implementatiedetails.',
 
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
