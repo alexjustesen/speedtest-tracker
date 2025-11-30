@@ -13,6 +13,7 @@ use App\Actions\Notifications\SendPushoverTestNotification;
 use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
+use App\Rules\AppriseScheme;
 use App\Settings\NotificationSettings;
 use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
 use Filament\Actions\Action;
@@ -239,7 +240,8 @@ class Notification extends SettingsPage
                                                     ->helperText(__('settings/notifications.apprise_channel_url_helper'))
                                                     ->maxLength(2000)
                                                     ->distinct()
-                                                    ->required(),
+                                                    ->required()
+                                                    ->rule(new AppriseScheme),
                                             ])
                                             ->columnSpanFull(),
                                         Actions::make([

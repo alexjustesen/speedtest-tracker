@@ -29,6 +29,7 @@ return [
     'apprise_channel_url_helper' => 'Provide the service endpoint URL for notifications.',
     'apprise_documentation' => 'Apprise Documentation',
     'test_apprise_channel' => 'Test Apprise',
+    'apprise_channel_url_validation_error' => 'The Apprise channel URL must not start with "http" or "https". Please provide a valid Apprise URL scheme.',
 
     // Webhook
     'webhook' => 'Webhook',
