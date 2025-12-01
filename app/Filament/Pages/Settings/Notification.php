@@ -121,20 +121,20 @@ class Notification extends SettingsPage
                                                     ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
-                                        Fieldset::make('Periodic Reports')
+                                        Fieldset::make(__('settings/notifications.periodic_reports'))
                                             ->columns(1)
                                             ->schema([
                                                 Checkbox::make('mail_daily_average_enabled')
-                                                    ->label('Daily Average Report')
-                                                    ->helperText('Sends daily average statistics every day at 6 AM'),
+                                                    ->label(__('settings/notifications.daily_average_report'))
+                                                    ->helperText(__('settings/notifications.daily_average_report_helper')),
 
                                                 Checkbox::make('mail_weekly_average_enabled')
-                                                    ->label('Weekly Average Report')
-                                                    ->helperText('Sends weekly average statistics every Monday at 6 AM'),
+                                                    ->label(__('settings/notifications.weekly_average_report'))
+                                                    ->helperText(__('settings/notifications.weekly_average_report_helper')),
 
                                                 Checkbox::make('mail_monthly_average_enabled')
-                                                    ->label('Monthly Average Report')
-                                                    ->helperText('Sends monthly average statistics on the 1st of each month at 6 AM'),
+                                                    ->label(__('settings/notifications.monthly_average_report'))
+                                                    ->helperText(__('settings/notifications.monthly_average_report_helper')),
                                             ]),
 
                                         Repeater::make('mail_recipients')
