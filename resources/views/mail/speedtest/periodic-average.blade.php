@@ -10,9 +10,9 @@
 <x-mail::table>
 | **Metric**         | **Value**                  |
 |:-------------------|---------------------------:|
-| Average Download   | {{ App\Helpers\Number::toBitRate(bits: $stats['download_avg'] * 8, precision: 2) }} |
-| Average Upload     | {{ App\Helpers\Number::toBitRate(bits: $stats['upload_avg'] * 8, precision: 2) }} |
-| Average Ping       | {{ $stats['ping_avg'] }} ms            |
+| Average Download   | {{ $stats['download_avg'] }} |
+| Average Upload     | {{ $stats['upload_avg'] }} |
+| Average Ping       | {{ $stats['ping_avg'] }} |
 </x-mail::table>
 
 ---
@@ -39,7 +39,7 @@
 | **Server Name** | **Tests** | **Download** | **Upload** | **Ping** |
 |:----------------|----------:|-------------:|-----------:|---------:|
 @foreach($serverStats as $server)
-| {{ $server['server_name'] }} | {{ $server['count'] }} | {{ App\Helpers\Number::toBitRate(bits: $server['download_avg'] * 8, precision: 2) }} | {{ App\Helpers\Number::toBitRate(bits: $server['upload_avg'] * 8, precision: 2) }} | {{ $server['ping_avg'] }} ms |
+| {{ $server['server_name'] }} | {{ $server['count'] }} | {{ $server['download_avg'] }} | {{ $server['upload_avg'] }} | {{ $server['ping_avg'] }} |
 @endforeach
 </x-mail::table>
 

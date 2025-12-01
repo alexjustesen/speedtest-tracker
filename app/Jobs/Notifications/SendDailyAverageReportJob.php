@@ -2,9 +2,8 @@
 
 namespace App\Jobs\Notifications;
 
-use App\Enums\ResultStatus;
 use App\Mail\PeriodicAverageMail;
-use App\Models\Result;
+use App\Services\PeriodicReportService;
 use App\Settings\NotificationSettings;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -17,7 +16,7 @@ class SendDailyAverageReportJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(NotificationSettings $settings): void
+    public function handle(NotificationSettings $settings, PeriodicReportService $reportService): void
     {
         if (! $settings->mail_enabled || ! $settings->mail_daily_average_enabled) {
             return;
@@ -27,41 +26,17 @@ class SendDailyAverageReportJob implements ShouldQueue
             return;
         }
 
-        $results = Result::query()
-            ->whereDate('created_at', '>=', now()->subDay())
-            ->whereDate('created_at', '<', now())
-            ->get();
+        $start = now()->subDay()->startOfDay();
+        $end = now()->subDay()->endOfDay();
+
+        $results = $reportService->getResults($start, $end);
 
         if ($results->isEmpty()) {
             return;
         }
 
-        $stats = [
-            'download_avg' => $results->avg('download'),
-            'upload_avg' => $results->avg('upload'),
-            'ping_avg' => round($results->avg('ping'), 2),
-            'total_tests' => $results->count(),
-            'successful_tests' => $results->where('status', ResultStatus::Completed)->count(),
-            'failed_tests' => $results->where('status', ResultStatus::Failed)->count(),
-            'healthy_tests' => $results->where('healthy', '===', true)->count(),
-            'unhealthy_tests' => $results->where('healthy', '===', false)->count(),
-        ];
-
-        // Calculate per-server averages (only completed tests)
-        $serverStats = $results
-            ->where('status', '===', ResultStatus::Completed)
-            ->groupBy('server_name')
-            ->map(function ($serverResults) {
-                return [
-                    'server_name' => $serverResults->first()->server_name ?? 'Unknown',
-                    'count' => $serverResults->count(),
-                    'download_avg' => $serverResults->avg('download'),
-                    'upload_avg' => $serverResults->avg('upload'),
-                    'ping_avg' => round($serverResults->avg('ping'), 2),
-                ];
-            })
-            ->values()
-            ->sortByDesc('count');
+        $stats = $reportService->calculateStats($results);
+        $serverStats = $reportService->calculateServerStats($results);
 
         $period = 'Daily';
         $periodLabel = now()->subDay()->format('F j, Y');
