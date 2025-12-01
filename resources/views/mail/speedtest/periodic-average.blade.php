@@ -5,14 +5,15 @@
 
 ---
 
-## Performance Averages
+## Performance Statistics
 
 <x-mail::table>
-| **Metric**         | **Value**                  |
-|:-------------------|---------------------------:|
-| Download           | {{ $stats['download_avg'] }} |
-| Upload             | {{ $stats['upload_avg'] }}   |
-| Ping               | {{ $stats['ping_avg'] }}     |
+| **Metric**   | **Average** | **Highest** | **Lowest** |
+|:-------------|------------:|------------:|-----------:|
+| Download     | {{ $stats['download_avg'] }} | {{ $stats['download_max'] }} | {{ $stats['download_min'] }} |
+| Upload       | {{ $stats['upload_avg'] }} | {{ $stats['upload_max'] }} | {{ $stats['upload_min'] }} |
+| Ping         | {{ $stats['ping_avg'] }} | {{ $stats['ping_min'] }} | {{ $stats['ping_max'] }} |
+| Packet Loss  | {{ $stats['packet_loss_avg'] }} | {{ $stats['packet_loss_max'] }} | {{ $stats['packet_loss_min'] }} |
 </x-mail::table>
 
 ---
