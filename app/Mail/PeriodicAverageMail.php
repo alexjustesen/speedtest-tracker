@@ -20,6 +20,7 @@ class PeriodicAverageMail extends Mailable implements ShouldQueue
         public array $stats,
         public string $period,
         public string $periodLabel,
+        public $serverStats = null,
     ) {}
 
     /**

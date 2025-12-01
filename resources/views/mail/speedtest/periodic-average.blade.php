@@ -29,6 +29,22 @@
 | Unhealthy Tests    | {{ $stats['unhealthy_tests'] }}         |
 </x-mail::table>
 
+@if($serverStats && $serverStats->isNotEmpty())
+
+---
+
+## Per-Server Averages
+
+<x-mail::table>
+| **Server Name** | **Tests** | **Download** | **Upload** | **Ping** |
+|:----------------|----------:|-------------:|-----------:|---------:|
+@foreach($serverStats as $server)
+| {{ $server['server_name'] }} | {{ $server['count'] }} | {{ App\Helpers\Number::toBitRate(bits: $server['download_avg'] * 8, precision: 2) }} | {{ App\Helpers\Number::toBitRate(bits: $server['upload_avg'] * 8, precision: 2) }} | {{ $server['ping_avg'] }} ms |
+@endforeach
+</x-mail::table>
+
+@endif
+
 ---
 
 <x-mail::button :url="config('app.url') . '/admin/results'">
