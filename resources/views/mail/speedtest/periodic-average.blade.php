@@ -10,9 +10,9 @@
 <x-mail::table>
 | **Metric**         | **Value**                  |
 |:-------------------|---------------------------:|
-| Average Download   | {{ $stats['download_avg'] }} |
-| Average Upload     | {{ $stats['upload_avg'] }} |
-| Average Ping       | {{ $stats['ping_avg'] }} |
+| Download           | {{ $stats['download_avg'] }} |
+| Upload             | {{ $stats['upload_avg'] }}   |
+| Ping               | {{ $stats['ping_avg'] }}     |
 </x-mail::table>
 
 ---
