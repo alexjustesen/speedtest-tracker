@@ -121,6 +121,22 @@ class Notification extends SettingsPage
                                                     ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
+                                        Fieldset::make('Periodic Reports')
+                                            ->columns(1)
+                                            ->schema([
+                                                Checkbox::make('mail_daily_average_enabled')
+                                                    ->label('Daily Average Report')
+                                                    ->helperText('Sends daily average statistics every day at 6 AM'),
+
+                                                Checkbox::make('mail_weekly_average_enabled')
+                                                    ->label('Weekly Average Report')
+                                                    ->helperText('Sends weekly average statistics every Monday at 6 AM'),
+
+                                                Checkbox::make('mail_monthly_average_enabled')
+                                                    ->label('Monthly Average Report')
+                                                    ->helperText('Sends monthly average statistics on the 1st of each month at 6 AM'),
+                                            ]),
+
                                         Repeater::make('mail_recipients')
                                             ->label(__('settings/notifications.recipients'))
                                             ->schema([

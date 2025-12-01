@@ -86,6 +86,12 @@ class NotificationSettings extends Settings
 
     public ?array $gotify_webhooks;
 
+    public bool $mail_daily_average_enabled;
+
+    public bool $mail_weekly_average_enabled;
+
+    public bool $mail_monthly_average_enabled;
+
     public static function group(): string
     {
         return 'notification';
