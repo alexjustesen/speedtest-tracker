@@ -27,12 +27,22 @@ class ScheduleObserver
     }
 
     /**
+     * Handle the Schedule "updating" event.
+     */
+    public function updating(Schedule $schedule): void
+    {
+        if ($schedule->isDirty('cron_schedule')) {
+            UpdateNextRun::run($schedule);
+            CheckCronOverlap::run($schedule);
+        }
+    }
+
+    /**
      * Handle the Schedule "updated" event.
      */
     public function updated(Schedule $schedule): void
     {
-        UpdateNextRun::run($schedule);
-        CheckCronOverlap::run($schedule);
+        //
     }
 
     /**
