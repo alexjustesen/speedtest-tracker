@@ -7,27 +7,22 @@ return [
     // Database notifications
     'database' => 'Base de données',
     'database_description' => 'Les notifications envoyées à ce salon apparaîtront sous l\'icône 🔔 dans l\'entête.',
-    'database_on_speedtest_run' => 'Notifier à chaque test de vitesse',
-    'database_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
     'test_database_channel' => 'Tester le canal de base de données',
 
     // Mail notifications
     'mail' => 'Courrier',
     'recipients' => 'Destinataires',
-    'mail_on_speedtest_run' => 'Notifier à chaque test de vitesse',
-    'mail_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
     'test_mail_channel' => 'Tester le canal de messagerie',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'webhook_on_speedtest_run' => 'Notifier à chaque test de vitesse',
-    'webhook_on_threshold_failure' => 'Notifier en cas de dépassement de seuil',
     'test_webhook_channel' => 'Tester le canal webhook',
+    'webhook_hint_description' => 'Ce sont des webhooks génériques. Pour des exemples de charge utile et des détails d\'implémentation, consultez la documentation.',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notifier à chaque test de vitesse',
-    'notify_on_threshold_failures' => 'Notifier en cas de dépassement de seuil',
+    'notify_on_every_speedtest_run' => 'Notifier à chaque test de vitesse programmé',
+    'notify_on_threshold_failures' => 'Notifier les pannes de seuil pour les tests de vitesse programmés',
 
     // Test notification messages
     'test_notifications' => [
