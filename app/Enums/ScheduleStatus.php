@@ -25,10 +25,10 @@ enum ScheduleStatus: string implements HasColor, HasLabel
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::Healthy => 'Healthy',
-            self::Unhealthy => 'Unhealthy',
-            self::Failed => 'Failed',
-            self::NotTested => 'Not Tested',
+            self::Healthy => __('enums.schedule_status.healthy'),
+            self::Unhealthy => __('enums.schedule_status.unhealthy'),
+            self::Failed => __('enums.schedule_status.failed'),
+            self::NotTested => __('enums.schedule_status.not_tested'),
         };
     }
 }
