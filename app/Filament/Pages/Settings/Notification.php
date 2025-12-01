@@ -85,10 +85,10 @@ class Notification extends SettingsPage
                                             ->columns(1)
                                             ->schema([
                                                 Checkbox::make('database_on_speedtest_run')
-                                                    ->label(__('settings/notifications.database_on_speedtest_run')),
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
 
                                                 Checkbox::make('database_on_threshold_failure')
-                                                    ->label(__('settings/notifications.database_on_threshold_failure')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
                                         Actions::make([
@@ -117,10 +117,10 @@ class Notification extends SettingsPage
                                             ->columns(1)
                                             ->schema([
                                                 Checkbox::make('mail_on_speedtest_run')
-                                                    ->label(__('settings/notifications.mail_on_speedtest_run')),
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
 
                                                 Checkbox::make('mail_on_threshold_failure')
-                                                    ->label(__('settings/notifications.mail_on_threshold_failure')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
                                         Repeater::make('mail_recipients')
@@ -175,10 +175,10 @@ class Notification extends SettingsPage
                                             ->columns(1)
                                             ->schema([
                                                 Checkbox::make('webhook_on_speedtest_run')
-                                                    ->label(__('settings/notifications.webhook_on_speedtest_run')),
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
 
                                                 Checkbox::make('webhook_on_threshold_failure')
-                                                    ->label(__('settings/notifications.webhook_on_threshold_failure')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
                                         Repeater::make('webhook_urls')
