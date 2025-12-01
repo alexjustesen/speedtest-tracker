@@ -8,7 +8,7 @@
 ## Performance Statistics
 
 <x-mail::table>
-| **Metric**   | **Average** | **Highest** | **Lowest** |
+| **Metric**   | **Average** | **Best** | **Worst** |
 |:-------------|------------:|------------:|-----------:|
 | Download     | {{ $stats['download_avg'] }} | {{ $stats['download_max'] }} | {{ $stats['download_min'] }} |
 | Upload       | {{ $stats['upload_avg'] }} | {{ $stats['upload_max'] }} | {{ $stats['upload_min'] }} |
