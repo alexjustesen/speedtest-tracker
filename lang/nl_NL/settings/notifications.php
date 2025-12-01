@@ -7,28 +7,22 @@ return [
     // Database notifications
     'database' => 'Database',
     'database_description' => 'Meldingen die naar dit kanaal worden verzonden worden weergegeven onder de 🔔 icoon in de header.',
-    'database_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
-    'database_on_threshold_failure' => 'Melding bij limiet overschrijding',
     'test_database_channel' => 'Test database notificaties',
 
     // Mail notifications
     'mail' => 'E-mailen',
     'recipients' => 'Ontvangers',
-    'mail_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
-    'mail_on_threshold_failure' => 'Melding bij limiet overschrijding',
     'test_mail_channel' => 'Test e-mailkanaal',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'webhook_on_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
-    'webhook_on_threshold_failure' => 'Melding bij limiet overschrijding',
     'test_webhook_channel' => 'Test webhook kanaal',
     'webhook_hint_description' => 'Dit zijn generieke webhooks. Raadpleeg de documentatie voor voorbeelden van payloads en implementatiedetails.',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notificatie bij elke snelheidstest uitgevoerd',
-    'notify_on_threshold_failures' => 'Melding bij drempelfouten',
+    'notify_on_every_speedtest_run' => 'Notificatie bij elke geplande snelheidstest',
+    'notify_on_threshold_failures' => 'Melding bij drempelfouten voor geplande snelheidstests',
 
     // Test notification messages
     'test_notifications' => [
