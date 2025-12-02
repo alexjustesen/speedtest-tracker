@@ -19,8 +19,9 @@ Route::get('/', HomeController::class)
     ->middleware(['getting-started', 'public-dashboard'])
     ->name('home');
 
-Route::get('/metrics', MetricsController::class)
-    ->name('metrics');
+Route::get('/prometheus', MetricsController::class)
+    ->middleware(App\Http\Middleware\PrometheusAllowedIpMiddleware::class)
+    ->name('prometheus');
 
 Route::view('/getting-started', 'getting-started')
     ->name('getting-started');

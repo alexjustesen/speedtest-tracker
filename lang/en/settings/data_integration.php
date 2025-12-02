@@ -37,10 +37,8 @@ return [
     'prometheus' => 'Prometheus',
     'prometheus_enabled' => 'Enable',
     'prometheus_enabled_helper_text' => 'When enabled, metrics for each new speedtest will be available at the /prometheus endpoint.',
-    'prometheus_basic_auth_enabled' => 'Use Basic Authentication',
-    'prometheus_basic_auth_credentials' => 'Basic Authentication Credentials',
-    'prometheus_basic_auth_username' => 'Username',
-    'prometheus_basic_auth_password' => 'Password',
+    'prometheus_allowed_ips' => 'Allowed IP Addresses',
+    'prometheus_allowed_ips_helper' => 'List of IP addresses or CIDR ranges (e.g., 192.168.1.0/24) allowed to access the metrics endpoint. Leave empty to allow all IPs.',
 
     // Common labels
     'org' => 'Org',

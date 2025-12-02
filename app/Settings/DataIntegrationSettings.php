@@ -20,11 +20,7 @@ class DataIntegrationSettings extends Settings
 
     public bool $prometheus_enabled;
 
-    public bool $prometheus_basic_auth_enabled;
-
-    public ?string $prometheus_basic_auth_username;
-
-    public ?string $prometheus_basic_auth_password;
+    public array $prometheus_allowed_ips = [];
 
     public static function group(): string
     {

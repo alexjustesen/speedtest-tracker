@@ -7,6 +7,7 @@ use App\Jobs\Influxdb\v2\TestConnectionJob;
 use App\Settings\DataIntegrationSettings;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
@@ -139,22 +140,12 @@ class DataIntegration extends SettingsPage
                                 Grid::make(['default' => 1, 'md' => 3])
                                     ->hidden(fn (Get $get) => $get('prometheus_enabled') !== true)
                                     ->schema([
-                                        Toggle::make('prometheus_basic_auth_enabled')
-                                            ->label(__('settings/data_integration.prometheus_basic_auth_enabled'))
-                                            ->reactive()
+                                        TagsInput::make('prometheus_allowed_ips')
+                                            ->label(__('settings/data_integration.prometheus_allowed_ips'))
+                                            ->helperText(__('settings/data_integration.prometheus_allowed_ips_helper'))
+                                            ->placeholder('192.168.1.100')
+                                            ->splitKeys(['Tab', ',', ' '])
                                             ->columnSpanFull(),
-                                        TextInput::make('prometheus_basic_auth_username')
-                                            ->label(__('settings/data_integration.prometheus_basic_auth_username'))
-                                            ->maxLength(255)
-                                            ->required(fn (Get $get) => $get('prometheus_basic_auth_enabled') === true)
-                                            ->hidden(fn (Get $get) => $get('prometheus_basic_auth_enabled') !== true)
-                                            ->columnSpan(['md' => 1]),
-                                        TextInput::make('prometheus_basic_auth_password')
-                                            ->label(__('settings/data_integration.prometheus_basic_auth_password'))
-                                            ->maxLength(255)
-                                            ->password()
-                                            ->required(fn (Get $get) => $get('prometheus_basic_auth_enabled') === true)
-                                            ->hidden(fn (Get $get) => $get('prometheus_basic_auth_enabled') !== true),
                                     ]),
                             ])
                             ->columnSpanFull(),
