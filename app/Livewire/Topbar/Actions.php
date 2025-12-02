@@ -16,14 +16,14 @@ use Filament\Support\Enums\IconPosition;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class RunSpeedtestAction extends Component implements HasActions, HasForms
+class Actions extends Component implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 
     public function dashboardAction(): Action
     {
         return Action::make('home')
-            ->label(__('results.public_dashboard'))
+            ->label(__('general.metrics'))
             ->icon('heroicon-o-chart-bar')
             ->iconPosition(IconPosition::Before)
             ->color('gray')
@@ -77,6 +77,6 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
 
     public function render()
     {
-        return view('livewire.topbar.run-speedtest-action');
+        return view('livewire.topbar.actions');
     }
 }

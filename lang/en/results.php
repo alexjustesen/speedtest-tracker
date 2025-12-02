@@ -72,7 +72,6 @@ return [
 
     // Run Speedtest Action
     'speedtest' => 'Speedtest',
-    'public_dashboard' => 'Public Dashboard',
     'select_server' => 'Select Server',
     'select_server_helper' => 'Leave empty to run the speedtest without specifying a server. Blocked servers will be skipped.',
     'manual_servers' => 'Manual servers',

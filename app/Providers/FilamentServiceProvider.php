@@ -24,7 +24,7 @@ class FilamentServiceProvider extends ServiceProvider
     {
         FilamentView::registerRenderHook(
             PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
-            fn (): string => Blade::render("@livewire('topbar.run-speedtest-action')"),
+            fn (): string => Blade::render("@livewire('topbar.actions')"),
         );
     }
 }

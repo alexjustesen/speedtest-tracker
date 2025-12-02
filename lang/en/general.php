@@ -54,6 +54,7 @@ return [
     'last_month' => 'Last month',
 
     // Metrics
+    'metrics' => 'Metrics',
     'average' => 'Average',
     'high' => 'High',
     'low' => 'Low',
