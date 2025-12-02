@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MetricsController;
+use App\Http\Middleware\PrometheusAllowedIpMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +21,7 @@ Route::get('/', HomeController::class)
     ->name('home');
 
 Route::get('/prometheus', MetricsController::class)
-    ->middleware(App\Http\Middleware\PrometheusAllowedIpMiddleware::class)
+    ->middleware(PrometheusAllowedIpMiddleware::class)
     ->name('prometheus');
 
 Route::view('/getting-started', 'getting-started')
