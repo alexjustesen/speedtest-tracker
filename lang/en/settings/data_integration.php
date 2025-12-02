@@ -6,6 +6,7 @@ return [
 
     // InfluxDB v2
     'influxdb_v2' => 'InfluxDB v2',
+    'influxdb_v2_description' => 'When enabled, all new Speedtest results will also be sent to InfluxDB.',
     'influxdb_v2_enabled' => 'Enable',
     'influxdb_v2_url' => 'URL',
     'influxdb_v2_url_placeholder' => 'http://your-influxdb-instance',
@@ -35,6 +36,7 @@ return [
     // Prometheus
     'prometheus' => 'Prometheus',
     'prometheus_enabled' => 'Enable',
+    'prometheus_enabled_helper_text' => 'When enabled, metrics for each new speedtest will be available at the /prometheus endpoint.',
     'prometheus_basic_auth_enabled' => 'Use Basic Authentication',
     'prometheus_basic_auth_credentials' => 'Basic Authentication Credentials',
     'prometheus_basic_auth_username' => 'Username',
