@@ -1,0 +1,27 @@
+name: Trigger Docker Image Build
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  trigger-docker-build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Generate GitHub App token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: alexjustesen
+          repositories: docker-speedtest-tracker
+
+      - name: Trigger docker-speedtest-tracker build
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          repository: alexjustesen/docker-speedtest-tracker
+          event-type: speedtest-tracker-release
+          client-payload: '{"tag_name": "${{ github.event.release.tag_name }}"}'
