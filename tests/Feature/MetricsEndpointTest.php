@@ -12,7 +12,7 @@ describe('metrics endpoint', function () {
     test('returns 404 when prometheus is disabled', function () {
         app(DataIntegrationSettings::class)->fill(['prometheus_enabled' => false])->save();
 
-        $response = $this->get('/metrics');
+        $response = $this->get('/prometheus');
 
         $response->assertNotFound();
     });
@@ -25,7 +25,7 @@ describe('metrics endpoint', function () {
 
         Result::factory()->create();
 
-        $response = $this->get('/metrics');
+        $response = $this->get('/prometheus');
 
         $response->assertSuccessful();
         $response->assertHeader('Content-Type', 'text/plain; version=0.0.4; charset=utf-8');
@@ -37,7 +37,7 @@ describe('metrics endpoint', function () {
             'prometheus_allowed_ips' => ['192.168.1.100', '10.0.0.1'],
         ])->save();
 
-        $response = $this->get('/metrics', [
+        $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '192.168.1.50',
         ]);
 
@@ -52,7 +52,7 @@ describe('metrics endpoint', function () {
 
         Result::factory()->create();
 
-        $response = $this->get('/metrics', [
+        $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '192.168.1.100',
         ]);
 
@@ -68,7 +68,7 @@ describe('metrics endpoint', function () {
 
         Result::factory()->create();
 
-        $response = $this->get('/metrics', [
+        $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '10.0.0.1',
         ]);
 
@@ -83,7 +83,7 @@ describe('metrics endpoint', function () {
 
         Result::factory()->create();
 
-        $response = $this->get('/metrics', [
+        $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '192.168.1.150',
         ]);
 
@@ -96,7 +96,7 @@ describe('metrics endpoint', function () {
             'prometheus_allowed_ips' => ['192.168.1.0/24'],
         ])->save();
 
-        $response = $this->get('/metrics', [
+        $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '192.168.2.1',
         ]);
 
@@ -111,13 +111,13 @@ describe('metrics endpoint', function () {
 
         Result::factory()->create();
 
-        $response = $this->get('/metrics', [
+        $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '192.168.1.50',
         ]);
 
         $response->assertSuccessful();
 
-        $response = $this->get('/metrics', [
+        $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '10.0.0.1',
         ]);
 
