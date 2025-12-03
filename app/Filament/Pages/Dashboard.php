@@ -2,20 +2,17 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\RecentDownloadChartWidget;
-use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
-use App\Filament\Widgets\RecentJitterChartWidget;
-use App\Filament\Widgets\RecentPingChartWidget;
-use App\Filament\Widgets\RecentUploadChartWidget;
-use App\Filament\Widgets\RecentUploadLatencyChartWidget;
-use App\Filament\Widgets\StatsOverviewWidget;
+use App\Enums\ResultStatus;
+use App\Models\Result;
 use Carbon\Carbon;
 use Cron\CronExpression;
 use Filament\Pages\Dashboard as BasePage;
+use Illuminate\Support\Number;
+use Livewire\Attributes\Computed;
 
 class Dashboard extends BasePage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-chart-bar';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-home';
 
     protected string $view = 'filament.pages.dashboard';
 
@@ -29,31 +26,37 @@ class Dashboard extends BasePage
         return __('dashboard.title');
     }
 
-    public function getSubheading(): ?string
+    #[Computed()]
+    public function resultsStats(): array
     {
-        $schedule = config('speedtest.schedule');
+        $totalResults = Result::count();
+        $completedResults = Result::where('status', ResultStatus::Completed)->count();
+        $failedResults = Result::where('status', ResultStatus::Failed)->count();
 
-        if (blank($schedule) || $schedule === false) {
-            return __('dashboard.no_speedtests_scheduled');
-        }
-
-        $cronExpression = new CronExpression($schedule);
-
-        $nextRunDate = Carbon::parse($cronExpression->getNextRunDate(timeZone: config('app.display_timezone')))->format(config('app.datetime_format'));
-
-        return __('dashboard.next_speedtest_at').': '.$nextRunDate;
+        return [
+            'total' => Number::format($totalResults),
+            'completed' => Number::format($completedResults),
+            'failed' => Number::format($failedResults),
+        ];
     }
 
-    protected function getHeaderWidgets(): array
+    #[Computed()]
+    public function latestResult(): ?Result
     {
-        return [
-            StatsOverviewWidget::make(),
-            RecentDownloadChartWidget::make(),
-            RecentUploadChartWidget::make(),
-            RecentPingChartWidget::make(),
-            RecentJitterChartWidget::make(),
-            RecentDownloadLatencyChartWidget::make(),
-            RecentUploadLatencyChartWidget::make(),
-        ];
+        return Result::where('status', ResultStatus::Completed)
+            ->latest()
+            ->first();
+    }
+
+    #[Computed()]
+    public function nextSpeedtest(): ?Carbon
+    {
+        if ($schedule = config('speedtest.schedule')) {
+            $cronExpression = new CronExpression($schedule);
+
+            return Carbon::parse(time: $cronExpression->getNextRunDate(timeZone: config('app.display_timezone')));
+        }
+
+        return null;
     }
 }
