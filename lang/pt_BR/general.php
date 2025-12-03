@@ -39,6 +39,7 @@ return [
     'settings' => 'Confirgurações',
     'users' => 'Usuários',
     'documentation' => 'Documentação',
+    'view_documentation' => 'Ver documentação',
     'links' => 'Links',
     'donate' => 'Doar',
 
