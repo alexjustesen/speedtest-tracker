@@ -7,27 +7,22 @@ return [
     // Database notifications
     'database' => 'Banco de Dados',
     'database_description' => 'Notificações enviadas para este canal aparecerão sob o 🔔 ícone no cabeçalho.',
-    'database_on_speedtest_run' => 'Notificar em todos os testes de velocidade',
-    'database_on_threshold_failure' => 'Notificar em falhas com limite',
     'test_database_channel' => 'Testar canal do banco de dados',
 
     // Mail notifications
     'mail' => 'Correio',
     'recipients' => 'Destinatários',
-    'mail_on_speedtest_run' => 'Notificar a cada execução do teste de velocidade',
-    'mail_on_threshold_failure' => 'Notificar em falhas com limite',
     'test_mail_channel' => 'Testar canal de e-mail',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'webhook_on_speedtest_run' => 'Notificar a cada execução do teste de velocidade',
-    'webhook_on_threshold_failure' => 'Notificar em falhas com limite',
     'test_webhook_channel' => 'Testar canal webhook',
+    'webhook_hint_description' => 'Estes são webhooks genéricos. Para exemplos de payload e detalhes de implementação, consulte a documentação.',
 
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notificar a cada execução do teste de velocidade',
-    'notify_on_threshold_failures' => 'Notificar em falhas com limite',
+    'notify_on_threshold_failures' => 'Notificar sobre falhas nos limites de testes de velocidade agendados',
 
     // Test notification messages
     'test_notifications' => [
