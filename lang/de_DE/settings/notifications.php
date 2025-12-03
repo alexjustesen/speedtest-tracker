@@ -7,27 +7,22 @@ return [
     // Database notifications
     'database' => 'Datenbank',
     'database_description' => 'Benachrichtigungen, die an diesen Kanal gesendet werden, werden unter 🔔 Symbol in der Kopfzeile angezeigt.',
-    'database_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
-    'database_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
     'test_database_channel' => 'Datenbankkanal testen',
 
     // Mail notifications
     'mail' => 'Mail',
     'recipients' => 'Empfänger',
-    'mail_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
-    'mail_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
     'test_mail_channel' => 'Mail-Kanal testen',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'webhook_on_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
-    'webhook_on_threshold_failure' => 'Benachrichtigen bei Schwellenausfällen',
     'test_webhook_channel' => 'Webhook-Kanal testen',
+    'webhook_hint_description' => 'Dies sind allgemeine Webhooks. Für Payload-Beispiele und Implementierungsdetails lesen Sie die Dokumentation.',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Bei jedem Schnelltest benachrichtigen',
-    'notify_on_threshold_failures' => 'Benachrichtigen bei Schwellenausfällen',
+    'notify_on_every_speedtest_run' => 'Benachrichtigung bei jedem geplanten Geschwindigkeitstest',
+    'notify_on_threshold_failures' => 'Benachrichtigung bei Schwellenausfällen für geplante Geschwindigkeitstests',
 
     // Test notification messages
     'test_notifications' => [
