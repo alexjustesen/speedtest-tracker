@@ -39,6 +39,7 @@ return [
     'settings' => 'Einstellungen',
     'users' => 'Benutzer',
     'documentation' => 'Dokumentation',
+    'view_documentation' => 'Dokumentation anzeigen',
     'links' => 'Links',
     'donate' => 'Spenden',
 
