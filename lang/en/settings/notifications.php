@@ -18,6 +18,7 @@ return [
     'apprise' => 'Apprise',
     'enable_apprise_notifications' => 'Enable Apprise notifications',
     'apprise_sidecar' => 'Apprise Sidecar',
+    'apprise_sidecar_url' => 'Apprise Sidecar URL',
     'apprise_verify_ssl' => 'Verify SSL',
     'apprise_channels' => 'Apprise Channels',
     'apprise_channel_url' => 'Channel URL',

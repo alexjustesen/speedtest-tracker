@@ -229,6 +229,20 @@ class Notification extends SettingsPage
                                 ])
                                     ->hidden(fn (Get $get) => $get('apprise_enabled') !== true)
                                     ->schema([
+                                        Fieldset::make(__('settings/notifications.apprise_sidecar'))
+                                            ->schema([
+                                                TextInput::make('apprise_sidecar_url')
+                                                    ->label(__('settings/notifications.apprise_sidecar_url'))
+                                                    ->placeholder('http://localhost:8000')
+                                                    ->maxLength(2000)
+                                                    ->required()
+                                                    ->url()
+                                                    ->columnSpanFull(),
+                                                Checkbox::make('apprise_verify_ssl')
+                                                    ->label(__('settings/notifications.apprise_verify_ssl'))
+                                                    ->default(true)
+                                                    ->columnSpanFull(),
+                                            ]),
                                         Fieldset::make(__('settings.triggers'))
                                             ->schema([
                                                 Checkbox::make('apprise_on_speedtest_run')
@@ -236,13 +250,6 @@ class Notification extends SettingsPage
                                                     ->columnSpanFull(),
                                                 Checkbox::make('apprise_on_threshold_failure')
                                                     ->label(__('settings/notifications.notify_on_threshold_failures'))
-                                                    ->columnSpanFull(),
-                                            ]),
-                                        Fieldset::make(__('settings/notifications.apprise_sidecar'))
-                                            ->schema([
-                                                Checkbox::make('apprise_verify_ssl')
-                                                    ->label(__('settings/notifications.apprise_verify_ssl'))
-                                                    ->default(true)
                                                     ->columnSpanFull(),
                                             ]),
                                         Repeater::make('apprise_channel_urls')

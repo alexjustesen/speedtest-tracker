@@ -21,8 +21,14 @@ class AppriseChannel
             return;
         }
 
-        $appriseUrl = rtrim(config('services.apprise.url'), '/');
         $settings = app(NotificationSettings::class);
+        $appriseUrl = rtrim($settings->apprise_sidecar_url ?? '', '/');
+
+        if (empty($appriseUrl)) {
+            Log::warning('Apprise notification skipped: No sidecar URL configured');
+
+            return;
+        }
 
         try {
             $request = Http::timeout(5)
