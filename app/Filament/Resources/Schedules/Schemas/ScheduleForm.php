@@ -94,13 +94,9 @@ class ScheduleForm
                                 ->required()
                                 ->live(),
 
-                            Repeater::make('options.servers')
-                                ->schema([
-                                    TextInput::make('server_id')
-                                        ->label(__('schedules.server_id'))
-                                        ->placeholder(__('schedules.server_id_placeholder'))
-                                        ->required(),
-                                ])
+                            TagsInput::make('options.servers')
+                                ->label(__('schedules.server_id'))
+                                ->placeholder(__('schedules.server_id_placeholder'))
                                 ->hidden(fn (Get $get) => $get('options.server_preference') === 'auto'),
                         ]),
 
