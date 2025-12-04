@@ -149,7 +149,7 @@ return [
     |
     */
 
-    'datetime_format' => env('DATETIME_FORMAT', 'M. jS, Y g:ia'),
+    'datetime_format' => env('DATETIME_FORMAT', 'M. j, Y g:ia'),
 
     'display_timezone' => env('DISPLAY_TIMEZONE', 'UTC'),
 
