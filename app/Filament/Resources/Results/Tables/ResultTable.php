@@ -315,7 +315,7 @@ class ResultTable
                     ->dropdownPlacement('left-start'),
             ])
             ->defaultSort('id', 'desc')
-            ->paginationPageOptions([5, 10, 25, 50, 'all'])
+            ->paginationPageOptions([10, 25, 50])
             ->deferLoading()
             ->poll('60s');
     }
