@@ -134,7 +134,7 @@ class DataIntegration extends SettingsPage
                             ->schema([
                                 Toggle::make('prometheus_enabled')
                                     ->label(__('settings/data_integration.prometheus_enabled'))
-                                    ->helperText(__('settings/data_integration.influxdb_v2_description'))
+                                    ->helperText(__('settings/data_integration.prometheus_enabled_helper_text'))
                                     ->reactive()
                                     ->columnSpanFull(),
                                 Grid::make(['default' => 1, 'md' => 3])

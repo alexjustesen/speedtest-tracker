@@ -39,6 +39,7 @@ return [
     'settings' => 'Instellingen',
     'users' => 'Gebruikers',
     'documentation' => 'Documentatie',
+    'view_documentation' => 'Bekijk documentatie',
     'links' => 'Koppelingen',
     'donate' => 'Doneren',
 

@@ -33,6 +33,13 @@ return [
     'influxdb_bulk_write_success' => 'Charge de données en masse terminée sur Influxdb.',
     'influxdb_bulk_write_success_body' => 'Les données ont été envoyées à InfluxDB, vérifiez si les données ont été reçues.',
 
+    // Prometheus
+    'prometheus' => 'Prometheus',
+    'prometheus_enabled' => 'Activer',
+    'prometheus_enabled_helper_text' => 'Lorsque cette option est activée, les métriques pour chaque nouveau test de vitesse seront disponibles au point de terminaison /prometheus.',
+    'prometheus_allowed_ips' => 'Adresses IP autorisées',
+    'prometheus_allowed_ips_helper' => 'Liste des adresses IP ou des plages CIDR (par exemple, 192.168.1.0/24) autorisés à accéder au point de terminaison des métriques. Laisser vide pour autoriser toutes les IPs.',
+
     // Common labels
     'org' => 'Org',
     'bucket' => 'Seau',

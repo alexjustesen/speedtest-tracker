@@ -16,6 +16,7 @@ return [
     'no' => 'Non',
     'options' => 'Options',
     'details' => 'Détails',
+    'view' => 'Voir',
 
     // Common labels
     'name' => 'Nom',
@@ -38,6 +39,7 @@ return [
     'settings' => 'Réglages',
     'users' => 'Utilisateurs',
     'documentation' => 'Documentation',
+    'view_documentation' => 'Afficher la documentation',
     'links' => 'Liens',
     'donate' => 'Faire un don',
 
