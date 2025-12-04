@@ -83,10 +83,10 @@ class Notification extends SettingsPage
                                             ->columns(1)
                                             ->schema([
                                                 Checkbox::make('database_on_speedtest_run')
-                                                    ->label(__('settings/notifications.database_on_speedtest_run')),
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
 
                                                 Checkbox::make('database_on_threshold_failure')
-                                                    ->label(__('settings/notifications.database_on_threshold_failure')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
                                         Actions::make([
@@ -115,10 +115,10 @@ class Notification extends SettingsPage
                                             ->columns(1)
                                             ->schema([
                                                 Checkbox::make('mail_on_speedtest_run')
-                                                    ->label(__('settings/notifications.mail_on_speedtest_run')),
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
 
                                                 Checkbox::make('mail_on_threshold_failure')
-                                                    ->label(__('settings/notifications.mail_on_threshold_failure')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
                                         Repeater::make('mail_recipients')
@@ -144,6 +144,22 @@ class Notification extends SettingsPage
                         Tab::make(__('settings/notifications.webhook'))
                             ->icon(Heroicon::OutlinedGlobeAlt)
                             ->schema([
+                                SimpleAlert::make('wehbook_info')
+                                    ->title(__('general.documentation'))
+                                    ->description(__('settings/notifications.webhook_hint_description'))
+                                    ->border()
+                                    ->info()
+                                    ->actions([
+                                        Action::make('webhook_docs')
+                                            ->label(__('general.view_documentation'))
+                                            ->icon('heroicon-m-arrow-long-right')
+                                            ->color('info')
+                                            ->link()
+                                            ->url('https://docs.speedtest-tracker.dev/settings/notifications/webhook')
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->columnSpanFull(),
+
                                 Toggle::make('webhook_enabled')
                                     ->label(__('general.enable'))
                                     ->live(),
@@ -157,10 +173,10 @@ class Notification extends SettingsPage
                                             ->columns(1)
                                             ->schema([
                                                 Checkbox::make('webhook_on_speedtest_run')
-                                                    ->label(__('settings/notifications.webhook_on_speedtest_run')),
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
 
                                                 Checkbox::make('webhook_on_threshold_failure')
-                                                    ->label(__('settings/notifications.webhook_on_threshold_failure')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
                                         Repeater::make('webhook_urls')
