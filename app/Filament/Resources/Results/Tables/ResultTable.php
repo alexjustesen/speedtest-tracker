@@ -44,15 +44,11 @@ class ResultTable
 
                 TextColumn::make('data.interface.externalIp')
                     ->label(__('results.ip_address'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->interface->externalIp', $direction);
-                    }),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('service')
                     ->label(__('results.service'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('data.server.id')
                     ->label(__('results.server_id'))
