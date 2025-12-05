@@ -1,19 +1,25 @@
 <div wire:poll.60s>
     @filled($this->latestResult)
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 latest-result-stats">
-            <div class="flex items-center justify-between col-span-full">
-                <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                    <x-tabler-rocket class="size-5" />
-                    Latest result
-                </h2>
+            <div class="col-span-full">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                            <x-tabler-rocket class="size-5" />
+                            Latest result
+                        </h2>
 
-                <x-filament::button
-                    href="{{ url('admin/results') }}"
-                    tag="a"
-                    size="sm"
-                >
-                    {{ __('general.view') }}
-                </x-filament::button>
+                        <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->format(config('app.datetime_format')) }}</p>
+                    </div>
+
+                    <x-filament::button
+                        href="{{ url('admin/results') }}"
+                        tag="a"
+                        size="sm"
+                    >
+                        {{ __('general.view') }}
+                    </x-filament::button>
+                </div>
             </div>
 
             <x-filament::section class="col-span-1" icon="tabler-download" icon-size="md">
