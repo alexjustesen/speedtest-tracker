@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.60s>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 col-span-full">
             <x-tabler-chart-bar class="size-5" />
@@ -24,7 +24,7 @@
         </x-filament::section> --}}
 
         @filled($this->nextSpeedtest)
-            <x-filament::section class="col-span-1" wire:poll.60s>
+            <x-filament::section class="col-span-1">
                 <x-slot name="heading">
                     Next Speedtest in
                 </x-slot>
