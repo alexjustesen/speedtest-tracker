@@ -27,7 +27,7 @@ class Actions extends Component implements HasActions, HasForms
             ->iconButton()
             ->icon('tabler-chart-histogram')
             ->color('gray')
-            ->url(shouldOpenInNewTab: true, url: route('home'))
+            ->url(url: route('home'))
             ->extraAttributes([
                 'id' => 'dashboardAction',
             ]);

@@ -1,10 +1,20 @@
 <div class="latest-result-stats" wire:poll.60s>
     @filled($this->latestResult)
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 latest-result-stats">
-            <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 col-span-full">
-                <x-tabler-rocket class="size-5" />
-                Latest result
-            </h2>
+            <div class="flex items-center justify-between col-span-full">
+                <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                    <x-tabler-rocket class="size-5" />
+                    Latest result
+                </h2>
+
+                <x-filament::button
+                    href="{{ url('admin/results') }}"
+                    tag="a"
+                    size="sm"
+                >
+                    {{ __('general.view') }}
+                </x-filament::button>
+            </div>
 
             <x-filament::section class="col-span-1" icon="tabler-ruler" icon-size="md">
                 <x-slot name="heading">
