@@ -12,7 +12,7 @@ use Livewire\Attributes\Computed;
 
 class Dashboard extends BasePage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-home';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-layout-dashboard';
 
     protected string $view = 'filament.pages.dashboard';
 

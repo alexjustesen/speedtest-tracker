@@ -2,7 +2,7 @@
     <div class="space-y-6 md:space-y-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 col-span-full">
-                <x-lucide-bar-chart class="size-5" />
+                <x-tabler-chart-bar class="size-5" />
                 Platform statistics
             </h2>
 
@@ -72,7 +72,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 col-span-full">
-                    <x-lucide-rabbit class="size-5" />
+                    <x-tabler-rocket class="size-5" />
                     Latest result
                 </h2>
 
@@ -190,7 +190,10 @@
         <div class="w-full border-t border-zinc-200 dark:border-zinc-700"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <x-filament::section class="col-span-1" icon="lucide-book-open-text">
+            <x-filament::section
+                class="col-span-1"
+                icon="tabler-book"
+            >
                 <x-slot name="heading">
                     {{ __('general.documentation') }}
                 </x-slot>
@@ -210,7 +213,10 @@
                 </div>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1 h-full" icon="lucide-hand-coins">
+            <x-filament::section
+                class="col-span-1"
+                icon="tabler-cash-banknote-heart"
+            >
                 <x-slot name="heading">
                     {{ __('general.donations') }}
                 </x-slot>
@@ -232,7 +238,7 @@
 
             <x-filament::section
                 class="col-span-1"
-                icon="lucide-rabbit"
+                icon="tabler-brand-github"
             >
                 <x-slot name="heading">
                     {{ __('general.speedtest_tracker') }}

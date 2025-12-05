@@ -25,7 +25,7 @@ class Actions extends Component implements HasActions, HasForms
     {
         return Action::make('metrics')
             ->iconButton()
-            ->icon('lucide-chart-spline')
+            ->icon('tabler-chart-histogram')
             ->color('gray')
             ->url(shouldOpenInNewTab: true, url: route('home'))
             ->extraAttributes([
@@ -62,14 +62,13 @@ class Actions extends Component implements HasActions, HasForms
                     ->send();
             })
             ->modalHeading(__('results.speedtest'))
-            ->modalIcon('lucide-rabbit')
             ->modalWidth('lg')
             ->modalSubmitActionLabel(__('results.start'))
             ->button()
             ->size(Size::Medium)
             ->color('primary')
             ->label(__('results.speedtest'))
-            ->icon('lucide-rabbit')
+            ->icon('tabler-rocket')
             ->iconPosition(IconPosition::Before)
             ->hidden(! Auth::check() && Auth::user()->is_admin)
             ->extraAttributes([
