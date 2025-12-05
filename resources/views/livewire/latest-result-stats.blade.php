@@ -16,34 +16,6 @@
                 </x-filament::button>
             </div>
 
-            <x-filament::section class="col-span-1" icon="tabler-ruler" icon-size="md">
-                <x-slot name="heading">
-                    Benchmark status
-                </x-slot>
-
-                <div class="flex items-center gap-x-2">
-                    @if($this->latestResult->healthy === true)
-                        <div class="flex-none rounded-full bg-emerald-500/20 p-1">
-                            <div class="size-2 rounded-full bg-emerald-500"></div>
-                        </div>
-
-                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ __('general.healthy') }}</span>
-                    @elseif($this->latestResult->healthy === false)
-                        <div class="flex-none rounded-full bg-amber-500/20 p-1">
-                            <div class="size-2 rounded-full bg-amber-500"></div>
-                        </div>
-
-                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ __('general.unhealthy') }}</span>
-                    @else
-                        <div class="flex-none rounded-full bg-zinc-500/20 p-1">
-                            <div class="size-2 rounded-full bg-zinc-500"></div>
-                        </div>
-
-                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ __('general.not_measured') }}</span>
-                    @endif
-                </div>
-            </x-filament::section>
-
             <x-filament::section class="col-span-1" icon="tabler-download" icon-size="md">
                 <x-slot name="heading">
                     {{ __('general.download') }}
@@ -146,6 +118,17 @@
                 <p class="flex items-baseline gap-x-2">
                     <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->latestResult?->ping }}</span>
                     <span class="text-sm text-zinc-600 dark:text-zinc-400">ms</span>
+                </p>
+            </x-filament::section>
+
+            <x-filament::section class="col-span-1" icon="tabler-square-percentage" icon-size="sm">
+                <x-slot name="heading">
+                    {{ __('results.packet_loss') }}
+                </x-slot>
+
+                <p class="flex items-baseline gap-x-2">
+                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->latestResult?->packet_loss }}</span>
+                    <span class="text-sm text-zinc-600 dark:text-zinc-400">%</span>
                 </p>
             </x-filament::section>
         </div>
