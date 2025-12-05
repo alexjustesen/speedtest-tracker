@@ -88,7 +88,7 @@
                         tag="a"
                         target="_blank"
                     >
-                        {{ __('general.github_repository') }}
+                        {{ __('general.github') }} {{ str(__('general.repository'))->lower() }}
                     </x-filament::button>
                 </div>
             </x-filament::section>

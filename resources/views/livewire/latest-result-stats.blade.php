@@ -27,19 +27,19 @@
                             <div class="size-2 rounded-full bg-emerald-500"></div>
                         </div>
 
-                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Healthy</span>
+                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ __('general.healthy') }}</span>
                     @elseif($this->latestResult->healthy === false)
                         <div class="flex-none rounded-full bg-amber-500/20 p-1">
                             <div class="size-2 rounded-full bg-amber-500"></div>
                         </div>
 
-                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Unhealthy</span>
+                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ __('general.unhealthy') }}</span>
                     @else
                         <div class="flex-none rounded-full bg-zinc-500/20 p-1">
                             <div class="size-2 rounded-full bg-zinc-500"></div>
                         </div>
 
-                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Not measured</span>
+                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ __('general.not_measured') }}</span>
                     @endif
                 </div>
             </x-filament::section>

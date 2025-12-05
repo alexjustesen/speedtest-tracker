@@ -4,7 +4,6 @@ return [
     'current_version' => 'Current version',
     'latest_version' => 'Latest version',
     'github' => 'GitHub',
-    'github_repository' => 'GitHub repository',
     'repository' => 'Repository',
 
     // Common actions
@@ -70,6 +69,8 @@ return [
     'faster' => 'faster',
     'slower' => 'slower',
     'healthy' => 'Healthy',
+    'not_measured' => 'Not measured',
+    'unhealthy' => 'Unhealthy',
 
     // Units
     'ms' => 'ms',
