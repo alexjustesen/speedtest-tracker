@@ -22,6 +22,10 @@
     padding-bottom: 0px;
 }
 
+.admin-panel-dashboard-page .fi-section-header .fi-section-header-heading {
+    @apply text-sm font-medium text-zinc-700 dark:text-zinc-300;
+}
+
 .admin-panel-dashboard-page .fi-section-content-ctn {
     border-top: none;
 }
