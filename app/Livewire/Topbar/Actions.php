@@ -61,7 +61,8 @@ class Actions extends Component implements HasActions, HasForms
                     ->success()
                     ->send();
             })
-            ->modalHeading(__('results.run_speedtest'))
+            ->modalHeading(__('results.speedtest'))
+            ->modalIcon('lucide-rabbit')
             ->modalWidth('lg')
             ->modalSubmitActionLabel(__('results.start'))
             ->button()
