@@ -72,7 +72,6 @@ return [
 
     // Run Speedtest Action
     'speedtest' => 'Snelheidstest',
-    'public_dashboard' => 'Openbaar Dashboard',
     'select_server' => 'Selecteer Server',
     'select_server_helper' => 'Laat leeg om de snelheidstest uit te voeren zonder een server op te geven. Geblokkeerde servers zullen worden overgeslagen.',
     'manual_servers' => 'Handmatige servers',
