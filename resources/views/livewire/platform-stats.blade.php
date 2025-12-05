@@ -51,7 +51,7 @@
 
         <x-filament::section class="col-span-1">
             <x-slot name="heading">
-                Total successful tests
+                Total completed tests
             </x-slot>
 
             <p class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->platformStats['completed'] }}</p>
