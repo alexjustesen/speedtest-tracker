@@ -13,6 +13,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\IconPosition;
+use Filament\Support\Enums\Size;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -22,10 +23,9 @@ class Actions extends Component implements HasActions, HasForms
 
     public function dashboardAction(): Action
     {
-        return Action::make('home')
-            ->label(__('general.metrics'))
-            ->icon('heroicon-o-chart-bar')
-            ->iconPosition(IconPosition::Before)
+        return Action::make('metrics')
+            ->iconButton()
+            ->icon('lucide-chart-spline')
             ->color('gray')
             ->url(shouldOpenInNewTab: true, url: route('home'))
             ->extraAttributes([
@@ -65,9 +65,10 @@ class Actions extends Component implements HasActions, HasForms
             ->modalWidth('lg')
             ->modalSubmitActionLabel(__('results.start'))
             ->button()
+            ->size(Size::Medium)
             ->color('primary')
             ->label(__('results.speedtest'))
-            ->icon('heroicon-o-rocket-launch')
+            ->icon('lucide-rabbit')
             ->iconPosition(IconPosition::Before)
             ->hidden(! Auth::check() && Auth::user()->is_admin)
             ->extraAttributes([
