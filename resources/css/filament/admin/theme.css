@@ -1,4 +1,5 @@
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../custom.css';
 
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
@@ -16,18 +17,6 @@
 .fi-fo-field-wrp-helper-text a,
 .fi-fo-field-wrp-hint a {
     @apply font-bold underline;
-}
-
-.admin-panel-dashboard-page .fi-section-header {
-    padding-bottom: 0px;
-}
-
-.admin-panel-dashboard-page .fi-section-header .fi-section-header-heading {
-    @apply text-sm font-medium text-zinc-700 dark:text-zinc-300;
-}
-
-.admin-panel-dashboard-page .fi-section-content-ctn {
-    border-top: none;
 }
 
 @media (min-width: 768px) {
