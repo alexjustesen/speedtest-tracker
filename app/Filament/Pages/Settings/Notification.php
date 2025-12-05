@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Notification extends SettingsPage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bell-alert';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-bell-ringing';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 

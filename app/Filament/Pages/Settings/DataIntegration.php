@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DataIntegration extends SettingsPage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-circle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-database';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
