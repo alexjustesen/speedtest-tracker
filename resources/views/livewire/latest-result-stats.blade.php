@@ -1,4 +1,4 @@
-<div class="latest-result-stats" wire:poll.60s>
+<div wire:poll.60s>
     @filled($this->latestResult)
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 latest-result-stats">
             <div class="flex items-center justify-between col-span-full">
