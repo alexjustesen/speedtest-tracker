@@ -51,7 +51,7 @@
 
                 @php
                     $downloadBenchmark = Arr::get($this->latestResult->benchmarks, 'download');
-                    $downloadBenchmarkPassed = Arr::boolean($downloadBenchmark, 'passed',);
+                    $downloadBenchmarkPassed = Arr::get($downloadBenchmark, 'passed', false);
                 @endphp
 
                 @filled($downloadBenchmark)
