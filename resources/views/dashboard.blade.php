@@ -1,39 +1,26 @@
 <x-app-layout title="Dashboard">
-    <div class="grid gap-4 sm:grid-cols-6 sm:gap-8">
-        <div class="col-span-full">
-            @livewire(\App\Filament\Widgets\StatsOverviewWidget::class)
-        </div>
+    <div class="space-y-6 md:space-y-12 dashboard-page">
+        <livewire:platform-stats />
 
-        @isset($latestResult)
-            <div class="text-sm font-semibold leading-6 text-center col-span-full sm:text-base">
-                Latest result: <time title="{{ $latestResult->created_at->timezone(config('app.display_timezone'))->format(config('app.datetime_format')) }}" datetime="{{ $latestResult->created_at->timezone(config('app.display_timezone')) }}">{{ $latestResult->created_at->diffForHumans() }}</time>
-            </div>
-        @endisset
+        <livewire:latest-result-stats />
 
-        <div class="col-span-full">
+        <div class="grid grid-cols-1 gap-6">
+            <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 col-span-full">
+                <x-tabler-chart-histogram class="size-5" />
+                Metrics
+            </h2>
+
             @livewire(\App\Filament\Widgets\RecentDownloadChartWidget::class)
-        </div>
 
-        <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentUploadChartWidget::class)
-        </div>
 
-        <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentPingChartWidget::class)
-        </div>
 
-        <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentJitterChartWidget::class)
-        </div>
 
-        <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentDownloadLatencyChartWidget::class)
-        </div>
 
-        <div class="col-span-full">
             @livewire(\App\Filament\Widgets\RecentUploadLatencyChartWidget::class)
         </div>
-
     </div>
-
 </x-app-layout>

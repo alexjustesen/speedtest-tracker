@@ -38,6 +38,8 @@ return [
     'created_at' => 'Created at',
     'updated_at' => 'Updated at',
     'url' => 'URL',
+    'stats' => 'Stats',
+    'statistics' => 'Statistics',
 
     // Navigation
     'dashboard' => 'Dashboard',
