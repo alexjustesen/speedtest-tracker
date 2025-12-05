@@ -1,4 +1,4 @@
-<x-filament-panels::page>
+<x-filament-panels::page class="admin-panel-dashboard-page">
     <div class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-8 gap-6">
             {{-- <x-filament::section class="col-span-full">
@@ -63,14 +63,10 @@
         </div>
 
         @filled($this->latestResult)
+            <div class="w-full border-t border-gray-200"></div>
+
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="flex items-center col-span-full py-3 md:py-6">
-                    <div aria-hidden="true" class="w-full border-t border-gray-200"></div>
-                    <div class="relative flex justify-center">
-                        <span class="bg-gray-50 px-2 text-sm text-gray-500">Latest</span>
-                    </div>
-                    <div aria-hidden="true" class="w-full border-t border-gray-200"></div>
-                </div>
+                <h3 class="text-base font-semibold text-gray-900 col-span-full">Latest result</h3>
 
                 <x-filament::section class="col-span-1">
                     <p class="text-sm/6 font-medium text-gray-500">Benchmarks</p>
@@ -175,14 +171,15 @@
             </div>
         @endfilled
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <x-filament::section class="col-span-1">
-                <h3 class="flex items-center gap-x-2 text-base font-semibold text-gray-900">
-                    <x-lucide-book-open-text class="size-5 text-gray-600 dark:text-gray-300" />
-                    {{ __('general.documentation') }}
-                </h3>
+        <div class="w-full border-t border-gray-200"></div>
 
-                <div class="mt-2 max-w-xl text-sm text-gray-500">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <x-filament::section class="col-span-1" icon="lucide-book-open-text">
+                <x-slot name="heading">
+                    {{ __('general.documentation') }}
+                </x-slot>
+
+                <div class="text-sm text-gray-600 dark:text-gray-300">
                     <p>Need help getting started or configuring your speedtests?</p>
                 </div>
 
@@ -197,13 +194,12 @@
                 </div>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1">
-                <h3 class="flex items-center gap-x-2 text-base font-semibold text-gray-900">
-                    <x-lucide-hand-coins class="size-5 text-gray-600 dark:text-gray-300" />
+            <x-filament::section class="col-span-1 h-full" icon="lucide-hand-coins">
+                <x-slot name="heading">
                     {{ __('general.donations') }}
-                </h3>
+                </x-slot>
 
-                <div class="mt-2 max-w-xl text-sm text-gray-500">
+                <div class="text-sm text-gray-600 dark:text-gray-300">
                     <p>Support the development and maintenance of Speedtest Tracker by making a donation.</p>
                 </div>
 
@@ -218,29 +214,31 @@
                 </div>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1">
-                <div class="flex items-center justify-between">
-                    <h3 class="flex items-center gap-x-2 text-base font-semibold text-gray-900">
-                        <x-lucide-rabbit class="size-5 text-gray-600 dark:text-gray-300" />
-                        {{ __('general.speedtest_tracker') }}
-                    </h3>
+            <x-filament::section
+                class="col-span-1"
+                icon="lucide-rabbit"
+            >
+                <x-slot name="heading">
+                    {{ __('general.speedtest_tracker') }}
+                </x-slot>
 
-                    @if (\App\Services\GitHub\Repository::updateAvailable())
+                @if (\App\Services\GitHub\Repository::updateAvailable())
+                    <x-slot name="afterHeader">
                         <x-filament::badge>
                             {{ __('general.update_available') }}
                         </x-filament::badge>
-                    @endif
-                </div>
+                    </x-slot>
+                @endif
 
-                <ul role="list" class="mt-2 divide-y divide-gray-200">
-                    <li class="flex items-center justify-between py-2">
-                        <p class="text-sm text-gray-500">{{ __('general.current_version') }}</p>
-                        <p class="text-sm text-gray-500">{{ config('speedtest.build_version') }}</p>
+                <ul role="list" class="divide-y divide-gray-200 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                    <li class="flex items-center justify-between pb-2">
+                        <p class="font-medium">{{ __('general.current_version') }}</p>
+                        <p>{{ config('speedtest.build_version') }}</p>
                     </li>
 
-                    <li class="flex items-center justify-between py-2">
-                        <p class="text-sm text-gray-500">{{ __('general.latest_version') }}</p>
-                        <p class="text-sm text-gray-500">{{ \App\Services\GitHub\Repository::getLatestVersion() }}</p>
+                    <li class="flex items-center justify-between">
+                        <p class="font-medium">{{ __('general.latest_version') }}</p>
+                        <p>{{ \App\Services\GitHub\Repository::getLatestVersion() }}</p>
                     </li>
                 </ul>
 
