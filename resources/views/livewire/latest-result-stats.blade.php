@@ -6,7 +6,7 @@
                 Latest result
             </h2>
 
-            <x-filament::section class="col-span-1">
+            <x-filament::section class="col-span-1" icon="tabler-ruler" icon-size="md">
                 <x-slot name="heading">
                     Benchmark status
                 </x-slot>
@@ -34,18 +34,26 @@
                 </div>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1">
+            <x-filament::section class="col-span-1" icon="tabler-download" icon-size="md">
                 <x-slot name="heading">
                     {{ __('general.download') }}
                 </x-slot>
 
                 @php
                     $downloadBenchmark = Arr::get($this->latestResult->benchmarks, 'download');
+                    $downloadBenchmarkPassed = Arr::boolean($downloadBenchmark, 'passed',);
                 @endphp
 
                 @filled($downloadBenchmark)
                     <x-slot name="afterHeader">
-                        <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300 underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4" title="Benchmark: {{ true ? 'Passed' : 'Failed' }}">
+                        <span @class([
+                            'inline-flex items-center gap-x-1.5 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
+                            'text-zinc-700 dark:text-zinc-300' => $downloadBenchmarkPassed,
+                            'text-amber-500 dark:text-amber-400' => ! $downloadBenchmarkPassed,
+                        ]) title="Benchmark {{ $downloadBenchmarkPassed ? 'passed' : 'failed' }}">
+                            @if (! $downloadBenchmarkPassed)
+                                <x-tabler-alert-triangle class="size-4" />
+                            @endif
                             {{ Arr::get($downloadBenchmark, 'value').' '.str(Arr::get($downloadBenchmark, 'unit'))->title() }}
                         </span>
                     </x-slot>
@@ -63,18 +71,26 @@
                 </p>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1">
+            <x-filament::section class="col-span-1" icon="tabler-upload" icon-size="md">
                 <x-slot name="heading">
                     {{ __('general.upload') }}
                 </x-slot>
 
                 @php
                     $uploadBenchmark = Arr::get($this->latestResult->benchmarks, 'upload');
+                    $uploadBenchmarkPassed = Arr::get($uploadBenchmark, 'passed', false);
                 @endphp
 
                 @filled($uploadBenchmark)
                     <x-slot name="afterHeader">
-                        <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300 underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4" title="Benchmark: {{ true ? 'Passed' : 'Failed' }}">
+                        <span @class([
+                            'inline-flex items-center gap-x-1.5 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
+                            'text-zinc-700 dark:text-zinc-300' => $uploadBenchmarkPassed,
+                            'text-amber-500 dark:text-amber-400' => ! $uploadBenchmarkPassed,
+                        ]) title="Benchmark {{ $uploadBenchmarkPassed ? 'passed' : 'failed' }}">
+                            @if (! $uploadBenchmarkPassed)
+                                <x-tabler-alert-triangle class="size-4" />
+                            @endif
                             {{ Arr::get($uploadBenchmark, 'value').' '.str(Arr::get($uploadBenchmark, 'unit'))->title() }}
                         </span>
                     </x-slot>
@@ -92,18 +108,26 @@
                 </p>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1">
+            <x-filament::section class="col-span-1" icon="tabler-clock-bolt" icon-size="sm">
                 <x-slot name="heading">
                     {{ __('general.ping') }}
                 </x-slot>
 
                 @php
                     $pingBenchmark = Arr::get($this->latestResult->benchmarks, 'ping');
+                    $pingBenchmarkPassed = Arr::get($pingBenchmark, 'passed', false);
                 @endphp
 
                 @filled($pingBenchmark)
                     <x-slot name="afterHeader">
-                        <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300 underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4" title="Benchmark: {{ true ? 'Passed' : 'Failed' }}">
+                        <span @class([
+                            'inline-flex items-center gap-x-1.5 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
+                            'text-zinc-700 dark:text-zinc-300' => $pingBenchmarkPassed,
+                            'text-amber-500 dark:text-amber-400' => ! $pingBenchmarkPassed,
+                        ]) title="Benchmark {{ $pingBenchmarkPassed ? 'passed' : 'failed' }}">
+                            @if (! $pingBenchmarkPassed)
+                                <x-tabler-alert-triangle class="size-4" />
+                            @endif
                             {{ Arr::get($pingBenchmark, 'value').' '.str(Arr::get($pingBenchmark, 'unit')) }}
                         </span>
                     </x-slot>
