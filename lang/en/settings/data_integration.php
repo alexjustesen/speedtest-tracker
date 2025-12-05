@@ -28,7 +28,7 @@ return [
     'influxdb_test_success_body' => 'Test data has been sent to InfluxDB, check if the data was received.',
 
     // Bulk write notifications
-    'influxdb_bulk_write_failed' => 'Failed to build write to Influxdb.',
+    'influxdb_bulk_write_failed' => 'Failed to bulk write to Influxdb.',
     'influxdb_bulk_write_failed_body' => 'Check the logs for more details.',
     'influxdb_bulk_write_success' => 'Finished bulk data load to Influxdb.',
     'influxdb_bulk_write_success_body' => 'Data has been sent to InfluxDB, check if the data was received.',
