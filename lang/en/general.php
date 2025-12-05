@@ -1,6 +1,12 @@
 <?php
 
 return [
+    'current_version' => 'Current version',
+    'latest_version' => 'Latest version',
+    'github' => 'GitHub',
+    'github_repository' => 'GitHub repository',
+    'repository' => 'Repository',
+
     // Common actions
     'save' => 'Save',
     'cancel' => 'Cancel',
@@ -42,6 +48,7 @@ return [
     'view_documentation' => 'View documentation',
     'links' => 'Links',
     'donate' => 'Donate',
+    'donations' => 'Donations',
 
     // Roles
     'admin' => 'Admin',
