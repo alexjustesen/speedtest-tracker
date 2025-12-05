@@ -72,7 +72,6 @@ return [
 
     // Run Speedtest Action
     'speedtest' => 'Test de vitesse',
-    'public_dashboard' => 'Tableau de bord public',
     'select_server' => 'Sélectionner un serveur',
     'select_server_helper' => 'Laisser vide pour exécuter le test de vitesse sans spécifier de serveur. Les serveurs bloqués seront ignorés.',
     'manual_servers' => 'Serveurs manuels',
