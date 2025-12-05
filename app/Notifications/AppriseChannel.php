@@ -22,10 +22,10 @@ class AppriseChannel
         }
 
         $settings = app(NotificationSettings::class);
-        $appriseUrl = rtrim($settings->apprise_sidecar_url ?? '', '/');
+        $appriseUrl = rtrim($settings->apprise_server_url ?? '', '/');
 
         if (empty($appriseUrl)) {
-            Log::warning('Apprise notification skipped: No sidecar URL configured');
+            Log::warning('Apprise notification skipped: No Server URL configured');
 
             return;
         }

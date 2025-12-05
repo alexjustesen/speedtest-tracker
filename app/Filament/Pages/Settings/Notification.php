@@ -229,10 +229,10 @@ class Notification extends SettingsPage
                                 ])
                                     ->hidden(fn (Get $get) => $get('apprise_enabled') !== true)
                                     ->schema([
-                                        Fieldset::make(__('settings/notifications.apprise_sidecar'))
+                                        Fieldset::make(__('settings/notifications.apprise_server'))
                                             ->schema([
-                                                TextInput::make('apprise_sidecar_url')
-                                                    ->label(__('settings/notifications.apprise_sidecar_url'))
+                                                TextInput::make('apprise_server_url')
+                                                    ->label(__('settings/notifications.apprise_server_url'))
                                                     ->placeholder('http://localhost:8000')
                                                     ->maxLength(2000)
                                                     ->required()

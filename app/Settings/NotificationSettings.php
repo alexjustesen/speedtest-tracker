@@ -88,7 +88,7 @@ class NotificationSettings extends Settings
 
     public bool $apprise_enabled;
 
-    public ?string $apprise_sidecar_url;
+    public ?string $apprise_server_url;
 
     public bool $apprise_on_speedtest_run;
 
