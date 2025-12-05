@@ -8,6 +8,7 @@
             <x-filament::section
                 class="col-span-1"
                 icon="tabler-book"
+                icon-size="md"
             >
                 <x-slot name="heading">
                     {{ __('general.documentation') }}
@@ -31,6 +32,7 @@
             <x-filament::section
                 class="col-span-1"
                 icon="tabler-cash-banknote-heart"
+                icon-size="md"
             >
                 <x-slot name="heading">
                     {{ __('general.donations') }}
@@ -54,6 +56,7 @@
             <x-filament::section
                 class="col-span-1"
                 icon="tabler-brand-github"
+                icon-size="md"
             >
                 <x-slot name="heading">
                     {{ __('general.speedtest_tracker') }}
