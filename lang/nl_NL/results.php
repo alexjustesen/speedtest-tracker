@@ -55,9 +55,6 @@ return [
 
     // Actions
     'update_comments' => 'Reacties bijwerken',
-    'truncate_results' => 'Afkappen resultaten',
-    'truncate_results_description' => 'Weet je zeker dat je alle resultaten wilt afbreken? Deze actie is onomkeerbaar.',
-    'truncate_results_success' => 'Resultatentabel afgekapt!',
     'view_on_speedtest_net' => 'Bekijk op Speedtest.net',
 
     // Notifications
@@ -72,7 +69,6 @@ return [
 
     // Run Speedtest Action
     'speedtest' => 'Snelheidstest',
-    'public_dashboard' => 'Openbaar Dashboard',
     'select_server' => 'Selecteer Server',
     'select_server_helper' => 'Laat leeg om de snelheidstest uit te voeren zonder een server op te geven. Geblokkeerde servers zullen worden overgeslagen.',
     'manual_servers' => 'Handmatige servers',

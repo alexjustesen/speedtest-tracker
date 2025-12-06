@@ -55,9 +55,6 @@ return [
 
     // Actions
     'update_comments' => 'Kommentare aktualisieren',
-    'truncate_results' => 'Ergebnisse kürzen',
-    'truncate_results_description' => 'Sind Sie sicher, dass Sie alle Ergebnisse kürzen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',
-    'truncate_results_success' => 'Ergebnistabelle abgeschnitten!',
     'view_on_speedtest_net' => 'Auf Speedtest.net anzeigen',
 
     // Notifications
@@ -72,7 +69,6 @@ return [
 
     // Run Speedtest Action
     'speedtest' => 'Schnelligkeit',
-    'public_dashboard' => 'Öffentliches Dashboard',
     'select_server' => 'Server auswählen',
     'select_server_helper' => 'Leer lassen, um den Speedtest auszuführen, ohne einen Server anzugeben. Blockierte Server werden übersprungen.',
     'manual_servers' => 'Manuelle Server',
