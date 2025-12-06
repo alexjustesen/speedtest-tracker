@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Result;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class ResultPolicy
 {
@@ -43,8 +44,12 @@ class ResultPolicy
     /**
      * Determine whether the user can bulk delete any model.
      */
-    public function deleteAny(User $user): Response
+    public function deleteAny(?User $user): Response
     {
+        if (Auth::guest()) {
+            return Response::deny('You do not have permission to delete results.');
+        }
+
         return $user->is_admin
             ? Response::allow()
             : Response::deny('You do not have permission to delete results.');
@@ -53,26 +58,10 @@ class ResultPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Result $result): Response
+    public function delete(?User $user, Result $result): Response
     {
         return $user->is_admin
             ? Response::allow()
             : Response::deny('You do not have permission to delete this result.');
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Result $result): Response
-    {
-        return Response::deny(); // soft deletes not used
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Result $result): Response
-    {
-        return Response::deny(); // soft deletes not used
     }
 }

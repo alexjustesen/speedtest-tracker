@@ -23,7 +23,7 @@
 @import '../../vendor/filament/schemas/resources/css/index.css';
 
 /* Required by tables */
-/* @import '../../vendor/filament/tables/resources/css/index.css'; */
+@import '../../vendor/filament/tables/resources/css/index.css';
 
 /* Required by widgets */
 @import '../../vendor/filament/widgets/resources/css/index.css';

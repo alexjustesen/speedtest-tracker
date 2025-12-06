@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\ResultsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MetricsController;
 use App\Http\Middleware\PrometheusAllowedIpMiddleware;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)
     ->middleware(['getting-started', 'public-dashboard'])
     ->name('home');
+
+Route::get('/results', ResultsController::class)
+    ->middleware(['getting-started', 'public-dashboard'])
+    ->name('dashboard.results');
 
 Route::get('/prometheus', MetricsController::class)
     ->middleware(PrometheusAllowedIpMiddleware::class)

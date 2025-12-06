@@ -1,0 +1,187 @@
+<?php
+
+namespace App\Livewire;
+
+use App\Helpers\Number;
+use App\Models\Result;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Schemas\Concerns\InteractsWithSchemas;
+use Filament\Schemas\Contracts\HasSchemas;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
+
+class ListResults extends Component implements HasActions, HasSchemas, HasTable
+{
+    use InteractsWithActions, InteractsWithSchemas, InteractsWithTable;
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query(Result::query())
+            ->columns([
+                TextColumn::make('id')
+                    ->label(__('general.id'))
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
+
+                TextColumn::make('status')
+                    ->label(__('general.status'))
+                    ->badge()
+                    ->toggleable(isToggledHiddenByDefault: false),
+
+                TextColumn::make('data.interface.externalIp')
+                    ->label(__('results.ip_address'))
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('service')
+                    ->label(__('results.service'))
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('data.server.id')
+                    ->label(__('results.server_id'))
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->server->id', $direction);
+                    }),
+
+                TextColumn::make('data.server.name')
+                    ->label(__('results.server_name'))
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->server->name', $direction);
+                    }),
+
+                TextColumn::make('download')
+                    ->label(__('results.download'))
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->download) ? Number::toBitRate(bits: $record->download_bits, precision: 2) : null)
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
+
+                TextColumn::make('upload')
+                    ->label(__('results.upload'))
+                    ->getStateUsing(fn (Result $record): ?string => ! blank($record->upload) ? Number::toBitRate(bits: $record->upload_bits, precision: 2) : null)
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable(),
+
+                TextColumn::make('ping')
+                    ->label(__('results.ping'))
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable()
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
+                    }),
+
+                TextColumn::make('data.packetLoss')
+                    ->label(__('results.packet_loss'))
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->sortable()
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 2, '.', '').' %';
+                    }),
+
+                TextColumn::make('data.download.latency.jitter')
+                    ->label(__('results.download_latency_jitter'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->download->latency->jitter', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
+                    }),
+
+                TextColumn::make('data.download.latency.high')
+                    ->label(__('results.download_latency_high'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->download->latency->high', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
+                    }),
+
+                TextColumn::make('data.download.latency.low')
+                    ->label(__('results.download_latency_low'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->download->latency->low', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
+                    }),
+
+                TextColumn::make('data.upload.latency.jitter')
+                    ->label(__('results.upload_latency_jitter'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->upload->latency->jitter', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
+                    }),
+
+                TextColumn::make('data.upload.latency.high')
+                    ->label(__('results.upload_latency_high'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->upload->latency->high', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
+                    }),
+
+                TextColumn::make('data.upload.latency.low')
+                    ->label(__('results.upload_latency_low'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('data->upload->latency->low', $direction);
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return number_format((float) $state, 0, '.', '').' ms';
+                    }),
+
+                IconColumn::make('healthy')
+                    ->label(__('general.healthy'))
+                    ->boolean()
+                    ->trueIcon(Heroicon::OutlinedCheckCircle)
+                    ->falseIcon(Heroicon::OutlinedExclamationCircle)
+                    ->trueColor('success')
+                    ->falseColor('warning')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->alignment(Alignment::Center),
+
+                IconColumn::make('scheduled')
+                    ->label(__('results.scheduled'))
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->alignment(Alignment::Center),
+
+                TextColumn::make('created_at')
+                    ->label(__('general.created_at'))
+                    ->dateTime(config('app.datetime_format'))
+                    ->timezone(config('app.display_timezone'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+            ])
+            ->toolbarActions([
+                DeleteBulkAction::make()
+                    ->authorizeIndividualRecords('deleteAny'),
+            ])
+            ->defaultSort('id', 'desc')
+            ->paginationPageOptions([10, 25, 50])
+            ->poll('60s');
+    }
+
+    public function render()
+    {
+        return view('livewire.list-results');
+    }
+}
