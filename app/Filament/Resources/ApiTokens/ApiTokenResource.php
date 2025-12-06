@@ -19,6 +19,8 @@ class ApiTokenResource extends Resource
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
+    protected static ?int $navigationSort = 1;
+
     public static function getLabel(): ?string
     {
         return __('api_tokens.api_token');
