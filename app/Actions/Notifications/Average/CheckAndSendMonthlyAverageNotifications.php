@@ -2,7 +2,8 @@
 
 namespace App\Actions\Notifications\Average;
 
-use App\Jobs\Notifications\SendMonthlyAverageReportJob;
+use App\Enums\ReportPeriod;
+use App\Jobs\Notifications\SendPeriodicAverageReportJob;
 use App\Settings\NotificationSettings;
 
 class CheckAndSendMonthlyAverageNotifications
@@ -10,9 +11,10 @@ class CheckAndSendMonthlyAverageNotifications
     public static function run(): void
     {
         $notificationSettings = app(NotificationSettings::class);
+        $period = ReportPeriod::Monthly;
 
-        if ($notificationSettings->mail_monthly_average_enabled || $notificationSettings->apprise_monthly_average_enabled || $notificationSettings->webhook_monthly_average_enabled) {
-            SendMonthlyAverageReportJob::dispatch();
+        if ($period->isAnyChannelEnabled($notificationSettings)) {
+            SendPeriodicAverageReportJob::dispatch($period);
         }
     }
 }

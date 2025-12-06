@@ -2,7 +2,8 @@
 
 namespace App\Actions\Notifications\Average;
 
-use App\Jobs\Notifications\SendDailyAverageReportJob;
+use App\Enums\ReportPeriod;
+use App\Jobs\Notifications\SendPeriodicAverageReportJob;
 use App\Settings\NotificationSettings;
 
 class CheckAndSendDailyAverageNotifications
@@ -10,9 +11,10 @@ class CheckAndSendDailyAverageNotifications
     public static function run(): void
     {
         $notificationSettings = app(NotificationSettings::class);
+        $period = ReportPeriod::Daily;
 
-        if ($notificationSettings->mail_daily_average_enabled || $notificationSettings->apprise_daily_average_enabled || $notificationSettings->webhook_daily_average_enabled) {
-            SendDailyAverageReportJob::dispatch();
+        if ($period->isAnyChannelEnabled($notificationSettings)) {
+            SendPeriodicAverageReportJob::dispatch($period);
         }
     }
 }
