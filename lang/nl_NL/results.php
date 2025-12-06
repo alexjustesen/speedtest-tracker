@@ -55,9 +55,6 @@ return [
 
     // Actions
     'update_comments' => 'Reacties bijwerken',
-    'truncate_results' => 'Afkappen resultaten',
-    'truncate_results_description' => 'Weet je zeker dat je alle resultaten wilt afbreken? Deze actie is onomkeerbaar.',
-    'truncate_results_success' => 'Resultatentabel afgekapt!',
     'view_on_speedtest_net' => 'Bekijk op Speedtest.net',
 
     // Notifications
