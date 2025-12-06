@@ -55,9 +55,6 @@ return [
 
     // Actions
     'update_comments' => 'Atualizar comentários',
-    'truncate_results' => 'Truncar resultados',
-    'truncate_results_description' => 'Tem certeza que deseja truncar todos os resultados? Esta ação é irreversível.',
-    'truncate_results_success' => 'Tabela de resultados truncada!',
     'view_on_speedtest_net' => 'Ver em Speedtest.net',
 
     // Notifications
