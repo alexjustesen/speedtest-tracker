@@ -52,27 +52,4 @@ class FileSize
 
         return (bool) preg_match('/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB|TB|PB|EB)$/i', $size);
     }
-
-    /**
-     * Convert bytes to human-readable format.
-     */
-    public static function fromBytes(int|float $bytes, int $precision = 2): string
-    {
-        if ($bytes === 0) {
-            return '0 B';
-        }
-
-        $units = array_keys(self::UNITS);
-        $values = array_values(self::UNITS);
-
-        for ($i = count($values) - 1; $i >= 0; $i--) {
-            if ($bytes >= $values[$i]) {
-                $value = $bytes / $values[$i];
-
-                return round($value, $precision).' '.$units[$i];
-            }
-        }
-
-        return $bytes.' B';
-    }
 }

@@ -104,18 +104,3 @@ test('invalidates incorrect file size strings', function (string $size) {
     '',
     ' ',
 ]);
-
-test('converts bytes to human readable format', function () {
-    expect(FileSize::fromBytes(0))->toBe('0 B');
-    expect(FileSize::fromBytes(100))->toBe('100 B');
-    expect(FileSize::fromBytes(1024))->toBe('1 KB');
-    expect(FileSize::fromBytes(1048576))->toBe('1 MB');
-    expect(FileSize::fromBytes(1073741824))->toBe('1 GB');
-    expect(FileSize::fromBytes(1099511627776))->toBe('1 TB');
-});
-
-test('converts bytes to human readable format with custom precision', function () {
-    expect(FileSize::fromBytes(1572864, 1))->toBe('1.5 MB');
-    expect(FileSize::fromBytes(2684354560, 2))->toBe('2.5 GB');
-    expect(FileSize::fromBytes(1536, 0))->toBe('2 KB');
-});
