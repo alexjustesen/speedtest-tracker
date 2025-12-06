@@ -91,12 +91,26 @@
                         </button>
                     </div>
 
-                    <x-filament::button
-                        href="{{ url('/admin') }}"
-                        tag="a"
-                    >
-                        Admin Panel
-                    </x-filament::button>
+                    @auth
+                        <x-filament::button
+                            href="{{ url('/admin') }}"
+                            icon="tabler-layout-dashboard"
+                            iconButton="true"
+                            tag="a"
+                            size="lg"
+                        >
+                            {{ __('general.admin') }}
+                        </x-filament::button>
+                    @else
+                        <x-filament::button
+                            href="{{ url('/login') }}"
+                            icon="tabler-login"
+                            tag="a"
+                            size="lg"
+                        >
+                            {{ __('auth.sign_in') }}
+                        </x-filament::button>
+                    @endauth
                 </div>
             </header>
 
