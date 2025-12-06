@@ -1,4 +1,6 @@
+@import 'tailwindcss';
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../custom.css';
 
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
@@ -6,6 +8,7 @@
 /* Filament Plugins */
 @source '../../../../vendor/codewithdennis/filament-simple-alert/resources/**/*.blade.php';
 @source inline('animate-{spin,pulse,bounce}');
+@source inline('{bg,text,border,ring}-{amber,zinc}-{50,100,200,300,400,500,600,700,800,900,950}');
 
 /* Additional styles */
 .fi-topbar #dashboardAction .fi-btn-label,

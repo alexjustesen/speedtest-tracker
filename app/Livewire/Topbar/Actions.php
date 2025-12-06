@@ -13,21 +13,21 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\IconPosition;
+use Filament\Support\Enums\Size;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class RunSpeedtestAction extends Component implements HasActions, HasForms
+class Actions extends Component implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 
     public function dashboardAction(): Action
     {
-        return Action::make('home')
-            ->label(__('results.public_dashboard'))
-            ->icon('heroicon-o-chart-bar')
-            ->iconPosition(IconPosition::Before)
+        return Action::make('metrics')
+            ->iconButton()
+            ->icon('tabler-chart-histogram')
             ->color('gray')
-            ->url(shouldOpenInNewTab: true, url: route('home'))
+            ->url(url: route('home'))
             ->extraAttributes([
                 'id' => 'dashboardAction',
             ]);
@@ -61,13 +61,14 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
                     ->success()
                     ->send();
             })
-            ->modalHeading(__('results.run_speedtest'))
+            ->modalHeading(__('results.speedtest'))
             ->modalWidth('lg')
             ->modalSubmitActionLabel(__('results.start'))
             ->button()
+            ->size(Size::Medium)
             ->color('primary')
             ->label(__('results.speedtest'))
-            ->icon('heroicon-o-rocket-launch')
+            ->icon('tabler-rocket')
             ->iconPosition(IconPosition::Before)
             ->hidden(! Auth::check() && Auth::user()->is_admin)
             ->extraAttributes([
@@ -77,6 +78,6 @@ class RunSpeedtestAction extends Component implements HasActions, HasForms
 
     public function render()
     {
-        return view('livewire.topbar.run-speedtest-action');
+        return view('livewire.topbar.actions');
     }
 }

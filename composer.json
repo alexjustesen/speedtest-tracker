@@ -32,7 +32,7 @@
         "orisai/cron-expression-explainer": "^1.1",
         "promphp/prometheus_client_php": "^2.14.1",
         "saloonphp/laravel-plugin": "^3.7",
-        "secondnetwork/blade-tabler-icons": "^3.35.0",
+        "secondnetwork/blade-tabler-icons": "^3.35",
         "spatie/laravel-json-api-paginate": "^1.16.3",
         "spatie/laravel-query-builder": "^6.3.6",
         "spatie/laravel-settings": "^3.6.0",
