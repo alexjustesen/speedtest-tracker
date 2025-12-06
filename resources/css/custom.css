@@ -1,0 +1,11 @@
+.dashboard-page .fi-section-header {
+    padding-bottom: 0px;
+}
+
+.dashboard-page .fi-section-header .fi-section-header-heading {
+    @apply font-medium text-zinc-600 dark:text-zinc-400;
+}
+
+.dashboard-page .fi-section-content-ctn {
+    border-top: none;
+}

@@ -3,15 +3,19 @@
 namespace App\Listeners;
 
 use App\Events\SpeedtestCompleted;
+use App\Helpers\Number;
 use App\Mail\CompletedSpeedtestMail;
 use App\Models\Result;
 use App\Models\User;
+use App\Notifications\Apprise\SpeedtestNotification;
 use App\Settings\NotificationSettings;
 use Filament\Actions\Action;
-use Filament\Notifications\Notification;
+use Filament\Notifications\Notification as FilamentNotification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Spatie\WebhookServer\WebhookCall;
 
 class ProcessCompletedSpeedtest
@@ -29,7 +33,7 @@ class ProcessCompletedSpeedtest
 
         $result->loadMissing(['dispatchedBy']);
 
-        // $this->notifyAppriseChannels($result);
+        $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
         $this->notifyDispatchingUser($result);
         $this->notifyMailChannels($result);
@@ -42,11 +46,50 @@ class ProcessCompletedSpeedtest
     private function notifyAppriseChannels(Result $result): void
     {
         // Don't send Apprise notification if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || ! $result->healthy) {
+        if (filled($result->dispatched_by) || $result->healthy === false) {
             return;
         }
 
-        //
+        // Check if Apprise notifications are enabled.
+        if (! $this->notificationSettings->apprise_enabled || ! $this->notificationSettings->apprise_on_speedtest_run) {
+            return;
+        }
+
+        if (! count($this->notificationSettings->apprise_channel_urls)) {
+            Log::warning('Apprise channel URLs not found, check Apprise notification channel settings.');
+
+            return;
+        }
+
+        // Build the speedtest data
+        $body = view('apprise.speedtest-completed', [
+            'id' => $result->id,
+            'service' => Str::title($result->service->getLabel()),
+            'serverName' => $result->server_name,
+            'serverId' => $result->server_id,
+            'isp' => $result->isp,
+            'ping' => round($result->ping).' ms',
+            'download' => Number::toBitRate(bits: $result->download_bits, precision: 2),
+            'upload' => Number::toBitRate(bits: $result->upload_bits, precision: 2),
+            'packetLoss' => $result->packet_loss,
+            'speedtest_url' => $result->result_url,
+            'url' => url('/admin/results'),
+        ])->render();
+
+        $title = 'Speedtest Completed – #'.$result->id;
+
+        // Send notification to each configured channel URL
+        foreach ($this->notificationSettings->apprise_channel_urls as $row) {
+            $channelUrl = $row['channel_url'] ?? null;
+            if (! $channelUrl) {
+                Log::warning('Skipping entry with missing channel_url.');
+
+                continue;
+            }
+
+            Notification::route('apprise_urls', $channelUrl)
+                ->notify(new SpeedtestNotification($title, $body, 'info'));
+        }
     }
 
     /**
@@ -65,7 +108,7 @@ class ProcessCompletedSpeedtest
         }
 
         foreach (User::all() as $user) {
-            Notification::make()
+            FilamentNotification::make()
                 ->title(__('results.speedtest_completed'))
                 ->actions([
                     Action::make('view')
@@ -87,7 +130,7 @@ class ProcessCompletedSpeedtest
         }
 
         $result->dispatchedBy->notify(
-            Notification::make()
+            FilamentNotification::make()
                 ->title(__('results.speedtest_completed'))
                 ->actions([
                     Action::make('view')

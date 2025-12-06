@@ -33,6 +33,13 @@ return [
     'influxdb_bulk_write_success' => 'Alle resultaten naar InfluxDB sturen afgerond.',
     'influxdb_bulk_write_success_body' => 'Gegevens zijn verzonden naar InfluxDB, controleer of de gegevens zijn ontvangen.',
 
+    // Prometheus
+    'prometheus' => 'Prometheus',
+    'prometheus_enabled' => 'Inschakelen',
+    'prometheus_enabled_helper_text' => 'Wanneer ingeschakeld, zullen statistieken voor elke nieuwe snelheidstest beschikbaar zijn vanaf het /Prometheus eindpunt.',
+    'prometheus_allowed_ips' => 'Toegestane IP-adressen',
+    'prometheus_allowed_ips_helper' => 'Lijst van IP-adressen of CIDR (bijv. 192.168.1.0/24) toegestaan om het eindpunt van de statistieken te bekijken. Laat leeg om alle IP-adressen toe te staan.',
+
     // Common labels
     'org' => 'Org',
     'bucket' => 'Emmer',

@@ -14,7 +14,7 @@ class ResultResource extends Resource
 {
     protected static ?string $model = Result::class;
 
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-table-cells';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-table';
 
     public static function getNavigationLabel(): string
     {
