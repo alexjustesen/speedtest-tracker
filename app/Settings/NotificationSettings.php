@@ -104,6 +104,12 @@ class NotificationSettings extends Settings
 
     public bool $mail_monthly_average_enabled;
 
+    public bool $apprise_daily_average_enabled;
+
+    public bool $apprise_weekly_average_enabled;
+
+    public bool $apprise_monthly_average_enabled;
+
     public static function group(): string
     {
         return 'notification';

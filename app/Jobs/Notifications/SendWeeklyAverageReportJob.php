@@ -3,11 +3,13 @@
 namespace App\Jobs\Notifications;
 
 use App\Mail\PeriodicAverageMail;
+use App\Notifications\Apprise\PeriodicAverageNotification;
 use App\Services\PeriodicReportService;
 use App\Settings\NotificationSettings;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class SendWeeklyAverageReportJob implements ShouldQueue
 {
@@ -18,14 +20,6 @@ class SendWeeklyAverageReportJob implements ShouldQueue
      */
     public function handle(NotificationSettings $settings, PeriodicReportService $reportService): void
     {
-        if (! $settings->mail_enabled || ! $settings->mail_weekly_average_enabled) {
-            return;
-        }
-
-        if (empty($settings->mail_recipients)) {
-            return;
-        }
-
         $start = now()->subWeek()->startOfWeek();
         $end = now()->subWeek()->endOfWeek();
 
@@ -41,10 +35,21 @@ class SendWeeklyAverageReportJob implements ShouldQueue
         $period = 'Weekly';
         $periodLabel = $start->format('M j').' - '.$end->format('M j, Y');
 
-        foreach ($settings->mail_recipients as $recipient) {
-            Mail::to($recipient)->queue(
-                new PeriodicAverageMail($stats, $period, $periodLabel, $serverStats)
-            );
+        // Send mail notifications
+        if ($settings->mail_enabled && $settings->mail_weekly_average_enabled && ! empty($settings->mail_recipients)) {
+            foreach ($settings->mail_recipients as $recipient) {
+                Mail::to($recipient)->queue(
+                    new PeriodicAverageMail($stats, $period, $periodLabel, $serverStats)
+                );
+            }
+        }
+
+        // Send Apprise notifications
+        if ($settings->apprise_enabled && $settings->apprise_weekly_average_enabled && ! empty($settings->apprise_channel_urls)) {
+            $urls = collect($settings->apprise_channel_urls)->pluck('channel_url')->toArray();
+
+            Notification::route('apprise_urls', $urls)
+                ->notify(new PeriodicAverageNotification($stats, $period, $periodLabel, is_array($serverStats) ? $serverStats : $serverStats->toArray()));
         }
     }
 }

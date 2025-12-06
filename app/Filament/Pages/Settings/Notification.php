@@ -109,7 +109,7 @@ class Notification extends SettingsPage
                                     ->live(),
 
                                 Grid::make([
-                                    'default' => 1,
+                                    'default' => 2,
                                 ])
                                     ->hidden(fn (Get $get) => $get('mail_enabled') !== true)
                                     ->schema([
@@ -146,7 +146,7 @@ class Notification extends SettingsPage
                                                     ->placeholder('your@email.com')
                                                     ->email()
                                                     ->required(),
-                                            ]),
+                                            ])->columnSpan('full'),
 
                                         Actions::make([
                                             Action::make('test mail')
@@ -267,6 +267,21 @@ class Notification extends SettingsPage
                                                 Checkbox::make('apprise_on_threshold_failure')
                                                     ->label(__('settings/notifications.notify_on_threshold_failures'))
                                                     ->columnSpanFull(),
+                                            ]),
+                                        Fieldset::make(__('settings/notifications.periodic_reports'))
+                                            ->columns(1)
+                                            ->schema([
+                                                Checkbox::make('apprise_daily_average_enabled')
+                                                    ->label(__('settings/notifications.daily_average_report'))
+                                                    ->helperText(__('settings/notifications.daily_average_report_helper')),
+
+                                                Checkbox::make('apprise_weekly_average_enabled')
+                                                    ->label(__('settings/notifications.weekly_average_report'))
+                                                    ->helperText(__('settings/notifications.weekly_average_report_helper')),
+
+                                                Checkbox::make('apprise_monthly_average_enabled')
+                                                    ->label(__('settings/notifications.monthly_average_report'))
+                                                    ->helperText(__('settings/notifications.monthly_average_report_helper')),
                                             ]),
                                         Repeater::make('apprise_channel_urls')
                                             ->label(__('settings/notifications.apprise_channels'))
