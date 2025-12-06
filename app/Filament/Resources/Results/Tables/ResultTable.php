@@ -135,8 +135,6 @@ class ResultTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
             ])
-            ->deferFilters(false)
-            ->deferColumnManager(false)
             ->filters([
                 Filter::make('created_at')
                     ->label(__('general.created_at'))
@@ -276,7 +274,6 @@ class ResultTable
             ])
             ->defaultSort('id', 'desc')
             ->paginationPageOptions([10, 25, 50])
-            ->deferLoading()
             ->poll('60s');
     }
 }
