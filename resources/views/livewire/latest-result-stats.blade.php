@@ -12,13 +12,15 @@
                         <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->format(config('app.datetime_format')) }}</p>
                     </div>
 
-                    <x-filament::button
-                        href="{{ url('admin/results') }}"
-                        tag="a"
-                        size="sm"
-                    >
-                        {{ __('general.view') }}
-                    </x-filament::button>
+                    @auth
+                        <x-filament::button
+                            href="{{ url('admin/results') }}"
+                            tag="a"
+                            size="sm"
+                        >
+                            {{ __('general.view') }}
+                        </x-filament::button>
+                    @endauth
                 </div>
             </div>
 
