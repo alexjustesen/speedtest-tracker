@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Results\Tables;
 use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
 use App\Helpers\Number;
-use App\Jobs\TruncateResults;
 use App\Models\Result;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -251,26 +250,12 @@ class ResultTable
             ])
             ->toolbarActions([
                 DeleteBulkAction::make(),
-            ])
-            ->headerActions([
                 ExportAction::make()
                     ->exporter(ResultExporter::class)
                     ->columnMapping(false)
                     ->modalHeading(__('results.export_all_results'))
                     ->modalDescription(__('results.export_all_results_description'))
                     ->fileName(fn (): string => 'results-'.now()->timestamp),
-                ActionGroup::make([
-                    Action::make('truncate')
-                        ->label(__('results.truncate_results'))
-                        ->action(fn () => TruncateResults::dispatch(Auth::user()))
-                        ->requiresConfirmation()
-                        ->modalHeading(__('results.truncate_results'))
-                        ->modalDescription(__('results.truncate_results_description'))
-                        ->color('danger')
-                        ->icon('heroicon-o-trash')
-                        ->hidden(fn (): bool => ! Auth::user()->is_admin),
-                ])
-                    ->dropdownPlacement('left-start'),
             ])
             ->defaultSort('id', 'desc')
             ->paginationPageOptions([10, 25, 50])
