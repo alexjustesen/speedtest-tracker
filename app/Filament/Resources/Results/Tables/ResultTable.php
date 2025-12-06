@@ -102,51 +102,11 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
 
-                TextColumn::make('data.download.latency.high')
-                    ->label(__('results.download_latency_high'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download->latency->high', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.download.latency.low')
-                    ->label(__('results.download_latency_low'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download->latency->low', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
                 TextColumn::make('data.upload.latency.jitter')
                     ->label(__('results.upload_latency_jitter'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->jitter', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.upload.latency.high')
-                    ->label(__('results.upload_latency_high'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload->latency->high', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.upload.latency.low')
-                    ->label(__('results.upload_latency_low'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload->latency->low', $direction);
                     })
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
