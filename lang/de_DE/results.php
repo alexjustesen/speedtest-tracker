@@ -55,9 +55,6 @@ return [
 
     // Actions
     'update_comments' => 'Kommentare aktualisieren',
-    'truncate_results' => 'Ergebnisse kürzen',
-    'truncate_results_description' => 'Sind Sie sicher, dass Sie alle Ergebnisse kürzen möchten? Diese Aktion kann nicht rückgängig gemacht werden.',
-    'truncate_results_success' => 'Ergebnistabelle abgeschnitten!',
     'view_on_speedtest_net' => 'Auf Speedtest.net anzeigen',
 
     // Notifications
