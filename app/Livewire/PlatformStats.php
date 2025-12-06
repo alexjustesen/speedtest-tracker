@@ -4,26 +4,12 @@ namespace App\Livewire;
 
 use App\Enums\ResultStatus;
 use App\Models\Result;
-use Carbon\Carbon;
-use Cron\CronExpression;
 use Illuminate\Support\Number;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class PlatformStats extends Component
 {
-    #[Computed]
-    public function nextSpeedtest(): ?Carbon
-    {
-        if ($schedule = config('speedtest.schedule')) {
-            $cronExpression = new CronExpression($schedule);
-
-            return Carbon::parse(time: $cronExpression->getNextRunDate(timeZone: config('app.display_timezone')));
-        }
-
-        return null;
-    }
-
     #[Computed]
     public function platformStats(): array
     {

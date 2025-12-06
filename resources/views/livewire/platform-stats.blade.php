@@ -1,5 +1,5 @@
 <div wire:poll.60s>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 col-span-full">
             <x-tabler-chart-bar class="size-5" />
             {{ __('general.statistics') }}
@@ -23,25 +23,7 @@
             </div>
         </x-filament::section> --}}
 
-        @filled($this->nextSpeedtest)
-            <x-filament::section class="col-span-1">
-                <x-slot name="heading">
-                    Next Speedtest in
-                </x-slot>
-
-                <p class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100" title="{{ $this->nextSpeedtest->format('F jS, Y g:i A') }}">{{ $this->nextSpeedtest->diffForHumans() }}</p>
-            </x-filament::section>
-        @else
-            <x-filament::section class="col-span-1 bg-zinc-100 shadow-none">
-                <x-slot name="heading">
-                    Next Speedtest in
-                </x-slot>
-
-                <p class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">No scheduled speedtests</p>
-            </x-filament::section>
-        @endfilled
-
-        <x-filament::section class="col-span-1">
+        <x-filament::section class="col-span-1" icon="tabler-hash">
             <x-slot name="heading">
                 Total tests
             </x-slot>
@@ -49,7 +31,7 @@
             <p class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->platformStats['total'] }}</p>
         </x-filament::section>
 
-        <x-filament::section class="col-span-1">
+        <x-filament::section class="col-span-1" icon="tabler-circle-check">
             <x-slot name="heading">
                 Total completed tests
             </x-slot>
@@ -57,7 +39,7 @@
             <p class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->platformStats['completed'] }}</p>
         </x-filament::section>
 
-        <x-filament::section class="col-span-1">
+        <x-filament::section class="col-span-1" icon="tabler-alert-circle">
             <x-slot name="heading">
                 Total failed tests
             </x-slot>
