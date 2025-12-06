@@ -9,5 +9,11 @@ return new class extends SettingsMigration
         $this->migrator->add('notification.mail_daily_average_enabled', false);
         $this->migrator->add('notification.mail_weekly_average_enabled', false);
         $this->migrator->add('notification.mail_monthly_average_enabled', false);
+        $this->migrator->add('notification.webhook_daily_average_enabled', false);
+        $this->migrator->add('notification.webhook_weekly_average_enabled', false);
+        $this->migrator->add('notification.webhook_monthly_average_enabled', false);
+        $this->migrator->add('notification.apprise_daily_average_enabled', false);
+        $this->migrator->add('notification.apprise_weekly_average_enabled', false);
+        $this->migrator->add('notification.apprise_monthly_average_enabled', false);
     }
 };

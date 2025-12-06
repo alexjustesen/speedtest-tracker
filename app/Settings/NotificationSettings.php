@@ -110,6 +110,12 @@ class NotificationSettings extends Settings
 
     public bool $apprise_monthly_average_enabled;
 
+    public bool $webhook_daily_average_enabled;
+
+    public bool $webhook_weekly_average_enabled;
+
+    public bool $webhook_monthly_average_enabled;
+
     public static function group(): string
     {
         return 'notification';

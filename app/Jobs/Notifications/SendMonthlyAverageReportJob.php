@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Spatie\WebhookServer\WebhookCall;
 
 class SendMonthlyAverageReportJob implements ShouldQueue
 {
@@ -50,6 +51,26 @@ class SendMonthlyAverageReportJob implements ShouldQueue
 
             Notification::route('apprise_urls', $urls)
                 ->notify(new PeriodicAverageNotification($stats, $period, $periodLabel, is_array($serverStats) ? $serverStats : $serverStats->toArray()));
+        }
+
+        // Send webhook notifications
+        if ($settings->webhook_enabled && $settings->webhook_monthly_average_enabled && ! empty($settings->webhook_urls)) {
+            foreach ($settings->webhook_urls as $url) {
+                WebhookCall::create()
+                    ->url($url['url'])
+                    ->payload([
+                        'site_name' => config('app.name'),
+                        'period' => $period,
+                        'period_label' => $periodLabel,
+                        'start_date' => $start->toDateTimeString(),
+                        'end_date' => $end->toDateTimeString(),
+                        'stats' => $stats,
+                        'server_stats' => is_array($serverStats) ? $serverStats : $serverStats->toArray(),
+                        'url' => url('/admin/results'),
+                    ])
+                    ->doNotSign()
+                    ->dispatch();
+            }
         }
     }
 }

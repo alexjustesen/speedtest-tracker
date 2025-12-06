@@ -11,7 +11,7 @@ class CheckAndSendWeeklyAverageNotifications
     {
         $notificationSettings = app(NotificationSettings::class);
 
-        if ($notificationSettings->mail_weekly_average_enabled || $notificationSettings->apprise_weekly_average_enabled) {
+        if ($notificationSettings->mail_weekly_average_enabled || $notificationSettings->apprise_weekly_average_enabled || $notificationSettings->webhook_weekly_average_enabled) {
             SendWeeklyAverageReportJob::dispatch();
         }
     }

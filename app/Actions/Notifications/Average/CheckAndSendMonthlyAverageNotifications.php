@@ -11,7 +11,7 @@ class CheckAndSendMonthlyAverageNotifications
     {
         $notificationSettings = app(NotificationSettings::class);
 
-        if ($notificationSettings->mail_monthly_average_enabled || $notificationSettings->apprise_monthly_average_enabled) {
+        if ($notificationSettings->mail_monthly_average_enabled || $notificationSettings->apprise_monthly_average_enabled || $notificationSettings->webhook_monthly_average_enabled) {
             SendMonthlyAverageReportJob::dispatch();
         }
     }

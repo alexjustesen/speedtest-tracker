@@ -197,6 +197,22 @@ class Notification extends SettingsPage
                                                     ->label(__('settings/notifications.notify_on_threshold_failures')),
                                             ]),
 
+                                        Fieldset::make(__('settings/notifications.periodic_reports'))
+                                            ->columns(1)
+                                            ->schema([
+                                                Checkbox::make('webhook_daily_average_enabled')
+                                                    ->label(__('settings/notifications.daily_average_report'))
+                                                    ->helperText(__('settings/notifications.daily_average_report_helper')),
+
+                                                Checkbox::make('webhook_weekly_average_enabled')
+                                                    ->label(__('settings/notifications.weekly_average_report'))
+                                                    ->helperText(__('settings/notifications.weekly_average_report_helper')),
+
+                                                Checkbox::make('webhook_monthly_average_enabled')
+                                                    ->label(__('settings/notifications.monthly_average_report'))
+                                                    ->helperText(__('settings/notifications.monthly_average_report_helper')),
+                                            ]),
+
                                         Repeater::make('webhook_urls')
                                             ->label(__('settings/notifications.recipients'))
                                             ->schema([
