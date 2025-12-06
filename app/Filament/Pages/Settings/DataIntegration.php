@@ -7,20 +7,23 @@ use App\Jobs\Influxdb\v2\TestConnectionJob;
 use App\Settings\DataIntegrationSettings;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 
 class DataIntegration extends SettingsPage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-circle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-database';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
@@ -52,16 +55,14 @@ class DataIntegration extends SettingsPage
     {
         return $schema
             ->components([
-                Grid::make([
-                    'default' => 1,
-                    'md' => 3,
-                ])
+                Tabs::make()
                     ->schema([
-                        Section::make(__('settings/data_integration.influxdb_v2'))
-                            ->description(__('settings/data_integration.influxdb_v2_description'))
+                        Tab::make(__('settings/data_integration.influxdb_v2'))
+                            ->icon(Heroicon::OutlinedCircleStack)
                             ->schema([
                                 Toggle::make('influxdb_v2_enabled')
                                     ->label(__('settings/data_integration.influxdb_v2_enabled'))
+                                    ->helperText(__('settings/data_integration.influxdb_v2_description'))
                                     ->reactive()
                                     ->columnSpanFull(),
                                 Grid::make(['default' => 1, 'md' => 3])
@@ -127,7 +128,26 @@ class DataIntegration extends SettingsPage
                                         ]),
                                     ]),
                             ])
-                            ->compact()
+                            ->columnSpanFull(),
+                        Tab::make(__('settings/data_integration.prometheus'))
+                            ->icon(Heroicon::OutlinedChartBar)
+                            ->schema([
+                                Toggle::make('prometheus_enabled')
+                                    ->label(__('settings/data_integration.prometheus_enabled'))
+                                    ->helperText(__('settings/data_integration.prometheus_enabled_helper_text'))
+                                    ->reactive()
+                                    ->columnSpanFull(),
+                                Grid::make(['default' => 1, 'md' => 3])
+                                    ->hidden(fn (Get $get) => $get('prometheus_enabled') !== true)
+                                    ->schema([
+                                        TagsInput::make('prometheus_allowed_ips')
+                                            ->label(__('settings/data_integration.prometheus_allowed_ips'))
+                                            ->helperText(__('settings/data_integration.prometheus_allowed_ips_helper'))
+                                            ->placeholder('192.168.1.100')
+                                            ->splitKeys(['Tab', ',', ' '])
+                                            ->columnSpanFull(),
+                                    ]),
+                            ])
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),

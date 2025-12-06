@@ -33,6 +33,13 @@ return [
     'influxdb_bulk_write_success' => 'Massendatenlade für Influxdb abgeschlossen.',
     'influxdb_bulk_write_success_body' => 'Daten wurden an InfluxDB gesendet. Überprüfen Sie, ob die Daten empfangen wurden.',
 
+    // Prometheus
+    'prometheus' => 'Prometheus',
+    'prometheus_enabled' => 'Aktivieren',
+    'prometheus_enabled_helper_text' => 'Wenn aktiviert, werden neue Messungen für jeden neuen Geschwindigkeitstest am /prometheus Endpunkt verfügbar sein.',
+    'prometheus_allowed_ips' => 'Erlaubte IP-Adressen',
+    'prometheus_allowed_ips_helper' => 'Liste der IP-Adressen oder CIDR-Bereiche (z.B. 192.168.1.0/24) denen es erlaubt ist, auf den Mess-Endpunkt zuzugreifen. Leer lassen, um alle IPs zu erlauben.',
+
     // Common labels
     'org' => 'Org',
     'bucket' => 'Eimer',

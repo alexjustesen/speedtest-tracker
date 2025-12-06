@@ -61,8 +61,11 @@ return [
     'view_on_speedtest_net' => 'Voir sur Speedtest.net',
 
     // Notifications
+    'speedtest_benchmark_passed' => 'Le benchmark du test de vitesse a été passé',
+    'speedtest_benchmark_failed' => 'Le benchmark du test de vitesse a échoué',
     'speedtest_started' => 'Test de vitesse démarré',
     'speedtest_completed' => 'Test de vitesse terminé',
+    'speedtest_failed' => 'Le test de vitesse a échoué',
     'download_threshold_breached' => 'Seuil de téléchargement dépassé !',
     'upload_threshold_breached' => 'Seuil d\'envoi dépassé !',
     'ping_threshold_breached' => 'Seuil de latence dépassé !',
