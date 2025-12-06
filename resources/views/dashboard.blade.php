@@ -1,6 +1,8 @@
 <x-app-layout title="Dashboard">
     <div class="space-y-6 md:space-y-12 dashboard-page">
-        <livewire:platform-stats />
+        @auth
+            <livewire:platform-stats />
+        @endauth
 
         <livewire:latest-result-stats />
 
