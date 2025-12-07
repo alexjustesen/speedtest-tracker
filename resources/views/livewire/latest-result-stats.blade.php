@@ -141,7 +141,7 @@
                 </x-slot>
 
                 <p class="flex items-baseline gap-x-2">
-                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->latestResult?->packet_loss }}</span>
+                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ round($this->latestResult?->packet_loss, 2) }}</span>
                     <span class="text-sm text-zinc-600 dark:text-zinc-400">%</span>
                 </p>
             </x-filament::section>
