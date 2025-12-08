@@ -88,7 +88,7 @@ class ProcessCompletedSpeedtest
             }
 
             Notification::route('apprise_urls', $channelUrl)
-                ->notify(new SpeedtestNotification($title, $body, 'info'));
+                ->notify(new SpeedtestNotification($title, $body, 'info', 'markdown'));
         }
     }
 
