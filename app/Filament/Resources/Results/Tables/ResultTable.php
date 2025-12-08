@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Results\Tables;
 
 use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
+use App\Filament\Tables\Columns\ResultServerColumn;
 use App\Helpers\Number;
 use App\Models\Result;
 use Filament\Actions\Action;
@@ -49,19 +50,9 @@ class ResultTable
                     ->label(__('results.service'))
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('data.server.id')
-                    ->label(__('results.server_id'))
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->server->id', $direction);
-                    }),
-
-                TextColumn::make('data.server.name')
-                    ->label(__('results.server_name'))
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->server->name', $direction);
-                    }),
+                ResultServerColumn::make('server')
+                    ->label(__('general.server'))
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('download')
                     ->label(__('results.download'))
@@ -131,7 +122,7 @@ class ResultTable
                     ->label(__('general.created_at'))
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
             ])
             ->filters([
@@ -158,6 +149,7 @@ class ResultTable
                                 fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     }),
+
                 SelectFilter::make('ip_address')
                     ->label(__('results.ip_address'))
                     ->multiple()
@@ -175,6 +167,7 @@ class ResultTable
                             ->toArray();
                     })
                     ->attribute('data->interface->externalIp'),
+
                 SelectFilter::make('server_name')
                     ->label(__('results.server_name'))
                     ->multiple()
@@ -192,6 +185,25 @@ class ResultTable
                             ->toArray();
                     })
                     ->attribute('data->server->name'),
+
+                SelectFilter::make('server_id')
+                    ->label(__('results.server_id'))
+                    ->multiple()
+                    ->options(function (): array {
+                        return Result::query()
+                            ->select('data->server->id AS data_server_id')
+                            ->whereNotNull('data->server->id')
+                            ->where('status', '=', ResultStatus::Completed)
+                            ->distinct()
+                            ->orderBy('data->server->id')
+                            ->get()
+                            ->mapWithKeys(function (Result $item, int $key) {
+                                return [$item['data_server_id'] => $item['data_server_id']];
+                            })
+                            ->toArray();
+                    })
+                    ->attribute('data->server->id'),
+
                 TernaryFilter::make('scheduled')
                     ->label(__('results.scheduled'))
                     ->nullable()
@@ -203,10 +215,12 @@ class ResultTable
                         false: fn (Builder $query) => $query->where('scheduled', false),
                         blank: fn (Builder $query) => $query,
                     ),
+
                 SelectFilter::make('status')
                     ->label(__('general.status'))
                     ->multiple()
                     ->options(ResultStatus::class),
+
                 TernaryFilter::make('healthy')
                     ->label(__('general.healthy'))
                     ->nullable()
