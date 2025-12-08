@@ -9,7 +9,7 @@
                             Latest result
                         </h2>
 
-                        <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->format(config('app.datetime_format')) }}</p>
+                        <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->timezone(config('app.display_timezone'))->format(config('app.datetime_format')) }}</p>
                     </div>
 
                     @auth
@@ -130,7 +130,7 @@
                 @endfilled
 
                 <p class="flex items-baseline gap-x-2">
-                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->latestResult?->ping }}</span>
+                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ round($this->latestResult?->ping, 2) }}</span>
                     <span class="text-sm text-zinc-600 dark:text-zinc-400">ms</span>
                 </p>
             </x-filament::section>
@@ -141,7 +141,7 @@
                 </x-slot>
 
                 <p class="flex items-baseline gap-x-2">
-                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->latestResult?->packet_loss }}</span>
+                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ round($this->latestResult?->packet_loss, 2) }}</span>
                     <span class="text-sm text-zinc-600 dark:text-zinc-400">%</span>
                 </p>
             </x-filament::section>
