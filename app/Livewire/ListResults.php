@@ -2,11 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Filament\Tables\Columns\ResultServerColumn;
 use App\Helpers\Number;
 use App\Models\Result;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Support\Enums\Alignment;
@@ -17,6 +21,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class ListResults extends Component implements HasActions, HasSchemas, HasTable
@@ -46,19 +51,9 @@ class ListResults extends Component implements HasActions, HasSchemas, HasTable
                     ->label(__('results.service'))
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('data.server.id')
-                    ->label(__('results.server_id'))
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->server->id', $direction);
-                    }),
-
-                TextColumn::make('data.server.name')
-                    ->label(__('results.server_name'))
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->server->name', $direction);
-                    }),
+                ResultServerColumn::make('server')
+                    ->label(__('general.server'))
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('download')
                     ->label(__('results.download'))
@@ -98,51 +93,11 @@ class ListResults extends Component implements HasActions, HasSchemas, HasTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
 
-                TextColumn::make('data.download.latency.high')
-                    ->label(__('results.download_latency_high'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download->latency->high', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.download.latency.low')
-                    ->label(__('results.download_latency_low'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download->latency->low', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
                 TextColumn::make('data.upload.latency.jitter')
                     ->label(__('results.upload_latency_jitter'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->jitter', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.upload.latency.high')
-                    ->label(__('results.upload_latency_high'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload->latency->high', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.upload.latency.low')
-                    ->label(__('results.upload_latency_low'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload->latency->low', $direction);
                     })
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
@@ -168,12 +123,20 @@ class ListResults extends Component implements HasActions, HasSchemas, HasTable
                     ->label(__('general.created_at'))
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
+            ])
+            ->recordActions([
+                ActionGroup::make([
+                    ViewAction::make()
+                        ->hidden(fn (Result $record): bool => Auth::user()?->cannot('view', $record) ?? true),
+                    DeleteAction::make()
+                        ->hidden(fn (Result $record): bool => Auth::user()?->cannot('delete', $record) ?? true),
+                ]),
             ])
             ->toolbarActions([
                 DeleteBulkAction::make()
-                    ->authorizeIndividualRecords('deleteAny'),
+                    ->hidden(fn (): bool => Auth::user()?->cannot('deleteAny', Result::class) ?? true),
             ])
             ->defaultSort('id', 'desc')
             ->paginationPageOptions([10, 25, 50])

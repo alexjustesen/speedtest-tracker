@@ -5,14 +5,13 @@ namespace App\Policies;
 use App\Models\Result;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Auth;
 
 class ResultPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): Response
+    public function viewAny(?User $user): Response
     {
         return Response::allow();
     }
@@ -20,7 +19,7 @@ class ResultPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Result $result): Response
+    public function view(?User $user, Result $result): Response
     {
         return Response::allow();
     }
@@ -36,7 +35,7 @@ class ResultPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Result $result): Response
+    public function update(?User $user, Result $result): Response
     {
         return Response::allow();
     }
@@ -46,11 +45,7 @@ class ResultPolicy
      */
     public function deleteAny(?User $user): Response
     {
-        if (Auth::guest()) {
-            return Response::deny('You do not have permission to delete results.');
-        }
-
-        return $user->is_admin
+        return $user && $user->is_admin
             ? Response::allow()
             : Response::deny('You do not have permission to delete results.');
     }
