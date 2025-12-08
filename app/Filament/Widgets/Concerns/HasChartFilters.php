@@ -10,7 +10,12 @@ trait HasChartFilters
 
     public ?string $dateTo = null;
 
-    public function mountHasChartFilters(): void
+    public function mount(): void
+    {
+        $this->initializeChartFilters();
+    }
+
+    protected function initializeChartFilters(): void
     {
         $defaultRange = config('speedtest.default_chart_range');
 
@@ -18,7 +23,6 @@ trait HasChartFilters
             '24h' => now()->subDay()->startOfDay()->toDateTimeString(),
             'week' => now()->subWeek()->startOfDay()->toDateTimeString(),
             'month' => now()->subMonth()->startOfDay()->toDateTimeString(),
-            default => now()->subDay()->startOfDay()->toDateTimeString(),
         };
 
         $this->dateTo = now()->endOfDay()->toDateTimeString();
