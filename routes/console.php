@@ -34,8 +34,7 @@ Schedule::everyMinute()
 /**
  * Send daily average report at 6 AM.
  */
-// Schedule::dailyAt('00:05')
-Schedule::everyMinute()
+Schedule::dailyAt('00:05')
     ->group(function () {
         Schedule::call(fn () => CheckAndSendPeriodicAverageNotifications::run(ReportPeriod::Daily));
     });
@@ -43,8 +42,7 @@ Schedule::everyMinute()
 /**
  * Send weekly average report every Monday at 6 AM.
  */
-// Schedule::weeklyOn(1, '00:05')
-Schedule::everyMinute()
+Schedule::weeklyOn(1, '00:05')
     ->group(function () {
         Schedule::call(fn () => CheckAndSendPeriodicAverageNotifications::run(ReportPeriod::Weekly));
     });
@@ -52,8 +50,7 @@ Schedule::everyMinute()
 /**
  * Send monthly average report on the 1st of each month at 6 AM.
  */
-// Schedule::monthlyOn(1, '00:05')
-Schedule::everyMinute()
+Schedule::monthlyOn(1, '00:05')
     ->group(function () {
         Schedule::call(fn () => CheckAndSendPeriodicAverageNotifications::run(ReportPeriod::Monthly));
     });
