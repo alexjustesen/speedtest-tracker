@@ -28,11 +28,11 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
     protected function getData(): array
     {
         $startDate = $this->dateFrom
-            ? Carbon::parse($this->dateFrom)->timezone(config('app.timezone'))->startOfDay()
+            ? Carbon::parse($this->dateFrom)->timezone(config('app.timezone'))
             : null;
 
         $endDate = $this->dateTo
-            ? Carbon::parse($this->dateTo)->timezone(config('app.timezone'))->endOfDay()
+            ? Carbon::parse($this->dateTo)->timezone(config('app.timezone'))
             : null;
 
         $results = Result::query()
