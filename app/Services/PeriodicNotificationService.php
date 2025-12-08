@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Traits;
+namespace App\Services;
 
 use App\Mail\PeriodicAverageMail;
 use App\Notifications\Apprise\PeriodicAverageNotification;
 use App\Settings\NotificationSettings;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Spatie\WebhookServer\WebhookCall;
 
-trait SendsPeriodicNotifications
+class PeriodicNotificationService
 {
-    protected function sendMailNotifications(
+    public function sendMail(
         NotificationSettings $settings,
         array $stats,
         string $period,
         string $periodLabel,
-        Collection|array $serverStats
+        array $serverStats
     ): void {
         if (empty($settings->mail_recipients)) {
             return;
@@ -31,12 +30,12 @@ trait SendsPeriodicNotifications
         }
     }
 
-    protected function sendAppriseNotifications(
+    public function sendApprise(
         NotificationSettings $settings,
         array $stats,
         string $period,
         string $periodLabel,
-        Collection|array $serverStats
+        array $serverStats
     ): void {
         if (empty($settings->apprise_channel_urls)) {
             return;
@@ -49,18 +48,18 @@ trait SendsPeriodicNotifications
                 $stats,
                 $period,
                 $periodLabel,
-                is_array($serverStats) ? $serverStats : $serverStats->toArray()
+                $serverStats
             ));
     }
 
-    protected function sendWebhookNotifications(
+    public function sendWebhook(
         NotificationSettings $settings,
         Carbon $start,
         Carbon $end,
         array $stats,
         string $period,
         string $periodLabel,
-        Collection|array $serverStats
+        array $serverStats
     ): void {
         if (empty($settings->webhook_urls)) {
             return;
@@ -76,7 +75,7 @@ trait SendsPeriodicNotifications
                     'start_date' => $start->toDateTimeString(),
                     'end_date' => $end->toDateTimeString(),
                     'stats' => $stats,
-                    'server_stats' => is_array($serverStats) ? $serverStats : $serverStats->toArray(),
+                    'server_stats' => $serverStats,
                     'url' => url('/admin/results'),
                 ])
                 ->doNotSign()

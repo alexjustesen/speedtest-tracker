@@ -6,12 +6,11 @@ use App\Enums\ReportPeriod;
 use App\Jobs\Notifications\SendPeriodicAverageReportJob;
 use App\Settings\NotificationSettings;
 
-class CheckAndSendMonthlyAverageNotifications
+class CheckAndSendPeriodicAverageNotifications
 {
-    public static function run(): void
+    public static function run(ReportPeriod $period): void
     {
         $notificationSettings = app(NotificationSettings::class);
-        $period = ReportPeriod::Monthly;
 
         if ($period->isAnyChannelEnabled($notificationSettings)) {
             SendPeriodicAverageReportJob::dispatch($period);

@@ -13,7 +13,7 @@
 | Download     | {{ $stats['download_avg'] }} | {{ $stats['download_max'] }} | {{ $stats['download_min'] }} |
 | Upload       | {{ $stats['upload_avg'] }} | {{ $stats['upload_max'] }} | {{ $stats['upload_min'] }} |
 | Ping         | {{ $stats['ping_avg'] }} | {{ $stats['ping_min'] }} | {{ $stats['ping_max'] }} |
-| Packet Loss  | {{ $stats['packet_loss_avg'] }} | {{ $stats['packet_loss_max'] }} | {{ $stats['packet_loss_min'] }} |
+| Packet Loss  | {{ $stats['packet_loss_avg'] }} | {{ $stats['packet_loss_min'] }} | {{ $stats['packet_loss_max'] }} |
 </x-mail::table>
 
 ---
@@ -30,7 +30,7 @@
 | Unhealthy Tests    | {{ $stats['unhealthy_tests'] }}         |
 </x-mail::table>
 
-@if($serverStats && $serverStats->isNotEmpty())
+@if($serverStats && count($serverStats) > 0)
 
 ---
 
