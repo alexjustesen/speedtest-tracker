@@ -136,6 +136,7 @@
         </main>
 
         {{-- Scripts --}}
+        @livewire('notifications')
         @filamentScripts
     </body>
 </html>
