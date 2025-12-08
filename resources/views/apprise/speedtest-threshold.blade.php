@@ -3,14 +3,11 @@ A new speedtest on **{{ config('app.name') }}** was completed using **{{ $servic
 ### Failed Metrics
 @foreach ($metrics as $item)
 - **{{ $item['name'] }}**
-  - Threshold: {{ $item['threshold'] }}
-  - Actual: {{ $item['value'] }}
+  - **Threshold:** {{ $item['threshold'] }} | **Actual:** {{ $item['value'] }}
 @endforeach
-
 ### Server Information
 - **Server:** {{ $serverName }} (ID: {{ $serverId }})
 - **ISP:** {{ $isp }}
-
 ### Links
 - [View Ookla Results]({{ $speedtest_url }})
 - [View Dashboard]({{ $url }})

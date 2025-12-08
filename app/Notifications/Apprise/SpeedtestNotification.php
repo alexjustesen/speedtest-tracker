@@ -14,7 +14,7 @@ class SpeedtestNotification extends Notification implements ShouldQueue
         public string $title,
         public string $body,
         public string $type = 'info',
-        public string $format = 'text',
+        public string $format = 'markdown',
     ) {}
 
     /**
