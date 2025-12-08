@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
 use App\Filament\Widgets\Concerns\ListensToDateRange;
+use App\Helpers\Average;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 
@@ -50,6 +51,16 @@ class RecentPingChartWidget extends ChartWidget
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
+                ],
+                [
+                    'label' => __('general.average'),
+                    'data' => array_fill(0, count($results), Average::averagePing($results)),
+                    'borderColor' => 'rgb(243, 7, 6, 1)',
+                    'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
+                    'fill' => false,
+                    'cubicInterpolationMode' => 'monotone',
+                    'tension' => 0.4,
+                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
