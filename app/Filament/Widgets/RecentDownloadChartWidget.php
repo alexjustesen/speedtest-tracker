@@ -3,15 +3,14 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
-use App\Filament\Widgets\Concerns\HasChartFilters;
-use App\Helpers\Average;
+use App\Filament\Widgets\Concerns\ListensToDateRange;
 use App\Helpers\Number;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 
 class RecentDownloadChartWidget extends ChartWidget
 {
-    use HasChartFilters;
+    use ListensToDateRange;
 
     protected ?string $heading = null;
 
@@ -26,26 +25,16 @@ class RecentDownloadChartWidget extends ChartWidget
 
     protected ?string $pollingInterval = '60s';
 
-    public ?string $filter = null;
-
-    public function mount(): void
-    {
-        $this->filter = $this->filter ?? config('speedtest.default_chart_range', '24h');
-    }
-
     protected function getData(): array
     {
         $results = Result::query()
             ->select(['id', 'download', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
-            ->when($this->filter === '24h', function ($query) {
-                $query->where('created_at', '>=', now()->subDay());
+            ->when($this->dateFrom, function ($query) {
+                $query->whereDate('created_at', '>=', $this->dateFrom);
             })
-            ->when($this->filter === 'week', function ($query) {
-                $query->where('created_at', '>=', now()->subWeek());
-            })
-            ->when($this->filter === 'month', function ($query) {
-                $query->where('created_at', '>=', now()->subMonth());
+            ->when($this->dateTo, function ($query) {
+                $query->whereDate('created_at', '<=', $this->dateTo);
             })
             ->orderBy('created_at')
             ->get();
@@ -62,16 +51,6 @@ class RecentDownloadChartWidget extends ChartWidget
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
-                ],
-                [
-                    'label' => __('general.average'),
-                    'data' => array_fill(0, count($results), Average::averageDownload($results)),
-                    'borderColor' => 'rgb(243, 7, 6, 1)',
-                    'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
-                    'fill' => false,
-                    'cubicInterpolationMode' => 'monotone',
-                    'tension' => 0.4,
-                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),

@@ -2,9 +2,13 @@
     <div class="space-y-6 md:space-y-12">
         <livewire:next-speedtest-banner />
 
+        <livewire:date-range-filter />
+
         <livewire:platform-stats />
 
         <livewire:latest-result-stats />
+
+        <livewire:average-stats />
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <x-filament::section
