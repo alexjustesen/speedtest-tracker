@@ -58,11 +58,6 @@ return [
     'user' => 'User',
     'role' => 'Role',
 
-    // Date ranges
-    'last_24h' => 'Last 24 hours',
-    'last_week' => 'Last week',
-    'last_month' => 'Last month',
-
     // Metrics
     'metrics' => 'Metrics',
     'average' => 'Average',

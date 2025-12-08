@@ -42,7 +42,7 @@ class DateRangeFilter extends Component implements HasForms
     {
         return $schema
             ->components([
-                Section::make(__('Date Range'))
+                Section::make()
                     ->schema([
                         DateTimePicker::make('dateFrom')
                             ->label(__('From'))
@@ -70,9 +70,7 @@ class DateRangeFilter extends Component implements HasForms
                     ->columns([
                         'default' => 1,
                         'sm' => 2,
-                    ])
-                    ->icon('tabler-calendar-stats')
-                    ->iconSize('md'),
+                    ]),
             ]);
     }
 

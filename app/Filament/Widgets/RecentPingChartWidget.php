@@ -3,14 +3,15 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\ResultStatus;
-use App\Filament\Widgets\Concerns\ListensToDateRange;
+use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Helpers\Average;
 use App\Models\Result;
+use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 
 class RecentPingChartWidget extends ChartWidget
 {
-    use ListensToDateRange;
+    use HasChartFilters;
 
     protected ?string $heading = null;
 
@@ -27,14 +28,22 @@ class RecentPingChartWidget extends ChartWidget
 
     protected function getData(): array
     {
+        $startDate = $this->dateFrom
+            ? Carbon::parse($this->dateFrom)->timezone(config('app.timezone'))->startOfDay()
+            : null;
+
+        $endDate = $this->dateTo
+            ? Carbon::parse($this->dateTo)->timezone(config('app.timezone'))->endOfDay()
+            : null;
+
         $results = Result::query()
             ->select(['id', 'ping', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
-            ->when($this->dateFrom, function ($query) {
-                $query->whereDate('created_at', '>=', $this->dateFrom);
+            ->when($startDate, function ($query) use ($startDate) {
+                $query->where('created_at', '>=', $startDate);
             })
-            ->when($this->dateTo, function ($query) {
-                $query->whereDate('created_at', '<=', $this->dateTo);
+            ->when($endDate, function ($query) use ($endDate) {
+                $query->where('created_at', '<=', $endDate);
             })
             ->orderBy('created_at')
             ->get();
