@@ -1,6 +1,10 @@
 <x-app-layout title="Dashboard">
     <div class="space-y-6 md:space-y-12 dashboard-page">
-        <livewire:platform-stats />
+        <livewire:next-speedtest-banner />
+
+        @auth
+            <livewire:platform-stats />
+        @endauth
 
         <livewire:latest-result-stats />
 

@@ -9,7 +9,7 @@
                             Latest result
                         </h2>
 
-                        <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->format(config('app.datetime_format')) }}</p>
+                        <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->timezone(config('app.display_timezone'))->format(config('app.datetime_format')) }}</p>
                     </div>
 
                     @auth
@@ -37,12 +37,14 @@
                 @filled($downloadBenchmark)
                     <x-slot name="afterHeader">
                         <span @class([
-                            'inline-flex items-center gap-x-1.5 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
-                            'text-zinc-700 dark:text-zinc-300' => $downloadBenchmarkPassed,
+                            'inline-flex items-center gap-x-1 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
+                            'text-green-500 dark:text-green-400' => $downloadBenchmarkPassed,
                             'text-amber-500 dark:text-amber-400' => ! $downloadBenchmarkPassed,
                         ]) title="Benchmark {{ $downloadBenchmarkPassed ? 'passed' : 'failed' }}">
-                            @if (! $downloadBenchmarkPassed)
-                                <x-tabler-alert-triangle class="size-4" />
+                            @if ($downloadBenchmarkPassed)
+                                <x-tabler-circle-check class="size-4" />
+                            @else
+                                <x-tabler-alert-circle class="size-4" />
                             @endif
                             {{ Arr::get($downloadBenchmark, 'value').' '.str(Arr::get($downloadBenchmark, 'unit'))->title() }}
                         </span>
@@ -74,11 +76,13 @@
                 @filled($uploadBenchmark)
                     <x-slot name="afterHeader">
                         <span @class([
-                            'inline-flex items-center gap-x-1.5 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
-                            'text-zinc-700 dark:text-zinc-300' => $uploadBenchmarkPassed,
+                            'inline-flex items-center gap-x-1 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
+                            'text-green-500 dark:text-green-400' => $uploadBenchmarkPassed,
                             'text-amber-500 dark:text-amber-400' => ! $uploadBenchmarkPassed,
                         ]) title="Benchmark {{ $uploadBenchmarkPassed ? 'passed' : 'failed' }}">
-                            @if (! $uploadBenchmarkPassed)
+                            @if ($uploadBenchmarkPassed)
+                                <x-tabler-circle-check class="size-4" />
+                            @else
                                 <x-tabler-alert-triangle class="size-4" />
                             @endif
                             {{ Arr::get($uploadBenchmark, 'value').' '.str(Arr::get($uploadBenchmark, 'unit'))->title() }}
@@ -111,11 +115,13 @@
                 @filled($pingBenchmark)
                     <x-slot name="afterHeader">
                         <span @class([
-                            'inline-flex items-center gap-x-1.5 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
-                            'text-zinc-700 dark:text-zinc-300' => $pingBenchmarkPassed,
+                            'inline-flex items-center gap-x-1 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
+                            'text-green-500 dark:text-green-400' => $pingBenchmarkPassed,
                             'text-amber-500 dark:text-amber-400' => ! $pingBenchmarkPassed,
                         ]) title="Benchmark {{ $pingBenchmarkPassed ? 'passed' : 'failed' }}">
-                            @if (! $pingBenchmarkPassed)
+                            @if ($pingBenchmarkPassed)
+                                <x-tabler-circle-check class="size-4" />
+                            @else
                                 <x-tabler-alert-triangle class="size-4" />
                             @endif
                             {{ Arr::get($pingBenchmark, 'value').' '.str(Arr::get($pingBenchmark, 'unit')) }}
@@ -124,7 +130,7 @@
                 @endfilled
 
                 <p class="flex items-baseline gap-x-2">
-                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->latestResult?->ping }}</span>
+                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ round($this->latestResult?->ping, 2) }}</span>
                     <span class="text-sm text-zinc-600 dark:text-zinc-400">ms</span>
                 </p>
             </x-filament::section>
@@ -135,7 +141,7 @@
                 </x-slot>
 
                 <p class="flex items-baseline gap-x-2">
-                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->latestResult?->packet_loss }}</span>
+                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ round($this->latestResult?->packet_loss, 2) }}</span>
                     <span class="text-sm text-zinc-600 dark:text-zinc-400">%</span>
                 </p>
             </x-filament::section>
