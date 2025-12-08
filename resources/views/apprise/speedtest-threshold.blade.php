@@ -1,5 +1,4 @@
-A new speedtest on **{{ config('app.name') }}** was completed using **{{ $service }}** on **{{ $isp }}** but a threshold was breached.
-
+A new speedtest on **{{ config('app.name') }}** was completed using **{{ $service }}** on **{{ $isp }}** but a threshold was breached
 ### Failed Metrics
 @foreach ($metrics as $item)
 - **{{ $item['name'] }}**
