@@ -92,6 +92,8 @@
                     </div>
 
                     @auth
+                        <livewire:topbar.actions :showDashboard="false" />
+
                         <x-filament::button
                             href="{{ url('/admin') }}"
                             icon="tabler-layout-dashboard"

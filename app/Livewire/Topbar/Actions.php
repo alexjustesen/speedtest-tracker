@@ -21,6 +21,8 @@ class Actions extends Component implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 
+    public bool $showDashboard = true;
+
     public function dashboardAction(): Action
     {
         return Action::make('metrics')
