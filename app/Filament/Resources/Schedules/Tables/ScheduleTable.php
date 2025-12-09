@@ -87,15 +87,7 @@ class ScheduleTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
-                TextColumn::make('updated_at')
-                    ->label(__('general.updated_at'))
-                    ->alignEnd()
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->deferFilters(false)
-            ->deferColumnManager(false)
             ->filters([
                 SelectFilter::make('type')
                     ->label(__('schedules.type'))
