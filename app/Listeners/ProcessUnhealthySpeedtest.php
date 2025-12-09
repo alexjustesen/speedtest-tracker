@@ -110,7 +110,7 @@ class ProcessUnhealthySpeedtest
             }
 
             Notification::route('apprise_urls', $channelUrl)
-                ->notify(new SpeedtestNotification($title, $body, 'warning'));
+                ->notify(new SpeedtestNotification($title, $body, 'warning', 'markdown'));
         }
     }
 

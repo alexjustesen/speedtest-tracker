@@ -25,10 +25,14 @@ class TestNotification extends Notification implements ShouldQueue
      */
     public function toApprise(object $notifiable): AppriseMessage
     {
+        $body = '👋 This is a test notification from **'.config('app.name')."**.\n\n";
+        $body .= "If you're seeing this, your Apprise notification channel is configured correctly!\n\n";
+
         return AppriseMessage::create()
             ->urls($notifiable->routes['apprise_urls'])
             ->title('Test Notification')
-            ->body('👋 Testing the Apprise notification channel.')
-            ->type('info');
+            ->body($body)
+            ->type('info')
+            ->format('markdown');
     }
 }
