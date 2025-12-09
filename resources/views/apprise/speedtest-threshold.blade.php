@@ -1,7 +1,12 @@
-A new speedtest on **{{ config('app.name') }}** was completed using **{{ $service }}** on **{{ $isp }}** but a threshold was breached.
-
+A new speedtest on **{{ config('app.name') }}** was completed using **{{ $service }}** on **{{ $isp }}** but a threshold was breached
+### Failed Metrics
 @foreach ($metrics as $item)
-- **{{ $item['name'] }}** {{ $item['threshold'] }}: {{ $item['value'] }}
+- **{{ $item['name'] }}**
+  - **Threshold:** {{ $item['threshold'] }} | **Actual:** {{ $item['value'] }}
 @endforeach
-- **Ookla Speedtest:** {{ $speedtest_url }}
-- **URL:** {{ $url }}
+### Server Information
+- **Server:** {{ $serverName }} (ID: {{ $serverId }})
+- **ISP:** {{ $isp }}
+### Links
+- [View Ookla Results]({{ $speedtest_url }})
+- [View Dashboard]({{ $url }})
