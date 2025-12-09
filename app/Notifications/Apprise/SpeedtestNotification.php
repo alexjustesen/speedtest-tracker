@@ -14,6 +14,7 @@ class SpeedtestNotification extends Notification implements ShouldQueue
         public string $title,
         public string $body,
         public string $type = 'info',
+        public string $format = 'markdown',
     ) {}
 
     /**
@@ -35,6 +36,7 @@ class SpeedtestNotification extends Notification implements ShouldQueue
             ->urls($notifiable->routes['apprise_urls'])
             ->title($this->title)
             ->body($this->body)
-            ->type($this->type);
+            ->type($this->type)
+            ->format($this->format);
     }
 }
