@@ -1,11 +1,13 @@
-A new speedtest on {{ config('app.name') }} was completed using {{ $service }}.
+A new speedtest on **{{ config('app.name') }}** was completed using **{{ $service }}**.
 
-Server name: {{ $serverName }}
-Server ID: {{ $serverId }}
-ISP: {{ $isp }}
-Ping: {{ $ping }}
-Download: {{ $download }}
-Upload: {{ $upload }}
-Packet Loss: {{ $packetLoss }} %
-Ookla Speedtest: {{ $speedtest_url }}
-URL: {{ $url }}
+### Results
+- **Server:** {{ $serverName }} (ID: {{ $serverId }})
+- **ISP:** {{ $isp }}
+- **Ping:** {{ $ping }}
+- **Download:** {{ $download }}
+- **Upload:** {{ $upload }}
+- **Packet Loss:** {{ $packetLoss }}%
+
+### Links
+- [View Ookla Results]({{ $speedtest_url }})
+- [View Dashboard]({{ $url }})
