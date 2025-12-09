@@ -21,7 +21,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class ListResults extends Component implements HasActions, HasSchemas, HasTable
@@ -129,14 +129,15 @@ class ListResults extends Component implements HasActions, HasSchemas, HasTable
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make()
-                        ->hidden(fn (Result $record): bool => Auth::user()?->cannot('view', $record) ?? true),
+                        ->hidden(fn (Result $record): bool => Gate::denies('view', $record)),
+
                     DeleteAction::make()
-                        ->hidden(fn (Result $record): bool => Auth::user()?->cannot('delete', $record) ?? true),
+                        ->hidden(fn (Result $record): bool => Gate::denies('delete', $record)),
                 ]),
             ])
             ->toolbarActions([
                 DeleteBulkAction::make()
-                    ->hidden(fn (): bool => Auth::user()?->cannot('deleteAny', Result::class) ?? true),
+                    ->hidden(fn (): bool => Gate::denies('deleteAny', Result::class)),
             ])
             ->defaultSort('id', 'desc')
             ->paginationPageOptions([10, 25, 50])

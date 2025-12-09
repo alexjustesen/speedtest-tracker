@@ -37,7 +37,9 @@ class ResultPolicy
      */
     public function update(?User $user, Result $result): Response
     {
-        return Response::allow();
+        return $user && $user->is_admin
+            ? Response::allow()
+            : Response::deny('You do not have permission to update this result.');
     }
 
     /**
@@ -55,7 +57,7 @@ class ResultPolicy
      */
     public function delete(?User $user, Result $result): Response
     {
-        return $user->is_admin
+        return $user && $user->is_admin
             ? Response::allow()
             : Response::deny('You do not have permission to delete this result.');
     }
