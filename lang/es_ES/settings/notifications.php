@@ -7,27 +7,35 @@ return [
     // Database notifications
     'database' => 'Base de datos',
     'database_description' => 'Las notificaciones enviadas a este canal se mostrarán bajo el icono :belell: en el encabezado.',
-    'database_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
-    'database_on_threshold_failure' => 'Notificar en los umbrales de fallos',
     'test_database_channel' => 'Probar canal de base de datos',
 
     // Mail notifications
     'mail' => 'Correo',
     'recipients' => 'Destinatarios',
-    'mail_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
-    'mail_on_threshold_failure' => 'Notificar en los umbrales de fallos',
     'test_mail_channel' => 'Canal de prueba de correo',
+
+    // Apprise notifications
+    'apprise' => 'Apprise',
+    'enable_apprise_notifications' => 'Habilitar notificaciones Apprise',
+    'apprise_server' => 'Servidor Apprise',
+    'apprise_server_url' => 'URL del servidor',
+    'apprise_verify_ssl' => 'Verificar SSL',
+    'apprise_channels' => 'Canales de expedición',
+    'apprise_channel_url' => 'URL del canal',
+    'apprise_hint_description' => 'Para más información sobre cómo configurar Apprise, vea la documentación.',
+    'apprise_channel_url_helper' => 'Proporcionar la URL de los puntos finales del servicio para las notificaciones.',
+    'test_apprise_channel' => 'Prueba de aviso',
+    'apprise_channel_url_validation_error' => 'La URL del canal Apprise no debe comenzar con "http" o "https". Por favor, proporcione un esquema de URL de Apprise válido.',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
-    'webhook_on_speedtest_run' => 'Notificar en cada prueba de velocidad',
-    'webhook_on_threshold_failure' => 'Notificar en los umbrales de fallos',
     'test_webhook_channel' => 'Probar canal webhook',
+    'webhook_hint_description' => 'Estos son webhooks genéricos. Para ejemplos de payload y detalles de la implementación, vea la documentación.',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notificar en cada prueba de velocidad',
-    'notify_on_threshold_failures' => 'Notificar en los umbrales de fallos',
+    'notify_on_every_speedtest_run' => 'Notificar en cada prueba de velocidad programada',
+    'notify_on_threshold_failures' => 'Notificar fallos de umbral para pruebas de velocidad programadas',
 
     // Test notification messages
     'test_notifications' => [
