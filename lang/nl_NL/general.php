@@ -37,6 +37,8 @@ return [
     'created_at' => 'Aangemaakt op',
     'updated_at' => 'Bijgewerkt op',
     'url' => 'URL',
+    'server' => 'Server',
+    'servers' => 'Servers',
     'stats' => 'Statistieken',
     'statistics' => 'Statistieken',
 
