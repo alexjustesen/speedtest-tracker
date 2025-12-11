@@ -7,6 +7,7 @@ use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Helpers\Average;
 use App\Helpers\Number;
 use App\Models\Result;
+use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 
 class RecentDownloadChartWidget extends ChartWidget
@@ -26,26 +27,24 @@ class RecentDownloadChartWidget extends ChartWidget
 
     protected ?string $pollingInterval = '60s';
 
-    public ?string $filter = null;
-
-    public function mount(): void
-    {
-        $this->filter = $this->filter ?? config('speedtest.default_chart_range', '24h');
-    }
-
     protected function getData(): array
     {
+        $startDate = $this->dateFrom
+            ? Carbon::parse($this->dateFrom)->timezone(config('app.timezone'))
+            : null;
+
+        $endDate = $this->dateTo
+            ? Carbon::parse($this->dateTo)->timezone(config('app.timezone'))
+            : null;
+
         $results = Result::query()
             ->select(['id', 'download', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
-            ->when($this->filter === '24h', function ($query) {
-                $query->where('created_at', '>=', now()->subDay());
+            ->when($startDate, function ($query) use ($startDate) {
+                $query->where('created_at', '>=', $startDate);
             })
-            ->when($this->filter === 'week', function ($query) {
-                $query->where('created_at', '>=', now()->subWeek());
-            })
-            ->when($this->filter === 'month', function ($query) {
-                $query->where('created_at', '>=', now()->subMonth());
+            ->when($endDate, function ($query) use ($endDate) {
+                $query->where('created_at', '<=', $endDate);
             })
             ->orderBy('created_at')
             ->get();
