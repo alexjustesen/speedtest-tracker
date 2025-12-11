@@ -8,13 +8,13 @@
 
         <livewire:latest-result-stats />
 
-        <livewire:date-range-filter />
-
         <div class="grid grid-cols-1 gap-6">
             <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 col-span-full">
                 <x-tabler-chart-histogram class="size-5" />
                 Metrics
             </h2>
+
+            <livewire:date-range-filter />
 
             @livewire(\App\Filament\Widgets\RecentDownloadChartWidget::class)
 
