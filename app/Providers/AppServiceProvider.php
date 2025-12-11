@@ -43,9 +43,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configureUrl();
         $this->defineCustomIfStatements();
         $this->defineGates();
-        $this->forceHttps();
         $this->setApiRateLimit();
         $this->registerNotificationChannels();
 
@@ -111,10 +111,18 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Force https scheme in non-local environments.
+     * Configure URL generation:
+     * - respect APP_URL, including subpath deployments.
+     * - force https scheme in non-local environments.
      */
-    protected function forceHttps(): void
+    protected function configureUrl(): void
     {
+        $appUrl = config('app.url');
+
+        if ($appUrl) {
+            URL::forceRootUrl($appUrl);
+        }
+
         if (! app()->environment('local') && config('app.force_https')) {
             URL::forceScheme('https');
         }
