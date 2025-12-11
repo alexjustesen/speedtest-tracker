@@ -115,7 +115,6 @@
                     @endauth
                 </div>
             </header>
-            @include('layouts.partials.header')
 
             {{ $slot }}
 
