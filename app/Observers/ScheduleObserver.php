@@ -42,7 +42,8 @@ class ScheduleObserver
      */
     public function updated(Schedule $schedule): void
     {
-        //
+        UpdateNextRun::run($schedule);
+        CheckCronOverlap::run($schedule);
     }
 
     /**
