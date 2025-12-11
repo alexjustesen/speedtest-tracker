@@ -12,12 +12,12 @@ class GetExternalIpAddress
 {
     use AsAction;
 
-    public function handle(): bool|string
+    public function handle(?string $url = null): bool|string
     {
         try {
             $response = Http::retry(3, 100)
                 ->timeout(5)
-                ->get(url: 'https://icanhazip.com/');
+                ->get(url: config('speedtest.preflight.get_external_ip_url'));
         } catch (Throwable $e) {
             Log::error('Failed to fetch external IP address.', [$e->getMessage()]);
 
