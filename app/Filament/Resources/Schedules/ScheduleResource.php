@@ -23,17 +23,17 @@ class ScheduleResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return 'Schedules';
+        return __('schedules.title');
     }
 
     public static function getModelLabel(): string
     {
-        return 'Schedule';
+        return __('schedules.singular');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Schedules';
+        return __('schedules.title');
     }
 
     public static function canAccess(): bool

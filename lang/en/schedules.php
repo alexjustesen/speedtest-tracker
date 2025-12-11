@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Schedules',
+    'singular' => 'Schedule',
 
     // Form labels
     'active' => 'Active',
