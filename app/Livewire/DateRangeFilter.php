@@ -59,6 +59,7 @@ class DateRangeFilter extends Component implements HasForms
                             ->label(__('To'))
                             ->seconds(false)
                             ->native(false)
+                            ->minDate(fn ($get) => $get('dateFrom'))
                             ->reactive()
                             ->afterStateUpdated(function ($state) {
                                 $this->dateTo = $state;
