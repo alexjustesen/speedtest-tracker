@@ -42,19 +42,6 @@ class ScheduleTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->formatStateUsing(fn (?string $state) => ExplainCronExpression::run($state)),
-                TextColumn::make('options.server_preference')
-                    ->label(__('schedules.server_preference'))
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->formatStateUsing(function (?string $state) {
-                        return match ($state) {
-                            'auto' => __('schedules.server_preference_auto'),
-                            'prefer' => __('schedules.server_preference_prefer'),
-                            'ignore' => __('schedules.server_preference_ignore'),
-                            default => $state,
-                        };
-                    })
-                    ->tooltip(fn ($record) => $record->getServerTooltip()),
                 IconColumn::make('is_active')
                     ->label(__('schedules.active'))
                     ->alignCenter()
@@ -107,30 +94,6 @@ class ScheduleTable
                         false: fn (Builder $query) => $query->where('is_active', false),
                         blank: fn (Builder $query) => $query,
                     )
-                    ->native(false),
-                SelectFilter::make('options.server_preference')
-                    ->label(__('schedules.server_preference'))
-                    ->options(function () {
-                        return Schedule::query()
-                            ->get()
-                            ->pluck('options')
-                            ->map(function ($options) {
-                                return $options['server_preference'] ?? null;
-                            })
-                            ->filter()
-                            ->unique()
-                            ->mapWithKeys(function ($value) {
-                                return [
-                                    $value => match ($value) {
-                                        'auto' => __('schedules.server_preference_auto'),
-                                        'prefer' => __('schedules.server_preference_prefer'),
-                                        'ignore' => __('schedules.server_preference_ignore'),
-                                        default => $value,
-                                    },
-                                ];
-                            })
-                            ->toArray();
-                    })
                     ->native(false),
                 SelectFilter::make('status')
                     ->label(__('schedules.status'))

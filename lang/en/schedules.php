@@ -19,9 +19,9 @@ return [
     // Servers tab
     'servers' => 'Servers',
     'server_preference' => 'Server Preference',
-    'server_preference_auto' => 'Automatically select a server',
-    'server_preference_prefer' => 'Prefer servers from the list',
-    'server_preference_ignore' => 'Ignore servers from the list',
+    'server_preference_auto' => 'Automatic selection',
+    'server_preference_prefer' => 'Prefered servers',
+    'server_preference_ignore' => 'Ignore servers',
     'server_id' => 'Server ID',
     'server_id_placeholder' => 'Enter the ID of the server.',
 
