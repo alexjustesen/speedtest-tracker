@@ -5,7 +5,6 @@ namespace App\Observers;
 use App\Actions\CheckCronOverlap;
 use App\Actions\UpdateNextRun;
 use App\Models\Schedule;
-use Illuminate\Support\Str;
 
 class ScheduleObserver
 {
