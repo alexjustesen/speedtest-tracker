@@ -2,8 +2,9 @@
     <div class="flex items-center gap-4">
         {{ $this->speedtestAction }}
 
-        {{ $this->dashboardAction }}
-
+        @if ($showDashboard)
+            {{ $this->dashboardAction }}
+        @endif
     </div>
 
     <x-filament-actions::modals />
