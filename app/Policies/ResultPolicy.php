@@ -11,7 +11,7 @@ class ResultPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): Response
+    public function viewAny(?User $user): Response
     {
         return Response::allow();
     }
@@ -19,7 +19,7 @@ class ResultPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Result $result): Response
+    public function view(?User $user, Result $result): Response
     {
         return Response::allow();
     }
@@ -35,17 +35,19 @@ class ResultPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Result $result): Response
+    public function update(?User $user, Result $result): Response
     {
-        return Response::allow();
+        return $user && $user->is_admin
+            ? Response::allow()
+            : Response::deny('You do not have permission to update this result.');
     }
 
     /**
      * Determine whether the user can bulk delete any model.
      */
-    public function deleteAny(User $user): Response
+    public function deleteAny(?User $user): Response
     {
-        return $user->is_admin
+        return $user && $user->is_admin
             ? Response::allow()
             : Response::deny('You do not have permission to delete results.');
     }
@@ -53,26 +55,10 @@ class ResultPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Result $result): Response
+    public function delete(?User $user, Result $result): Response
     {
-        return $user->is_admin
+        return $user && $user->is_admin
             ? Response::allow()
             : Response::deny('You do not have permission to delete this result.');
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Result $result): Response
-    {
-        return Response::deny(); // soft deletes not used
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Result $result): Response
-    {
-        return Response::deny(); // soft deletes not used
     }
 }
