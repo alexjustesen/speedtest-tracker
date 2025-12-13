@@ -28,7 +28,7 @@ return [
     'influxdb_test_success_body' => 'Test gegevens zijn verzonden naar de InfluxDB, controleer of de gegevens zijn ontvangen.',
 
     // Bulk write notifications
-    'influxdb_bulk_write_failed' => 'Kan schrijven naar Influxdb niet maken.',
+    'influxdb_bulk_write_failed' => 'Bulk schrijven naar Influxdb mislukt.',
     'influxdb_bulk_write_failed_body' => 'Bekijk de logs voor meer details.',
     'influxdb_bulk_write_success' => 'Alle resultaten naar InfluxDB sturen afgerond.',
     'influxdb_bulk_write_success_body' => 'Gegevens zijn verzonden naar InfluxDB, controleer of de gegevens zijn ontvangen.',

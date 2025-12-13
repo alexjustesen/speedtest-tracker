@@ -14,6 +14,19 @@ return [
     'recipients' => 'Destinatários',
     'test_mail_channel' => 'Testar canal de e-mail',
 
+    // Apprise notifications
+    'apprise' => 'Informar',
+    'enable_apprise_notifications' => 'Habilitar notificações Apprise',
+    'apprise_server' => 'Servidor Apprise',
+    'apprise_server_url' => 'URL do Servidor Apprise',
+    'apprise_verify_ssl' => 'Verificar SSL',
+    'apprise_channels' => 'Canais Apprise',
+    'apprise_channel_url' => 'URL do Canal',
+    'apprise_hint_description' => 'Para obter mais informações sobre como configurar o Apprise, veja a documentação.',
+    'apprise_channel_url_helper' => 'Forneça o URL do serviço endpoint para notificações.',
+    'test_apprise_channel' => 'Testar Apprise',
+    'apprise_channel_url_validation_error' => 'O URL do canal Apprise não deve começar com "http" ou "https". Por favor, forneça um esquema válido de URL Apprise.',
+
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',

@@ -55,9 +55,6 @@ return [
 
     // Actions
     'update_comments' => 'Actualiser les commentaires',
-    'truncate_results' => 'Tronquer les résultats',
-    'truncate_results_description' => 'Êtes-vous sûr de vouloir tronquer tous les résultats ? Cette action est irréversible.',
-    'truncate_results_success' => 'Tableau des résultats tronqué !',
     'view_on_speedtest_net' => 'Voir sur Speedtest.net',
 
     // Notifications
@@ -72,7 +69,6 @@ return [
 
     // Run Speedtest Action
     'speedtest' => 'Test de vitesse',
-    'public_dashboard' => 'Tableau de bord public',
     'select_server' => 'Sélectionner un serveur',
     'select_server_helper' => 'Laisser vide pour exécuter le test de vitesse sans spécifier de serveur. Les serveurs bloqués seront ignorés.',
     'manual_servers' => 'Serveurs manuels',

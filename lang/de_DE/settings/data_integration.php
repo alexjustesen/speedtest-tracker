@@ -28,7 +28,7 @@ return [
     'influxdb_test_success_body' => 'Testdaten wurden an InfluxDB gesendet. Überprüfen Sie, ob die Daten empfangen wurden.',
 
     // Bulk write notifications
-    'influxdb_bulk_write_failed' => 'Fehler beim Erstellen des Schreibens auf Influxdb.',
+    'influxdb_bulk_write_failed' => 'Fehler beim Schreiben von Massendaten in InfluxDB.',
     'influxdb_bulk_write_failed_body' => 'Überprüfen Sie die Protokolle für weitere Details.',
     'influxdb_bulk_write_success' => 'Massendatenlade für Influxdb abgeschlossen.',
     'influxdb_bulk_write_success_body' => 'Daten wurden an InfluxDB gesendet. Überprüfen Sie, ob die Daten empfangen wurden.',

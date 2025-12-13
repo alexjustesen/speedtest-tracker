@@ -55,9 +55,6 @@ return [
 
     // Actions
     'update_comments' => 'Atualizar comentários',
-    'truncate_results' => 'Truncar resultados',
-    'truncate_results_description' => 'Tem certeza que deseja truncar todos os resultados? Esta ação é irreversível.',
-    'truncate_results_success' => 'Tabela de resultados truncada!',
     'view_on_speedtest_net' => 'Ver em Speedtest.net',
 
     // Notifications
@@ -72,7 +69,6 @@ return [
 
     // Run Speedtest Action
     'speedtest' => 'Teste de velocidade',
-    'public_dashboard' => 'Painel público',
     'select_server' => 'Selecionar servidor',
     'select_server_helper' => 'Deixe em branco para executar o acelerador sem especificar um servidor. Os servidores bloqueados serão ignorados.',
     'manual_servers' => 'Servidores manuais',

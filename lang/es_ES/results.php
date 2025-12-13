@@ -55,21 +55,20 @@ return [
 
     // Actions
     'update_comments' => 'Actualizar comentarios',
-    'truncate_results' => 'Truncar resultados',
-    'truncate_results_description' => '¿Está seguro que desea truncar todos los resultados? Esta acción es irreversible.',
-    'truncate_results_success' => '¡Tabla de resultados truncada!',
     'view_on_speedtest_net' => 'Ver en Speedtest.net',
 
     // Notifications
+    'speedtest_benchmark_passed' => 'La prueba de rendimiento de velocidad ha pasado',
+    'speedtest_benchmark_failed' => 'Prueba de rendimiento de velocidad fallida',
     'speedtest_started' => 'Velocidad iniciada',
     'speedtest_completed' => 'Velocidad completada',
+    'speedtest_failed' => 'Error en la prueba de velocidad',
     'download_threshold_breached' => '¡Umbral de descarga incumplido!',
     'upload_threshold_breached' => '¡Umbral de subida infringido!',
     'ping_threshold_breached' => '¡Umbral de ping infringido!',
 
     // Run Speedtest Action
     'speedtest' => 'Velocidad',
-    'public_dashboard' => 'Panel público',
     'select_server' => 'Seleccionar Servidor',
     'select_server_helper' => 'Dejar en blanco para ejecutar el test de velocidad sin especificar un servidor. Se omitirán los servidores bloqueados.',
     'manual_servers' => 'Servidores manuales',
