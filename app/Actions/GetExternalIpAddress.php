@@ -14,7 +14,7 @@ class GetExternalIpAddress
 
     public function handle(?string $url = null): array
     {
-        $url = $url ?? config('speedtest.preflight.get_external_ip_url');
+        $url = $url ?? config('speedtest.preflight.external_ip_url');
 
         try {
             $response = Http::retry(3, 100)
