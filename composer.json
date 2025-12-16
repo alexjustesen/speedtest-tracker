@@ -20,7 +20,6 @@
         "dragonmantank/cron-expression": "^3.6.0",
         "filament/filament": "4.1.0",
         "filament/spatie-laravel-settings-plugin": "^4.1",
-        "geerlingguy/ping": "^1.2.1",
         "influxdata/influxdb-client-php": "^3.8",
         "laravel-notification-channels/telegram": "^6.0",
         "laravel/framework": "^12.41.1",
@@ -36,6 +35,7 @@
         "spatie/laravel-query-builder": "^6.3.6",
         "spatie/laravel-settings": "^3.6.0",
         "spatie/laravel-webhook-server": "^3.8.3",
+        "spatie/ping": "^1.1.1",
         "zircote/swagger-php": "^5.7.6"
     },
     "require-dev": {
