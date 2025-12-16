@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Actions\CheckInternetConnection;
+use App\Actions\PingHostname;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestChecking;
 use App\Events\SpeedtestFailed;
@@ -44,14 +44,18 @@ class CheckForInternetConnectionJob implements ShouldQueue
 
         SpeedtestChecking::dispatch($this->result);
 
-        if (CheckInternetConnection::run() !== false) {
+        $ping = PingHostname::run();
+
+        if ($ping->isSuccess()) {
             return;
         }
+
+        $message = sprintf('Failed to connected to hostname "%s". Error received "%s".', $ping->getHost(), $ping->error()?->value);
 
         $this->result->update([
             'data->type' => 'log',
             'data->level' => 'error',
-            'data->message' => 'Failed to connect to the internet.',
+            'data->message' => $message,
             'status' => ResultStatus::Failed,
         ]);
 
