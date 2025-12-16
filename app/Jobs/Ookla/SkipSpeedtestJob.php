@@ -92,11 +92,11 @@ class SkipSpeedtestJob implements ShouldQueue
         $skipIPs = array_filter(
             array_map(
                 'trim',
-                explode(',', config('speedtest.skip_ips')),
+                explode(',', config('speedtest.preflight.skip_ips')),
             ),
         );
 
-        if (count($skipIPs) < 1) {
+        if (empty($skipIPs)) {
             return false;
         }
 

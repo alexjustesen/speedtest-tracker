@@ -32,14 +32,13 @@ return [
     'preflight' => [
         'external_ip_url' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_EXTERNAL_IP_URL', 'https://icanhazip.com'),
         'internet_check_hostname' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_INTERNET_CHECK_HOSTNAME', 'icanhazip.com'),
+        'skip_ips' => env('SPEEDTEST_SKIP_IPS'),
     ],
 
     /**
      * IP filtering settings.
      */
     'allowed_ips' => env('ALLOWED_IPS'),
-
-    'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''),
 
     /**
      * Threshold settings.
