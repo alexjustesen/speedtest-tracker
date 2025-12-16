@@ -111,6 +111,18 @@ class PreflightSpeedtestJob implements ShouldQueue
 
         $externalIp = GetExternalIpAddress::run();
 
+        if ($externalIp === false) {
+            $this->result->update([
+                'data->type' => 'log',
+                'data->level' => 'error',
+                'data->message' => sprintf('Failed to determine external IP address, see logs.', $externalIp),
+                'data->interface->externalIp' => $externalIp,
+                'status' => ResultStatus::Failed,
+            ]);
+
+            return true;
+        }
+
         foreach ($skipIPs as $ip) {
             // Check for exact IP match
             if (filter_var($ip, FILTER_VALIDATE_IP) && $externalIp === $ip) {
