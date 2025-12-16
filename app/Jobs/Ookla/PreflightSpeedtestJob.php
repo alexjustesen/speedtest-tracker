@@ -47,18 +47,20 @@ class PreflightSpeedtestJob implements ShouldQueue
 
         SpeedtestChecking::dispatch($this->result);
 
-        // TODO: 1. Check for internet connectivity.
         if (! $this->checkInternetConnectivity()) {
             SpeedtestFailed::dispatch($this->result);
 
             $this->batch()->cancel();
+
+            return;
         }
 
-        // TODO: 2. Decide whether to skip based on IP address.
         if ($this->shouldSkip() === true) {
             SpeedtestSkipped::dispatch($this->result);
 
             $this->batch()->cancel();
+
+            return;
         }
     }
 
