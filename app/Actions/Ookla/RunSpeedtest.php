@@ -38,8 +38,6 @@ class RunSpeedtest
             [
                 new StartSpeedtestJob($result),
                 new PreflightSpeedtestJob($result),
-                // new CheckForInternetConnectionJob($result),
-                // new SkipSpeedtestJob($result),
                 new SelectSpeedtestServerJob($result),
                 new RunSpeedtestJob($result),
                 new BenchmarkSpeedtestJob($result),
