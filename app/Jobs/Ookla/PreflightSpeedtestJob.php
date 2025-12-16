@@ -80,7 +80,7 @@ class PreflightSpeedtestJob implements ShouldQueue
             $this->result->update([
                 'data->type' => 'log',
                 'data->level' => 'error',
-                'data->message' => 'Failed to verify internet connectivity using hostname: "' . $hostname . '".',
+                'data->message' => 'Failed to verify internet connectivity using hostname: "'.$hostname.'".',
                 'status' => ResultStatus::Failed,
             ]);
         }
