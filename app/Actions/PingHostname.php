@@ -12,7 +12,7 @@ class PingHostname
 
     public function handle(?string $hostname = null, int $count = 1): PingResult
     {
-        $hostname = $hostname ?? config('speedtest.preflight.check_internet_check_hostname');
+        $hostname = $hostname ?? config('speedtest.preflight.internet_check_hostname');
 
         // Remove protocol if present
         $hostname = preg_replace('#^https?://#', '', $hostname);
