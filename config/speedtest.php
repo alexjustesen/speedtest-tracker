@@ -36,15 +36,6 @@ return [
         'skip_ips' => env('SPEEDTEST_SKIP_IPS') ?? env('SPEEDTEST_SKIP_IPS'),
     ],
 
-    'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'), // ! DEPRECATED, use 'preflight.check_internet_connectivity' instead
-
-    /**
-     * IP filtering settings.
-     */
-    'allowed_ips' => env('ALLOWED_IPS'), // ! DEPRECATED, use 'preflight.allowed_ips' instead
-
-    'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''), // ! DEPRECATED, use 'preflight.skip_ips' instead
-
     /**
      * Threshold settings.
      */
