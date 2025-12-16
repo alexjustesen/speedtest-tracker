@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Spatie\Ping\Ping;
 use Spatie\Ping\PingResult;
@@ -21,6 +22,11 @@ class PingHostname
             hostname: $hostname,
             count: $count,
         ))->run();
+
+        Log::info('Pinged hostname', [
+            'host' => $hostname,
+            'data' => $ping->toArray(),
+        ]);
 
         return $ping;
     }
