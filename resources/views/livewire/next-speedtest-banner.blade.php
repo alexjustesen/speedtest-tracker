@@ -8,7 +8,7 @@
 
                 <div class="ml-3 flex-1">
                     <p class="text-sm text-blue-700 dark:text-blue-300">
-                        Next scheduled test at <span class="font-medium">{{ $this->nextSpeedtest->timezone(config('app.display_timezone'))->format('F jS, Y, g:i a') }}</span>.
+                        Next scheduled test at <span class="font-medium">{{ $this->nextSpeedtest->timezone(config('app.display_timezone'))->format(config('app.datetime_format')) }}</span>.
                     </p>
                 </div>
             </div>
