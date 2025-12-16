@@ -30,10 +30,9 @@ return [
     'interface' => env('SPEEDTEST_INTERFACE'),
 
     'preflight' => [
-        'get_external_ip_url' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_GET_EXTERNAL_IP_URL', 'https://icanhazip.com'),
+        'external_ip_url' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_EXTERNAL_IP_URL', 'https://icanhazip.com'),
+        'internet_check_hostname' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_INTERNET_CHECK_HOSTNAME', 'icanhazip.com'),
     ],
-
-    'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL'), // ! DEPRECATED, use preflight.get_external_ip_url instead
 
     /**
      * IP filtering settings.
