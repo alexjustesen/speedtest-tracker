@@ -32,7 +32,7 @@ return [
     'preflight' => [
         'check_internet_connectivity_url' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_CHECK_INTERNET_CONNECTIVITY_URL', 'speedtest-tracker.dev'),
         'get_external_ip_url' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_GET_EXTERNAL_IP_URL', 'https://icanhazip.com'),
-        'skip_ips' => env('SPEEDTEST_SKIP_IPS') ?? env('SPEEDTEST_SKIP_IPS'),
+        'skip_ips' => env('SPEEDTEST_SKIP_IPS'),
     ],
 
     'allowed_ips' => env('ALLOWED_IPS'),
