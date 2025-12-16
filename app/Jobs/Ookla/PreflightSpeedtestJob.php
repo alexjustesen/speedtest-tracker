@@ -69,7 +69,7 @@ class PreflightSpeedtestJob implements ShouldQueue
      */
     private function checkInternetConnectivity(): bool
     {
-        $hostname = config('speedtest.preflight.check_internet_connectivity');
+        $hostname = config('speedtest.preflight.check_internet_connectivity_url');
         $hostname = preg_replace('#^https?://#', '', $hostname);
 
         $response = (new Ping(
