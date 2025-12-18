@@ -1,34 +1,4 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
-@import './custom.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
-
-/* Safelist max-width utilities to always generate them */
-@source inline("max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,full,min,max,fit,prose,screen-sm,screen-md,screen-lg,screen-xl,screen-2xl}");
-
-/* Required by all components */
-@import '../../vendor/filament/support/resources/css/index.css';
-
-/* Required by actions and tables */
-@import '../../vendor/filament/actions/resources/css/index.css';
-
-/* Required by actions, forms and tables */
-@import '../../vendor/filament/forms/resources/css/index.css';
-
-/* Required by actions and infolists */
-@import '../../vendor/filament/infolists/resources/css/index.css';
-
-/* Required by notifications */
-/* @import '../../vendor/filament/notifications/resources/css/index.css'; */
-
-/* Required by actions, infolists, forms, schemas and tables */
-@import '../../vendor/filament/schemas/resources/css/index.css';
-
-/* Required by tables */
-/* @import '../../vendor/filament/tables/resources/css/index.css'; */
-
-/* Required by widgets */
-@import '../../vendor/filament/widgets/resources/css/index.css';
-
-@variant dark (&:where(.dark, .dark *));
