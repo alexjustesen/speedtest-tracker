@@ -57,6 +57,7 @@
                         } else {
                             document.documentElement.classList.remove('dark');
                         }
+                        window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: newTheme } }));
                     }
                 }" align="end">
                     <flux:button variant="subtle" square class="group" aria-label="Preferred color scheme">

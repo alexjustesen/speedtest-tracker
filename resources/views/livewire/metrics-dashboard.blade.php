@@ -248,9 +248,19 @@
     Alpine.data('chartComponent', (config) => ({
         chart: null,
         animationFrame: null,
+        currentLabels: config.labels,
+        currentData: config.data,
 
         init() {
             this.createChart(config.labels, config.data);
+
+            // Listen for theme changes and re-draw chart
+            window.addEventListener('theme-changed', () => {
+                // Small delay to allow DOM to update
+                setTimeout(() => {
+                    this.createChart(this.currentLabels, this.currentData);
+                }, 100);
+            });
         },
 
         destroy() {
@@ -263,6 +273,10 @@
         },
 
         createChart(labels, data) {
+            // Store current data for theme changes
+            this.currentLabels = labels;
+            this.currentData = data;
+
             if (this.chart) {
                 this.chart.destroy();
             }
@@ -272,6 +286,11 @@
             const unit = config.unit || 'Mbps';
             const benchmarkFailed = config.benchmarkFailed || [];
             const yellowColor = 'rgb(234, 179, 8)'; // Yellow for failed benchmarks
+
+            // Detect dark mode for text colors
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const textColor = isDarkMode ? 'rgb(228, 228, 231)' : 'rgb(39, 39, 42)';
+            const gridColor = isDarkMode ? 'rgba(228, 228, 231, 0.1)' : 'rgba(0, 0, 0, 0.1)';
 
             // Convert rgb() to rgba() with opacity for fill
             const getFillColor = (color) => {
@@ -407,18 +426,26 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
+                                color: textColor,
                                 callback: function(value) {
                                     return value + ' ' + unit;
                                 }
+                            },
+                            grid: {
+                                color: gridColor
                             }
                         },
                         x: {
                             ticks: {
+                                color: textColor,
                                 display: true,
                                 autoSkip: true,
                                 maxTicksLimit: 8,
                                 maxRotation: 0,
                                 minRotation: 0
+                            },
+                            grid: {
+                                color: gridColor
                             }
                         }
                     }
