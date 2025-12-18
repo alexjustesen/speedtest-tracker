@@ -7,7 +7,19 @@
         <title>{{ $title ?? 'Page Title' }} - {{ config('app.name') }}</title>
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @fluxAppearance
+
+        <script>
+            const theme = localStorage.getItem('theme') ?? 'system'
+
+            if (
+                theme === 'dark' ||
+                (theme === 'system' &&
+                    window.matchMedia('(prefers-color-scheme: dark)')
+                        .matches)
+            ) {
+                document.documentElement.classList.add('dark')
+            }
+        </script>
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800 antialiased">
         <flux:header container class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
@@ -32,18 +44,32 @@
             <flux:spacer />
 
             <flux:navbar>
-                <flux:dropdown x-data align="end">
+                <flux:dropdown x-data="{
+                    theme: localStorage.getItem('theme') ?? 'system',
+                    updateTheme(newTheme) {
+                        this.theme = newTheme;
+                        localStorage.setItem('theme', newTheme);
+                        const effectiveTheme = newTheme === 'system'
+                            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                            : newTheme;
+                        if (effectiveTheme === 'dark') {
+                            document.documentElement.classList.add('dark');
+                        } else {
+                            document.documentElement.classList.remove('dark');
+                        }
+                    }
+                }" align="end">
                     <flux:button variant="subtle" square class="group" aria-label="Preferred color scheme">
-                        <flux:icon.sun x-show="$flux.appearance === 'light'" variant="mini" class="text-zinc-500 dark:text-white" />
-                        <flux:icon.moon x-show="$flux.appearance === 'dark'" variant="mini" class="text-zinc-500 dark:text-white" />
-                        <flux:icon.moon x-show="$flux.appearance === 'system' && $flux.dark" variant="mini" />
-                        <flux:icon.sun x-show="$flux.appearance === 'system' && ! $flux.dark" variant="mini" />
+                        <flux:icon.sun x-show="theme === 'light'" variant="mini" class="text-zinc-500 dark:text-white" />
+                        <flux:icon.moon x-show="theme === 'dark'" variant="mini" class="text-zinc-500 dark:text-white" />
+                        <flux:icon.moon x-show="theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-zinc-500 dark:text-white" />
+                        <flux:icon.sun x-show="theme === 'system' && !window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-zinc-500 dark:text-white" />
                     </flux:button>
 
                     <flux:menu>
-                        <flux:menu.item icon="sun" x-on:click="$flux.appearance = 'light'">Light</flux:menu.item>
-                        <flux:menu.item icon="moon" x-on:click="$flux.appearance = 'dark'">Dark</flux:menu.item>
-                        <flux:menu.item icon="monitor" x-on:click="$flux.appearance = 'system'">System</flux:menu.item>
+                        <flux:menu.item icon="sun" x-on:click="updateTheme('light')">Light</flux:menu.item>
+                        <flux:menu.item icon="moon" x-on:click="updateTheme('dark')">Dark</flux:menu.item>
+                        <flux:menu.item icon="monitor" x-on:click="updateTheme('system')">System</flux:menu.item>
                     </flux:menu>
                 </flux:dropdown>
 
