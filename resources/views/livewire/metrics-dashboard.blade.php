@@ -1,4 +1,5 @@
-<div class="flex h-full w-full flex-1 flex-col gap-6">
+<div class="flex h-full w-full flex-1 flex-col gap-6"
+    x-data="dateRangePersistence(@js($dateRange))">
     <livewire:next-speedtest-banner />
 
     <div class="flex items-center justify-between">
@@ -1442,6 +1443,34 @@
             config.benchmarks = newData[benchmarksField] || [];
 
             this.createChart(newData.labels, newData[config.field], newData[config.field + 'Latency']);
+        }
+    }));
+
+    Alpine.data('dateRangePersistence', (initialDateRange) => ({
+        dateRange: initialDateRange,
+
+        init() {
+            try {
+                const savedRange = localStorage.getItem('metrics-date-range');
+                const validRanges = ['today', 'week', 'month'];
+
+                // Always prefer localStorage if it exists and is valid
+                if (savedRange && validRanges.includes(savedRange) && savedRange !== initialDateRange) {
+                    console.log('Restoring from localStorage:', savedRange);
+                    this.dateRange = savedRange;
+                    // Call the updateDateRange method to properly update the component
+                    $wire.call('updateDateRange', savedRange);
+                }
+
+                // Watch for changes and save to localStorage
+                $wire.$watch('dateRange', (value) => {
+                    console.log('Date range changed to:', value);
+                    this.dateRange = value;
+                    localStorage.setItem('metrics-date-range', value);
+                });
+            } catch (e) {
+                console.warn('Date range persistence unavailable:', e);
+            }
         }
     }));
 </script>
