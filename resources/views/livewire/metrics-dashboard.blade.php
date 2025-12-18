@@ -34,8 +34,123 @@
 
     <!-- Data Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- Download Data -->
+        <!-- Download & Upload Speed Comparison -->
         <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                <x-tabler-chart-histogram class="size-5 text-neutral-600" />
+                Speed
+            </flux:heading>
+
+            <!-- Speed Comparison Chart -->
+            <div
+                x-data="speedComparisonChartComponent({
+                    labels: @js($chartData['labels']),
+                    downloadData: @js($chartData['download']),
+                    uploadData: @js($chartData['upload']),
+                    downloadColor: 'rgb(59, 130, 246)',
+                    uploadColor: 'rgb(168, 85, 247)',
+                    downloadBenchmarkFailed: @js($chartData['downloadBenchmarkFailed']),
+                    uploadBenchmarkFailed: @js($chartData['uploadBenchmarkFailed']),
+                })"
+                @charts-updated.window="updateChart($event.detail.chartData)"
+                wire:ignore
+                class="aspect-[2/1] lg:aspect-[4/1] px-6 py-4"
+            >
+                <canvas x-ref="canvas"></canvas>
+            </div>
+
+            <!-- Speed Comparison Stats -->
+            <div class="border-t border-neutral-200 dark:border-neutral-700">
+                <!-- Download Stats -->
+                <div class="border-b border-neutral-200 dark:border-neutral-700">
+                    <flux:heading size="sm" class="px-6 pt-3 pb-2 text-blue-600 dark:text-blue-400">Download</flux:heading>
+                    <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 dark:divide-neutral-700 border-t border-neutral-200 dark:border-neutral-700">
+                        <div class="px-6 py-3">
+                            <flux:heading>Latest</flux:heading>
+                            <div class="text-xl font-semibold {{ $chartData['downloadStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
+                                {{ number_format($chartData['downloadStats']['latest'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>Average</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['downloadStats']['average'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>P95</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['downloadStats']['p95'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>Maximum</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['downloadStats']['maximum'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>Minimum</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['downloadStats']['minimum'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>Healthy</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['downloadStats']['healthy'], 1) }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Stats -->
+                <div>
+                    <flux:heading size="sm" class="px-6 pt-3 pb-2 text-purple-600 dark:text-purple-400">Upload</flux:heading>
+                    <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 dark:divide-neutral-700 border-t border-neutral-200 dark:border-neutral-700">
+                        <div class="px-6 py-3">
+                            <flux:heading>Latest</flux:heading>
+                            <div class="text-xl font-semibold {{ $chartData['uploadStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
+                                {{ number_format($chartData['uploadStats']['latest'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>Average</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['uploadStats']['average'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>P95</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['uploadStats']['p95'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>Maximum</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['uploadStats']['maximum'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>Minimum</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['uploadStats']['minimum'], 2) }} Mbps
+                            </div>
+                        </div>
+                        <div class="px-6 py-3">
+                            <flux:heading>Healthy</flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['uploadStats']['healthy'], 1) }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download Data -->
+        <div class="hidden col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
                 <x-tabler-download class="size-5 text-neutral-600" />
                 {{ __('general.download') }}
@@ -106,7 +221,7 @@
         </div>
 
         <!-- Upload Data -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+        <div class="hidden col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
                 <x-tabler-upload class="size-5 text-neutral-600" />
                 {{ __('general.upload') }}
@@ -735,6 +850,300 @@
             ];
 
             this.createChart(newData.labels, datasets);
+        }
+    }));
+
+    Alpine.data('speedComparisonChartComponent', (config) => ({
+        chart: null,
+        animationFrame: null,
+        currentLabels: config.labels,
+        currentDownloadData: config.downloadData,
+        currentUploadData: config.uploadData,
+
+        init() {
+            this.createChart(config.labels, config.downloadData, config.uploadData);
+
+            // Listen for theme changes and re-draw chart
+            window.addEventListener('theme-changed', () => {
+                // Small delay to allow DOM to update
+                setTimeout(() => {
+                    this.createChart(this.currentLabels, this.currentDownloadData, this.currentUploadData);
+                }, 100);
+            });
+        },
+
+        destroy() {
+            if (this.animationFrame) {
+                cancelAnimationFrame(this.animationFrame);
+            }
+            if (this.chart) {
+                this.chart.destroy();
+            }
+        },
+
+        createChart(labels, downloadData, uploadData) {
+            // Store current data for theme changes
+            this.currentLabels = labels;
+            this.currentDownloadData = downloadData;
+            this.currentUploadData = uploadData;
+
+            if (this.chart) {
+                this.chart.destroy();
+            }
+
+            const downloadBenchmarkFailed = config.downloadBenchmarkFailed || [];
+            const uploadBenchmarkFailed = config.uploadBenchmarkFailed || [];
+            const amberColor = 'rgb(251, 191, 36)'; // Amber for failed benchmarks
+
+            // Detect dark mode for text colors
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const textColor = isDarkMode ? 'rgb(228, 228, 231)' : 'rgb(39, 39, 42)';
+            const gridColor = isDarkMode ? 'rgba(228, 228, 231, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+            // Convert rgb() to rgba() with opacity for fill
+            const getFillColor = (color, opacity = 0.2) => {
+                return color.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
+            };
+
+            // Create point colors and radii for download
+            const downloadPointColors = downloadData.map((_, index) =>
+                downloadBenchmarkFailed[index] ? amberColor : config.downloadColor
+            );
+            const downloadPointRadii = downloadData.map((_, index) =>
+                downloadBenchmarkFailed[index] ? 5 : 0
+            );
+
+            // Create point colors and radii for upload
+            const uploadPointColors = uploadData.map((_, index) =>
+                uploadBenchmarkFailed[index] ? amberColor : config.uploadColor
+            );
+            const uploadPointRadii = uploadData.map((_, index) =>
+                uploadBenchmarkFailed[index] ? 5 : 0
+            );
+
+            // Plugin to create ping/ripple effect on failed benchmark points
+            const self = this;
+            const pulsingPointsPlugin = {
+                id: 'pulsingPoints',
+                afterDatasetsDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const time = Date.now();
+
+                    // Process download dataset (index 0)
+                    const downloadMeta = chart.getDatasetMeta(0);
+                    downloadMeta.data.forEach((point, index) => {
+                        if (downloadBenchmarkFailed[index]) {
+                            const x = point.x;
+                            const y = point.y;
+
+                            // Create multiple ping rings at different stages
+                            const pingDuration = 2000;
+                            const maxRadius = 25;
+                            const numberOfRings = 3;
+
+                            for (let i = 0; i < numberOfRings; i++) {
+                                const offset = (pingDuration / numberOfRings) * i;
+                                const progress = ((time + offset) % pingDuration) / pingDuration;
+                                const radius = progress * maxRadius;
+                                const opacity = Math.max(0, 0.6 * (1 - progress));
+
+                                if (opacity > 0.05) {
+                                    ctx.save();
+                                    ctx.beginPath();
+                                    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+                                    ctx.strokeStyle = `rgba(251, 191, 36, ${opacity})`;
+                                    ctx.lineWidth = 2.5;
+                                    ctx.stroke();
+                                    ctx.restore();
+                                }
+                            }
+                        }
+                    });
+
+                    // Process upload dataset (index 1)
+                    const uploadMeta = chart.getDatasetMeta(1);
+                    uploadMeta.data.forEach((point, index) => {
+                        if (uploadBenchmarkFailed[index]) {
+                            const x = point.x;
+                            const y = point.y;
+
+                            // Create multiple ping rings at different stages
+                            const pingDuration = 2000;
+                            const maxRadius = 25;
+                            const numberOfRings = 3;
+
+                            for (let i = 0; i < numberOfRings; i++) {
+                                const offset = (pingDuration / numberOfRings) * i;
+                                const progress = ((time + offset) % pingDuration) / pingDuration;
+                                const radius = progress * maxRadius;
+                                const opacity = Math.max(0, 0.6 * (1 - progress));
+
+                                if (opacity > 0.05) {
+                                    ctx.save();
+                                    ctx.beginPath();
+                                    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+                                    ctx.strokeStyle = `rgba(251, 191, 36, ${opacity})`;
+                                    ctx.lineWidth = 2.5;
+                                    ctx.stroke();
+                                    ctx.restore();
+                                }
+                            }
+                        }
+                    });
+
+                    // Continue animation if there are failed benchmarks
+                    if (downloadBenchmarkFailed.some(failed => failed) || uploadBenchmarkFailed.some(failed => failed)) {
+                        self.animationFrame = requestAnimationFrame(() => {
+                            chart.render();
+                        });
+                    }
+                }
+            };
+
+            this.chart = new Chart(this.$refs.canvas, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Download (Mbps)',
+                            data: downloadData,
+                            borderColor: config.downloadColor,
+                            backgroundColor: getFillColor(config.downloadColor),
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: downloadPointRadii,
+                            pointHoverRadius: 7,
+                            pointBackgroundColor: downloadPointColors,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointHoverBackgroundColor: downloadPointColors,
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 3,
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Upload (Mbps)',
+                            data: uploadData,
+                            borderColor: config.uploadColor,
+                            backgroundColor: getFillColor(config.uploadColor),
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: uploadPointRadii,
+                            pointHoverRadius: 7,
+                            pointBackgroundColor: uploadPointColors,
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointHoverBackgroundColor: uploadPointColors,
+                            pointHoverBorderColor: '#fff',
+                            pointHoverBorderWidth: 3,
+                            yAxisID: 'y1',
+                        }
+                    ]
+                },
+                plugins: [pulsingPointsPlugin],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toFixed(2) + ' Mbps';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Download Speed (Mbps)',
+                                color: config.downloadColor,
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                }
+                            },
+                            ticks: {
+                                color: textColor,
+                                callback: function(value) {
+                                    return value + ' Mbps';
+                                }
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Upload Speed (Mbps)',
+                                color: config.uploadColor,
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                }
+                            },
+                            ticks: {
+                                color: textColor,
+                                callback: function(value) {
+                                    return value + ' Mbps';
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false, // Only want the grid lines for one axis to show up
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: textColor,
+                                display: true,
+                                autoSkip: true,
+                                maxTicksLimit: 8,
+                                maxRotation: 0,
+                                minRotation: 0
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
+        updateChart(newData) {
+            // Update benchmark failed data
+            config.downloadBenchmarkFailed = newData.downloadBenchmarkFailed || [];
+            config.uploadBenchmarkFailed = newData.uploadBenchmarkFailed || [];
+
+            this.createChart(newData.labels, newData.download, newData.upload);
         }
     }));
 
