@@ -49,6 +49,9 @@ class MetricsDashboard extends Component
         $downloadData = [];
         $uploadData = [];
         $pingData = [];
+        $downloadJitterData = [];
+        $uploadJitterData = [];
+        $pingJitterData = [];
         $downloadBenchmarkFailed = [];
         $uploadBenchmarkFailed = [];
         $pingBenchmarkFailed = [];
@@ -70,6 +73,11 @@ class MetricsDashboard extends Component
 
             // Ping in milliseconds
             $pingData[] = round($result->ping ?? 0, 2);
+
+            // Jitter in milliseconds
+            $downloadJitterData[] = round($result->downloadJitter ?? 0, 2);
+            $uploadJitterData[] = round($result->uploadJitter ?? 0, 2);
+            $pingJitterData[] = round($result->pingJitter ?? 0, 2);
 
             // Track benchmark failures and full benchmark data
             $benchmarks = $result->benchmarks ?? [];
@@ -103,6 +111,25 @@ class MetricsDashboard extends Component
         $pingMax = count($pingData) > 0 ? round(max($pingData), 2) : 0;
         $pingMin = count($pingData) > 0 ? round(min($pingData), 2) : 0;
 
+        // Calculate jitter statistics
+        $downloadJitterLatest = count($downloadJitterData) > 0 ? end($downloadJitterData) : 0;
+        $downloadJitterAvg = count($downloadJitterData) > 0 ? round(array_sum($downloadJitterData) / count($downloadJitterData), 2) : 0;
+        $downloadJitterP95 = $this->calculatePercentile($downloadJitterData, 95);
+        $downloadJitterMax = count($downloadJitterData) > 0 ? round(max($downloadJitterData), 2) : 0;
+        $downloadJitterMin = count($downloadJitterData) > 0 ? round(min($downloadJitterData), 2) : 0;
+
+        $uploadJitterLatest = count($uploadJitterData) > 0 ? end($uploadJitterData) : 0;
+        $uploadJitterAvg = count($uploadJitterData) > 0 ? round(array_sum($uploadJitterData) / count($uploadJitterData), 2) : 0;
+        $uploadJitterP95 = $this->calculatePercentile($uploadJitterData, 95);
+        $uploadJitterMax = count($uploadJitterData) > 0 ? round(max($uploadJitterData), 2) : 0;
+        $uploadJitterMin = count($uploadJitterData) > 0 ? round(min($uploadJitterData), 2) : 0;
+
+        $pingJitterLatest = count($pingJitterData) > 0 ? end($pingJitterData) : 0;
+        $pingJitterAvg = count($pingJitterData) > 0 ? round(array_sum($pingJitterData) / count($pingJitterData), 2) : 0;
+        $pingJitterP95 = $this->calculatePercentile($pingJitterData, 95);
+        $pingJitterMax = count($pingJitterData) > 0 ? round(max($pingJitterData), 2) : 0;
+        $pingJitterMin = count($pingJitterData) > 0 ? round(min($pingJitterData), 2) : 0;
+
         // Calculate healthy ratio for each metric based on benchmark KPI
         $downloadPassedCount = collect($downloadBenchmarkFailed)->filter(fn ($failed) => $failed === false)->count();
         $uploadPassedCount = collect($uploadBenchmarkFailed)->filter(fn ($failed) => $failed === false)->count();
@@ -122,6 +149,9 @@ class MetricsDashboard extends Component
             'download' => $downloadData,
             'upload' => $uploadData,
             'ping' => $pingData,
+            'downloadJitter' => $downloadJitterData,
+            'uploadJitter' => $uploadJitterData,
+            'pingJitter' => $pingJitterData,
             'downloadBenchmarkFailed' => $downloadBenchmarkFailed,
             'uploadBenchmarkFailed' => $uploadBenchmarkFailed,
             'pingBenchmarkFailed' => $pingBenchmarkFailed,
@@ -157,6 +187,24 @@ class MetricsDashboard extends Component
                 'maximum' => $pingMax,
                 'minimum' => $pingMin,
                 'healthy' => $pingHealthyRatio,
+                'tests' => count($results),
+            ],
+            'jitterStats' => [
+                'downloadLatest' => $downloadJitterLatest,
+                'downloadAverage' => $downloadJitterAvg,
+                'downloadP95' => $downloadJitterP95,
+                'downloadMaximum' => $downloadJitterMax,
+                'downloadMinimum' => $downloadJitterMin,
+                'uploadLatest' => $uploadJitterLatest,
+                'uploadAverage' => $uploadJitterAvg,
+                'uploadP95' => $uploadJitterP95,
+                'uploadMaximum' => $uploadJitterMax,
+                'uploadMinimum' => $uploadJitterMin,
+                'pingLatest' => $pingJitterLatest,
+                'pingAverage' => $pingJitterAvg,
+                'pingP95' => $pingJitterP95,
+                'pingMaximum' => $pingJitterMax,
+                'pingMinimum' => $pingJitterMin,
                 'tests' => count($results),
             ],
         ];

@@ -240,6 +240,122 @@
                 </div>
             </div>
         </div>
+
+        <!-- Jitter Data -->
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                <x-tabler-graph class="size-5 text-neutral-600" />
+                Jitter
+            </flux:heading>
+
+            <!-- Jitter Chart -->
+            <div
+                x-data="multiLineChartComponent({
+                    labels: @js($chartData['labels']),
+                    datasets: [
+                        {
+                            label: 'Download Jitter (ms)',
+                            data: @js($chartData['downloadJitter']),
+                            color: 'rgb(59, 130, 246)',
+                        },
+                        {
+                            label: 'Upload Jitter (ms)',
+                            data: @js($chartData['uploadJitter']),
+                            color: 'rgb(16, 185, 129)',
+                        },
+                        {
+                            label: 'Ping Jitter (ms)',
+                            data: @js($chartData['pingJitter']),
+                            color: 'rgb(168, 85, 247)',
+                        }
+                    ],
+                    unit: 'ms'
+                })"
+                @charts-updated.window="updateChart($event.detail.chartData)"
+                wire:ignore
+                class="aspect-[2/1] lg:aspect-[4/1] px-6 py-4"
+            >
+                <canvas x-ref="canvas"></canvas>
+            </div>
+
+            <!-- Jitter Stats -->
+            <div class="divide-x divide-neutral-200 grid grid-cols-1 lg:grid-cols-3 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
+                <!-- Download Jitter Stats -->
+                <div class="px-6 py-4">
+                    <flux:heading size="sm" class="mb-3 text-blue-600 dark:text-blue-400">Download Jitter</flux:heading>
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <flux:heading>Latest</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['downloadLatest'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>Average</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['downloadAverage'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>P95</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['downloadP95'], 2) }} ms
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Jitter Stats -->
+                <div class="px-6 py-4">
+                    <flux:heading size="sm" class="mb-3 text-emerald-600 dark:text-emerald-400">Upload Jitter</flux:heading>
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <flux:heading>Latest</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['uploadLatest'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>Average</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['uploadAverage'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>P95</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['uploadP95'], 2) }} ms
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ping Jitter Stats -->
+                <div class="px-6 py-4">
+                    <flux:heading size="sm" class="mb-3 text-purple-600 dark:text-purple-400">Ping Jitter</flux:heading>
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <flux:heading>Latest</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['pingLatest'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>Average</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['pingAverage'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>P95</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['jitterStats']['pingP95'], 2) }} ms
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -463,6 +579,156 @@
             config.benchmarks = newData[benchmarksField] || [];
 
             this.createChart(newData.labels, newData[config.field]);
+        }
+    }));
+
+    Alpine.data('multiLineChartComponent', (config) => ({
+        chart: null,
+        currentLabels: config.labels,
+        currentDatasets: config.datasets,
+
+        init() {
+            this.createChart(config.labels, config.datasets);
+
+            // Listen for theme changes and re-draw chart
+            window.addEventListener('theme-changed', () => {
+                // Small delay to allow DOM to update
+                setTimeout(() => {
+                    this.createChart(this.currentLabels, this.currentDatasets);
+                }, 100);
+            });
+        },
+
+        destroy() {
+            if (this.chart) {
+                this.chart.destroy();
+            }
+        },
+
+        createChart(labels, datasets) {
+            // Store current data for theme changes
+            this.currentLabels = labels;
+            this.currentDatasets = datasets;
+
+            if (this.chart) {
+                this.chart.destroy();
+            }
+
+            const unit = config.unit || 'ms';
+
+            // Detect dark mode for text colors
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const textColor = isDarkMode ? 'rgb(228, 228, 231)' : 'rgb(39, 39, 42)';
+            const gridColor = isDarkMode ? 'rgba(228, 228, 231, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+            // Convert dataset configs to Chart.js format
+            const chartDatasets = datasets.map(dataset => {
+                const color = dataset.color || 'rgb(59, 130, 246)';
+                const fillColor = color.replace('rgb(', 'rgba(').replace(')', ', 0.1)');
+
+                return {
+                    label: dataset.label,
+                    data: dataset.data,
+                    borderColor: color,
+                    backgroundColor: fillColor,
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: color,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverBackgroundColor: color,
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBorderWidth: 2,
+                };
+            });
+
+            this.chart = new Chart(this.$refs.canvas, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: chartDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toFixed(2) + ' ' + unit;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: textColor,
+                                callback: function(value) {
+                                    return value + ' ' + unit;
+                                }
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: textColor,
+                                display: true,
+                                autoSkip: true,
+                                maxTicksLimit: 8,
+                                maxRotation: 0,
+                                minRotation: 0
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
+        updateChart(newData) {
+            const datasets = [
+                {
+                    label: 'Download Jitter (ms)',
+                    data: newData.downloadJitter || [],
+                    color: 'rgb(59, 130, 246)',
+                },
+                {
+                    label: 'Upload Jitter (ms)',
+                    data: newData.uploadJitter || [],
+                    color: 'rgb(16, 185, 129)',
+                },
+                {
+                    label: 'Ping Jitter (ms)',
+                    data: newData.pingJitter || [],
+                    color: 'rgb(168, 85, 247)',
+                }
+            ];
+
+            this.createChart(newData.labels, datasets);
         }
     }));
 </script>
