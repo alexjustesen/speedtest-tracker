@@ -49,6 +49,7 @@
                     labels: @js($chartData['labels']),
                     data: @js($chartData['download']),
                     benchmarkFailed: @js($chartData['downloadBenchmarkFailed']),
+                    benchmarks: @js($chartData['downloadBenchmarks']),
                     color: 'rgb(59, 130, 246)',
                     field: 'download',
                     showPoints: true,
@@ -117,6 +118,7 @@
                     labels: @js($chartData['labels']),
                     data: @js($chartData['upload']),
                     benchmarkFailed: @js($chartData['uploadBenchmarkFailed']),
+                    benchmarks: @js($chartData['uploadBenchmarks']),
                     color: 'rgb(59, 130, 246)',
                     field: 'upload',
                     showPoints: true,
@@ -185,6 +187,7 @@
                     labels: @js($chartData['labels']),
                     data: @js($chartData['ping']),
                     benchmarkFailed: @js($chartData['pingBenchmarkFailed']),
+                    benchmarks: @js($chartData['pingBenchmarks']),
                     color: 'rgb(59, 130, 246)',
                     field: 'ping',
                     showPoints: true,
@@ -371,16 +374,31 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            displayColors: false,
                             callbacks: {
                                 label: function(context) {
-                                    let label = config.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
+                                    const index = context.dataIndex;
+                                    const benchmark = config.benchmarks && config.benchmarks[index];
+                                    const labels = [];
+
+                                    // Main result line
+                                    let resultLabel = 'Result: ';
                                     if (context.parsed.y !== null) {
-                                        label += context.parsed.y.toFixed(2) + ' ' + unit;
+                                        resultLabel += context.parsed.y.toFixed(2) + ' ' + unit;
                                     }
-                                    return label;
+                                    labels.push(resultLabel);
+
+                                    // Benchmark info if available
+                                    if (benchmark) {
+                                        const thresholdType = benchmark.bar === 'min' ? 'Min' : 'Max';
+                                        const benchmarkLabel = `Benchmark (${thresholdType}): ${benchmark.value} ${benchmark.unit}`;
+                                        labels.push(benchmarkLabel);
+
+                                        const statusLabel = benchmark.passed ? 'Status: ✅ Passed' : 'Status: ❌ Failed';
+                                        labels.push(statusLabel);
+                                    }
+
+                                    return labels;
                                 }
                             }
                         }
@@ -412,6 +430,10 @@
             // Update benchmark failed data for this field
             const benchmarkFailedField = config.field + 'BenchmarkFailed';
             config.benchmarkFailed = newData[benchmarkFailedField] || [];
+
+            // Update full benchmark data for this field
+            const benchmarksField = config.field + 'Benchmarks';
+            config.benchmarks = newData[benchmarksField] || [];
 
             this.createChart(newData.labels, newData[config.field]);
         }

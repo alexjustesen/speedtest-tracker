@@ -52,6 +52,9 @@ class MetricsDashboard extends Component
         $downloadBenchmarkFailed = [];
         $uploadBenchmarkFailed = [];
         $pingBenchmarkFailed = [];
+        $downloadBenchmarks = [];
+        $uploadBenchmarks = [];
+        $pingBenchmarks = [];
 
         foreach ($results as $result) {
             // Format timestamp for label
@@ -68,11 +71,15 @@ class MetricsDashboard extends Component
             // Ping in milliseconds
             $pingData[] = round($result->ping ?? 0, 2);
 
-            // Track benchmark failures
+            // Track benchmark failures and full benchmark data
             $benchmarks = $result->benchmarks ?? [];
             $downloadBenchmarkFailed[] = isset($benchmarks['download']) && $benchmarks['download']['passed'] === false;
             $uploadBenchmarkFailed[] = isset($benchmarks['upload']) && $benchmarks['upload']['passed'] === false;
             $pingBenchmarkFailed[] = isset($benchmarks['ping']) && $benchmarks['ping']['passed'] === false;
+
+            $downloadBenchmarks[] = $benchmarks['download'] ?? null;
+            $uploadBenchmarks[] = $benchmarks['upload'] ?? null;
+            $pingBenchmarks[] = $benchmarks['ping'] ?? null;
         }
 
         // Calculate download statistics
@@ -113,6 +120,9 @@ class MetricsDashboard extends Component
             'downloadBenchmarkFailed' => $downloadBenchmarkFailed,
             'uploadBenchmarkFailed' => $uploadBenchmarkFailed,
             'pingBenchmarkFailed' => $pingBenchmarkFailed,
+            'downloadBenchmarks' => $downloadBenchmarks,
+            'uploadBenchmarks' => $uploadBenchmarks,
+            'pingBenchmarks' => $pingBenchmarks,
             'count' => count($results),
             'downloadStats' => [
                 'latest' => $downloadLatest,
