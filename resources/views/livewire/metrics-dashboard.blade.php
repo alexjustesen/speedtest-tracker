@@ -35,9 +35,9 @@
     <!-- Data Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Download Data -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-900">
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <x-tabler-download class="size-5 text-zinc-600" />
+                <x-tabler-download class="size-5 text-neutral-600" />
                 {{ __('general.download') }}
             </flux:heading>
 
@@ -66,37 +66,37 @@
             <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
                 <div class="px-6 py-3">
                     <flux:heading>Latest</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold {{ $chartData['downloadStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
                         {{ number_format($chartData['downloadStats']['latest'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Average</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['downloadStats']['average'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>P95</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['downloadStats']['p95'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Maximum</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['downloadStats']['maximum'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Minimum</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['downloadStats']['minimum'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Healthy</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['downloadStats']['healthy'], 1) }}%
                     </div>
                 </div>
@@ -104,9 +104,9 @@
         </div>
 
         <!-- Upload Data -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-900">
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <x-tabler-upload class="size-5 text-zinc-600" />
+                <x-tabler-upload class="size-5 text-neutral-600" />
                 {{ __('general.upload') }}
             </flux:heading>
 
@@ -135,37 +135,37 @@
             <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
                 <div class="px-6 py-3">
                     <flux:heading>Latest</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold {{ $chartData['uploadStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
                         {{ number_format($chartData['uploadStats']['latest'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Average</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['uploadStats']['average'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>P95</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['uploadStats']['p95'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Maximum</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['uploadStats']['maximum'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Minimum</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['uploadStats']['minimum'], 2) }} Mbps
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Healthy</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['uploadStats']['healthy'], 1) }}%
                     </div>
                 </div>
@@ -173,9 +173,9 @@
         </div>
 
         <!-- Ping Data -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-900">
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <x-tabler-antenna-bars-5 class="size-5 text-zinc-600" />
+                <x-tabler-antenna-bars-5 class="size-5 text-neutral-600" />
                 {{ __('general.ping') }}
             </flux:heading>
 
@@ -204,37 +204,37 @@
             <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
                 <div class="px-6 py-3">
                     <flux:heading>Latest</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold {{ $chartData['pingStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
                         {{ number_format($chartData['pingStats']['latest'], 2) }} ms
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Average</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['pingStats']['average'], 2) }} ms
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>P95</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['pingStats']['p95'], 2) }} ms
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Maximum</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['pingStats']['maximum'], 2) }} ms
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Minimum</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['pingStats']['minimum'], 2) }} ms
                     </div>
                 </div>
                 <div class="px-6 py-3">
                     <flux:heading>Healthy</flux:heading>
-                    <div class="text-xl font-semibold">
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['pingStats']['healthy'], 1) }}%
                     </div>
                 </div>

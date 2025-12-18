@@ -21,17 +21,17 @@
             }
         </script>
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800 antialiased">
-        <flux:header container class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
+    <body class="min-h-screen bg-white dark:bg-neutral-800 antialiased">
+        <flux:header container class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <flux:brand href="#" class="max-lg:hidden dark:hidden">
-                <x-slot name="logo" class="size-8 rounded-full bg-zinc-900 text-white text-xs font-bold">
+                <x-slot name="logo" class="size-8 rounded-full bg-neutral-900 text-white text-xs font-bold">
                     <flux:icon name="rabbit" variant="mini" />
                 </x-slot>
             </flux:brand>
             <flux:brand href="#" class="max-lg:hidden! hidden dark:flex">
-                <x-slot name="logo" class="size-8 rounded-full bg-white text-zinc-900 text-xs font-bold">
+                <x-slot name="logo" class="size-8 rounded-full bg-white text-neutral-900 text-xs font-bold">
                     <flux:icon name="rabbit" variant="mini" />
                 </x-slot>
             </flux:brand>
@@ -61,10 +61,10 @@
                     }
                 }" align="end">
                     <flux:button variant="subtle" square class="group" aria-label="Preferred color scheme">
-                        <flux:icon.sun x-show="theme === 'light'" variant="mini" class="text-zinc-500 dark:text-white" />
-                        <flux:icon.moon x-show="theme === 'dark'" variant="mini" class="text-zinc-500 dark:text-white" />
-                        <flux:icon.moon x-show="theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-zinc-500 dark:text-white" />
-                        <flux:icon.sun x-show="theme === 'system' && !window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-zinc-500 dark:text-white" />
+                        <flux:icon.sun x-show="theme === 'light'" variant="mini" class="text-neutral-500 dark:text-white" />
+                        <flux:icon.moon x-show="theme === 'dark'" variant="mini" class="text-neutral-500 dark:text-white" />
+                        <flux:icon.moon x-show="theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-neutral-500 dark:text-white" />
+                        <flux:icon.sun x-show="theme === 'system' && !window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-neutral-500 dark:text-white" />
                     </flux:button>
 
                     <flux:menu>
@@ -84,7 +84,7 @@
             </flux:navbar>
         </flux:header>
 
-        <flux:sidebar sticky collapsible="mobile" class="lg:hidden bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-700">
+        <flux:sidebar sticky collapsible="mobile" class="lg:hidden bg-neutral-50 dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-700">
             <flux:sidebar.header>
                 <flux:sidebar.brand
                     href="#"

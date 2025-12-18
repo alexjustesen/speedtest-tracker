@@ -112,6 +112,11 @@ class MetricsDashboard extends Component
         $uploadHealthyRatio = count($results) > 0 ? round(($uploadPassedCount / count($results)) * 100, 1) : 0;
         $pingHealthyRatio = count($results) > 0 ? round(($pingPassedCount / count($results)) * 100, 1) : 0;
 
+        // Determine if latest stat failed benchmark
+        $downloadLatestFailed = count($downloadBenchmarkFailed) > 0 ? end($downloadBenchmarkFailed) : false;
+        $uploadLatestFailed = count($uploadBenchmarkFailed) > 0 ? end($uploadBenchmarkFailed) : false;
+        $pingLatestFailed = count($pingBenchmarkFailed) > 0 ? end($pingBenchmarkFailed) : false;
+
         return [
             'labels' => $labels,
             'download' => $downloadData,
@@ -126,6 +131,7 @@ class MetricsDashboard extends Component
             'count' => count($results),
             'downloadStats' => [
                 'latest' => $downloadLatest,
+                'latestFailed' => $downloadLatestFailed,
                 'average' => $downloadAvg,
                 'p95' => $downloadP95,
                 'maximum' => $downloadMax,
@@ -135,6 +141,7 @@ class MetricsDashboard extends Component
             ],
             'uploadStats' => [
                 'latest' => $uploadLatest,
+                'latestFailed' => $uploadLatestFailed,
                 'average' => $uploadAvg,
                 'p95' => $uploadP95,
                 'maximum' => $uploadMax,
@@ -144,6 +151,7 @@ class MetricsDashboard extends Component
             ],
             'pingStats' => [
                 'latest' => $pingLatest,
+                'latestFailed' => $pingLatestFailed,
                 'average' => $pingAvg,
                 'p95' => $pingP95,
                 'maximum' => $pingMax,
