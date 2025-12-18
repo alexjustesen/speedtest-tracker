@@ -15,7 +15,7 @@
                             You are currently using the following deprecated notification channels: <strong>{{ implode(', ', $this->deprecatedChannelsList) }}</strong>.
                         </p>
                         <p class="mt-1">
-                            These channels will be removed in a future release. Please migrate to <a href="{{ url('/admin/settings/notification') }}" class="font-medium underline hover:text-amber-900 dark:hover:text-amber-200">Apprise</a> which supports all these services and more.
+                            These channels will be removed in a future release. Please migrate to <a href="{{ url('/admin/notification') }}" class="font-medium underline hover:text-amber-900 dark:hover:text-amber-200">Apprise</a> which supports all these services and more.
                         </p>
                     </div>
                 </div>
