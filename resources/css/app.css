@@ -2,3 +2,32 @@
 @import '../../vendor/livewire/flux/dist/flux.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Re-assign Flux's gray of choice... */
+@theme {
+    --color-zinc-50: var(--color-neutral-50);
+    --color-zinc-100: var(--color-neutral-100);
+    --color-zinc-200: var(--color-neutral-200);
+    --color-zinc-300: var(--color-neutral-300);
+    --color-zinc-400: var(--color-neutral-400);
+    --color-zinc-500: var(--color-neutral-500);
+    --color-zinc-600: var(--color-neutral-600);
+    --color-zinc-700: var(--color-neutral-700);
+    --color-zinc-800: var(--color-neutral-800);
+    --color-zinc-900: var(--color-neutral-900);
+    --color-zinc-950: var(--color-neutral-950);
+}
+
+@theme {
+    --color-accent: var(--color-amber-400);
+    --color-accent-content: var(--color-amber-600);
+    --color-accent-foreground: var(--color-amber-950);
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-amber-400);
+        --color-accent-content: var(--color-amber-400);
+        --color-accent-foreground: var(--color-amber-950);
+    }
+}

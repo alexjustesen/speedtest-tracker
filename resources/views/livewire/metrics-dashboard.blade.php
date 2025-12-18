@@ -13,21 +13,21 @@
                 :variant="$dateRange === 'today' ? 'primary' : 'ghost'"
                 size="sm"
                 class="cursor-pointer">
-                Today
+                Last 24 Hours
             </flux:button>
             <flux:button
                 wire:click="updateDateRange('week')"
                 :variant="$dateRange === 'week' ? 'primary' : 'ghost'"
                 size="sm"
                 class="cursor-pointer">
-                This Week
+                Last Week
             </flux:button>
             <flux:button
                 wire:click="updateDateRange('month')"
                 :variant="$dateRange === 'month' ? 'primary' : 'ghost'"
                 size="sm"
                 class="cursor-pointer">
-                This Month
+                Last Month
             </flux:button>
         </div>
     </div>
@@ -285,7 +285,7 @@
             const showPoints = config.showPoints || false;
             const unit = config.unit || 'Mbps';
             const benchmarkFailed = config.benchmarkFailed || [];
-            const yellowColor = 'rgb(234, 179, 8)'; // Yellow for failed benchmarks
+            const amberColor = 'rgb(251, 191, 36)'; // Amber for failed benchmarks
 
             // Detect dark mode for text colors
             const isDarkMode = document.documentElement.classList.contains('dark');
@@ -300,7 +300,7 @@
 
             // Create point color arrays based on benchmark failures
             const pointColors = data.map((_, index) =>
-                benchmarkFailed[index] ? yellowColor : config.color
+                benchmarkFailed[index] ? amberColor : config.color
             );
 
             // Plugin to create ping/ripple effect on failed benchmark points
@@ -338,7 +338,7 @@
                                     ctx.save();
                                     ctx.beginPath();
                                     ctx.arc(x, y, radius, 0, 2 * Math.PI);
-                                    ctx.strokeStyle = `rgba(234, 179, 8, ${opacity})`;
+                                    ctx.strokeStyle = `rgba(251, 191, 36, ${opacity})`;
                                     ctx.lineWidth = 2.5;
                                     ctx.stroke();
                                     ctx.restore();

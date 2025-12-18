@@ -26,10 +26,10 @@ class MetricsDashboard extends Component
     {
         $endDate = now();
         $startDate = match ($this->dateRange) {
-            'today' => now()->startOfDay(),
-            'week' => now()->startOfWeek(),
-            'month' => now()->startOfMonth(),
-            default => now()->startOfMonth(),
+            'today' => now()->subDay(),
+            'week' => now()->subWeek(),
+            'month' => now()->subMonth(),
+            default => now()->subMonth(),
         };
 
         $results = Result::completed()
