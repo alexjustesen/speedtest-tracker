@@ -76,6 +76,8 @@
 
                 {{-- TODO: Add speedtest modal here --}}
 
+                <flux:separator vertical variant="subtle" class="my-2"/>
+
                 @auth
                     <flux:navbar.item class="max-lg:hidden" icon="settings" :href="route('filament.admin.pages.dashboard')">Admin Panel</flux:navbar.item>
                 @else
