@@ -414,9 +414,13 @@
                 return color.replace('rgb(', 'rgba(').replace(')', ', 0.3)');
             };
 
-            // Create point color arrays based on benchmark failures
+            // Create point color and radius arrays based on benchmark failures
             const pointColors = data.map((_, index) =>
                 benchmarkFailed[index] ? amberColor : config.color
+            );
+
+            const pointRadii = data.map((_, index) =>
+                benchmarkFailed[index] ? 5 : 0
             );
 
             // Plugin to create ping/ripple effect on failed benchmark points
@@ -482,19 +486,19 @@
                         borderColor: config.color,
                         backgroundColor: getFillColor(config.color),
                         fill: isLine ? true : false,
-                        tension: isLine ? 0.4 : 0.4,
+                        tension: isLine ? 0.2 : 0.2,
                         borderWidth: isLine ? 3 : 1,
                         borderRadius: config.type === 'bar' ? 4 : 0,
                         barPercentage: 0.6,
                         categoryPercentage: 0.7,
-                        pointRadius: isLine && showPoints ? 5 : 0,
-                        pointHoverRadius: isLine && showPoints ? 7 : 0,
+                        pointRadius: pointRadii,
+                        pointHoverRadius: 7,
                         pointBackgroundColor: pointColors,
                         pointBorderColor: '#fff',
-                        pointBorderWidth: isLine && showPoints ? 2 : 0,
+                        pointBorderWidth: 2,
                         pointHoverBackgroundColor: pointColors,
                         pointHoverBorderColor: '#fff',
-                        pointHoverBorderWidth: isLine && showPoints ? 3 : 0,
+                        pointHoverBorderWidth: 3,
                     }]
                 },
                 plugins: [pulsingPointsPlugin],
@@ -632,7 +636,7 @@
                     borderColor: color,
                     backgroundColor: fillColor,
                     fill: true,
-                    tension: 0.4,
+                    tension: 0.2,
                     borderWidth: 2,
                     pointRadius: 0,
                     pointHoverRadius: 5,
