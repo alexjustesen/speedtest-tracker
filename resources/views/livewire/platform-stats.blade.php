@@ -23,7 +23,7 @@
             </div>
         </x-filament::section> --}}
 
-        <x-filament::section class="col-span-1" icon="tabler-hash">
+        <x-filament::section class="col-span-1" icon="tabler-hash" icon-size="md" :compact="true">
             <x-slot name="heading">
                 Total tests
             </x-slot>
@@ -31,7 +31,7 @@
             <p class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->platformStats['total'] }}</p>
         </x-filament::section>
 
-        <x-filament::section class="col-span-1" icon="tabler-circle-check">
+        <x-filament::section class="col-span-1" icon="tabler-circle-check" icon-size="md" :compact="true">
             <x-slot name="heading">
                 Total completed tests
             </x-slot>
@@ -39,7 +39,7 @@
             <p class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->platformStats['completed'] }}</p>
         </x-filament::section>
 
-        <x-filament::section class="col-span-1" icon="tabler-alert-circle">
+        <x-filament::section class="col-span-1" icon="tabler-alert-circle" icon-size="md" :compact="true">
             <x-slot name="heading">
                 Total failed tests
             </x-slot>

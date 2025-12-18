@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <x-filament::section class="col-span-1" icon="tabler-download" icon-size="md">
+            <x-filament::section class="col-span-1" icon="tabler-download" icon-size="md" :compact="true">
                 <x-slot name="heading">
                     {{ __('general.download') }}
                 </x-slot>
@@ -63,7 +63,7 @@
                 </p>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1" icon="tabler-upload" icon-size="md">
+            <x-filament::section class="col-span-1" icon="tabler-upload" icon-size="md" :compact="true">
                 <x-slot name="heading">
                     {{ __('general.upload') }}
                 </x-slot>
@@ -102,7 +102,7 @@
                 </p>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1" icon="tabler-clock-bolt" icon-size="sm">
+            <x-filament::section class="col-span-1" icon="tabler-clock-bolt" icon-size="md" :compact="true">
                 <x-slot name="heading">
                     {{ __('general.ping') }}
                 </x-slot>
@@ -135,7 +135,7 @@
                 </p>
             </x-filament::section>
 
-            <x-filament::section class="col-span-1" icon="tabler-square-percentage" icon-size="sm">
+            <x-filament::section class="col-span-1" icon="tabler-square-percentage" icon-size="md" :compact="true">
                 <x-slot name="heading">
                     {{ __('results.packet_loss') }}
                 </x-slot>
