@@ -48,6 +48,14 @@ class Result extends Model
     }
 
     /**
+     * Scope a query to only include completed results.
+     */
+    public function scopeCompleted(Builder $query): Builder
+    {
+        return $query->where('status', ResultStatus::Completed);
+    }
+
+    /**
      * Get the user who dispatched this speedtest.
      */
     public function dispatchedBy(): BelongsTo

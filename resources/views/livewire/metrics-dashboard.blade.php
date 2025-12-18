@@ -1,0 +1,420 @@
+<div class="flex h-full w-full flex-1 flex-col gap-6">
+    <livewire:next-speedtest-banner />
+
+    <div class="flex items-center justify-between">
+        <flux:heading size="xl" class="flex items-center gap-2">
+            <x-tabler-chart-histogram class="size-5" />
+            Metrics Dashboard
+        </flux:heading>
+
+        <div class="flex items-center gap-2">
+            <flux:button
+                wire:click="updateDateRange('today')"
+                :variant="$dateRange === 'today' ? 'primary' : 'ghost'"
+                size="sm"
+                class="cursor-pointer">
+                Today
+            </flux:button>
+            <flux:button
+                wire:click="updateDateRange('week')"
+                :variant="$dateRange === 'week' ? 'primary' : 'ghost'"
+                size="sm"
+                class="cursor-pointer">
+                This Week
+            </flux:button>
+            <flux:button
+                wire:click="updateDateRange('month')"
+                :variant="$dateRange === 'month' ? 'primary' : 'ghost'"
+                size="sm"
+                class="cursor-pointer">
+                This Month
+            </flux:button>
+        </div>
+    </div>
+
+    <!-- Data Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <!-- Download Data -->
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-900">
+            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                <x-tabler-download class="size-5 text-zinc-600" />
+                {{ __('general.download') }}
+            </flux:heading>
+
+            <!-- Download Chart -->
+            <div
+                x-data="chartComponent({
+                    type: 'line',
+                    label: 'Download (Mbps)',
+                    labels: @js($chartData['labels']),
+                    data: @js($chartData['download']),
+                    benchmarkFailed: @js($chartData['downloadBenchmarkFailed']),
+                    color: 'rgb(59, 130, 246)',
+                    field: 'download',
+                    showPoints: true,
+                    unit: 'Mbps'
+                })"
+                @charts-updated.window="updateChart($event.detail.chartData)"
+                wire:ignore
+                class="aspect-[2/1] lg:aspect-[4/1] px-6 py-4"
+            >
+                <canvas x-ref="canvas"></canvas>
+            </div>
+
+            <!-- Download Stats -->
+            <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
+                <div class="px-6 py-3">
+                    <flux:heading>Latest</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['downloadStats']['latest'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Average</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['downloadStats']['average'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>P95</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['downloadStats']['p95'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Maximum</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['downloadStats']['maximum'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Minimum</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['downloadStats']['minimum'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Healthy</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['downloadStats']['healthy'], 1) }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Data -->
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-900">
+            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                <x-tabler-upload class="size-5 text-zinc-600" />
+                {{ __('general.upload') }}
+            </flux:heading>
+
+            <!-- Upload Chart -->
+            <div
+                x-data="chartComponent({
+                    type: 'line',
+                    label: 'Upload (Mbps)',
+                    labels: @js($chartData['labels']),
+                    data: @js($chartData['upload']),
+                    benchmarkFailed: @js($chartData['uploadBenchmarkFailed']),
+                    color: 'rgb(59, 130, 246)',
+                    field: 'upload',
+                    showPoints: true,
+                    unit: 'Mbps'
+                })"
+                @charts-updated.window="updateChart($event.detail.chartData)"
+                wire:ignore
+                class="aspect-[2/1] lg:aspect-[4/1] px-6 py-4"
+            >
+                <canvas x-ref="canvas"></canvas>
+            </div>
+
+            <!-- Upload Stats -->
+            <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
+                <div class="px-6 py-3">
+                    <flux:heading>Latest</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['uploadStats']['latest'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Average</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['uploadStats']['average'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>P95</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['uploadStats']['p95'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Maximum</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['uploadStats']['maximum'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Minimum</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['uploadStats']['minimum'], 2) }} Mbps
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Healthy</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['uploadStats']['healthy'], 1) }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ping Data -->
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-zinc-900">
+            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                <x-tabler-antenna-bars-5 class="size-5 text-zinc-600" />
+                {{ __('general.ping') }}
+            </flux:heading>
+
+            <!-- Ping Chart -->
+            <div
+                x-data="chartComponent({
+                    type: 'line',
+                    label: 'Ping (ms)',
+                    labels: @js($chartData['labels']),
+                    data: @js($chartData['ping']),
+                    benchmarkFailed: @js($chartData['pingBenchmarkFailed']),
+                    color: 'rgb(59, 130, 246)',
+                    field: 'ping',
+                    showPoints: true,
+                    unit: 'ms'
+                })"
+                @charts-updated.window="updateChart($event.detail.chartData)"
+                wire:ignore
+                class="aspect-[3/1] lg:aspect-[4/1] px-6 py-4"
+            >
+                <canvas x-ref="canvas"></canvas>
+            </div>
+
+            <!-- Ping Stats -->
+            <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
+                <div class="px-6 py-3">
+                    <flux:heading>Latest</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['pingStats']['latest'], 2) }} ms
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Average</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['pingStats']['average'], 2) }} ms
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>P95</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['pingStats']['p95'], 2) }} ms
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Maximum</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['pingStats']['maximum'], 2) }} ms
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Minimum</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['pingStats']['minimum'], 2) }} ms
+                    </div>
+                </div>
+                <div class="px-6 py-3">
+                    <flux:heading>Healthy</flux:heading>
+                    <div class="text-xl font-semibold">
+                        {{ number_format($chartData['pingStats']['healthy'], 1) }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@script
+<script>
+    Alpine.data('chartComponent', (config) => ({
+        chart: null,
+        animationFrame: null,
+
+        init() {
+            this.createChart(config.labels, config.data);
+        },
+
+        destroy() {
+            if (this.animationFrame) {
+                cancelAnimationFrame(this.animationFrame);
+            }
+            if (this.chart) {
+                this.chart.destroy();
+            }
+        },
+
+        createChart(labels, data) {
+            if (this.chart) {
+                this.chart.destroy();
+            }
+
+            const isLine = config.type === 'line';
+            const showPoints = config.showPoints || false;
+            const unit = config.unit || 'Mbps';
+            const benchmarkFailed = config.benchmarkFailed || [];
+            const yellowColor = 'rgb(234, 179, 8)'; // Yellow for failed benchmarks
+
+            // Convert rgb() to rgba() with opacity for fill
+            const getFillColor = (color) => {
+                if (config.type === 'bar') return color;
+                return color.replace('rgb(', 'rgba(').replace(')', ', 0.3)');
+            };
+
+            // Create point color arrays based on benchmark failures
+            const pointColors = data.map((_, index) =>
+                benchmarkFailed[index] ? yellowColor : config.color
+            );
+
+            // Plugin to create ping/ripple effect on failed benchmark points
+            const self = this;
+            const pulsingPointsPlugin = {
+                id: 'pulsingPoints',
+                afterDatasetsDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const meta = chart.getDatasetMeta(0);
+                    const time = Date.now();
+
+                    meta.data.forEach((point, index) => {
+                        if (benchmarkFailed[index]) {
+                            const x = point.x;
+                            const y = point.y;
+
+                            // Create multiple ping rings at different stages
+                            const pingDuration = 2000; // Duration of one ping cycle in ms
+                            const maxRadius = 25;
+                            const numberOfRings = 3;
+
+                            for (let i = 0; i < numberOfRings; i++) {
+                                // Offset each ring by a fraction of the duration
+                                const offset = (pingDuration / numberOfRings) * i;
+                                const progress = ((time + offset) % pingDuration) / pingDuration;
+
+                                // Radius expands from 0 to maxRadius
+                                const radius = progress * maxRadius;
+
+                                // Opacity fades out as ring expands
+                                const opacity = Math.max(0, 0.6 * (1 - progress));
+
+                                // Draw ping ring
+                                if (opacity > 0.05) { // Only draw if visible
+                                    ctx.save();
+                                    ctx.beginPath();
+                                    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+                                    ctx.strokeStyle = `rgba(234, 179, 8, ${opacity})`;
+                                    ctx.lineWidth = 2.5;
+                                    ctx.stroke();
+                                    ctx.restore();
+                                }
+                            }
+                        }
+                    });
+
+                    // Continue animation if there are failed benchmarks
+                    if (benchmarkFailed.some(failed => failed)) {
+                        self.animationFrame = requestAnimationFrame(() => {
+                            chart.render();
+                        });
+                    }
+                }
+            };
+
+            this.chart = new Chart(this.$refs.canvas, {
+                type: config.type,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: config.label,
+                        data: data,
+                        borderColor: config.color,
+                        backgroundColor: getFillColor(config.color),
+                        fill: isLine ? true : false,
+                        tension: isLine ? 0.4 : 0.4,
+                        borderWidth: isLine ? 3 : 1,
+                        borderRadius: config.type === 'bar' ? 4 : 0,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.7,
+                        pointRadius: isLine && showPoints ? 5 : 0,
+                        pointHoverRadius: isLine && showPoints ? 7 : 0,
+                        pointBackgroundColor: pointColors,
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: isLine && showPoints ? 2 : 0,
+                        pointHoverBackgroundColor: pointColors,
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: isLine && showPoints ? 3 : 0,
+                    }]
+                },
+                plugins: [pulsingPointsPlugin],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = config.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y.toFixed(2) + ' ' + unit;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' ' + unit;
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                display: true,
+                                autoSkip: true,
+                                maxTicksLimit: 8,
+                                maxRotation: 0,
+                                minRotation: 0
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
+        updateChart(newData) {
+            // Update benchmark failed data for this field
+            const benchmarkFailedField = config.field + 'BenchmarkFailed';
+            config.benchmarkFailed = newData[benchmarkFailedField] || [];
+
+            this.createChart(newData.labels, newData[config.field]);
+        }
+    }));
+</script>
+@endscript

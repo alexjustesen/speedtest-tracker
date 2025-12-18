@@ -12,5 +12,8 @@
         "laravel-vite-plugin": "^1.0.0",
         "tailwindcss": "^4.1.17",
         "vite": "^6.4.1"
+    },
+    "dependencies": {
+        "chart.js": "^4.5.1"
     }
 }
