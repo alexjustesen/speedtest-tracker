@@ -49,6 +49,8 @@ class MetricsDashboard extends Component
         $downloadData = [];
         $uploadData = [];
         $pingData = [];
+        $downloadLatencyData = [];
+        $uploadLatencyData = [];
         $downloadJitterData = [];
         $uploadJitterData = [];
         $pingJitterData = [];
@@ -73,6 +75,10 @@ class MetricsDashboard extends Component
 
             // Ping in milliseconds
             $pingData[] = round($result->ping ?? 0, 2);
+
+            // Latency IQM in milliseconds
+            $downloadLatencyData[] = round($result->downloadlatencyiqm ?? 0, 2);
+            $uploadLatencyData[] = round($result->uploadlatencyiqm ?? 0, 2);
 
             // Jitter in milliseconds
             $downloadJitterData[] = round($result->downloadJitter ?? 0, 2);
@@ -130,6 +136,15 @@ class MetricsDashboard extends Component
         $pingJitterMax = count($pingJitterData) > 0 ? round(max($pingJitterData), 2) : 0;
         $pingJitterMin = count($pingJitterData) > 0 ? round(min($pingJitterData), 2) : 0;
 
+        // Calculate latency statistics
+        $downloadLatencyLatest = count($downloadLatencyData) > 0 ? end($downloadLatencyData) : 0;
+        $downloadLatencyMax = count($downloadLatencyData) > 0 ? round(max($downloadLatencyData), 2) : 0;
+        $downloadLatencyMin = count($downloadLatencyData) > 0 ? round(min($downloadLatencyData), 2) : 0;
+
+        $uploadLatencyLatest = count($uploadLatencyData) > 0 ? end($uploadLatencyData) : 0;
+        $uploadLatencyMax = count($uploadLatencyData) > 0 ? round(max($uploadLatencyData), 2) : 0;
+        $uploadLatencyMin = count($uploadLatencyData) > 0 ? round(min($uploadLatencyData), 2) : 0;
+
         // Calculate healthy ratio for each metric based on benchmark KPI
         $downloadPassedCount = collect($downloadBenchmarkFailed)->filter(fn ($failed) => $failed === false)->count();
         $uploadPassedCount = collect($uploadBenchmarkFailed)->filter(fn ($failed) => $failed === false)->count();
@@ -154,6 +169,8 @@ class MetricsDashboard extends Component
             'download' => $downloadData,
             'upload' => $uploadData,
             'ping' => $pingData,
+            'downloadLatency' => $downloadLatencyData,
+            'uploadLatency' => $uploadLatencyData,
             'downloadJitter' => $downloadJitterData,
             'uploadJitter' => $uploadJitterData,
             'pingJitter' => $pingJitterData,
@@ -195,6 +212,15 @@ class MetricsDashboard extends Component
                 'maximum' => $pingMax,
                 'minimum' => $pingMin,
                 'healthy' => $pingHealthyRatio,
+                'tests' => count($results),
+            ],
+            'latencyStats' => [
+                'downloadLatest' => $downloadLatencyLatest,
+                'downloadMaximum' => $downloadLatencyMax,
+                'downloadMinimum' => $downloadLatencyMin,
+                'uploadLatest' => $uploadLatencyLatest,
+                'uploadMaximum' => $uploadLatencyMax,
+                'uploadMinimum' => $uploadLatencyMin,
                 'tests' => count($results),
             ],
             'jitterStats' => [

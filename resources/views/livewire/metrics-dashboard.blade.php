@@ -190,7 +190,7 @@
                     data: @js($chartData['ping']),
                     benchmarkFailed: @js($chartData['pingBenchmarkFailed']),
                     benchmarks: @js($chartData['pingBenchmarks']),
-                    color: 'rgb(59, 130, 246)',
+                    color: 'rgb(168, 85, 247)',
                     field: 'ping',
                     showPoints: true,
                     unit: 'ms'
@@ -250,6 +250,92 @@
             </div>
         </div>
 
+        <!-- Latency Data -->
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                <flux:icon.activity class="size-5 text-neutral-600 dark:text-neutral-400" />
+                Latency (IQM)
+            </flux:heading>
+
+            <!-- Latency Chart -->
+            <div
+                x-data="multiLineChartComponent({
+                    labels: @js($chartData['labels']),
+                    datasets: [
+                        {
+                            label: 'Download Latency (ms)',
+                            data: @js($chartData['downloadLatency']),
+                            color: 'rgb(59, 130, 246)',
+                        },
+                        {
+                            label: 'Upload Latency (ms)',
+                            data: @js($chartData['uploadLatency']),
+                            color: 'rgb(245, 158, 11)',
+                        }
+                    ],
+                    unit: 'ms'
+                })"
+                @charts-updated.window="updateChart($event.detail.chartData)"
+                wire:ignore
+                class="aspect-[2/1] lg:aspect-[5/1] px-6 py-4"
+            >
+                <canvas x-ref="canvas"></canvas>
+            </div>
+
+            <!-- Latency Stats -->
+            <div class="divide-x divide-neutral-200 grid grid-cols-1 lg:grid-cols-2 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
+                <!-- Download Latency Stats -->
+                <div class="px-6 py-4">
+                    <flux:heading size="sm" class="mb-3 text-blue-600 dark:text-blue-400">Download Latency</flux:heading>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <flux:heading>Latest</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['latencyStats']['downloadLatest'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>Maximum</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['latencyStats']['downloadMaximum'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>Minimum</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['latencyStats']['downloadMinimum'], 2) }} ms
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Latency Stats -->
+                <div class="px-6 py-4">
+                    <flux:heading size="sm" class="mb-3 text-amber-600 dark:text-amber-400">Upload Latency</flux:heading>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <flux:heading>Latest</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['latencyStats']['uploadLatest'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>Maximum</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['latencyStats']['uploadMaximum'], 2) }} ms
+                            </div>
+                        </div>
+                        <div>
+                            <flux:heading>Minimum</flux:heading>
+                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+                                {{ number_format($chartData['latencyStats']['uploadMinimum'], 2) }} ms
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Jitter Data -->
         <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
@@ -270,7 +356,7 @@
                         {
                             label: 'Upload Jitter (ms)',
                             data: @js($chartData['uploadJitter']),
-                            color: 'rgb(16, 185, 129)',
+                            color: 'rgb(245, 158, 11)',
                         },
                         {
                             label: 'Ping Jitter (ms)',
@@ -316,7 +402,7 @@
 
                 <!-- Upload Jitter Stats -->
                 <div class="px-6 py-4">
-                    <flux:heading size="sm" class="mb-3 text-emerald-600 dark:text-emerald-400">Upload Jitter</flux:heading>
+                    <flux:heading size="sm" class="mb-3 text-amber-600 dark:text-amber-400">Upload Jitter</flux:heading>
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
                         <div>
                             <flux:heading>Latest</flux:heading>
@@ -723,23 +809,43 @@
         },
 
         updateChart(newData) {
-            const datasets = [
-                {
-                    label: 'Download Jitter (ms)',
-                    data: newData.downloadJitter || [],
-                    color: 'rgb(59, 130, 246)',
-                },
-                {
-                    label: 'Upload Jitter (ms)',
-                    data: newData.uploadJitter || [],
-                    color: 'rgb(16, 185, 129)',
-                },
-                {
-                    label: 'Ping Jitter (ms)',
-                    data: newData.pingJitter || [],
-                    color: 'rgb(168, 85, 247)',
-                }
-            ];
+            // Determine which datasets to use based on current config
+            let datasets;
+
+            // Check if this is the latency chart (has downloadLatency)
+            if (newData.downloadLatency !== undefined) {
+                datasets = [
+                    {
+                        label: 'Download Latency (ms)',
+                        data: newData.downloadLatency || [],
+                        color: 'rgb(59, 130, 246)',
+                    },
+                    {
+                        label: 'Upload Latency (ms)',
+                        data: newData.uploadLatency || [],
+                        color: 'rgb(245, 158, 11)',
+                    }
+                ];
+            } else {
+                // Jitter chart
+                datasets = [
+                    {
+                        label: 'Download Jitter (ms)',
+                        data: newData.downloadJitter || [],
+                        color: 'rgb(59, 130, 246)',
+                    },
+                    {
+                        label: 'Upload Jitter (ms)',
+                        data: newData.uploadJitter || [],
+                        color: 'rgb(245, 158, 11)',
+                    },
+                    {
+                        label: 'Ping Jitter (ms)',
+                        data: newData.pingJitter || [],
+                        color: 'rgb(168, 85, 247)',
+                    }
+                ];
+            }
 
             this.createChart(newData.labels, datasets);
         }
