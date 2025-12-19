@@ -7,6 +7,7 @@ use App\Settings\NotificationSettings;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Notification as FacadesNotification;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Throwable;
 
 class SendAppriseTestNotification
 {
@@ -48,7 +49,7 @@ class SendAppriseTestNotification
                 FacadesNotification::route('apprise_urls', $channelUrl)
                     ->notifyNow(new TestNotification);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $errorMessage = $this->cleanErrorMessage($e);
 
             Notification::make()
