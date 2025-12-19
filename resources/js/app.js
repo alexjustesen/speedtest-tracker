@@ -1,3 +1,6 @@
+import { Livewire, Alpine } from '../../vendor/livewire/livewire/dist/livewire.esm';
+import sort from '@alpinejs/sort';
+
 import {
     Chart,
     LineController,
@@ -26,3 +29,9 @@ Chart.register(
 );
 
 window.Chart = Chart;
+
+document.addEventListener('livewire:init', () => {
+    window.Alpine.plugin(sort);
+});
+
+Livewire.start();

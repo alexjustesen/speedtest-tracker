@@ -13,7 +13,7 @@
             </flux:modal.trigger>
 
             <!-- Filter Modal -->
-            <flux:modal name="filterModal" class="md:w-md space-y-6">
+            <flux:modal name="filterModal" flyout class="space-y-6">
                 <div>
                     <flux:heading size="lg">Filter Results</flux:heading>
                     <flux:text>Select a date range to filter your speed test results</flux:text>
@@ -52,6 +52,57 @@
                     </flux:select>
                 </flux:field>
 
+                <flux:separator />
+
+                <div>
+                    <flux:heading size="sm">Manage Sections</flux:heading>
+                    <flux:text size="sm">Drag to reorder, uncheck to hide</flux:text>
+                </div>
+
+                <div x-data="sectionManager()" x-init="init()">
+                    <!-- Sortable Section List -->
+                    <div
+                        x-sort="updateOrder"
+                        class="space-y-2"
+                    >
+                        <template x-for="section in sections" :key="section.id">
+                            <div
+                                x-sort:item="section.id"
+                                class="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 cursor-move hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
+                            >
+                                <!-- Drag Handle -->
+                                <flux:icon.grip-vertical class="size-5 text-neutral-400 shrink-0" />
+
+                                <!-- Checkbox for visibility -->
+                                <flux:checkbox
+                                    x-model="section.visible"
+                                    @change="updateVisibility()"
+                                    class="shrink-0"
+                                />
+
+                                <!-- Section Info -->
+                                <div class="flex items-center gap-2 flex-1">
+                                    <span
+                                        x-text="section.name"
+                                        class="font-medium text-neutral-900 dark:text-neutral-100"
+                                    ></span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Reset to Default Button -->
+                    <flux:button
+                        @click="resetToDefaults()"
+                        variant="ghost"
+                        size="sm"
+                        class="mt-4 w-full"
+                    >
+                        <flux:icon.arrow-up-down class="size-4" />
+                        Reset to Default Order
+                    </flux:button>
+                </div>
+
                 <div class="flex justify-between items-center gap-2">
                     <div class="flex gap-2">
                         <flux:button
@@ -77,10 +128,17 @@
         </div>
     </div>
 
-    <!-- Data Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- Download & Upload Speed Comparison -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+    <!-- Data Grid with Dynamic Section Ordering -->
+    <div
+        x-data="dashboardSections()"
+        x-init="init()"
+        class="grid grid-cols-1 lg:grid-cols-4 gap-6"
+    >
+        <template x-for="sectionId in visibleSections" :key="sectionId">
+            <div class="col-span-full">
+                <!-- Speed Section -->
+                <template x-if="sectionId === 'speed'">
+                    <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
                 <flux:icon.chart-line class="size-5 text-neutral-600 dark:text-neutral-400" />
                 Speed
@@ -217,10 +275,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+                    </div>
+                </template>
 
-        <!-- Ping Data -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+                <!-- Ping Section -->
+                <template x-if="sectionId === 'ping'">
+                    <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
                 <flux:icon.radio class="size-5 text-neutral-600 dark:text-neutral-400" />
                 {{ __('general.ping') }}
@@ -294,10 +354,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+                    </div>
+                </template>
 
-        <!-- Latency Data -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+                <!-- Latency Section -->
+                <template x-if="sectionId === 'latency'">
+                    <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
                 <flux:icon.activity class="size-5 text-neutral-600 dark:text-neutral-400" />
                 Latency (IQM)
@@ -381,10 +443,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+                    </div>
+                </template>
 
-        <!-- Jitter Data -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+                <!-- Jitter Section -->
+                <template x-if="sectionId === 'jitter'">
+                    <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
                 <flux:icon.coffee class="size-5 text-neutral-600 dark:text-neutral-400" />
                 Jitter
@@ -498,8 +562,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+                    </div>
+                </template>
+            </div>
+        </template>
     </div>
 </div>
 
@@ -1253,6 +1319,164 @@
             config.uploadBenchmarks = newData.uploadBenchmarks || [];
 
             this.createChart(newData.labels, newData.download, newData.upload);
+        }
+    }));
+
+    // Section Manager for Filter Modal
+    Alpine.data('sectionManager', () => ({
+        sections: [],
+
+        init() {
+            this.loadSections();
+
+            // Listen for reset events from dashboard
+            window.addEventListener('sections-reset', () => {
+                this.loadSections();
+            });
+        },
+
+        loadSections() {
+            const prefs = this.getPreferences();
+            const sectionDefinitions = [
+                { id: 'speed', name: 'Speed' },
+                { id: 'ping', name: 'Ping' },
+                { id: 'latency', name: 'Latency (IQM)' },
+                { id: 'jitter', name: 'Jitter' }
+            ];
+
+            // Sort sections according to saved order
+            const orderedSections = prefs.sectionOrder.map(id => {
+                const def = sectionDefinitions.find(s => s.id === id);
+                return {
+                    ...def,
+                    visible: !prefs.hiddenSections.includes(id)
+                };
+            });
+
+            this.sections = orderedSections;
+        },
+
+        getPreferences() {
+            const defaultPrefs = {
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                hiddenSections: [],
+                version: 1
+            };
+
+            try {
+                const stored = localStorage.getItem('metrics-dashboard-preferences');
+                if (!stored) return defaultPrefs;
+
+                const parsed = JSON.parse(stored);
+
+                // Validate structure
+                if (!Array.isArray(parsed.sectionOrder) || !Array.isArray(parsed.hiddenSections)) {
+                    console.warn('Invalid dashboard preferences structure, using defaults');
+                    return defaultPrefs;
+                }
+
+                // Ensure all sections exist (handles case where new sections are added)
+                const allSections = ['speed', 'ping', 'latency', 'jitter'];
+                const missingSections = allSections.filter(s => !parsed.sectionOrder.includes(s));
+                if (missingSections.length > 0) {
+                    parsed.sectionOrder = [...parsed.sectionOrder, ...missingSections];
+                }
+
+                return parsed;
+            } catch (e) {
+                console.error('Error loading dashboard preferences:', e);
+                return defaultPrefs;
+            }
+        },
+
+        savePreferences(prefs) {
+            try {
+                localStorage.setItem('metrics-dashboard-preferences', JSON.stringify(prefs));
+                // Dispatch event to update dashboard
+                window.dispatchEvent(new CustomEvent('dashboard-preferences-changed', {
+                    detail: prefs
+                }));
+            } catch (e) {
+                console.error('Error saving dashboard preferences:', e);
+            }
+        },
+
+        updateOrder() {
+            const prefs = this.getPreferences();
+            prefs.sectionOrder = this.sections.map(s => s.id);
+            this.savePreferences(prefs);
+        },
+
+        updateVisibility() {
+            const prefs = this.getPreferences();
+            prefs.hiddenSections = this.sections
+                .filter(s => !s.visible)
+                .map(s => s.id);
+            this.savePreferences(prefs);
+        },
+
+        resetToDefaults() {
+            const defaultPrefs = {
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                hiddenSections: [],
+                version: 1
+            };
+
+            this.savePreferences(defaultPrefs);
+            this.loadSections();
+
+            // Dispatch reset event
+            window.dispatchEvent(new CustomEvent('sections-reset'));
+        }
+    }));
+
+    // Dashboard Sections Component
+    Alpine.data('dashboardSections', () => ({
+        visibleSections: [],
+        preferences: null,
+
+        init() {
+            this.loadPreferences();
+
+            // Listen for preference changes
+            window.addEventListener('dashboard-preferences-changed', (e) => {
+                this.preferences = e.detail;
+                this.updateVisibleSections();
+            });
+
+            window.addEventListener('sections-reset', () => {
+                this.loadPreferences();
+            });
+        },
+
+        loadPreferences() {
+            const defaultPrefs = {
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                hiddenSections: [],
+                version: 1
+            };
+
+            try {
+                const stored = localStorage.getItem('metrics-dashboard-preferences');
+                this.preferences = stored ? JSON.parse(stored) : defaultPrefs;
+
+                // Validate and fix if needed
+                if (!Array.isArray(this.preferences.sectionOrder)) {
+                    this.preferences = defaultPrefs;
+                }
+
+                this.updateVisibleSections();
+            } catch (e) {
+                console.error('Error loading preferences:', e);
+                this.preferences = defaultPrefs;
+                this.updateVisibleSections();
+            }
+        },
+
+        updateVisibleSections() {
+            this.visibleSections = this.preferences.sectionOrder.filter(
+                id => !this.preferences.hiddenSections.includes(id)
+            );
         }
     }));
 </script>

@@ -119,5 +119,6 @@
         </flux:main>
 
         @fluxScripts
+        @livewireScriptConfig
     </body>
 </html>
