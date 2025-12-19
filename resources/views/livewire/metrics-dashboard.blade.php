@@ -42,9 +42,9 @@
                 Speed
             </flux:heading>
 
-            <!-- Speed Comparison Chart -->
+            <!-- Speed Chart -->
             <div
-                x-data="speedComparisonChartComponent({
+                x-data="speedChartComponent({
                     labels: @js($chartData['labels']),
                     downloadData: @js($chartData['download']),
                     uploadData: @js($chartData['upload']),
@@ -62,7 +62,7 @@
                 <canvas x-ref="canvas"></canvas>
             </div>
 
-            <!-- Speed Comparison Stats -->
+            <!-- Speed Stats -->
             <div class="border-t border-neutral-200 dark:border-neutral-700">
                 <!-- Download Stats -->
                 <div class="border-b border-neutral-200 dark:border-neutral-700">
@@ -899,7 +899,7 @@
         }
     }));
 
-    Alpine.data('speedComparisonChartComponent', (config) => ({
+    Alpine.data('speedChartComponent', (config) => ({
         chart: null,
         animationFrame: null,
         currentLabels: config.labels,
