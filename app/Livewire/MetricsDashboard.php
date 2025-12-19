@@ -148,6 +148,11 @@ class MetricsDashboard extends Component
         $uploadLatestFailed = count($uploadBenchmarkFailed) > 0 ? end($uploadBenchmarkFailed) : false;
         $pingLatestFailed = count($pingBenchmarkFailed) > 0 ? end($pingBenchmarkFailed) : false;
 
+        // Get latest benchmark data
+        $downloadLatestBenchmark = count($downloadBenchmarks) > 0 ? end($downloadBenchmarks) : null;
+        $uploadLatestBenchmark = count($uploadBenchmarks) > 0 ? end($uploadBenchmarks) : null;
+        $pingLatestBenchmark = count($pingBenchmarks) > 0 ? end($pingBenchmarks) : null;
+
         return [
             'labels' => $labels,
             'download' => $downloadData,
@@ -167,6 +172,7 @@ class MetricsDashboard extends Component
             'downloadStats' => [
                 'latest' => $downloadLatest,
                 'latestFailed' => $downloadLatestFailed,
+                'latestBenchmark' => $downloadLatestBenchmark,
                 'average' => $downloadAvg,
                 'p95' => $downloadP95,
                 'maximum' => $downloadMax,
@@ -177,6 +183,7 @@ class MetricsDashboard extends Component
             'uploadStats' => [
                 'latest' => $uploadLatest,
                 'latestFailed' => $uploadLatestFailed,
+                'latestBenchmark' => $uploadLatestBenchmark,
                 'average' => $uploadAvg,
                 'p95' => $uploadP95,
                 'maximum' => $uploadMax,
@@ -187,6 +194,7 @@ class MetricsDashboard extends Component
             'pingStats' => [
                 'latest' => $pingLatest,
                 'latestFailed' => $pingLatestFailed,
+                'latestBenchmark' => $pingLatestBenchmark,
                 'average' => $pingAvg,
                 'p95' => $pingP95,
                 'maximum' => $pingMax,

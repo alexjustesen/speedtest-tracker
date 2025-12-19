@@ -38,7 +38,7 @@
         <!-- Download & Upload Speed Comparison -->
         <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <x-tabler-chart-histogram class="size-5 text-neutral-600" />
+                <flux:icon.chart-line class="size-5 text-neutral-600 dark:text-neutral-400" />
                 Speed
             </flux:heading>
 
@@ -49,9 +49,11 @@
                     downloadData: @js($chartData['download']),
                     uploadData: @js($chartData['upload']),
                     downloadColor: 'rgb(59, 130, 246)',
-                    uploadColor: 'rgb(168, 85, 247)',
+                    uploadColor: 'rgb(245, 158, 11)',
                     downloadBenchmarkFailed: @js($chartData['downloadBenchmarkFailed']),
                     uploadBenchmarkFailed: @js($chartData['uploadBenchmarkFailed']),
+                    downloadBenchmarks: @js($chartData['downloadBenchmarks']),
+                    uploadBenchmarks: @js($chartData['uploadBenchmarks']),
                 })"
                 @charts-updated.window="updateChart($event.detail.chartData)"
                 wire:ignore
@@ -67,8 +69,15 @@
                     <flux:heading size="sm" class="px-6 pt-3 pb-2 text-blue-600 dark:text-blue-400">Download</flux:heading>
                     <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 dark:divide-neutral-700 border-t border-neutral-200 dark:border-neutral-700">
                         <div class="px-6 py-3">
-                            <flux:heading>Latest</flux:heading>
-                            <div class="text-xl font-semibold {{ $chartData['downloadStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
+                            <flux:heading class="flex items-center gap-1.5">
+                                @if($chartData['downloadStats']['latestFailed'] && $chartData['downloadStats']['latestBenchmark'])
+                                    <flux:tooltip content="Benchmark Failed: {{ $chartData['downloadStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['downloadStats']['latestBenchmark']['value'] }} {{ $chartData['downloadStats']['latestBenchmark']['unit'] }}">
+                                        <flux:icon.triangle-alert class="size-4 text-amber-500" />
+                                    </flux:tooltip>
+                                @endif
+                                Latest
+                            </flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                                 {{ number_format($chartData['downloadStats']['latest'], 2) }} Mbps
                             </div>
                         </div>
@@ -107,11 +116,18 @@
 
                 <!-- Upload Stats -->
                 <div>
-                    <flux:heading size="sm" class="px-6 pt-3 pb-2 text-purple-600 dark:text-purple-400">Upload</flux:heading>
+                    <flux:heading size="sm" class="px-6 pt-3 pb-2 text-amber-600 dark:text-amber-400">Upload</flux:heading>
                     <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 dark:divide-neutral-700 border-t border-neutral-200 dark:border-neutral-700">
                         <div class="px-6 py-3">
-                            <flux:heading>Latest</flux:heading>
-                            <div class="text-xl font-semibold {{ $chartData['uploadStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
+                            <flux:heading class="flex items-center gap-1.5">
+                                @if($chartData['uploadStats']['latestFailed'] && $chartData['uploadStats']['latestBenchmark'])
+                                    <flux:tooltip content="Benchmark Failed: {{ $chartData['uploadStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['uploadStats']['latestBenchmark']['value'] }} {{ $chartData['uploadStats']['latestBenchmark']['unit'] }}">
+                                        <flux:icon.triangle-alert class="size-4 text-amber-500" />
+                                    </flux:tooltip>
+                                @endif
+                                Latest
+                            </flux:heading>
+                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                                 {{ number_format($chartData['uploadStats']['latest'], 2) }} Mbps
                             </div>
                         </div>
@@ -183,8 +199,15 @@
             <!-- Download Stats -->
             <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
                 <div class="px-6 py-3">
-                    <flux:heading>Latest</flux:heading>
-                    <div class="text-xl font-semibold {{ $chartData['downloadStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
+                    <flux:heading class="flex items-center gap-1.5">
+                        @if($chartData['downloadStats']['latestFailed'] && $chartData['downloadStats']['latestBenchmark'])
+                            <flux:tooltip content="Benchmark Failed: {{ $chartData['downloadStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['downloadStats']['latestBenchmark']['value'] }} {{ $chartData['downloadStats']['latestBenchmark']['unit'] }}">
+                                <flux:icon.triangle-alert class="size-4 text-amber-500" />
+                            </flux:tooltip>
+                        @endif
+                        Latest
+                    </flux:heading>
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['downloadStats']['latest'], 2) }} Mbps
                     </div>
                 </div>
@@ -252,8 +275,15 @@
             <!-- Upload Stats -->
             <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
                 <div class="px-6 py-3">
-                    <flux:heading>Latest</flux:heading>
-                    <div class="text-xl font-semibold {{ $chartData['uploadStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
+                    <flux:heading class="flex items-center gap-1.5">
+                        @if($chartData['uploadStats']['latestFailed'] && $chartData['uploadStats']['latestBenchmark'])
+                            <flux:tooltip content="Benchmark Failed: {{ $chartData['uploadStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['uploadStats']['latestBenchmark']['value'] }} {{ $chartData['uploadStats']['latestBenchmark']['unit'] }}">
+                                <flux:icon.triangle-alert class="size-4 text-amber-500" />
+                            </flux:tooltip>
+                        @endif
+                        Latest
+                    </flux:heading>
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['uploadStats']['latest'], 2) }} Mbps
                     </div>
                 </div>
@@ -293,7 +323,7 @@
         <!-- Ping Data -->
         <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <x-tabler-antenna-bars-5 class="size-5 text-neutral-600" />
+                <flux:icon.radio class="size-5 text-neutral-600 dark:text-neutral-400" />
                 {{ __('general.ping') }}
             </flux:heading>
 
@@ -313,7 +343,7 @@
                 })"
                 @charts-updated.window="updateChart($event.detail.chartData)"
                 wire:ignore
-                class="aspect-[3/1] lg:aspect-[4/1] px-6 py-4"
+                class="aspect-[3/1] lg:aspect-[5/1] px-6 py-4"
             >
                 <canvas x-ref="canvas"></canvas>
             </div>
@@ -321,8 +351,15 @@
             <!-- Ping Stats -->
             <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
                 <div class="px-6 py-3">
-                    <flux:heading>Latest</flux:heading>
-                    <div class="text-xl font-semibold {{ $chartData['pingStats']['latestFailed'] ? 'text-amber-500 dark:text-amber-400' : 'text-neutral-900 dark:text-neutral-100' }}">
+                    <flux:heading class="flex items-center gap-1.5">
+                        @if($chartData['pingStats']['latestFailed'] && $chartData['pingStats']['latestBenchmark'])
+                            <flux:tooltip content="Benchmark Failed: {{ $chartData['pingStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['pingStats']['latestBenchmark']['value'] }} {{ $chartData['pingStats']['latestBenchmark']['unit'] }}">
+                                <flux:icon.triangle-alert class="size-4 text-amber-500" />
+                            </flux:tooltip>
+                        @endif
+                        Latest
+                    </flux:heading>
+                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
                         {{ number_format($chartData['pingStats']['latest'], 2) }} ms
                     </div>
                 </div>
@@ -362,7 +399,7 @@
         <!-- Jitter Data -->
         <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
             <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <x-tabler-graph class="size-5 text-neutral-600" />
+                <flux:icon.coffee class="size-5 text-neutral-600 dark:text-neutral-400" />
                 Jitter
             </flux:heading>
 
@@ -391,7 +428,7 @@
                 })"
                 @charts-updated.window="updateChart($event.detail.chartData)"
                 wire:ignore
-                class="aspect-[2/1] lg:aspect-[4/1] px-6 py-4"
+                class="aspect-[2/1] lg:aspect-[5/1] px-6 py-4"
             >
                 <canvas x-ref="canvas"></canvas>
             </div>
@@ -603,7 +640,7 @@
                         data: data,
                         borderColor: config.color,
                         backgroundColor: getFillColor(config.color),
-                        fill: isLine ? true : false,
+                        fill: false,
                         tension: 0.4,
                         borderWidth: isLine ? 3 : 1,
                         borderRadius: config.type === 'bar' ? 4 : 0,
@@ -639,7 +676,7 @@
                                     const labels = [];
 
                                     // Main result line
-                                    let resultLabel = 'Result: ';
+                                    let resultLabel = '- Value: ';
                                     if (context.parsed.y !== null) {
                                         resultLabel += context.parsed.y.toFixed(2) + ' ' + unit;
                                     }
@@ -648,10 +685,10 @@
                                     // Benchmark info if available
                                     if (benchmark) {
                                         const thresholdType = benchmark.bar === 'min' ? 'Min' : 'Max';
-                                        const benchmarkLabel = `Benchmark (${thresholdType}): ${benchmark.value} ${benchmark.unit}`;
+                                        const benchmarkLabel = `- Benchmark (${thresholdType}): ${benchmark.value} ${benchmark.unit}`;
                                         labels.push(benchmarkLabel);
 
-                                        const statusLabel = benchmark.passed ? 'Status: ✅ Passed' : 'Status: ❌ Failed';
+                                        const statusLabel = benchmark.passed ? '- Benchmark Status: ✅ Passed' : '- Benchmark Status: ❌ Failed';
                                         labels.push(statusLabel);
                                     }
 
@@ -753,7 +790,7 @@
                     data: dataset.data,
                     borderColor: color,
                     backgroundColor: fillColor,
-                    fill: true,
+                    fill: false,
                     tension: 0.4,
                     borderWidth: 2,
                     pointRadius: 0,
@@ -788,7 +825,7 @@
                             displayColors: true,
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.dataset.label || '';
+                                    let label = '- ' + (context.dataset.label || '');
                                     if (label) {
                                         label += ': ';
                                     }
@@ -894,7 +931,6 @@
 
             const downloadBenchmarkFailed = config.downloadBenchmarkFailed || [];
             const uploadBenchmarkFailed = config.uploadBenchmarkFailed || [];
-            const amberColor = 'rgb(251, 191, 36)'; // Amber for failed benchmarks
 
             // Detect dark mode for text colors
             const isDarkMode = document.documentElement.classList.contains('dark');
@@ -908,7 +944,7 @@
 
             // Create point colors and radii for download
             const downloadPointColors = downloadData.map((_, index) =>
-                downloadBenchmarkFailed[index] ? amberColor : config.downloadColor
+                config.downloadColor
             );
             const downloadPointRadii = downloadData.map((_, index) =>
                 downloadBenchmarkFailed[index] ? 5 : 0
@@ -916,7 +952,7 @@
 
             // Create point colors and radii for upload
             const uploadPointColors = uploadData.map((_, index) =>
-                uploadBenchmarkFailed[index] ? amberColor : config.uploadColor
+                config.uploadColor
             );
             const uploadPointRadii = uploadData.map((_, index) =>
                 uploadBenchmarkFailed[index] ? 5 : 0
@@ -952,7 +988,8 @@
                                     ctx.save();
                                     ctx.beginPath();
                                     ctx.arc(x, y, radius, 0, 2 * Math.PI);
-                                    ctx.strokeStyle = `rgba(251, 191, 36, ${opacity})`;
+                                    const downloadRingColor = config.downloadColor.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
+                                    ctx.strokeStyle = downloadRingColor;
                                     ctx.lineWidth = 2.5;
                                     ctx.stroke();
                                     ctx.restore();
@@ -983,7 +1020,8 @@
                                     ctx.save();
                                     ctx.beginPath();
                                     ctx.arc(x, y, radius, 0, 2 * Math.PI);
-                                    ctx.strokeStyle = `rgba(251, 191, 36, ${opacity})`;
+                                    const uploadRingColor = config.uploadColor.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
+                                    ctx.strokeStyle = uploadRingColor;
                                     ctx.lineWidth = 2.5;
                                     ctx.stroke();
                                     ctx.restore();
@@ -1011,7 +1049,7 @@
                             data: downloadData,
                             borderColor: config.downloadColor,
                             backgroundColor: getFillColor(config.downloadColor),
-                            fill: true,
+                            fill: false,
                             tension: 0.4,
                             borderWidth: 3,
                             pointRadius: downloadPointRadii,
@@ -1029,7 +1067,7 @@
                             data: uploadData,
                             borderColor: config.uploadColor,
                             backgroundColor: getFillColor(config.uploadColor),
-                            fill: true,
+                            fill: false,
                             tension: 0.4,
                             borderWidth: 3,
                             pointRadius: uploadPointRadii,
@@ -1060,14 +1098,34 @@
                             displayColors: true,
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
+                                    const datasetIndex = context.datasetIndex;
+                                    const index = context.dataIndex;
+                                    const labels = [];
+
+                                    // Determine which dataset (download or upload)
+                                    const isDownload = datasetIndex === 0;
+                                    const benchmark = isDownload
+                                        ? (config.downloadBenchmarks && config.downloadBenchmarks[index])
+                                        : (config.uploadBenchmarks && config.uploadBenchmarks[index]);
+
+                                    // Main result line
+                                    let resultLabel = '- Value: ';
                                     if (context.parsed.y !== null) {
-                                        label += context.parsed.y.toFixed(2) + ' Mbps';
+                                        resultLabel += context.parsed.y.toFixed(2) + ' Mbps';
                                     }
-                                    return label;
+                                    labels.push(resultLabel);
+
+                                    // Benchmark info if available
+                                    if (benchmark) {
+                                        const thresholdType = benchmark.bar === 'min' ? 'Min' : 'Max';
+                                        const benchmarkLabel = `- Benchmark (${thresholdType}): ${benchmark.value} ${benchmark.unit}`;
+                                        labels.push(benchmarkLabel);
+
+                                        const statusLabel = benchmark.passed ? '- Benchmark Status: ✅ Passed' : '- Benchmark Status: ❌ Failed';
+                                        labels.push(statusLabel);
+                                    }
+
+                                    return labels;
                                 }
                             }
                         }
@@ -1143,6 +1201,10 @@
             // Update benchmark failed data
             config.downloadBenchmarkFailed = newData.downloadBenchmarkFailed || [];
             config.uploadBenchmarkFailed = newData.uploadBenchmarkFailed || [];
+
+            // Update full benchmark data
+            config.downloadBenchmarks = newData.downloadBenchmarks || [];
+            config.uploadBenchmarks = newData.uploadBenchmarks || [];
 
             this.createChart(newData.labels, newData.download, newData.upload);
         }
@@ -1282,7 +1344,7 @@
                             data: primaryData,
                             borderColor: config.primaryColor,
                             backgroundColor: getFillColor(config.primaryColor),
-                            fill: true,
+                            fill: false,
                             tension: 0.4,
                             borderWidth: 3,
                             pointRadius: pointRadii,
@@ -1300,7 +1362,7 @@
                             data: secondaryData,
                             borderColor: config.secondaryColor,
                             backgroundColor: getFillColor(config.secondaryColor, 0.1),
-                            fill: true,
+                            fill: false,
                             tension: 0.4,
                             borderWidth: 2,
                             pointRadius: 0,
@@ -1340,7 +1402,7 @@
                                         const benchmark = config.benchmarks && config.benchmarks[index];
 
                                         // Main result line
-                                        let resultLabel = config.primaryLabel + ': ';
+                                        let resultLabel = '- ' + config.primaryLabel + ': ';
                                         if (context.parsed.y !== null) {
                                             resultLabel += context.parsed.y.toFixed(2) + ' ' + primaryUnit;
                                         }
@@ -1349,17 +1411,17 @@
                                         // Benchmark info if available
                                         if (benchmark) {
                                             const thresholdType = benchmark.bar === 'min' ? 'Min' : 'Max';
-                                            const benchmarkLabel = `Benchmark (${thresholdType}): ${benchmark.value} ${benchmark.unit}`;
+                                            const benchmarkLabel = `- Benchmark (${thresholdType}): ${benchmark.value} ${benchmark.unit}`;
                                             labels.push(benchmarkLabel);
 
-                                            const statusLabel = benchmark.passed ? 'Status: ✅ Passed' : 'Status: ❌ Failed';
+                                            const statusLabel = benchmark.passed ? '- Benchmark Status: ✅ Passed' : '- Benchmark Status: ❌ Failed';
                                             labels.push(statusLabel);
                                         }
 
                                         return labels;
                                     } else {
                                         // Secondary dataset (Latency)
-                                        let label = config.secondaryLabel + ': ';
+                                        let label = '- ' + config.secondaryLabel + ': ';
                                         if (context.parsed.y !== null) {
                                             label += context.parsed.y.toFixed(2) + ' ' + secondaryUnit;
                                         }
