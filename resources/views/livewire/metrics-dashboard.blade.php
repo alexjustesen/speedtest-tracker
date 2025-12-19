@@ -792,7 +792,7 @@
                     backgroundColor: fillColor,
                     fill: false,
                     tension: 0.4,
-                    borderWidth: 2,
+                    borderWidth: 3,
                     pointRadius: 0,
                     pointHoverRadius: 5,
                     pointBackgroundColor: color,
