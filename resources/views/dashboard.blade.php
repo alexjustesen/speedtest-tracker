@@ -4,10 +4,6 @@
 
         <livewire:next-speedtest-banner />
 
-        @auth
-            <livewire:platform-stats />
-        @endauth
-
         <livewire:latest-result-stats />
 
         <div class="grid grid-cols-1 gap-6">

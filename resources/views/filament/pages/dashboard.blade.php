@@ -13,6 +13,7 @@
                 class="col-span-1"
                 icon="tabler-book"
                 icon-size="md"
+                :compact="true"
             >
                 <x-slot name="heading">
                     {{ __('general.documentation') }}
@@ -37,6 +38,7 @@
                 class="col-span-1"
                 icon="tabler-cash-banknote-heart"
                 icon-size="md"
+                :compact="true"
             >
                 <x-slot name="heading">
                     {{ __('general.donations') }}
@@ -61,6 +63,7 @@
                 class="col-span-1"
                 icon="tabler-brand-github"
                 icon-size="md"
+                :compact="true"
             >
                 <x-slot name="heading">
                     {{ __('general.speedtest_tracker') }}

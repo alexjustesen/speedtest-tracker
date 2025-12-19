@@ -6,9 +6,9 @@ return [
     /**
      * General settings.
      */
-    'build_date' => Carbon::parse('2025-12-15'),
+    'build_date' => Carbon::parse('2025-12-18'),
 
-    'build_version' => 'v1.12.4',
+    'build_version' => 'v1.13.2',
 
     'content_width' => env('CONTENT_WIDTH', '7xl'),
 
@@ -29,14 +29,16 @@ return [
 
     'interface' => env('SPEEDTEST_INTERFACE'),
 
-    'checkinternet_url' => env('SPEEDTEST_CHECKINTERNET_URL', 'https://icanhazip.com'),
+    'preflight' => [
+        'external_ip_url' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_EXTERNAL_IP_URL', 'https://icanhazip.com'),
+        'internet_check_hostname' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_INTERNET_CHECK_HOSTNAME', 'icanhazip.com'),
+        'skip_ips' => env('SPEEDTEST_SKIP_IPS'),
+    ],
 
     /**
      * IP filtering settings.
      */
     'allowed_ips' => env('ALLOWED_IPS'),
-
-    'skip_ips' => env('SPEEDTEST_SKIP_IPS', ''),
 
     /**
      * Threshold settings.
