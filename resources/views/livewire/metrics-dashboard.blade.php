@@ -500,37 +500,6 @@
             </div>
         </div>
 
-        <!-- Packet Loss Data -->
-        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
-            <flux:heading class="flex items-center gap-x-2 px-6 pt-4 pb-4" size="lg">
-                <flux:icon.file-exclamation-point class="size-5 text-neutral-600 dark:text-neutral-400" />
-                Packet Loss
-            </flux:heading>
-
-            <!-- Packet Loss Chart -->
-            <div
-                x-data="chartComponent({
-                    type: 'bar',
-                    label: 'Packet Loss (%)',
-                    labels: @js($chartData['labels']),
-                    resultIds: @js($chartData['resultIds']),
-                    data: @js($chartData['packetLoss']),
-                    benchmarkFailed: [],
-                    benchmarks: [],
-                    color: 'rgb(225, 29, 72)',
-                    field: 'packetLoss',
-                    showPoints: false,
-                    unit: '%',
-                    yAxisMin: 0,
-                    yAxisMax: 100
-                })"
-                @charts-updated.window="updateChart($event.detail.chartData)"
-                wire:ignore
-                class="aspect-[2/1] lg:aspect-[5/1] px-6 pb-6"
-            >
-                <canvas x-ref="canvas"></canvas>
-            </div>
-        </div>
     </div>
 </div>
 
