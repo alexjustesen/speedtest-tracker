@@ -3,9 +3,11 @@
 namespace App\Notifications;
 
 use App\Settings\NotificationSettings;
+use Exception;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class AppriseChannel
 {
@@ -22,7 +24,7 @@ class AppriseChannel
         }
 
         $settings = app(NotificationSettings::class);
-        $appriseUrl = rtrim($settings->apprise_server_url ?? '', '/');
+        $appriseUrl = $settings->apprise_server_url ?? '';
 
         if (empty($appriseUrl)) {
             Log::warning('Apprise notification skipped: No Server URL configured');
@@ -41,7 +43,7 @@ class AppriseChannel
                 $request = $request->withoutVerifying();
             }
 
-            $response = $request->post("{$appriseUrl}/notify", [
+            $response = $request->post($appriseUrl, [
                 'urls' => $message->urls,
                 'title' => $message->title,
                 'body' => $message->body,
@@ -50,26 +52,25 @@ class AppriseChannel
                 'tag' => $message->tag ?? null,
             ]);
 
-            if ($response->failed()) {
-                Log::error('Apprise notification failed', [
-                    'channel' => $message->urls,
-                    'instance' => $appriseUrl,
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-            } else {
-                Log::info('Apprise notification sent', [
-                    'channel' => $message->urls,
-                    'instance' => $appriseUrl,
-                ]);
+            // Only accept 200 OK responses as successful
+            if ($response->status() !== 200) {
+                throw new Exception('Apprise returned an error, please check Apprise logs for details');
             }
-        } catch (\Throwable $e) {
-            Log::error('Apprise notification exception', [
+
+            Log::info('Apprise notification sent', [
+                'channel' => $message->urls,
+                'instance' => $appriseUrl,
+            ]);
+        } catch (Throwable $e) {
+            Log::error('Apprise notification failed', [
                 'channel' => $message->urls ?? 'unknown',
                 'instance' => $appriseUrl,
                 'message' => $e->getMessage(),
                 'exception' => get_class($e),
             ]);
+
+            // Re-throw the exception so it can be handled by the queue
+            throw $e;
         }
     }
 }

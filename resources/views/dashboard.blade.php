@@ -1,10 +1,8 @@
 <x-app-layout title="Dashboard">
     <div class="space-y-6 md:space-y-12 dashboard-page">
-        <livewire:next-speedtest-banner />
+        <livewire:deprecated-notification-channels-banner />
 
-        @auth
-            <livewire:platform-stats />
-        @endauth
+        <livewire:next-speedtest-banner />
 
         <livewire:latest-result-stats />
 

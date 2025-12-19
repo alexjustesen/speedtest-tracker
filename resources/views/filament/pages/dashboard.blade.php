@@ -1,5 +1,7 @@
 <x-filament-panels::page class="dashboard-page">
     <div class="space-y-6 md:space-y-12">
+        <livewire:deprecated-notification-channels-banner />
+
         <livewire:next-speedtest-banner />
 
         <livewire:platform-stats />
@@ -11,6 +13,7 @@
                 class="col-span-1"
                 icon="tabler-book"
                 icon-size="md"
+                :compact="true"
             >
                 <x-slot name="heading">
                     {{ __('general.documentation') }}
@@ -35,6 +38,7 @@
                 class="col-span-1"
                 icon="tabler-cash-banknote-heart"
                 icon-size="md"
+                :compact="true"
             >
                 <x-slot name="heading">
                     {{ __('general.donations') }}
@@ -59,6 +63,7 @@
                 class="col-span-1"
                 icon="tabler-brand-github"
                 icon-size="md"
+                :compact="true"
             >
                 <x-slot name="heading">
                     {{ __('general.speedtest_tracker') }}

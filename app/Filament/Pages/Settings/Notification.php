@@ -14,6 +14,7 @@ use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Rules\AppriseScheme;
+use App\Rules\ContainsString;
 use App\Settings\NotificationSettings;
 use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
 use Filament\Actions\Action;
@@ -265,10 +266,12 @@ class Notification extends SettingsPage
                                             ->schema([
                                                 TextInput::make('apprise_server_url')
                                                     ->label(__('settings/notifications.apprise_server_url'))
-                                                    ->placeholder('http://localhost:8000')
+                                                    ->placeholder('http://localhost:8000/notify')
+                                                    ->helperText(__('settings/notifications.apprise_server_url_helper'))
                                                     ->maxLength(2000)
                                                     ->required()
                                                     ->url()
+                                                    ->rule(new ContainsString('/notify'))
                                                     ->columnSpanFull(),
                                                 Checkbox::make('apprise_verify_ssl')
                                                     ->label(__('settings/notifications.apprise_verify_ssl'))
