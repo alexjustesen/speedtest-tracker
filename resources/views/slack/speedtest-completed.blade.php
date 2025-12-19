@@ -1,3 +1,5 @@
+*Deprecation Notice: The Slack notification channel will stop working at the end of January 2026. Please migrate to Apprise which supports Slack and many other services.*
+
 *Speedtest Completed - #{{ $id }}*
 
 A new speedtest on *{{ config('app.name') }}* was completed using *{{ $service }}*.
