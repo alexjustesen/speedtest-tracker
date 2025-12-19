@@ -57,18 +57,32 @@ class AppriseChannel
             ]);
 
             if ($response->failed()) {
+                $errorMessage = $response->body();
+                $statusCode = $response->status();
+
                 Log::error('Apprise notification failed', [
                     'channel' => $message->urls,
                     'instance' => $appriseUrl,
-                    'status' => $response->status(),
-                    'body' => $response->body(),
+                    'status' => $statusCode,
+                    'body' => $errorMessage,
                 ]);
-            } else {
-                Log::info('Apprise notification sent', [
-                    'channel' => $message->urls,
-                    'instance' => $appriseUrl,
-                ]);
+
+                throw new \RuntimeException("Apprise server responded with status {$statusCode}: {$errorMessage}");
             }
+
+            Log::info('Apprise notification sent', [
+                'channel' => $message->urls,
+                'instance' => $appriseUrl,
+            ]);
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            Log::error('Apprise notification connection exception', [
+                'channel' => $message->urls ?? 'unknown',
+                'instance' => $appriseUrl,
+                'message' => $e->getMessage(),
+                'exception' => get_class($e),
+            ]);
+
+            throw new \RuntimeException("Failed to connect to Apprise server: {$e->getMessage()}", 0, $e);
         } catch (\Throwable $e) {
             Log::error('Apprise notification exception', [
                 'channel' => $message->urls ?? 'unknown',
@@ -76,6 +90,9 @@ class AppriseChannel
                 'message' => $e->getMessage(),
                 'exception' => get_class($e),
             ]);
+
+            // Re-throw the exception so it can be handled by the queue
+            throw $e;
         }
     }
 }

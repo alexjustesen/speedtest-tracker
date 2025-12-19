@@ -140,3 +140,41 @@ it('disables SSL verification when configured', function () {
         return $request->url() === 'https://localhost:8000/notify';
     });
 });
+
+it('throws exception when server responds with failure', function () {
+    $settings = app(NotificationSettings::class);
+    $settings->apprise_server_url = 'http://localhost:8000';
+    $settings->save();
+
+    Http::fake([
+        'http://localhost:8000/notify' => Http::response('Invalid URL scheme', 400),
+    ]);
+
+    $notifiable = new AnonymousNotifiable;
+    $notifiable->route('apprise_urls', ['invalid://webhook']);
+
+    $notification = new TestNotification;
+    $channel = new AppriseChannel;
+
+    expect(fn () => $channel->send($notifiable, $notification))
+        ->toThrow(\RuntimeException::class, 'Apprise server responded with status 400');
+});
+
+it('throws exception on connection error', function () {
+    $settings = app(NotificationSettings::class);
+    $settings->apprise_server_url = 'http://invalid-host-that-does-not-exist.local';
+    $settings->save();
+
+    Http::fake(function () {
+        throw new \Illuminate\Http\Client\ConnectionException('Could not resolve host');
+    });
+
+    $notifiable = new AnonymousNotifiable;
+    $notifiable->route('apprise_urls', ['discord://webhook-id/webhook-token']);
+
+    $notification = new TestNotification;
+    $channel = new AppriseChannel;
+
+    expect(fn () => $channel->send($notifiable, $notification))
+        ->toThrow(\RuntimeException::class, 'Failed to connect to Apprise server');
+});

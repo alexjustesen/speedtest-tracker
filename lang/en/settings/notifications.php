@@ -31,7 +31,7 @@ return [
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
     'test_webhook_channel' => 'Test webhook channel',
-    'webhook_hint_description' => 'These are generic webhooks. For payload examples and implementation details, view the documentation.',
+    'webhook_hint_description' => 'These are generic webhooks. For payload examples and implementation details, view the documentation. For services like Discord, Ntfy etc please use Apprise.',
 
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notify on every scheduled speedtest run',
