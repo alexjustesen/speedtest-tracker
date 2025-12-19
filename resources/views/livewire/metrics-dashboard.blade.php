@@ -66,7 +66,11 @@
             <div class="border-t border-neutral-200 dark:border-neutral-700">
                 <!-- Download Stats -->
                 <div class="border-b border-neutral-200 dark:border-neutral-700">
-                    <flux:heading size="sm" class="px-6 pt-3 pb-2 text-blue-600 dark:text-blue-400">Download</flux:heading>
+                    <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-blue-600 dark:text-blue-400">
+                        <flux:icon.download class="size-4" />
+                        Download
+                    </flux:heading>
+
                     <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 dark:divide-neutral-700 border-t border-neutral-200 dark:border-neutral-700">
                         <div class="px-6 py-3">
                             <flux:heading class="flex items-center gap-1.5">
@@ -116,7 +120,11 @@
 
                 <!-- Upload Stats -->
                 <div>
-                    <flux:heading size="sm" class="px-6 pt-3 pb-2 text-amber-600 dark:text-amber-400">Upload</flux:heading>
+                    <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-amber-600 dark:text-amber-400">
+                        <flux:icon.upload class="size-4" />
+                        Upload
+                    </flux:heading>
+
                     <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 dark:divide-neutral-700 border-t border-neutral-200 dark:border-neutral-700">
                         <div class="px-6 py-3">
                             <flux:heading class="flex items-center gap-1.5">
@@ -1138,7 +1146,7 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Download Speed (Mbps)',
+                                text: 'Download',
                                 color: config.downloadColor,
                                 font: {
                                     size: 12,
@@ -1162,7 +1170,7 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Upload Speed (Mbps)',
+                                text: 'Upload',
                                 color: config.uploadColor,
                                 font: {
                                     size: 12,
