@@ -47,7 +47,6 @@ class MetricsDashboard extends Component
 
         $labels = [];
         $downloadData = [];
-        $downloadLatencyData = [];
         $uploadData = [];
         $pingData = [];
         $downloadJitterData = [];
@@ -67,9 +66,6 @@ class MetricsDashboard extends Component
             // Convert download from bytes/sec to Mbps
             $downloadBits = Bitrate::bytesToBits($result->download ?? 0);
             $downloadData[] = round($downloadBits / 1000000, 2); // Convert to Mbps
-
-            // Download latency IQM in milliseconds
-            $downloadLatencyData[] = round($result->downloadlatencyiqm ?? 0, 2);
 
             // Convert upload from bytes/sec to Mbps
             $uploadBits = Bitrate::bytesToBits($result->upload ?? 0);
@@ -156,7 +152,6 @@ class MetricsDashboard extends Component
         return [
             'labels' => $labels,
             'download' => $downloadData,
-            'downloadLatency' => $downloadLatencyData,
             'upload' => $uploadData,
             'ping' => $pingData,
             'downloadJitter' => $downloadJitterData,
