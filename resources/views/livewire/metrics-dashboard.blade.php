@@ -13,7 +13,7 @@
             </flux:modal.trigger>
 
             <!-- Filter Modal -->
-            <flux:modal name="filterModal" class="md:w-[600px] space-y-6">
+            <flux:modal name="filterModal" class="md:w-md space-y-6">
                 <div>
                     <flux:heading size="lg">Filter Results</flux:heading>
                     <flux:text>Select a date range to filter your speed test results</flux:text>
