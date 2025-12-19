@@ -30,6 +30,12 @@ class AppriseChannel
             return;
         }
 
+        // Handle both cases: URL with or without /notify endpoint
+        // If user already included /notify, don't append it again
+        if (! str_ends_with($appriseUrl, '/notify')) {
+            $appriseUrl .= '/notify';
+        }
+
         try {
             $request = Http::timeout(5)
                 ->withHeaders([
@@ -41,7 +47,7 @@ class AppriseChannel
                 $request = $request->withoutVerifying();
             }
 
-            $response = $request->post("{$appriseUrl}/notify", [
+            $response = $request->post($appriseUrl, [
                 'urls' => $message->urls,
                 'title' => $message->title,
                 'body' => $message->body,

@@ -233,7 +233,7 @@ class Notification extends SettingsPage
                                             ->schema([
                                                 TextInput::make('apprise_server_url')
                                                     ->label(__('settings/notifications.apprise_server_url'))
-                                                    ->placeholder('http://localhost:8000')
+                                                    ->placeholder('http://localhost:8000 or http://localhost:8000/notify')
                                                     ->maxLength(2000)
                                                     ->required()
                                                     ->url()
