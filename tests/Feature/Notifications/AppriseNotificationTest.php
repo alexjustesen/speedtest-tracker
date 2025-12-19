@@ -3,6 +3,8 @@
 use App\Notifications\Apprise\TestNotification;
 use App\Notifications\AppriseChannel;
 use App\Settings\NotificationSettings;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Http;
 
@@ -157,7 +159,7 @@ it('throws exception when server responds with failure', function () {
     $channel = new AppriseChannel;
 
     expect(fn () => $channel->send($notifiable, $notification))
-        ->toThrow(\RuntimeException::class, 'Apprise server responded with status 400');
+        ->toThrow(RequestException::class);
 });
 
 it('throws exception on connection error', function () {
@@ -166,7 +168,7 @@ it('throws exception on connection error', function () {
     $settings->save();
 
     Http::fake(function () {
-        throw new \Illuminate\Http\Client\ConnectionException('Could not resolve host');
+        throw new ConnectionException('Could not resolve host');
     });
 
     $notifiable = new AnonymousNotifiable;
@@ -176,5 +178,5 @@ it('throws exception on connection error', function () {
     $channel = new AppriseChannel;
 
     expect(fn () => $channel->send($notifiable, $notification))
-        ->toThrow(\RuntimeException::class, 'Failed to connect to Apprise server');
+        ->toThrow(ConnectionException::class);
 });
