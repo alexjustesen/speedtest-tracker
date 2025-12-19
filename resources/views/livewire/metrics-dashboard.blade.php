@@ -451,6 +451,37 @@
                 </div>
             </div>
         </div>
+
+        <!-- Packet Loss Data -->
+        <div class="col-span-full rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+            <flux:heading class="flex items-center gap-x-2 px-6 pt-4 pb-4" size="lg">
+                <flux:icon.file-exclamation-point class="size-5 text-neutral-600 dark:text-neutral-400" />
+                Packet Loss
+            </flux:heading>
+
+            <!-- Packet Loss Chart -->
+            <div
+                x-data="chartComponent({
+                    type: 'bar',
+                    label: 'Packet Loss (%)',
+                    labels: @js($chartData['labels']),
+                    data: @js($chartData['packetLoss']),
+                    benchmarkFailed: [],
+                    benchmarks: [],
+                    color: 'rgb(225, 29, 72)',
+                    field: 'packetLoss',
+                    showPoints: false,
+                    unit: '%',
+                    yAxisMin: 0,
+                    yAxisMax: 100
+                })"
+                @charts-updated.window="updateChart($event.detail.chartData)"
+                wire:ignore
+                class="aspect-[2/1] lg:aspect-[5/1] px-6 pb-6"
+            >
+                <canvas x-ref="canvas"></canvas>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -579,7 +610,7 @@
                         label: config.label,
                         data: data,
                         borderColor: config.color,
-                        backgroundColor: getFillColor(config.color),
+                        backgroundColor: config.type === 'bar' ? config.color : getFillColor(config.color),
                         fill: false,
                         tension: 0.4,
                         borderWidth: isLine ? 3 : 1,
@@ -640,6 +671,8 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            min: config.yAxisMin !== undefined ? config.yAxisMin : undefined,
+                            max: config.yAxisMax !== undefined ? config.yAxisMax : undefined,
                             ticks: {
                                 color: textColor,
                                 callback: function(value) {
@@ -669,13 +702,15 @@
         },
 
         updateChart(newData) {
-            // Update benchmark failed data for this field
-            const benchmarkFailedField = config.field + 'BenchmarkFailed';
-            config.benchmarkFailed = newData[benchmarkFailedField] || [];
+            // Update benchmark failed data for this field (only if not packet loss)
+            if (config.field !== 'packetLoss') {
+                const benchmarkFailedField = config.field + 'BenchmarkFailed';
+                config.benchmarkFailed = newData[benchmarkFailedField] || [];
 
-            // Update full benchmark data for this field
-            const benchmarksField = config.field + 'Benchmarks';
-            config.benchmarks = newData[benchmarksField] || [];
+                // Update full benchmark data for this field
+                const benchmarksField = config.field + 'Benchmarks';
+                config.benchmarks = newData[benchmarksField] || [];
+            }
 
             this.createChart(newData.labels, newData[config.field]);
         }

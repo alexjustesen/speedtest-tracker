@@ -54,6 +54,7 @@ class MetricsDashboard extends Component
         $downloadJitterData = [];
         $uploadJitterData = [];
         $pingJitterData = [];
+        $packetLossData = [];
         $downloadBenchmarkFailed = [];
         $uploadBenchmarkFailed = [];
         $pingBenchmarkFailed = [];
@@ -84,6 +85,9 @@ class MetricsDashboard extends Component
             $downloadJitterData[] = round($result->downloadJitter ?? 0, 2);
             $uploadJitterData[] = round($result->uploadJitter ?? 0, 2);
             $pingJitterData[] = round($result->pingJitter ?? 0, 2);
+
+            // Packet loss (percentage 0-100)
+            $packetLossData[] = round($result->packet_loss ?? 0, 2);
 
             // Track benchmark failures and full benchmark data
             $benchmarks = $result->benchmarks ?? [];
@@ -174,6 +178,7 @@ class MetricsDashboard extends Component
             'downloadJitter' => $downloadJitterData,
             'uploadJitter' => $uploadJitterData,
             'pingJitter' => $pingJitterData,
+            'packetLoss' => $packetLossData,
             'downloadBenchmarkFailed' => $downloadBenchmarkFailed,
             'uploadBenchmarkFailed' => $uploadBenchmarkFailed,
             'pingBenchmarkFailed' => $pingBenchmarkFailed,
