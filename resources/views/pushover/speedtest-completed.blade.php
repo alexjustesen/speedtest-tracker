@@ -1,4 +1,4 @@
-Deprecation Notice: The Pushover notification channel is deprecated and will be removed in a future release. Please migrate to Apprise which supports Pushover and many other services.
+Deprecation Notice: The Pushover notification channel will stop working at the end of January 2026. Please migrate to Apprise which supports Pushover and many other services.
 
 Speedtest Completed - #{{ $id }}
 

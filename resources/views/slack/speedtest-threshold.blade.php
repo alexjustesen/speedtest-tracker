@@ -1,4 +1,4 @@
-*Deprecation Notice: The Slack notification channel is deprecated and will be removed in a future release. Please migrate to Apprise which supports Slack and many other services.*
+*Deprecation Notice: The Slack notification channel will stop working at the end of January 2026. Please migrate to Apprise which supports Slack and many other services.*
 
 **Speedtest Threshold Breached - #{{ $id }}**
 
