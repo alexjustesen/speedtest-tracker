@@ -70,7 +70,7 @@ class SendAppriseTestNotification
     /**
      * Clean up error message for display in UI.
      */
-    protected function cleanErrorMessage(\Throwable $e): string
+    protected function cleanErrorMessage(Throwable $e): string
     {
         $message = $e->getMessage();
 

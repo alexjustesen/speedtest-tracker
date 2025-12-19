@@ -3,8 +3,8 @@
 use App\Notifications\Apprise\TestNotification;
 use App\Notifications\AppriseChannel;
 use App\Settings\NotificationSettings;
+use Exception;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Http;
 
@@ -30,7 +30,7 @@ it('appends /notify to server URL when not present', function () {
     });
 });
 
-it('does not duplicate /notify when already present in server URL', function () {
+it('does not modify URL when /notify is already present', function () {
     $settings = app(NotificationSettings::class);
     $settings->apprise_server_url = 'http://localhost:8000/notify';
     $settings->save();
@@ -49,6 +49,28 @@ it('does not duplicate /notify when already present in server URL', function () 
 
     Http::assertSent(function ($request) {
         return $request->url() === 'http://localhost:8000/notify';
+    });
+});
+
+it('preserves URL with /notify in a custom path', function () {
+    $settings = app(NotificationSettings::class);
+    $settings->apprise_server_url = 'http://localhost:8000/config/notify';
+    $settings->save();
+
+    Http::fake([
+        'http://localhost:8000/config/notify' => Http::response(['success' => true], 200),
+    ]);
+
+    $notifiable = new AnonymousNotifiable;
+    $notifiable->route('apprise_urls', ['discord://webhook-id/webhook-token']);
+
+    $notification = new TestNotification;
+    $channel = new AppriseChannel;
+
+    $channel->send($notifiable, $notification);
+
+    Http::assertSent(function ($request) {
+        return $request->url() === 'http://localhost:8000/config/notify';
     });
 });
 
@@ -159,7 +181,7 @@ it('throws exception when server responds with failure', function () {
     $channel = new AppriseChannel;
 
     expect(fn () => $channel->send($notifiable, $notification))
-        ->toThrow(RequestException::class);
+        ->toThrow(Exception::class, 'Apprise returned an error, check Apprise logs for details');
 });
 
 it('throws exception on connection error', function () {
@@ -179,4 +201,23 @@ it('throws exception on connection error', function () {
 
     expect(fn () => $channel->send($notifiable, $notification))
         ->toThrow(ConnectionException::class);
+});
+
+it('throws exception when apprise returns 204 no content', function () {
+    $settings = app(NotificationSettings::class);
+    $settings->apprise_server_url = 'http://localhost:8000';
+    $settings->save();
+
+    Http::fake([
+        'http://localhost:8000/notify' => Http::response('', 204),
+    ]);
+
+    $notifiable = new AnonymousNotifiable;
+    $notifiable->route('apprise_urls', ['discord://webhook-id/webhook-token']);
+
+    $notification = new TestNotification;
+    $channel = new AppriseChannel;
+
+    expect(fn () => $channel->send($notifiable, $notification))
+        ->toThrow(Exception::class, 'Apprise returned an error, check Apprise logs for details');
 });

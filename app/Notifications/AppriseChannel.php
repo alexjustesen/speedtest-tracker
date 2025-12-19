@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Settings\NotificationSettings;
+use Exception;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -23,18 +24,12 @@ class AppriseChannel
         }
 
         $settings = app(NotificationSettings::class);
-        $appriseUrl = rtrim($settings->apprise_server_url ?? '', '/');
+        $appriseUrl = $settings->apprise_server_url ?? '';
 
         if (empty($appriseUrl)) {
             Log::warning('Apprise notification skipped: No Server URL configured');
 
             return;
-        }
-
-        // Handle both cases: URL with or without /notify endpoint
-        // If user already included /notify, don't append it again
-        if (! str_ends_with($appriseUrl, '/notify')) {
-            $appriseUrl .= '/notify';
         }
 
         try {
@@ -48,14 +43,19 @@ class AppriseChannel
                 $request = $request->withoutVerifying();
             }
 
-            $request->post($appriseUrl, [
+            $response = $request->post($appriseUrl, [
                 'urls' => $message->urls,
                 'title' => $message->title,
                 'body' => $message->body,
                 'type' => $message->type ?? 'info',
                 'format' => $message->format ?? 'text',
                 'tag' => $message->tag ?? null,
-            ])->throw();
+            ]);
+
+            // Only accept 200 OK responses as successful
+            if ($response->status() !== 200) {
+                throw new Exception('Apprise returned an error, please check Apprise logs for details');
+            }
 
             Log::info('Apprise notification sent', [
                 'channel' => $message->urls,

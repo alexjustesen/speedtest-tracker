@@ -19,7 +19,7 @@ return [
     'enable_apprise_notifications' => 'Enable Apprise notifications',
     'apprise_server' => 'Apprise Server',
     'apprise_server_url' => 'Apprise Server URL',
-    'apprise_server_url_helper' => 'The URL of your Apprise Server.',
+    'apprise_server_url_helper' => 'The URL of your Apprise Server. The URL must end on /notify',
     'apprise_verify_ssl' => 'Verify SSL',
     'apprise_channels' => 'Notification Channels',
     'apprise_channel_url' => 'Service URL',
