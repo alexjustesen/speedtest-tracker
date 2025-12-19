@@ -7,124 +7,68 @@
             Metrics Dashboard
         </flux:heading>
 
-        <div>
-            <flux:modal.trigger name="filterModal">
-                <flux:button size="sm" icon="adjustments-horizontal" />
-            </flux:modal.trigger>
+        <div class="flex items-center gap-4">
+            <flux:input
+                wire:model.blur="startDate"
+                type="date"
+                size="sm"
+                max="{{ now()->format('Y-m-d') }}"
+                placeholder="Start date" />
 
-            <!-- Filter Modal -->
-            <flux:modal name="filterModal" flyout class="space-y-6">
-                <div>
-                    <flux:heading size="lg">Filter Results</flux:heading>
-                    <flux:text>Select a date range to filter your speed test results</flux:text>
-                </div>
+            <flux:input
+                wire:model.blur="endDate"
+                type="date"
+                size="sm"
+                max="{{ now()->format('Y-m-d') }}"
+                placeholder="End date" />
 
-                <flux:separator />
+            <div>
+                <flux:modal.trigger name="displaySettingsModal">
+                    <flux:button size="sm" icon="sliders-vertical" />
+                </flux:modal.trigger>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <flux:field>
-                        <flux:label>Start Date</flux:label>
-                        <flux:input
-                            wire:model="startDate"
-                            type="date"
-                            max="{{ now()->format('Y-m-d') }}"
-                            placeholder="Select start date" />
-                        <flux:error name="startDate" />
-                    </flux:field>
+                <!-- Display Settings Modal -->
+                <flux:modal name="displaySettingsModal" flyout class="space-y-6">
+                    <div>
+                        <flux:heading size="sm">Manage Sections</flux:heading>
+                        <flux:text size="sm">Uncheck to hide sections</flux:text>
+                    </div>
 
-                    <flux:field>
-                        <flux:label>End Date</flux:label>
-                        <flux:input
-                            wire:model="endDate"
-                            type="date"
-                            max="{{ now()->format('Y-m-d') }}"
-                            placeholder="Select end date" />
-                        <flux:error name="endDate" />
-                    </flux:field>
-                </div>
+                    <div x-data="sectionManager()" x-init="init()">
+                        <!-- Section Visibility List -->
+                        <div class="space-y-2">
+                            <template x-for="section in sections" :key="section.id">
+                                <div class="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
+                                    <!-- Checkbox for visibility -->
+                                    <flux:checkbox
+                                        x-model="section.visible"
+                                        @change="updateVisibility()"
+                                        class="shrink-0"
+                                    />
 
-                <flux:field>
-                    <flux:label>Scheduled Status</flux:label>
-                    <flux:select wire:model="scheduledFilter">
-                        <flux:select.option value="all">All</flux:select.option>
-                        <flux:select.option value="scheduled">Only scheduled</flux:select.option>
-                        <flux:select.option value="unscheduled">Only unscheduled</flux:select.option>
-                    </flux:select>
-                </flux:field>
-
-                <flux:separator />
-
-                <div>
-                    <flux:heading size="sm">Manage Sections</flux:heading>
-                    <flux:text size="sm">Drag to reorder, uncheck to hide</flux:text>
-                </div>
-
-                <div x-data="sectionManager()" x-init="init()">
-                    <!-- Sortable Section List -->
-                    <div
-                        x-sort="updateOrder"
-                        class="space-y-2"
-                    >
-                        <template x-for="section in sections" :key="section.id">
-                            <div
-                                x-sort:item="section.id"
-                                class="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 cursor-move hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors"
-                            >
-                                <!-- Drag Handle -->
-                                <flux:icon.grip-vertical class="size-5 text-neutral-400 shrink-0" />
-
-                                <!-- Checkbox for visibility -->
-                                <flux:checkbox
-                                    x-model="section.visible"
-                                    @change="updateVisibility()"
-                                    class="shrink-0"
-                                />
-
-                                <!-- Section Info -->
-                                <div class="flex items-center gap-2 flex-1">
-                                    <span
-                                        x-text="section.name"
-                                        class="font-medium text-neutral-900 dark:text-neutral-100"
-                                    ></span>
+                                    <!-- Section Info -->
+                                    <div class="flex items-center gap-2 flex-1">
+                                        <span
+                                            x-text="section.name"
+                                            class="font-medium text-neutral-900 dark:text-neutral-100"
+                                        ></span>
+                                    </div>
                                 </div>
-                            </div>
-                        </template>
-                    </div>
+                            </template>
+                        </div>
 
-                    <!-- Reset to Default Button -->
-                    <flux:button
-                        @click="resetToDefaults()"
-                        variant="ghost"
-                        size="sm"
-                        class="mt-4 w-full"
-                    >
-                        <flux:icon.arrow-up-down class="size-4" />
-                        Reset to Default Order
-                    </flux:button>
-                </div>
-
-                <div class="flex justify-between items-center gap-2">
-                    <div class="flex gap-2">
+                        <!-- Reset to Default Button -->
                         <flux:button
-                            wire:click="applyFilters"
-                            variant="primary">
-                            Apply
-                        </flux:button>
-
-                        <flux:button
-                            wire:click="resetFilters"
-                            variant="ghost">
-                            Reset
+                            @click="resetToDefaults()"
+                            variant="ghost"
+                            size="sm"
+                            class="mt-4 w-full"
+                        >
+                            Reset to Defaults
                         </flux:button>
                     </div>
-
-                    <flux:modal.close>
-                        <flux:button variant="ghost">
-                            Cancel
-                        </flux:button>
-                    </flux:modal.close>
-                </div>
-            </flux:modal>
+                </flux:modal>
+            </div>
         </div>
     </div>
 
@@ -1329,7 +1273,6 @@
         init() {
             this.loadSections();
 
-            // Listen for reset events from dashboard
             window.addEventListener('sections-reset', () => {
                 this.loadSections();
             });
@@ -1344,21 +1287,14 @@
                 { id: 'jitter', name: 'Jitter' }
             ];
 
-            // Sort sections according to saved order
-            const orderedSections = prefs.sectionOrder.map(id => {
-                const def = sectionDefinitions.find(s => s.id === id);
-                return {
-                    ...def,
-                    visible: !prefs.hiddenSections.includes(id)
-                };
-            });
-
-            this.sections = orderedSections;
+            this.sections = sectionDefinitions.map(def => ({
+                ...def,
+                visible: !prefs.hiddenSections.includes(def.id)
+            }));
         },
 
         getPreferences() {
             const defaultPrefs = {
-                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
                 hiddenSections: [],
                 version: 1
             };
@@ -1370,16 +1306,9 @@
                 const parsed = JSON.parse(stored);
 
                 // Validate structure
-                if (!Array.isArray(parsed.sectionOrder) || !Array.isArray(parsed.hiddenSections)) {
+                if (!Array.isArray(parsed.hiddenSections)) {
                     console.warn('Invalid dashboard preferences structure, using defaults');
                     return defaultPrefs;
-                }
-
-                // Ensure all sections exist (handles case where new sections are added)
-                const allSections = ['speed', 'ping', 'latency', 'jitter'];
-                const missingSections = allSections.filter(s => !parsed.sectionOrder.includes(s));
-                if (missingSections.length > 0) {
-                    parsed.sectionOrder = [...parsed.sectionOrder, ...missingSections];
                 }
 
                 return parsed;
@@ -1401,12 +1330,6 @@
             }
         },
 
-        updateOrder() {
-            const prefs = this.getPreferences();
-            prefs.sectionOrder = this.sections.map(s => s.id);
-            this.savePreferences(prefs);
-        },
-
         updateVisibility() {
             const prefs = this.getPreferences();
             prefs.hiddenSections = this.sections
@@ -1417,7 +1340,6 @@
 
         resetToDefaults() {
             const defaultPrefs = {
-                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
                 hiddenSections: [],
                 version: 1
             };
@@ -1438,43 +1360,44 @@
         init() {
             this.loadPreferences();
 
-            // Listen for preference changes
-            window.addEventListener('dashboard-preferences-changed', (e) => {
-                this.preferences = e.detail;
-                this.updateVisibleSections();
+            // Listen for reset events
+            window.addEventListener('sections-reset', () => {
+                this.loadPreferences();
             });
 
-            window.addEventListener('sections-reset', () => {
+            // Listen for preference changes
+            window.addEventListener('dashboard-preferences-changed', () => {
                 this.loadPreferences();
             });
         },
 
         loadPreferences() {
             const defaultPrefs = {
-                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
                 hiddenSections: [],
                 version: 1
             };
+
+            const allSections = ['speed', 'ping', 'latency', 'jitter'];
 
             try {
                 const stored = localStorage.getItem('metrics-dashboard-preferences');
                 this.preferences = stored ? JSON.parse(stored) : defaultPrefs;
 
                 // Validate and fix if needed
-                if (!Array.isArray(this.preferences.sectionOrder)) {
+                if (!Array.isArray(this.preferences.hiddenSections)) {
                     this.preferences = defaultPrefs;
                 }
 
-                this.updateVisibleSections();
+                this.updateVisibleSections(allSections);
             } catch (e) {
                 console.error('Error loading preferences:', e);
                 this.preferences = defaultPrefs;
-                this.updateVisibleSections();
+                this.updateVisibleSections(allSections);
             }
         },
 
-        updateVisibleSections() {
-            this.visibleSections = this.preferences.sectionOrder.filter(
+        updateVisibleSections(allSections) {
+            this.visibleSections = allSections.filter(
                 id => !this.preferences.hiddenSections.includes(id)
             );
         }

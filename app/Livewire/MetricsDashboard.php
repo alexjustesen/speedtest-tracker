@@ -14,8 +14,6 @@ class MetricsDashboard extends Component
 
     public string $endDate = '';
 
-    public string $scheduledFilter = 'all';
-
     public function mount(): void
     {
         if (empty($this->startDate)) {
@@ -27,26 +25,14 @@ class MetricsDashboard extends Component
         }
     }
 
-    public function applyFilters(): void
+    public function updatedStartDate(): void
     {
-        $this->validate([
-            'startDate' => 'required|date|before_or_equal:endDate|before_or_equal:today',
-            'endDate' => 'required|date|after_or_equal:startDate|before_or_equal:today',
-        ], [
-            'startDate.before_or_equal' => 'The start date must be before or equal to the end date and cannot be in the future.',
-            'endDate.after_or_equal' => 'The end date must be after or equal to the start date.',
-            'endDate.before_or_equal' => 'The end date cannot be in the future.',
-        ]);
-
         $this->dispatch('charts-updated', chartData: $this->getChartData());
-        $this->js('$flux.modal(\'filterModal\').close()');
     }
 
-    public function resetFilters(): void
+    public function updatedEndDate(): void
     {
-        $this->startDate = now()->subDay()->format('Y-m-d');
-        $this->endDate = now()->format('Y-m-d');
-        $this->scheduledFilter = 'all';
+        $this->dispatch('charts-updated', chartData: $this->getChartData());
     }
 
     public function getChartData(): array
@@ -54,17 +40,10 @@ class MetricsDashboard extends Component
         $startDate = \Carbon\Carbon::parse($this->startDate)->startOfDay();
         $endDate = \Carbon\Carbon::parse($this->endDate)->endOfDay();
 
-        $query = Result::completed()
-            ->whereBetween('created_at', [$startDate, $endDate]);
-
-        // Apply scheduled filter
-        if ($this->scheduledFilter === 'scheduled') {
-            $query->where('scheduled', true);
-        } elseif ($this->scheduledFilter === 'unscheduled') {
-            $query->where('scheduled', false);
-        }
-
-        $results = $query->orderBy('created_at')->get();
+        $results = Result::completed()
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->orderBy('created_at')
+            ->get();
 
         // Determine label format based on date range duration
         $daysDifference = $startDate->diffInDays($endDate);
