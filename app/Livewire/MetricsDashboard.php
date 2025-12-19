@@ -5,44 +5,73 @@ namespace App\Livewire;
 use App\Helpers\Bitrate;
 use App\Models\Result;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Url;
 use Livewire\Component;
 
 #[Title('Metrics Dashboard')]
 class MetricsDashboard extends Component
 {
-    #[Url]
-    public string $dateRange = 'month';
+    public string $startDate = '';
 
-    public function updateDateRange(string $range): void
+    public string $endDate = '';
+
+    public string $scheduledFilter = 'all';
+
+    public function mount(): void
     {
-        $this->dateRange = $range;
-        // $this->resetPage(); // Reset pagination if applicable
+        if (empty($this->startDate)) {
+            $this->startDate = now()->subDay()->format('Y-m-d');
+        }
+
+        if (empty($this->endDate)) {
+            $this->endDate = now()->format('Y-m-d');
+        }
+    }
+
+    public function applyFilters(): void
+    {
+        $this->validate([
+            'startDate' => 'required|date|before_or_equal:endDate|before_or_equal:today',
+            'endDate' => 'required|date|after_or_equal:startDate|before_or_equal:today',
+        ], [
+            'startDate.before_or_equal' => 'The start date must be before or equal to the end date and cannot be in the future.',
+            'endDate.after_or_equal' => 'The end date must be after or equal to the start date.',
+            'endDate.before_or_equal' => 'The end date cannot be in the future.',
+        ]);
 
         $this->dispatch('charts-updated', chartData: $this->getChartData());
+        $this->js('$flux.modal(\'filterModal\').close()');
+    }
+
+    public function resetFilters(): void
+    {
+        $this->startDate = now()->subDay()->format('Y-m-d');
+        $this->endDate = now()->format('Y-m-d');
+        $this->scheduledFilter = 'all';
     }
 
     public function getChartData(): array
     {
-        $endDate = now();
-        $startDate = match ($this->dateRange) {
-            'today' => now()->subDay(),
-            'week' => now()->subWeek(),
-            'month' => now()->subMonth(),
-            default => now()->subMonth(),
-        };
+        $startDate = \Carbon\Carbon::parse($this->startDate)->startOfDay();
+        $endDate = \Carbon\Carbon::parse($this->endDate)->endOfDay();
 
-        $results = Result::completed()
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->orderBy('created_at')
-            ->get();
+        $query = Result::completed()
+            ->whereBetween('created_at', [$startDate, $endDate]);
 
-        // Determine label format based on date range
-        $labelFormat = match ($this->dateRange) {
-            'today' => 'g:i A',           // 3:45 PM
-            'week' => 'D g:i A',          // Mon 3:45 PM
-            'month' => 'M j g:i A',       // Dec 15 3:45 PM
-            default => 'M j g:i A',
+        // Apply scheduled filter
+        if ($this->scheduledFilter === 'scheduled') {
+            $query->where('scheduled', true);
+        } elseif ($this->scheduledFilter === 'unscheduled') {
+            $query->where('scheduled', false);
+        }
+
+        $results = $query->orderBy('created_at')->get();
+
+        // Determine label format based on date range duration
+        $daysDifference = $startDate->diffInDays($endDate);
+        $labelFormat = match (true) {
+            $daysDifference <= 1 => 'g:i A',           // 3:45 PM
+            $daysDifference <= 7 => 'D g:i A',          // Mon 3:45 PM
+            default => 'M j g:i A',                     // Dec 15 3:45 PM
         };
 
         $labels = [];

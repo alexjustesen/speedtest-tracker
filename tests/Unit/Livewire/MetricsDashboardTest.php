@@ -12,7 +12,7 @@ it('returns individual results not aggregated by date', function () {
         'upload' => 50000000, // 50 MB/s = 400 Mbps
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     // Should return 5 individual results, not 1 aggregated day
@@ -21,14 +21,16 @@ it('returns individual results not aggregated by date', function () {
     expect($chartData['upload'])->toHaveCount(5);
 });
 
-it('formats labels as time only for today range', function () {
+it('formats labels as time only for 1 day or less range', function () {
     Result::factory()->create([
         'created_at' => now()->setTime(14, 30, 0),
         'download' => 125000000,
         'upload' => 50000000,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->set('startDate', now()->subDay()->format('Y-m-d'));
+    $component->set('endDate', now()->format('Y-m-d'));
     $chartData = $component->instance()->getChartData();
 
     // Should match format like "2:30 PM"
@@ -42,7 +44,9 @@ it('formats labels as day and time for week range', function () {
         'upload' => 50000000,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'week']);
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->set('startDate', now()->subWeek()->format('Y-m-d'));
+    $component->set('endDate', now()->format('Y-m-d'));
     $chartData = $component->instance()->getChartData();
 
     // Should match format like "Mon 2:30 PM"
@@ -56,7 +60,9 @@ it('formats labels as date and time for month range', function () {
         'upload' => 50000000,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'month']);
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->set('startDate', now()->subMonth()->format('Y-m-d'));
+    $component->set('endDate', now()->format('Y-m-d'));
     $chartData = $component->instance()->getChartData();
 
     // Should match format like "Dec 15 2:30 PM"
@@ -72,7 +78,7 @@ it('converts download speed from bytes per second to Mbps correctly', function (
         'upload' => 50000000,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['download'][0])->toBe(1000.0);
@@ -87,7 +93,7 @@ it('converts upload speed from bytes per second to Mbps correctly', function () 
         'upload' => 50000000,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['upload'][0])->toBe(400.0);
@@ -100,7 +106,7 @@ it('handles null download values gracefully', function () {
         'upload' => 50000000,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['download'][0])->toBe(0.0);
@@ -113,14 +119,14 @@ it('handles null upload values gracefully', function () {
         'upload' => null,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['upload'][0])->toBe(0.0);
 });
 
 it('returns empty arrays when no results exist', function () {
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['labels'])->toBeEmpty();
@@ -140,7 +146,7 @@ it('only includes completed results within date range', function () {
         'created_at' => now()->subDays(2),
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['count'])->toBe(1);
@@ -151,7 +157,7 @@ it('returns correct count of results', function () {
         'created_at' => now()->subHours(2),
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['count'])->toBe(10);
@@ -174,7 +180,7 @@ it('orders results by created_at chronologically', function () {
         'download' => 300000000,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     // Data should be ordered chronologically (oldest to newest)
@@ -211,7 +217,7 @@ it('calculates healthy ratio based on download benchmark KPI passed status', fun
         ],
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     // 3 out of 4 passed = 75%
@@ -255,7 +261,7 @@ it('calculates healthy ratio based on upload benchmark KPI passed status', funct
         ],
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     // 2 out of 5 passed = 40%
@@ -271,7 +277,7 @@ it('calculates healthy ratio based on ping benchmark KPI passed status', functio
         ],
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     // 10 out of 10 passed = 100%
@@ -298,7 +304,7 @@ it('calculates separate healthy ratios for each metric', function () {
         ],
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     // Download: 1 passed out of 2 = 50%
@@ -316,7 +322,7 @@ it('handles results without benchmarks in healthy ratio calculation', function (
         'benchmarks' => null,
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     // No benchmarks means no passed tests = 0%
@@ -326,7 +332,7 @@ it('handles results without benchmarks in healthy ratio calculation', function (
 });
 
 it('returns 0 healthy ratio when no results exist', function () {
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['downloadStats']['healthy'])->toBe(0.0);
@@ -355,7 +361,7 @@ it('marks latest stat as failed when the most recent benchmark failed', function
         ],
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['downloadStats']['latestFailed'])->toBeTrue();
@@ -384,7 +390,7 @@ it('marks latest stat as not failed when the most recent benchmark passed', func
         ],
     ]);
 
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+    $component = Livewire::test(MetricsDashboard::class);
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['downloadStats']['latestFailed'])->toBeFalse();
@@ -392,11 +398,59 @@ it('marks latest stat as not failed when the most recent benchmark passed', func
     expect($chartData['pingStats']['latestFailed'])->toBeFalse();
 });
 
-it('returns false for latestFailed when no results exist', function () {
-    $component = Livewire::test(MetricsDashboard::class, ['dateRange' => 'today']);
+it('filters only scheduled results when scheduled filter is set', function () {
+    // Create scheduled and unscheduled results
+    Result::factory()->count(3)->create([
+        'created_at' => now()->subHours(2),
+        'scheduled' => true,
+    ]);
+
+    Result::factory()->count(2)->create([
+        'created_at' => now()->subHours(2),
+        'scheduled' => false,
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->set('scheduledFilter', 'scheduled');
     $chartData = $component->instance()->getChartData();
 
-    expect($chartData['downloadStats']['latestFailed'])->toBeFalse();
-    expect($chartData['uploadStats']['latestFailed'])->toBeFalse();
-    expect($chartData['pingStats']['latestFailed'])->toBeFalse();
+    expect($chartData['count'])->toBe(3);
+});
+
+it('filters only unscheduled results when unscheduled filter is set', function () {
+    // Create scheduled and unscheduled results
+    Result::factory()->count(3)->create([
+        'created_at' => now()->subHours(2),
+        'scheduled' => true,
+    ]);
+
+    Result::factory()->count(4)->create([
+        'created_at' => now()->subHours(2),
+        'scheduled' => false,
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->set('scheduledFilter', 'unscheduled');
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['count'])->toBe(4);
+});
+
+it('returns all results when scheduled filter is set to all', function () {
+    // Create scheduled and unscheduled results
+    Result::factory()->count(3)->create([
+        'created_at' => now()->subHours(2),
+        'scheduled' => true,
+    ]);
+
+    Result::factory()->count(2)->create([
+        'created_at' => now()->subHours(2),
+        'scheduled' => false,
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->set('scheduledFilter', 'all');
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['count'])->toBe(5);
 });

@@ -1,35 +1,79 @@
-<div class="flex h-full w-full flex-1 flex-col gap-6"
-    x-data="dateRangePersistence(@js($dateRange))">
+<div class="flex h-full w-full flex-1 flex-col gap-6">
     <livewire:next-speedtest-banner />
 
     <div class="flex items-center justify-between">
         <flux:heading size="xl" class="flex items-center gap-2">
-            <x-tabler-chart-histogram class="size-5" />
+            <flux:icon.chart-no-axes-combined class="size-5" />
             Metrics Dashboard
         </flux:heading>
 
-        <div class="flex items-center gap-2">
-            <flux:button
-                wire:click="updateDateRange('today')"
-                :variant="$dateRange === 'today' ? 'primary' : 'ghost'"
-                size="sm"
-                class="cursor-pointer">
-                Last 24 Hours
-            </flux:button>
-            <flux:button
-                wire:click="updateDateRange('week')"
-                :variant="$dateRange === 'week' ? 'primary' : 'ghost'"
-                size="sm"
-                class="cursor-pointer">
-                Last Week
-            </flux:button>
-            <flux:button
-                wire:click="updateDateRange('month')"
-                :variant="$dateRange === 'month' ? 'primary' : 'ghost'"
-                size="sm"
-                class="cursor-pointer">
-                Last Month
-            </flux:button>
+        <div>
+            <flux:modal.trigger name="filterModal">
+                <flux:button size="sm" icon="adjustments-horizontal" />
+            </flux:modal.trigger>
+
+            <!-- Filter Modal -->
+            <flux:modal name="filterModal" class="md:w-[600px] space-y-6">
+                <div>
+                    <flux:heading size="lg">Filter Results</flux:heading>
+                    <flux:text>Select a date range to filter your speed test results</flux:text>
+                </div>
+
+                <flux:separator />
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <flux:field>
+                        <flux:label>Start Date</flux:label>
+                        <flux:input
+                            wire:model="startDate"
+                            type="date"
+                            max="{{ now()->format('Y-m-d') }}"
+                            placeholder="Select start date" />
+                        <flux:error name="startDate" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>End Date</flux:label>
+                        <flux:input
+                            wire:model="endDate"
+                            type="date"
+                            max="{{ now()->format('Y-m-d') }}"
+                            placeholder="Select end date" />
+                        <flux:error name="endDate" />
+                    </flux:field>
+                </div>
+
+                <flux:field>
+                    <flux:label>Scheduled Status</flux:label>
+                    <flux:select wire:model="scheduledFilter">
+                        <flux:select.option value="all">All</flux:select.option>
+                        <flux:select.option value="scheduled">Only scheduled</flux:select.option>
+                        <flux:select.option value="unscheduled">Only unscheduled</flux:select.option>
+                    </flux:select>
+                </flux:field>
+
+                <div class="flex justify-between items-center gap-2">
+                    <div class="flex gap-2">
+                        <flux:button
+                            wire:click="applyFilters"
+                            variant="primary">
+                            Apply
+                        </flux:button>
+
+                        <flux:button
+                            wire:click="resetFilters"
+                            variant="ghost">
+                            Reset
+                        </flux:button>
+                    </div>
+
+                    <flux:modal.close>
+                        <flux:button variant="ghost">
+                            Cancel
+                        </flux:button>
+                    </flux:modal.close>
+                </div>
+            </flux:modal>
         </div>
     </div>
 
@@ -1240,34 +1284,6 @@
             config.uploadBenchmarks = newData.uploadBenchmarks || [];
 
             this.createChart(newData.labels, newData.download, newData.upload);
-        }
-    }));
-
-    Alpine.data('dateRangePersistence', (initialDateRange) => ({
-        dateRange: initialDateRange,
-
-        init() {
-            try {
-                const savedRange = localStorage.getItem('metrics-date-range');
-                const validRanges = ['today', 'week', 'month'];
-
-                // Always prefer localStorage if it exists and is valid
-                if (savedRange && validRanges.includes(savedRange) && savedRange !== initialDateRange) {
-                    console.log('Restoring from localStorage:', savedRange);
-                    this.dateRange = savedRange;
-                    // Call the updateDateRange method to properly update the component
-                    $wire.call('updateDateRange', savedRange);
-                }
-
-                // Watch for changes and save to localStorage
-                $wire.$watch('dateRange', (value) => {
-                    console.log('Date range changed to:', value);
-                    this.dateRange = value;
-                    localStorage.setItem('metrics-date-range', value);
-                });
-            } catch (e) {
-                console.warn('Date range persistence unavailable:', e);
-            }
         }
     }));
 </script>
