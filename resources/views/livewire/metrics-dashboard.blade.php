@@ -46,6 +46,7 @@
             <div
                 x-data="speedChartComponent({
                     labels: @js($chartData['labels']),
+                    resultIds: @js($chartData['resultIds']),
                     downloadData: @js($chartData['download']),
                     uploadData: @js($chartData['upload']),
                     downloadColor: 'rgb(59, 130, 246)',
@@ -187,6 +188,7 @@
                     type: 'line',
                     label: 'Ping (ms)',
                     labels: @js($chartData['labels']),
+                    resultIds: @js($chartData['resultIds']),
                     data: @js($chartData['ping']),
                     benchmarkFailed: @js($chartData['pingBenchmarkFailed']),
                     benchmarks: @js($chartData['pingBenchmarks']),
@@ -261,6 +263,7 @@
             <div
                 x-data="multiLineChartComponent({
                     labels: @js($chartData['labels']),
+                    resultIds: @js($chartData['resultIds']),
                     datasets: [
                         {
                             label: 'Download Latency (ms)',
@@ -347,6 +350,7 @@
             <div
                 x-data="multiLineChartComponent({
                     labels: @js($chartData['labels']),
+                    resultIds: @js($chartData['resultIds']),
                     datasets: [
                         {
                             label: 'Download Jitter (ms)',
@@ -465,6 +469,7 @@
                     type: 'bar',
                     label: 'Packet Loss (%)',
                     labels: @js($chartData['labels']),
+                    resultIds: @js($chartData['resultIds']),
                     data: @js($chartData['packetLoss']),
                     benchmarkFailed: [],
                     benchmarks: [],
@@ -631,6 +636,11 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            window.open('/admin/results', '_blank');
+                        }
+                    },
                     interaction: {
                         mode: 'nearest',
                         axis: 'x',
@@ -641,13 +651,21 @@
                         tooltip: {
                             displayColors: false,
                             callbacks: {
+                                title: function(context) {
+                                    const index = context[0].dataIndex;
+                                    const resultId = config.resultIds && config.resultIds[index];
+                                    return resultId ? `Result #${resultId}` : '';
+                                },
                                 label: function(context) {
                                     const index = context.dataIndex;
                                     const benchmark = config.benchmarks && config.benchmarks[index];
                                     const labels = [];
 
-                                    // Main result line
-                                    let resultLabel = '- Value: ';
+                                    // Extract metric name from config.label (e.g., "Ping (ms)" -> "Ping")
+                                    const metricName = config.label.split('(')[0].trim();
+
+                                    // Main result line with metric name
+                                    let resultLabel = `- ${metricName}: `;
                                     if (context.parsed.y !== null) {
                                         resultLabel += context.parsed.y.toFixed(2) + ' ' + unit;
                                     }
@@ -788,6 +806,11 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            window.open('/admin/results', '_blank');
+                        }
+                    },
                     interaction: {
                         mode: 'index',
                         intersect: false
@@ -799,6 +822,11 @@
                         tooltip: {
                             displayColors: true,
                             callbacks: {
+                                title: function(context) {
+                                    const index = context[0].dataIndex;
+                                    const resultId = config.resultIds && config.resultIds[index];
+                                    return resultId ? `Result #${resultId}` : '';
+                                },
                                 label: function(context) {
                                     let label = '- ' + (context.dataset.label || '');
                                     if (label) {
@@ -1081,6 +1109,11 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            window.open('/admin/results', '_blank');
+                        }
+                    },
                     interaction: {
                         mode: 'index',
                         intersect: false
@@ -1092,6 +1125,11 @@
                         tooltip: {
                             displayColors: true,
                             callbacks: {
+                                title: function(context) {
+                                    const index = context[0].dataIndex;
+                                    const resultId = config.resultIds && config.resultIds[index];
+                                    return resultId ? `Result #${resultId}` : '';
+                                },
                                 label: function(context) {
                                     const datasetIndex = context.datasetIndex;
                                     const index = context.dataIndex;
@@ -1103,8 +1141,8 @@
                                         ? (config.downloadBenchmarks && config.downloadBenchmarks[index])
                                         : (config.uploadBenchmarks && config.uploadBenchmarks[index]);
 
-                                    // Main result line
-                                    let resultLabel = '- Value: ';
+                                    // Main result line with specific label
+                                    let resultLabel = isDownload ? '- Download: ' : '- Upload: ';
                                     if (context.parsed.y !== null) {
                                         resultLabel += context.parsed.y.toFixed(2) + ' Mbps';
                                     }

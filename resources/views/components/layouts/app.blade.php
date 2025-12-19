@@ -22,7 +22,7 @@
         </script>
     </head>
     <body class="min-h-screen bg-white dark:bg-neutral-800 antialiased">
-        <flux:header container class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700">
+        <flux:header container sticky class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <flux:brand href="#" class="max-lg:hidden dark:hidden">

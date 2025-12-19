@@ -46,6 +46,7 @@ class MetricsDashboard extends Component
         };
 
         $labels = [];
+        $resultIds = [];
         $downloadData = [];
         $uploadData = [];
         $pingData = [];
@@ -65,6 +66,9 @@ class MetricsDashboard extends Component
         foreach ($results as $result) {
             // Format timestamp for label
             $labels[] = $result->created_at->format($labelFormat);
+
+            // Store result ID
+            $resultIds[] = $result->id;
 
             // Convert download from bytes/sec to Mbps
             $downloadBits = Bitrate::bytesToBits($result->download ?? 0);
@@ -170,6 +174,7 @@ class MetricsDashboard extends Component
 
         return [
             'labels' => $labels,
+            'resultIds' => $resultIds,
             'download' => $downloadData,
             'upload' => $uploadData,
             'ping' => $pingData,
