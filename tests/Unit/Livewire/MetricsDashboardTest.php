@@ -605,3 +605,93 @@ it('updates lastResultId when new result is detected', function () {
     // lastResultId should be updated
     expect($component->get('lastResultId'))->toBe($newResult->id);
 });
+
+it('has failed results when download benchmark fails', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'benchmarks' => [
+            'download' => ['bar' => 'min', 'passed' => false, 'type' => 'absolute', 'value' => 100, 'unit' => 'mbps'],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['hasFailedResults'])->toBeTrue();
+});
+
+it('has failed results when upload benchmark fails', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'benchmarks' => [
+            'upload' => ['bar' => 'min', 'passed' => false, 'type' => 'absolute', 'value' => 50, 'unit' => 'mbps'],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['hasFailedResults'])->toBeTrue();
+});
+
+it('has failed results when ping benchmark fails', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'benchmarks' => [
+            'ping' => ['bar' => 'max', 'passed' => false, 'type' => 'absolute', 'value' => 100, 'unit' => 'ms'],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['hasFailedResults'])->toBeTrue();
+});
+
+it('does not have failed results when all benchmarks pass', function () {
+    Result::factory()->count(3)->create([
+        'created_at' => now()->subHours(1),
+        'benchmarks' => [
+            'download' => ['bar' => 'min', 'passed' => true, 'type' => 'absolute', 'value' => 100, 'unit' => 'mbps'],
+            'upload' => ['bar' => 'min', 'passed' => true, 'type' => 'absolute', 'value' => 50, 'unit' => 'mbps'],
+            'ping' => ['bar' => 'max', 'passed' => true, 'type' => 'absolute', 'value' => 100, 'unit' => 'ms'],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['hasFailedResults'])->toBeFalse();
+});
+
+it('does not have failed results when no results exist', function () {
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['hasFailedResults'])->toBeFalse();
+});
+
+it('has failed results when at least one result fails even if others pass', function () {
+    // Create passing results
+    Result::factory()->count(2)->create([
+        'created_at' => now()->subHours(3),
+        'benchmarks' => [
+            'download' => ['bar' => 'min', 'passed' => true, 'type' => 'absolute', 'value' => 100, 'unit' => 'mbps'],
+            'upload' => ['bar' => 'min', 'passed' => true, 'type' => 'absolute', 'value' => 50, 'unit' => 'mbps'],
+            'ping' => ['bar' => 'max', 'passed' => true, 'type' => 'absolute', 'value' => 100, 'unit' => 'ms'],
+        ],
+    ]);
+
+    // Create one failing result
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'benchmarks' => [
+            'download' => ['bar' => 'min', 'passed' => false, 'type' => 'absolute', 'value' => 100, 'unit' => 'mbps'],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['hasFailedResults'])->toBeTrue();
+});

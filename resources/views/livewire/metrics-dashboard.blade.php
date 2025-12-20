@@ -86,6 +86,16 @@
         </div>
     </div>
 
+    @if($chartData['hasFailedResults'])
+        <flux:callout variant="danger" icon="x-circle" inline>
+            <flux:callout.heading>There are failed speed tests in this date range.</flux:callout.heading>
+
+            <x-slot name="actions">
+                <flux:button variant="ghost">View results</flux:button>
+            </x-slot>
+        </flux:callout>
+    @endif
+
     <!-- Data Grid with Dynamic Section Ordering -->
     <div
         x-data="dashboardSections()"

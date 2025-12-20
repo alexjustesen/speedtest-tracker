@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\ResultStatus;
 use App\Helpers\Bitrate;
 use App\Models\Result;
 use Livewire\Attributes\Title;
@@ -26,7 +27,9 @@ class MetricsDashboard extends Component
             $this->endDate = now()->format('Y-m-d');
         }
 
-        $this->lastResultId = Result::completed()->latest()->value('id');
+        $this->lastResultId = Result::whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
+            ->latest()
+            ->value('id');
     }
 
     protected function getDefaultStartDate(): \Carbon\Carbon
@@ -75,7 +78,9 @@ class MetricsDashboard extends Component
 
     public function checkForNewResults(): void
     {
-        $latestResultId = Result::completed()->latest()->value('id');
+        $latestResultId = Result::whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
+            ->latest()
+            ->value('id');
 
         if ($latestResultId && $latestResultId !== $this->lastResultId) {
             $this->lastResultId = $latestResultId;
@@ -93,7 +98,7 @@ class MetricsDashboard extends Component
         $startDate = \Carbon\Carbon::parse($this->startDate)->startOfDay();
         $endDate = \Carbon\Carbon::parse($this->endDate)->endOfDay();
 
-        $results = Result::completed()
+        $results = Result::whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
@@ -229,9 +234,15 @@ class MetricsDashboard extends Component
         $uploadLatestBenchmark = count($uploadBenchmarks) > 0 ? end($uploadBenchmarks) : null;
         $pingLatestBenchmark = count($pingBenchmarks) > 0 ? end($pingBenchmarks) : null;
 
+        // Check if there are any failed benchmarks in the date range
+        $hasFailedResults = collect($downloadBenchmarkFailed)->contains(true) ||
+                           collect($uploadBenchmarkFailed)->contains(true) ||
+                           collect($pingBenchmarkFailed)->contains(true);
+
         return [
             'labels' => $labels,
             'resultIds' => $resultIds,
+            'hasFailedResults' => $hasFailedResults,
             'download' => $downloadData,
             'upload' => $uploadData,
             'ping' => $pingData,
