@@ -35,6 +35,27 @@ class MetricsDashboard extends Component
         $this->dispatch('charts-updated', chartData: $this->getChartData());
     }
 
+    public function setLastDay(): void
+    {
+        $this->startDate = now()->subDay()->format('Y-m-d');
+        $this->endDate = now()->format('Y-m-d');
+        $this->dispatch('charts-updated', chartData: $this->getChartData());
+    }
+
+    public function setLastWeek(): void
+    {
+        $this->startDate = now()->subWeek()->format('Y-m-d');
+        $this->endDate = now()->format('Y-m-d');
+        $this->dispatch('charts-updated', chartData: $this->getChartData());
+    }
+
+    public function setLastMonth(): void
+    {
+        $this->startDate = now()->subMonth()->format('Y-m-d');
+        $this->endDate = now()->format('Y-m-d');
+        $this->dispatch('charts-updated', chartData: $this->getChartData());
+    }
+
     public function getChartData(): array
     {
         $startDate = \Carbon\Carbon::parse($this->startDate)->startOfDay();

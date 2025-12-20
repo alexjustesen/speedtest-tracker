@@ -454,3 +454,60 @@ it('returns all results when scheduled filter is set to all', function () {
 
     expect($chartData['count'])->toBe(5);
 });
+
+it('sets date range to last day when setLastDay is called', function () {
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->call('setLastDay');
+
+    expect($component->get('startDate'))->toBe(now()->subDay()->format('Y-m-d'));
+    expect($component->get('endDate'))->toBe(now()->format('Y-m-d'));
+});
+
+it('sets date range to last week when setLastWeek is called', function () {
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->call('setLastWeek');
+
+    expect($component->get('startDate'))->toBe(now()->subWeek()->format('Y-m-d'));
+    expect($component->get('endDate'))->toBe(now()->format('Y-m-d'));
+});
+
+it('sets date range to last month when setLastMonth is called', function () {
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->call('setLastMonth');
+
+    expect($component->get('startDate'))->toBe(now()->subMonth()->format('Y-m-d'));
+    expect($component->get('endDate'))->toBe(now()->format('Y-m-d'));
+});
+
+it('dispatches charts-updated event when setLastDay is called', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(12),
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->call('setLastDay');
+
+    $component->assertDispatched('charts-updated');
+});
+
+it('dispatches charts-updated event when setLastWeek is called', function () {
+    Result::factory()->create([
+        'created_at' => now()->subDays(3),
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->call('setLastWeek');
+
+    $component->assertDispatched('charts-updated');
+});
+
+it('dispatches charts-updated event when setLastMonth is called', function () {
+    Result::factory()->create([
+        'created_at' => now()->subDays(15),
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->call('setLastMonth');
+
+    $component->assertDispatched('charts-updated');
+});

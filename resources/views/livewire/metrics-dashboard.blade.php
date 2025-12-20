@@ -29,9 +29,9 @@
             <flux:separator vertical class="my-2" />
 
             <flux:button.group>
-                <flux:button size="sm">1D</flux:button>
-                <flux:button size="sm">1W</flux:button>
-                <flux:button size="sm">1M</flux:button>
+                <flux:button size="sm" wire:click="setLastDay">1D</flux:button>
+                <flux:button size="sm" wire:click="setLastWeek">1W</flux:button>
+                <flux:button size="sm" wire:click="setLastMonth">1M</flux:button>
             </flux:button.group>
 
             <flux:separator vertical class="my-2" />
