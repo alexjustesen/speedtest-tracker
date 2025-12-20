@@ -552,3 +552,56 @@ it('defaults to 1 day when DEFAULT_CHART_RANGE config is invalid', function () {
 
     expect($component->get('startDate'))->toBe(now()->subDay()->format('Y-m-d'));
 });
+
+it('checks for new results and refreshes charts when new result is added', function () {
+    $initialResult = Result::factory()->create([
+        'created_at' => now()->subHours(2),
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+
+    // Create a new result
+    $newResult = Result::factory()->create([
+        'created_at' => now()->subHours(1),
+    ]);
+
+    // Call checkForNewResults
+    $component->call('checkForNewResults');
+
+    // Should dispatch charts-updated event
+    $component->assertDispatched('charts-updated');
+});
+
+it('does not refresh charts when no new results exist', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+
+    // Call checkForNewResults without adding new results
+    $component->call('checkForNewResults');
+
+    // Should not dispatch charts-updated event (no new results)
+    $component->assertNotDispatched('charts-updated');
+});
+
+it('updates lastResultId when new result is detected', function () {
+    $initialResult = Result::factory()->create([
+        'created_at' => now()->subHours(2),
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    expect($component->get('lastResultId'))->toBe($initialResult->id);
+
+    // Create a new result
+    $newResult = Result::factory()->create([
+        'created_at' => now()->subHours(1),
+    ]);
+
+    // Call checkForNewResults
+    $component->call('checkForNewResults');
+
+    // lastResultId should be updated
+    expect($component->get('lastResultId'))->toBe($newResult->id);
+});

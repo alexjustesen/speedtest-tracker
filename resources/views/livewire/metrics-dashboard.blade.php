@@ -1,4 +1,4 @@
-<div class="flex h-full w-full flex-1 flex-col gap-6">
+<div class="flex h-full w-full flex-1 flex-col gap-6" wire:poll.5s="checkForNewResults">
     <livewire:next-speedtest-banner />
 
     <div class="flex items-center justify-between">

@@ -14,6 +14,8 @@ class MetricsDashboard extends Component
 
     public string $endDate = '';
 
+    public ?int $lastResultId = null;
+
     public function mount(): void
     {
         if (empty($this->startDate)) {
@@ -23,6 +25,8 @@ class MetricsDashboard extends Component
         if (empty($this->endDate)) {
             $this->endDate = now()->format('Y-m-d');
         }
+
+        $this->lastResultId = Result::completed()->latest()->value('id');
     }
 
     protected function getDefaultStartDate(): \Carbon\Carbon
@@ -66,6 +70,21 @@ class MetricsDashboard extends Component
     {
         $this->startDate = now()->subMonth()->format('Y-m-d');
         $this->endDate = now()->format('Y-m-d');
+        $this->dispatch('charts-updated', chartData: $this->getChartData());
+    }
+
+    public function checkForNewResults(): void
+    {
+        $latestResultId = Result::completed()->latest()->value('id');
+
+        if ($latestResultId && $latestResultId !== $this->lastResultId) {
+            $this->lastResultId = $latestResultId;
+            $this->refreshCharts();
+        }
+    }
+
+    public function refreshCharts(): void
+    {
         $this->dispatch('charts-updated', chartData: $this->getChartData());
     }
 
