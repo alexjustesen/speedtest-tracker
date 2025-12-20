@@ -96,430 +96,448 @@
             <div class="col-span-full">
                 <!-- Speed Section -->
                 <template x-if="sectionId === 'speed'">
-                    <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
-            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <flux:icon.chart-line class="size-5 text-neutral-600 dark:text-neutral-400" />
-                Speed
-            </flux:heading>
+                    <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900 overflow-hidden">
+                        <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                            <flux:icon.chart-line class="size-5 text-neutral-600 dark:text-neutral-400" />
+                            Speed
+                        </flux:heading>
 
-            <!-- Speed Chart -->
-            <div
-                x-data="speedChartComponent({
-                    labels: @js($chartData['labels']),
-                    resultIds: @js($chartData['resultIds']),
-                    downloadData: @js($chartData['download']),
-                    uploadData: @js($chartData['upload']),
-                    downloadColor: 'rgb(59, 130, 246)',
-                    uploadColor: 'rgb(245, 158, 11)',
-                    downloadBenchmarkFailed: @js($chartData['downloadBenchmarkFailed']),
-                    uploadBenchmarkFailed: @js($chartData['uploadBenchmarkFailed']),
-                    downloadBenchmarks: @js($chartData['downloadBenchmarks']),
-                    uploadBenchmarks: @js($chartData['uploadBenchmarks']),
-                })"
-                @charts-updated.window="updateChart($event.detail.chartData)"
-                wire:ignore
-                class="aspect-[2/1] lg:aspect-[4/1] px-6 py-4"
-            >
-                <canvas x-ref="canvas"></canvas>
-            </div>
+                        <!-- Speed Chart -->
+                        <div
+                            x-data="speedChartComponent({
+                                labels: @js($chartData['labels']),
+                                resultIds: @js($chartData['resultIds']),
+                                downloadData: @js($chartData['download']),
+                                uploadData: @js($chartData['upload']),
+                                downloadColor: 'rgb(59, 130, 246)',
+                                uploadColor: 'rgb(245, 158, 11)',
+                                downloadBenchmarkFailed: @js($chartData['downloadBenchmarkFailed']),
+                                uploadBenchmarkFailed: @js($chartData['uploadBenchmarkFailed']),
+                                downloadBenchmarks: @js($chartData['downloadBenchmarks']),
+                                uploadBenchmarks: @js($chartData['uploadBenchmarks']),
+                            })"
+                            @charts-updated.window="updateChart($event.detail.chartData)"
+                            wire:ignore
+                            class="aspect-[2/1] lg:aspect-[4/1] px-6 py-4"
+                        >
+                            <canvas x-ref="canvas"></canvas>
+                        </div>
 
-            <!-- Speed Stats -->
-            <div class="border-t border-neutral-200 dark:border-neutral-700">
-                <!-- Download Stats -->
-                <div class="border-b border-neutral-200 dark:border-neutral-700">
-                    <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-blue-600 dark:text-blue-400">
-                        <flux:icon.download class="size-4" />
-                        Download
-                    </flux:heading>
+                        <!-- Speed Stats -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <!-- Download Stats -->
+                            <div class="border-t border-neutral-200 dark:border-neutral-700">
+                                <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-blue-600 dark:text-blue-400">
+                                    <flux:icon.download class="size-4" />
+                                    Download Speed
+                                </flux:heading>
 
-                    <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 dark:divide-neutral-700 border-t border-neutral-200 dark:border-neutral-700">
-                        <div class="px-6 py-3">
-                            <flux:heading class="flex items-center gap-1.5">
-                                @if($chartData['downloadStats']['latestFailed'] && $chartData['downloadStats']['latestBenchmark'])
-                                    <flux:tooltip content="Benchmark Failed: {{ $chartData['downloadStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['downloadStats']['latestBenchmark']['value'] }} {{ $chartData['downloadStats']['latestBenchmark']['unit'] }}">
-                                        <flux:icon.triangle-alert class="size-4 text-amber-500" />
-                                    </flux:tooltip>
-                                @endif
-                                Latest
-                            </flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['downloadStats']['latest'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>Average</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['downloadStats']['average'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>P95</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['downloadStats']['p95'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>Maximum</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['downloadStats']['maximum'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>Minimum</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['downloadStats']['minimum'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>Healthy</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['downloadStats']['healthy'], 1) }}%
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                <div class="grid grid-cols-2 lg:grid-cols-3">
+                                    <x-dashboard.stats-card heading="Latest">
+                                        <x-slot name="heading">
+                                            @if($chartData['downloadStats']['latestFailed'] && $chartData['downloadStats']['latestBenchmark'])
+                                                <flux:tooltip content="Benchmark Failed: {{ $chartData['downloadStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['downloadStats']['latestBenchmark']['value'] }} {{ $chartData['downloadStats']['latestBenchmark']['unit'] }}" class="mr-2">
+                                                    <flux:icon.triangle-alert class="size-4 text-amber-500" />
+                                                </flux:tooltip>
+                                            @endif
+                                            Latest
+                                        </x-slot>
 
-                <!-- Upload Stats -->
-                <div>
-                    <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-amber-600 dark:text-amber-400">
-                        <flux:icon.upload class="size-4" />
-                        Upload
-                    </flux:heading>
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['downloadStats']['latest'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
 
-                    <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 dark:divide-neutral-700 border-t border-neutral-200 dark:border-neutral-700">
-                        <div class="px-6 py-3">
-                            <flux:heading class="flex items-center gap-1.5">
-                                @if($chartData['uploadStats']['latestFailed'] && $chartData['uploadStats']['latestBenchmark'])
-                                    <flux:tooltip content="Benchmark Failed: {{ $chartData['uploadStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['uploadStats']['latestBenchmark']['value'] }} {{ $chartData['uploadStats']['latestBenchmark']['unit'] }}">
-                                        <flux:icon.triangle-alert class="size-4 text-amber-500" />
-                                    </flux:tooltip>
-                                @endif
-                                Latest
-                            </flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['uploadStats']['latest'], 2) }} Mbps
+                                    <x-dashboard.stats-card heading="Average">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['downloadStats']['average'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="P95">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['downloadStats']['p95'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Maximum">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['downloadStats']['maximum'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Minimum">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['downloadStats']['minimum'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Healthy">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['downloadStats']['healthy'], 1) }}%
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+                                </div>
+                            </div>
+
+                            <!-- Upload Stats -->
+                            <div class="border-t lg:border-l border-neutral-200 dark:border-neutral-700">
+                                <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-amber-600 dark:text-amber-400">
+                                    <flux:icon.upload class="size-4" />
+                                    Upload Speed
+                                </flux:heading>
+
+                                <div class="grid grid-cols-2 lg:grid-cols-3 ">
+                                    <x-dashboard.stats-card heading="Latest">
+                                        <x-slot name="heading">
+                                            @if($chartData['uploadStats']['latestFailed'] && $chartData['uploadStats']['latestBenchmark'])
+                                                <flux:tooltip content="Benchmark Failed: {{ $chartData['uploadStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['uploadStats']['latestBenchmark']['value'] }} {{ $chartData['uploadStats']['latestBenchmark']['unit'] }}" class="mr-2">
+                                                    <flux:icon.triangle-alert class="size-4 text-amber-500" />
+                                                </flux:tooltip>
+                                            @endif
+                                            Latest
+                                        </x-slot>
+
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['uploadStats']['latest'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Average">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['uploadStats']['average'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="P95">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['uploadStats']['p95'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Maximum">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['uploadStats']['maximum'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Minimum">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['uploadStats']['minimum'], 2) }} Mbps
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Healthy">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['uploadStats']['healthy'], 1) }}%
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+                                </div>
                             </div>
                         </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>Average</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['uploadStats']['average'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>P95</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['uploadStats']['p95'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>Maximum</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['uploadStats']['maximum'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>Minimum</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['uploadStats']['minimum'], 2) }} Mbps
-                            </div>
-                        </div>
-                        <div class="px-6 py-3">
-                            <flux:heading>Healthy</flux:heading>
-                            <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['uploadStats']['healthy'], 1) }}%
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
                     </div>
                 </template>
 
                 <!-- Ping Section -->
                 <template x-if="sectionId === 'ping'">
                     <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
-            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <flux:icon.radio class="size-5 text-neutral-600 dark:text-neutral-400" />
-                {{ __('general.ping') }}
-            </flux:heading>
+                        <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                            <flux:icon.radio class="size-5 text-neutral-600 dark:text-neutral-400" />
+                            {{ __('general.ping') }}
+                        </flux:heading>
 
-            <!-- Ping Chart -->
-            <div
-                x-data="chartComponent({
-                    type: 'line',
-                    label: 'Ping (ms)',
-                    labels: @js($chartData['labels']),
-                    resultIds: @js($chartData['resultIds']),
-                    data: @js($chartData['ping']),
-                    benchmarkFailed: @js($chartData['pingBenchmarkFailed']),
-                    benchmarks: @js($chartData['pingBenchmarks']),
-                    color: 'rgb(168, 85, 247)',
-                    field: 'ping',
-                    showPoints: true,
-                    unit: 'ms'
-                })"
-                @charts-updated.window="updateChart($event.detail.chartData)"
-                wire:ignore
-                class="aspect-[3/1] lg:aspect-[5/1] px-6 py-4"
-            >
-                <canvas x-ref="canvas"></canvas>
-            </div>
+                        <!-- Ping Chart -->
+                        <div
+                            x-data="chartComponent({
+                                type: 'line',
+                                label: 'Ping (ms)',
+                                labels: @js($chartData['labels']),
+                                resultIds: @js($chartData['resultIds']),
+                                data: @js($chartData['ping']),
+                                benchmarkFailed: @js($chartData['pingBenchmarkFailed']),
+                                benchmarks: @js($chartData['pingBenchmarks']),
+                                color: 'rgb(168, 85, 247)',
+                                field: 'ping',
+                                showPoints: true,
+                                unit: 'ms'
+                            })"
+                            @charts-updated.window="updateChart($event.detail.chartData)"
+                            wire:ignore
+                            class="aspect-[3/1] lg:aspect-[5/1] px-6 py-4"
+                        >
+                            <canvas x-ref="canvas"></canvas>
+                        </div>
 
-            <!-- Ping Stats -->
-            <div class="divide-x divide-neutral-200 grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
-                <div class="px-6 py-3">
-                    <flux:heading class="flex items-center gap-1.5">
-                        @if($chartData['pingStats']['latestFailed'] && $chartData['pingStats']['latestBenchmark'])
-                            <flux:tooltip content="Benchmark Failed: {{ $chartData['pingStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['pingStats']['latestBenchmark']['value'] }} {{ $chartData['pingStats']['latestBenchmark']['unit'] }}">
-                                <flux:icon.triangle-alert class="size-4 text-amber-500" />
-                            </flux:tooltip>
-                        @endif
-                        Latest
-                    </flux:heading>
-                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                        {{ number_format($chartData['pingStats']['latest'], 2) }} ms
-                    </div>
-                </div>
-                <div class="px-6 py-3">
-                    <flux:heading>Average</flux:heading>
-                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                        {{ number_format($chartData['pingStats']['average'], 2) }} ms
-                    </div>
-                </div>
-                <div class="px-6 py-3">
-                    <flux:heading>P95</flux:heading>
-                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                        {{ number_format($chartData['pingStats']['p95'], 2) }} ms
-                    </div>
-                </div>
-                <div class="px-6 py-3">
-                    <flux:heading>Maximum</flux:heading>
-                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                        {{ number_format($chartData['pingStats']['maximum'], 2) }} ms
-                    </div>
-                </div>
-                <div class="px-6 py-3">
-                    <flux:heading>Minimum</flux:heading>
-                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                        {{ number_format($chartData['pingStats']['minimum'], 2) }} ms
-                    </div>
-                </div>
-                <div class="px-6 py-3">
-                    <flux:heading>Healthy</flux:heading>
-                    <div class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">
-                        {{ number_format($chartData['pingStats']['healthy'], 1) }}%
-                    </div>
-                </div>
-            </div>
+                        <!-- Ping Stats -->
+                        <div class="grid grid-cols-2 lg:grid-cols-6 border-t border-neutral-200 dark:border-neutral-700">
+                            <x-dashboard.stats-card heading="Latest">
+                                <x-slot name="heading">
+                                    @if($chartData['pingStats']['latestFailed'] && $chartData['pingStats']['latestBenchmark'])
+                                        <flux:tooltip content="Benchmark Failed: {{ $chartData['pingStats']['latestBenchmark']['bar'] === 'min' ? 'Min' : 'Max' }} {{ $chartData['pingStats']['latestBenchmark']['value'] }} {{ $chartData['pingStats']['latestBenchmark']['unit'] }}" class="mr-2">
+                                            <flux:icon.triangle-alert class="size-4 text-amber-500" />
+                                        </flux:tooltip>
+                                    @endif
+                                    Latest
+                                </x-slot>
+
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['pingStats']['latest'], 2) }} ms
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="Average">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['pingStats']['average'], 2) }} ms
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="P95">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['pingStats']['p95'], 2) }} ms
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="Maximum">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['pingStats']['maximum'], 2) }} ms
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="Minimum">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['pingStats']['minimum'], 2) }} ms
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="Healthy">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['pingStats']['healthy'], 1) }}%
+                                </flux:text>
+                            </x-dashboard.stats-card>
+                        </div>
                     </div>
                 </template>
 
                 <!-- Latency Section -->
                 <template x-if="sectionId === 'latency'">
                     <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
-            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <flux:icon.activity class="size-5 text-neutral-600 dark:text-neutral-400" />
-                Latency (IQM)
-            </flux:heading>
+                        <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                            <flux:icon.activity class="size-5 text-neutral-600 dark:text-neutral-400" />
+                            Latency (IQM)
+                        </flux:heading>
 
-            <!-- Latency Chart -->
-            <div
-                x-data="multiLineChartComponent({
-                    labels: @js($chartData['labels']),
-                    resultIds: @js($chartData['resultIds']),
-                    datasets: [
-                        {
-                            label: 'Download Latency (ms)',
-                            data: @js($chartData['downloadLatency']),
-                            color: 'rgb(59, 130, 246)',
-                        },
-                        {
-                            label: 'Upload Latency (ms)',
-                            data: @js($chartData['uploadLatency']),
-                            color: 'rgb(245, 158, 11)',
-                        }
-                    ],
-                    unit: 'ms'
-                })"
-                @charts-updated.window="updateChart($event.detail.chartData)"
-                wire:ignore
-                class="aspect-[2/1] lg:aspect-[5/1] px-6 py-4"
-            >
-                <canvas x-ref="canvas"></canvas>
-            </div>
+                        <!-- Latency Chart -->
+                        <div
+                            x-data="multiLineChartComponent({
+                                labels: @js($chartData['labels']),
+                                resultIds: @js($chartData['resultIds']),
+                                datasets: [
+                                    {
+                                        label: 'Download Latency (ms)',
+                                        data: @js($chartData['downloadLatency']),
+                                        color: 'rgb(59, 130, 246)',
+                                    },
+                                    {
+                                        label: 'Upload Latency (ms)',
+                                        data: @js($chartData['uploadLatency']),
+                                        color: 'rgb(245, 158, 11)',
+                                    }
+                                ],
+                                unit: 'ms'
+                            })"
+                            @charts-updated.window="updateChart($event.detail.chartData)"
+                            wire:ignore
+                            class="aspect-[2/1] lg:aspect-[5/1] px-6 py-4"
+                        >
+                            <canvas x-ref="canvas"></canvas>
+                        </div>
 
-            <!-- Latency Stats -->
-            <div class="divide-x divide-neutral-200 grid grid-cols-1 lg:grid-cols-2 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
-                <!-- Download Latency Stats -->
-                <div class="px-6 py-4">
-                    <flux:heading size="sm" class="mb-3 text-blue-600 dark:text-blue-400">Download Latency</flux:heading>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div>
-                            <flux:heading>Latest</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['latencyStats']['downloadLatest'], 2) }} ms
-                            </div>
-                        </div>
-                        <div>
-                            <flux:heading>Maximum</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['latencyStats']['downloadMaximum'], 2) }} ms
-                            </div>
-                        </div>
-                        <div>
-                            <flux:heading>Minimum</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['latencyStats']['downloadMinimum'], 2) }} ms
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <!-- Latency Stats -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2">
+                            <!-- Download Latency Stats -->
+                            <div class="border-t border-neutral-200 dark:border-neutral-700">
+                                <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-blue-600 dark:text-blue-400">
+                                    <flux:icon.download class="size-4" />
+                                    Download Latency
+                                </flux:heading>
 
-                <!-- Upload Latency Stats -->
-                <div class="px-6 py-4">
-                    <flux:heading size="sm" class="mb-3 text-amber-600 dark:text-amber-400">Upload Latency</flux:heading>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div>
-                            <flux:heading>Latest</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['latencyStats']['uploadLatest'], 2) }} ms
+                                <div class="grid grid-cols-3">
+                                    <x-dashboard.stats-card heading="Latest">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['latencyStats']['downloadLatest'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Maximum">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['latencyStats']['downloadMaximum'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Minimum">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['latencyStats']['downloadMinimum'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+                                </div>
+                            </div>
+
+                            <!-- Upload Latency Stats -->
+                            <div class="border-t lg:border-l border-neutral-200 dark:border-neutral-700">
+                                <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-amber-600 dark:text-amber-400">
+                                    <flux:icon.upload class="size-4" />
+                                    Upload Latency
+                                </flux:heading>
+
+                                <div class="grid grid-cols-3">
+                                    <x-dashboard.stats-card heading="Latest">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['latencyStats']['uploadLatest'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Maximum">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['latencyStats']['uploadMaximum'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Minimum">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['latencyStats']['uploadMinimum'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <flux:heading>Maximum</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['latencyStats']['uploadMaximum'], 2) }} ms
-                            </div>
-                        </div>
-                        <div>
-                            <flux:heading>Minimum</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['latencyStats']['uploadMinimum'], 2) }} ms
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
                     </div>
                 </template>
 
                 <!-- Jitter Section -->
                 <template x-if="sectionId === 'jitter'">
                     <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
-            <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
-                <flux:icon.coffee class="size-5 text-neutral-600 dark:text-neutral-400" />
-                Jitter
-            </flux:heading>
+                        <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                            <flux:icon.coffee class="size-5 text-neutral-600 dark:text-neutral-400" />
+                            Jitter
+                        </flux:heading>
 
-            <!-- Jitter Chart -->
-            <div
-                x-data="multiLineChartComponent({
-                    labels: @js($chartData['labels']),
-                    resultIds: @js($chartData['resultIds']),
-                    datasets: [
-                        {
-                            label: 'Download Jitter (ms)',
-                            data: @js($chartData['downloadJitter']),
-                            color: 'rgb(59, 130, 246)',
-                        },
-                        {
-                            label: 'Upload Jitter (ms)',
-                            data: @js($chartData['uploadJitter']),
-                            color: 'rgb(245, 158, 11)',
-                        },
-                        {
-                            label: 'Ping Jitter (ms)',
-                            data: @js($chartData['pingJitter']),
-                            color: 'rgb(168, 85, 247)',
-                        }
-                    ],
-                    unit: 'ms'
-                })"
-                @charts-updated.window="updateChart($event.detail.chartData)"
-                wire:ignore
-                class="aspect-[2/1] lg:aspect-[5/1] px-6 py-4"
-            >
-                <canvas x-ref="canvas"></canvas>
-            </div>
+                        <!-- Jitter Chart -->
+                        <div
+                            x-data="multiLineChartComponent({
+                                labels: @js($chartData['labels']),
+                                resultIds: @js($chartData['resultIds']),
+                                datasets: [
+                                    {
+                                        label: 'Download Jitter (ms)',
+                                        data: @js($chartData['downloadJitter']),
+                                        color: 'rgb(59, 130, 246)',
+                                    },
+                                    {
+                                        label: 'Upload Jitter (ms)',
+                                        data: @js($chartData['uploadJitter']),
+                                        color: 'rgb(245, 158, 11)',
+                                    },
+                                    {
+                                        label: 'Ping Jitter (ms)',
+                                        data: @js($chartData['pingJitter']),
+                                        color: 'rgb(168, 85, 247)',
+                                    }
+                                ],
+                                unit: 'ms'
+                            })"
+                            @charts-updated.window="updateChart($event.detail.chartData)"
+                            wire:ignore
+                            class="aspect-[2/1] lg:aspect-[5/1] px-6 py-4"
+                        >
+                            <canvas x-ref="canvas"></canvas>
+                        </div>
 
-            <!-- Jitter Stats -->
-            <div class="divide-x divide-neutral-200 grid grid-cols-1 lg:grid-cols-3 border-t border-neutral-200 dark:divide-neutral-700 dark:border-neutral-700">
-                <!-- Download Jitter Stats -->
-                <div class="px-6 py-4">
-                    <flux:heading size="sm" class="mb-3 text-blue-600 dark:text-blue-400">Download Jitter</flux:heading>
-                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div>
-                            <flux:heading>Latest</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['downloadLatest'], 2) }} ms
-                            </div>
-                        </div>
-                        <div>
-                            <flux:heading>Average</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['downloadAverage'], 2) }} ms
-                            </div>
-                        </div>
-                        <div>
-                            <flux:heading>P95</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['downloadP95'], 2) }} ms
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <!-- Jitter Stats -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3">
+                            <!-- Download Jitter Stats -->
+                            <div class="border-t border-neutral-200 dark:border-neutral-700">
+                                <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-blue-600 dark:text-blue-400">
+                                    <flux:icon.download class="size-4" />
+                                    Download Jitter
+                                </flux:heading>
 
-                <!-- Upload Jitter Stats -->
-                <div class="px-6 py-4">
-                    <flux:heading size="sm" class="mb-3 text-amber-600 dark:text-amber-400">Upload Jitter</flux:heading>
-                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div>
-                            <flux:heading>Latest</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['uploadLatest'], 2) }} ms
-                            </div>
-                        </div>
-                        <div>
-                            <flux:heading>Average</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['uploadAverage'], 2) }} ms
-                            </div>
-                        </div>
-                        <div>
-                            <flux:heading>P95</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['uploadP95'], 2) }} ms
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                <div class="grid grid-cols-3">
+                                    <x-dashboard.stats-card heading="Latest">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['downloadLatest'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
 
-                <!-- Ping Jitter Stats -->
-                <div class="px-6 py-4">
-                    <flux:heading size="sm" class="mb-3 text-purple-600 dark:text-purple-400">Ping Jitter</flux:heading>
-                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div>
-                            <flux:heading>Latest</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['pingLatest'], 2) }} ms
+                                    <x-dashboard.stats-card heading="Average">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['downloadAverage'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="P95">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['downloadP95'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+                                </div>
+                            </div>
+
+                            <!-- Upload Jitter Stats -->
+                            <div class="border-t lg:border-l border-neutral-200 dark:border-neutral-700">
+                                <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-amber-600 dark:text-amber-400">
+                                    <flux:icon.upload class="size-4" />
+                                    Upload Jitter
+                                </flux:heading>
+
+                                <div class="grid grid-cols-3">
+                                    <x-dashboard.stats-card heading="Latest">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['uploadLatest'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Average">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['uploadAverage'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="P95">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['uploadP95'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+                                </div>
+                            </div>
+
+                            <!-- Ping Jitter Stats -->
+                            <div class="border-t lg:border-l border-neutral-200 dark:border-neutral-700">
+                                <flux:heading size="sm" class="flex items-center gap-2 px-6 py-2 text-purple-600 dark:text-purple-400">
+                                    <flux:icon.radio class="size-4" />
+                                    Ping Jitter
+                                </flux:heading>
+
+                                <div class="grid grid-cols-3">
+                                    <x-dashboard.stats-card heading="Latest">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['pingLatest'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="Average">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['pingAverage'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+
+                                    <x-dashboard.stats-card heading="P95">
+                                        <flux:text class="text-xl">
+                                            {{ number_format($chartData['jitterStats']['pingP95'], 2) }} ms
+                                        </flux:text>
+                                    </x-dashboard.stats-card>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <flux:heading>Average</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['pingAverage'], 2) }} ms
-                            </div>
-                        </div>
-                        <div>
-                            <flux:heading>P95</flux:heading>
-                            <div class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                                {{ number_format($chartData['jitterStats']['pingP95'], 2) }} ms
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
                     </div>
                 </template>
             </div>
@@ -1207,7 +1225,7 @@
                             position: 'left',
                             beginAtZero: true,
                             title: {
-                                display: true,
+                                display: false,
                                 text: 'Download',
                                 color: config.downloadColor,
                                 font: {
@@ -1231,7 +1249,7 @@
                             position: 'right',
                             beginAtZero: true,
                             title: {
-                                display: true,
+                                display: false,
                                 text: 'Upload',
                                 color: config.uploadColor,
                                 font: {
