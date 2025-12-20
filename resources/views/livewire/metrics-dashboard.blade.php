@@ -125,6 +125,7 @@
                                 uploadBenchmarkFailed: @js($chartData['uploadBenchmarkFailed']),
                                 downloadBenchmarks: @js($chartData['downloadBenchmarks']),
                                 uploadBenchmarks: @js($chartData['uploadBenchmarks']),
+                                resultStatusFailed: @js($chartData['resultStatusFailed']),
                             })"
                             @charts-updated.window="updateChart($event.detail.chartData)"
                             wire:ignore
@@ -266,6 +267,7 @@
                                 data: @js($chartData['ping']),
                                 benchmarkFailed: @js($chartData['pingBenchmarkFailed']),
                                 benchmarks: @js($chartData['pingBenchmarks']),
+                                resultStatusFailed: @js($chartData['resultStatusFailed']),
                                 color: 'rgb(168, 85, 247)',
                                 field: 'ping',
                                 showPoints: true,
@@ -341,6 +343,7 @@
                             x-data="multiLineChartComponent({
                                 labels: @js($chartData['labels']),
                                 resultIds: @js($chartData['resultIds']),
+                                resultStatusFailed: @js($chartData['resultStatusFailed']),
                                 datasets: [
                                     {
                                         label: 'Download Latency (ms)',
@@ -436,6 +439,7 @@
                             x-data="multiLineChartComponent({
                                 labels: @js($chartData['labels']),
                                 resultIds: @js($chartData['resultIds']),
+                                resultStatusFailed: @js($chartData['resultStatusFailed']),
                                 datasets: [
                                     {
                                         label: 'Download Jitter (ms)',
@@ -597,6 +601,7 @@
             const showPoints = config.showPoints || false;
             const unit = config.unit || 'Mbps';
             const benchmarkFailed = config.benchmarkFailed || [];
+            const resultStatusFailed = config.resultStatusFailed || [];
             const amberColor = 'rgb(251, 191, 36)'; // Amber for failed benchmarks
 
             // Detect dark mode for text colors
@@ -611,15 +616,24 @@
             };
 
             // Create point color and radius arrays based on benchmark failures
-            const pointColors = data.map((_, index) =>
-                benchmarkFailed[index] ? amberColor : config.color
+            // Failed status results use the same color as the line (not red)
+            const pointColors = data.map((_, index) => {
+                if (benchmarkFailed[index] && !resultStatusFailed[index]) return amberColor;
+                return config.color;
+            });
+
+            // Show points always for benchmark failures, only on hover for failed status
+            const pointRadii = data.map((_, index) => {
+                if (benchmarkFailed[index] && !resultStatusFailed[index]) return 5;
+                return 0; // Hide by default for failed status and normal points
+            });
+
+            // Show points on hover for failed status and benchmark failures
+            const pointHoverRadii = data.map((_, index) =>
+                (benchmarkFailed[index] || resultStatusFailed[index]) ? 7 : 5
             );
 
-            const pointRadii = data.map((_, index) =>
-                benchmarkFailed[index] ? 5 : 0
-            );
-
-            // Plugin to create ping/ripple effect on failed benchmark points
+            // Plugin to create ping/ripple effect on failed benchmark points (NOT for failed status)
             const self = this;
             const pulsingPointsPlugin = {
                 id: 'pulsingPoints',
@@ -629,7 +643,8 @@
                     const time = Date.now();
 
                     meta.data.forEach((point, index) => {
-                        if (benchmarkFailed[index]) {
+                        // Only animate benchmark failures, not failed status results
+                        if (benchmarkFailed[index] && !resultStatusFailed[index]) {
                             const x = point.x;
                             const y = point.y;
 
@@ -663,8 +678,11 @@
                         }
                     });
 
-                    // Continue animation if there are failed benchmarks
-                    if (benchmarkFailed.some(failed => failed)) {
+                    // Continue animation if there are failed benchmarks (excluding failed status)
+                    const hasBenchmarkFailures = benchmarkFailed.some((failed, index) =>
+                        failed && !resultStatusFailed[index]
+                    );
+                    if (hasBenchmarkFailures) {
                         self.animationFrame = requestAnimationFrame(() => {
                             chart.render();
                         });
@@ -688,13 +706,31 @@
                         barPercentage: 0.6,
                         categoryPercentage: 0.7,
                         pointRadius: pointRadii,
-                        pointHoverRadius: 7,
+                        pointHoverRadius: pointHoverRadii,
                         pointBackgroundColor: pointColors,
                         pointBorderColor: '#fff',
                         pointBorderWidth: 2,
                         pointHoverBackgroundColor: pointColors,
                         pointHoverBorderColor: '#fff',
                         pointHoverBorderWidth: 3,
+                        segment: {
+                            borderColor: ctx => {
+                                // Skip drawing line if either point is a failed result
+                                const index = ctx.p0DataIndex;
+                                if (resultStatusFailed[index] || resultStatusFailed[index + 1]) {
+                                    return 'rgba(0, 0, 0, 0)'; // Transparent - no line
+                                }
+                                return undefined; // Use default color
+                            },
+                            borderWidth: ctx => {
+                                // Skip drawing line if either point is a failed result
+                                const index = ctx.p0DataIndex;
+                                if (resultStatusFailed[index] || resultStatusFailed[index + 1]) {
+                                    return 0;
+                                }
+                                return undefined; // Use default width
+                            }
+                        }
                     }]
                 },
                 plugins: [pulsingPointsPlugin],
@@ -725,6 +761,15 @@
                                     const index = context.dataIndex;
                                     const benchmark = config.benchmarks && config.benchmarks[index];
                                     const labels = [];
+
+                                    // Check if this result has failed status
+                                    const hasFailed = resultStatusFailed[index];
+
+                                    // Show failed result indicator
+                                    if (hasFailed) {
+                                        labels.push('- Result Status: ❌ Failed');
+                                        return labels;
+                                    }
 
                                     // Extract metric name from config.label (e.g., "Ping (ms)" -> "Ping")
                                     const metricName = config.label.split('(')[0].trim();
@@ -795,6 +840,9 @@
                 config.benchmarks = newData[benchmarksField] || [];
             }
 
+            // Update failed status data
+            config.resultStatusFailed = newData.resultStatusFailed || [];
+
             this.createChart(newData.labels, newData[config.field]);
         }
     }));
@@ -832,6 +880,7 @@
             }
 
             const unit = config.unit || 'ms';
+            const resultStatusFailed = config.resultStatusFailed || [];
 
             // Detect dark mode for text colors
             const isDarkMode = document.documentElement.classList.contains('dark');
@@ -859,6 +908,24 @@
                     pointHoverBackgroundColor: color,
                     pointHoverBorderColor: '#fff',
                     pointHoverBorderWidth: 2,
+                    segment: {
+                        borderColor: ctx => {
+                            // Skip drawing line if either point is a failed result
+                            const index = ctx.p0DataIndex;
+                            if (resultStatusFailed[index] || resultStatusFailed[index + 1]) {
+                                return 'rgba(0, 0, 0, 0)'; // Transparent - no line
+                            }
+                            return undefined; // Use default color
+                        },
+                        borderWidth: ctx => {
+                            // Skip drawing line if either point is a failed result
+                            const index = ctx.p0DataIndex;
+                            if (resultStatusFailed[index] || resultStatusFailed[index + 1]) {
+                                return 0;
+                            }
+                            return undefined; // Use default width
+                        }
+                    }
                 };
             });
 
@@ -893,6 +960,14 @@
                                     return resultId ? `Result #${resultId}` : '';
                                 },
                                 label: function(context) {
+                                    const index = context.dataIndex;
+                                    const hasFailed = resultStatusFailed[index];
+
+                                    // Show failed result indicator
+                                    if (hasFailed) {
+                                        return '- Result Status: ❌ Failed';
+                                    }
+
                                     let label = '- ' + (context.dataset.label || '');
                                     if (label) {
                                         label += ': ';
@@ -975,6 +1050,9 @@
                 ];
             }
 
+            // Update failed status data
+            config.resultStatusFailed = newData.resultStatusFailed || [];
+
             this.createChart(newData.labels, datasets);
         }
     }));
@@ -1019,6 +1097,8 @@
 
             const downloadBenchmarkFailed = config.downloadBenchmarkFailed || [];
             const uploadBenchmarkFailed = config.uploadBenchmarkFailed || [];
+            const resultStatusFailed = config.resultStatusFailed || [];
+            const failedColor = 'rgb(239, 68, 68)'; // Red color for failed results
 
             // Detect dark mode for text colors
             const isDarkMode = document.documentElement.classList.contains('dark');
@@ -1032,21 +1112,21 @@
 
             // Create point colors and radii for download
             const downloadPointColors = downloadData.map((_, index) =>
-                config.downloadColor
+                resultStatusFailed[index] ? failedColor : config.downloadColor
             );
             const downloadPointRadii = downloadData.map((_, index) =>
-                downloadBenchmarkFailed[index] ? 5 : 0
+                (downloadBenchmarkFailed[index] || resultStatusFailed[index]) ? 5 : 0
             );
 
             // Create point colors and radii for upload
             const uploadPointColors = uploadData.map((_, index) =>
-                config.uploadColor
+                resultStatusFailed[index] ? failedColor : config.uploadColor
             );
             const uploadPointRadii = uploadData.map((_, index) =>
-                uploadBenchmarkFailed[index] ? 5 : 0
+                (uploadBenchmarkFailed[index] || resultStatusFailed[index]) ? 5 : 0
             );
 
-            // Plugin to create ping/ripple effect on failed benchmark points
+            // Plugin to create ping/ripple effect on failed benchmark points and failed status results
             const self = this;
             const pulsingPointsPlugin = {
                 id: 'pulsingPoints',
@@ -1057,7 +1137,7 @@
                     // Process download dataset (index 0)
                     const downloadMeta = chart.getDatasetMeta(0);
                     downloadMeta.data.forEach((point, index) => {
-                        if (downloadBenchmarkFailed[index]) {
+                        if (downloadBenchmarkFailed[index] || resultStatusFailed[index]) {
                             const x = point.x;
                             const y = point.y;
 
@@ -1065,6 +1145,9 @@
                             const pingDuration = 2000;
                             const maxRadius = 25;
                             const numberOfRings = 3;
+
+                            // Use red color for failed status, download color for failed benchmark
+                            const ringBaseColor = resultStatusFailed[index] ? failedColor : config.downloadColor;
 
                             for (let i = 0; i < numberOfRings; i++) {
                                 const offset = (pingDuration / numberOfRings) * i;
@@ -1076,7 +1159,7 @@
                                     ctx.save();
                                     ctx.beginPath();
                                     ctx.arc(x, y, radius, 0, 2 * Math.PI);
-                                    const downloadRingColor = config.downloadColor.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
+                                    const downloadRingColor = ringBaseColor.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
                                     ctx.strokeStyle = downloadRingColor;
                                     ctx.lineWidth = 2.5;
                                     ctx.stroke();
@@ -1089,7 +1172,7 @@
                     // Process upload dataset (index 1)
                     const uploadMeta = chart.getDatasetMeta(1);
                     uploadMeta.data.forEach((point, index) => {
-                        if (uploadBenchmarkFailed[index]) {
+                        if (uploadBenchmarkFailed[index] || resultStatusFailed[index]) {
                             const x = point.x;
                             const y = point.y;
 
@@ -1097,6 +1180,9 @@
                             const pingDuration = 2000;
                             const maxRadius = 25;
                             const numberOfRings = 3;
+
+                            // Use red color for failed status, upload color for failed benchmark
+                            const ringBaseColor = resultStatusFailed[index] ? failedColor : config.uploadColor;
 
                             for (let i = 0; i < numberOfRings; i++) {
                                 const offset = (pingDuration / numberOfRings) * i;
@@ -1108,7 +1194,7 @@
                                     ctx.save();
                                     ctx.beginPath();
                                     ctx.arc(x, y, radius, 0, 2 * Math.PI);
-                                    const uploadRingColor = config.uploadColor.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
+                                    const uploadRingColor = ringBaseColor.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`);
                                     ctx.strokeStyle = uploadRingColor;
                                     ctx.lineWidth = 2.5;
                                     ctx.stroke();
@@ -1118,8 +1204,10 @@
                         }
                     });
 
-                    // Continue animation if there are failed benchmarks
-                    if (downloadBenchmarkFailed.some(failed => failed) || uploadBenchmarkFailed.some(failed => failed)) {
+                    // Continue animation if there are failed benchmarks or failed status results
+                    if (downloadBenchmarkFailed.some(failed => failed) ||
+                        uploadBenchmarkFailed.some(failed => failed) ||
+                        resultStatusFailed.some(failed => failed)) {
                         self.animationFrame = requestAnimationFrame(() => {
                             chart.render();
                         });
@@ -1149,6 +1237,24 @@
                             pointHoverBorderColor: '#fff',
                             pointHoverBorderWidth: 3,
                             yAxisID: 'y',
+                            segment: {
+                                borderColor: ctx => {
+                                    // Skip drawing line if either point is a failed result
+                                    const index = ctx.p0DataIndex;
+                                    if (resultStatusFailed[index] || resultStatusFailed[index + 1]) {
+                                        return 'rgba(0, 0, 0, 0)'; // Transparent - no line
+                                    }
+                                    return undefined; // Use default color
+                                },
+                                borderWidth: ctx => {
+                                    // Skip drawing line if either point is a failed result
+                                    const index = ctx.p0DataIndex;
+                                    if (resultStatusFailed[index] || resultStatusFailed[index + 1]) {
+                                        return 0;
+                                    }
+                                    return undefined; // Use default width
+                                }
+                            }
                         },
                         {
                             label: 'Upload (Mbps)',
@@ -1167,6 +1273,24 @@
                             pointHoverBorderColor: '#fff',
                             pointHoverBorderWidth: 3,
                             yAxisID: 'y1',
+                            segment: {
+                                borderColor: ctx => {
+                                    // Skip drawing line if either point is a failed result
+                                    const index = ctx.p0DataIndex;
+                                    if (resultStatusFailed[index] || resultStatusFailed[index + 1]) {
+                                        return 'rgba(0, 0, 0, 0)'; // Transparent - no line
+                                    }
+                                    return undefined; // Use default color
+                                },
+                                borderWidth: ctx => {
+                                    // Skip drawing line if either point is a failed result
+                                    const index = ctx.p0DataIndex;
+                                    if (resultStatusFailed[index] || resultStatusFailed[index + 1]) {
+                                        return 0;
+                                    }
+                                    return undefined; // Use default width
+                                }
+                            }
                         }
                     ]
                 },
@@ -1200,21 +1324,31 @@
                                     const index = context.dataIndex;
                                     const labels = [];
 
+                                    // Check if this result has failed status
+                                    const hasFailed = resultStatusFailed[index];
+
+                                    // Show failed result indicator
+                                    if (hasFailed) {
+                                        labels.push('- Result Status: ❌ Failed');
+                                    }
+
                                     // Determine which dataset (download or upload)
                                     const isDownload = datasetIndex === 0;
                                     const benchmark = isDownload
                                         ? (config.downloadBenchmarks && config.downloadBenchmarks[index])
                                         : (config.uploadBenchmarks && config.uploadBenchmarks[index]);
 
-                                    // Main result line with specific label
-                                    let resultLabel = isDownload ? '- Download: ' : '- Upload: ';
-                                    if (context.parsed.y !== null) {
-                                        resultLabel += context.parsed.y.toFixed(2) + ' Mbps';
+                                    // Main result line with specific label (skip if failed)
+                                    if (!hasFailed) {
+                                        let resultLabel = isDownload ? '- Download: ' : '- Upload: ';
+                                        if (context.parsed.y !== null) {
+                                            resultLabel += context.parsed.y.toFixed(2) + ' Mbps';
+                                        }
+                                        labels.push(resultLabel);
                                     }
-                                    labels.push(resultLabel);
 
-                                    // Benchmark info if available
-                                    if (benchmark) {
+                                    // Benchmark info if available (skip if failed)
+                                    if (!hasFailed && benchmark) {
                                         const thresholdType = benchmark.bar === 'min' ? 'Min' : 'Max';
                                         const benchmarkLabel = `- Benchmark (${thresholdType}): ${benchmark.value} ${benchmark.unit}`;
                                         labels.push(benchmarkLabel);
@@ -1303,6 +1437,9 @@
             // Update full benchmark data
             config.downloadBenchmarks = newData.downloadBenchmarks || [];
             config.uploadBenchmarks = newData.uploadBenchmarks || [];
+
+            // Update failed status data
+            config.resultStatusFailed = newData.resultStatusFailed || [];
 
             this.createChart(newData.labels, newData.download, newData.upload);
         }

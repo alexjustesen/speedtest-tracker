@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ResultStatus;
 use App\Livewire\MetricsDashboard;
 use App\Models\Result;
 use Livewire\Livewire;
@@ -694,4 +695,163 @@ it('has failed results when at least one result fails even if others pass', func
     $chartData = $component->instance()->getChartData();
 
     expect($chartData['hasFailedResults'])->toBeTrue();
+});
+
+it('includes results with failed status in chart data', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(2),
+        'status' => ResultStatus::Completed,
+        'download' => 125000000,
+    ]);
+
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'status' => ResultStatus::Failed,
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['count'])->toBe(2);
+    expect($chartData['resultStatusFailed'])->toHaveCount(2);
+});
+
+it('sets download and upload to 0 for failed status results', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(2),
+        'status' => ResultStatus::Completed,
+        'download' => 125000000,
+        'upload' => 50000000,
+    ]);
+
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'status' => ResultStatus::Failed,
+        'download' => 125000000,
+        'upload' => 50000000,
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    // First result (completed) should have normal values
+    expect($chartData['download'][0])->toBe(1000.0);
+    expect($chartData['upload'][0])->toBe(400.0);
+
+    // Second result (failed) should be 0
+    expect($chartData['download'][1])->toBe(0.0);
+    expect($chartData['upload'][1])->toBe(0.0);
+});
+
+it('tracks failed status results separately from benchmark failures', function () {
+    // Completed result that failed benchmark
+    Result::factory()->create([
+        'created_at' => now()->subHours(2),
+        'status' => ResultStatus::Completed,
+        'benchmarks' => [
+            'download' => ['bar' => 'min', 'passed' => false, 'type' => 'absolute', 'value' => 100, 'unit' => 'mbps'],
+        ],
+    ]);
+
+    // Failed status result
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'status' => ResultStatus::Failed,
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    expect($chartData['resultStatusFailed'][0])->toBeFalse();
+    expect($chartData['resultStatusFailed'][1])->toBeTrue();
+    expect($chartData['downloadBenchmarkFailed'][0])->toBeTrue();
+});
+
+it('sets ping to 0 for failed status results', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(2),
+        'status' => ResultStatus::Completed,
+        'ping' => 25.5,
+    ]);
+
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'status' => ResultStatus::Failed,
+        'ping' => 50.0,
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    // First result (completed) should have normal ping value
+    expect($chartData['ping'][0])->toBe(25.5);
+
+    // Second result (failed) should be 0
+    expect($chartData['ping'][1])->toBe(0.0);
+});
+
+it('sets latency to 0 for failed status results', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(2),
+        'status' => ResultStatus::Completed,
+        'data' => [
+            'download' => ['latency' => ['iqm' => 12.5]],
+            'upload' => ['latency' => ['iqm' => 18.3]],
+        ],
+    ]);
+
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'status' => ResultStatus::Failed,
+        'data' => [
+            'download' => ['latency' => ['iqm' => 30.0]],
+            'upload' => ['latency' => ['iqm' => 40.0]],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    // First result (completed) should have normal latency values
+    expect($chartData['downloadLatency'][0])->toBe(12.5);
+    expect($chartData['uploadLatency'][0])->toBe(18.3);
+
+    // Second result (failed) should be 0
+    expect($chartData['downloadLatency'][1])->toBe(0.0);
+    expect($chartData['uploadLatency'][1])->toBe(0.0);
+});
+
+it('sets jitter to 0 for failed status results', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(2),
+        'status' => ResultStatus::Completed,
+        'data' => [
+            'download' => ['jitter' => 2.5],
+            'upload' => ['jitter' => 3.2],
+            'ping' => ['jitter' => 1.8],
+        ],
+    ]);
+
+    Result::factory()->create([
+        'created_at' => now()->subHours(1),
+        'status' => ResultStatus::Failed,
+        'data' => [
+            'download' => ['jitter' => 5.0],
+            'upload' => ['jitter' => 6.0],
+            'ping' => ['jitter' => 4.0],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $chartData = $component->instance()->getChartData();
+
+    // First result (completed) should have normal jitter values
+    expect($chartData['downloadJitter'][0])->toBe(2.5);
+    expect($chartData['uploadJitter'][0])->toBe(3.2);
+    expect($chartData['pingJitter'][0])->toBe(1.8);
+
+    // Second result (failed) should be 0
+    expect($chartData['downloadJitter'][1])->toBe(0.0);
+    expect($chartData['uploadJitter'][1])->toBe(0.0);
+    expect($chartData['pingJitter'][1])->toBe(0.0);
 });

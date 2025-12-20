@@ -127,6 +127,7 @@ class MetricsDashboard extends Component
         $downloadBenchmarks = [];
         $uploadBenchmarks = [];
         $pingBenchmarks = [];
+        $resultStatusFailed = [];
 
         foreach ($results as $result) {
             // Format timestamp for label
@@ -135,25 +136,29 @@ class MetricsDashboard extends Component
             // Store result ID
             $resultIds[] = $result->id;
 
-            // Convert download from bytes/sec to Mbps
-            $downloadBits = Bitrate::bytesToBits($result->download ?? 0);
+            // Track if this result has a Failed status
+            $isFailed = $result->status === ResultStatus::Failed;
+            $resultStatusFailed[] = $isFailed;
+
+            // Convert download from bytes/sec to Mbps (0 if failed)
+            $downloadBits = $isFailed ? 0 : Bitrate::bytesToBits($result->download ?? 0);
             $downloadData[] = round($downloadBits / 1000000, 2); // Convert to Mbps
 
-            // Convert upload from bytes/sec to Mbps
-            $uploadBits = Bitrate::bytesToBits($result->upload ?? 0);
+            // Convert upload from bytes/sec to Mbps (0 if failed)
+            $uploadBits = $isFailed ? 0 : Bitrate::bytesToBits($result->upload ?? 0);
             $uploadData[] = round($uploadBits / 1000000, 2); // Convert to Mbps
 
-            // Ping in milliseconds
-            $pingData[] = round($result->ping ?? 0, 2);
+            // Ping in milliseconds (0 if failed)
+            $pingData[] = $isFailed ? 0 : round($result->ping ?? 0, 2);
 
-            // Latency IQM in milliseconds
-            $downloadLatencyData[] = round($result->downloadlatencyiqm ?? 0, 2);
-            $uploadLatencyData[] = round($result->uploadlatencyiqm ?? 0, 2);
+            // Latency IQM in milliseconds (0 if failed)
+            $downloadLatencyData[] = $isFailed ? 0 : round($result->downloadlatencyiqm ?? 0, 2);
+            $uploadLatencyData[] = $isFailed ? 0 : round($result->uploadlatencyiqm ?? 0, 2);
 
-            // Jitter in milliseconds
-            $downloadJitterData[] = round($result->downloadJitter ?? 0, 2);
-            $uploadJitterData[] = round($result->uploadJitter ?? 0, 2);
-            $pingJitterData[] = round($result->pingJitter ?? 0, 2);
+            // Jitter in milliseconds (0 if failed)
+            $downloadJitterData[] = $isFailed ? 0 : round($result->downloadJitter ?? 0, 2);
+            $uploadJitterData[] = $isFailed ? 0 : round($result->uploadJitter ?? 0, 2);
+            $pingJitterData[] = $isFailed ? 0 : round($result->pingJitter ?? 0, 2);
 
             // Track benchmark failures and full benchmark data
             $benchmarks = $result->benchmarks ?? [];
@@ -243,6 +248,7 @@ class MetricsDashboard extends Component
             'labels' => $labels,
             'resultIds' => $resultIds,
             'hasFailedResults' => $hasFailedResults,
+            'resultStatusFailed' => $resultStatusFailed,
             'download' => $downloadData,
             'upload' => $uploadData,
             'ping' => $pingData,
