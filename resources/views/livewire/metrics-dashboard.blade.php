@@ -8,19 +8,33 @@
         </flux:heading>
 
         <div class="flex items-center gap-4">
-            <flux:input
-                wire:model.blur="startDate"
-                type="date"
-                size="sm"
-                max="{{ now()->format('Y-m-d') }}"
-                placeholder="Start date" />
+            <div class="flex items-center gap-2">
+                <flux:input
+                    wire:model.live="startDate"
+                    :loading="false"
+                    type="date"
+                    size="sm"
+                    max="{{ now()->format('Y-m-d') }}"
+                    placeholder="Start date" />
 
-            <flux:input
-                wire:model.blur="endDate"
-                type="date"
-                size="sm"
-                max="{{ now()->format('Y-m-d') }}"
-                placeholder="End date" />
+                <flux:input
+                    wire:model.live="endDate"
+                    :loading="false"
+                    type="date"
+                    size="sm"
+                    max="{{ now()->format('Y-m-d') }}"
+                    placeholder="End date" />
+            </div>
+
+            <flux:separator vertical class="my-2" />
+
+            <flux:button.group>
+                <flux:button size="sm">1D</flux:button>
+                <flux:button size="sm">1W</flux:button>
+                <flux:button size="sm">1M</flux:button>
+            </flux:button.group>
+
+            <flux:separator vertical class="my-2" />
 
             <div>
                 <flux:modal.trigger name="displaySettingsModal">
