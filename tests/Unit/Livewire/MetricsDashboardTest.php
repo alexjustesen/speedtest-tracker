@@ -511,3 +511,44 @@ it('dispatches charts-updated event when setLastMonth is called', function () {
 
     $component->assertDispatched('charts-updated');
 });
+
+it('uses DEFAULT_CHART_RANGE config for default start date', function () {
+    config(['speedtest.default_chart_range' => '7d']);
+
+    $component = Livewire::test(MetricsDashboard::class);
+
+    expect($component->get('startDate'))->toBe(now()->subDays(7)->format('Y-m-d'));
+    expect($component->get('endDate'))->toBe(now()->format('Y-m-d'));
+});
+
+it('parses hours from DEFAULT_CHART_RANGE config', function () {
+    config(['speedtest.default_chart_range' => '48h']);
+
+    $component = Livewire::test(MetricsDashboard::class);
+
+    expect($component->get('startDate'))->toBe(now()->subHours(48)->format('Y-m-d'));
+});
+
+it('parses weeks from DEFAULT_CHART_RANGE config', function () {
+    config(['speedtest.default_chart_range' => '2w']);
+
+    $component = Livewire::test(MetricsDashboard::class);
+
+    expect($component->get('startDate'))->toBe(now()->subWeeks(2)->format('Y-m-d'));
+});
+
+it('parses months from DEFAULT_CHART_RANGE config', function () {
+    config(['speedtest.default_chart_range' => '3m']);
+
+    $component = Livewire::test(MetricsDashboard::class);
+
+    expect($component->get('startDate'))->toBe(now()->subMonths(3)->format('Y-m-d'));
+});
+
+it('defaults to 1 day when DEFAULT_CHART_RANGE config is invalid', function () {
+    config(['speedtest.default_chart_range' => 'invalid']);
+
+    $component = Livewire::test(MetricsDashboard::class);
+
+    expect($component->get('startDate'))->toBe(now()->subDay()->format('Y-m-d'));
+});

@@ -17,12 +17,25 @@ class MetricsDashboard extends Component
     public function mount(): void
     {
         if (empty($this->startDate)) {
-            $this->startDate = now()->subWeek()->format('Y-m-d');
+            $this->startDate = $this->getDefaultStartDate()->format('Y-m-d');
         }
 
         if (empty($this->endDate)) {
             $this->endDate = now()->format('Y-m-d');
         }
+    }
+
+    protected function getDefaultStartDate(): \Carbon\Carbon
+    {
+        $chartRange = config('speedtest.default_chart_range', '24h');
+
+        return match (true) {
+            str_ends_with($chartRange, 'h') => now()->subHours((int) rtrim($chartRange, 'h')),
+            str_ends_with($chartRange, 'd') => now()->subDays((int) rtrim($chartRange, 'd')),
+            str_ends_with($chartRange, 'w') => now()->subWeeks((int) rtrim($chartRange, 'w')),
+            str_ends_with($chartRange, 'm') => now()->subMonths((int) rtrim($chartRange, 'm')),
+            default => now()->subDay(),
+        };
     }
 
     public function updatedStartDate(): void
