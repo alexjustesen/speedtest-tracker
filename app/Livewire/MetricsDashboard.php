@@ -17,7 +17,7 @@ class MetricsDashboard extends Component
     public function mount(): void
     {
         if (empty($this->startDate)) {
-            $this->startDate = now()->subDay()->format('Y-m-d');
+            $this->startDate = now()->subWeek()->format('Y-m-d');
         }
 
         if (empty($this->endDate)) {
