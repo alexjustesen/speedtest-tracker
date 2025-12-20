@@ -60,7 +60,7 @@
                         window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: newTheme } }));
                     }
                 }" align="end">
-                    <flux:button variant="subtle" square class="group" aria-label="Preferred color scheme">
+                    <flux:button variant="subtle" size="sm" square class="group" aria-label="Preferred color scheme">
                         <flux:icon.sun x-show="theme === 'light'" variant="mini" class="text-neutral-500 dark:text-white" />
                         <flux:icon.moon x-show="theme === 'dark'" variant="mini" class="text-neutral-500 dark:text-white" />
                         <flux:icon.moon x-show="theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-neutral-500 dark:text-white" />
@@ -76,7 +76,7 @@
 
                 {{-- TODO: Add speedtest modal here --}}
 
-                <flux:separator vertical variant="subtle" class="my-2"/>
+                <flux:separator vertical variant="subtle" class="max-lg:hidden my-2"/>
 
                 @auth
                     <flux:navbar.item class="max-lg:hidden" icon="settings" :href="route('filament.admin.pages.dashboard')">Admin Panel</flux:navbar.item>
