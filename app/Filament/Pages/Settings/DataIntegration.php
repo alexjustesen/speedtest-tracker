@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DataIntegration extends SettingsPage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-circle-stack';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-database';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
@@ -62,7 +62,7 @@ class DataIntegration extends SettingsPage
                             ->schema([
                                 Toggle::make('influxdb_v2_enabled')
                                     ->label(__('settings/data_integration.influxdb_v2_enabled'))
-                                    ->helpertext(__('settings/data_integration.influxdb_v2_description'))
+                                    ->helperText(__('settings/data_integration.influxdb_v2_description'))
                                     ->reactive()
                                     ->columnSpanFull(),
                                 Grid::make(['default' => 1, 'md' => 3])

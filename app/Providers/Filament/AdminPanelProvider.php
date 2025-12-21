@@ -2,12 +2,10 @@
 
 namespace App\Providers\Filament;
 
-use App\Services\GitHub\Repository;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationGroup;
-use Filament\Navigation\NavigationItem;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -59,25 +57,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label(__('general.settings')),
-                NavigationGroup::make()
-                    ->label(__('general.links'))
+                    ->label(__('general.settings'))
                     ->collapsible(false),
-            ])
-            ->navigationItems([
-                NavigationItem::make(__('general.documentation'))
-                    ->url('https://docs.speedtest-tracker.dev/', shouldOpenInNewTab: true)
-                    ->icon('heroicon-o-book-open')
-                    ->group(__('general.links')),
-                NavigationItem::make(__('general.donate'))
-                    ->url('https://github.com/sponsors/alexjustesen', shouldOpenInNewTab: true)
-                    ->icon('heroicon-o-banknotes')
-                    ->group(__('general.links')),
-                NavigationItem::make(config('speedtest.build_version'))
-                    ->url('https://github.com/alexjustesen/speedtest-tracker', shouldOpenInNewTab: true)
-                    ->icon('tabler-brand-github')
-                    ->badge(fn (): string => Repository::updateAvailable() ? __('general.update_available') : __('general.up_to_date'))
-                    ->group(__('general.links')),
             ]);
     }
 }

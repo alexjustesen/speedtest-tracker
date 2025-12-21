@@ -35,22 +35,11 @@
     </head>
     <body class="antialiased min-h-dvh bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-white">
         <main class="p-4 sm:p-6 lg:p-8 mx-auto max-w-{{ config('speedtest.content_width') }} space-y-4 sm:space-y-8">
-            <header class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
-                <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-gray-950 dark:text-white sm:text-3xl">{{ $title ?? 'Page Title' }} - {{ config('app.name') }}</h1>
-                </div>
-
-                <div class="flex-shrink-0">
-                    <x-filament::button
-                        href="{{ url('/admin') }}"
-                        tag="a"
-                    >
-                        Admin Panel
-                    </x-filament::button>
-                </div>
-            </header>
+            @include('layouts.partials.header')
 
             {{ $slot }}
+
+            @include('layouts.partials.footer')
         </main>
 
         {{-- Scripts --}}

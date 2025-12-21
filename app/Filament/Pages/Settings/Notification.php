@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Settings;
 
+use App\Actions\Notifications\SendAppriseTestNotification;
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendDiscordTestNotification;
 use App\Actions\Notifications\SendGotifyTestNotification;
@@ -12,6 +13,8 @@ use App\Actions\Notifications\SendPushoverTestNotification;
 use App\Actions\Notifications\SendSlackTestNotification;
 use App\Actions\Notifications\SendTelegramTestNotification;
 use App\Actions\Notifications\SendWebhookTestNotification;
+use App\Rules\AppriseScheme;
+use App\Rules\ContainsString;
 use App\Settings\NotificationSettings;
 use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
 use Filament\Actions\Action;
@@ -33,7 +36,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Notification extends SettingsPage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-bell-alert';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-bell-ringing';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 
@@ -198,6 +201,82 @@ class Notification extends SettingsPage
                                     ]),
 
                                 // ...
+                            ]),
+                        Tab::make(__('settings/notifications.apprise'))
+                            ->icon(Heroicon::CloudArrowUp)
+                            ->schema([
+                                SimpleAlert::make('wehbook_info')
+                                    ->title(__('general.documentation'))
+                                    ->description(__('settings/notifications.apprise_hint_description'))
+                                    ->border()
+                                    ->info()
+                                    ->actions([
+                                        Action::make('webhook_docs')
+                                            ->label(__('general.view_documentation'))
+                                            ->icon('heroicon-m-arrow-long-right')
+                                            ->color('info')
+                                            ->link()
+                                            ->url('https://docs.speedtest-tracker.dev/settings/notifications/apprise')
+                                            ->openUrlInNewTab(),
+                                    ])
+                                    ->columnSpanFull(),
+
+                                Toggle::make('apprise_enabled')
+                                    ->label(__('settings/notifications.enable_apprise_notifications'))
+                                    ->reactive()
+                                    ->columnSpanFull(),
+                                Grid::make([
+                                    'default' => 1,
+                                ])
+                                    ->hidden(fn (Get $get) => $get('apprise_enabled') !== true)
+                                    ->schema([
+                                        Fieldset::make(__('settings/notifications.apprise_server'))
+                                            ->schema([
+                                                TextInput::make('apprise_server_url')
+                                                    ->label(__('settings/notifications.apprise_server_url'))
+                                                    ->placeholder('http://localhost:8000/notify')
+                                                    ->helperText(__('settings/notifications.apprise_server_url_helper'))
+                                                    ->maxLength(2000)
+                                                    ->required()
+                                                    ->url()
+                                                    ->rule(new ContainsString('/notify'))
+                                                    ->columnSpanFull(),
+                                                Checkbox::make('apprise_verify_ssl')
+                                                    ->label(__('settings/notifications.apprise_verify_ssl'))
+                                                    ->default(true)
+                                                    ->columnSpanFull(),
+                                            ]),
+                                        Fieldset::make(__('settings.triggers'))
+                                            ->schema([
+                                                Checkbox::make('apprise_on_speedtest_run')
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run'))
+                                                    ->columnSpanFull(),
+                                                Checkbox::make('apprise_on_threshold_failure')
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
+                                                    ->columnSpanFull(),
+                                            ]),
+                                        Repeater::make('apprise_channel_urls')
+                                            ->label(__('settings/notifications.apprise_channels'))
+                                            ->schema([
+                                                TextInput::make('channel_url')
+                                                    ->label(__('settings/notifications.apprise_channel_url'))
+                                                    ->placeholder('discord://WebhookID/WebhookToken')
+                                                    ->helperText(__('settings/notifications.apprise_channel_url_helper'))
+                                                    ->maxLength(2000)
+                                                    ->distinct()
+                                                    ->required()
+                                                    ->rule(new AppriseScheme),
+                                            ])
+                                            ->columnSpanFull(),
+                                        Actions::make([
+                                            Action::make('test apprise')
+                                                ->label(__('settings/notifications.test_apprise_channel'))
+                                                ->action(fn (Get $get) => SendAppriseTestNotification::run(
+                                                    channel_urls: $get('apprise_channel_urls'),
+                                                ))
+                                                ->hidden(fn (Get $get) => ! count($get('apprise_channel_urls'))),
+                                        ]),
+                                    ]),
                             ]),
                     ])
                     ->columnSpanFull(),

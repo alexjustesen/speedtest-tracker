@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Thresholds extends SettingsPage
 {
-    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-exclamation-triangle';
+    protected static string|\BackedEnum|null $navigationIcon = 'tabler-alert-triangle';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Settings';
 

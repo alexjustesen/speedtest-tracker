@@ -2,9 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Settings\NotificationSettings;
+use Exception;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class AppriseChannel
 {
@@ -20,35 +23,54 @@ class AppriseChannel
             return;
         }
 
-        $appriseUrl = config('services.apprise.url');
+        $settings = app(NotificationSettings::class);
+        $appriseUrl = $settings->apprise_server_url ?? '';
+
+        if (empty($appriseUrl)) {
+            Log::warning('Apprise notification skipped: No Server URL configured');
+
+            return;
+        }
 
         try {
-            $response = Http::timeout(5)
+            $request = Http::timeout(5)
                 ->withHeaders([
                     'Content-Type' => 'application/json',
-                ])
-                // ->when(true, function ($http) {
-                //     $http->withoutVerifying();
-                // })
-                ->post("{$appriseUrl}/notify", [
-                    'urls' => $message->urls,
-                    'title' => $message->title,
-                    'body' => $message->body,
-                    'type' => $message->type ?? 'info',
-                    'format' => $message->format ?? 'text',
-                    'tag' => $message->tag ?? null,
                 ]);
 
-            if ($response->failed()) {
-                Log::error('Apprise notification failed', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
+            // If SSL verification is disabled in settings, skip it
+            if (! $settings->apprise_verify_ssl) {
+                $request = $request->withoutVerifying();
             }
-        } catch (\Exception $e) {
-            Log::error('Apprise notification exception', [
-                'message' => $e->getMessage(),
+
+            $response = $request->post($appriseUrl, [
+                'urls' => $message->urls,
+                'title' => $message->title,
+                'body' => $message->body,
+                'type' => $message->type ?? 'info',
+                'format' => $message->format ?? 'text',
+                'tag' => $message->tag ?? null,
             ]);
+
+            // Only accept 200 OK responses as successful
+            if ($response->status() !== 200) {
+                throw new Exception('Apprise returned an error, please check Apprise logs for details');
+            }
+
+            Log::info('Apprise notification sent', [
+                'channel' => $message->urls,
+                'instance' => $appriseUrl,
+            ]);
+        } catch (Throwable $e) {
+            Log::error('Apprise notification failed', [
+                'channel' => $message->urls ?? 'unknown',
+                'instance' => $appriseUrl,
+                'message' => $e->getMessage(),
+                'exception' => get_class($e),
+            ]);
+
+            // Re-throw the exception so it can be handled by the queue
+            throw $e;
         }
     }
 }
