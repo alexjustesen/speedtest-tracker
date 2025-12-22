@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Enums\ResultStatus;
 use App\Helpers\Bitrate;
 use App\Models\Result;
+use Carbon\Carbon;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -32,16 +33,15 @@ class MetricsDashboard extends Component
             ->value('id');
     }
 
-    protected function getDefaultStartDate(): \Carbon\Carbon
+    protected function getDefaultStartDate(): Carbon
     {
-        $chartRange = config('speedtest.default_chart_range', '24h');
+        $chartRange = config('speedtest.default_chart_range');
 
-        return match (true) {
-            str_ends_with($chartRange, 'h') => now()->subHours((int) rtrim($chartRange, 'h')),
-            str_ends_with($chartRange, 'd') => now()->subDays((int) rtrim($chartRange, 'd')),
-            str_ends_with($chartRange, 'w') => now()->subWeeks((int) rtrim($chartRange, 'w')),
-            str_ends_with($chartRange, 'm') => now()->subMonths((int) rtrim($chartRange, 'm')),
-            default => now()->subDay(),
+        return match ($chartRange) {
+            '24h' => now()->subDay(),
+            'week' => now()->subWeek(),
+            'month' => now()->subMonth(),
+            default => now()->subWeek(),
         };
     }
 
