@@ -1013,25 +1013,13 @@
         },
 
         updateChart(newData) {
-            // Determine which datasets to use based on current config
+            // Determine which datasets to use based on the original config
+            // Check the number of datasets in the original config to identify chart type
             let datasets;
 
-            // Check if this is the latency chart (has downloadLatency)
-            if (newData.downloadLatency !== undefined) {
-                datasets = [
-                    {
-                        label: 'Download Latency (ms)',
-                        data: newData.downloadLatency || [],
-                        color: 'rgb(59, 130, 246)',
-                    },
-                    {
-                        label: 'Upload Latency (ms)',
-                        data: newData.uploadLatency || [],
-                        color: 'rgb(245, 158, 11)',
-                    }
-                ];
-            } else {
-                // Jitter chart
+            // Check if this is the jitter chart (has 3 datasets) or latency chart (has 2 datasets)
+            if (config.datasets.length === 3) {
+                // Jitter chart - 3 datasets
                 datasets = [
                     {
                         label: 'Download Jitter (ms)',
@@ -1047,6 +1035,20 @@
                         label: 'Ping Jitter (ms)',
                         data: newData.pingJitter || [],
                         color: 'rgb(168, 85, 247)',
+                    }
+                ];
+            } else {
+                // Latency chart - 2 datasets
+                datasets = [
+                    {
+                        label: 'Download Latency (ms)',
+                        data: newData.downloadLatency || [],
+                        color: 'rgb(59, 130, 246)',
+                    },
+                    {
+                        label: 'Upload Latency (ms)',
+                        data: newData.uploadLatency || [],
+                        color: 'rgb(245, 158, 11)',
                     }
                 ];
             }

@@ -855,3 +855,60 @@ it('sets jitter to 0 for failed status results', function () {
     expect($chartData['uploadJitter'][1])->toBe(0.0);
     expect($chartData['pingJitter'][1])->toBe(0.0);
 });
+
+it('includes all jitter datasets when date range is updated', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(2),
+        'data' => [
+            'download' => ['jitter' => 2.5],
+            'upload' => ['jitter' => 3.2],
+            'ping' => ['jitter' => 1.8],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+
+    // Update the date range
+    $component->set('startDate', now()->subDay()->format('Y-m-d'));
+
+    // Verify the dispatched event includes all three jitter datasets
+    $component->assertDispatched('charts-updated', function ($event) {
+        $chartData = $event['chartData'];
+
+        return isset($chartData['downloadJitter'])
+            && isset($chartData['uploadJitter'])
+            && isset($chartData['pingJitter'])
+            && is_array($chartData['downloadJitter'])
+            && is_array($chartData['uploadJitter'])
+            && is_array($chartData['pingJitter']);
+    });
+});
+
+it('includes all jitter datasets when setLastDay is called', function () {
+    Result::factory()->create([
+        'created_at' => now()->subHours(12),
+        'data' => [
+            'download' => ['jitter' => 1.5],
+            'upload' => ['jitter' => 2.0],
+            'ping' => ['jitter' => 1.2],
+        ],
+    ]);
+
+    $component = Livewire::test(MetricsDashboard::class);
+    $component->call('setLastDay');
+
+    // Verify the dispatched event includes all three jitter datasets
+    $component->assertDispatched('charts-updated', function ($event) {
+        $chartData = $event['chartData'];
+
+        return isset($chartData['downloadJitter'])
+            && isset($chartData['uploadJitter'])
+            && isset($chartData['pingJitter'])
+            && count($chartData['downloadJitter']) === 1
+            && count($chartData['uploadJitter']) === 1
+            && count($chartData['pingJitter']) === 1
+            && $chartData['downloadJitter'][0] === 1.5
+            && $chartData['uploadJitter'][0] === 2.0
+            && $chartData['pingJitter'][0] === 1.2;
+    });
+});
