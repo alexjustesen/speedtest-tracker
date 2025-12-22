@@ -249,6 +249,7 @@ class MetricsDashboard extends Component
             'resultIds' => $resultIds,
             'hasFailedResults' => $hasFailedResults,
             'resultStatusFailed' => $resultStatusFailed,
+            'daysDifference' => $daysDifference,
             'download' => $downloadData,
             'upload' => $uploadData,
             'ping' => $pingData,

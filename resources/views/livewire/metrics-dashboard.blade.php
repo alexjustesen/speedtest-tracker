@@ -127,6 +127,7 @@
                                 downloadBenchmarks: @js($chartData['downloadBenchmarks']),
                                 uploadBenchmarks: @js($chartData['uploadBenchmarks']),
                                 resultStatusFailed: @js($chartData['resultStatusFailed']),
+                                daysDifference: @js($chartData['daysDifference']),
                             })"
                             @charts-updated.window="updateChart($event.detail.chartData)"
                             wire:ignore
@@ -272,7 +273,8 @@
                                 color: 'rgb(168, 85, 247)',
                                 field: 'ping',
                                 showPoints: true,
-                                unit: 'ms'
+                                unit: 'ms',
+                                daysDifference: @js($chartData['daysDifference']),
                             })"
                             @charts-updated.window="updateChart($event.detail.chartData)"
                             wire:ignore
@@ -357,7 +359,8 @@
                                         color: 'rgb(245, 158, 11)',
                                     }
                                 ],
-                                unit: 'ms'
+                                unit: 'ms',
+                                daysDifference: @js($chartData['daysDifference']),
                             })"
                             @charts-updated.window="updateChart($event.detail.chartData)"
                             wire:ignore
@@ -458,7 +461,8 @@
                                         color: 'rgb(168, 85, 247)',
                                     }
                                 ],
-                                unit: 'ms'
+                                unit: 'ms',
+                                daysDifference: @js($chartData['daysDifference']),
                             })"
                             @charts-updated.window="updateChart($event.detail.chartData)"
                             wire:ignore
@@ -604,6 +608,8 @@
             const benchmarkFailed = config.benchmarkFailed || [];
             const resultStatusFailed = config.resultStatusFailed || [];
             const amberColor = 'rgb(251, 191, 36)'; // Amber for failed benchmarks
+            const daysDifference = config.daysDifference || 0;
+            const showRingingPoints = daysDifference <= 8;
 
             // Detect dark mode for text colors
             const isDarkMode = document.documentElement.classList.contains('dark');
@@ -623,8 +629,9 @@
                 return config.color;
             });
 
-            // Show points always for benchmark failures, only on hover for failed status
+            // Show points for benchmark failures only if date range <= 8 days
             const pointRadii = data.map((_, index) => {
+                if (!showRingingPoints) return 0; // Hide all points if date range > 8 days
                 if (benchmarkFailed[index] && !resultStatusFailed[index]) return 5;
                 return 0; // Hide by default for failed status and normal points
             });
@@ -639,12 +646,17 @@
             const pulsingPointsPlugin = {
                 id: 'pulsingPoints',
                 afterDatasetsDraw: (chart) => {
+                    // Only show ringing animation if date range is 8 days or less
+                    if (!showRingingPoints) {
+                        return;
+                    }
+
                     const ctx = chart.ctx;
                     const meta = chart.getDatasetMeta(0);
                     const time = Date.now();
 
                     meta.data.forEach((point, index) => {
-                        // Only animate benchmark failures, not failed status results
+                        // Only show ringing for benchmark failures, not failed status results
                         if (benchmarkFailed[index] && !resultStatusFailed[index]) {
                             const x = point.x;
                             const y = point.y;
@@ -679,7 +691,7 @@
                         }
                     });
 
-                    // Continue animation if there are failed benchmarks (excluding failed status)
+                    // Continue animation if there are benchmark failures (excluding failed status)
                     const hasBenchmarkFailures = benchmarkFailed.some((failed, index) =>
                         failed && !resultStatusFailed[index]
                     );
@@ -843,6 +855,9 @@
 
             // Update failed status data
             config.resultStatusFailed = newData.resultStatusFailed || [];
+
+            // Update days difference
+            config.daysDifference = newData.daysDifference || 0;
 
             this.createChart(newData.labels, newData[config.field]);
         }
@@ -1056,6 +1071,9 @@
             // Update failed status data
             config.resultStatusFailed = newData.resultStatusFailed || [];
 
+            // Update days difference
+            config.daysDifference = newData.daysDifference || 0;
+
             this.createChart(newData.labels, datasets);
         }
     }));
@@ -1102,6 +1120,8 @@
             const uploadBenchmarkFailed = config.uploadBenchmarkFailed || [];
             const resultStatusFailed = config.resultStatusFailed || [];
             const failedColor = 'rgb(239, 68, 68)'; // Red color for failed results
+            const daysDifference = config.daysDifference || 0;
+            const showRingingPoints = daysDifference <= 8;
 
             // Detect dark mode for text colors
             const isDarkMode = document.documentElement.classList.contains('dark');
@@ -1117,30 +1137,44 @@
             const downloadPointColors = downloadData.map((_, index) =>
                 resultStatusFailed[index] ? failedColor : config.downloadColor
             );
-            const downloadPointRadii = downloadData.map((_, index) =>
-                (downloadBenchmarkFailed[index] || resultStatusFailed[index]) ? 5 : 0
-            );
+            const downloadPointRadii = downloadData.map((_, index) => {
+                if (!showRingingPoints) return 0; // Hide all points if date range > 8 days
+                if (resultStatusFailed[index]) return 5;
+                if (downloadBenchmarkFailed[index]) return 5;
+                return 0;
+            });
 
             // Create point colors and radii for upload
             const uploadPointColors = uploadData.map((_, index) =>
                 resultStatusFailed[index] ? failedColor : config.uploadColor
             );
-            const uploadPointRadii = uploadData.map((_, index) =>
-                (uploadBenchmarkFailed[index] || resultStatusFailed[index]) ? 5 : 0
-            );
+            const uploadPointRadii = uploadData.map((_, index) => {
+                if (!showRingingPoints) return 0; // Hide all points if date range > 8 days
+                if (resultStatusFailed[index]) return 5;
+                if (uploadBenchmarkFailed[index]) return 5;
+                return 0;
+            });
 
             // Plugin to create ping/ripple effect on failed benchmark points and failed status results
             const self = this;
             const pulsingPointsPlugin = {
                 id: 'pulsingPoints',
                 afterDatasetsDraw: (chart) => {
+                    // Only show ringing animation if date range is 8 days or less
+                    if (!showRingingPoints) {
+                        return;
+                    }
+
                     const ctx = chart.ctx;
                     const time = Date.now();
 
                     // Process download dataset (index 0)
                     const downloadMeta = chart.getDatasetMeta(0);
                     downloadMeta.data.forEach((point, index) => {
-                        if (downloadBenchmarkFailed[index] || resultStatusFailed[index]) {
+                        // Show ringing for both failed status and benchmark failures
+                        const shouldShowRinging = resultStatusFailed[index] || downloadBenchmarkFailed[index];
+
+                        if (shouldShowRinging) {
                             const x = point.x;
                             const y = point.y;
 
@@ -1175,7 +1209,10 @@
                     // Process upload dataset (index 1)
                     const uploadMeta = chart.getDatasetMeta(1);
                     uploadMeta.data.forEach((point, index) => {
-                        if (uploadBenchmarkFailed[index] || resultStatusFailed[index]) {
+                        // Show ringing for both failed status and benchmark failures
+                        const shouldShowRinging = resultStatusFailed[index] || uploadBenchmarkFailed[index];
+
+                        if (shouldShowRinging) {
                             const x = point.x;
                             const y = point.y;
 
@@ -1207,10 +1244,12 @@
                         }
                     });
 
-                    // Continue animation if there are failed benchmarks or failed status results
-                    if (downloadBenchmarkFailed.some(failed => failed) ||
-                        uploadBenchmarkFailed.some(failed => failed) ||
-                        resultStatusFailed.some(failed => failed)) {
+                    // Continue animation if there are any failures (already checked showRingingPoints at the start)
+                    const hasFailures = resultStatusFailed.some(failed => failed) ||
+                        downloadBenchmarkFailed.some(failed => failed) ||
+                        uploadBenchmarkFailed.some(failed => failed);
+
+                    if (hasFailures) {
                         self.animationFrame = requestAnimationFrame(() => {
                             chart.render();
                         });
@@ -1443,6 +1482,9 @@
 
             // Update failed status data
             config.resultStatusFailed = newData.resultStatusFailed || [];
+
+            // Update days difference
+            config.daysDifference = newData.daysDifference || 0;
 
             this.createChart(newData.labels, newData.download, newData.upload);
         }
