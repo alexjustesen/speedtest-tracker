@@ -575,6 +575,64 @@
                         </div>
                     </div>
                 </template>
+
+                <!-- Packet Loss Section -->
+                <template x-if="sectionId === 'packetLoss'">
+                    <div class="rounded-xl border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
+                        <flux:heading class="flex items-center gap-x-2 px-6 pt-4" size="lg">
+                            <flux:icon.package class="size-5 text-neutral-600 dark:text-neutral-400" />
+                            Packet Loss
+                        </flux:heading>
+
+                        <!-- Packet Loss Chart -->
+                        <div
+                            x-data="scatterChartComponent({
+                                labels: @js($chartData['labels']),
+                                resultIds: @js($chartData['resultIds']),
+                                data: @js($chartData['packetLoss']),
+                                resultStatusFailed: @js($chartData['resultStatusFailed']),
+                            })"
+                            @charts-updated.window="updateChart($event.detail.chartData)"
+                            wire:ignore
+                            class="aspect-[3/1] lg:aspect-[5/1] px-6 py-4"
+                        >
+                            <canvas x-ref="canvas"></canvas>
+                        </div>
+
+                        <!-- Packet Loss Stats -->
+                        <div class="grid grid-cols-2 lg:grid-cols-5 border-t border-neutral-200 dark:border-neutral-700">
+                            <x-dashboard.stats-card heading="Latest">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['packetLossStats']['latest'], 2) }}%
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="Average">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['packetLossStats']['average'], 2) }}%
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="P95">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['packetLossStats']['p95'], 2) }}%
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="Maximum">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['packetLossStats']['maximum'], 2) }}%
+                                </flux:text>
+                            </x-dashboard.stats-card>
+
+                            <x-dashboard.stats-card heading="Minimum">
+                                <flux:text class="text-xl">
+                                    {{ number_format($chartData['packetLossStats']['minimum'], 2) }}%
+                                </flux:text>
+                            </x-dashboard.stats-card>
+                        </div>
+                    </div>
+                </template>
             </div>
         </template>
     </div>
@@ -1199,6 +1257,231 @@
         }
     }));
 
+    Alpine.data('scatterChartComponent', (config) => ({
+        chart: null,
+        currentLabels: config.labels,
+        currentData: config.data,
+
+        init() {
+            this.createChart(config.labels, config.data);
+
+            // Listen for theme changes and re-draw chart
+            window.addEventListener('theme-changed', () => {
+                // Small delay to allow DOM to update
+                setTimeout(() => {
+                    this.createChart(this.currentLabels, this.currentData);
+                }, 100);
+            });
+        },
+
+        destroy() {
+            if (this.chart) {
+                this.chart.destroy();
+            }
+        },
+
+        createChart(labels, data) {
+            // Store current data for theme changes
+            this.currentLabels = labels;
+            this.currentData = data;
+
+            if (this.chart) {
+                this.chart.destroy();
+            }
+
+            const resultStatusFailed = config.resultStatusFailed || [];
+
+            // Detect dark mode for text colors
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const textColor = isDarkMode ? 'rgb(228, 228, 231)' : 'rgb(39, 39, 42)';
+            const gridColor = isDarkMode ? 'rgba(228, 228, 231, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+            // Color mapping based on packet loss severity
+            const getPointColor = (value) => {
+                if (value === 0) return 'rgb(34, 197, 94)'; // Green - excellent
+                if (value <= 1) return 'rgb(234, 179, 8)'; // Yellow - fair
+                if (value <= 5) return 'rgb(249, 115, 22)'; // Orange - poor
+                return 'rgb(239, 68, 68)'; // Red - critical
+            };
+
+            // Create point colors based on packet loss values
+            const pointColors = data.map((value, index) => {
+                if (resultStatusFailed[index]) return 'rgb(156, 163, 175)'; // Gray for failed results
+                return getPointColor(value);
+            });
+
+            // All points are visible in scatter plot
+            const pointRadii = data.map(() => 6);
+            const pointHoverRadii = data.map(() => 8);
+
+            // Plugin to draw vertical bands behind failed results
+            const verticalBandsPlugin = {
+                id: 'verticalBands',
+                beforeDatasetsDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const chartArea = chart.chartArea;
+                    const meta = chart.getDatasetMeta(0);
+
+                    // Only draw bands if we have failed results
+                    const hasFailedResults = resultStatusFailed.some(failed => failed);
+                    if (!hasFailedResults || !meta.data.length) {
+                        return;
+                    }
+
+                    ctx.save();
+
+                    // Set the fill color based on dark mode
+                    const bandColor = isDarkMode ? 'rgba(239, 68, 68, 0.08)' : 'rgba(239, 68, 68, 0.06)';
+
+                    meta.data.forEach((point, index) => {
+                        if (resultStatusFailed[index]) {
+                            const x = point.x;
+
+                            // Calculate band width based on spacing between points
+                            let bandWidth = 20; // Default width
+                            if (meta.data.length > 1) {
+                                if (index < meta.data.length - 1) {
+                                    const nextX = meta.data[index + 1].x;
+                                    bandWidth = Math.abs(nextX - x) / 2;
+                                } else if (index > 0) {
+                                    const prevX = meta.data[index - 1].x;
+                                    bandWidth = Math.abs(x - prevX) / 2;
+                                }
+                            }
+
+                            // Draw vertical band
+                            ctx.fillStyle = bandColor;
+                            ctx.fillRect(
+                                x - bandWidth / 2,
+                                chartArea.top,
+                                bandWidth,
+                                chartArea.bottom - chartArea.top
+                            );
+                        }
+                    });
+
+                    ctx.restore();
+                }
+            };
+
+            this.chart = new Chart(this.$refs.canvas, {
+                type: 'scatter',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Packet Loss (%)',
+                        data: data.map((value, index) => ({ x: index, y: value })),
+                        backgroundColor: pointColors,
+                        borderColor: pointColors.map(color => color.replace('rgb(', 'rgba(').replace(')', ', 0.8)')),
+                        borderWidth: 2,
+                        pointRadius: pointRadii,
+                        pointHoverRadius: pointHoverRadii,
+                        pointHoverBorderWidth: 3,
+                        pointHoverBorderColor: '#fff',
+                    }]
+                },
+                plugins: [verticalBandsPlugin],
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            window.open('/admin/results', '_blank');
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            displayColors: false,
+                            callbacks: {
+                                title: function(context) {
+                                    const index = context[0].parsed.x;
+                                    const resultId = config.resultIds && config.resultIds[index];
+                                    return resultId ? `Result #${resultId}` : '';
+                                },
+                                label: function(context) {
+                                    const index = context.parsed.x;
+                                    const labels = [];
+
+                                    // Check if this result has failed status
+                                    const hasFailed = resultStatusFailed[index];
+
+                                    // Show failed result indicator
+                                    if (hasFailed) {
+                                        labels.push('- Result Status: ❌ Failed');
+                                        return labels;
+                                    }
+
+                                    // Main result line
+                                    let resultLabel = '- Packet Loss: ';
+                                    if (context.parsed.y !== null) {
+                                        resultLabel += context.parsed.y.toFixed(2) + '%';
+                                    }
+                                    labels.push(resultLabel);
+
+                                    return labels;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: textColor,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        },
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            min: 0,
+                            max: Math.max(0, data.length - 1),
+                            ticks: {
+                                color: textColor,
+                                display: true,
+                                stepSize: 1,
+                                callback: function(value) {
+                                    // Show the corresponding label from labels array
+                                    const index = Math.round(value);
+                                    if (labels[index]) {
+                                        return labels[index];
+                                    }
+                                    return '';
+                                },
+                                autoSkip: true,
+                                maxTicksLimit: 8,
+                                maxRotation: 0,
+                                minRotation: 0
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
+        updateChart(newData) {
+            // Update failed status data
+            config.resultStatusFailed = newData.resultStatusFailed || [];
+            config.resultIds = newData.resultIds || [];
+
+            this.createChart(newData.labels, newData.packetLoss);
+        }
+    }));
+
     Alpine.data('speedChartComponent', (config) => ({
         chart: null,
         animationFrame: null,
@@ -1683,7 +1966,8 @@
                 { id: 'speed', name: 'Speed' },
                 { id: 'ping', name: 'Ping' },
                 { id: 'latency', name: 'Latency (IQM)' },
-                { id: 'jitter', name: 'Jitter' }
+                { id: 'jitter', name: 'Jitter' },
+                { id: 'packetLoss', name: 'Packet Loss' }
             ];
 
             // Apply saved order if it exists
@@ -1709,7 +1993,7 @@
         getPreferences() {
             const defaultPrefs = {
                 hiddenSections: [],
-                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter', 'packetLoss'],
                 version: 2
             };
 
@@ -1811,7 +2095,7 @@
         resetToDefaults() {
             const defaultPrefs = {
                 hiddenSections: [],
-                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter', 'packetLoss'],
                 version: 2
             };
 
@@ -1845,7 +2129,7 @@
         loadPreferences() {
             const defaultPrefs = {
                 hiddenSections: [],
-                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter', 'packetLoss'],
                 version: 2
             };
 

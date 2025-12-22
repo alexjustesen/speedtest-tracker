@@ -10,6 +10,7 @@ import {
     CategoryScale,
     BarController,
     BarElement,
+    ScatterController,
     Tooltip,
     Legend,
     Filler
@@ -23,6 +24,7 @@ Chart.register(
     CategoryScale,
     BarController,
     BarElement,
+    ScatterController,
     Tooltip,
     Legend,
     Filler

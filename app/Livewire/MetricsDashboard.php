@@ -121,6 +121,7 @@ class MetricsDashboard extends Component
         $downloadJitterData = [];
         $uploadJitterData = [];
         $pingJitterData = [];
+        $packetLossData = [];
         $downloadBenchmarkFailed = [];
         $uploadBenchmarkFailed = [];
         $pingBenchmarkFailed = [];
@@ -159,6 +160,9 @@ class MetricsDashboard extends Component
             $downloadJitterData[] = $isFailed ? 0 : round($result->downloadJitter ?? 0, 2);
             $uploadJitterData[] = $isFailed ? 0 : round($result->uploadJitter ?? 0, 2);
             $pingJitterData[] = $isFailed ? 0 : round($result->pingJitter ?? 0, 2);
+
+            // Packet loss in percentage (0 if failed)
+            $packetLossData[] = $isFailed ? 0 : round($result->packet_loss ?? 0, 2);
 
             // Track benchmark failures and full benchmark data
             $benchmarks = $result->benchmarks ?? [];
@@ -220,6 +224,13 @@ class MetricsDashboard extends Component
         $uploadLatencyMax = count($uploadLatencyData) > 0 ? round(max($uploadLatencyData), 2) : 0;
         $uploadLatencyMin = count($uploadLatencyData) > 0 ? round(min($uploadLatencyData), 2) : 0;
 
+        // Calculate packet loss statistics
+        $packetLossLatest = count($packetLossData) > 0 ? end($packetLossData) : 0;
+        $packetLossAvg = count($packetLossData) > 0 ? round(array_sum($packetLossData) / count($packetLossData), 2) : 0;
+        $packetLossP95 = $this->calculatePercentile($packetLossData, 95);
+        $packetLossMax = count($packetLossData) > 0 ? round(max($packetLossData), 2) : 0;
+        $packetLossMin = count($packetLossData) > 0 ? round(min($packetLossData), 2) : 0;
+
         // Calculate healthy ratio for each metric based on benchmark KPI
         $downloadPassedCount = collect($downloadBenchmarkFailed)->filter(fn ($failed) => $failed === false)->count();
         $uploadPassedCount = collect($uploadBenchmarkFailed)->filter(fn ($failed) => $failed === false)->count();
@@ -258,6 +269,7 @@ class MetricsDashboard extends Component
             'downloadJitter' => $downloadJitterData,
             'uploadJitter' => $uploadJitterData,
             'pingJitter' => $pingJitterData,
+            'packetLoss' => $packetLossData,
             'downloadBenchmarkFailed' => $downloadBenchmarkFailed,
             'uploadBenchmarkFailed' => $uploadBenchmarkFailed,
             'pingBenchmarkFailed' => $pingBenchmarkFailed,
@@ -323,6 +335,14 @@ class MetricsDashboard extends Component
                 'pingP95' => $pingJitterP95,
                 'pingMaximum' => $pingJitterMax,
                 'pingMinimum' => $pingJitterMin,
+                'tests' => count($results),
+            ],
+            'packetLossStats' => [
+                'latest' => $packetLossLatest,
+                'average' => $packetLossAvg,
+                'p95' => $packetLossP95,
+                'maximum' => $packetLossMax,
+                'minimum' => $packetLossMin,
                 'tests' => count($results),
             ],
         ];
