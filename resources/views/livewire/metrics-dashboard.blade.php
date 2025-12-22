@@ -46,14 +46,20 @@
                 <flux:modal name="displaySettingsModal" flyout class="space-y-6">
                     <div>
                         <flux:heading size="sm">Manage Sections</flux:heading>
-                        <flux:text size="sm">Uncheck to hide sections</flux:text>
+                        <flux:text size="sm">Drag to reorder, uncheck to hide sections</flux:text>
                     </div>
 
                     <div x-data="sectionManager()" x-init="init()">
                         <!-- Section Visibility List -->
-                        <div class="space-y-2">
-                            <template x-for="section in sections" :key="section.id">
-                                <div class="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
+                        <div class="flex flex-col">
+                            <template x-for="(section, index) in sections" :key="section.id">
+                                <div
+                                    @dragover.prevent="dragOver(index, $event)"
+                                    @drop="drop(index, $event)"
+                                    @dragleave="dragLeave($event)"
+                                    :class="{ 'opacity-50': draggingIndex === index, 'border-blue-500 dark:border-blue-400': dragOverIndex === index }"
+                                    class="flex items-center gap-3 p-3 mb-2 last:mb-0 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 transition-all"
+                                >
                                     <!-- Checkbox for visibility -->
                                     <flux:checkbox
                                         x-model="section.visible"
@@ -67,6 +73,16 @@
                                             x-text="section.name"
                                             class="font-medium text-neutral-900 dark:text-neutral-100"
                                         ></span>
+                                    </div>
+
+                                    <!-- Drag Handle -->
+                                    <div
+                                        draggable="true"
+                                        @dragstart="dragStart(index, $event)"
+                                        @dragend="dragEnd($event)"
+                                        class="shrink-0 text-neutral-400 dark:text-neutral-600 cursor-grab active:cursor-grabbing"
+                                    >
+                                        <flux:icon.grip-vertical class="size-5" />
                                     </div>
                                 </div>
                             </template>
@@ -1650,6 +1666,8 @@
     // Section Manager for Filter Modal
     Alpine.data('sectionManager', () => ({
         sections: [],
+        draggingIndex: null,
+        dragOverIndex: null,
 
         init() {
             this.loadSections();
@@ -1668,7 +1686,21 @@
                 { id: 'jitter', name: 'Jitter' }
             ];
 
-            this.sections = sectionDefinitions.map(def => ({
+            // Apply saved order if it exists
+            let orderedDefinitions = sectionDefinitions;
+            if (prefs.sectionOrder && Array.isArray(prefs.sectionOrder)) {
+                orderedDefinitions = prefs.sectionOrder
+                    .map(id => sectionDefinitions.find(def => def.id === id))
+                    .filter(def => def !== undefined);
+
+                // Add any new sections that aren't in the saved order
+                const missingDefs = sectionDefinitions.filter(
+                    def => !prefs.sectionOrder.includes(def.id)
+                );
+                orderedDefinitions = [...orderedDefinitions, ...missingDefs];
+            }
+
+            this.sections = orderedDefinitions.map(def => ({
                 ...def,
                 visible: !prefs.hiddenSections.includes(def.id)
             }));
@@ -1677,7 +1709,8 @@
         getPreferences() {
             const defaultPrefs = {
                 hiddenSections: [],
-                version: 1
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                version: 2
             };
 
             try {
@@ -1690,6 +1723,12 @@
                 if (!Array.isArray(parsed.hiddenSections)) {
                     console.warn('Invalid dashboard preferences structure, using defaults');
                     return defaultPrefs;
+                }
+
+                // Migrate from v1 to v2 if needed
+                if (!parsed.sectionOrder) {
+                    parsed.sectionOrder = defaultPrefs.sectionOrder;
+                    parsed.version = 2;
                 }
 
                 return parsed;
@@ -1716,13 +1755,64 @@
             prefs.hiddenSections = this.sections
                 .filter(s => !s.visible)
                 .map(s => s.id);
+            prefs.sectionOrder = this.sections.map(s => s.id);
             this.savePreferences(prefs);
+        },
+
+        updateOrder() {
+            const prefs = this.getPreferences();
+            prefs.sectionOrder = this.sections.map(s => s.id);
+            this.savePreferences(prefs);
+        },
+
+        dragStart(index, event) {
+            this.draggingIndex = index;
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/html', event.target);
+        },
+
+        dragEnd(event) {
+            this.draggingIndex = null;
+            this.dragOverIndex = null;
+        },
+
+        dragOver(index, event) {
+            if (this.draggingIndex !== null && this.draggingIndex !== index) {
+                this.dragOverIndex = index;
+            }
+        },
+
+        dragLeave(event) {
+            this.dragOverIndex = null;
+        },
+
+        drop(index, event) {
+            event.preventDefault();
+
+            if (this.draggingIndex === null || this.draggingIndex === index) {
+                this.draggingIndex = null;
+                this.dragOverIndex = null;
+                return;
+            }
+
+            // Reorder the sections array
+            const draggedSection = this.sections[this.draggingIndex];
+            const newSections = [...this.sections];
+            newSections.splice(this.draggingIndex, 1);
+            newSections.splice(index, 0, draggedSection);
+
+            this.sections = newSections;
+            this.updateOrder();
+
+            this.draggingIndex = null;
+            this.dragOverIndex = null;
         },
 
         resetToDefaults() {
             const defaultPrefs = {
                 hiddenSections: [],
-                version: 1
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                version: 2
             };
 
             this.savePreferences(defaultPrefs);
@@ -1755,10 +1845,9 @@
         loadPreferences() {
             const defaultPrefs = {
                 hiddenSections: [],
-                version: 1
+                sectionOrder: ['speed', 'ping', 'latency', 'jitter'],
+                version: 2
             };
-
-            const allSections = ['speed', 'ping', 'latency', 'jitter'];
 
             try {
                 const stored = localStorage.getItem('metrics-dashboard-preferences');
@@ -1769,16 +1858,23 @@
                     this.preferences = defaultPrefs;
                 }
 
-                this.updateVisibleSections(allSections);
+                // Migrate from v1 to v2 if needed
+                if (!this.preferences.sectionOrder) {
+                    this.preferences.sectionOrder = defaultPrefs.sectionOrder;
+                    this.preferences.version = 2;
+                }
+
+                this.updateVisibleSections();
             } catch (e) {
                 console.error('Error loading preferences:', e);
                 this.preferences = defaultPrefs;
-                this.updateVisibleSections(allSections);
+                this.updateVisibleSections();
             }
         },
 
-        updateVisibleSections(allSections) {
-            this.visibleSections = allSections.filter(
+        updateVisibleSections() {
+            // Use the saved order and filter out hidden sections
+            this.visibleSections = this.preferences.sectionOrder.filter(
                 id => !this.preferences.hiddenSections.includes(id)
             );
         }
