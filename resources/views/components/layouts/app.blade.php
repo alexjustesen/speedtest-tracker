@@ -9,14 +9,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <script>
-            const theme = localStorage.getItem('theme') ?? 'system'
+            const theme = localStorage.getItem('theme') ?? 'light'
 
-            if (
-                theme === 'dark' ||
-                (theme === 'system' &&
-                    window.matchMedia('(prefers-color-scheme: dark)')
-                        .matches)
-            ) {
+            if (theme === 'dark') {
                 document.documentElement.classList.add('dark')
             }
         </script>
@@ -44,35 +39,29 @@
             <flux:spacer />
 
             <flux:navbar>
-                <flux:dropdown x-data="{
-                    theme: localStorage.getItem('theme') ?? 'system',
-                    updateTheme(newTheme) {
-                        this.theme = newTheme;
-                        localStorage.setItem('theme', newTheme);
-                        const effectiveTheme = newTheme === 'system'
-                            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-                            : newTheme;
-                        if (effectiveTheme === 'dark') {
-                            document.documentElement.classList.add('dark');
-                        } else {
-                            document.documentElement.classList.remove('dark');
+                <flux:button
+                    variant="subtle"
+                    size="sm"
+                    square
+                    aria-label="Toggle theme"
+                    x-data="{
+                        theme: localStorage.getItem('theme') ?? 'light',
+                        toggleTheme() {
+                            this.theme = this.theme === 'light' ? 'dark' : 'light';
+                            localStorage.setItem('theme', this.theme);
+                            if (this.theme === 'dark') {
+                                document.documentElement.classList.add('dark');
+                            } else {
+                                document.documentElement.classList.remove('dark');
+                            }
+                            window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: this.theme } }));
                         }
-                        window.dispatchEvent(new CustomEvent('theme-changed', { detail: { theme: newTheme } }));
-                    }
-                }" align="end">
-                    <flux:button variant="subtle" size="sm" square class="group" aria-label="Preferred color scheme">
-                        <flux:icon.sun x-show="theme === 'light'" variant="mini" class="text-neutral-500 dark:text-white" />
-                        <flux:icon.moon x-show="theme === 'dark'" variant="mini" class="text-neutral-500 dark:text-white" />
-                        <flux:icon.moon x-show="theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-neutral-500 dark:text-white" />
-                        <flux:icon.sun x-show="theme === 'system' && !window.matchMedia('(prefers-color-scheme: dark)').matches" variant="mini" class="text-neutral-500 dark:text-white" />
-                    </flux:button>
-
-                    <flux:menu>
-                        <flux:menu.item icon="sun" x-on:click="updateTheme('light')">Light</flux:menu.item>
-                        <flux:menu.item icon="moon" x-on:click="updateTheme('dark')">Dark</flux:menu.item>
-                        <flux:menu.item icon="monitor" x-on:click="updateTheme('system')">System</flux:menu.item>
-                    </flux:menu>
-                </flux:dropdown>
+                    }"
+                    x-on:click="toggleTheme()"
+                >
+                    <flux:icon.sun x-show="theme === 'light'" variant="mini" class="text-neutral-500 dark:text-white" />
+                    <flux:icon.moon x-show="theme === 'dark'" variant="mini" class="text-neutral-500 dark:text-white" />
+                </flux:button>
 
                 {{-- TODO: Add speedtest modal here --}}
 
