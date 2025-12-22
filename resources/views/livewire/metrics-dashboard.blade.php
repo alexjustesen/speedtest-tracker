@@ -703,6 +703,58 @@
                 }
             };
 
+            // Plugin to draw vertical bands behind failed results
+            const verticalBandsPlugin = {
+                id: 'verticalBands',
+                beforeDatasetsDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const chartArea = chart.chartArea;
+                    const meta = chart.getDatasetMeta(0); // Use first dataset for positioning
+
+                    // Only draw bands if we have failed results
+                    const hasFailedResults = resultStatusFailed.some(failed => failed);
+                    if (!hasFailedResults || !meta.data.length) {
+                        return;
+                    }
+
+                    ctx.save();
+
+                    // Set the fill color based on dark mode
+                    const bandColor = isDarkMode ? 'rgba(239, 68, 68, 0.08)' : 'rgba(239, 68, 68, 0.06)';
+
+                    meta.data.forEach((point, index) => {
+                        if (resultStatusFailed[index]) {
+                            const x = point.x;
+
+                            // Calculate band width based on spacing between points
+                            let bandWidth = 20; // Default width
+                            if (meta.data.length > 1) {
+                                if (index < meta.data.length - 1) {
+                                    // Use spacing to next point
+                                    const nextX = meta.data[index + 1].x;
+                                    bandWidth = Math.abs(nextX - x) / 2;
+                                } else if (index > 0) {
+                                    // For last point, use spacing from previous point
+                                    const prevX = meta.data[index - 1].x;
+                                    bandWidth = Math.abs(x - prevX) / 2;
+                                }
+                            }
+
+                            // Draw vertical band
+                            ctx.fillStyle = bandColor;
+                            ctx.fillRect(
+                                x - bandWidth / 2,
+                                chartArea.top,
+                                bandWidth,
+                                chartArea.bottom - chartArea.top
+                            );
+                        }
+                    });
+
+                    ctx.restore();
+                }
+            };
+
             this.chart = new Chart(this.$refs.canvas, {
                 type: config.type,
                 data: {
@@ -746,7 +798,7 @@
                         }
                     }]
                 },
-                plugins: [pulsingPointsPlugin],
+                plugins: [verticalBandsPlugin, pulsingPointsPlugin],
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -945,12 +997,65 @@
                 };
             });
 
+            // Plugin to draw vertical bands behind failed results
+            const verticalBandsPlugin = {
+                id: 'verticalBands',
+                beforeDatasetsDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const chartArea = chart.chartArea;
+                    const meta = chart.getDatasetMeta(0); // Use first dataset for positioning
+
+                    // Only draw bands if we have failed results
+                    const hasFailedResults = resultStatusFailed.some(failed => failed);
+                    if (!hasFailedResults || !meta.data.length) {
+                        return;
+                    }
+
+                    ctx.save();
+
+                    // Set the fill color based on dark mode
+                    const bandColor = isDarkMode ? 'rgba(239, 68, 68, 0.08)' : 'rgba(239, 68, 68, 0.06)';
+
+                    meta.data.forEach((point, index) => {
+                        if (resultStatusFailed[index]) {
+                            const x = point.x;
+
+                            // Calculate band width based on spacing between points
+                            let bandWidth = 20; // Default width
+                            if (meta.data.length > 1) {
+                                if (index < meta.data.length - 1) {
+                                    // Use spacing to next point
+                                    const nextX = meta.data[index + 1].x;
+                                    bandWidth = Math.abs(nextX - x) / 2;
+                                } else if (index > 0) {
+                                    // For last point, use spacing from previous point
+                                    const prevX = meta.data[index - 1].x;
+                                    bandWidth = Math.abs(x - prevX) / 2;
+                                }
+                            }
+
+                            // Draw vertical band
+                            ctx.fillStyle = bandColor;
+                            ctx.fillRect(
+                                x - bandWidth / 2,
+                                chartArea.top,
+                                bandWidth,
+                                chartArea.bottom - chartArea.top
+                            );
+                        }
+                    });
+
+                    ctx.restore();
+                }
+            };
+
             this.chart = new Chart(this.$refs.canvas, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: chartDatasets
                 },
+                plugins: [verticalBandsPlugin],
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
@@ -1155,6 +1260,58 @@
                 return 0;
             });
 
+            // Plugin to draw vertical bands behind failed results
+            const verticalBandsPlugin = {
+                id: 'verticalBands',
+                beforeDatasetsDraw: (chart) => {
+                    const ctx = chart.ctx;
+                    const chartArea = chart.chartArea;
+                    const meta = chart.getDatasetMeta(0); // Use first dataset for positioning
+
+                    // Only draw bands if we have failed results
+                    const hasFailedResults = resultStatusFailed.some(failed => failed);
+                    if (!hasFailedResults || !meta.data.length) {
+                        return;
+                    }
+
+                    ctx.save();
+
+                    // Set the fill color based on dark mode
+                    const bandColor = isDarkMode ? 'rgba(239, 68, 68, 0.08)' : 'rgba(239, 68, 68, 0.06)';
+
+                    meta.data.forEach((point, index) => {
+                        if (resultStatusFailed[index]) {
+                            const x = point.x;
+
+                            // Calculate band width based on spacing between points
+                            let bandWidth = 20; // Default width
+                            if (meta.data.length > 1) {
+                                if (index < meta.data.length - 1) {
+                                    // Use spacing to next point
+                                    const nextX = meta.data[index + 1].x;
+                                    bandWidth = Math.abs(nextX - x) / 2;
+                                } else if (index > 0) {
+                                    // For last point, use spacing from previous point
+                                    const prevX = meta.data[index - 1].x;
+                                    bandWidth = Math.abs(x - prevX) / 2;
+                                }
+                            }
+
+                            // Draw vertical band
+                            ctx.fillStyle = bandColor;
+                            ctx.fillRect(
+                                x - bandWidth / 2,
+                                chartArea.top,
+                                bandWidth,
+                                chartArea.bottom - chartArea.top
+                            );
+                        }
+                    });
+
+                    ctx.restore();
+                }
+            };
+
             // Plugin to create ping/ripple effect on failed benchmark points and failed status results
             const self = this;
             const pulsingPointsPlugin = {
@@ -1336,7 +1493,7 @@
                         }
                     ]
                 },
-                plugins: [pulsingPointsPlugin],
+                plugins: [verticalBandsPlugin, pulsingPointsPlugin],
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
