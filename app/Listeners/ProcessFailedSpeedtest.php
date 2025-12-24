@@ -16,10 +16,19 @@ class ProcessFailedSpeedtest
     {
         $result = $event->result;
 
-        $result->loadMissing(['dispatchedBy']);
+        // Notify the user who dispatched the speedtest.
+        if ($result->dispatched_by && $result->unscheduled) {
+            $result->loadMissing('dispatchedBy');
+
+            $this->notifyDispatchingUser($result);
+        }
+
+        // Don't send notifications for unscheduled speedtests.
+        if ($result->unscheduled) {
+            return;
+        }
 
         // $this->notifyAppriseChannels($result);
-        $this->notifyDispatchingUser($result);
     }
 
     /**
@@ -27,11 +36,6 @@ class ProcessFailedSpeedtest
      */
     private function notifyAppriseChannels(Result $result): void
     {
-        // Don't send Apprise notification if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || ! $result->healthy) {
-            return;
-        }
-
         //
     }
 
@@ -40,10 +44,6 @@ class ProcessFailedSpeedtest
      */
     private function notifyDispatchingUser(Result $result): void
     {
-        if (empty($result->dispatched_by)) {
-            return;
-        }
-
         $result->dispatchedBy->notify(
             Notification::make()
                 ->title(__('results.speedtest_failed'))
