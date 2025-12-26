@@ -19,19 +19,20 @@ return [
     'enable_apprise_notifications' => 'Inschakelen Apprise meldingen',
     'apprise_server' => 'Apprise Server',
     'apprise_server_url' => 'Appprise Server-URL',
+    'apprise_server_url_helper' => 'De URL van uw Apprise Server. De URL moet eindigen op /notify',
     'apprise_verify_ssl' => 'Controleer SSL',
-    'apprise_channels' => 'Apprise Kanalen',
-    'apprise_channel_url' => 'Kanaal URL',
-    'apprise_hint_description' => 'Voor meer informatie over het instellen van Apprise, bekijk de documentatie.',
-    'apprise_channel_url_helper' => 'Geef de service eindpunt URL voor meldingen.',
+    'apprise_channels' => 'Notificatie kanalen',
+    'apprise_channel_url' => 'Service URL',
+    'apprise_hint_description' => 'Met Apprise kan je meldingen verzenden naar meer dan 90 diensten. Je moet een Apprise server hebben draaien en onderstaande service URL\'s configureren.',
+    'apprise_channel_url_helper' => 'Gebruik Apprise URL formaat. Bijvoorbeeld discord://WebhookID/Token, slack://TokenA/TokenB/TokenC',
     'test_apprise_channel' => 'Test Apprise',
-    'apprise_channel_url_validation_error' => 'De URL van het Apprise kanaal mag niet beginnen met "http" of "https". Geef een geldig URL-schema op.',
+    'apprise_channel_url_validation_error' => 'Ongeldige Apprise URL. De URL moet gebruik maken van Apprise formaat (bijv. discord://, slack://), niet http:// of https://. Zie de Apprise documentatie voor meer informatie',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
     'test_webhook_channel' => 'Test webhook kanaal',
-    'webhook_hint_description' => 'Dit zijn generieke webhooks. Raadpleeg de documentatie voor voorbeelden van payloads en implementatiedetails.',
+    'webhook_hint_description' => 'Dit zijn algemene webhooks. Voor payload voorbeelden en implementatiegegevens, bekijk de documentatie. Voor diensten zoals Discord, Ntfy etc. gebruik Apprise.',
 
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notificatie bij elke geplande snelheidstest',

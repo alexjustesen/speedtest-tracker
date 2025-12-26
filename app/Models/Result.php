@@ -6,6 +6,7 @@ use App\Enums\ResultService;
 use App\Enums\ResultStatus;
 use App\Models\Traits\ResultDataAttributes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
@@ -53,5 +54,15 @@ class Result extends Model
     public function dispatchedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'dispatched_by');
+    }
+
+    /**
+     * Determine if the result was unscheduled.
+     */
+    protected function unscheduled(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): bool => ! $this->scheduled,
+        );
     }
 }
