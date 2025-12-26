@@ -33,13 +33,6 @@ class ProcessUnhealthySpeedtest
     {
         $result = $event->result;
 
-        // Notify the user who dispatched the speedtest.
-        if ($result->dispatched_by && $result->unscheduled) {
-            $result->loadMissing('dispatchedBy');
-
-            $this->notifyDispatchingUser($result);
-        }
-
         // Don't send notifications for unscheduled speedtests.
         if ($result->unscheduled) {
             return;
@@ -152,24 +145,6 @@ class ProcessUnhealthySpeedtest
                 ->success()
                 ->sendToDatabase($user);
         }
-    }
-
-    /**
-     * Notify the user who dispatched the speedtest.
-     */
-    private function notifyDispatchingUser(Result $result): void
-    {
-        $result->dispatchedBy->notify(
-            FilamentNotification::make()
-                ->title(__('results.speedtest_benchmark_failed'))
-                ->actions([
-                    Action::make('view')
-                        ->label(__('general.view'))
-                        ->url(route('filament.admin.resources.results.index')),
-                ])
-                ->warning()
-                ->toDatabase(),
-        );
     }
 
     /**
