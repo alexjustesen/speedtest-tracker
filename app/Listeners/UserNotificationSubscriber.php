@@ -46,6 +46,11 @@ class UserNotificationSubscriber
             return;
         }
 
+        // Don't send notifications for unscheduled speedtests.
+        if ($result->unscheduled) {
+            return;
+        }
+
         $result->loadMissing('dispatchedBy');
 
         Notification::make()
