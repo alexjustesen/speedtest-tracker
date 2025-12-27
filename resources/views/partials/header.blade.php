@@ -1,4 +1,4 @@
-<flux:header container sticky class="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700">
+<flux:header container sticky class="bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800">
     <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
     <flux:brand href="#" class="max-lg:hidden dark:hidden">
