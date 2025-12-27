@@ -18,4 +18,12 @@ return [
         'faker' => 'Faker',
         'ookla' => 'Ookla',
     ],
+
+    // Schedule status enum values
+    'schedule_status' => [
+        'healthy' => 'Healthy',
+        'unhealthy' => 'Unhealthy',
+        'failed' => 'Failed',
+        'not_tested' => 'Not Tested',
+    ],
 ];
