@@ -52,6 +52,9 @@ return [
     'links' => 'Links',
     'donate' => 'Donate',
     'donations' => 'Donations',
+    'light' => 'Light',
+    'dark' => 'Dark',
+    'system' => 'System',
 
     // Roles
     'admin' => 'Admin',
