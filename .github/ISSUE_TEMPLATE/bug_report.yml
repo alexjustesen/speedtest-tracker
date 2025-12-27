@@ -12,6 +12,8 @@ body:
         - For **feature requests or changes**, use the [feature request form](https://github.com/alexjustesen/speedtest-tracker/issues/new?template=feature_request.yml).  
         - For **general questions**, **setup or configuration help**, or if you’re not sure this is a bug, please use **[GitHub Discussions](https://github.com/alexjustesen/speedtest-tracker/discussions)** instead.
         - Any isseus with translations should be reported/solved within the [crowdin project](https://crowdin.com/project/speedtest-tracker).
+        - Any issues that can be resolved by consulting the documentation or by reviewing existing open or closed issues will be closed without further interaction.
+        - We only support installations that follow the methods described in the documentation. Installations using third-party or undocumented methods are not supported by the project.
   - type: checkboxes
     attributes:
       label: Pre-work
