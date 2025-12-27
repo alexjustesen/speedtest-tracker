@@ -600,7 +600,7 @@
                         </div>
 
                         <!-- Packet Loss Stats -->
-                        <div class="grid grid-cols-2 lg:grid-cols-5 border-t border-neutral-200 dark:border-neutral-700">
+                        <div class="grid grid-cols-2 lg:grid-cols-4 border-t border-neutral-200 dark:border-neutral-700">
                             <x-dashboard.stats-card heading="Latest">
                                 <flux:text class="text-xl">
                                     {{ number_format($chartData['packetLossStats']['latest'], 2) }}%
@@ -610,12 +610,6 @@
                             <x-dashboard.stats-card heading="Average">
                                 <flux:text class="text-xl">
                                     {{ number_format($chartData['packetLossStats']['average'], 2) }}%
-                                </flux:text>
-                            </x-dashboard.stats-card>
-
-                            <x-dashboard.stats-card heading="P95">
-                                <flux:text class="text-xl">
-                                    {{ number_format($chartData['packetLossStats']['p95'], 2) }}%
                                 </flux:text>
                             </x-dashboard.stats-card>
 
@@ -1311,8 +1305,8 @@
             });
 
             // All points are visible in scatter plot
-            const pointRadii = data.map(() => 6);
-            const pointHoverRadii = data.map(() => 8);
+            const pointRadii = data.map(() => 3);
+            const pointHoverRadii = data.map(() => 5);
 
             // Plugin to draw vertical bands behind failed results
             const verticalBandsPlugin = {
@@ -1432,6 +1426,8 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            min: 0,
+                            max: 100,
                             ticks: {
                                 color: textColor,
                                 callback: function(value) {
