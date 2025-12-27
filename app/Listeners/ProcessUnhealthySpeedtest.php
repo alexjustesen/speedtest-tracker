@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\SpeedtestBenchmarkFailed;
+use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Helpers\Number;
 use App\Mail\UnhealthySpeedtestMail;
 use App\Models\Result;
@@ -29,7 +29,7 @@ class ProcessUnhealthySpeedtest
     /**
      * Handle the event.
      */
-    public function handle(SpeedtestBenchmarkFailed $event): void
+    public function handle(SpeedtestBenchmarkUnhealthy $event): void
     {
         $result = $event->result;
 
