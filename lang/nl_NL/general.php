@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'current_version' => 'Huidige versie',
+    'latest_version' => 'Laatste versie',
+    'github' => 'GitHub',
+    'repository' => 'Repository',
+
     // Common actions
     'save' => 'Opslaan',
     'cancel' => 'Annuleren',
@@ -32,6 +37,10 @@ return [
     'created_at' => 'Aangemaakt op',
     'updated_at' => 'Bijgewerkt op',
     'url' => 'URL',
+    'server' => 'Server',
+    'servers' => 'Servers',
+    'stats' => 'Statistieken',
+    'statistics' => 'Statistieken',
 
     // Navigation
     'dashboard' => 'Dashboard',
@@ -42,6 +51,7 @@ return [
     'view_documentation' => 'Bekijk documentatie',
     'links' => 'Koppelingen',
     'donate' => 'Doneren',
+    'donations' => 'Donaties',
 
     // Roles
     'admin' => 'Beheerder',
@@ -54,12 +64,15 @@ return [
     'last_month' => 'Vorige maand',
 
     // Metrics
+    'metrics' => 'Statistieken',
     'average' => 'Gemiddeld',
     'high' => 'Hoog',
     'low' => 'Laag',
     'faster' => 'sneller',
     'slower' => 'langzamer',
     'healthy' => 'Gezond',
+    'not_measured' => 'Niet gemeten',
+    'unhealthy' => 'Ongezond',
 
     // Units
     'ms' => 'ms',

@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'current_version' => 'Aktuelle Version',
+    'latest_version' => 'Neueste Version',
+    'github' => 'GitHub',
+    'repository' => 'Repository',
+
     // Common actions
     'save' => 'Speichern',
     'cancel' => 'Abbrechen',
@@ -32,6 +37,10 @@ return [
     'created_at' => 'Erstellt am',
     'updated_at' => 'Aktualisiert am',
     'url' => 'URL',
+    'server' => 'Server',
+    'servers' => 'Server',
+    'stats' => 'Statistiken',
+    'statistics' => 'Statistiken',
 
     // Navigation
     'dashboard' => 'Dashboard',
@@ -42,6 +51,7 @@ return [
     'view_documentation' => 'Dokumentation anzeigen',
     'links' => 'Links',
     'donate' => 'Spenden',
+    'donations' => 'Spenden',
 
     // Roles
     'admin' => 'Admin',
@@ -54,12 +64,15 @@ return [
     'last_month' => 'Letzten Monat',
 
     // Metrics
+    'metrics' => 'Metriken',
     'average' => 'Durchschnitt',
     'high' => 'Hoch',
     'low' => 'Niedrig',
     'faster' => 'schneller',
     'slower' => 'langsamer',
     'healthy' => 'Gesund',
+    'not_measured' => 'Nicht gemessen',
+    'unhealthy' => 'fehlerhaft',
 
     // Units
     'ms' => 'M',

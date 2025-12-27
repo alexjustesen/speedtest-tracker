@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\SpeedtestBenchmarkFailed;
+use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Helpers\Number;
 use App\Mail\UnhealthySpeedtestMail;
 use App\Models\Result;
@@ -29,15 +29,17 @@ class ProcessUnhealthySpeedtest
     /**
      * Handle the event.
      */
-    public function handle(SpeedtestBenchmarkFailed $event): void
+    public function handle(SpeedtestBenchmarkUnhealthy $event): void
     {
         $result = $event->result;
 
-        $result->loadMissing(['dispatchedBy']);
+        // Don't send notifications for unscheduled speedtests.
+        if ($result->unscheduled) {
+            return;
+        }
 
         $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
-        $this->notifyDispatchingUser($result);
         $this->notifyMailChannels($result);
         $this->notifyWebhookChannels($result);
     }
@@ -47,11 +49,6 @@ class ProcessUnhealthySpeedtest
      */
     private function notifyAppriseChannels(Result $result): void
     {
-        // Don't send Apprise notification if dispatched by a user.
-        if (filled($result->dispatched_by)) {
-            return;
-        }
-
         if (! $this->notificationSettings->apprise_enabled || ! $this->notificationSettings->apprise_on_threshold_failure) {
             return;
         }
@@ -132,11 +129,6 @@ class ProcessUnhealthySpeedtest
      */
     private function notifyDatabaseChannels(Result $result): void
     {
-        // Don't send database notification if dispatched by a user.
-        if (filled($result->dispatched_by)) {
-            return;
-        }
-
         // Check if database notifications are enabled.
         if (! $this->notificationSettings->database_enabled || ! $this->notificationSettings->database_on_threshold_failure) {
             return;
@@ -156,37 +148,10 @@ class ProcessUnhealthySpeedtest
     }
 
     /**
-     * Notify the user who dispatched the speedtest.
-     */
-    private function notifyDispatchingUser(Result $result): void
-    {
-        if (empty($result->dispatched_by)) {
-            return;
-        }
-
-        $result->dispatchedBy->notify(
-            FilamentNotification::make()
-                ->title(__('results.speedtest_benchmark_failed'))
-                ->actions([
-                    Action::make('view')
-                        ->label(__('general.view'))
-                        ->url(route('filament.admin.resources.results.index')),
-                ])
-                ->warning()
-                ->toDatabase(),
-        );
-    }
-
-    /**
      * Notify mail channels.
      */
     private function notifyMailChannels(Result $result): void
     {
-        // Don't send mail if dispatched by a user.
-        if (filled($result->dispatched_by)) {
-            return;
-        }
-
         // Check if mail notifications are enabled.
         if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_threshold_failure) {
             return;
@@ -210,11 +175,6 @@ class ProcessUnhealthySpeedtest
      */
     private function notifyWebhookChannels(Result $result): void
     {
-        // Don't send webhook if dispatched by a user.
-        if (filled($result->dispatched_by)) {
-            return;
-        }
-
         // Check if webhook notifications are enabled.
         if (! $this->notificationSettings->webhook_enabled || ! $this->notificationSettings->webhook_on_threshold_failure) {
             return;
