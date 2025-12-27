@@ -98,6 +98,24 @@ class NotificationSettings extends Settings
 
     public ?array $apprise_channel_urls;
 
+    public bool $mail_daily_average_enabled;
+
+    public bool $mail_weekly_average_enabled;
+
+    public bool $mail_monthly_average_enabled;
+
+    public bool $apprise_daily_average_enabled;
+
+    public bool $apprise_weekly_average_enabled;
+
+    public bool $apprise_monthly_average_enabled;
+
+    public bool $webhook_daily_average_enabled;
+
+    public bool $webhook_weekly_average_enabled;
+
+    public bool $webhook_monthly_average_enabled;
+
     public static function group(): string
     {
         return 'notification';
