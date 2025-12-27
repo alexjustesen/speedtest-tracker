@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\SpeedtestBenchmarkFailed;
+use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use Filament\Actions\Action;
@@ -38,7 +38,7 @@ class UserNotificationSubscriber
     /**
      * Handle the event.
      */
-    public function handleBenchmarkFailed(SpeedtestBenchmarkFailed $event): void
+    public function handleBenchmarkFailed(SpeedtestBenchmarkUnhealthy $event): void
     {
         $result = $event->result;
 
@@ -97,7 +97,7 @@ class UserNotificationSubscriber
     {
         return [
             SpeedtestCompleted::class => 'handleCompleted',
-            SpeedtestBenchmarkFailed::class => 'handleBenchmarkFailed',
+            SpeedtestBenchmarkUnhealthy::class => 'handleBenchmarkFailed',
             SpeedtestFailed::class => 'handleFailed',
         ];
     }
