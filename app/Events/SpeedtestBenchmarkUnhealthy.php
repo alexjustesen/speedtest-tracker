@@ -6,7 +6,7 @@ use App\Models\Result;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SpeedtestBenchmarkFailed
+class SpeedtestBenchmarkUnhealthy
 {
     use Dispatchable, SerializesModels;
 

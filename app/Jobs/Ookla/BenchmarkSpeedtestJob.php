@@ -3,9 +3,9 @@
 namespace App\Jobs\Ookla;
 
 use App\Enums\ResultStatus;
-use App\Events\SpeedtestBenchmarkFailed;
+use App\Events\SpeedtestBenchmarkHealthy;
 use App\Events\SpeedtestBenchmarking;
-use App\Events\SpeedtestBenchmarkPassed;
+use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Helpers\Benchmark;
 use App\Models\Result;
 use App\Settings\ThresholdSettings;
@@ -70,8 +70,8 @@ class BenchmarkSpeedtestJob implements ShouldQueue
         ]);
 
         $this->healthy
-            ? SpeedtestBenchmarkPassed::dispatch($this->result)
-            : SpeedtestBenchmarkFailed::dispatch($this->result);
+            ? SpeedtestBenchmarkHealthy::dispatch($this->result)
+            : SpeedtestBenchmarkUnhealthy::dispatch($this->result);
     }
 
     private function benchmark(Result $result, ThresholdSettings $settings): array
