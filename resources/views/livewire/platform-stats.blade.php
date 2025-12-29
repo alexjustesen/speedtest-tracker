@@ -28,46 +28,5 @@
 
             <p class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $this->platformStats['failed'] }}</p>
         </x-filament::section>
-
-        <x-filament::section class="col-span-full" icon="tabler-chart-pie" icon-size="md">
-            <x-slot name="heading">
-                Bandwidth Quota
-            </x-slot>
-
-            <x-slot name="description">
-                Resets on {{ today()->addMonth()->startOfMonth()->format('M. jS, Y') }}
-            </x-slot>
-
-            @auth
-                <x-slot name="afterHeader">
-                    <x-filament::button
-                        href="#"
-                        tag="a"
-                        size="sm"
-                    >
-                        {{ __('general.edit') }}
-                    </x-filament::button>
-                </x-slot>
-            @endauth
-
-            <div>
-                <div class="flex justify-between mb-1">
-                    <span class="text-sm font-medium text-body">Usage</span>
-                    <span class="text-sm font-medium text-body">{{ Number::fileSize($this->platformStats['bandwidth_used']['total_bytes'] ?? 0, 2) }} of {{ $this->platformStats['bandwidth_limit'] ?? 'Unlimited' }}</span>
-                </div>
-
-                @php
-                    $used = 0;
-
-                    if (isset($this->platformStats['bandwidth_used']['total_bytes']) && isset($this->platformStats['bandwidth_limit'])) {
-                        $used = round($this->platformStats['bandwidth_used']['total_bytes'] / (\App\Helpers\FileSize::toBytes($this->platformStats['bandwidth_limit']) ?: 1) * 100);
-                    }
-                @endphp
-
-                <div class="w-full bg-zinc-200 rounded-full h-2">
-                    <div class="bg-amber-500 h-2 rounded-full" style="width: {{ min($used, 100) }}%" title="{{ number_format($used) }}%"></div>
-                </div>
-            </div>
-        </x-filament::section>
     </div>
 </div>
