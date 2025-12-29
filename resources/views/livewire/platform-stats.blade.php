@@ -5,24 +5,6 @@
             {{ __('general.statistics') }}
         </h2>
 
-        {{-- <x-filament::section class="col-span-full">
-            <div class="flex items-center justify-between">
-                <p class="text-sm/6 font-medium text-zinc-500">Quota Usage</p>
-                <a href="#" class="text-sm font-medium text-zinc-600 hover:text-amber-500 underline">Edit</a>
-            </div>
-
-            <div class="mt-2">
-                <div class="flex justify-between mb-1">
-                    <span class="text-sm font-medium text-body">Bandwidth</span>
-                    <span class="text-sm font-medium text-body">450MB of 1 GB</span>
-                </div>
-
-                <div class="w-full bg-zinc-200 rounded-full h-2">
-                    <div class="bg-amber-500 h-2 rounded-full" style="width: 45%"></div>
-                </div>
-            </div>
-        </x-filament::section> --}}
-
         <x-filament::section class="col-span-1" icon="tabler-hash" icon-size="md" :compact="true">
             <x-slot name="heading">
                 Total tests
