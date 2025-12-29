@@ -4,6 +4,7 @@ namespace App\Jobs\Ookla;
 
 use App\Actions\GetExternalIpAddress;
 use App\Enums\ResultStatus;
+use App\Events\SpeedtestFailed;
 use App\Events\SpeedtestSkipped;
 use App\Helpers\Network;
 use App\Models\Result;
@@ -47,8 +48,23 @@ class SkipSpeedtestJob implements ShouldQueue
 
         $externalIp = GetExternalIpAddress::run();
 
+        if ($externalIp['ok'] === false) {
+            $this->result->update([
+                'data->type' => 'log',
+                'data->level' => 'error',
+                'data->message' => $externalIp['body'],
+                'status' => ResultStatus::Failed,
+            ]);
+
+            SpeedtestFailed::dispatch($this->result);
+
+            $this->batch()->cancel();
+
+            return;
+        }
+
         $shouldSkip = $this->shouldSkip(
-            externalIp: $externalIp,
+            externalIp: $externalIp['body'],
         );
 
         if ($shouldSkip === false) {
@@ -76,11 +92,11 @@ class SkipSpeedtestJob implements ShouldQueue
         $skipIPs = array_filter(
             array_map(
                 'trim',
-                explode(',', config('speedtest.skip_ips')),
+                explode(',', config('speedtest.preflight.skip_ips')),
             ),
         );
 
-        if (count($skipIPs) < 1) {
+        if (empty($skipIPs)) {
             return false;
         }
 

@@ -28,7 +28,7 @@ return [
     'influxdb_test_success_body' => 'Les données de test ont été envoyées à InfluxDB, vérifiez si les données ont été reçues.',
 
     // Bulk write notifications
-    'influxdb_bulk_write_failed' => 'Échec de la construction de l\'écriture sur Influxdb.',
+    'influxdb_bulk_write_failed' => 'Impossible d\'écrire en masse sur Influxdb.',
     'influxdb_bulk_write_failed_body' => 'Consultez les journaux pour plus de détails.',
     'influxdb_bulk_write_success' => 'Charge de données en masse terminée sur Influxdb.',
     'influxdb_bulk_write_success_body' => 'Les données ont été envoyées à InfluxDB, vérifiez si les données ont été reçues.',

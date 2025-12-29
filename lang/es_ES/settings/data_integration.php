@@ -28,10 +28,17 @@ return [
     'influxdb_test_success_body' => 'Los datos de prueba han sido enviados a InfluxDB, compruebe si los datos han sido recibidos.',
 
     // Bulk write notifications
-    'influxdb_bulk_write_failed' => 'Error al construir escritura en Influxdb.',
+    'influxdb_bulk_write_failed' => 'Error al escribir en masa a Influxdb.',
     'influxdb_bulk_write_failed_body' => 'Revisa los registros para más detalles.',
     'influxdb_bulk_write_success' => 'Carga de datos en masa a Influxdb.',
     'influxdb_bulk_write_success_body' => 'Los datos han sido enviados a InfluxDB, compruebe si los datos han sido recibidos.',
+
+    // Prometheus
+    'prometheus' => 'Prometeo',
+    'prometheus_enabled' => 'Activar',
+    'prometheus_enabled_helper_text' => 'Cuando está activado, las métricas para cada prueba de velocidad nueva estarán disponibles en el punto final /prometheus.',
+    'prometheus_allowed_ips' => 'Direcciones IP permitidas',
+    'prometheus_allowed_ips_helper' => 'Lista de direcciones IP o rangos CIDR (por ejemplo, 192.168.1.0/24) permitieron acceder al extremo de las métricas. Dejar en blanco para permitir todas las IPs.',
 
     // Common labels
     'org' => 'Org',

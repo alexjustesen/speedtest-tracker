@@ -12,18 +12,28 @@ class GetExternalIpAddress
 {
     use AsAction;
 
-    public function handle(): bool|string
+    public function handle(?string $url = null): array
     {
+        $url = $url ?? config('speedtest.preflight.external_ip_url');
+
         try {
             $response = Http::retry(3, 100)
                 ->timeout(5)
-                ->get(url: 'https://icanhazip.com/');
+                ->get(url: $url);
         } catch (Throwable $e) {
-            Log::error('Failed to fetch external IP address.', [$e->getMessage()]);
+            $message = sprintf('Failed to fetch external IP address from "%s". See the logs for more details.', $url);
 
-            return false;
+            Log::error($message, [$e->getMessage()]);
+
+            return [
+                'ok' => false,
+                'body' => $message,
+            ];
         }
 
-        return Str::trim($response->body());
+        return [
+            'ok' => $response->ok(),
+            'body' => Str::of($response->body())->trim()->toString(),
+        ];
     }
 }

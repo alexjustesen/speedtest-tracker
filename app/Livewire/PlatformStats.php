@@ -14,18 +14,6 @@ use Livewire\Component;
 class PlatformStats extends Component
 {
     #[Computed]
-    public function nextSpeedtest(): ?Carbon
-    {
-        if ($schedule = config('speedtest.schedule')) {
-            $cronExpression = new CronExpression($schedule);
-
-            return Carbon::parse(time: $cronExpression->getNextRunDate(timeZone: config('app.display_timezone')));
-        }
-
-        return null;
-    }
-
-    #[Computed]
     public function platformStats(): array
     {
         $totalResults = Result::count();

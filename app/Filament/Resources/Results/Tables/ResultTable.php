@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Results\Tables;
 
 use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
+use App\Filament\Tables\Columns\ResultServerColumn;
 use App\Helpers\Number;
-use App\Jobs\TruncateResults;
 use App\Models\Result;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -50,19 +50,9 @@ class ResultTable
                     ->label(__('results.service'))
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('data.server.id')
-                    ->label(__('results.server_id'))
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->server->id', $direction);
-                    }),
-
-                TextColumn::make('data.server.name')
-                    ->label(__('results.server_name'))
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->server->name', $direction);
-                    }),
+                ResultServerColumn::make('server')
+                    ->label(__('general.server'))
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('download')
                     ->label(__('results.download'))
@@ -102,51 +92,11 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
 
-                TextColumn::make('data.download.latency.high')
-                    ->label(__('results.download_latency_high'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download->latency->high', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.download.latency.low')
-                    ->label(__('results.download_latency_low'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download->latency->low', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
                 TextColumn::make('data.upload.latency.jitter')
                     ->label(__('results.upload_latency_jitter'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query->orderBy('data->upload->latency->jitter', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.upload.latency.high')
-                    ->label(__('results.upload_latency_high'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload->latency->high', $direction);
-                    })
-                    ->formatStateUsing(function ($state) {
-                        return number_format((float) $state, 0, '.', '').' ms';
-                    }),
-
-                TextColumn::make('data.upload.latency.low')
-                    ->label(__('results.upload_latency_low'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload->latency->low', $direction);
                     })
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
@@ -172,11 +122,9 @@ class ResultTable
                     ->label(__('general.created_at'))
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
             ])
-            ->deferFilters(false)
-            ->deferColumnManager(false)
             ->filters([
                 Filter::make('created_at')
                     ->label(__('general.created_at'))
@@ -201,6 +149,7 @@ class ResultTable
                                 fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     }),
+
                 SelectFilter::make('ip_address')
                     ->label(__('results.ip_address'))
                     ->multiple()
@@ -218,6 +167,7 @@ class ResultTable
                             ->toArray();
                     })
                     ->attribute('data->interface->externalIp'),
+
                 SelectFilter::make('server_name')
                     ->label(__('results.server_name'))
                     ->multiple()
@@ -235,6 +185,25 @@ class ResultTable
                             ->toArray();
                     })
                     ->attribute('data->server->name'),
+
+                SelectFilter::make('server_id')
+                    ->label(__('results.server_id'))
+                    ->multiple()
+                    ->options(function (): array {
+                        return Result::query()
+                            ->select('data->server->id AS data_server_id')
+                            ->whereNotNull('data->server->id')
+                            ->where('status', '=', ResultStatus::Completed)
+                            ->distinct()
+                            ->orderBy('data->server->id')
+                            ->get()
+                            ->mapWithKeys(function (Result $item, int $key) {
+                                return [$item['data_server_id'] => $item['data_server_id']];
+                            })
+                            ->toArray();
+                    })
+                    ->attribute('data->server->id'),
+
                 TernaryFilter::make('scheduled')
                     ->label(__('results.scheduled'))
                     ->nullable()
@@ -246,10 +215,12 @@ class ResultTable
                         false: fn (Builder $query) => $query->where('scheduled', false),
                         blank: fn (Builder $query) => $query,
                     ),
+
                 SelectFilter::make('status')
                     ->label(__('general.status'))
                     ->multiple()
                     ->options(ResultStatus::class),
+
                 TernaryFilter::make('healthy')
                     ->label(__('general.healthy'))
                     ->nullable()
@@ -293,30 +264,15 @@ class ResultTable
             ])
             ->toolbarActions([
                 DeleteBulkAction::make(),
-            ])
-            ->headerActions([
                 ExportAction::make()
                     ->exporter(ResultExporter::class)
                     ->columnMapping(false)
                     ->modalHeading(__('results.export_all_results'))
                     ->modalDescription(__('results.export_all_results_description'))
                     ->fileName(fn (): string => 'results-'.now()->timestamp),
-                ActionGroup::make([
-                    Action::make('truncate')
-                        ->label(__('results.truncate_results'))
-                        ->action(fn () => TruncateResults::dispatch(Auth::user()))
-                        ->requiresConfirmation()
-                        ->modalHeading(__('results.truncate_results'))
-                        ->modalDescription(__('results.truncate_results_description'))
-                        ->color('danger')
-                        ->icon('heroicon-o-trash')
-                        ->hidden(fn (): bool => ! Auth::user()->is_admin),
-                ])
-                    ->dropdownPlacement('left-start'),
             ])
             ->defaultSort('id', 'desc')
             ->paginationPageOptions([10, 25, 50])
-            ->deferLoading()
             ->poll('60s');
     }
 }

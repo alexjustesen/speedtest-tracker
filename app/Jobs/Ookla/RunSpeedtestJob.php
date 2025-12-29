@@ -60,6 +60,7 @@ class RunSpeedtestJob implements ShouldQueue
             'speedtest',
             '--accept-license',
             '--accept-gdpr',
+            '--selection-details',
             '--format=json',
             $this->result->server_id ? '--server-id='.$this->result->server_id : null,
             config('speedtest.interface') ? '--interface='.config('speedtest.interface') : null,

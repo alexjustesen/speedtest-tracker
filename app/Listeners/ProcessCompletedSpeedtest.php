@@ -31,11 +31,17 @@ class ProcessCompletedSpeedtest
     {
         $result = $event->result;
 
-        $result->loadMissing(['dispatchedBy']);
+        if ($result->healthy === false) {
+            return;
+        }
+
+        // Don't send notifications for unscheduled speedtests.
+        if ($result->unscheduled) {
+            return;
+        }
 
         $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
-        $this->notifyDispatchingUser($result);
         $this->notifyMailChannels($result);
         $this->notifyWebhookChannels($result);
     }
@@ -45,11 +51,6 @@ class ProcessCompletedSpeedtest
      */
     private function notifyAppriseChannels(Result $result): void
     {
-        // Don't send Apprise notification if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || $result->healthy === false) {
-            return;
-        }
-
         // Check if Apprise notifications are enabled.
         if (! $this->notificationSettings->apprise_enabled || ! $this->notificationSettings->apprise_on_speedtest_run) {
             return;
@@ -88,7 +89,7 @@ class ProcessCompletedSpeedtest
             }
 
             Notification::route('apprise_urls', $channelUrl)
-                ->notify(new SpeedtestNotification($title, $body, 'info'));
+                ->notify(new SpeedtestNotification($title, $body, 'info', 'markdown'));
         }
     }
 
@@ -97,11 +98,6 @@ class ProcessCompletedSpeedtest
      */
     private function notifyDatabaseChannels(Result $result): void
     {
-        // Don't send database notification if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || $result->healthy === false) {
-            return;
-        }
-
         // Check if database notifications are enabled.
         if (! $this->notificationSettings->database_enabled || ! $this->notificationSettings->database_on_speedtest_run) {
             return;
@@ -121,36 +117,10 @@ class ProcessCompletedSpeedtest
     }
 
     /**
-     * Notify the user who dispatched the speedtest.
-     */
-    private function notifyDispatchingUser(Result $result): void
-    {
-        if (empty($result->dispatched_by) || ! $result->healthy) {
-            return;
-        }
-
-        $result->dispatchedBy->notify(
-            FilamentNotification::make()
-                ->title(__('results.speedtest_completed'))
-                ->actions([
-                    Action::make('view')
-                        ->label(__('general.view'))
-                        ->url(route('filament.admin.resources.results.index')),
-                ])
-                ->success()
-                ->toDatabase(),
-        );
-    }
-
-    /**
      * Notify mail channels.
      */
     private function notifyMailChannels(Result $result): void
     {
-        if (filled($result->dispatched_by) || $result->healthy === false) {
-            return;
-        }
-
         if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_speedtest_run) {
             return;
         }
@@ -172,11 +142,6 @@ class ProcessCompletedSpeedtest
      */
     private function notifyWebhookChannels(Result $result): void
     {
-        // Don't send webhook if dispatched by a user or test is unhealthy.
-        if (filled($result->dispatched_by) || $result->healthy === false) {
-            return;
-        }
-
         // Check if webhook notifications are enabled.
         if (! $this->notificationSettings->webhook_enabled || ! $this->notificationSettings->webhook_on_speedtest_run) {
             return;

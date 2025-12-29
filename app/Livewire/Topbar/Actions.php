@@ -21,6 +21,8 @@ class Actions extends Component implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 
+    public bool $showDashboard = true;
+
     public function dashboardAction(): Action
     {
         return Action::make('metrics')
@@ -65,7 +67,7 @@ class Actions extends Component implements HasActions, HasForms
             ->modalWidth('lg')
             ->modalSubmitActionLabel(__('results.start'))
             ->button()
-            ->size(Size::Medium)
+            ->size(request()->is('filament*') ? Size::Medium : Size::Large)
             ->color('primary')
             ->label(__('results.speedtest'))
             ->icon('tabler-rocket')
