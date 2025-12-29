@@ -5,17 +5,18 @@ namespace App\Filament\Pages\Settings;
 use App\Settings\GeneralSettings;
 use BackedEnum;
 use CodeWithDennis\SimpleAlert\Components\SimpleAlert;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Pages\SettingsPage;
-use Filament\Schemas\Components\Fieldset;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\HtmlString;
 
 class General extends SettingsPage
 {
@@ -44,7 +45,7 @@ class General extends SettingsPage
             ->components([
                 Tabs::make()
                     ->schema([
-                        Tab::make('Bandwidth')
+                        Tab::make('Data Usage')
                             ->icon('tabler-cloud-data-connection')
                             ->columns([
                                 'default' => 1,
@@ -53,11 +54,11 @@ class General extends SettingsPage
                             ->schema([
                                 SimpleAlert::make('data_usage_note')
                                     ->info()
-                                    ->description('Data usage is calculated based on the total downloaded and uploaded data from Ookla Speedtests only.')
+                                    ->description(new HtmlString('Data usage is calculated on the total downloaded and uploaded data from Ookla Speedtests <u>only</u>.'))
                                     ->columnSpanFull(),
 
-                                Toggle::make('data_cap_enabled')
-                                    ->label('Enable bandwidth data cap')
+                                Toggle::make('data_usage_enabled')
+                                    ->label('Enable data usage limit')
                                     ->reactive()
                                     ->columnSpanFull(),
 
@@ -66,27 +67,29 @@ class General extends SettingsPage
                                     'md' => 2,
                                 ])
                                     ->schema([
-                                        TextInput::make('data_cap_data_limit')
-                                            ->label('Data limit')
+                                        TextInput::make('data_usage_limit')
+                                            ->label('Usage limit')
                                             ->placeholder('e.g., 500GB, 1TB')
-                                            ->required(fn (Get $get) => $get('data_cap_enabled'))
+                                            ->required(fn (Get $get) => $get('data_usage_enabled'))
                                             ->columnSpanFull(),
 
-                                        TextInput::make('data_cap_warning_threshold')
-                                            ->label('Warning threshold')
+                                        Select::make('data_usage_period')
+                                            ->label('Period')
+                                            ->options([
+                                                'day' => 'Day',
+                                                'week' => 'Week',
+                                                'month' => 'Month',
+                                            ])
+                                            ->required(),
+
+                                        TextInput::make('data_usage_reset_day')
+                                            ->label('Reset day')
+                                            ->helperText('Which day of the month or week (Sunday=0, Monday=1 etc.) should the data usage reset?')
                                             ->numeric()
                                             ->integer()
-                                            ->minValue(1)
-                                            ->maxValue(100)
-                                            ->required()
-                                            ->suffix('%'),
-
-                                        Select::make('data_cap_action')
-                                            ->label('Action on limit reached')
-                                            ->options([
-                                                'notify' => 'Notify admin(s)',
-                                                'block' => 'Block and notify admin(s)',
-                                            ])
+                                            ->step(1)
+                                            ->minValue(0)
+                                            ->maxValue(31)
                                             ->required(),
                                     ])
                                     ->columnSpan([
@@ -98,27 +101,16 @@ class General extends SettingsPage
                                     'default' => 1,
                                 ])
                                     ->schema([
-                                        Fieldset::make('period_settings')
-                                            ->label('Period settings')
-                                            ->schema([
-                                                Select::make('data_cap_period')
-                                                    ->label('Period')
-                                                    ->options([
-                                                        'day' => 'Day',
-                                                        'week' => 'Week',
-                                                        'month' => 'Month',
-                                                    ])
-                                                    ->required(),
-
-                                                TextInput::make('data_cap_reset_day')
-                                                    ->label('Reset day')
-                                                    ->numeric()
-                                                    ->integer()
-                                                    ->minValue(0)
-                                                    ->maxValue(31)
-                                                    ->required(),
+                                        Radio::make('data_usage_action')
+                                            ->label('Action on limit reached')
+                                            ->options([
+                                                'notify' => 'Notify',
+                                                'block' => 'Block and notify',
                                             ])
-                                            ->columns(1),
+                                            ->descriptions([
+                                                'notify' => 'Allow speed tests but notify the admin user(s) when the limit is reached.',
+                                                'block' => 'Block further speed tests and notify the admin user(s) when the limit is reached.',
+                                            ]),
                                     ])
                                     ->columnSpan([
                                         'default' => 1,
