@@ -19,19 +19,20 @@ return [
     'enable_apprise_notifications' => 'Habilitar notificações Apprise',
     'apprise_server' => 'Servidor Apprise',
     'apprise_server_url' => 'URL do Servidor Apprise',
+    'apprise_server_url_helper' => 'A URL do seu Servidor Apprise. A URL deve terminar em /notify',
     'apprise_verify_ssl' => 'Verificar SSL',
-    'apprise_channels' => 'Canais Apprise',
-    'apprise_channel_url' => 'URL do Canal',
-    'apprise_hint_description' => 'Para obter mais informações sobre como configurar o Apprise, veja a documentação.',
-    'apprise_channel_url_helper' => 'Forneça o URL do serviço endpoint para notificações.',
+    'apprise_channels' => 'Canais de notificação',
+    'apprise_channel_url' => 'URL de serviço',
+    'apprise_hint_description' => 'Apprise permite que você envie notificações para mais de 90 serviços. Você precisa executar um servidor Apprise e configurar as URLs de serviço abaixo.',
+    'apprise_channel_url_helper' => 'Use o formato de URL Apprise. Exemplos: discord://WebhookID/Token, slack://TokenA/TokenB/TokenC',
     'test_apprise_channel' => 'Testar Apprise',
-    'apprise_channel_url_validation_error' => 'O URL do canal Apprise não deve começar com "http" ou "https". Por favor, forneça um esquema válido de URL Apprise.',
+    'apprise_channel_url_validation_error' => 'URL Apprise inválida. Deve usar o formato Apprise (por exemplo, discord://, slack://), não http:// ou https://. Consulte a documentação Apprise para obter mais informações',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
     'test_webhook_channel' => 'Testar canal webhook',
-    'webhook_hint_description' => 'Estes são webhooks genéricos. Para exemplos de payload e detalhes de implementação, consulte a documentação.',
+    'webhook_hint_description' => 'Estes são webhooks genéricos. Para exemplos de payload e detalhes de implementação, consulte a documentação. Para serviços como Discord, Ntfy e etc. por favor use Apprise.',
 
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notificar a cada execução do teste de velocidade',
