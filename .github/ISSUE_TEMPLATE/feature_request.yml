@@ -2,22 +2,28 @@ name: Feature Request
 description: Use this template for requesting a new feature or change.
 title: "[Feature] "
 labels: ["feature", "needs review"]
+
 body:
-  - type: markdown
-    attributes:
-      value: |
-        You should only use this form to request a change or new feature, to report a bug or issue use the [bug report form](https://github.com/alexjustesen/speedtest-tracker).
-        Any reqeusts for new translations should be reqeusted within the [crowdin project](https://crowdin.com/project/speedtest-tracker).
   - type: checkboxes
     attributes:
-      label: Pre-work
+      label: Welcome!
+      description: |
+        The issue tracker is for reporting bugs and feature requests only. For end-user related support questions, please use the **[GitHub Discussions](https://github.com/alexjustesen/speedtest-tracker/discussions)** instead
+
+        Please note:
+        - For **Bug reports**, use the [Bug Form](https://github.com/alexjustesen/speedtest-tracker/issues/new?template=bug_report.yml).
+        - Any requests for new translations should be requested within the [crowdin project](https://crowdin.com/project/speedtest-tracker).
+
       options:
-      - label: I have searched open and closed feature request to make sure this or similar feature request does not already exist.
+      - label: I have searched open and closed feature requests to make sure this or similar feature request does not already exist.
         required: true
-      - label: I have reviewed the [milestones](https://github.com/alexjustesen/speedtest-tracker/milestones) to ensure that this feature request, or a similar one, has not already been proposed.
+      - label: I have reviewed the [Milestones](https://github.com/alexjustesen/speedtest-tracker/milestones) to ensure that this feature request, or a similar one, has not already been proposed.
         required: true
-      - label: I agree to follow this project's [Code of Conduct]().
+      - label: This is a feature request, not a bug report or support question.
         required: true
+      - label: I agree to follow this project's [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md).
+        required: true
+
   - type: dropdown
     id: idea-section
     attributes:
@@ -28,14 +34,23 @@ body:
         - Notifications
         - Speedtest
         - Web UI/UX
+        - Other
       default: 0
     validations:
       required: true
+
   - type: textarea
     id: description
     attributes:
       label: Description
-      description: Describe the solution or feature you'd like, you should also mention if this solves a problem.
-      placeholder: Be sure to keep it clear and concise.
+      description: |
+        Describe the solution or feature you'd like. Explain what problem this solves or what value it adds.
+        **Important:** Be specific and detailed. Vague requests like "make it better" will be closed.
+      placeholder: |
+        Example:
+        - What is the feature?
+        - What problem does it solve?
+        - How should it work?
+        - Why would this be valuable?
     validations:
       required: true
