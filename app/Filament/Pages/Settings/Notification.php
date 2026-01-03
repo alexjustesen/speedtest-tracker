@@ -277,6 +277,7 @@ class Notification extends SettingsPage
                                                 ))
                                                 ->hidden(function () {
                                                     $settings = app(NotificationSettings::class);
+
                                                     return empty($settings->apprise_server_url) || ! count($settings->apprise_channel_urls ?? []);
                                                 }),
                                         ]),
