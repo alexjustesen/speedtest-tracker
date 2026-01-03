@@ -40,9 +40,9 @@ class SkipSpeedtestJob implements ShouldQueue
     public function handle(): void
     {
         /**
-         * Only skip IPs for scheduled tests.
+         * Skip if test is not scheduled or no IPs are configured to skip.
          */
-        if ($this->result->scheduled === false) {
+        if ($this->result->scheduled === false || empty(config('speedtest.preflight.skip_ips'))) {
             return;
         }
 
