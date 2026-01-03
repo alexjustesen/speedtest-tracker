@@ -25,6 +25,7 @@ return [
     'apprise_channel_url' => 'Service URL',
     'apprise_hint_description' => 'Met Apprise kan je meldingen verzenden naar meer dan 90 diensten. Je moet een Apprise server hebben draaien en onderstaande service URL\'s configureren.',
     'apprise_channel_url_helper' => 'Gebruik Apprise URL formaat. Bijvoorbeeld discord://WebhookID/Token, slack://TokenA/TokenB/TokenC',
+    'apprise_save_to_test' => 'Sla de instellingen op om de melding uit te proberen.',
     'test_apprise_channel' => 'Test Apprise',
     'apprise_channel_url_validation_error' => 'Ongeldige Apprise URL. De URL moet gebruik maken van Apprise formaat (bijv. discord://, slack://), niet http:// of https://. Zie de Apprise documentatie voor meer informatie',
 
