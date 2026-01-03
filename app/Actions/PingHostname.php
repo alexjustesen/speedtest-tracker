@@ -26,7 +26,7 @@ class PingHostname
         $data = $ping->toArray();
         unset($data['raw_output'], $data['lines']);
 
-        Log::info('Pinged hostname', [
+        Log::debug('Pinged hostname', [
             'host' => $hostname,
             'data' => $data,
         ]);
