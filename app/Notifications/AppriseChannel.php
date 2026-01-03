@@ -33,7 +33,7 @@ class AppriseChannel
         }
 
         try {
-            $request = Http::timeout(15)
+            $request = Http::timeout(5)
                 ->withHeaders([
                     'Content-Type' => 'application/json',
                 ]);
