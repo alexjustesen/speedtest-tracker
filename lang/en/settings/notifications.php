@@ -25,6 +25,7 @@ return [
     'apprise_channel_url' => 'Service URL',
     'apprise_hint_description' => 'Apprise allows you to send notifications to 90+ services. You need to run an Apprise server and configure service URLs below.',
     'apprise_channel_url_helper' => 'Use Apprise URL format. Examples: discord://WebhookID/Token, slack://TokenA/TokenB/TokenC',
+    'apprise_save_to_test' => 'Save your settings to test the notification.',
     'test_apprise_channel' => 'Test Apprise',
     'apprise_channel_url_validation_error' => 'Invalid Apprise URL. Must use Apprise format (e.g., discord://, slack://), not http:// or https://. See the Apprise documentation for more information',
 
