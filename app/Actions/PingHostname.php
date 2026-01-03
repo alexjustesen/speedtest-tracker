@@ -23,9 +23,12 @@ class PingHostname
             count: $count,
         ))->run();
 
+        $data = $ping->toArray();
+        unset($data['raw_output'], $data['lines']);
+
         Log::info('Pinged hostname', [
             'host' => $hostname,
-            'data' => $ping->toArray(),
+            'data' => $data,
         ]);
 
         return $ping;
