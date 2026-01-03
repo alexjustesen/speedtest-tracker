@@ -11,13 +11,6 @@ class TestNotification extends Notification implements ShouldQueue
     use Queueable;
 
     /**
-     * The number of times the job may be attempted.
-     *
-     * @var int
-     */
-    public $tries = 1;
-
-    /**
      * Get the notification's delivery channels.
      *
      * @return array<int, string>

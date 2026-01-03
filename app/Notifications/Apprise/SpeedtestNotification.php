@@ -10,13 +10,6 @@ class SpeedtestNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * The number of times the job may be attempted.
-     *
-     * @var int
-     */
-    public $tries = 1;
-
     public function __construct(
         public string $title,
         public string $body,
