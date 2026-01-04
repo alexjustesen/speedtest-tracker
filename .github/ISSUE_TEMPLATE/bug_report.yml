@@ -2,67 +2,100 @@ name: Bug Report
 description: Use this template to report a bug or issue.
 title: "[Question] "
 labels: ["question", "needs review"]
-body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to report this issue! We appreciate your help in improving the project. If this report is confirmed as a bug, we’ll update its type accordingly.
 
-        Please note:  
-        - For **feature requests or changes**, use the [feature request form](https://github.com/alexjustesen/speedtest-tracker/issues/new?template=feature_request.yml).  
-        - For **general questions**, **setup or configuration help**, or if you’re not sure this is a bug, please use **[GitHub Discussions](https://github.com/alexjustesen/speedtest-tracker/discussions)** instead.
-        - Any isseus with translations should be reported/solved within the [crowdin project](https://crowdin.com/project/speedtest-tracker).
+body:
   - type: checkboxes
+    id: terms
     attributes:
-      label: Pre-work
+      label: Welcome!
       description: |
-        Before opening an issue make sure you've checked the resources below first, any issues that could have been solved by reading the docs or existing issues will be closed.
+        The issue tracker is for reporting bugs and feature requests only. For end-user related support questions, please use the **[GitHub Discussions](https://github.com/alexjustesen/speedtest-tracker/discussions)** instead
+
+        Please note:
+        - For translation-related issues or requests, please use the [Crowdin project](https://crowdin.com/project/speedtest-tracker).
+        - Any issues that can be resolved by consulting the documentation or by reviewing existing open or closed issues will be closed.
+        - We only support installations that follow the methods described in the documentation. Installations using third-party or undocumented methods are not supported by the project.
+
       options:
-      - label: I have read the [docs](https://docs.speedtest-tracker.dev).
+      - label: I have read the [documentation](https://docs.speedtest-tracker.dev) and my problem was not listed in the help section.
         required: true
-      - label: I have searched open and closed issues.
+      - label: I have searched open and closed issues and my problem was not mentioned before.
+        required: true
+      - label: I have verified I am using the latest version available. You can check the latest release [here](https://github.com/alexjustesen/speedtest-tracker/releases).
         required: true
       - label: I agree to follow this project's [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md).
         required: true
+
   - type: textarea
     id: description
     attributes:
-      label: Description
-      description: Explain the issue you experienced, please be clear and concise.
-      placeholder: I went to the coffee pot and it was empty.
+      label: What did you do?
+      description: |
+        How to write a good bug report?
+
+        - Respect the issue template as much as possible.
+        - The title should be short and descriptive.
+        - Explain the conditions which led you to report this issue: the context.
+        - The context should lead to something, a problem that you’re facing.
+        - Remain clear and concise.
+        - Format your messages to help the reader focus on what matters and understand the structure of your message, use [Markdown syntax](https://help.github.com/articles/github-flavored-markdown)
     validations:
       required: true
+
   - type: textarea
     id: expected-behavior
     attributes:
       label: Expected Behavior
-      description: In a perfect world, what should have happened?
+      description: |
+        In a perfect world, what should have happened?
+        **Important:** Be specific. Vague descriptions like "it should work" are not helpful.
       placeholder: When I got to the coffee pot, it should have been full.
     validations:
       required: true
+
   - type: textarea
     id: steps-to-reproduce
     attributes:
       label: Steps to Reproduce
-      description: Describe how to reproduce the issue in repeatable steps.
+      description: |
+        Provide detailed, numbered steps that someone else can follow to reproduce the issue.
+        **Important:** Vague descriptions like "it doesn't work" or "it's broken" will result in the issue being closed.
+        Include specific actions, URLs, button clicks, and any relevant data or configuration.
       placeholder: |
         1. Go to the coffee pot.
         2. Make more coffee.
         3. Pour it into a cup.
+        4. Observe that the cup is empty instead of full.
     validations:
       required: true
+
   - type: dropdown
     id: deployment-environment
     attributes:
       label: Deployment Environment
-      description: How did you deploy the application?
+      description: How did you deploy the application? Only supported deployment methods are listed.
       options:
         - Docker Compose
         - Docker Run
-        - Other
       default: 0
     validations:
       required: true
+
+  - type: textarea
+    id: environment-configuration
+    attributes:
+      label: What is your environment & configuration?
+      description: Please add your docker compose file or docker run command used to deploy the application.
+      placeholder: Add information here.
+      value: |
+        ```yaml
+        # (paste your configuration here)
+        ```
+
+        Add more configuration information here.
+    validations:
+      required: true
+
   - type: textarea
     id: application-information
     attributes:
@@ -71,6 +104,7 @@ body:
       render: json
     validations:
       required: true
+
   - type: input
     id: browsers
     attributes:
@@ -78,9 +112,12 @@ body:
       placeholder: Chrome, Firefox, Safari, etc.
     validations:
       required: true
+
   - type: textarea
     id: logs
     attributes:
       label: Logs
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks. If you are unsure which logs to include, include all logs. You can get the logs by running `docker logs <container_id/name>`.
       render: shell
+    validations:
+      required: true

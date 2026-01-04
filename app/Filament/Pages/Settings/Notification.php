@@ -316,6 +316,7 @@ class Notification extends SettingsPage
                                             ->columnSpanFull(),
                                         Repeater::make('apprise_channel_urls')
                                             ->label(__('settings/notifications.apprise_channels'))
+                                            ->helperText(__('settings/notifications.apprise_save_to_test'))
                                             ->schema([
                                                 TextInput::make('channel_url')
                                                     ->label(__('settings/notifications.apprise_channel_url'))
@@ -333,8 +334,12 @@ class Notification extends SettingsPage
                                                 ->action(fn (Get $get) => SendAppriseTestNotification::run(
                                                     channel_urls: $get('apprise_channel_urls'),
                                                 ))
-                                                ->hidden(fn (Get $get) => ! count($get('apprise_channel_urls'))),
-                                        ])->columnSpanFull(),
+                                                ->hidden(function () {
+                                                    $settings = app(NotificationSettings::class);
+
+                                                    return empty($settings->apprise_server_url) || ! count($settings->apprise_channel_urls ?? []);
+                                                }),
+                                        ]),
                                     ]),
                             ]),
                     ])
