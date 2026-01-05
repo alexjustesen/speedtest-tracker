@@ -115,6 +115,8 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function forceHttps(): void
     {
+        URL::forceRootUrl(config('app.url'));
+
         if (! app()->environment('local') && config('app.force_https')) {
             URL::forceScheme('https');
         }
