@@ -6,7 +6,7 @@
                     <div>
                         <h2 class="flex items-center gap-x-2 text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
                             <x-tabler-rocket class="size-5" />
-                            Latest result
+                            {{ __('general.last_results') }}
                         </h2>
 
                         <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->timezone(config('app.display_timezone'))->format(config('app.datetime_format')) }}</p>

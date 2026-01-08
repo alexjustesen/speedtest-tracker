@@ -73,6 +73,10 @@ return [
     'healthy' => 'Healthy',
     'not_measured' => 'Not measured',
     'unhealthy' => 'Unhealthy',
+    'last_results' => 'Last results',
+    'total_failed' => 'Total failed tests',
+    'total_complted' => 'Total completed tests',
+    'total' => 'Total',
 
     // Units
     'ms' => 'ms',
