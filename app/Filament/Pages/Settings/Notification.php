@@ -180,7 +180,6 @@ class Notification extends SettingsPage
                                                 Checkbox::make('webhook_on_speedtest_run')
                                                     ->label(__('settings/notifications.notify_on_every_speedtest_run'))
                                                     ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper')),
-
                                                 Checkbox::make('webhook_on_threshold_failure')
                                                     ->label(__('settings/notifications.notify_on_threshold_failures'))
                                                     ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
