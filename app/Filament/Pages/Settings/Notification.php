@@ -86,10 +86,11 @@ class Notification extends SettingsPage
                                             ->columns(1)
                                             ->schema([
                                                 Checkbox::make('database_on_speedtest_run')
-                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
-
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run'))
+                                                    ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper')),
                                                 Checkbox::make('database_on_threshold_failure')
-                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
+                                                    ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
                                             ]),
 
                                         Actions::make([
@@ -119,10 +120,11 @@ class Notification extends SettingsPage
                                             ->columnSpan(1)
                                             ->schema([
                                                 Checkbox::make('mail_on_speedtest_run')
-                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
-
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run'))
+                                                    ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper')),
                                                 Checkbox::make('mail_on_threshold_failure')
-                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
+                                                    ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
                                             ]),
 
                                         Fieldset::make(__('settings/notifications.periodic_reports'))
@@ -195,10 +197,11 @@ class Notification extends SettingsPage
                                             ->columnSpan(1)
                                             ->schema([
                                                 Checkbox::make('webhook_on_speedtest_run')
-                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run')),
-
+                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run'))
+                                                    ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper')),
                                                 Checkbox::make('webhook_on_threshold_failure')
-                                                    ->label(__('settings/notifications.notify_on_threshold_failures')),
+                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
+                                                    ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
                                             ]),
 
                                         Fieldset::make(__('settings/notifications.periodic_reports'))
