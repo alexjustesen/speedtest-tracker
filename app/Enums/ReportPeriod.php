@@ -64,19 +64,9 @@ enum ReportPeriod: string
         };
     }
 
-    public function isEnabledForWebhook($settings): bool
-    {
-        return match ($this) {
-            self::Daily => $settings->webhook_enabled && $settings->webhook_daily_average_enabled,
-            self::Weekly => $settings->webhook_enabled && $settings->webhook_weekly_average_enabled,
-            self::Monthly => $settings->webhook_enabled && $settings->webhook_monthly_average_enabled,
-        };
-    }
-
     public function isAnyChannelEnabled($settings): bool
     {
         return $this->isEnabledForMail($settings)
-            || $this->isEnabledForApprise($settings)
-            || $this->isEnabledForWebhook($settings);
+            || $this->isEnabledForApprise($settings);
     }
 }

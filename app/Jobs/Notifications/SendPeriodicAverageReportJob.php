@@ -49,10 +49,5 @@ class SendPeriodicAverageReportJob implements ShouldQueue
         if ($this->period->isEnabledForApprise($settings)) {
             $notificationService->sendApprise($settings, $stats, $periodName, $periodLabel, $serverStats);
         }
-
-        // Send webhook notifications
-        if ($this->period->isEnabledForWebhook($settings)) {
-            $notificationService->sendWebhook($settings, $start, $end, $stats, $periodName, $periodLabel, $serverStats);
-        }
     }
 }

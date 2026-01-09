@@ -188,13 +188,12 @@ class Notification extends SettingsPage
                                     ->live(),
 
                                 Grid::make([
-                                    'default' => 2,
+                                    'default' => 1,
                                 ])
                                     ->hidden(fn (Get $get) => $get('webhook_enabled') !== true)
                                     ->schema([
                                         Fieldset::make(__('settings.triggers'))
                                             ->columns(1)
-                                            ->columnSpan(1)
                                             ->schema([
                                                 Checkbox::make('webhook_on_speedtest_run')
                                                     ->label(__('settings/notifications.notify_on_every_speedtest_run'))
@@ -202,23 +201,6 @@ class Notification extends SettingsPage
                                                 Checkbox::make('webhook_on_threshold_failure')
                                                     ->label(__('settings/notifications.notify_on_threshold_failures'))
                                                     ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
-                                            ]),
-
-                                        Fieldset::make(__('settings/notifications.periodic_reports'))
-                                            ->columns(1)
-                                            ->columnSpan(1)
-                                            ->schema([
-                                                Checkbox::make('webhook_daily_average_enabled')
-                                                    ->label(__('settings/notifications.daily_average_report'))
-                                                    ->helperText(__('settings/notifications.daily_average_report_helper')),
-
-                                                Checkbox::make('webhook_weekly_average_enabled')
-                                                    ->label(__('settings/notifications.weekly_average_report'))
-                                                    ->helperText(__('settings/notifications.weekly_average_report_helper')),
-
-                                                Checkbox::make('webhook_monthly_average_enabled')
-                                                    ->label(__('settings/notifications.monthly_average_report'))
-                                                    ->helperText(__('settings/notifications.monthly_average_report_helper')),
                                             ]),
 
                                         Repeater::make('webhook_urls')
@@ -295,9 +277,11 @@ class Notification extends SettingsPage
                                                     ->columnSpan(1)
                                                     ->schema([
                                                         Checkbox::make('apprise_on_speedtest_run')
-                                                            ->label(__('settings/notifications.notify_on_every_speedtest_run')),
+                                                            ->label(__('settings/notifications.notify_on_every_speedtest_run'))
+                                                            ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper')),
                                                         Checkbox::make('apprise_on_threshold_failure')
-                                                            ->label(__('settings/notifications.notify_on_threshold_failures')),
+                                                            ->label(__('settings/notifications.notify_on_threshold_failures'))
+                                                            ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
                                                     ]),
                                                 Fieldset::make(__('settings/notifications.periodic_reports'))
                                                     ->columns(1)
@@ -306,11 +290,9 @@ class Notification extends SettingsPage
                                                         Checkbox::make('apprise_daily_average_enabled')
                                                             ->label(__('settings/notifications.daily_average_report'))
                                                             ->helperText(__('settings/notifications.daily_average_report_helper')),
-
                                                         Checkbox::make('apprise_weekly_average_enabled')
                                                             ->label(__('settings/notifications.weekly_average_report'))
                                                             ->helperText(__('settings/notifications.weekly_average_report_helper')),
-
                                                         Checkbox::make('apprise_monthly_average_enabled')
                                                             ->label(__('settings/notifications.monthly_average_report'))
                                                             ->helperText(__('settings/notifications.monthly_average_report_helper')),
