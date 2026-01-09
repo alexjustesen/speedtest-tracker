@@ -121,6 +121,9 @@ class ResultForm
                         TextEntry::make('comment')
                             ->label(__('general.comment'))
                             ->state(fn (Result $result): ?string => $result->comments),
+                        TextEntry::make('schedule.name')
+                            ->label(__('results.schedule'))
+                            ->state(fn (Result $result): ?string => $result->schedule?->name),
                         Checkbox::make('scheduled')
                             ->label(__('results.scheduled')),
                         Checkbox::make('healthy')
