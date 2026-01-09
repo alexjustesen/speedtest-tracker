@@ -4,7 +4,7 @@ Performance Statistics
 ━━━━━━━━━━━━━━━━━━━━
 Download: {{ $stats['download_avg'] }} (Best: {{ $stats['download_max'] }}, Worst: {{ $stats['download_min'] }})
 Upload: {{ $stats['upload_avg'] }} (Best: {{ $stats['upload_max'] }}, Worst: {{ $stats['upload_min'] }})
-⏱Ping: {{ $stats['ping_avg'] }} (Best: {{ $stats['ping_min'] }}, Worst: {{ $stats['ping_max'] }})
+Ping: {{ $stats['ping_avg'] }} (Best: {{ $stats['ping_min'] }}, Worst: {{ $stats['ping_max'] }})
 
 Summary Statistics
 ━━━━━━━━━━━━━━━━━━━━

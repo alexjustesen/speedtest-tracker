@@ -14,7 +14,9 @@ class SendPeriodicAverageReportJob implements ShouldQueue
     use Queueable;
 
     public function __construct(
-        public ReportPeriod $period
+        public ReportPeriod $period,
+        public bool $sendMail,
+        public bool $sendApprise
     ) {}
 
     /**
@@ -39,23 +41,11 @@ class SendPeriodicAverageReportJob implements ShouldQueue
         $periodName = $this->period->getName();
         $periodLabel = $this->period->getLabel();
 
-        $mailEnabled = match ($this->period) {
-            ReportPeriod::Daily => $settings->mail_enabled && $settings->mail_daily_average_enabled,
-            ReportPeriod::Weekly => $settings->mail_enabled && $settings->mail_weekly_average_enabled,
-            ReportPeriod::Monthly => $settings->mail_enabled && $settings->mail_monthly_average_enabled,
-        };
-
-        $appriseEnabled = match ($this->period) {
-            ReportPeriod::Daily => $settings->apprise_enabled && $settings->apprise_daily_average_enabled,
-            ReportPeriod::Weekly => $settings->apprise_enabled && $settings->apprise_weekly_average_enabled,
-            ReportPeriod::Monthly => $settings->apprise_enabled && $settings->apprise_monthly_average_enabled,
-        };
-
-        if ($mailEnabled) {
+        if ($this->sendMail) {
             $notificationService->sendMail($settings, $stats, $periodName, $periodLabel);
         }
 
-        if ($appriseEnabled) {
+        if ($this->sendApprise) {
             $notificationService->sendApprise($settings, $stats, $periodName, $periodLabel);
         }
     }
