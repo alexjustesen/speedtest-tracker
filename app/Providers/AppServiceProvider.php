@@ -45,7 +45,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->defineCustomIfStatements();
         $this->defineGates();
-        $this->forceHttps();
+        $this->configureUrl();
         $this->setApiRateLimit();
         $this->registerNotificationChannels();
 
@@ -111,10 +111,12 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Force https scheme in non-local environments.
+     * Configure URL generation settings.
      */
-    protected function forceHttps(): void
+    protected function configureUrl(): void
     {
+        URL::useOrigin(config('app.url'));
+
         if (! app()->environment('local') && config('app.force_https')) {
             URL::forceScheme('https');
         }
