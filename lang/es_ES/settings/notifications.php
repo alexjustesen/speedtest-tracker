@@ -19,23 +19,27 @@ return [
     'enable_apprise_notifications' => 'Habilitar notificaciones Apprise',
     'apprise_server' => 'Servidor Apprise',
     'apprise_server_url' => 'URL del servidor',
+    'apprise_server_url_helper' => 'La URL de su Servidor Apprise. La URL debe terminar en /notify',
     'apprise_verify_ssl' => 'Verificar SSL',
-    'apprise_channels' => 'Canales de expedición',
-    'apprise_channel_url' => 'URL del canal',
-    'apprise_hint_description' => 'Para más información sobre cómo configurar Apprise, vea la documentación.',
-    'apprise_channel_url_helper' => 'Proporcionar la URL de los puntos finales del servicio para las notificaciones.',
+    'apprise_channels' => 'Canales de notificación',
+    'apprise_channel_url' => 'URL del servicio',
+    'apprise_hint_description' => 'Apprise le permite enviar notificaciones a más de 90 servicios. Necesita ejecutar un servidor Apprise y configurar las URL del servicio a continuación.',
+    'apprise_channel_url_helper' => 'Usar formato de URL de Apprise. Ejemplos: Discord',
+    'apprise_save_to_test' => 'Guarda tus ajustes para probar la notificación.',
     'test_apprise_channel' => 'Prueba de aviso',
-    'apprise_channel_url_validation_error' => 'La URL del canal Apprise no debe comenzar con "http" o "https". Por favor, proporcione un esquema de URL de Apprise válido.',
+    'apprise_channel_url_validation_error' => 'URL no válida. Debe utilizar el formato Apprise (por ejemplo, discord://, slack://), no http:// o https://. Vea la documentación de Apprise para más información',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
     'test_webhook_channel' => 'Probar canal webhook',
-    'webhook_hint_description' => 'Estos son webhooks genéricos. Para ejemplos de payload y detalles de la implementación, vea la documentación.',
+    'webhook_hint_description' => 'Estos son webhooks genéricos. Para ejemplos de payload y detalles de la implementación, vea la documentación. Para servicios como Discord, Ntfy etc por favor use Apprise.',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notificar en cada prueba de velocidad programada',
+    'notify_on_every_speedtest_run' => 'Notificar en cada prueba de velocidad programada completada',
+    'notify_on_every_speedtest_run_helper' => 'Esto enviará una notificación para cada prueba de velocidad programada completada, sólo para pruebas saludables o no benchmark',
     'notify_on_threshold_failures' => 'Notificar fallos de umbral para pruebas de velocidad programadas',
+    'notify_on_threshold_failures_helper' => 'Esto enviará una notificación cuando una prueba de velocidad programada falle cualquier umbral configurado',
 
     // Test notification messages
     'test_notifications' => [
