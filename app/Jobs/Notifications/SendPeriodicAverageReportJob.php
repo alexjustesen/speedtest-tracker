@@ -39,13 +39,23 @@ class SendPeriodicAverageReportJob implements ShouldQueue
         $periodName = $this->period->getName();
         $periodLabel = $this->period->getLabel();
 
-        // Send mail notifications
-        if ($this->period->isEnabledForMail($settings)) {
+        $mailEnabled = match ($this->period) {
+            ReportPeriod::Daily => $settings->mail_enabled && $settings->mail_daily_average_enabled,
+            ReportPeriod::Weekly => $settings->mail_enabled && $settings->mail_weekly_average_enabled,
+            ReportPeriod::Monthly => $settings->mail_enabled && $settings->mail_monthly_average_enabled,
+        };
+
+        $appriseEnabled = match ($this->period) {
+            ReportPeriod::Daily => $settings->apprise_enabled && $settings->apprise_daily_average_enabled,
+            ReportPeriod::Weekly => $settings->apprise_enabled && $settings->apprise_weekly_average_enabled,
+            ReportPeriod::Monthly => $settings->apprise_enabled && $settings->apprise_monthly_average_enabled,
+        };
+
+        if ($mailEnabled) {
             $notificationService->sendMail($settings, $stats, $periodName, $periodLabel);
         }
 
-        // Send Apprise notifications
-        if ($this->period->isEnabledForApprise($settings)) {
+        if ($appriseEnabled) {
             $notificationService->sendApprise($settings, $stats, $periodName, $periodLabel);
         }
     }

@@ -45,28 +45,4 @@ enum ReportPeriod: string
             self::Monthly => 'Monthly',
         };
     }
-
-    public function isEnabledForMail($settings): bool
-    {
-        return match ($this) {
-            self::Daily => $settings->mail_enabled && $settings->mail_daily_average_enabled,
-            self::Weekly => $settings->mail_enabled && $settings->mail_weekly_average_enabled,
-            self::Monthly => $settings->mail_enabled && $settings->mail_monthly_average_enabled,
-        };
-    }
-
-    public function isEnabledForApprise($settings): bool
-    {
-        return match ($this) {
-            self::Daily => $settings->apprise_enabled && $settings->apprise_daily_average_enabled,
-            self::Weekly => $settings->apprise_enabled && $settings->apprise_weekly_average_enabled,
-            self::Monthly => $settings->apprise_enabled && $settings->apprise_monthly_average_enabled,
-        };
-    }
-
-    public function isAnyChannelEnabled($settings): bool
-    {
-        return $this->isEnabledForMail($settings)
-            || $this->isEnabledForApprise($settings);
-    }
 }
