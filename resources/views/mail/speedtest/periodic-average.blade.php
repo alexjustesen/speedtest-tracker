@@ -30,22 +30,6 @@
 | Unhealthy Tests    | {{ $stats['unhealthy_tests'] }}         |
 </x-mail::table>
 
-@if($serverStats && count($serverStats) > 0)
-
----
-
-## Per-Server Averages
-
-<x-mail::table>
-| **Server Name** | **Tests** | **Download** | **Upload** | **Ping** |
-|:----------------|----------:|-------------:|-----------:|---------:|
-@foreach($serverStats as $server)
-| {{ $server['server_name'] }} | {{ $server['count'] }} | {{ $server['download_avg'] }} | {{ $server['upload_avg'] }} | {{ $server['ping_avg'] }} |
-@endforeach
-</x-mail::table>
-
-@endif
-
 ---
 
 <x-mail::button :url="config('app.url') . '/admin/results'">

@@ -35,19 +35,18 @@ class SendPeriodicAverageReportJob implements ShouldQueue
         }
 
         $stats = $reportService->calculateStats($results);
-        $serverStats = $reportService->calculateServerStats($results)->toArray();
 
         $periodName = $this->period->getName();
         $periodLabel = $this->period->getLabel();
 
         // Send mail notifications
         if ($this->period->isEnabledForMail($settings)) {
-            $notificationService->sendMail($settings, $stats, $periodName, $periodLabel, $serverStats);
+            $notificationService->sendMail($settings, $stats, $periodName, $periodLabel);
         }
 
         // Send Apprise notifications
         if ($this->period->isEnabledForApprise($settings)) {
-            $notificationService->sendApprise($settings, $stats, $periodName, $periodLabel, $serverStats);
+            $notificationService->sendApprise($settings, $stats, $periodName, $periodLabel);
         }
     }
 }

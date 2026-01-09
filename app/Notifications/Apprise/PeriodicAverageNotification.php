@@ -13,8 +13,7 @@ class PeriodicAverageNotification extends Notification implements ShouldQueue
     public function __construct(
         public array $stats,
         public string $period,
-        public string $periodLabel,
-        public array $serverStats,
+        public string $periodLabel
     ) {}
 
     /**
@@ -36,7 +35,6 @@ class PeriodicAverageNotification extends Notification implements ShouldQueue
             'stats' => $this->stats,
             'period' => $this->period,
             'periodLabel' => $this->periodLabel,
-            'serverStats' => $this->serverStats,
         ])->render();
 
         return AppriseMessage::create()

@@ -13,12 +13,3 @@ Successful: {{ $stats['successful_tests'] }}
 Failed: {{ $stats['failed_tests'] }}
 Healthy: {{ $stats['healthy_tests'] }}
 Unhealthy: {{ $stats['unhealthy_tests'] }}
-@if($serverStats && count($serverStats) > 0)
-
-Per-Server Averages
-━━━━━━━━━━━━━━━━━━━━
-@foreach($serverStats as $server)
-• {{ $server['server_name'] }} ({{ $server['count'] }} tests)
-  ↓ {{ $server['download_avg'] }} | ↑ {{ $server['upload_avg'] }} | ⏱️  {{ $server['ping_avg'] }}
-@endforeach
-@endif

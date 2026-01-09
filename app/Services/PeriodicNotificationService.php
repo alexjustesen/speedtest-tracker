@@ -14,8 +14,7 @@ class PeriodicNotificationService
         NotificationSettings $settings,
         array $stats,
         string $period,
-        string $periodLabel,
-        array $serverStats
+        string $periodLabel
     ): void {
         if (empty($settings->mail_recipients)) {
             return;
@@ -23,7 +22,7 @@ class PeriodicNotificationService
 
         foreach ($settings->mail_recipients as $recipient) {
             Mail::to($recipient)->queue(
-                new PeriodicAverageMail($stats, $period, $periodLabel, $serverStats)
+                new PeriodicAverageMail($stats, $period, $periodLabel)
             );
         }
     }
@@ -32,8 +31,7 @@ class PeriodicNotificationService
         NotificationSettings $settings,
         array $stats,
         string $period,
-        string $periodLabel,
-        array $serverStats
+        string $periodLabel
     ): void {
         if (empty($settings->apprise_channel_urls)) {
             return;
@@ -45,8 +43,7 @@ class PeriodicNotificationService
             ->notify(new PeriodicAverageNotification(
                 $stats,
                 $period,
-                $periodLabel,
-                $serverStats
+                $periodLabel
             ));
     }
 }

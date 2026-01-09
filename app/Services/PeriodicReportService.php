@@ -50,22 +50,4 @@ class PeriodicReportService
             'unhealthy_tests' => $unhealthyResults->count(),
         ];
     }
-
-    public function calculateServerStats(Collection $results): Collection
-    {
-        return $results
-            ->where('status', '===', ResultStatus::Completed)
-            ->groupBy('server_name')
-            ->map(function ($serverResults) {
-                return [
-                    'server_name' => $serverResults->first()->server_name ?? 'Unknown',
-                    'count' => $serverResults->count(),
-                    'download_avg' => Number::toBitRate(bits: $serverResults->avg('download') * 8, precision: 2),
-                    'upload_avg' => Number::toBitRate(bits: $serverResults->avg('upload') * 8, precision: 2),
-                    'ping_avg' => round($serverResults->avg('ping'), 2).' ms',
-                ];
-            })
-            ->values()
-            ->sortByDesc('count');
-    }
 }
