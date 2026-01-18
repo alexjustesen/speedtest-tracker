@@ -47,6 +47,24 @@ class RecentDownloadChartWidget extends ChartWidget
             ->when($this->filter === 'month', function ($query) {
                 $query->where('created_at', '>=', now()->subMonth());
             })
+            ->when($this->filter === 'mtd', function ($query) {
+                $query->where('created_at', '>=', now()->startOfMonth());
+            })
+            ->when($this->filter === '90d', function ($query) {
+                $query->where('created_at', '>=', now()->subDays(90));
+            })
+            ->when($this->filter === 'ytd', function ($query) {
+                $query->where('created_at', '>=', now()->startOfYear());
+            })
+            ->when($this->filter === '365d', function ($query) {
+                $query->where('created_at', '>=', now()->subYear());
+            })
+            ->when($this->filter === '5y', function ($query) {
+                $query->where('created_at', '>=', now()->subYears(5));
+            })
+            ->when($this->filter === '10y', function ($query) {
+                $query->where('created_at', '>=', now()->subYears(10));
+            })
             ->orderBy('created_at')
             ->get();
 
