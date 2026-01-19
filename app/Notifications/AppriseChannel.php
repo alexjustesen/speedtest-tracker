@@ -48,7 +48,7 @@ class AppriseChannel
                 $request = $request->withoutVerifying();
             }
 
-           $response = $request->post($appriseUrl, [
+            $response = $request->post($appriseUrl, [
                 'urls' => $message->urls,
                 'title' => $message->title,
                 'body' => $message->body,
