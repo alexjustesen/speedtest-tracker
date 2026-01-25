@@ -2,6 +2,7 @@
 
 namespace App\Actions\Notifications;
 
+use App\Models\Result;
 use App\Services\SpeedtestFakeResultGenerator;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Str;
@@ -43,7 +44,6 @@ class SendWebhookTestNotification
                 ->doNotSign()
                 ->dispatchSync();
         }
-
 
         Notification::make()
             ->title(__('settings/notifications.test_notifications.webhook.sent'))
