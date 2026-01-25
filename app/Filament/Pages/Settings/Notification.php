@@ -252,9 +252,12 @@ class Notification extends SettingsPage
                                                     ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper'))
                                                     ->columnSpanFull(),
                                             ]),
+                                        SimpleAlert::make('wehbook_info')
+                                            ->border()
+                                            ->info()
+                                            ->description(__('settings/notifications.apprise_save_to_test')),
                                         Repeater::make('apprise_channel_urls')
                                             ->label(__('settings/notifications.apprise_channels'))
-                                            ->helperText(__('settings/notifications.apprise_save_to_test'))
                                             ->schema([
                                                 TextInput::make('channel_url')
                                                     ->label(__('settings/notifications.apprise_channel_url'))
