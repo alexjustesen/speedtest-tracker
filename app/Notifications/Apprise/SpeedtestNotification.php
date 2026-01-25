@@ -10,6 +10,16 @@ class SpeedtestNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    /**
+     * The number of times the job may be attempted.
+     * Set to 1 to prevent duplicate notifications.
+     * Apprise may take >30s to respond (timeout), but still processes successfully.
+     * See #2653 and #2615
+     *
+     * @var int
+     */
+    public $tries = 1;
+
     public function __construct(
         public string $title,
         public string $body,
