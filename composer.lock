@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "374762e19dbfc99374c14f3f12a4ae3e",
+    "content-hash": "0a9782dcef4c31a1240deaa25a17b484",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -2364,78 +2364,6 @@
                 "source": "https://github.com/kirschbaum-development/eloquent-power-joins/tree/4.2.10"
             },
             "time": "2025-11-13T14:57:49+00:00"
-        },
-        {
-            "name": "laravel-notification-channels/telegram",
-            "version": "6.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel-notification-channels/telegram.git",
-                "reference": "289eb825f6c918b21bbda19bffb900d882c9647a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel-notification-channels/telegram/zipball/289eb825f6c918b21bbda19bffb900d882c9647a",
-                "reference": "289eb825f6c918b21bbda19bffb900d882c9647a",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/guzzle": "^7.8",
-                "illuminate/contracts": "^11.0 || ^12.0",
-                "illuminate/notifications": "^11.0 || ^12.0",
-                "illuminate/support": "^11.0 || ^12.0",
-                "php": "^8.2"
-            },
-            "require-dev": {
-                "larastan/larastan": "^3.0",
-                "mockery/mockery": "^1.4.4",
-                "orchestra/testbench": "^10.0",
-                "pestphp/pest": "^3.0",
-                "pestphp/pest-plugin-laravel": "^3.0",
-                "phpstan/extension-installer": "^1.2",
-                "phpstan/phpstan-deprecation-rules": "^2.0",
-                "phpstan/phpstan-phpunit": "^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "NotificationChannels\\Telegram\\TelegramServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "NotificationChannels\\Telegram\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Irfaq Syed",
-                    "email": "github@lukonet.net",
-                    "homepage": "https://lukonet.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Telegram Notifications Channel for Laravel",
-            "homepage": "https://github.com/laravel-notification-channels/telegram",
-            "keywords": [
-                "laravel",
-                "notification",
-                "telegram",
-                "telegram notification",
-                "telegram notifications channel"
-            ],
-            "support": {
-                "issues": "https://github.com/laravel-notification-channels/telegram/issues",
-                "source": "https://github.com/laravel-notification-channels/telegram/tree/6.0.0"
-            },
-            "time": "2025-02-25T22:59:13+00:00"
         },
         {
             "name": "laravel/framework",
