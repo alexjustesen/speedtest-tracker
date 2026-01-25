@@ -1,5 +1,7 @@
 <x-filament-panels::page class="dashboard-page">
     <div class="space-y-6 md:space-y-12">
+        <livewire:deprecated-notification-channels-banner />
+
         <livewire:next-speedtest-banner />
 
         <livewire:platform-stats />
