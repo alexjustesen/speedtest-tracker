@@ -14,8 +14,6 @@ class LogWebhookFailure
     {
         Log::error('Webhook notification failed', [
             'url' => $event->webhookUrl,
-            'attempt' => $event->attempt,
-            'http_verb' => $event->httpVerb,
             'error_type' => $event->errorType,
             'error_message' => $event->errorMessage,
         ]);

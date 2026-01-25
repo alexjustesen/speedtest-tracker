@@ -55,7 +55,7 @@ return [
         ],
         'webhook' => [
             'add' => 'Add webhook URLs!',
-            'sent' => 'Test webhook notification sent successfully.',
+            'sent' => 'Test webhook notification sent.',
             'failed' => 'Webhook notification failed.',
             'failed_body' => 'Check the logs for details.',
             'payload' => 'Testing webhook notification',

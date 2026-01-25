@@ -2,14 +2,10 @@
 
 namespace App\Actions\Notifications;
 
-use App\Models\Result;
 use App\Services\SpeedtestFakeResultGenerator;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Spatie\WebhookServer\Events\WebhookCallFailedEvent;
-use Spatie\WebhookServer\Events\WebhookCallSucceededEvent;
 use Spatie\WebhookServer\WebhookCall;
 
 class SendWebhookTestNotification
@@ -30,28 +26,9 @@ class SendWebhookTestNotification
         // Generate a fake Result (NOT saved to database)
         $fakeResult = SpeedtestFakeResultGenerator::completed();
 
-        $hasFailure = false;
-
         foreach ($webhooks as $webhook) {
-            $url = $webhook['url'];
-            $succeeded = false;
-
-            // Listen for success/failure events for this specific webhook
-            Event::listen(WebhookCallSucceededEvent::class, function ($event) use ($url, &$succeeded) {
-                if ($event->webhookUrl === $url) {
-                    $succeeded = true;
-                }
-            });
-
-            Event::listen(WebhookCallFailedEvent::class, function ($event) use ($url, &$succeeded) {
-                if ($event->webhookUrl === $url) {
-                    $succeeded = false;
-                }
-            });
-
-            // Send webhook synchronously to get immediate result
             WebhookCall::create()
-                ->url($url)
+                ->url($webhook['url'])
                 ->payload([
                     'result_id' => Str::uuid(),
                     'site_name' => __('settings/notifications.test_notifications.webhook.payload'),
@@ -65,24 +42,12 @@ class SendWebhookTestNotification
                 ])
                 ->doNotSign()
                 ->dispatchSync();
-
-            if (! $succeeded) {
-                $hasFailure = true;
-            }
         }
 
-        // Show appropriate notification based on results
-        if (! $hasFailure) {
-            Notification::make()
-                ->title(__('settings/notifications.test_notifications.webhook.sent'))
-                ->success()
-                ->send();
-        } else {
-            Notification::make()
-                ->title(__('settings/notifications.test_notifications.webhook.failed'))
-                ->body(__('settings/notifications.test_notifications.webhook.failed_body'))
-                ->danger()
-                ->send();
-        }
+
+        Notification::make()
+            ->title(__('settings/notifications.test_notifications.webhook.sent'))
+            ->success()
+            ->send();
     }
 }
