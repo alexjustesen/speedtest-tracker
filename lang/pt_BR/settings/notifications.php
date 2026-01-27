@@ -15,7 +15,7 @@ return [
     'test_mail_channel' => 'Testar canal de e-mail',
 
     // Apprise notifications
-    'apprise' => 'Informar',
+    'apprise' => 'Apprise',
     'enable_apprise_notifications' => 'Habilitar notificações Apprise',
     'apprise_server' => 'Servidor Apprise',
     'apprise_server_url' => 'URL do Servidor Apprise',
