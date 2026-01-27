@@ -20,7 +20,7 @@
                 </x-slot>
 
                 <div class="text-sm text-zinc-600 dark:text-zinc-300">
-                    <p>Need help getting started or configuring your speedtests?</p>
+                    <p>{{ __('general.documentation_description') }}</p>
                 </div>
 
                 <div class="mt-5">
@@ -45,7 +45,7 @@
                 </x-slot>
 
                 <div class="text-sm text-zinc-600 dark:text-zinc-300">
-                    <p>Support the development and maintenance of Speedtest Tracker by making a donation.</p>
+                    <p>{{ __('general.donations_description') }}</p>
                 </div>
 
                 <div class="mt-5">
