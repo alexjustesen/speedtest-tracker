@@ -72,7 +72,7 @@ class ProcessCompletedSpeedtest
             'ping' => round($result->ping).' ms',
             'download' => Number::toBitRate(bits: $result->download_bits, precision: 2),
             'upload' => Number::toBitRate(bits: $result->upload_bits, precision: 2),
-            'packetLoss' => $result->packet_loss,
+            'packetLoss' => is_numeric($result->packet_loss) ? round($result->packet_loss, precision: 2) : 'n/a',
             'speedtest_url' => $result->result_url,
             'url' => url('/admin/results'),
         ])->render();
