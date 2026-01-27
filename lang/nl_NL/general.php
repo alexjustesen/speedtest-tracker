@@ -73,6 +73,10 @@ return [
     'healthy' => 'Gezond',
     'not_measured' => 'Niet gemeten',
     'unhealthy' => 'Ongezond',
+    'last_results' => 'Laatste resultaten',
+    'total_failed' => 'Totaal mislukte tests',
+    'total_complted' => 'Totaal voltooide testen',
+    'total' => 'Totaal',
 
     // Units
     'ms' => 'ms',
