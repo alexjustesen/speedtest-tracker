@@ -37,7 +37,7 @@ class SendWebhookTestNotification
                     'ping' => $fakeResult->ping,
                     'download' => $fakeResult->download,
                     'upload' => $fakeResult->upload,
-                    'packetLoss' => $fakeResult->data['packetLoss'],
+                    'packet_loss' => $fakeResult->data['packetLoss'],
                     'speedtest_url' => $fakeResult->data['result']['url'],
                     'url' => url('/admin/results'),
                 ])
