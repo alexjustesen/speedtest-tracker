@@ -10,7 +10,7 @@ return [
     'test_database_channel' => 'Testar canal do banco de dados',
 
     // Mail notifications
-    'mail' => 'Correio',
+    'mail' => 'E-mail',
     'recipients' => 'Destinatários',
     'test_mail_channel' => 'Testar canal de e-mail',
 
