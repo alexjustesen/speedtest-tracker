@@ -51,7 +51,7 @@ class PrometheusMetricsService
             'Download speed in bytes per second',
             $labelNames
         );
-        $downloadBytesGauge->set($result->download, $labelValues);
+        $downloadBytesGauge->set($result->download ?? 0, $labelValues);
 
         // Upload speed in bytes
         $uploadBytesGauge = $registry->getOrRegisterGauge(
@@ -60,7 +60,7 @@ class PrometheusMetricsService
             'Upload speed in bytes per second',
             $labelNames
         );
-        $uploadBytesGauge->set($result->upload, $labelValues);
+        $uploadBytesGauge->set($result->upload ?? 0, $labelValues);
 
         // Download speed in bits per second
         $downloadBitsGauge = $registry->getOrRegisterGauge(
@@ -69,7 +69,7 @@ class PrometheusMetricsService
             'Download speed in bits per second',
             $labelNames
         );
-        $downloadBitsGauge->set(toBits($result->download), $labelValues);
+        $downloadBitsGauge->set(toBits($result->download ?? 0), $labelValues);
 
         // Upload speed in bits per second
         $uploadBitsGauge = $registry->getOrRegisterGauge(
@@ -78,7 +78,7 @@ class PrometheusMetricsService
             'Upload speed in bits per second',
             $labelNames
         );
-        $uploadBitsGauge->set(toBits($result->upload), $labelValues);
+        $uploadBitsGauge->set(toBits($result->upload ?? 0), $labelValues);
 
         // Ping latency in milliseconds
         $pingGauge = $registry->getOrRegisterGauge(
@@ -87,7 +87,7 @@ class PrometheusMetricsService
             'Ping latency in milliseconds',
             $labelNames
         );
-        $pingGauge->set($result->ping, $labelValues);
+        $pingGauge->set($result->ping ?? 0, $labelValues);
 
         // Ping jitter
         $pingJitterGauge = $registry->getOrRegisterGauge(
