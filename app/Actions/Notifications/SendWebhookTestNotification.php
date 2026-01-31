@@ -2,8 +2,8 @@
 
 namespace App\Actions\Notifications;
 
-use App\Models\Result;
 use App\Helpers\Number;
+use App\Models\Result;
 use App\Services\SpeedtestFakeResultGenerator;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Str;
