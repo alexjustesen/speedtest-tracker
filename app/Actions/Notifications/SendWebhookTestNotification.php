@@ -33,6 +33,8 @@ class SendWebhookTestNotification
                 ->payload([
                     'result_id' => Str::uuid(),
                     'site_name' => __('settings/notifications.test_notifications.webhook.payload'),
+                    'server_name' => $fakeResult->data['server']['name'],
+                    'server_id' => $fakeResult->data['server']['id'],
                     'isp' => $fakeResult->data['isp'],
                     'ping' => $fakeResult->ping,
                     'download' => $fakeResult->download,
