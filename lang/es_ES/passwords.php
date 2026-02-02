@@ -14,7 +14,7 @@ return [
     */
 
     'reset' => '¡Tu contraseña ha sido restablecida!',
-    'sent' => '¡Hemos enviado por correo electrónico tu enlace de restablecimiento de contraseña!',
-    'password' => 'La contraseña y la confirmación deben coincidir y contener al menos seis caracteres.',
+    'sent' => '¡Hemos enviado por correo electrónico un enlace para restablecer la contraseña!',
+    'password' => 'Ambas contraseñas deben coincidir y contener al menos seis caracteres.',
 
 ];

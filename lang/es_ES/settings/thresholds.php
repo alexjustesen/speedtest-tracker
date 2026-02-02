@@ -6,7 +6,7 @@ return [
 
     // Absolute thresholds
     'absolute' => 'Absoluto',
-    'absolute_description' => 'Los umbrales absolutos no tienen en cuenta la historia anterior y podrían ser activados en cada prueba.',
+    'absolute_description' => 'Los umbrales absolutos no tienen en cuenta el historial anterior y podrían ser activados en cada prueba.',
     'absolute_enabled' => 'Habilitar umbrales absolutos',
 
     // Metrics section

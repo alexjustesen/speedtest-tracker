@@ -3,10 +3,10 @@
 return [
     // Status enum values
     'status' => [
-        'benchmarking' => 'Marcando',
+        'benchmarking' => 'Evaluando',
         'checking' => 'Comprobando',
         'completed' => 'Completado',
-        'failed' => 'Fallo',
+        'failed' => 'Fallido',
         'running' => 'Ejecutando',
         'started' => 'Iniciado',
         'skipped' => 'Omitido',

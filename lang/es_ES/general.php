@@ -3,8 +3,8 @@
 return [
     'current_version' => 'Versión actual',
     'latest_version' => 'Última versión',
-    'github' => 'GitHub',
-    'repository' => 'Repositorio',
+    'github' => 'Repositorio',
+    'repository' => 'GitHub',
 
     // Common actions
     'save' => 'Guardar',
@@ -13,22 +13,22 @@ return [
     'edit' => 'Editar',
     'create' => 'Crear',
     'search' => 'Buscar',
-    'filter' => 'Filtro',
+    'filter' => 'Filtrar',
     'export' => 'Exportar',
     'actions' => 'Acciones',
-    'enable' => 'Activar',
+    'enable' => 'Habilitar',
     'yes' => 'Sí',
-    'no' => 'Nu',
+    'no' => 'No',
     'options' => 'Opciones',
     'details' => 'Detalles',
     'view' => 'Ver',
 
     // Common labels
     'name' => 'Nombre',
-    'email' => 'E-mail',
-    'email_address' => 'Dirección de email',
+    'email' => 'Correo electrónico',
+    'email_address' => 'Dirección de correo electrónico',
     'password' => 'Contraseña',
-    'password_confirmation' => 'Confirmación de contraseña',
+    'password_confirmation' => 'Repite la contraseña',
     'id' => 'ID',
     'status' => 'Estado',
     'message' => 'Mensaje',
@@ -43,9 +43,9 @@ return [
     'statistics' => 'Estadísticas',
 
     // Navigation
-    'dashboard' => 'Tablero',
+    'dashboard' => 'Panel de Control',
     'results' => 'Resultados',
-    'settings' => 'Ajustes',
+    'settings' => 'Configuración',
     'users' => 'Usuarios',
     'documentation' => 'Documentación',
     'view_documentation' => 'Ver documentación',
@@ -54,7 +54,7 @@ return [
     'donations' => 'Donaciones',
 
     // Roles
-    'admin' => 'Admin',
+    'admin' => 'Administrador',
     'user' => 'Usuario',
     'role' => 'Rol',
 
@@ -66,41 +66,45 @@ return [
     // Metrics
     'metrics' => 'Métricas',
     'average' => 'Promedio',
-    'high' => 'Alta',
-    'low' => 'Baja',
-    'faster' => 'más rápido',
-    'slower' => 'más lento',
+    'high' => 'Alto',
+    'low' => 'Bajo',
+    'faster' => 'Más rápido',
+    'slower' => 'Más lento',
     'healthy' => 'Saludable',
     'not_measured' => 'No medido',
-    'unhealthy' => 'Poco saludable',
+    'unhealthy' => 'Enfermo',
+    'last_results' => 'Últimos resultados',
+    'total_failed' => 'Total de pruebas fallidas',
+    'total_complted' => 'Total de pruebas completadas',
+    'total' => 'Total',
 
     // Units
-    'ms' => 'm',
+    'ms' => 'ms',
     'mbps' => 'Mbps',
 
     // Speed test metrics
-    'download' => 'Descargar',
-    'upload' => 'Subir',
+    'download' => 'Descarga',
+    'upload' => 'Subida',
     'ping' => 'Ping',
-    'jitter' => 'Jitter',
+    'jitter' => 'Variación de latencia',
 
     // Metric labels with units
-    'download_mbps' => 'Descargar (Mbps)',
-    'upload_mbps' => 'Subir (Mbps)',
+    'download_mbps' => 'Descarga (Mbps)',
+    'upload_mbps' => 'Subida (Mbps)',
     'ping_ms' => 'Ping (ms)',
-    'download_ms' => 'Descargar (ms)',
-    'upload_ms' => 'Subir (ms)',
+    'download_ms' => 'Descarga (ms)',
+    'upload_ms' => 'Subida (ms)',
     'average_ms' => 'Promedio (ms)',
     'high_ms' => 'Alto (ms)',
-    'low_ms' => 'Baja (ms)',
+    'low_ms' => 'Bajo (ms)',
     'ping_ms_label' => 'Ping (ms)',
 
     // Latency
-    'download_latency' => 'Descargar latencia',
-    'upload_latency' => 'Cargar latencia',
+    'download_latency' => 'Latencia de descarga',
+    'upload_latency' => 'Latencia de subida',
 
     // Actions
-    'run_speedtest' => 'Ejecutar el test de velocidad',
+    'run_speedtest' => 'Ejecutar prueba de velocidad',
     'list_servers' => 'Listar servidores',
     'export_current_results' => 'Exportar resultados actuales',
     'test' => 'Prueba',
@@ -109,13 +113,12 @@ return [
     'token' => 'Token',
 
     // Application
-    'speedtest_tracker' => 'Rastreador más rápido',
+    'speedtest_tracker' => 'Speedtest Tracker',
     'platform' => 'Plataforma',
 
     // Update status
     'update_available' => '¡Actualización disponible!',
     'up_to_date' => 'Actualizado',
-
     // Notifications
     'token_created' => 'Token creado',
 ];
