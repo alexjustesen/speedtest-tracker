@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ResultStatus;
 use App\Models\Result;
 use App\Settings\DataIntegrationSettings;
 use Illuminate\Support\Facades\Cache;
@@ -43,6 +44,21 @@ class PrometheusMetricsService
         $labels = $this->buildLabels($result);
         $labelNames = array_keys($labels);
         $labelValues = array_values($labels);
+
+        // Info metric - always exported so users can see test status (including failures)
+        $infoGauge = $registry->getOrRegisterGauge(
+            'speedtest_tracker',
+            'result_id',
+            'Speedtest result id',
+            $labelNames
+        );
+        $infoGauge->set($result->id, $labelValues);
+
+        // Only export numeric metrics for completed tests
+        // Failed/incomplete tests won't have valid measurements
+        if ($result->status !== ResultStatus::Completed) {
+            return;
+        }
 
         // Download speed in bytes
         $downloadBytesGauge = $registry->getOrRegisterGauge(
@@ -96,7 +112,7 @@ class PrometheusMetricsService
             'Ping jitter in milliseconds',
             $labelNames
         );
-        $pingJitterGauge->set($result->ping_jitter ?? 0, $labelValues);
+        $pingJitterGauge->set($result->ping_jitter, $labelValues);
 
         // Download jitter
         $downloadJitterGauge = $registry->getOrRegisterGauge(
@@ -105,7 +121,7 @@ class PrometheusMetricsService
             'Download jitter in milliseconds',
             $labelNames
         );
-        $downloadJitterGauge->set($result->download_jitter ?? 0, $labelValues);
+        $downloadJitterGauge->set($result->download_jitter, $labelValues);
 
         // Upload jitter
         $uploadJitterGauge = $registry->getOrRegisterGauge(
@@ -114,7 +130,7 @@ class PrometheusMetricsService
             'Upload jitter in milliseconds',
             $labelNames
         );
-        $uploadJitterGauge->set($result->upload_jitter ?? 0, $labelValues);
+        $uploadJitterGauge->set($result->upload_jitter, $labelValues);
 
         // Packet loss
         $packetLossGauge = $registry->getOrRegisterGauge(
@@ -123,7 +139,7 @@ class PrometheusMetricsService
             'Packet loss percentage',
             $labelNames
         );
-        $packetLossGauge->set($result->packet_loss ?? 0, $labelValues);
+        $packetLossGauge->set($result->packet_loss, $labelValues);
 
         // Ping latency low/high
         $pingLowGauge = $registry->getOrRegisterGauge(
@@ -132,7 +148,7 @@ class PrometheusMetricsService
             'Ping low latency in milliseconds',
             $labelNames
         );
-        $pingLowGauge->set($result->ping_low ?? 0, $labelValues);
+        $pingLowGauge->set($result->ping_low, $labelValues);
 
         $pingHighGauge = $registry->getOrRegisterGauge(
             'speedtest_tracker',
@@ -140,7 +156,7 @@ class PrometheusMetricsService
             'Ping high latency in milliseconds',
             $labelNames
         );
-        $pingHighGauge->set($result->ping_high ?? 0, $labelValues);
+        $pingHighGauge->set($result->ping_high, $labelValues);
 
         // Download latency metrics (IQM = Interquartile Mean - more reliable than average)
         $downloadLatencyIqmGauge = $registry->getOrRegisterGauge(
@@ -149,7 +165,7 @@ class PrometheusMetricsService
             'Download latency interquartile mean in milliseconds',
             $labelNames
         );
-        $downloadLatencyIqmGauge->set($result->downloadlatencyiqm ?? 0, $labelValues);
+        $downloadLatencyIqmGauge->set($result->downloadlatencyiqm, $labelValues);
 
         $downloadLatencyLowGauge = $registry->getOrRegisterGauge(
             'speedtest_tracker',
@@ -157,7 +173,7 @@ class PrometheusMetricsService
             'Download latency low in milliseconds',
             $labelNames
         );
-        $downloadLatencyLowGauge->set($result->downloadlatency_low ?? 0, $labelValues);
+        $downloadLatencyLowGauge->set($result->downloadlatency_low, $labelValues);
 
         $downloadLatencyHighGauge = $registry->getOrRegisterGauge(
             'speedtest_tracker',
@@ -165,7 +181,7 @@ class PrometheusMetricsService
             'Download latency high in milliseconds',
             $labelNames
         );
-        $downloadLatencyHighGauge->set($result->downloadlatency_high ?? 0, $labelValues);
+        $downloadLatencyHighGauge->set($result->downloadlatency_high, $labelValues);
 
         // Upload latency metrics
         $uploadLatencyIqmGauge = $registry->getOrRegisterGauge(
@@ -174,7 +190,7 @@ class PrometheusMetricsService
             'Upload latency interquartile mean in milliseconds',
             $labelNames
         );
-        $uploadLatencyIqmGauge->set($result->uploadlatencyiqm ?? 0, $labelValues);
+        $uploadLatencyIqmGauge->set($result->uploadlatencyiqm, $labelValues);
 
         $uploadLatencyLowGauge = $registry->getOrRegisterGauge(
             'speedtest_tracker',
@@ -182,7 +198,7 @@ class PrometheusMetricsService
             'Upload latency low in milliseconds',
             $labelNames
         );
-        $uploadLatencyLowGauge->set($result->uploadlatency_low ?? 0, $labelValues);
+        $uploadLatencyLowGauge->set($result->uploadlatency_low, $labelValues);
 
         $uploadLatencyHighGauge = $registry->getOrRegisterGauge(
             'speedtest_tracker',
@@ -190,7 +206,7 @@ class PrometheusMetricsService
             'Upload latency high in milliseconds',
             $labelNames
         );
-        $uploadLatencyHighGauge->set($result->uploadlatency_high ?? 0, $labelValues);
+        $uploadLatencyHighGauge->set($result->uploadlatency_high, $labelValues);
 
         // Bytes transferred during test
         $downloadedBytesGauge = $registry->getOrRegisterGauge(
@@ -199,7 +215,7 @@ class PrometheusMetricsService
             'Total bytes downloaded during test',
             $labelNames
         );
-        $downloadedBytesGauge->set($result->downloaded_bytes ?? 0, $labelValues);
+        $downloadedBytesGauge->set($result->downloaded_bytes, $labelValues);
 
         $uploadedBytesGauge = $registry->getOrRegisterGauge(
             'speedtest_tracker',
@@ -207,7 +223,7 @@ class PrometheusMetricsService
             'Total bytes uploaded during test',
             $labelNames
         );
-        $uploadedBytesGauge->set($result->uploaded_bytes ?? 0, $labelValues);
+        $uploadedBytesGauge->set($result->uploaded_bytes, $labelValues);
 
         // Test duration
         $downloadElapsedGauge = $registry->getOrRegisterGauge(
@@ -216,7 +232,7 @@ class PrometheusMetricsService
             'Download test duration in milliseconds',
             $labelNames
         );
-        $downloadElapsedGauge->set($result->download_elapsed ?? 0, $labelValues);
+        $downloadElapsedGauge->set($result->download_elapsed, $labelValues);
 
         $uploadElapsedGauge = $registry->getOrRegisterGauge(
             'speedtest_tracker',
@@ -224,7 +240,7 @@ class PrometheusMetricsService
             'Upload test duration in milliseconds',
             $labelNames
         );
-        $uploadElapsedGauge->set($result->upload_elapsed ?? 0, $labelValues);
+        $uploadElapsedGauge->set($result->upload_elapsed, $labelValues);
     }
 
     protected function buildLabels(Result $result): array
