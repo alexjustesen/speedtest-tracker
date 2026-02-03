@@ -3,10 +3,11 @@
 namespace App\Jobs\Ookla;
 
 use App\Enums\ResultStatus;
-use App\Events\SpeedtestBenchmarkFailed;
+use App\Events\SpeedtestBenchmarkHealthy;
 use App\Events\SpeedtestBenchmarking;
-use App\Events\SpeedtestBenchmarkPassed;
+use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Helpers\Benchmark;
+use App\Helpers\Number;
 use App\Models\Result;
 use App\Settings\ThresholdSettings;
 use Illuminate\Bus\Batchable;
@@ -70,8 +71,8 @@ class BenchmarkSpeedtestJob implements ShouldQueue
         ]);
 
         $this->healthy
-            ? SpeedtestBenchmarkPassed::dispatch($this->result)
-            : SpeedtestBenchmarkFailed::dispatch($this->result);
+            ? SpeedtestBenchmarkHealthy::dispatch($this->result)
+            : SpeedtestBenchmarkUnhealthy::dispatch($this->result);
     }
 
     private function benchmark(Result $result, ThresholdSettings $settings): array
@@ -83,7 +84,8 @@ class BenchmarkSpeedtestJob implements ShouldQueue
                 'bar' => 'min',
                 'passed' => Benchmark::bitrate($result->download, ['value' => $settings->absolute_download, 'unit' => 'mbps']),
                 'type' => 'absolute',
-                'value' => $settings->absolute_download,
+                'test_value' => Number::bitsToMagnitude(bits: $result->download_bits, precision: 0, magnitude: 'mbit'),
+                'benchmark_value' => $settings->absolute_download,
                 'unit' => 'mbps',
             ]);
 
@@ -97,7 +99,8 @@ class BenchmarkSpeedtestJob implements ShouldQueue
                 'bar' => 'min',
                 'passed' => filter_var(Benchmark::bitrate($result->upload, ['value' => $settings->absolute_upload, 'unit' => 'mbps']), FILTER_VALIDATE_BOOLEAN),
                 'type' => 'absolute',
-                'value' => $settings->absolute_upload,
+                'test_value' => Number::bitsToMagnitude(bits: $result->upload_bits, precision: 0, magnitude: 'mbit'),
+                'benchmark_value' => $settings->absolute_upload,
                 'unit' => 'mbps',
             ]);
 
@@ -111,7 +114,8 @@ class BenchmarkSpeedtestJob implements ShouldQueue
                 'bar' => 'max',
                 'passed' => Benchmark::ping($result->ping, ['value' => $settings->absolute_ping]),
                 'type' => 'absolute',
-                'value' => $settings->absolute_ping,
+                'test_value' => round($result->ping),
+                'benchmark_value' => $settings->absolute_ping,
                 'unit' => 'ms',
             ]);
 
