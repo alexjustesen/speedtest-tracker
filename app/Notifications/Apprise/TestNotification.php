@@ -11,6 +11,16 @@ class TestNotification extends Notification implements ShouldQueue
     use Queueable;
 
     /**
+     * The number of times the job may be attempted.
+     * Set to 1 to prevent duplicate notifications.
+     * Apprise may take >30s to respond (timeout), but still processes successfully.
+     * See #2653 and #2615
+     *
+     * @var int
+     */
+    public $tries = 1;
+
+    /**
      * Get the notification's delivery channels.
      *
      * @return array<int, string>
