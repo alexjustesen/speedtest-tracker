@@ -45,7 +45,7 @@ class SendWebhookTestNotification
                     'url' => url('/admin/results'),
                 ])
                 ->doNotSign()
-                ->dispatch();
+                ->dispatchSync();
         }
 
         Notification::make()
