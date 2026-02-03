@@ -6,9 +6,9 @@ A new speedtest on **{{ config('app.name') }}** was completed using **{{ $servic
 - **Ping:** {{ $ping }}
 - **Download:** {{ $download }}
 - **Upload:** {{ $upload }}
-@if($packetLoss)
+@filled($packetLoss)
 - **Packet Loss:** {{ $packetLoss }}%
-@endif
+@endfilled
 
 ### Links
 - [View Ookla Results]({{ $speedtest_url }})
