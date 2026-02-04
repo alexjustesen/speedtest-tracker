@@ -7,7 +7,7 @@
 
             <div class="ml-3 flex-1">
                 <p class="text-sm text-yellow-800 dark:text-yellow-300">
-                    Pushover, Discord, Slack, Telegram, Gotify, Ntfy, and Healthcheck.io notification channels are deprecated and no longer work. Please migrate to <span class="font-semibold">Apprise</span> for all notification needs.
+                    Pushover, Discord, Slack, Telegram, Gotify, Ntfy, and Healthcheck.io notification channels are deprecated and no longer work. Please use to <span class="font-semibold">Apprise</span> for all notification needs.
                 </p>
             </div>
         </div>
