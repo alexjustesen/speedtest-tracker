@@ -53,6 +53,8 @@ class CheckForInternetConnectionJob implements ShouldQueue
             return;
         }
 
+        Log::debug('Pinged failed, falling back to HTTP connectivity check');
+
         // Ping either failed or was unavailable — attempt an HTTP fallback.
         if ($this->httpFallbackSucceeds()) {
             return;
