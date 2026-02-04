@@ -10,14 +10,13 @@
         {{-- Fonts --}}
         <link href="{{ asset('fonts/filament/filament/inter/index.css') }}" rel="stylesheet" />
 
-
         {{-- Styles --}}
         <style>
             [x-cloak] {
                 display: none !important;
             }
         </style>
-        @vite('resources/css/app.css')
+        @vite('resources/css/dashboard.css')
         @filamentStyles
 
         <script>

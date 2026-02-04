@@ -53,6 +53,9 @@ return [
     'links' => 'Links',
     'donate' => 'Donate',
     'donations' => 'Donations',
+    'light' => 'Light',
+    'dark' => 'Dark',
+    'system' => 'System',
     'donations_description' => 'Support the development and maintenance of Speedtest Tracker by making a donation.',
 
     // Roles
