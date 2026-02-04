@@ -56,6 +56,7 @@ return [
         'webhook' => [
             'add' => 'Voeg webhook URL\'s toe!',
             'sent' => 'Test webhook melding verzonden.',
+            'failed' => 'Webhook notificatie is mislukt.',
             'payload' => 'Webhook melding',
         ],
     ],
