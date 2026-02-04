@@ -48,10 +48,12 @@ return [
     'settings' => 'Ajustes',
     'users' => 'Usuarios',
     'documentation' => 'Documentación',
+    'documentation_description' => '¿Necesitas ayuda para empezar o configurar tus pruebas?',
     'view_documentation' => 'Ver documentación',
     'links' => 'Enlaces',
     'donate' => 'Donar',
     'donations' => 'Donaciones',
+    'donations_description' => 'Apoya el desarrollo y mantenimiento de SpeedTracker haciendo una donación.',
 
     // Roles
     'admin' => 'Admin',
