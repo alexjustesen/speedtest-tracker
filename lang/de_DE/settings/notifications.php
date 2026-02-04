@@ -19,23 +19,27 @@ return [
     'enable_apprise_notifications' => 'Apprise Benachrichtigungen aktivieren',
     'apprise_server' => 'Apprise Server',
     'apprise_server_url' => 'Apprise Server URL',
+    'apprise_server_url_helper' => 'Die URL deines Apprise Servers. Die URL muss mit /notify enden',
     'apprise_verify_ssl' => 'SSL verifizieren',
-    'apprise_channels' => 'Apprise Kanäle',
-    'apprise_channel_url' => 'Kanal URL',
-    'apprise_hint_description' => 'Lesen Sie für weitere Informationen zum Einrichten von Apprise die Dokumentation.',
-    'apprise_channel_url_helper' => 'Geben Sie die Service Endpoint URL für Benachrichtigung an.',
+    'apprise_channels' => 'Benachrichtigungskanäle',
+    'apprise_channel_url' => 'Service URL',
+    'apprise_hint_description' => 'Apprise erlaubt es dir Benachrichtigungen zu 90+ Services zu senden. Du musst einen Apprise Server hosten und folgende Service URLs konfigurieren.',
+    'apprise_channel_url_helper' => 'Verwende ein Apprise URL Format. Beispiel: discord://WebhookID/Token, slack://TokenA/TokenB/TokenC',
+    'apprise_save_to_test' => 'Speichere deine Einstellungen um die Benachrichtigung zu Testen.',
     'test_apprise_channel' => 'Apprise testen',
-    'apprise_channel_url_validation_error' => 'Die Apprise Channel URL muss nicht mit "HTTP" oder "HTTPS" starten. Geben Sie ein valides Apprise URL Schema an.',
+    'apprise_channel_url_validation_error' => 'Ungültige Apprise URL. Es muss ein Apprise Format verwendet werden (z.B. discord://, slack://), und nicht http:// oder https://. Für mehr Informationen die Apprise Dokumentation prüfen',
 
     // Webhook
     'webhook' => 'Webhook',
     'webhooks' => 'Webhooks',
     'test_webhook_channel' => 'Webhook-Kanal testen',
-    'webhook_hint_description' => 'Dies sind allgemeine Webhooks. Für Payload-Beispiele und Implementierungsdetails lesen Sie die Dokumentation.',
+    'webhook_hint_description' => 'Dies sind generische Webhooks. Payload Beispiele und Implementations-Details s. h. Dokumentation. Für Services wie Discord',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Benachrichtigung bei jedem geplanten Geschwindigkeitstest',
+    'notify_on_every_speedtest_run' => 'Bei jedem abgeschlossenen Geschwindigkeitstest benachrichtigen',
+    'notify_on_every_speedtest_run_helper' => 'Dies wird eine Benachrichtigung für jeden abgeschlossenen Geschwindigkeitstest senden, nur für gesunde oder nicht markierte Tests',
     'notify_on_threshold_failures' => 'Benachrichtigung bei Schwellenausfällen für geplante Geschwindigkeitstests',
+    'notify_on_threshold_failures_helper' => 'Dies wird eine Benachrichtigung senden, wenn ein geplanter Geschwindigkeitstest keine konfigurierten Schwellwerte auslässt',
 
     // Test notification messages
     'test_notifications' => [

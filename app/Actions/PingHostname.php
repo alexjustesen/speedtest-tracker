@@ -6,26 +6,43 @@ use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Spatie\Ping\Ping;
 use Spatie\Ping\PingResult;
+use Throwable;
 
 class PingHostname
 {
     use AsAction;
 
-    public function handle(?string $hostname = null, int $count = 1): PingResult
+    /**
+     * Attempt to ping the given hostname. Returns null when the ping binary
+     * is unavailable or another OS-level error prevents execution.
+     */
+    public function handle(?string $hostname = null, int $count = 1): ?PingResult
     {
         $hostname = $hostname ?? config('speedtest.preflight.internet_check_hostname');
 
         // Remove protocol if present
         $hostname = preg_replace('#^https?://#', '', $hostname);
 
-        $ping = (new Ping(
-            hostname: $hostname,
-            count: $count,
-        ))->run();
+        try {
+            $ping = (new Ping(
+                hostname: $hostname,
+                count: $count,
+            ))->run();
+        } catch (Throwable $e) {
+            Log::debug('Ping command unavailable', [
+                'host' => $hostname,
+                'error' => $e->getMessage(),
+            ]);
 
-        Log::info('Pinged hostname', [
+            return null;
+        }
+
+        $data = $ping->toArray();
+        unset($data['raw_output'], $data['lines']);
+
+        Log::debug('Pinged hostname', [
             'host' => $hostname,
-            'data' => $ping->toArray(),
+            'data' => $data,
         ]);
 
         return $ping;

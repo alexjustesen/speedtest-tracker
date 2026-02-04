@@ -48,6 +48,7 @@ return [
     'settings' => 'Settings',
     'users' => 'Users',
     'documentation' => 'Documentation',
+    'documentation_description' => 'Need help getting started or configuring your speedtests?',
     'view_documentation' => 'View documentation',
     'links' => 'Links',
     'donate' => 'Donate',
@@ -55,6 +56,7 @@ return [
     'light' => 'Light',
     'dark' => 'Dark',
     'system' => 'System',
+    'donations_description' => 'Support the development and maintenance of Speedtest Tracker by making a donation.',
 
     // Roles
     'admin' => 'Admin',
@@ -76,6 +78,10 @@ return [
     'healthy' => 'Healthy',
     'not_measured' => 'Not measured',
     'unhealthy' => 'Unhealthy',
+    'last_results' => 'Last results',
+    'total_failed' => 'Total failed tests',
+    'total_complted' => 'Total completed tests',
+    'total' => 'Total',
 
     // Units
     'ms' => 'ms',

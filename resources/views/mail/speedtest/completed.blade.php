@@ -12,7 +12,9 @@ A new speedtest was completed using **{{ $service }}**.
 | Ping        | {{ $ping }}                |
 | Download    | {{ $download }}            |
 | Upload      | {{ $upload }}              |
+@filled($packetLoss)
 | Packet Loss | {{ $packetLoss }} **%**    |
+@endfilled
 
 
 </x-mail::table>

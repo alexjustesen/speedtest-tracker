@@ -1,8 +1,8 @@
 // https://aka.ms/devcontainer.json
 {
-	"name": "Existing Docker Compose (Extend)",
+	"name": "Speedtest Tracker Dev Environment",
 	"dockerComposeFile": [
-		"../docker-compose.yml"
+		"../compose.yaml"
 	],
 	"service": "laravel.test",
 	"workspaceFolder": "/var/www/html",
@@ -20,7 +20,7 @@
 		}
 	},
 	"remoteUser": "sail",
-	"postCreateCommand": "chown -R 1000:1000 /var/www/html 2>/dev/null || true"
+	"postCreateCommand": "composer install && npm install && npm run build && touch database/database.sqlite && php artisan migrate:fresh --force"
 	// "forwardPorts": [],
 	// "runServices": [],
 	// "shutdownAction": "none",

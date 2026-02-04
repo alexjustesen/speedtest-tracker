@@ -25,6 +25,7 @@ return [
     'apprise_channel_url' => 'Service URL',
     'apprise_hint_description' => 'Apprise allows you to send notifications to 90+ services. You need to run an Apprise server and configure service URLs below.',
     'apprise_channel_url_helper' => 'Use Apprise URL format. Examples: discord://WebhookID/Token, slack://TokenA/TokenB/TokenC',
+    'apprise_save_to_test' => 'Save your settings to test the notification.',
     'test_apprise_channel' => 'Test Apprise',
     'apprise_channel_url_validation_error' => 'Invalid Apprise URL. Must use Apprise format (e.g., discord://, slack://), not http:// or https://. See the Apprise documentation for more information',
 
@@ -35,8 +36,10 @@ return [
     'webhook_hint_description' => 'These are generic webhooks. For payload examples and implementation details, view the documentation. For services like Discord, Ntfy etc please use Apprise.',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notify on every scheduled speedtest run',
+    'notify_on_every_speedtest_run' => 'Notify on every completed scheduled speedtest run',
+    'notify_on_every_speedtest_run_helper' => 'This will send a notification for every completed scheduled speedtest run, only for healthy or unbenchmarked tests',
     'notify_on_threshold_failures' => 'Notify on threshold failures for scheduled speedtests',
+    'notify_on_threshold_failures_helper' => 'This will send a notification when a scheduled speedtest fails any configured thresholds',
 
     // Test notification messages
     'test_notifications' => [
@@ -53,6 +56,7 @@ return [
         'webhook' => [
             'add' => 'Add webhook URLs!',
             'sent' => 'Test webhook notification sent.',
+            'failed' => 'Webhook notification failed.',
             'payload' => 'Testing webhook notification',
         ],
     ],
