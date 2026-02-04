@@ -1,31 +1,33 @@
 @import 'tailwindcss';
-@import './custom.css';
+@import '../../vendor/livewire/flux/dist/flux.css';
 
-/* Safelist max-width utilities to always generate them */
-@source inline("max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl,full,min,max,fit,prose,screen-sm,screen-md,screen-lg,screen-xl,screen-2xl}");
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* Required by all components */
-@import '../../vendor/filament/support/resources/css/index.css';
+/* Re-assign Flux's gray of choice... */
+@theme {
+    --color-zinc-50: var(--color-neutral-50);
+    --color-zinc-100: var(--color-neutral-100);
+    --color-zinc-200: var(--color-neutral-200);
+    --color-zinc-300: var(--color-neutral-300);
+    --color-zinc-400: var(--color-neutral-400);
+    --color-zinc-500: var(--color-neutral-500);
+    --color-zinc-600: var(--color-neutral-600);
+    --color-zinc-700: var(--color-neutral-700);
+    --color-zinc-800: var(--color-neutral-800);
+    --color-zinc-900: var(--color-neutral-900);
+    --color-zinc-950: var(--color-neutral-950);
+}
 
-/* Required by actions and tables */
-@import '../../vendor/filament/actions/resources/css/index.css';
+@theme {
+    --color-accent: var(--color-amber-400);
+    --color-accent-content: var(--color-amber-600);
+    --color-accent-foreground: var(--color-amber-950);
+}
 
-/* Required by actions, forms and tables */
-@import '../../vendor/filament/forms/resources/css/index.css';
-
-/* Required by actions and infolists */
-@import '../../vendor/filament/infolists/resources/css/index.css';
-
-/* Required by notifications */
-/* @import '../../vendor/filament/notifications/resources/css/index.css'; */
-
-/* Required by actions, infolists, forms, schemas and tables */
-@import '../../vendor/filament/schemas/resources/css/index.css';
-
-/* Required by tables */
-/* @import '../../vendor/filament/tables/resources/css/index.css'; */
-
-/* Required by widgets */
-@import '../../vendor/filament/widgets/resources/css/index.css';
-
-@variant dark (&:where(.dark, .dark *));
+@layer theme {
+    .dark {
+        --color-accent: var(--color-amber-400);
+        --color-accent-content: var(--color-amber-400);
+        --color-accent-foreground: var(--color-amber-950);
+    }
+}
