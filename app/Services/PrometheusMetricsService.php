@@ -105,142 +105,35 @@ class PrometheusMetricsService
         );
         $pingGauge->set($result->ping, $labelValues);
 
-        // Ping jitter
-        $pingJitterGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'ping_jitter_ms',
-            'Ping jitter in milliseconds',
-            $labelNames
-        );
-        $pingJitterGauge->set($result->ping_jitter, $labelValues);
+        // Jitter metrics - optional, may not be present in all test results
+        $this->registerGaugeIfNotNull($registry, 'ping_jitter_ms', 'Ping jitter in milliseconds', $labelNames, $labelValues, $result->ping_jitter);
+        $this->registerGaugeIfNotNull($registry, 'download_jitter_ms', 'Download jitter in milliseconds', $labelNames, $labelValues, $result->download_jitter);
+        $this->registerGaugeIfNotNull($registry, 'upload_jitter_ms', 'Upload jitter in milliseconds', $labelNames, $labelValues, $result->upload_jitter);
 
-        // Download jitter
-        $downloadJitterGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'download_jitter_ms',
-            'Download jitter in milliseconds',
-            $labelNames
-        );
-        $downloadJitterGauge->set($result->download_jitter, $labelValues);
+        // Packet loss - optional
+        $this->registerGaugeIfNotNull($registry, 'packet_loss_percent', 'Packet loss percentage', $labelNames, $labelValues, $result->packet_loss);
 
-        // Upload jitter
-        $uploadJitterGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'upload_jitter_ms',
-            'Upload jitter in milliseconds',
-            $labelNames
-        );
-        $uploadJitterGauge->set($result->upload_jitter, $labelValues);
+        // Ping latency metrics - optional
+        $this->registerGaugeIfNotNull($registry, 'ping_low_ms', 'Ping low latency in milliseconds', $labelNames, $labelValues, $result->ping_low);
+        $this->registerGaugeIfNotNull($registry, 'ping_high_ms', 'Ping high latency in milliseconds', $labelNames, $labelValues, $result->ping_high);
 
-        // Packet loss
-        $packetLossGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'packet_loss_percent',
-            'Packet loss percentage',
-            $labelNames
-        );
-        $packetLossGauge->set($result->packet_loss, $labelValues);
+        // Download latency metrics - optional (IQM = Interquartile Mean - more reliable than average)
+        $this->registerGaugeIfNotNull($registry, 'download_latency_iqm_ms', 'Download latency interquartile mean in milliseconds', $labelNames, $labelValues, $result->downloadlatencyiqm);
+        $this->registerGaugeIfNotNull($registry, 'download_latency_low_ms', 'Download latency low in milliseconds', $labelNames, $labelValues, $result->downloadlatency_low);
+        $this->registerGaugeIfNotNull($registry, 'download_latency_high_ms', 'Download latency high in milliseconds', $labelNames, $labelValues, $result->downloadlatency_high);
 
-        // Ping latency low/high
-        $pingLowGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'ping_low_ms',
-            'Ping low latency in milliseconds',
-            $labelNames
-        );
-        $pingLowGauge->set($result->ping_low, $labelValues);
+        // Upload latency metrics - optional
+        $this->registerGaugeIfNotNull($registry, 'upload_latency_iqm_ms', 'Upload latency interquartile mean in milliseconds', $labelNames, $labelValues, $result->uploadlatencyiqm);
+        $this->registerGaugeIfNotNull($registry, 'upload_latency_low_ms', 'Upload latency low in milliseconds', $labelNames, $labelValues, $result->uploadlatency_low);
+        $this->registerGaugeIfNotNull($registry, 'upload_latency_high_ms', 'Upload latency high in milliseconds', $labelNames, $labelValues, $result->uploadlatency_high);
 
-        $pingHighGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'ping_high_ms',
-            'Ping high latency in milliseconds',
-            $labelNames
-        );
-        $pingHighGauge->set($result->ping_high, $labelValues);
+        // Bytes transferred during test - optional
+        $this->registerGaugeIfNotNull($registry, 'downloaded_bytes', 'Total bytes downloaded during test', $labelNames, $labelValues, $result->downloaded_bytes);
+        $this->registerGaugeIfNotNull($registry, 'uploaded_bytes', 'Total bytes uploaded during test', $labelNames, $labelValues, $result->uploaded_bytes);
 
-        // Download latency metrics (IQM = Interquartile Mean - more reliable than average)
-        $downloadLatencyIqmGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'download_latency_iqm_ms',
-            'Download latency interquartile mean in milliseconds',
-            $labelNames
-        );
-        $downloadLatencyIqmGauge->set($result->downloadlatencyiqm, $labelValues);
-
-        $downloadLatencyLowGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'download_latency_low_ms',
-            'Download latency low in milliseconds',
-            $labelNames
-        );
-        $downloadLatencyLowGauge->set($result->downloadlatency_low, $labelValues);
-
-        $downloadLatencyHighGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'download_latency_high_ms',
-            'Download latency high in milliseconds',
-            $labelNames
-        );
-        $downloadLatencyHighGauge->set($result->downloadlatency_high, $labelValues);
-
-        // Upload latency metrics
-        $uploadLatencyIqmGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'upload_latency_iqm_ms',
-            'Upload latency interquartile mean in milliseconds',
-            $labelNames
-        );
-        $uploadLatencyIqmGauge->set($result->uploadlatencyiqm, $labelValues);
-
-        $uploadLatencyLowGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'upload_latency_low_ms',
-            'Upload latency low in milliseconds',
-            $labelNames
-        );
-        $uploadLatencyLowGauge->set($result->uploadlatency_low, $labelValues);
-
-        $uploadLatencyHighGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'upload_latency_high_ms',
-            'Upload latency high in milliseconds',
-            $labelNames
-        );
-        $uploadLatencyHighGauge->set($result->uploadlatency_high, $labelValues);
-
-        // Bytes transferred during test
-        $downloadedBytesGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'downloaded_bytes',
-            'Total bytes downloaded during test',
-            $labelNames
-        );
-        $downloadedBytesGauge->set($result->downloaded_bytes, $labelValues);
-
-        $uploadedBytesGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'uploaded_bytes',
-            'Total bytes uploaded during test',
-            $labelNames
-        );
-        $uploadedBytesGauge->set($result->uploaded_bytes, $labelValues);
-
-        // Test duration
-        $downloadElapsedGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'download_elapsed_ms',
-            'Download test duration in milliseconds',
-            $labelNames
-        );
-        $downloadElapsedGauge->set($result->download_elapsed, $labelValues);
-
-        $uploadElapsedGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'upload_elapsed_ms',
-            'Upload test duration in milliseconds',
-            $labelNames
-        );
-        $uploadElapsedGauge->set($result->upload_elapsed, $labelValues);
+        // Test duration - optional
+        $this->registerGaugeIfNotNull($registry, 'download_elapsed_ms', 'Download test duration in milliseconds', $labelNames, $labelValues, $result->download_elapsed);
+        $this->registerGaugeIfNotNull($registry, 'upload_elapsed_ms', 'Upload test duration in milliseconds', $labelNames, $labelValues, $result->upload_elapsed);
     }
 
     protected function buildLabels(Result $result): array
@@ -261,5 +154,28 @@ class PrometheusMetricsService
     protected function emptyMetrics(): string
     {
         return "# no data available\n";
+    }
+
+    /**
+     * Register a gauge metric only if the value is not null.
+     * Follows Prometheus best practice of not exporting missing metrics.
+     */
+    protected function registerGaugeIfNotNull(
+        CollectorRegistry $registry,
+        string $name,
+        string $help,
+        array $labelNames,
+        array $labelValues,
+        mixed $value
+    ): void {
+        if ($value !== null) {
+            $gauge = $registry->getOrRegisterGauge(
+                'speedtest_tracker',
+                $name,
+                $help,
+                $labelNames
+            );
+            $gauge->set($value, $labelValues);
+        }
     }
 }
