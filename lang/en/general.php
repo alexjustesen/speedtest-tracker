@@ -48,10 +48,15 @@ return [
     'settings' => 'Settings',
     'users' => 'Users',
     'documentation' => 'Documentation',
+    'documentation_description' => 'Need help getting started or configuring your speedtests?',
     'view_documentation' => 'View documentation',
     'links' => 'Links',
     'donate' => 'Donate',
     'donations' => 'Donations',
+    'light' => 'Light',
+    'dark' => 'Dark',
+    'system' => 'System',
+    'donations_description' => 'Support the development and maintenance of Speedtest Tracker by making a donation.',
 
     // Roles
     'admin' => 'Admin',

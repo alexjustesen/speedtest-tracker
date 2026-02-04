@@ -25,6 +25,7 @@ return [
     'apprise_channel_url' => 'Service URL',
     'apprise_hint_description' => 'Met Apprise kan je meldingen verzenden naar meer dan 90 diensten. Je moet een Apprise server hebben draaien en onderstaande service URL\'s configureren.',
     'apprise_channel_url_helper' => 'Gebruik Apprise URL formaat. Bijvoorbeeld discord://WebhookID/Token, slack://TokenA/TokenB/TokenC',
+    'apprise_save_to_test' => 'Sla de instellingen op om de melding uit te proberen.',
     'test_apprise_channel' => 'Test Apprise',
     'apprise_channel_url_validation_error' => 'Ongeldige Apprise URL. De URL moet gebruik maken van Apprise formaat (bijv. discord://, slack://), niet http:// of https://. Zie de Apprise documentatie voor meer informatie',
 
@@ -35,8 +36,10 @@ return [
     'webhook_hint_description' => 'Dit zijn algemene webhooks. Voor payload voorbeelden en implementatiegegevens, bekijk de documentatie. Voor diensten zoals Discord, Ntfy etc. gebruik Apprise.',
 
     // Common notification messages
-    'notify_on_every_speedtest_run' => 'Notificatie bij elke geplande snelheidstest',
+    'notify_on_every_speedtest_run' => 'Melding voor elke voltooide geplande snelheidstest',
+    'notify_on_every_speedtest_run_helper' => 'Dit zal een melding sturen voor elke voltooide snelheidstest draaien, alleen voor gezonde of niet gecontroleerde tests',
     'notify_on_threshold_failures' => 'Melding bij drempelfouten voor geplande snelheidstests',
+    'notify_on_threshold_failures_helper' => 'Dit zal een melding sturen wanneer een geplande snelheidstest elke geconfigureerde drempelwaarde mislukt',
 
     // Test notification messages
     'test_notifications' => [

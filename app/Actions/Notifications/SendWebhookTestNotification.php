@@ -2,6 +2,7 @@
 
 namespace App\Actions\Notifications;
 
+use App\Helpers\Number;
 use App\Models\Result;
 use App\Services\SpeedtestFakeResultGenerator;
 use Filament\Notifications\Notification;
@@ -33,16 +34,18 @@ class SendWebhookTestNotification
                 ->payload([
                     'result_id' => Str::uuid(),
                     'site_name' => __('settings/notifications.test_notifications.webhook.payload'),
+                    'server_name' => $fakeResult->data['server']['name'],
+                    'server_id' => $fakeResult->data['server']['id'],
                     'isp' => $fakeResult->data['isp'],
-                    'ping' => $fakeResult->ping,
-                    'download' => $fakeResult->download,
-                    'upload' => $fakeResult->upload,
+                    'ping' => round($fakeResult->ping),
+                    'download' => Number::bitsToMagnitude(bits: $fakeResult->upload, precision: 0, magnitude: 'mbit'),
+                    'upload' => Number::bitsToMagnitude(bits: $fakeResult->download, precision: 0, magnitude: 'mbit'),
                     'packet_loss' => $fakeResult->data['packetLoss'],
                     'speedtest_url' => $fakeResult->data['result']['url'],
                     'url' => url('/admin/results'),
                 ])
                 ->doNotSign()
-                ->dispatch();
+                ->dispatchSync();
         }
 
         Notification::make()
