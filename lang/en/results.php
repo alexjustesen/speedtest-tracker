@@ -37,6 +37,7 @@ return [
     'isp' => 'ISP',
     'ip_address' => 'IP address',
     'scheduled' => 'Scheduled',
+    'schedule' => 'Schedule',
 
     // Filters
     'only_healthy_speedtests' => 'Only healthy speedtests',
