@@ -32,8 +32,13 @@ class AppriseChannel
             return;
         }
 
+        Log::debug('Attempting to send Apprise notification', [
+            'channel' => $message->urls,
+            'instance' => $appriseUrl,
+        ]);
+
         try {
-            $request = Http::timeout(30)
+            $request = Http::timeout(60)
                 ->withHeaders([
                     'Content-Type' => 'application/json',
                 ]);
@@ -57,7 +62,7 @@ class AppriseChannel
                 throw new Exception('Apprise returned an error, please check Apprise logs for details');
             }
 
-            Log::info('Apprise notification sent', [
+            Log::debug('Apprise notification sent', [
                 'channel' => $message->urls,
                 'instance' => $appriseUrl,
             ]);
