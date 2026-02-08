@@ -1,6 +1,8 @@
 <?php
 
 use App\Actions\CheckForScheduledSpeedtests;
+use App\Actions\Notifications\Average\CheckAndSendPeriodicAverageNotifications;
+use App\Enums\ReportPeriod;
 use Illuminate\Support\Facades\Schedule;
 
 /**
@@ -27,4 +29,28 @@ Schedule::daily()
 Schedule::everyMinute()
     ->group(function () {
         Schedule::call(fn () => CheckForScheduledSpeedtests::run());
+    });
+
+/**
+ * Send daily average report at 6 AM.
+ */
+Schedule::dailyAt('00:05')
+    ->group(function () {
+        Schedule::call(fn () => CheckAndSendPeriodicAverageNotifications::run(ReportPeriod::Daily));
+    });
+
+/**
+ * Send weekly average report every Monday at 6 AM.
+ */
+Schedule::weeklyOn(1, '00:05')
+    ->group(function () {
+        Schedule::call(fn () => CheckAndSendPeriodicAverageNotifications::run(ReportPeriod::Weekly));
+    });
+
+/**
+ * Send monthly average report on the 1st of each month at 6 AM.
+ */
+Schedule::monthlyOn(1, '00:05')
+    ->group(function () {
+        Schedule::call(fn () => CheckAndSendPeriodicAverageNotifications::run(ReportPeriod::Monthly));
     });

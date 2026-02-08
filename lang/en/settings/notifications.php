@@ -63,4 +63,13 @@ return [
 
     // Helper text
     'threshold_helper_text' => 'Threshold notifications will be sent to the /fail route in the URL.',
+
+    // Periodic reports
+    'periodic_reports' => 'Periodic Reports',
+    'daily_average_report' => 'Daily Average Report',
+    'daily_average_report_helper' => 'Sends daily average statistics every day at midnight',
+    'weekly_average_report' => 'Weekly Average Report',
+    'weekly_average_report_helper' => 'Sends weekly average statistics every Monday at midnight',
+    'monthly_average_report' => 'Monthly Average Report',
+    'monthly_average_report_helper' => 'Sends monthly average statistics on the 1st of each month at midnight',
 ];
