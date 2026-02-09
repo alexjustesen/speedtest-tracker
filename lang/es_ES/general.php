@@ -13,22 +13,22 @@ return [
     'edit' => 'Editar',
     'create' => 'Crear',
     'search' => 'Buscar',
-    'filter' => 'Filtro',
+    'filter' => 'Filtrar',
     'export' => 'Exportar',
     'actions' => 'Acciones',
     'enable' => 'Activar',
     'yes' => 'Sí',
-    'no' => 'Nu',
+    'no' => 'No',
     'options' => 'Opciones',
     'details' => 'Detalles',
     'view' => 'Ver',
 
     // Common labels
     'name' => 'Nombre',
-    'email' => 'E-mail',
-    'email_address' => 'Dirección de email',
+    'email' => 'Correo electrónico',
+    'email_address' => 'Dirección de correo electrónico',
     'password' => 'Contraseña',
-    'password_confirmation' => 'Confirmación de contraseña',
+    'password_confirmation' => 'Repite la contraseña',
     'id' => 'ID',
     'status' => 'Estado',
     'message' => 'Mensaje',
@@ -43,7 +43,7 @@ return [
     'statistics' => 'Estadísticas',
 
     // Navigation
-    'dashboard' => 'Tablero',
+    'dashboard' => 'Panel de control',
     'results' => 'Resultados',
     'settings' => 'Ajustes',
     'users' => 'Usuarios',
@@ -56,7 +56,7 @@ return [
     'donations_description' => 'Apoya el desarrollo y mantenimiento de SpeedTracker haciendo una donación.',
 
     // Roles
-    'admin' => 'Admin',
+    'admin' => 'Administrador',
     'user' => 'Usuario',
     'role' => 'Rol',
 
