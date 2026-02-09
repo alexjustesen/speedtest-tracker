@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'title' => 'Tokens API',
+    'title' => 'API tokens',
     'label' => 'Tokens API',
 
     // Token management
-    'api_token' => 'API token',
+    'api_token' => 'API toquen',
     'api_tokens' => 'Tokens de API',
     'create_api_token' => 'Crear token API',
     'your_token' => 'Tu token',
@@ -18,11 +18,11 @@ return [
 
     // Token properties
     'expires_at' => 'Expira el',
-    'expires_at_helper_text' => 'Dejar en blanco si no desea una fecha de caducidad',
-    'last_used_at' => 'Último usado en',
+    'expires_at_helper_text' => 'Deja este campo en blanco si no deseas una fecha de caducidad',
+    'last_used_at' => 'Usado por última vez él',
 
     // Abilities/Permissions
-    'abilities' => 'Habilidades',
+    'abilities' => 'Permisos',
     'read_results' => 'Leer resultados',
     'read_results_description' => 'El token tendrá permiso para leer resultados y estadísticas.',
     'run_speedtest_description' => 'El token tendrá permiso para ejecutar el test de velocidad.',
