@@ -19,7 +19,7 @@ return [
     // Token properties
     'expires_at' => 'Expira el',
     'expires_at_helper_text' => 'Deja este campo en blanco si no deseas una fecha de caducidad',
-    'last_used_at' => 'Usado por última vez él',
+    'last_used_at' => 'Usado por última vez el',
 
     // Abilities/Permissions
     'abilities' => 'Permisos',
