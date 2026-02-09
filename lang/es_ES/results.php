@@ -41,7 +41,7 @@ return [
     // Filters
     'only_healthy_speedtests' => 'Solo pruebas de velocidad saludables',
     'only_unhealthy_speedtests' => 'Sólo pruebas de velocidad no saludables',
-    'only_manual_speedtests' => 'Solo pruebas de velocidad manual',
+    'only_manual_speedtests' => 'Solo pruebas de velocidad manuales',
     'only_scheduled_speedtests' => 'Solo pruebas de velocidad programadas',
     'created_from' => 'Creado desde',
     'created_until' => 'Creado hasta',
