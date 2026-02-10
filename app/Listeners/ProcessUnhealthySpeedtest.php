@@ -72,7 +72,7 @@ class ProcessUnhealthySpeedtest
             if ($benchmark['passed'] === false) {
                 $failed[] = [
                     'name' => ucfirst($metric),
-                    'threshold' => $benchmark['value'].' '.$benchmark['unit'],
+                    'threshold' => $benchmark['benchmark_value'].' '.$benchmark['unit'],
                     'value' => $this->formatMetricValue($metric, $result),
                 ];
             }
