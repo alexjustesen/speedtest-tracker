@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'title' => 'Tablero',
+    'title' => 'Panel de Control',
     'no_speedtests_scheduled' => 'No hay pruebas de velocidad programadas.',
-    'next_speedtest_at' => 'Siguiente prueba de velocidad en',
+    'next_speedtest_at' => 'Siguiente prueba de velocidad el',
 
     // Widgets
     'recent_results' => 'Resultados recientes',

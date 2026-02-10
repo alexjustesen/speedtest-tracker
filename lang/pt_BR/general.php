@@ -48,10 +48,12 @@ return [
     'settings' => 'Confirgurações',
     'users' => 'Usuários',
     'documentation' => 'Documentação',
+    'documentation_description' => 'Precisa de ajuda para começar ou configurar seus testes de velocidade?',
     'view_documentation' => 'Ver documentação',
     'links' => 'Links',
     'donate' => 'Doar',
     'donations' => 'Doações',
+    'donations_description' => 'Apoie o desenvolvimento e a manutenção do Speedtest Tracker fazendo uma doação.',
 
     // Roles
     'admin' => 'Admin',

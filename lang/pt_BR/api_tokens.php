@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Tokens de API',
+    'title' => 'API Tokens',
     'label' => 'Tokens de API',
 
     // Token management
