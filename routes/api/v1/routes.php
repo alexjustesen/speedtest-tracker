@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\OoklaController;
 use App\Http\Controllers\Api\V1\ResultsController;
 use App\Http\Controllers\Api\V1\SpeedtestController;
 use App\Http\Controllers\Api\V1\StatsController;
+use App\Http\Controllers\Api\V1\VersionController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->group(function () {
@@ -24,4 +25,7 @@ Route::prefix('v1')->name('api.v1.')->group(function () {
 
     Route::get('/stats', StatsController::class)
         ->name('stats.aggregated');
+
+    Route::get('/version', VersionController::class)
+        ->name('version');
 });

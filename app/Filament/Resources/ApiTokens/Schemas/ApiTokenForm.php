@@ -25,6 +25,7 @@ class ApiTokenForm
                             'results:read' => __('api_tokens.read_results'),
                             'speedtests:run' => __('general.run_speedtest'),
                             'ookla:list-servers' => __('general.list_servers'),
+                            'admin:read' => __('api_tokens.admin_read'),
                         ])
                         ->required()
                         ->bulkToggleable()
@@ -32,6 +33,7 @@ class ApiTokenForm
                             'results:read' => __('api_tokens.read_results_description'),
                             'speedtests:run' => __('api_tokens.run_speedtest_description'),
                             'ookla:list-servers' => __('api_tokens.list_servers_description'),
+                            'admin:read' => __('api_tokens.admin_read_description'),
                         ]),
                     DateTimePicker::make('expires_at')
                         ->label(__('api_tokens.expires_at'))
