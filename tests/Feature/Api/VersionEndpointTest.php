@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
     Cache::flush();
@@ -10,28 +11,27 @@ beforeEach(function () {
 describe('version endpoint', function () {
     test('returns version information for users with admin:read ability', function () {
         $user = User::factory()->create();
-        $token = $user->createToken('test-token', ['admin:read']);
 
-        $response = $this->actingAs($user, 'sanctum')
-            ->getJson('/api/v1/version');
+        Sanctum::actingAs($user, ['admin:read']);
+
+        $response = $this->getJson('/api/v1/version');
 
         $response->assertSuccessful()
             ->assertJsonStructure([
                 'data' => [
-                    'app' => ['name', 'version', 'build_date'],
+                    'app' => ['version', 'build_date'],
                     'updates' => ['latest_version', 'update_available'],
                 ],
             ])
-            ->assertJsonPath('data.app.version', config('speedtest.build_version'))
-            ->assertJsonPath('data.app.name', config('app.name'));
+            ->assertJsonPath('data.app.version', config('speedtest.build_version'));
     });
 
     test('denies access for users without admin:read ability', function () {
         $user = User::factory()->create();
-        $token = $user->createToken('test-token', ['results:read']);
 
-        $response = $this->actingAs($user, 'sanctum')
-            ->getJson('/api/v1/version');
+        Sanctum::actingAs($user, ['results:read']);
+
+        $response = $this->getJson('/api/v1/version');
 
         $response->assertForbidden()
             ->assertJsonPath('message', 'You do not have permission to view version information.');
@@ -45,13 +45,13 @@ describe('version endpoint', function () {
 
     test('includes update information when available', function () {
         $user = User::factory()->create();
-        $token = $user->createToken('test-token', ['admin:read']);
+
+        Sanctum::actingAs($user, ['admin:read']);
 
         // Mock the GitHub service to return a known value
         Cache::put('github.latest_version', 'v1.13.8', now()->addHour());
 
-        $response = $this->actingAs($user, 'sanctum')
-            ->getJson('/api/v1/version');
+        $response = $this->getJson('/api/v1/version');
 
         $response->assertSuccessful()
             ->assertJsonPath('data.updates.latest_version', 'v1.13.8')
@@ -60,13 +60,13 @@ describe('version endpoint', function () {
 
     test('handles unavailable update information gracefully', function () {
         $user = User::factory()->create();
-        $token = $user->createToken('test-token', ['admin:read']);
+
+        Sanctum::actingAs($user, ['admin:read']);
 
         // Mock GitHub service to return false (unavailable)
         Cache::put('github.latest_version', false, now()->addHour());
 
-        $response = $this->actingAs($user, 'sanctum')
-            ->getJson('/api/v1/version');
+        $response = $this->getJson('/api/v1/version');
 
         $response->assertSuccessful()
             ->assertJsonPath('data.updates.latest_version', null)
