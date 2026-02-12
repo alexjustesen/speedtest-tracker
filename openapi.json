@@ -269,6 +269,69 @@
                 }
             }
         },
+        "/api/v1/version": {
+            "description": "Endpoint for retrieving application version information.",
+            "get": {
+                "tags": [
+                    "Version"
+                ],
+                "summary": "Get application version and update information",
+                "description": "Returns the currently installed application version and checks for available updates. Requires admin:read token ability.",
+                "operationId": "getVersion",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/AcceptHeader"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Version information retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Version"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthenticatedError"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden - Missing admin:read token ability",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ForbiddenError"
+                                }
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable - Missing or invalid Accept header",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotAcceptableError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/ookla/list-servers": {
             "get": {
                 "tags": [
@@ -1146,6 +1209,50 @@
                     }
                 },
                 "type": "object"
+            },
+            "Version": {
+                "title": "Version",
+                "description": "Application version and update information",
+                "properties": {
+                    "data": {
+                        "properties": {
+                            "app": {
+                                "properties": {
+                                    "version": {
+                                        "type": "string",
+                                        "example": "v1.13.7"
+                                    },
+                                    "build_date": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2026-02-04T00:00:00+00:00"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "updates": {
+                                "properties": {
+                                    "latest_version": {
+                                        "type": "string",
+                                        "example": "v1.13.8",
+                                        "nullable": true
+                                    },
+                                    "update_available": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "ok"
+                    }
+                },
+                "type": "object"
             }
         },
         "parameters": {
@@ -1180,6 +1287,10 @@
         {
             "name": "Stats",
             "description": "Endpoints for retrieving aggregated statistics and performance metrics. Requires `speedtests:read` token scope."
+        },
+        {
+            "name": "Version",
+            "description": "Endpoint for retrieving application version and update information. Requires `admin:read` token scope."
         },
         {
             "name": "Servers",

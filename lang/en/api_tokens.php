@@ -27,4 +27,6 @@ return [
     'read_results_description' => 'The token will have permission to read results and statistics.',
     'run_speedtest_description' => 'The token will have permission to run speedtest.',
     'list_servers_description' => 'The token will have permission to list servers.',
+    'admin_read' => 'Admin read',
+    'admin_read_description' => 'The token will have permission to read administrative information such as application version.',
 ];
