@@ -5,8 +5,8 @@ namespace App\Listeners;
 use App\Events\SpeedtestCompleted;
 use App\Events\SpeedtestFailed;
 use App\Jobs\Influxdb\v2\WriteResult;
+use App\Services\PrometheusMetricsService;
 use App\Settings\DataIntegrationSettings;
-use Illuminate\Support\Facades\Cache;
 
 class ProcessSpeedtestDataIntegrations
 {
@@ -15,6 +15,7 @@ class ProcessSpeedtestDataIntegrations
      */
     public function __construct(
         public DataIntegrationSettings $settings,
+        public PrometheusMetricsService $prometheusService,
     ) {}
 
     /**
@@ -27,7 +28,9 @@ class ProcessSpeedtestDataIntegrations
         }
 
         if ($this->settings->prometheus_enabled) {
-            Cache::forever('prometheus:latest_result', $event->result->id);
+            // Update Prometheus metrics cache when speedtest completes/fails
+            // This prevents rebuilding metrics on every scrape
+            $this->prometheusService->updateMetrics($event->result);
         }
     }
 }

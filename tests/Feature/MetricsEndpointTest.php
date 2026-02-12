@@ -23,7 +23,10 @@ describe('metrics endpoint', function () {
             'prometheus_allowed_ips' => [],
         ])->save();
 
-        Result::factory()->create();
+        $result = Result::factory()->create();
+
+        // Simulate the listener updating metrics
+        app(\App\Services\PrometheusMetricsService::class)->updateMetrics($result);
 
         $response = $this->get('/prometheus');
 
@@ -50,7 +53,10 @@ describe('metrics endpoint', function () {
             'prometheus_allowed_ips' => ['192.168.1.100', '10.0.0.1'],
         ])->save();
 
-        Result::factory()->create();
+        $result = Result::factory()->create();
+
+        // Simulate the listener updating metrics
+        app(\App\Services\PrometheusMetricsService::class)->updateMetrics($result);
 
         $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '192.168.1.100',
@@ -66,7 +72,10 @@ describe('metrics endpoint', function () {
             'prometheus_allowed_ips' => [],
         ])->save();
 
-        Result::factory()->create();
+        $result = Result::factory()->create();
+
+        // Simulate the listener updating metrics
+        app(\App\Services\PrometheusMetricsService::class)->updateMetrics($result);
 
         $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '10.0.0.1',
@@ -81,7 +90,10 @@ describe('metrics endpoint', function () {
             'prometheus_allowed_ips' => ['192.168.1.0/24'],
         ])->save();
 
-        Result::factory()->create();
+        $result = Result::factory()->create();
+
+        // Simulate the listener updating metrics
+        app(\App\Services\PrometheusMetricsService::class)->updateMetrics($result);
 
         $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '192.168.1.150',
@@ -109,7 +121,10 @@ describe('metrics endpoint', function () {
             'prometheus_allowed_ips' => ['10.0.0.1', '192.168.1.0/24'],
         ])->save();
 
-        Result::factory()->create();
+        $result = Result::factory()->create();
+
+        // Simulate the listener updating metrics
+        app(\App\Services\PrometheusMetricsService::class)->updateMetrics($result);
 
         $response = $this->get('/prometheus', [
             'REMOTE_ADDR' => '192.168.1.50',
