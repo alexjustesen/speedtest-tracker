@@ -82,7 +82,7 @@ class CheckForInternetConnectionJob implements ShouldQueue
      */
     protected function httpFallbackSucceeds(): bool
     {
-        $url = config('speedtest.preflight.external_ip_url');
+        $url = config('speedtest.preflight.internet_check_hostname');
 
         try {
             $response = Http::retry(3, 100)
