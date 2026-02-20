@@ -48,10 +48,12 @@ return [
     'settings' => 'Instellingen',
     'users' => 'Gebruikers',
     'documentation' => 'Documentatie',
+    'documentation_description' => 'Hulp nodig bij het opstarten of configureren van uw snelheid testen?',
     'view_documentation' => 'Bekijk documentatie',
     'links' => 'Koppelingen',
     'donate' => 'Doneren',
     'donations' => 'Donaties',
+    'donations_description' => 'Ondersteun de ontwikkeling en het onderhoud van Speedtest Tracker door een donatie te doen.',
 
     // Roles
     'admin' => 'Beheerder',
