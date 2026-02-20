@@ -25,7 +25,10 @@ yarn-error.log
 # AI and Boost assets
 /.claude
 /.github/copilot-instructions.md
+/.github/skills
 /.mcp.json
+/.opencode
 /boost.json
 /AGENTS.md
 /CLAUDE.md
+/opencode.json
