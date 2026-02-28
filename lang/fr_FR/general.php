@@ -62,6 +62,7 @@ return [
     'last_24h' => 'Dernières 24 heures',
     'last_week' => 'La semaine dernière',
     'last_month' => 'Le mois dernier',
+    'all_time' => 'Tout l\'historique',
 
     // Metrics
     'metrics' => 'Métriques',

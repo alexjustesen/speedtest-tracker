@@ -10,6 +10,7 @@ trait HasChartFilters
             '24h' => __('general.last_24h'),
             'week' => __('general.last_week'),
             'month' => __('general.last_month'),
+            'all' => __('general.all_time'),
         ];
     }
 }

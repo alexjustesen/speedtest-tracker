@@ -64,6 +64,7 @@ return [
     'last_24h' => 'Afgelopen 24 uur',
     'last_week' => 'Vorige week',
     'last_month' => 'Vorige maand',
+    'all_time' => 'Alle resultaten',
 
     // Metrics
     'metrics' => 'Statistieken',
