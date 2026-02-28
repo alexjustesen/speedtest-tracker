@@ -64,6 +64,7 @@ return [
     'last_24h' => 'Posledních 24 hodin',
     'last_week' => 'Poslední týden',
     'last_month' => 'Poslední měsíc',
+    'all_time' => 'Za celkovou dobu',
 
     // Metrics
     'metrics' => 'Metriky',
