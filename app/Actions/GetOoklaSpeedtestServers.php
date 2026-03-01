@@ -35,13 +35,14 @@ class GetOoklaSpeedtestServers
     /**
      * Fetch the raw Ookla server array from the Ookla API.
      */
-    public static function fetch(): array
+    public static function fetch(?string $search = null): array
     {
-        $query = [
+        $query = array_filter([
             'engine' => 'js',
             'https_functional' => true,
             'limit' => 20,
-        ];
+            'search' => $search,
+        ]);
 
         try {
             $response = Http::retry(3, 250)
@@ -56,6 +57,28 @@ class GetOoklaSpeedtestServers
                 '⚠️ Unable to retrieve Ookla servers, check internet connection and see logs.',
             ];
         }
+    }
+
+    /**
+     * For UI search: return the ID, Sponsor, and Name matching the query.
+     */
+    public static function search(string $query): array
+    {
+        if (strlen($query) < 3) {
+            return [];
+        }
+
+        $servers = self::fetch($query);
+
+        if (empty($servers) || ! is_array($servers) || (isset($servers[0]) && ! is_array($servers[0]))) {
+            return [];
+        }
+
+        return collect($servers)->mapWithKeys(function (array $item) {
+            return [
+                $item['id'] => ($item['sponsor'] ?? 'Unknown').' ('.($item['name'] ?? 'Unknown').', '.$item['id'].')',
+            ];
+        })->toArray();
     }
 
     /**
