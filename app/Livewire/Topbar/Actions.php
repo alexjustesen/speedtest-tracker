@@ -48,6 +48,8 @@ class Actions extends Component implements HasActions, HasForms
                             __('results.closest_servers') => GetOoklaSpeedtestServers::run(),
                         ]);
                     })
+                    ->getSearchResultsUsing(fn (string $search): array => GetOoklaSpeedtestServers::search($search))
+                    ->getOptionLabelUsing(fn (int|string $value): string => (string) $value)
                     ->searchable(),
             ])
             ->action(function (array $data) {

@@ -21,7 +21,6 @@
         "filament/filament": "^5.2",
         "filament/spatie-laravel-settings-plugin": "^5.2",
         "influxdata/influxdb-client-php": "^3.8",
-        "laravel-notification-channels/telegram": "^6.0",
         "laravel/framework": "^12.50.0",
         "laravel/prompts": "^0.3.11",
         "laravel/sanctum": "^4.3.0",
