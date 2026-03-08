@@ -56,6 +56,7 @@ return [
         'webhook' => [
             'add' => 'Ajouter des URL de webhook !',
             'sent' => 'Notification de test du webhook envoyée.',
+            'failed' => 'Échec de la notification Webhook.',
             'payload' => 'Test de la notification de webhook',
         ],
     ],
