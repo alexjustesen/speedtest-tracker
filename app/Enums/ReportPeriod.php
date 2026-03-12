@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Enums;
+
+use Carbon\Carbon;
+
+enum ReportPeriod: string
+{
+    case Daily = 'daily';
+    case Weekly = 'weekly';
+    case Monthly = 'monthly';
+
+    public function getStartDate(): Carbon
+    {
+        return match ($this) {
+            self::Daily => now()->subDay()->startOfDay(),
+            self::Weekly => now()->subWeek()->startOfWeek(),
+            self::Monthly => now()->subMonth()->startOfMonth(),
+        };
+    }
+
+    public function getEndDate(): Carbon
+    {
+        return match ($this) {
+            self::Daily => now()->subDay()->endOfDay(),
+            self::Weekly => now()->subWeek()->endOfWeek(),
+            self::Monthly => now()->subMonth()->endOfMonth(),
+        };
+    }
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::Daily => now()->subDay()->format('F j, Y'),
+            self::Weekly => $this->getStartDate()->format('M j').' - '.$this->getEndDate()->format('M j, Y'),
+            self::Monthly => $this->getStartDate()->format('F Y'),
+        };
+    }
+
+    public function getName(): string
+    {
+        return match ($this) {
+            self::Daily => 'Daily',
+            self::Weekly => 'Weekly',
+            self::Monthly => 'Monthly',
+        };
+    }
+}
