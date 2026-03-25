@@ -30,7 +30,7 @@
         "maennchen/zipstream-php": "^2.4",
         "promphp/prometheus_client_php": "^2.14.1",
         "saloonphp/laravel-plugin": "^4.0",
-        "saloonphp/saloon": "*",
+        "saloonphp/saloon": "^4.0",
         "secondnetwork/blade-tabler-icons": "^3.40.0",
         "spatie/laravel-json-api-paginate": "^1.16.3",
         "spatie/laravel-query-builder": "^6.4.4",
