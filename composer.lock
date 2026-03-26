@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d70ba4341beb8aefd26899276484578",
+    "content-hash": "ff2fdeeb28ce2b755a4b5012b6dc005e",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -6170,30 +6170,30 @@
         },
         {
             "name": "saloonphp/laravel-plugin",
-            "version": "v3.9.1",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/saloonphp/laravel-plugin.git",
-                "reference": "1dc8c076b1f9aa8955ea1a669894f5e94c09ea4e"
+                "reference": "64c26b3beacbdbd82e796c6f7a8f43d938e082c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/saloonphp/laravel-plugin/zipball/1dc8c076b1f9aa8955ea1a669894f5e94c09ea4e",
-                "reference": "1dc8c076b1f9aa8955ea1a669894f5e94c09ea4e",
+                "url": "https://api.github.com/repos/saloonphp/laravel-plugin/zipball/64c26b3beacbdbd82e796c6f7a8f43d938e082c3",
+                "reference": "64c26b3beacbdbd82e796c6f7a8f43d938e082c3",
                 "shasum": ""
             },
             "require": {
-                "illuminate/console": "^11.0 || ^v12.39.0",
-                "illuminate/support": "^11.0 || ^12.39.0",
+                "illuminate/console": "^11.0 || ^12.39.0 || ^13.0",
+                "illuminate/support": "^11.0 || ^12.39.0 || ^13.0",
                 "php": "^8.2",
-                "saloonphp/saloon": "^3.5",
-                "symfony/finder": "^6.4 || ^7.0"
+                "saloonphp/saloon": "^4.0",
+                "symfony/finder": "^6.4 || ^7.0 || ^8.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.48",
                 "laravel/pulse": "^1.4",
                 "laravel/telescope": "^5.16",
-                "orchestra/testbench": "^9.15 || ^10.7",
+                "orchestra/testbench": "^9.15 || ^10.7 || ^11.0",
                 "pestphp/pest": "^3.0|^4.0",
                 "phpstan/phpstan": "^1.10.57|^2.0.2"
             },
@@ -6234,22 +6234,22 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/saloonphp/laravel-plugin/tree/v3.9.1"
+                "source": "https://github.com/saloonphp/laravel-plugin/tree/v4.0.0"
             },
-            "time": "2026-03-08T15:09:31+00:00"
+            "time": "2026-03-25T20:31:13+00:00"
         },
         {
             "name": "saloonphp/saloon",
-            "version": "v3.15.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/saloonphp/saloon.git",
-                "reference": "8039c76132ca52d08c887407773a770c15ab04a0"
+                "reference": "1307b1d72cacdd2c9c20978cdf7a0b720b4bf3bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/saloonphp/saloon/zipball/8039c76132ca52d08c887407773a770c15ab04a0",
-                "reference": "8039c76132ca52d08c887407773a770c15ab04a0",
+                "url": "https://api.github.com/repos/saloonphp/saloon/zipball/1307b1d72cacdd2c9c20978cdf7a0b720b4bf3bb",
+                "reference": "1307b1d72cacdd2c9c20978cdf7a0b720b4bf3bb",
                 "shasum": ""
             },
             "require": {
@@ -6309,7 +6309,7 @@
             ],
             "support": {
                 "issues": "https://github.com/saloonphp/saloon/issues",
-                "source": "https://github.com/saloonphp/saloon/tree/v3.15.0"
+                "source": "https://github.com/saloonphp/saloon/tree/v4.0.0"
             },
             "funding": [
                 {
@@ -6317,7 +6317,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-02T22:04:13+00:00"
+            "time": "2026-03-17T22:58:33+00:00"
         },
         {
             "name": "scrivo/highlight.php",
@@ -14108,5 +14108,5 @@
     "platform-overrides": {
         "php": "8.4"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
