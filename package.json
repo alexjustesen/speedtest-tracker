@@ -11,6 +11,6 @@
         "autoprefixer": "^10.4.15",
         "laravel-vite-plugin": "^1.0.0",
         "tailwindcss": "^4.1.17",
-        "vite": "^6.4.1"
+        "vite": "^6.4.2"
     }
 }
