@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Log;
 
 describe('VacuumDatabase', function () {
     it('skips silently when the default connection is not sqlite', function () {
+        $connection = Mockery::mock();
+        $connection->shouldReceive('getDriverName')->andReturn('mysql');
+        $connection->shouldNotReceive('transactionLevel');
+        $connection->shouldNotReceive('statement');
+        DB::shouldReceive('connection')->andReturn($connection);
+
         Log::spy();
 
         VacuumDatabase::run();
