@@ -14,7 +14,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "chrisullyott/php-filesize": "^4.2.1",
         "codewithdennis/filament-simple-alert": "^4.0.5",
         "dragonmantank/cron-expression": "^3.6.0",
