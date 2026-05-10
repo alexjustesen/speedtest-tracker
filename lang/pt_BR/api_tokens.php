@@ -2,12 +2,12 @@
 
 return [
     'title' => 'API Tokens',
-    'label' => 'Tokens de API',
+    'label' => 'API Tokens',
 
     // Token management
-    'api_token' => 'Token de API',
-    'api_tokens' => 'Tokens da API',
-    'create_api_token' => 'Criar token de API',
+    'api_token' => 'API Token',
+    'api_tokens' => 'API Tokens',
+    'create_api_token' => 'Criar API token',
     'your_token' => 'Seu token',
     'token_status' => 'Estado do token',
 
