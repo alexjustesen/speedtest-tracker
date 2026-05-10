@@ -4,7 +4,7 @@ return [
     'current_version' => 'Huidige versie',
     'latest_version' => 'Laatste versie',
     'github' => 'GitHub',
-    'repository' => 'Repository',
+    'repository' => 'Bewaarplaats',
 
     // Common actions
     'save' => 'Opslaan',
@@ -30,7 +30,7 @@ return [
     'password' => 'Wachtwoord',
     'password_confirmation' => 'Wachtwoord bevestiging',
     'id' => 'ID',
-    'status' => 'Status',
+    'status' => 'status',
     'message' => 'Bericht',
     'comment' => 'Opmerking',
     'comments' => 'Opmerkingen',
@@ -85,7 +85,7 @@ return [
     'mbps' => 'Mbps',
 
     // Speed test metrics
-    'download' => 'Download',
+    'download' => 'downloaden',
     'upload' => 'Uploaden',
     'ping' => 'Ping',
     'jitter' => 'Jitter',
@@ -115,7 +115,7 @@ return [
     'token' => 'Token',
 
     // Application
-    'speedtest_tracker' => 'Speedtest Tracker',
+    'speedtest_tracker' => 'Snelheids Tracker',
     'platform' => 'Platform',
 
     // Update status
