@@ -12,7 +12,7 @@ return [
     'influxdb_v2_url_placeholder' => 'http://your-influxdb-instance',
     'influxdb_v2_org' => 'Org',
     'influxdb_v2_bucket' => 'Emmer',
-    'influxdb_v2_bucket_placeholder' => 'speedtest-tracker',
+    'influxdb_v2_bucket_placeholder' => 'snelheid-tracker',
     'influxdb_v2_token' => 'Token',
     'influxdb_v2_verify_ssl' => 'Controleer SSL',
 
