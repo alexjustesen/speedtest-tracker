@@ -6,13 +6,13 @@ return [
     'error_message_title' => 'Fout melding',
 
     // Metrics
-    'download' => 'Download',
+    'download' => 'downloaden',
     'download_latency_high' => 'Download latency hoog',
     'download_latency_low' => 'Download latency laag',
-    'download_latency_iqm' => 'Download latency IQM',
+    'download_latency_iqm' => 'Latency IQM downloaden',
     'download_latency_jitter' => 'Download latency jitter',
 
-    'upload' => 'Upload',
+    'upload' => 'Uploaden',
     'upload_latency_high' => 'Upload latentie hoog',
     'upload_latency_low' => 'Upload latency laag',
     'upload_latency_iqm' => 'Upload latency IQM',
