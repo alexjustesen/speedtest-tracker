@@ -26,5 +26,5 @@ return [
     'read_results' => 'Lees resultaten',
     'read_results_description' => 'De token zal toestemming hebben om resultaten en statistieken te lezen.',
     'run_speedtest_description' => 'Het token zal toestemming hebben om snelheidstest uit te voeren.',
-    'list_servers_description' => 'De token zal toestemming hebben om servers weer te geven.',
+    'list_servers_description' => 'Het token zal toestemming hebben om servers weer te geven.',
 ];
