@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\CheckForScheduledSpeedtests;
+use App\Actions\VacuumDatabase;
 use Illuminate\Support\Facades\Schedule;
 
 /**
@@ -28,3 +29,13 @@ Schedule::everyMinute()
     ->group(function () {
         Schedule::call(fn () => CheckForScheduledSpeedtests::run());
     });
+
+/**
+ * Weekly SQLite maintenance (no-op on other drivers).
+ */
+Schedule::call(fn () => VacuumDatabase::run())
+    ->weekly()
+    ->sundays()
+    ->at('03:15')
+    ->name('sqlite-vacuum')
+    ->onOneServer();

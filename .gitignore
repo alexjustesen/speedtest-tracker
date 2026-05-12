@@ -23,6 +23,7 @@ yarn-error.log
 /.vscode
 
 # AI and Boost assets
+/.agents
 /.claude
 /.github/copilot-instructions.md
 /.github/skills

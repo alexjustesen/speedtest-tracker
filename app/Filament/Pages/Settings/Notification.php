@@ -440,7 +440,7 @@ class Notification extends SettingsPage
                                                 Actions::make([
                                                     Action::make('test gotify')
                                                         ->label('Test Gotify webhook')
-                                                        ->action(fn (Get $get) => SendgotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
+                                                        ->action(fn (Get $get) => SendGotifyTestNotification::run(webhooks: $get('gotify_webhooks')))
                                                         ->hidden(fn (Get $get) => ! count($get('gotify_webhooks'))),
                                                 ]),
                                             ]),
