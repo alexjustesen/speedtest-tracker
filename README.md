@@ -2,7 +2,7 @@
 
 Speedtest Tracker is a self-hosted application that monitors the performance and uptime of your internet connection.
 
-![Dashboard](.github/screenshots/dashboard.jpeg)
+![Dashboard](.github/screenshots/dashboard.png)
 
 ## Features
 
