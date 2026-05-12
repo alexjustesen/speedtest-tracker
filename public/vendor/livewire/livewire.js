@@ -1679,8 +1679,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var directiveOrder = [
     "ignore",
     "ref",
-    "data",
     "id",
+    "data",
     "anchor",
     "bind",
     "init",
@@ -2614,7 +2614,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     get transaction() {
       return transaction;
     },
-    version: "3.15.11",
+    version: "3.15.12",
     flushAndStopDeferringMutations,
     dontAutoEvaluateFunctions,
     disableEffectScheduling,
@@ -3482,8 +3482,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
     };
     mutateDom(() => {
-      placeInDom(clone22, target, modifiers);
       skipDuringClone(() => {
+        placeInDom(clone22, target, modifiers);
         initTree(clone22);
       })();
     });
@@ -4080,7 +4080,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     evaluateItems((items) => {
       if (isNumeric3(items))
         items = Array.from({ length: items }, (_, i) => i + 1);
-      if (items === void 0)
+      if (items === void 0 || items === null)
         items = [];
       if (items instanceof Set)
         items = Array.from(items);
@@ -4189,7 +4189,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     return scopeVariables;
   }
   function isNumeric3(subject) {
-    return !Array.isArray(subject) && !isNaN(subject);
+    return typeof subject !== "object" && !isNaN(subject);
   }
   function isObject22(subject) {
     return typeof subject === "object" && !Array.isArray(subject);
@@ -4530,6 +4530,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     };
     onSuccess = () => {
     };
+    onSkipped = () => {
+    };
     onFinish = () => {
     };
     onSync = () => {
@@ -4558,6 +4560,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         onError: (callback2) => this.onError = callback2,
         onStream: (callback2) => this.onStream = callback2,
         onSuccess: (callback2) => this.onSuccess = callback2,
+        onSkipped: (callback2) => this.onSkipped = callback2,
         onFinish: (callback2) => this.onFinish = callback2
       });
     }
@@ -4804,6 +4807,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     pendingReturnsMeta = {};
     interceptors = [];
     cancelled = false;
+    skipped = false;
     request = null;
     _scope = null;
     get scope() {
@@ -4875,6 +4879,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     isCancelled() {
       return this.cancelled;
+    }
+    markSkipped() {
+      this.skipped = true;
+    }
+    isSkipped() {
+      return this.skipped;
     }
     isAsync() {
       return Array.from(this.actions).every((action) => action.isAsync());
@@ -4949,6 +4959,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     invokeOnFinish() {
       this.interceptors.forEach((interceptor2) => interceptor2.onFinish());
+    }
+    invokeOnSkipped() {
+      this.interceptors.forEach((interceptor2) => interceptor2.onSkipped());
+      Array.from(this.actions).forEach((action) => action.invokeOnFinish());
     }
     rejectActionPromises({ status, body, json, errors }) {
       Array.from(this.actions).forEach((action) => {
@@ -5516,6 +5530,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             messageResponsePayloads.forEach((payload) => {
               if (message.isCancelled())
                 return;
+              if (payload.skip) {
+                if (payload.id === message.component.id) {
+                  message.responsePayload = payload;
+                  message.markSkipped();
+                  message.invokeOnSkipped();
+                  message.resolveActionPromises([], []);
+                  message.invokeOnFinish();
+                }
+                return;
+              }
               let { snapshot: snapshotEncoded, effects } = payload;
               let snapshot = JSON.parse(snapshotEncoded);
               if (snapshot.memo.id === message.component.id) {
@@ -5683,7 +5707,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           state.clientErrors = null;
           component.__lastErrorsSnapshot = component.snapshot;
         }
-        return state.clientErrors ?? component.snapshot.memo.errors;
+        return state.clientErrors ??= component.snapshot.memo.errors;
       },
       keys() {
         return Object.keys(this.messages());
@@ -10810,7 +10834,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       let handleSelector = "[x-sort\\:handle],[wire\\:sort\\:handle]";
       let preferences = {
         hideGhost: !modifiers.includes("ghost"),
-        useHandles: !!el.querySelector(handleSelector) || Array.from(el.querySelectorAll("template")).some((tmpl) => tmpl.content.querySelector(handleSelector)),
+        useHandles: !!el.querySelector(handleSelector) || Array.from(el.querySelectorAll("template:not(svg template)")).some((tmpl) => tmpl.content?.querySelector(handleSelector)),
         group: getGroupName(el, modifiers)
       };
       let handleSort = generateSortHandler(expression, evaluate3);
@@ -12154,7 +12178,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
     Alpine3.directive("anchor", Alpine3.skipDuringClone(
       (el, { expression, modifiers, value }, { evaluate: evaluate22, effect: effect3, cleanup: cleanup2 }) => {
-        let { placement, offsetValue, unstyled, allowFlip } = getOptions(modifiers);
+        let { placement, offsetValue, unstyled, strategy, allowFlip } = getOptions(modifiers);
         el._x_anchor = Alpine3.reactive({ x: 0, y: 0 });
         let previousReference = null;
         let release2 = null;
@@ -12170,9 +12194,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
               let previousValue;
               computePosition2(reference, el, {
                 placement,
+                strategy,
                 middleware: [allowFlip && flip(), shift({ padding: 5 }), offset(offsetValue)]
               }).then(({ x, y }) => {
-                unstyled || setStyles2(el, x, y);
+                unstyled || setStyles2(el, x, y, strategy);
                 if (JSON.stringify({ x, y }) !== previousValue) {
                   el._x_anchor.x = x;
                   el._x_anchor.y = y;
@@ -12189,18 +12214,18 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         });
       },
       (el, { expression, modifiers, value }, { cleanup: cleanup2, evaluate: evaluate22 }) => {
-        let { placement, offsetValue, unstyled } = getOptions(modifiers);
+        let { placement, offsetValue, unstyled, strategy } = getOptions(modifiers);
         if (el._x_anchor) {
-          unstyled || setStyles2(el, el._x_anchor.x, el._x_anchor.y);
+          unstyled || setStyles2(el, el._x_anchor.x, el._x_anchor.y, strategy);
         }
       }
     ));
   }
-  function setStyles2(el, x, y) {
+  function setStyles2(el, x, y, strategy = "absolute") {
     Object.assign(el.style, {
       left: x + "px",
       top: y + "px",
-      position: "absolute"
+      position: strategy
     });
   }
   function getOptions(modifiers) {
@@ -12213,7 +12238,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     let unstyled = modifiers.includes("no-style");
     let allowFlip = !modifiers.includes("noflip");
-    return { placement, offsetValue, unstyled, allowFlip };
+    let strategy = modifiers.includes("fixed") ? "fixed" : "absolute";
+    return { placement, offsetValue, unstyled, strategy, allowFlip };
   }
   var module_default8 = src_default8;
 
@@ -12426,7 +12452,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       callback((whenReleased) => {
         let handler4 = (e2) => {
           e2.preventDefault();
-          whenReleased();
+          requestAnimationFrame(() => {
+            whenReleased();
+          });
           el.removeEventListener("mouseup", handler4);
         };
         el.addEventListener("mouseup", handler4);
@@ -13934,6 +13962,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   function registerListeners(component, listeners2) {
     listeners2.forEach((name) => {
       let handler4 = (e) => {
+        if (component.isLazy && !component.hasBeenLazyLoaded)
+          return;
         if (e.__livewire)
           e.__livewire.receivedBy.push(component);
         component.$wire.call("__dispatch", name, e.detail || {});
@@ -13941,6 +13971,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       window.addEventListener(name, handler4);
       component.addCleanup(() => window.removeEventListener(name, handler4));
       component.el.addEventListener(name, (e) => {
+        if (component.isLazy && !component.hasBeenLazyLoaded)
+          return;
         if (!e.__livewire)
           return;
         if (e.bubbles)
@@ -14144,11 +14176,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var defaultName = "match-element";
   globalDirective("transition", ({ el, directive: directive3, cleanup: cleanup2 }) => {
   });
-  function setTransitionNames(root) {
+  function setTransitionNames(root, options = {}) {
     root.querySelectorAll("[wire\\:transition]").forEach((el) => {
-      if (!el.style.viewTransitionName) {
-        el.style.viewTransitionName = el.getAttribute("wire:transition") || defaultName;
-      }
+      if (el.style.viewTransitionName)
+        return;
+      let name = el.getAttribute("wire:transition");
+      if (!name && options.type)
+        return;
+      el.style.viewTransitionName = name || defaultName;
     });
   }
   function clearTransitionNames(root) {
@@ -14166,7 +14201,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     if (document.querySelector("dialog:modal"))
       return callback();
-    setTransitionNames(fromEl);
+    setTransitionNames(fromEl, options);
     let style = document.createElement("style");
     style.textContent = `
         @media (prefers-reduced-motion: reduce) {
@@ -14188,7 +14223,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     document.head.appendChild(style);
     let update = () => {
       callback();
-      setTransitionNames(fromEl);
+      setTransitionNames(fromEl, options);
     };
     let transitionConfig = { update };
     if (options.type) {

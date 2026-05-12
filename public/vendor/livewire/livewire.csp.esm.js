@@ -1987,8 +1987,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var directiveOrder = [
       "ignore",
       "ref",
-      "data",
       "id",
+      "data",
       "anchor",
       "bind",
       "init",
@@ -2922,7 +2922,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       get transaction() {
         return transaction;
       },
-      version: "3.15.11",
+      version: "3.15.12",
       flushAndStopDeferringMutations,
       dontAutoEvaluateFunctions,
       disableEffectScheduling,
@@ -3636,6 +3636,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             } else if (node.argument.type === "MemberExpression") {
               const obj = this.evaluate({ node: node.argument.object, scope: scope2, context, forceBindingRootScopeToFunctions });
               const prop = node.argument.computed ? this.evaluate({ node: node.argument.property, scope: scope2, context, forceBindingRootScopeToFunctions }) : node.argument.property.name;
+              if (this.isDOMObject(obj)) {
+                throw new Error("Property assignments on DOM objects are prohibited in the CSP build");
+              }
+              this.checkForDangerousKeywords(prop);
               const oldValue = obj[prop];
               if (node.operator === "++") {
                 obj[prop] = oldValue + 1;
@@ -3647,7 +3651,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             throw new Error("Invalid update expression target");
           case "BinaryExpression":
             const left = this.evaluate({ node: node.left, scope: scope2, context, forceBindingRootScopeToFunctions });
-            const right = this.evaluate({ node: node.right, scope: scope2, context, forceBindingRootScopeToFunctions });
+            const evalRight = () => this.evaluate({ node: node.right, scope: scope2, context, forceBindingRootScopeToFunctions });
+            if (node.operator === "&&")
+              return left && evalRight();
+            if (node.operator === "||")
+              return left || evalRight();
+            const right = evalRight();
             switch (node.operator) {
               case "+":
                 return left + right;
@@ -3675,10 +3684,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 return left <= right;
               case ">=":
                 return left >= right;
-              case "&&":
-                return left && right;
-              case "||":
-                return left || right;
               default:
                 throw new Error(`Unknown binary operator: ${node.operator}`);
             }
@@ -3691,7 +3696,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
               scope2[node.left.name] = value;
               return value;
             } else if (node.left.type === "MemberExpression") {
-              throw new Error("Property assignments are prohibited in the CSP build");
+              const obj = this.evaluate({ node: node.left.object, scope: scope2, context, forceBindingRootScopeToFunctions });
+              const prop = node.left.computed ? this.evaluate({ node: node.left.property, scope: scope2, context, forceBindingRootScopeToFunctions }) : node.left.property.name;
+              if (this.isDOMObject(obj)) {
+                throw new Error("Property assignments on DOM objects are prohibited in the CSP build");
+              }
+              this.checkForDangerousKeywords(prop);
+              obj[prop] = value;
+              return value;
             }
             throw new Error("Invalid assignment target");
           case "ArrayExpression":
@@ -3708,6 +3720,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             throw new Error(`Unknown node type: ${node.type}`);
         }
       }
+      isDOMObject(obj) {
+        return obj instanceof Node || typeof CSSStyleDeclaration !== "undefined" && obj instanceof CSSStyleDeclaration || typeof DOMStringMap !== "undefined" && obj instanceof DOMStringMap || typeof DOMTokenList !== "undefined" && obj instanceof DOMTokenList || typeof NamedNodeMap !== "undefined" && obj instanceof NamedNodeMap;
+      }
       checkForDangerousKeywords(keyword) {
         let blacklist = [
           "constructor",
@@ -3715,7 +3730,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           "__proto__",
           "__defineGetter__",
           "__defineSetter__",
-          "insertAdjacentHTML"
+          "insertAdjacentHTML",
+          "setAttribute",
+          "setAttributeNS",
+          "setAttributeNode",
+          "setAttributeNodeNS"
         ];
         if (blacklist.includes(keyword)) {
           throw new Error(`Accessing "${keyword}" is prohibited in the CSP build`);
@@ -3959,8 +3978,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
       };
       mutateDom(() => {
-        placeInDom(clone2, target, modifiers);
         skipDuringClone(() => {
+          placeInDom(clone2, target, modifiers);
           initTree(clone2);
         })();
       });
@@ -4557,7 +4576,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       evaluateItems((items) => {
         if (isNumeric3(items))
           items = Array.from({ length: items }, (_, i) => i + 1);
-        if (items === void 0)
+        if (items === void 0 || items === null)
           items = [];
         if (items instanceof Set)
           items = Array.from(items);
@@ -4666,7 +4685,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       return scopeVariables;
     }
     function isNumeric3(subject) {
-      return !Array.isArray(subject) && !isNaN(subject);
+      return typeof subject !== "object" && !isNaN(subject);
     }
     function isObject2(subject) {
       return typeof subject === "object" && !Array.isArray(subject);
@@ -7608,7 +7627,10 @@ var require_module_cjs5 = __commonJS({
         let handleSelector = "[x-sort\\:handle],[wire\\:sort\\:handle]";
         let preferences = {
           hideGhost: !modifiers.includes("ghost"),
-          useHandles: !!el.querySelector(handleSelector) || Array.from(el.querySelectorAll("template")).some((tmpl) => tmpl.content.querySelector(handleSelector)),
+          useHandles: !!el.querySelector(handleSelector) || Array.from(el.querySelectorAll("template:not(svg template)")).some((tmpl) => {
+            var _a;
+            return (_a = tmpl.content) == null ? void 0 : _a.querySelector(handleSelector);
+          }),
           group: getGroupName(el, modifiers)
         };
         let handleSort = generateSortHandler(expression, evaluate);
@@ -9006,7 +9028,7 @@ var require_module_cjs7 = __commonJS({
       });
       Alpine25.directive("anchor", Alpine25.skipDuringClone(
         (el, { expression, modifiers, value }, { evaluate: evaluate2, effect, cleanup }) => {
-          let { placement, offsetValue, unstyled, allowFlip } = getOptions(modifiers);
+          let { placement, offsetValue, unstyled, strategy, allowFlip } = getOptions(modifiers);
           el._x_anchor = Alpine25.reactive({ x: 0, y: 0 });
           let previousReference = null;
           let release = null;
@@ -9022,9 +9044,10 @@ var require_module_cjs7 = __commonJS({
                 let previousValue;
                 computePosition2(reference, el, {
                   placement,
+                  strategy,
                   middleware: [allowFlip && flip(), shift({ padding: 5 }), offset(offsetValue)]
                 }).then(({ x, y }) => {
-                  unstyled || setStyles(el, x, y);
+                  unstyled || setStyles(el, x, y, strategy);
                   if (JSON.stringify({ x, y }) !== previousValue) {
                     el._x_anchor.x = x;
                     el._x_anchor.y = y;
@@ -9041,18 +9064,18 @@ var require_module_cjs7 = __commonJS({
           });
         },
         (el, { expression, modifiers, value }, { cleanup, evaluate: evaluate2 }) => {
-          let { placement, offsetValue, unstyled } = getOptions(modifiers);
+          let { placement, offsetValue, unstyled, strategy } = getOptions(modifiers);
           if (el._x_anchor) {
-            unstyled || setStyles(el, el._x_anchor.x, el._x_anchor.y);
+            unstyled || setStyles(el, el._x_anchor.x, el._x_anchor.y, strategy);
           }
         }
       ));
     }
-    function setStyles(el, x, y) {
+    function setStyles(el, x, y, strategy = "absolute") {
       Object.assign(el.style, {
         left: x + "px",
         top: y + "px",
-        position: "absolute"
+        position: strategy
       });
     }
     function getOptions(modifiers) {
@@ -9065,7 +9088,8 @@ var require_module_cjs7 = __commonJS({
       }
       let unstyled = modifiers.includes("no-style");
       let allowFlip = !modifiers.includes("noflip");
-      return { placement, offsetValue, unstyled, allowFlip };
+      let strategy = modifiers.includes("fixed") ? "fixed" : "absolute";
+      return { placement, offsetValue, unstyled, strategy, allowFlip };
     }
     var module_default2 = src_default2;
   }
@@ -10828,6 +10852,8 @@ var MessageInterceptor = class {
   };
   onSuccess = () => {
   };
+  onSkipped = () => {
+  };
   onFinish = () => {
   };
   onSync = () => {
@@ -10856,6 +10882,7 @@ var MessageInterceptor = class {
       onError: (callback2) => this.onError = callback2,
       onStream: (callback2) => this.onStream = callback2,
       onSuccess: (callback2) => this.onSuccess = callback2,
+      onSkipped: (callback2) => this.onSkipped = callback2,
       onFinish: (callback2) => this.onFinish = callback2
     });
   }
@@ -11102,6 +11129,7 @@ var Message = class {
   pendingReturnsMeta = {};
   interceptors = [];
   cancelled = false;
+  skipped = false;
   request = null;
   _scope = null;
   get scope() {
@@ -11173,6 +11201,12 @@ var Message = class {
   }
   isCancelled() {
     return this.cancelled;
+  }
+  markSkipped() {
+    this.skipped = true;
+  }
+  isSkipped() {
+    return this.skipped;
   }
   isAsync() {
     return Array.from(this.actions).every((action) => action.isAsync());
@@ -11247,6 +11281,10 @@ var Message = class {
   }
   invokeOnFinish() {
     this.interceptors.forEach((interceptor) => interceptor.onFinish());
+  }
+  invokeOnSkipped() {
+    this.interceptors.forEach((interceptor) => interceptor.onSkipped());
+    Array.from(this.actions).forEach((action) => action.invokeOnFinish());
   }
   rejectActionPromises({ status, body, json, errors }) {
     Array.from(this.actions).forEach((action) => {
@@ -11814,6 +11852,16 @@ function sendMessages() {
           messageResponsePayloads.forEach((payload) => {
             if (message.isCancelled())
               return;
+            if (payload.skip) {
+              if (payload.id === message.component.id) {
+                message.responsePayload = payload;
+                message.markSkipped();
+                message.invokeOnSkipped();
+                message.resolveActionPromises([], []);
+                message.invokeOnFinish();
+              }
+              return;
+            }
             let { snapshot: snapshotEncoded, effects } = payload;
             let snapshot = JSON.parse(snapshotEncoded);
             if (snapshot.memo.id === message.component.id) {
@@ -11982,7 +12030,7 @@ function getErrorsObject(component) {
         state.clientErrors = null;
         component.__lastErrorsSnapshot = component.snapshot;
       }
-      return state.clientErrors ?? component.snapshot.memo.errors;
+      return state.clientErrors ??= component.snapshot.memo.errors;
     },
     keys() {
       return Object.keys(this.messages());
@@ -13381,7 +13429,9 @@ function whenThisLinkIsPressed(el, callback) {
     callback((whenReleased) => {
       let handler = (e2) => {
         e2.preventDefault();
-        whenReleased();
+        requestAnimationFrame(() => {
+          whenReleased();
+        });
         el.removeEventListener("mouseup", handler);
       };
       el.addEventListener("mouseup", handler);
@@ -14357,6 +14407,8 @@ on("effect", ({ component, effects }) => {
 function registerListeners(component, listeners2) {
   listeners2.forEach((name) => {
     let handler = (e) => {
+      if (component.isLazy && !component.hasBeenLazyLoaded)
+        return;
       if (e.__livewire)
         e.__livewire.receivedBy.push(component);
       component.$wire.call("__dispatch", name, e.detail || {});
@@ -14364,6 +14416,8 @@ function registerListeners(component, listeners2) {
     window.addEventListener(name, handler);
     component.addCleanup(() => window.removeEventListener(name, handler));
     component.el.addEventListener(name, (e) => {
+      if (component.isLazy && !component.hasBeenLazyLoaded)
+        return;
       if (!e.__livewire)
         return;
       if (e.bubbles)
@@ -14575,11 +14629,14 @@ var import_alpinejs10 = __toESM(require_module_cjs());
 var defaultName = "match-element";
 globalDirective("transition", ({ el, directive: directive2, cleanup }) => {
 });
-function setTransitionNames(root) {
+function setTransitionNames(root, options = {}) {
   root.querySelectorAll("[wire\\:transition]").forEach((el) => {
-    if (!el.style.viewTransitionName) {
-      el.style.viewTransitionName = el.getAttribute("wire:transition") || defaultName;
-    }
+    if (el.style.viewTransitionName)
+      return;
+    let name = el.getAttribute("wire:transition");
+    if (!name && options.type)
+      return;
+    el.style.viewTransitionName = name || defaultName;
   });
 }
 function clearTransitionNames(root) {
@@ -14597,7 +14654,7 @@ async function transitionDomMutation(fromEl, toEl, callback, options = {}) {
   }
   if (document.querySelector("dialog:modal"))
     return callback();
-  setTransitionNames(fromEl);
+  setTransitionNames(fromEl, options);
   let style = document.createElement("style");
   style.textContent = `
         @media (prefers-reduced-motion: reduce) {
@@ -14619,7 +14676,7 @@ async function transitionDomMutation(fromEl, toEl, callback, options = {}) {
   document.head.appendChild(style);
   let update = () => {
     callback();
-    setTransitionNames(fromEl);
+    setTransitionNames(fromEl, options);
   };
   let transitionConfig = { update };
   if (options.type) {

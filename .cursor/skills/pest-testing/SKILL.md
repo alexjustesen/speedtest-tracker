@@ -18,6 +18,12 @@ Use `search-docs` for detailed Pest 4 patterns and documentation.
 
 All tests must be written using Pest. Use `vendor/bin/sail artisan make:test --pest {name}`.
 
+The `{name}` argument should include only the path and test name, but should not include the test suite.
+- Incorrect: `vendor/bin/sail artisan make:test --pest Feature/SomeFeatureTest` will generate `tests/Feature/Feature/SomeFeatureTest.php`
+- Correct: `vendor/bin/sail artisan make:test --pest SomeControllerTest` will generate `tests/Feature/SomeControllerTest.php`
+- Incorrect: `vendor/bin/sail artisan make:test --pest --unit Unit/SomeServiceTest` will generate `tests/Unit/Unit/SomeServiceTest.php`
+- Correct: `vendor/bin/sail artisan make:test --pest --unit SomeServiceTest` will generate `tests/Unit/SomeServiceTest.php`
+
 ### Test Organization
 
 - Unit/Feature tests: `tests/Feature` and `tests/Unit` directories.
@@ -157,3 +163,4 @@ arch('controllers')
 - Forgetting datasets for repetitive validation tests
 - Deleting tests without approval
 - Forgetting `assertNoJavaScriptErrors()` in browser tests
+- Prefixing `Feature/` or `Unit/` in `{name}` when using `make:test`
