@@ -6,6 +6,7 @@
 
         <title>Timezone - {{ config('app.name') }}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+        <link rel="apple-touch-icon" href="{{ asset('img/speedtest-tracker-icon.png') }}">
 
         {{-- Fonts --}}
         <link href="{{ asset('fonts/inter/inter.css') }}" rel="stylesheet" />
