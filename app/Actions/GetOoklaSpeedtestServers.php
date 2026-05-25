@@ -45,7 +45,6 @@ class GetOoklaSpeedtestServers
 
         try {
             $response = Http::retry(3, 250)
-                ->timeout(5)
                 ->get(url: 'https://www.speedtest.net/api/js/servers', query: $query);
 
             return $response->json();

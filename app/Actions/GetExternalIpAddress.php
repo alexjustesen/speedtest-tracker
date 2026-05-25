@@ -18,7 +18,6 @@ class GetExternalIpAddress
 
         try {
             $response = Http::retry(3, 100)
-                ->timeout(5)
                 ->get(url: $url);
         } catch (Throwable $e) {
             $message = sprintf('Failed to fetch external IP address from "%s". See the logs for more details.', $url);

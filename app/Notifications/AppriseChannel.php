@@ -38,10 +38,9 @@ class AppriseChannel
         ]);
 
         try {
-            $request = Http::timeout(60)
-                ->withHeaders([
-                    'Content-Type' => 'application/json',
-                ]);
+            $request = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ]);
 
             // If SSL verification is disabled in settings, skip it
             if (! $settings->apprise_verify_ssl) {

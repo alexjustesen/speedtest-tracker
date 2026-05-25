@@ -19,7 +19,6 @@ class Repository
         return Cache::remember('github.latest_version', now()->addHour(), function () {
             try {
                 $response = Http::retry(3, 100)
-                    ->timeout(10)
                     ->withHeaders([
                         'Accept' => 'application/vnd.github.v3+json',
                         'User-Agent' => 'speedtest-tracker',

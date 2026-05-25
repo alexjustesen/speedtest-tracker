@@ -86,7 +86,6 @@ class CheckForInternetConnectionJob implements ShouldQueue
 
         try {
             $response = Http::retry(3, 100)
-                ->timeout(5)
                 ->get(url: $url);
 
             if ($response->ok()) {
