@@ -1,14 +1,16 @@
 <?php
 
+use App\Enums\ResultStatus;
 use App\Models\Result;
-use Illuminate\Support\Facades\Cache;
 
-beforeEach(function () {
-    Cache::flush();
-});
+it('scopes results to only completed status', function () {
+    Result::factory()->create(['status' => ResultStatus::Completed]);
+    Result::factory()->create(['status' => ResultStatus::Completed]);
+    Result::factory()->create(['status' => ResultStatus::Failed]);
+    Result::factory()->create(['status' => ResultStatus::Running]);
 
-test('can use factory to create a Result model', function () {
-    Result::factory()->create();
+    $completedResults = Result::completed()->get();
 
-    expect(Result::count())->toBe(1);
+    expect($completedResults)->toHaveCount(2);
+    expect($completedResults->every(fn ($result) => $result->status === ResultStatus::Completed))->toBeTrue();
 });
