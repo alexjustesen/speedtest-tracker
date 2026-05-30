@@ -29,8 +29,6 @@ class ProcessSpeedtestDataIntegrations
         }
 
         if ($this->settings->prometheus_enabled) {
-            // Update Prometheus metrics cache when speedtest completes/fails
-            // This prevents rebuilding metrics on every scrape
             $this->prometheusService->updateMetrics($event->result);
         }
 
