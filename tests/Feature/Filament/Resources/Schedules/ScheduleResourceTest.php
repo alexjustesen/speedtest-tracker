@@ -1,0 +1,169 @@
+<?php
+
+use App\Enums\UserRole;
+use App\Filament\Resources\Schedules\Pages\CreateSchedule;
+use App\Filament\Resources\Schedules\Pages\EditSchedule;
+use App\Filament\Resources\Schedules\Pages\ListSchedules;
+use App\Models\Schedule;
+use App\Models\User;
+use Livewire\Livewire;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create(['role' => UserRole::Admin]));
+});
+
+describe('list page', function () {
+    it('can render the list page', function () {
+        Livewire::test(ListSchedules::class)->assertOk();
+    });
+
+    it('can see schedule records in the table', function () {
+        $schedules = Schedule::factory()->count(3)->create();
+
+        Livewire::test(ListSchedules::class)
+            ->assertCanSeeTableRecords($schedules);
+    });
+});
+
+describe('create page', function () {
+    it('can render the create page', function () {
+        Livewire::test(CreateSchedule::class)->assertOk();
+    });
+
+    it('can create a schedule with preferred servers', function () {
+        Livewire::test(CreateSchedule::class)
+            ->fillForm([
+                'name' => 'Hourly test',
+                'enabled' => true,
+                'schedule' => '0 * * * *',
+                'server_mode' => 'prefer',
+                'servers' => '12345,67890',
+                'interface' => 'eth0',
+                'skip_ips' => '1.2.3.4,10.0.0.0/8',
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $schedule = Schedule::query()->where('name', 'Hourly test')->first();
+
+        expect($schedule)->not->toBeNull()
+            ->and($schedule->enabled)->toBeTrue()
+            ->and($schedule->schedule)->toBe('0 * * * *')
+            ->and($schedule->servers)->toBe(['12345', '67890'])
+            ->and($schedule->blocked_servers)->toBeNull()
+            ->and($schedule->interface)->toBe('eth0')
+            ->and($schedule->skip_ips)->toBe(['1.2.3.4', '10.0.0.0/8']);
+    });
+
+    it('can create a schedule with blocked servers', function () {
+        Livewire::test(CreateSchedule::class)
+            ->fillForm([
+                'name' => 'Block test',
+                'enabled' => true,
+                'schedule' => '0 * * * *',
+                'server_mode' => 'block',
+                'blocked_servers' => '99999',
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $schedule = Schedule::query()->where('name', 'Block test')->first();
+
+        expect($schedule->servers)->toBeNull()
+            ->and($schedule->blocked_servers)->toBe(['99999']);
+    });
+
+    it('stores null when servers is left empty', function () {
+        Livewire::test(CreateSchedule::class)
+            ->fillForm([
+                'name' => 'No servers',
+                'enabled' => true,
+                'schedule' => '*/30 * * * *',
+            ])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $schedule = Schedule::query()->where('name', 'No servers')->first();
+
+        expect($schedule->servers)->toBeNull()
+            ->and($schedule->blocked_servers)->toBeNull()
+            ->and($schedule->interface)->toBeNull()
+            ->and($schedule->skip_ips)->toBeNull();
+    });
+
+    it('requires a name', function () {
+        Livewire::test(CreateSchedule::class)
+            ->fillForm(['name' => null, 'schedule' => '0 * * * *'])
+            ->call('create')
+            ->assertHasFormErrors(['name' => 'required']);
+    });
+
+    it('requires a cron schedule', function () {
+        Livewire::test(CreateSchedule::class)
+            ->fillForm(['name' => 'Test', 'schedule' => null])
+            ->call('create')
+            ->assertHasFormErrors(['schedule' => 'required']);
+    });
+});
+
+describe('edit page', function () {
+    it('can render the edit page', function () {
+        $schedule = Schedule::factory()->create();
+
+        Livewire::test(EditSchedule::class, ['record' => $schedule->id])->assertOk();
+    });
+
+    it('sets server_mode to prefer when servers are configured', function () {
+        $schedule = Schedule::factory()->create([
+            'servers' => ['12345', '67890'],
+            'blocked_servers' => null,
+        ]);
+
+        Livewire::test(EditSchedule::class, ['record' => $schedule->id])
+            ->assertFormSet([
+                'server_mode' => 'prefer',
+                'servers' => '12345,67890',
+            ]);
+    });
+
+    it('sets server_mode to block when blocked servers are configured', function () {
+        $schedule = Schedule::factory()->create([
+            'servers' => null,
+            'blocked_servers' => ['99999'],
+        ]);
+
+        Livewire::test(EditSchedule::class, ['record' => $schedule->id])
+            ->assertFormSet([
+                'server_mode' => 'block',
+                'blocked_servers' => '99999',
+            ]);
+    });
+
+    it('can update a schedule', function () {
+        $schedule = Schedule::factory()->create(['name' => 'Old name', 'enabled' => true]);
+
+        Livewire::test(EditSchedule::class, ['record' => $schedule->id])
+            ->fillForm([
+                'name' => 'New name',
+                'enabled' => false,
+                'schedule' => '*/15 * * * *',
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        expect($schedule->fresh())
+            ->name->toBe('New name')
+            ->enabled->toBeFalse()
+            ->schedule->toBe('*/15 * * * *');
+    });
+
+    it('can delete a schedule', function () {
+        $schedule = Schedule::factory()->create();
+
+        Livewire::test(EditSchedule::class, ['record' => $schedule->id])
+            ->callAction('delete')
+            ->assertRedirect();
+
+        expect(Schedule::find($schedule->id))->toBeNull();
+    });
+});

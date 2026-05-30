@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Schedule;
 use Carbon\Carbon;
 use Cron\CronExpression;
 
@@ -10,20 +11,21 @@ class ScheduledSpeedtestService
     /**
      * Assess if there are scheduled speedtests and return the next scheduled time.
      *
-     * @return Carbon|null Returns null if no tests are scheduled, or Carbon instance with next scheduled test
+     * @return Carbon|null Returns null if no schedules are enabled, or Carbon instance with the soonest next run
      */
     public static function getNextScheduledTest(): ?Carbon
     {
-        $schedule = config('speedtest.schedule');
+        return Schedule::query()
+            ->where('enabled', true)
+            ->get()
+            ->map(function (Schedule $schedule) {
+                $cron = new CronExpression($schedule->schedule);
 
-        if (blank($schedule) || $schedule === false) {
-            return null;
-        }
-
-        $cronExpression = new CronExpression($schedule);
-
-        return Carbon::parse(
-            time: $cronExpression->getNextRunDate(timeZone: config('app.display_timezone'))
-        );
+                return Carbon::parse(
+                    time: $cron->getNextRunDate(timeZone: config('app.display_timezone'))
+                );
+            })
+            ->sort()
+            ->first();
     }
 }

@@ -49,6 +49,14 @@ class Result extends Model
     }
 
     /**
+     * Get the schedule that triggered this speedtest.
+     */
+    public function schedule(): BelongsTo
+    {
+        return $this->belongsTo(Schedule::class);
+    }
+
+    /**
      * Scope a query to only include completed results.
      */
     public function scopeCompleted(Builder $query): Builder
