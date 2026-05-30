@@ -17,6 +17,7 @@ class Schedule extends Model
         'schedule',
         'servers',
         'blocked_servers',
+        'server_labels',
         'interface',
         'skip_ips',
     ];
@@ -27,6 +28,7 @@ class Schedule extends Model
             'enabled' => 'boolean',
             'servers' => 'array',
             'blocked_servers' => 'array',
+            'server_labels' => 'array',
             'skip_ips' => 'array',
         ];
     }

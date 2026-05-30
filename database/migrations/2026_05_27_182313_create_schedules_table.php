@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('schedule');
             $table->json('servers')->nullable();
             $table->json('blocked_servers')->nullable();
+            $table->json('server_labels')->nullable();
             $table->string('interface')->nullable();
             $table->json('skip_ips')->nullable();
             $table->timestamps();

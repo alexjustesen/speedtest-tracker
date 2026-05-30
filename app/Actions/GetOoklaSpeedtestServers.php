@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -25,11 +26,17 @@ class GetOoklaSpeedtestServers
             return ['error' => $servers[0] ?? 'Unable to retrieve servers'];
         }
 
-        return collect($servers)->mapWithKeys(function (array $item) {
+        $result = collect($servers)->mapWithKeys(function (array $item) {
             return [
                 $item['id'] => ($item['sponsor'] ?? 'Unknown').' ('.($item['name'] ?? 'Unknown').', '.$item['id'].')',
             ];
         })->toArray();
+
+        foreach ($result as $id => $label) {
+            Cache::put("ookla_server_label_{$id}", $label, now()->addDays(30));
+        }
+
+        return $result;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Schedules\Schemas;
 
 use App\Actions\ExplainCronExpression;
 use App\Actions\GetOoklaSpeedtestServers;
+use App\Models\Schedule;
 use App\Rules\Cron;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -94,12 +95,11 @@ class ScheduleForm
 
                                         return isset($servers['error']) ? [] : $servers;
                                     })
-                                    ->getOptionLabelsUsing(function (array $values): array {
-                                        $servers = GetOoklaSpeedtestServers::run();
-                                        $available = isset($servers['error']) ? [] : $servers;
+                                    ->getOptionLabelsUsing(function (array $values, ?Schedule $record): array {
+                                        $labels = $record?->server_labels ?? [];
 
                                         return collect($values)
-                                            ->mapWithKeys(fn ($value) => [$value => $available[$value] ?? (string) $value])
+                                            ->mapWithKeys(fn ($value) => [$value => $labels[$value] ?? (string) $value])
                                             ->toArray();
                                     })
                                     ->createOptionForm([
@@ -129,12 +129,11 @@ class ScheduleForm
 
                                         return isset($servers['error']) ? [] : $servers;
                                     })
-                                    ->getOptionLabelsUsing(function (array $values): array {
-                                        $servers = GetOoklaSpeedtestServers::run();
-                                        $available = isset($servers['error']) ? [] : $servers;
+                                    ->getOptionLabelsUsing(function (array $values, ?Schedule $record): array {
+                                        $labels = $record?->server_labels ?? [];
 
                                         return collect($values)
-                                            ->mapWithKeys(fn ($value) => [$value => $available[$value] ?? (string) $value])
+                                            ->mapWithKeys(fn ($value) => [$value => $labels[$value] ?? (string) $value])
                                             ->toArray();
                                     })
                                     ->createOptionForm([
