@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Enums\UserRole;
+use App\Listeners\DispatchWebhooks;
 use App\Models\User;
 use App\Notifications\AppriseChannel;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\ChannelManager;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\RateLimiter;
@@ -37,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
         $this->forceHttps();
         $this->setApiRateLimit();
         $this->registerNotificationChannels();
+
+        Event::subscribe(DispatchWebhooks::class);
 
         AboutCommand::add('Speedtest Tracker', fn () => [
             'Version' => config('speedtest.build_version'),

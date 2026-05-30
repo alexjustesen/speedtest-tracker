@@ -20,14 +20,6 @@ class NotificationSettings extends Settings
 
     public ?array $mail_recipients;
 
-    public bool $webhook_enabled;
-
-    public bool $webhook_on_speedtest_run;
-
-    public bool $webhook_on_threshold_failure;
-
-    public ?array $webhook_urls;
-
     public bool $apprise_enabled;
 
     public ?string $apprise_server_url;

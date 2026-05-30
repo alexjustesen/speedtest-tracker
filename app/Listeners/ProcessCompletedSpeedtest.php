@@ -11,12 +11,10 @@ use App\Notifications\Apprise\SpeedtestNotification;
 use App\Settings\NotificationSettings;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification as FilamentNotification;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
-use Spatie\WebhookServer\WebhookCall;
 
 class ProcessCompletedSpeedtest
 {
@@ -43,7 +41,6 @@ class ProcessCompletedSpeedtest
         $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
         $this->notifyMailChannels($result);
-        $this->notifyWebhookChannels($result);
     }
 
     /**
@@ -134,45 +131,6 @@ class ProcessCompletedSpeedtest
         foreach ($this->notificationSettings->mail_recipients as $recipient) {
             Mail::to($recipient)
                 ->send(new CompletedSpeedtestMail($result));
-        }
-    }
-
-    /**
-     * Notify webhook channels.
-     */
-    private function notifyWebhookChannels(Result $result): void
-    {
-        // Check if webhook notifications are enabled.
-        if (! $this->notificationSettings->webhook_enabled || ! $this->notificationSettings->webhook_on_speedtest_run) {
-            return;
-        }
-
-        // Check if webhook urls are configured.
-        if (! count($this->notificationSettings->webhook_urls)) {
-            Log::warning('Webhook urls not found, check webhook notification channel settings.');
-
-            return;
-        }
-
-        foreach ($this->notificationSettings->webhook_urls as $url) {
-            WebhookCall::create()
-                ->url($url['url'])
-                ->payload([
-                    'result_id' => $result->id,
-                    'site_name' => config('app.name'),
-                    'server_name' => Arr::get($result->data, 'server.name'),
-                    'server_id' => Arr::get($result->data, 'server.id'),
-                    'status' => $result->status,
-                    'isp' => Arr::get($result->data, 'isp'),
-                    'ping' => round($result->ping),
-                    'download' => Number::bitsToMagnitude(bits: $result->download_bits, precision: 0, magnitude: 'mbit'),
-                    'upload' => Number::bitsToMagnitude(bits: $result->upload_bits, precision: 0, magnitude: 'mbit'),
-                    'packet_loss' => Arr::get($result->data, 'packetLoss'),
-                    'speedtest_url' => Arr::get($result->data, 'result.url'),
-                    'url' => url('/admin/results'),
-                ])
-                ->doNotSign()
-                ->dispatch();
         }
     }
 }

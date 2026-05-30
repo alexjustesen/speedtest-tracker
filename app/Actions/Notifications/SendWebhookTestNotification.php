@@ -2,11 +2,12 @@
 
 namespace App\Actions\Notifications;
 
-use App\Helpers\Number;
-use App\Models\Result;
+use App\Actions\Webhooks\BuildWebhookPayload;
+use App\Enums\WebhookEvent;
+use App\Models\Webhook;
 use App\Services\SpeedtestFakeResultGenerator;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Spatie\WebhookServer\WebhookCall;
 
@@ -14,42 +15,32 @@ class SendWebhookTestNotification
 {
     use AsAction;
 
-    public function handle(array $webhooks)
+    public function handle(Webhook $webhook): void
     {
-        if (! count($webhooks)) {
-            Notification::make()
-                ->title(__('settings/notifications.test_notifications.webhook.add'))
-                ->warning()
-                ->send();
-
-            return;
-        }
-
-        // Generate a fake Result (NOT saved to database)
+        // Generate a fake Result (NOT saved to the database).
         $fakeResult = SpeedtestFakeResultGenerator::completed();
 
-        foreach ($webhooks as $webhook) {
-            WebhookCall::create()
-                ->url($webhook['url'])
-                ->payload([
-                    'result_id' => Str::uuid(),
-                    'site_name' => __('settings/notifications.test_notifications.webhook.payload'),
-                    'server_name' => $fakeResult->data['server']['name'],
-                    'server_id' => $fakeResult->data['server']['id'],
-                    'isp' => $fakeResult->data['isp'],
-                    'ping' => round($fakeResult->ping),
-                    'download' => Number::bitsToMagnitude(bits: $fakeResult->upload, precision: 0, magnitude: 'mbit'),
-                    'upload' => Number::bitsToMagnitude(bits: $fakeResult->download, precision: 0, magnitude: 'mbit'),
-                    'packet_loss' => $fakeResult->data['packetLoss'],
-                    'speedtest_url' => $fakeResult->data['result']['url'],
-                    'url' => url('/admin/results'),
-                ])
-                ->doNotSign()
-                ->dispatchSync();
-        }
+        $payload = BuildWebhookPayload::run($fakeResult, WebhookEvent::Completed);
+
+        $call = WebhookCall::create()
+            ->url($webhook->url)
+            ->payload($payload)
+            ->meta([
+                'webhook_test' => true,
+                'user_id' => Auth::id(),
+            ]);
+
+        $webhook->secret
+            ? $call->useSecret($webhook->secret)
+            : $call->doNotSign();
+
+        // Dispatch asynchronously; the delivery result is reported back to the
+        // user as a database notification by NotifyWebhookTestResult.
+        $call->dispatch();
 
         Notification::make()
-            ->title(__('settings/notifications.test_notifications.webhook.sent'))
+            ->title(__('webhooks.test_queued'))
+            ->body(__('webhooks.test_queued_body'))
             ->success()
             ->send();
     }

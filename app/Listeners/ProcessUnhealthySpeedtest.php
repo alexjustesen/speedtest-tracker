@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
-use Spatie\WebhookServer\WebhookCall;
 
 class ProcessUnhealthySpeedtest
 {
@@ -41,7 +40,6 @@ class ProcessUnhealthySpeedtest
         $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
         $this->notifyMailChannels($result);
-        $this->notifyWebhookChannels($result);
     }
 
     /**
@@ -167,39 +165,6 @@ class ProcessUnhealthySpeedtest
         foreach ($this->notificationSettings->mail_recipients as $recipient) {
             Mail::to($recipient)
                 ->send(new UnhealthySpeedtestMail($result));
-        }
-    }
-
-    /**
-     * Notify webhook channels.
-     */
-    private function notifyWebhookChannels(Result $result): void
-    {
-        // Check if webhook notifications are enabled.
-        if (! $this->notificationSettings->webhook_enabled || ! $this->notificationSettings->webhook_on_threshold_failure) {
-            return;
-        }
-
-        // Check if webhook urls are configured.
-        if (! count($this->notificationSettings->webhook_urls)) {
-            Log::warning('Webhook urls not found, check webhook notification channel settings.');
-
-            return;
-        }
-
-        foreach ($this->notificationSettings->webhook_urls as $url) {
-            WebhookCall::create()
-                ->url($url['url'])
-                ->payload([
-                    'result_id' => $result->id,
-                    'site_name' => config('app.name'),
-                    'isp' => $result->isp,
-                    'benchmarks' => $result->benchmarks,
-                    'speedtest_url' => $result->result_url,
-                    'url' => url('/admin/results'),
-                ])
-                ->doNotSign()
-                ->dispatch();
         }
     }
 }

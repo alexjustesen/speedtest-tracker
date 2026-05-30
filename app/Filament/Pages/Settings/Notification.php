@@ -5,7 +5,6 @@ namespace App\Filament\Pages\Settings;
 use App\Actions\Notifications\SendAppriseTestNotification;
 use App\Actions\Notifications\SendDatabaseTestNotification;
 use App\Actions\Notifications\SendMailTestNotification;
-use App\Actions\Notifications\SendWebhookTestNotification;
 use App\Rules\AppriseScheme;
 use App\Rules\ContainsString;
 use App\Settings\NotificationSettings;
@@ -138,65 +137,6 @@ class Notification extends SettingsPage
                                 // ...
                             ]),
 
-                        Tab::make(__('settings/notifications.webhook'))
-                            ->icon(Heroicon::OutlinedGlobeAlt)
-                            ->schema([
-                                SimpleAlert::make('wehbook_info')
-                                    ->title(__('general.documentation'))
-                                    ->description(__('settings/notifications.webhook_hint_description'))
-                                    ->border()
-                                    ->info()
-                                    ->actions([
-                                        Action::make('webhook_docs')
-                                            ->label(__('general.view_documentation'))
-                                            ->icon('heroicon-m-arrow-long-right')
-                                            ->color('info')
-                                            ->link()
-                                            ->url('https://docs.speedtest-tracker.dev/settings/notifications/webhook')
-                                            ->openUrlInNewTab(),
-                                    ])
-                                    ->columnSpanFull(),
-
-                                Toggle::make('webhook_enabled')
-                                    ->label(__('general.enable'))
-                                    ->live(),
-
-                                Grid::make([
-                                    'default' => 1,
-                                ])
-                                    ->hidden(fn (Get $get) => $get('webhook_enabled') !== true)
-                                    ->schema([
-                                        Fieldset::make(__('settings.triggers'))
-                                            ->columns(1)
-                                            ->schema([
-                                                Checkbox::make('webhook_on_speedtest_run')
-                                                    ->label(__('settings/notifications.notify_on_every_speedtest_run'))
-                                                    ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper')),
-                                                Checkbox::make('webhook_on_threshold_failure')
-                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
-                                                    ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
-                                            ]),
-
-                                        Repeater::make('webhook_urls')
-                                            ->label(__('settings/notifications.recipients'))
-                                            ->schema([
-                                                TextInput::make('url')
-                                                    ->placeholder('https://webhook.site/longstringofcharacters')
-                                                    ->maxLength(2000)
-                                                    ->required()
-                                                    ->url(),
-                                            ]),
-
-                                        Actions::make([
-                                            Action::make('test webhook')
-                                                ->label(__('settings/notifications.test_webhook_channel'))
-                                                ->action(fn (Get $get) => SendWebhookTestNotification::run(webhooks: $get('webhook_urls')))
-                                                ->hidden(fn (Get $get) => ! count($get('webhook_urls'))),
-                                        ]),
-                                    ]),
-
-                                // ...
-                            ]),
                         Tab::make(__('settings/notifications.apprise'))
                             ->icon(Heroicon::CloudArrowUp)
                             ->schema([
