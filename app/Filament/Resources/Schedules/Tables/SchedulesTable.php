@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources\Schedules\Tables;
 
-use App\Models\Schedule;
 use App\Actions\ExplainCronExpression;
+use App\Models\Schedule;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -50,7 +50,16 @@ class SchedulesTable
 
                 TextColumn::make('servers')
                     ->label(__('schedules.columns.servers'))
-                    ->state(fn (Schedule $record): string => implode(', ', $record->servers ?? $record->blocked_servers ?? []))
+                    ->state(function (Schedule $record): string {
+                        $ids = $record->servers ?? $record->blocked_servers ?? [];
+                        $labels = $record->server_labels ?? [];
+
+                        return implode(', ', array_map(function ($id) use ($labels) {
+                            $label = $labels[$id] ?? $id;
+
+                            return trim(explode('(', $label)[0]);
+                        }, $ids));
+                    })
                     ->placeholder('—'),
 
                 TextColumn::make('interface')
