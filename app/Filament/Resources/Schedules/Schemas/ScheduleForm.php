@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Schedules\Schemas;
 
 use App\Actions\ExplainCronExpression;
+use App\Actions\GetOoklaSpeedtestServers;
 use App\Rules\Cron;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
@@ -78,25 +79,65 @@ class ScheduleForm
                                         $set('blocked_servers', null);
                                     }),
 
-                                TextInput::make('servers')
+                                Select::make('servers')
                                     ->label(__('schedules.servers'))
                                     ->helperText(__('schedules.servers_helper'))
-                                    ->placeholder('12345,67890')
-                                    ->visible(fn (Get $get): bool => $get('server_mode') === 'prefer')
-                                    ->formatStateUsing(fn (?array $state): string => implode(',', $state ?? []))
-                                    ->dehydrateStateUsing(fn (?string $state, Get $get): ?array => $get('server_mode') === 'prefer'
-                                        ? self::parseCommaSeparated($state)
-                                        : null),
+                                    ->multiple()
+                                    ->searchable()
+                                    ->options(function (): array {
+                                        $servers = GetOoklaSpeedtestServers::run();
 
-                                TextInput::make('blocked_servers')
+                                        return isset($servers['error']) ? [] : $servers;
+                                    })
+                                    ->getOptionLabelsUsing(function (array $values): array {
+                                        $servers = GetOoklaSpeedtestServers::run();
+                                        $available = isset($servers['error']) ? [] : $servers;
+
+                                        return collect($values)
+                                            ->mapWithKeys(fn ($value) => [$value => $available[$value] ?? (string) $value])
+                                            ->toArray();
+                                    })
+                                    ->createOptionForm([
+                                        TextInput::make('server_id')
+                                            ->label(__('schedules.server_id_manual'))
+                                            ->required()
+                                            ->integer(),
+                                    ])
+                                    ->createOptionUsing(fn (array $data): string => (string) $data['server_id'])
+                                    ->visible(fn (Get $get): bool => $get('server_mode') === 'prefer')
+                                    ->dehydratedWhenHidden()
+                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state))
+                                    ),
+
+                                Select::make('blocked_servers')
                                     ->label(__('schedules.blocked_servers'))
                                     ->helperText(__('schedules.blocked_servers_helper'))
-                                    ->placeholder('12345,67890')
+                                    ->multiple()
+                                    ->searchable()
+                                    ->options(function (): array {
+                                        $servers = GetOoklaSpeedtestServers::run();
+
+                                        return isset($servers['error']) ? [] : $servers;
+                                    })
+                                    ->getOptionLabelsUsing(function (array $values): array {
+                                        $servers = GetOoklaSpeedtestServers::run();
+                                        $available = isset($servers['error']) ? [] : $servers;
+
+                                        return collect($values)
+                                            ->mapWithKeys(fn ($value) => [$value => $available[$value] ?? (string) $value])
+                                            ->toArray();
+                                    })
+                                    ->createOptionForm([
+                                        TextInput::make('server_id')
+                                            ->label(__('schedules.server_id_manual'))
+                                            ->required()
+                                            ->integer(),
+                                    ])
+                                    ->createOptionUsing(fn (array $data): string => (string) $data['server_id'])
                                     ->visible(fn (Get $get): bool => $get('server_mode') === 'block')
-                                    ->formatStateUsing(fn (?array $state): string => implode(',', $state ?? []))
-                                    ->dehydrateStateUsing(fn (?string $state, Get $get): ?array => $get('server_mode') === 'block'
-                                        ? self::parseCommaSeparated($state)
-                                        : null),
+                                    ->dehydratedWhenHidden()
+                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state))
+                                    ),
                             ]),
 
                         Tab::make(__('schedules.tab_network'))

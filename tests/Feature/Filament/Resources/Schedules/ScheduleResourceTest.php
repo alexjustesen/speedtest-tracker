@@ -37,7 +37,7 @@ describe('create page', function () {
                 'enabled' => true,
                 'schedule' => '0 * * * *',
                 'server_mode' => 'prefer',
-                'servers' => '12345,67890',
+                'servers' => ['12345', '67890'],
                 'interface' => 'eth0',
                 'skip_ips' => '1.2.3.4,10.0.0.0/8',
             ])
@@ -62,7 +62,7 @@ describe('create page', function () {
                 'enabled' => true,
                 'schedule' => '0 * * * *',
                 'server_mode' => 'block',
-                'blocked_servers' => '99999',
+                'blocked_servers' => ['99999'],
             ])
             ->call('create')
             ->assertHasNoFormErrors();
@@ -131,7 +131,7 @@ describe('edit page', function () {
         Livewire::test(EditSchedule::class, ['record' => $schedule->id])
             ->assertFormSet([
                 'server_mode' => 'prefer',
-                'servers' => '12345,67890',
+                'servers' => ['12345', '67890'],
             ]);
     });
 
@@ -144,7 +144,7 @@ describe('edit page', function () {
         Livewire::test(EditSchedule::class, ['record' => $schedule->id])
             ->assertFormSet([
                 'server_mode' => 'block',
-                'blocked_servers' => '99999',
+                'blocked_servers' => ['99999'],
             ]);
     });
 
