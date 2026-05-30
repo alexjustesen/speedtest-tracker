@@ -50,7 +50,6 @@ return [
     'prometheus_remote_write_username' => 'Username',
     'prometheus_remote_write_password' => 'Password',
 
-
     // Common labels
     'org' => 'Org',
     'bucket' => 'Bucket',
