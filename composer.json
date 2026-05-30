@@ -20,6 +20,7 @@
         "dragonmantank/cron-expression": "^3.6.0",
         "filament/filament": "^5.6.6",
         "filament/spatie-laravel-settings-plugin": "^5.6.6",
+        "flow-php/snappy": "^0.38.0",
         "influxdata/influxdb-client-php": "^3.8",
         "laravel/framework": "^13.12.0",
         "laravel/prompts": "^0.3.18",

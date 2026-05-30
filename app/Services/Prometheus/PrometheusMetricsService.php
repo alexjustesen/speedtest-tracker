@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Prometheus;
 
 use App\Models\Result;
 use Illuminate\Support\Facades\Cache;

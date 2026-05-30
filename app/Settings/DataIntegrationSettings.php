@@ -22,6 +22,14 @@ class DataIntegrationSettings extends Settings
 
     public array $prometheus_allowed_ips = [];
 
+    public bool $prometheus_remote_write_enabled;
+
+    public ?string $prometheus_remote_write_url;
+
+    public ?string $prometheus_remote_write_username;
+
+    public ?string $prometheus_remote_write_password;
+
     public static function group(): string
     {
         return 'dataintegration';
