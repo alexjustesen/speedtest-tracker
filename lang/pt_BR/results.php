@@ -71,8 +71,6 @@ return [
     'speedtest' => 'Teste de velocidade',
     'select_server' => 'Selecionar servidor',
     'select_server_helper' => 'Deixe em branco para executar o acelerador sem especificar um servidor. Os servidores bloqueados serão ignorados.',
-    'manual_servers' => 'Servidores manuais',
-    'closest_servers' => 'Servidores mais próximos',
     'run_speedtest' => 'Executar teste de velocidade',
     'start' => 'Iniciar',
 ];

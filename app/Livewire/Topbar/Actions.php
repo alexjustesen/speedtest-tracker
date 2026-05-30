@@ -4,7 +4,6 @@ namespace App\Livewire\Topbar;
 
 use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Ookla\RunSpeedtest;
-use App\Helpers\Ookla;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -43,10 +42,9 @@ class Actions extends Component implements HasActions, HasForms
                     ->label(__('results.select_server'))
                     ->helperText(__('results.select_server_helper'))
                     ->options(function (): array {
-                        return array_filter([
-                            __('results.manual_servers') => Ookla::getConfigServers(),
-                            __('results.closest_servers') => GetOoklaSpeedtestServers::run(),
-                        ]);
+                        $servers = GetOoklaSpeedtestServers::run();
+
+                        return isset($servers['error']) ? [] : $servers;
                     })
                     ->searchable(),
             ])

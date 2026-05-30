@@ -71,8 +71,6 @@ return [
     'speedtest' => 'Speedtest',
     'select_server' => 'Select Server',
     'select_server_helper' => 'Leave empty to run the speedtest without specifying a server. Blocked servers will be skipped.',
-    'manual_servers' => 'Manual servers',
-    'closest_servers' => 'Closest servers',
     'run_speedtest' => 'Run Speedtest',
     'start' => 'Start',
 ];
