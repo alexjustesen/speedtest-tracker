@@ -4,6 +4,7 @@ namespace App\Livewire\Topbar;
 
 use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Ookla\RunSpeedtest;
+use App\Models\Schedule;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -42,9 +43,25 @@ class Actions extends Component implements HasActions, HasForms
                     ->label(__('results.select_server'))
                     ->helperText(__('results.select_server_helper'))
                     ->options(function (): array {
-                        $servers = GetOoklaSpeedtestServers::run();
+                        $scheduleServers = Schedule::query()
+                            ->where('enabled', true)
+                            ->whereNotNull('servers')
+                            ->get()
+                            ->reduce(function (array $carry, Schedule $schedule) {
+                                foreach ($schedule->servers as $id) {
+                                    $carry[$id] = $schedule->server_labels[$id] ?? (string) $id;
+                                }
 
-                        return isset($servers['error']) ? [] : $servers;
+                                return $carry;
+                            }, []);
+
+                        $nearby = GetOoklaSpeedtestServers::run();
+                        $nearbyServers = isset($nearby['error']) ? [] : $nearby;
+
+                        return array_filter([
+                            __('results.schedule_servers') => $scheduleServers,
+                            __('results.nearby_servers') => $nearbyServers,
+                        ]);
                     })
                     ->getSearchResultsUsing(function (string $search): array {
                         $servers = GetOoklaSpeedtestServers::run($search);
