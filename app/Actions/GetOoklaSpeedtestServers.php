@@ -15,9 +15,9 @@ class GetOoklaSpeedtestServers
     /**
      * For UI: return the ID, Sponsor, and Name to start a manual test
      */
-    public function handle(): array
+    public function handle(?string $search = null): array
     {
-        $servers = self::fetch();
+        $servers = self::fetch($search);
 
         // If the first item is not an array, treat as error or empty
         if (empty($servers) || ! is_array($servers) || (isset($servers[0]) && ! is_array($servers[0]))) {
@@ -35,13 +35,17 @@ class GetOoklaSpeedtestServers
     /**
      * Fetch the raw Ookla server array from the Ookla API.
      */
-    public static function fetch(): array
+    public static function fetch(?string $search = null): array
     {
         $query = [
             'engine' => 'js',
             'https_functional' => true,
             'limit' => 20,
         ];
+
+        if (filled($search)) {
+            $query['search'] = $search;
+        }
 
         try {
             $response = Http::retry(3, 250)

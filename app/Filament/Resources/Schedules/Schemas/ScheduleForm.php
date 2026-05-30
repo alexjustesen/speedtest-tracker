@@ -89,6 +89,11 @@ class ScheduleForm
 
                                         return isset($servers['error']) ? [] : $servers;
                                     })
+                                    ->getSearchResultsUsing(function (string $search): array {
+                                        $servers = GetOoklaSpeedtestServers::run($search);
+
+                                        return isset($servers['error']) ? [] : $servers;
+                                    })
                                     ->getOptionLabelsUsing(function (array $values): array {
                                         $servers = GetOoklaSpeedtestServers::run();
                                         $available = isset($servers['error']) ? [] : $servers;
@@ -116,6 +121,11 @@ class ScheduleForm
                                     ->searchable()
                                     ->options(function (): array {
                                         $servers = GetOoklaSpeedtestServers::run();
+
+                                        return isset($servers['error']) ? [] : $servers;
+                                    })
+                                    ->getSearchResultsUsing(function (string $search): array {
+                                        $servers = GetOoklaSpeedtestServers::run($search);
 
                                         return isset($servers['error']) ? [] : $servers;
                                     })

@@ -46,6 +46,11 @@ class Actions extends Component implements HasActions, HasForms
 
                         return isset($servers['error']) ? [] : $servers;
                     })
+                    ->getSearchResultsUsing(function (string $search): array {
+                        $servers = GetOoklaSpeedtestServers::run($search);
+
+                        return isset($servers['error']) ? [] : $servers;
+                    })
                     ->searchable(),
             ])
             ->action(function (array $data) {
