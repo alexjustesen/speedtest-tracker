@@ -104,6 +104,15 @@ describe('create page', function () {
             ->call('create')
             ->assertHasFormErrors(['schedule' => 'required']);
     });
+
+    it('rejects a duplicate cron expression', function () {
+        Schedule::factory()->create(['schedule' => '0 * * * *']);
+
+        Livewire::test(CreateSchedule::class)
+            ->fillForm(['name' => 'Duplicate', 'schedule' => '0 * * * *'])
+            ->call('create')
+            ->assertHasFormErrors(['schedule' => 'unique']);
+    });
 });
 
 describe('edit page', function () {
@@ -155,6 +164,25 @@ describe('edit page', function () {
             ->name->toBe('New name')
             ->enabled->toBeFalse()
             ->schedule->toBe('*/15 * * * *');
+    });
+
+    it('allows saving own cron expression unchanged', function () {
+        $schedule = Schedule::factory()->create(['schedule' => '0 * * * *']);
+
+        Livewire::test(EditSchedule::class, ['record' => $schedule->id])
+            ->fillForm(['schedule' => '0 * * * *'])
+            ->call('save')
+            ->assertHasNoFormErrors();
+    });
+
+    it('rejects changing to a cron expression used by another schedule', function () {
+        Schedule::factory()->create(['schedule' => '0 * * * *']);
+        $schedule = Schedule::factory()->create(['schedule' => '*/5 * * * *']);
+
+        Livewire::test(EditSchedule::class, ['record' => $schedule->id])
+            ->fillForm(['schedule' => '0 * * * *'])
+            ->call('save')
+            ->assertHasFormErrors(['schedule' => 'unique']);
     });
 
     it('can delete a schedule', function () {

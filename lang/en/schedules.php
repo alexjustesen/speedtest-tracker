@@ -19,6 +19,7 @@ return [
     'schedule_hint' => 'minute hour day month weekday',
     'schedule_helper' => 'Enter a cron expression to define when speedtests run.',
     'cron_invalid' => 'Invalid cron expression.',
+    'schedule_overlap' => 'A schedule with this cron expression already exists.',
     'cron_every_minute' => 'Runs every minute.',
     'cron_every_n_minutes' => 'Runs every :n minutes.',
     'cron_every_hour' => 'Runs every hour.',

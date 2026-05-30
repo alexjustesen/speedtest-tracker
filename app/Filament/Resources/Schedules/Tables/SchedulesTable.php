@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Schedules\Tables;
 
 use App\Models\Schedule;
+use App\Actions\ExplainCronExpression;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -30,6 +31,7 @@ class SchedulesTable
 
                 TextColumn::make('schedule')
                     ->label(__('schedules.columns.schedule'))
+                    ->formatStateUsing(fn (?string $state) => ExplainCronExpression::run($state))
                     ->sortable(),
 
                 TextColumn::make('server_mode')

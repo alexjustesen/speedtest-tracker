@@ -47,6 +47,8 @@ class ScheduleForm
                                     )
                                     ->helperText(fn (Get $get) => ExplainCronExpression::run($get('schedule')))
                                     ->live(debounce: 500)
+                                    ->unique(ignoreRecord: true)
+                                    ->validationMessages(['unique' => __('schedules.schedule_overlap')])
                                     ->rules([new Cron])
                                     ->required()
                                     ->maxLength(255),
