@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Ookla;
 
+use App\Data\OoklaResult;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestFailed;
 use App\Events\SpeedtestRunning;
@@ -11,7 +12,6 @@ use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
-use Illuminate\Support\Arr;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -60,7 +60,6 @@ class RunSpeedtestJob implements ShouldQueue
             'speedtest',
             '--accept-license',
             '--accept-gdpr',
-            '--selection-details',
             '--format=json',
             $this->result->server_id ? '--server-id='.$this->result->server_id : null,
             config('speedtest.interface') ? '--interface='.config('speedtest.interface') : null,
@@ -72,9 +71,7 @@ class RunSpeedtestJob implements ShouldQueue
             $process->mustRun();
         } catch (ProcessFailedException $exception) {
             $this->result->update([
-                'data->type' => 'log',
-                'data->level' => 'error',
-                'data->message' => Ookla::getErrorMessage($exception),
+                'error_message' => Ookla::getErrorMessage($exception),
                 'status' => ResultStatus::Failed,
             ]);
 
@@ -87,13 +84,6 @@ class RunSpeedtestJob implements ShouldQueue
 
         $output = json_decode($process->getOutput(), true);
 
-        $this->result->update([
-            'ping' => Arr::get($output, 'ping.latency'),
-            'download' => Arr::get($output, 'download.bandwidth'),
-            'upload' => Arr::get($output, 'upload.bandwidth'),
-            'download_bytes' => Arr::get($output, 'download.bytes'),
-            'upload_bytes' => Arr::get($output, 'upload.bytes'),
-            'data' => $output,
-        ]);
+        $this->result->update(OoklaResult::fromArray($output)->toModelAttributes());
     }
 }

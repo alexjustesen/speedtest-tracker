@@ -68,18 +68,18 @@ class PrometheusMetricsService
         $this->registerGaugeIfNotNull($registry, 'packet_loss_percent', 'Packet loss percentage', $labelNames, $labelValues, $result->packet_loss, $timestamp);
 
         // Download latency metrics (IQM = Interquartile Mean - more reliable than average)
-        $this->registerGaugeIfNotNull($registry, 'download_latency_iqm_ms', 'Download latency interquartile mean in milliseconds', $labelNames, $labelValues, $result->downloadlatencyiqm, $timestamp);
-        $this->registerGaugeIfNotNull($registry, 'download_latency_low_ms', 'Download latency low in milliseconds', $labelNames, $labelValues, $result->downloadlatency_low, $timestamp);
-        $this->registerGaugeIfNotNull($registry, 'download_latency_high_ms', 'Download latency high in milliseconds', $labelNames, $labelValues, $result->downloadlatency_high, $timestamp);
+        $this->registerGaugeIfNotNull($registry, 'download_latency_iqm_ms', 'Download latency interquartile mean in milliseconds', $labelNames, $labelValues, $result->download_latency_iqm, $timestamp);
+        $this->registerGaugeIfNotNull($registry, 'download_latency_low_ms', 'Download latency low in milliseconds', $labelNames, $labelValues, $result->download_latency_low, $timestamp);
+        $this->registerGaugeIfNotNull($registry, 'download_latency_high_ms', 'Download latency high in milliseconds', $labelNames, $labelValues, $result->download_latency_high, $timestamp);
 
         // Upload latency metrics
-        $this->registerGaugeIfNotNull($registry, 'upload_latency_iqm_ms', 'Upload latency interquartile mean in milliseconds', $labelNames, $labelValues, $result->uploadlatencyiqm, $timestamp);
-        $this->registerGaugeIfNotNull($registry, 'upload_latency_low_ms', 'Upload latency low in milliseconds', $labelNames, $labelValues, $result->uploadlatency_low, $timestamp);
-        $this->registerGaugeIfNotNull($registry, 'upload_latency_high_ms', 'Upload latency high in milliseconds', $labelNames, $labelValues, $result->uploadlatency_high, $timestamp);
+        $this->registerGaugeIfNotNull($registry, 'upload_latency_iqm_ms', 'Upload latency interquartile mean in milliseconds', $labelNames, $labelValues, $result->upload_latency_iqm, $timestamp);
+        $this->registerGaugeIfNotNull($registry, 'upload_latency_low_ms', 'Upload latency low in milliseconds', $labelNames, $labelValues, $result->upload_latency_low, $timestamp);
+        $this->registerGaugeIfNotNull($registry, 'upload_latency_high_ms', 'Upload latency high in milliseconds', $labelNames, $labelValues, $result->upload_latency_high, $timestamp);
 
         // Bytes transferred during test (cumulative totals)
-        $this->registerGaugeIfNotNull($registry, 'test_downloaded_bytes_total', 'Total bytes downloaded during test', $labelNames, $labelValues, $result->downloaded_bytes, $timestamp);
-        $this->registerGaugeIfNotNull($registry, 'test_uploaded_bytes_total', 'Total bytes uploaded during test', $labelNames, $labelValues, $result->uploaded_bytes, $timestamp);
+        $this->registerGaugeIfNotNull($registry, 'test_downloaded_bytes_total', 'Total bytes downloaded during test', $labelNames, $labelValues, $result->download_bytes, $timestamp);
+        $this->registerGaugeIfNotNull($registry, 'test_uploaded_bytes_total', 'Total bytes uploaded during test', $labelNames, $labelValues, $result->upload_bytes, $timestamp);
 
         // Test duration
         $this->registerGaugeIfNotNull($registry, 'download_elapsed_ms', 'Download test duration in milliseconds', $labelNames, $labelValues, $result->download_elapsed, $timestamp);

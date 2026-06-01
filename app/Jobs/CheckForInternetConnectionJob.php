@@ -65,9 +65,7 @@ class CheckForInternetConnectionJob implements ShouldQueue
             : sprintf('Failed to connected to hostname "%s". Error received "%s". HTTP fallback also failed.', $ping->getHost(), $ping->error()?->value);
 
         $this->result->update([
-            'data->type' => 'log',
-            'data->level' => 'error',
-            'data->message' => $message,
+            'error_message' => $message,
             'status' => ResultStatus::Failed,
         ]);
 

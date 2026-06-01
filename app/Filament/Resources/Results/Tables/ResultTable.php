@@ -42,7 +42,7 @@ class ResultTable
                     ->badge()
                     ->toggleable(isToggledHiddenByDefault: false),
 
-                TextColumn::make('data.interface.externalIp')
+                TextColumn::make('ip_address')
                     ->label(__('results.ip_address'))
                     ->toggleable(isToggledHiddenByDefault: true),
 
@@ -74,7 +74,7 @@ class ResultTable
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
 
-                TextColumn::make('data.packetLoss')
+                TextColumn::make('packet_loss')
                     ->label(__('results.packet_loss'))
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
@@ -82,22 +82,18 @@ class ResultTable
                         return number_format((float) $state, 2, '.', '').' %';
                     }),
 
-                TextColumn::make('data.download.latency.jitter')
+                TextColumn::make('download_jitter')
                     ->label(__('results.download_latency_jitter'))
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->download->latency->jitter', $direction);
-                    })
+                    ->sortable()
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
 
-                TextColumn::make('data.upload.latency.jitter')
+                TextColumn::make('upload_jitter')
                     ->label(__('results.upload_latency_jitter'))
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(query: function (Builder $query, string $direction): Builder {
-                        return $query->orderBy('data->upload->latency->jitter', $direction);
-                    })
+                    ->sortable()
                     ->formatStateUsing(function ($state) {
                         return number_format((float) $state, 0, '.', '').' ms';
                     }),
@@ -155,54 +151,42 @@ class ResultTable
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
-                            ->select('data->interface->externalIp AS public_ip_address')
-                            ->whereNotNull('data->interface->externalIp')
+                            ->select('ip_address')
+                            ->whereNotNull('ip_address')
                             ->where('status', '=', ResultStatus::Completed)
                             ->distinct()
-                            ->orderBy('data->interface->externalIp')
-                            ->get()
-                            ->mapWithKeys(function (Result $item, int $key) {
-                                return [$item['public_ip_address'] => $item['public_ip_address']];
-                            })
+                            ->orderBy('ip_address')
+                            ->pluck('ip_address', 'ip_address')
                             ->toArray();
-                    })
-                    ->attribute('data->interface->externalIp'),
+                    }),
 
                 SelectFilter::make('server_name')
                     ->label(__('results.server_name'))
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
-                            ->select('data->server->name AS data_server_name')
-                            ->whereNotNull('data->server->name')
+                            ->select('server_name')
+                            ->whereNotNull('server_name')
                             ->where('status', '=', ResultStatus::Completed)
                             ->distinct()
-                            ->orderBy('data->server->name')
-                            ->get()
-                            ->mapWithKeys(function (Result $item, int $key) {
-                                return [$item['data_server_name'] => $item['data_server_name']];
-                            })
+                            ->orderBy('server_name')
+                            ->pluck('server_name', 'server_name')
                             ->toArray();
-                    })
-                    ->attribute('data->server->name'),
+                    }),
 
                 SelectFilter::make('server_id')
                     ->label(__('results.server_id'))
                     ->multiple()
                     ->options(function (): array {
                         return Result::query()
-                            ->select('data->server->id AS data_server_id')
-                            ->whereNotNull('data->server->id')
+                            ->select('server_id')
+                            ->whereNotNull('server_id')
                             ->where('status', '=', ResultStatus::Completed)
                             ->distinct()
-                            ->orderBy('data->server->id')
-                            ->get()
-                            ->mapWithKeys(function (Result $item, int $key) {
-                                return [$item['data_server_id'] => $item['data_server_id']];
-                            })
+                            ->orderBy('server_id')
+                            ->pluck('server_id', 'server_id')
                             ->toArray();
-                    })
-                    ->attribute('data->server->id'),
+                    }),
 
                 TernaryFilter::make('scheduled')
                     ->label(__('results.scheduled'))

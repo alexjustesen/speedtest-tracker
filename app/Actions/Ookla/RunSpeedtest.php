@@ -26,7 +26,7 @@ class RunSpeedtest
     public function handle(bool $scheduled = false, ?int $serverId = null, ?int $dispatchedBy = null): mixed
     {
         $result = Result::create([
-            'data->server->id' => $serverId,
+            'server_id' => $serverId,
             'service' => ResultService::Ookla,
             'status' => ResultStatus::Waiting,
             'scheduled' => $scheduled,

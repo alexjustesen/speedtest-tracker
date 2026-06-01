@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Data\OoklaResult;
 use App\Enums\ResultService;
 use App\Enums\ResultStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Lottery;
 
 /**
@@ -31,7 +31,7 @@ class ResultFactory extends Factory
 
         $output = json_decode($response, true);
 
-        if (Arr::exists($output, 'level')) {
+        if (isset($output['level'])) {
             return [
                 'service' => ResultService::Faker,
                 'data' => $output,
@@ -42,11 +42,7 @@ class ResultFactory extends Factory
 
         return [
             'service' => ResultService::Faker,
-            'ping' => Arr::get($output, 'ping.latency'),
-            'download' => Arr::get($output, 'download.bandwidth'),
-            'upload' => Arr::get($output, 'upload.bandwidth'),
-            'download_bytes' => Arr::get($output, 'download.bytes'),
-            'upload_bytes' => Arr::get($output, 'upload.bytes'),
+            ...OoklaResult::fromArray($output)->toModelAttributes(),
             'data' => $output,
             'status' => ResultStatus::Completed,
             'scheduled' => false,

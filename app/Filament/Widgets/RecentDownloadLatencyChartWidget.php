@@ -34,7 +34,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'data', 'created_at'])
+            ->select(['id', 'download_latency_iqm', 'download_latency_high', 'download_latency_low', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter === '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());

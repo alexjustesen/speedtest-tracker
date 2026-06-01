@@ -34,7 +34,7 @@ class RecentJitterChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'data', 'created_at'])
+            ->select(['id', 'download_jitter', 'upload_jitter', 'ping_jitter', 'created_at'])
             ->where('status', '=', ResultStatus::Completed)
             ->when($this->filter === '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());

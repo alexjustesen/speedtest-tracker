@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\OoklaResult;
 use App\Models\Result;
 use Illuminate\Support\Str;
 
@@ -28,7 +29,6 @@ class SpeedtestFakeResultGenerator
                 'ip' => '127.0.0.1',
                 'host' => 'docs.speedtest-tracker.dev',
                 'name' => 'Speedtest',
-                'port' => 8080,
                 'country' => 'United States',
                 'location' => 'New York City, NY',
             ],
@@ -66,42 +66,7 @@ class SpeedtestFakeResultGenerator
         ];
 
         return new Result([
-            'ping' => $data['ping']['latency'],
-            'ping_low' => $data['ping']['low'],
-            'ping_high' => $data['ping']['high'],
-            'ping_jitter' => $data['ping']['jitter'],
-            'packet_loss' => $data['packetLoss'],
-            'download' => $data['download']['bandwidth'],
-            'download_bits' => $data['download']['bandwidth'],
-            'download_bytes' => $data['download']['bytes'],
-            'download_elapsed' => $data['download']['elapsed'],
-            'download_latency_iqm' => $data['download']['latency']['iqm'],
-            'download_latency_low' => $data['download']['latency']['low'],
-            'download_latency_high' => $data['download']['latency']['high'],
-            'download_latency_jitter' => $data['download']['latency']['jitter'],
-            'upload' => $data['upload']['bandwidth'],
-            'upload_bits' => $data['upload']['bandwidth'],
-            'upload_bytes' => $data['upload']['bytes'],
-            'upload_elapsed' => $data['upload']['elapsed'],
-            'upload_latency_iqm' => $data['upload']['latency']['iqm'],
-            'upload_latency_low' => $data['upload']['latency']['low'],
-            'upload_latency_high' => $data['upload']['latency']['high'],
-            'upload_latency_jitter' => $data['upload']['latency']['jitter'],
-            'server_id' => $data['server']['id'],
-            'server_ip' => $data['server']['ip'],
-            'server_host' => $data['server']['host'],
-            'server_name' => $data['server']['name'],
-            'server_port' => $data['server']['port'],
-            'server_country' => $data['server']['country'],
-            'server_location' => $data['server']['location'],
-            'interface_name' => $data['interface']['name'],
-            'interface_is_vpn' => $data['interface']['isVpn'],
-            'interface_mac_addr' => $data['interface']['macAddr'],
-            'interface_internal_ip' => $data['interface']['internalIp'],
-            'ip_address' => $data['interface']['externalIp'],
-            'uuid' => $data['result']['id'],
-            'result_url' => $data['result']['url'],
-            'data' => $data,
+            ...OoklaResult::fromArray($data)->toModelAttributes(),
             'status' => 'completed',
             'service' => 'faker',
             'scheduled' => false,
@@ -110,15 +75,8 @@ class SpeedtestFakeResultGenerator
 
     public static function failed(): Result
     {
-        $data = [
-            'type' => 'log',
-            'level' => 'error',
-            'message' => 'A faked error message.',
-            'timestamp' => now()->toIso8601String(),
-        ];
-
         return new Result([
-            'data' => $data,
+            'error_message' => 'A faked error message.',
             'status' => 'failed',
             'service' => 'faker',
             'scheduled' => false,

@@ -72,10 +72,8 @@ class SkipSpeedtestJob implements ShouldQueue
         }
 
         $this->result->update([
-            'data->type' => 'log',
-            'data->level' => 'error',
-            'data->message' => $shouldSkip,
-            'data->interface->externalIp' => $externalIp,
+            'error_message' => $shouldSkip,
+            'ip_address' => $externalIp['body'],
             'status' => ResultStatus::Skipped,
         ]);
 

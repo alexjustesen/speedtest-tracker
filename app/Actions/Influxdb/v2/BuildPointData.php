@@ -5,7 +5,6 @@ namespace App\Actions\Influxdb\v2;
 use App\Helpers\Bitrate;
 use App\Helpers\Number;
 use App\Models\Result;
-use Illuminate\Support\Arr;
 use InfluxDB2\Point;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -21,14 +20,14 @@ class BuildPointData
 
         // Qualitative tags
         $point->addTag('result_id', $result->id)
-            ->addTag('external_ip', Arr::get($result->data, 'interface.externalIp'))
+            ->addTag('external_ip', $result->ip_address)
             ->addTag('id', $result->id)
-            ->addTag('isp', Arr::get($result->data, 'isp'))
+            ->addTag('isp', $result->isp)
             ->addTag('service', $result->service->value)
-            ->addTag('server_id', Arr::get($result->data, 'server.id'))
-            ->addTag('server_name', Arr::get($result->data, 'server.name'))
-            ->addTag('server_country', Arr::get($result->data, 'server.country'))
-            ->addTag('server_location', Arr::get($result->data, 'server.location'))
+            ->addTag('server_id', $result->server_id)
+            ->addTag('server_name', $result->server_name)
+            ->addTag('server_country', $result->server_country)
+            ->addTag('server_location', $result->server_location)
             ->addTag('healthy', $this->evalHealthyTag($result->healthy))
             ->addTag('status', $result->status->value)
             ->addTag('scheduled', $result->scheduled ? 'true' : 'false');
@@ -39,21 +38,21 @@ class BuildPointData
             ->addField('ping', Number::castToType($result->ping, 'float'))
             ->addField('download_bits', ! blank($result->download) ? Number::castToType(Bitrate::bytesToBits($result->download), 'int') : null)
             ->addField('upload_bits', ! blank($result->upload) ? Number::castToType(Bitrate::bytesToBits($result->upload), 'int') : null)
-            ->addField('download_elapsed', Number::castToType(Arr::get($result->data, 'download.elapsed'), 'float'))
-            ->addField('upload_elapsed', Number::castToType(Arr::get($result->data, 'upload.elapsed'), 'float'))
-            ->addField('download_jitter', Number::castToType(Arr::get($result->data, 'download.latency.jitter'), 'float'))
-            ->addField('upload_jitter', Number::castToType(Arr::get($result->data, 'upload.latency.jitter'), 'float'))
-            ->addField('ping_jitter', Number::castToType(Arr::get($result->data, 'ping.jitter'), 'float'))
-            ->addField('download_latency_avg', Number::castToType(Arr::get($result->data, 'download.latency.iqm'), 'float'))
-            ->addField('download_latency_high', Number::castToType(Arr::get($result->data, 'download.latency.high'), 'float'))
-            ->addField('download_latency_low', Number::castToType(Arr::get($result->data, 'download.latency.low'), 'float'))
-            ->addField('upload_latency_avg', Number::castToType(Arr::get($result->data, 'upload.latency.iqm'), 'float'))
-            ->addField('upload_latency_high', Number::castToType(Arr::get($result->data, 'upload.latency.high'), 'float'))
-            ->addField('upload_latency_low', Number::castToType(Arr::get($result->data, 'upload.latency.low'), 'float'))
+            ->addField('download_elapsed', Number::castToType($result->download_elapsed, 'float'))
+            ->addField('upload_elapsed', Number::castToType($result->upload_elapsed, 'float'))
+            ->addField('download_jitter', Number::castToType($result->download_jitter, 'float'))
+            ->addField('upload_jitter', Number::castToType($result->upload_jitter, 'float'))
+            ->addField('ping_jitter', Number::castToType($result->ping_jitter, 'float'))
+            ->addField('download_latency_avg', Number::castToType($result->download_latency_iqm, 'float'))
+            ->addField('download_latency_high', Number::castToType($result->download_latency_high, 'float'))
+            ->addField('download_latency_low', Number::castToType($result->download_latency_low, 'float'))
+            ->addField('upload_latency_avg', Number::castToType($result->upload_latency_iqm, 'float'))
+            ->addField('upload_latency_high', Number::castToType($result->upload_latency_high, 'float'))
+            ->addField('upload_latency_low', Number::castToType($result->upload_latency_low, 'float'))
             ->addField('downloaded_bytes', Number::castToType($result->download_bytes, 'float'))
             ->addField('uploaded_bytes', Number::castToType($result->upload_bytes, 'float'))
-            ->addField('packet_loss', Number::castToType(Arr::get($result->data, 'packetLoss'), 'float'))
-            ->addField('log_message', Arr::get($result->data, 'message'));
+            ->addField('packet_loss', Number::castToType($result->packet_loss, 'float'))
+            ->addField('log_message', $result->error_message);
 
         return $point;
     }

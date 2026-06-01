@@ -7,7 +7,6 @@ use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -39,7 +38,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
     public function handle(): void
     {
         // If the server id is already set, we don't need to do anything.
-        if (Arr::get($this->result->data, 'server.id')) {
+        if ($this->result->server_id) {
             return;
         }
 
@@ -170,7 +169,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
     private function updateServerId(Result $result, int $serverId): void
     {
         $result->update([
-            'data->server->id' => $serverId,
+            'server_id' => $serverId,
         ]);
     }
 }

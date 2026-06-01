@@ -43,20 +43,20 @@ class ResultForm
                                 TextInput::make('ping')
                                     ->label(__('general.ping'))
                                     ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                TextInput::make('data.packetLoss')
+                                TextInput::make('packet_loss')
                                     ->label(__('results.packet_loss'))
                                     ->formatStateUsing(fn ($state) => number_format((float) $state, 2, '.', '').' %'),
                             ])->columns(2)->columnSpan('full'),
 
                             Section::make(__('general.download_latency'))
                                 ->schema([
-                                    TextInput::make('data.download.latency.jitter')->label(__('general.jitter'))
+                                    TextInput::make('download_jitter')->label(__('general.jitter'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                    TextInput::make('data.download.latency.high')->label(__('general.high'))
+                                    TextInput::make('download_latency_high')->label(__('general.high'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                    TextInput::make('data.download.latency.low')->label(__('general.low'))
+                                    TextInput::make('download_latency_low')->label(__('general.low'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                    TextInput::make('data.download.latency.iqm')->label(__('results.iqm'))
+                                    TextInput::make('download_latency_iqm')->label(__('results.iqm'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
                                 ])
                                 ->columns(2)
@@ -65,13 +65,13 @@ class ResultForm
 
                             Section::make(__('general.upload_latency'))
                                 ->schema([
-                                    TextInput::make('data.upload.latency.jitter')->label(__('general.jitter'))
+                                    TextInput::make('upload_jitter')->label(__('general.jitter'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                    TextInput::make('data.upload.latency.high')->label(__('general.high'))
+                                    TextInput::make('upload_latency_high')->label(__('general.high'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                    TextInput::make('data.upload.latency.low')->label(__('general.low'))
+                                    TextInput::make('upload_latency_low')->label(__('general.low'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                    TextInput::make('data.upload.latency.iqm')->label(__('results.iqm'))
+                                    TextInput::make('upload_latency_iqm')->label(__('results.iqm'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
                                 ])
                                 ->columns(2)
@@ -80,18 +80,18 @@ class ResultForm
 
                             Section::make(__('results.ping_details'))
                                 ->schema([
-                                    TextInput::make('data.ping.jitter')->label(__('general.jitter'))
+                                    TextInput::make('ping_jitter')->label(__('general.jitter'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                    TextInput::make('data.ping.low')->label(__('general.low'))
+                                    TextInput::make('ping_low')->label(__('general.low'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
-                                    TextInput::make('data.ping.high')->label(__('general.high'))
+                                    TextInput::make('ping_high')->label(__('general.high'))
                                         ->formatStateUsing(fn ($state) => number_format((float) $state, 0, '.', '').' ms'),
                                 ])
                                 ->columns(2)
                                 ->collapsed()
                                 ->columnSpan('full'),
 
-                            Textarea::make('data.message')
+                            Textarea::make('error_message')
                                 ->label(__('general.message'))
                                 ->hint(new HtmlString('&#x1f517;<a href="https://docs.speedtest-tracker.dev/help/error-messages" target="_blank" rel="nofollow">Error Messages</a>'))
                                 ->columnSpanFull(),

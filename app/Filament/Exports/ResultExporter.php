@@ -21,59 +21,45 @@ class ResultExporter extends Exporter
 
     public static function getColumns(): array
     {
-        $columns = [
+        return [
             ExportColumn::make('id')->label('ID'),
             ExportColumn::make('service')->state(fn (Result $r) => $r->service->getLabel()),
             ExportColumn::make('status')->state(fn (Result $r) => $r->status->getLabel()),
             ExportColumn::make('scheduled')->state(fn (Result $r) => $r->scheduled ? 'Yes' : 'No'),
             ExportColumn::make('healthy')->state(fn (Result $r) => $r->healthy ? 'Yes' : 'No'),
+            ExportColumn::make('ping'),
+            ExportColumn::make('ping_jitter'),
+            ExportColumn::make('ping_low'),
+            ExportColumn::make('ping_high'),
+            ExportColumn::make('download'),
+            ExportColumn::make('download_bytes'),
+            ExportColumn::make('download_jitter'),
+            ExportColumn::make('download_latency_iqm'),
+            ExportColumn::make('download_latency_low'),
+            ExportColumn::make('download_latency_high'),
+            ExportColumn::make('download_elapsed'),
+            ExportColumn::make('upload'),
+            ExportColumn::make('upload_bytes'),
+            ExportColumn::make('upload_jitter'),
+            ExportColumn::make('upload_latency_iqm'),
+            ExportColumn::make('upload_latency_low'),
+            ExportColumn::make('upload_latency_high'),
+            ExportColumn::make('upload_elapsed'),
+            ExportColumn::make('packet_loss'),
+            ExportColumn::make('isp'),
+            ExportColumn::make('ip_address'),
+            ExportColumn::make('server_id'),
+            ExportColumn::make('server_name'),
+            ExportColumn::make('server_host'),
+            ExportColumn::make('server_ip'),
+            ExportColumn::make('server_country'),
+            ExportColumn::make('server_location'),
+            ExportColumn::make('result_url'),
+            ExportColumn::make('error_message'),
+            ExportColumn::make('comments'),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at'),
-            ExportColumn::make('comments'),
         ];
-
-        $columns = array_merge($columns, self::generateDataColumns());
-
-        return $columns;
-    }
-
-    protected static function generateDataColumns(): array
-    {
-
-        $sample = Result::query()->whereNotNull('data')->first()?->data ?? [];
-
-        $flattened = self::flatten($sample);
-
-        $columns = [];
-
-        foreach ($flattened as $key => $default) {
-            $columns[] = ExportColumn::make($key)
-                ->label(str_replace('_', ' ', ucfirst($key)))
-                ->state(function (Result $r) use ($key) {
-                    $flattened = self::flatten($r->data ?? []);
-
-                    return $flattened[$key] ?? null;
-                });
-        }
-
-        return $columns;
-    }
-
-    protected static function flatten(array $array, string $prefix = ''): array
-    {
-        $result = [];
-
-        foreach ($array as $key => $value) {
-            $newKey = $prefix ? "{$prefix}_{$key}" : $key;
-
-            if (is_array($value)) {
-                $result += self::flatten($value, $newKey);
-            } else {
-                $result[$newKey] = $value;
-            }
-        }
-
-        return $result;
     }
 
     public static function getCompletedNotificationBody(Export $export): string
