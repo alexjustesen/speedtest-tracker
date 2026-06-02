@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     *
+     * Replace the generic `data` JSON blob with dedicated columns so each
+     * Ookla metric can be queried and indexed individually. Existing rows are
+     * backfilled from their stored JSON before the blob column is dropped.
+     */
     public function up(): void
     {
         Schema::table('results', function (Blueprint $table) {
@@ -35,9 +42,10 @@ return new class extends Migration
             $table->string('server_country')->nullable()->after('server_ip');
             $table->string('server_location')->nullable()->after('server_country');
             $table->string('result_url')->nullable()->after('server_location');
-            $table->text('error_message')->nullable()->after('result_url');
+            $table->text('error_message')->nullable()->after('status');
         });
 
+        // Backfill the new columns from the existing JSON blob before dropping it.
         Result::whereNotNull('data')->lazy()->each(function (Result $result) {
             $result->updateQuietly([
                 ...OoklaResult::fromArray($result->data)->toModelAttributes(),
@@ -50,6 +58,9 @@ return new class extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('results', function (Blueprint $table) {
