@@ -12,9 +12,9 @@ return new class extends Migration
     /**
      * Run the migrations.
      *
-     * Replace the generic `data` JSON blob with dedicated columns so each
-     * Ookla metric can be queried and indexed individually. Existing rows are
-     * backfilled from their stored JSON before the blob column is dropped.
+     * Add dedicated columns for each Ookla metric so they can be queried and
+     * indexed individually. Existing rows are backfilled from the `data` JSON
+     * blob, which is kept in place for now and will be dropped in a follow-up.
      */
     public function up(): void
     {
@@ -45,16 +45,12 @@ return new class extends Migration
             $table->text('error_message')->nullable()->after('status');
         });
 
-        // Backfill the new columns from the existing JSON blob before dropping it.
+        // Backfill the new columns from the existing JSON blob.
         Result::whereNotNull('data')->lazy()->each(function (Result $result) {
             $result->updateQuietly([
                 ...OoklaResult::fromArray($result->data)->toModelAttributes(),
                 'error_message' => Arr::get($result->data, 'message'),
             ]);
-        });
-
-        Schema::table('results', function (Blueprint $table) {
-            $table->dropColumn('data');
         });
     }
 
@@ -63,10 +59,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('results', function (Blueprint $table) {
-            $table->json('data')->nullable()->after('comments');
-        });
-
         Schema::table('results', function (Blueprint $table) {
             $table->dropColumn([
                 'ping_jitter', 'ping_low', 'ping_high',
