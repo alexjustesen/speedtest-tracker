@@ -176,7 +176,7 @@ describe('metrics endpoint', function () {
             'download' => null,
             'upload' => null,
             'ping' => null,
-            'data' => ['type' => 'log', 'level' => 'error', 'message' => 'Test error.', 'timestamp' => '2024-03-01T01:00:00Z'],
+            'error_message' => 'Test error.',
         ]);
 
         app(PrometheusMetricsService::class)->updateMetrics($result);

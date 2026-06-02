@@ -120,8 +120,7 @@ describe('CheckForInternetConnectionJob', function () {
         $this->assertTrue($batch->cancelled());
         $result->refresh();
         expect($result->status)->toBe(ResultStatus::Failed);
-        expect($result->data['level'])->toBe('error');
-        expect($result->data['message'])->toContain('HTTP fallback also failed');
+        expect($result->error_message)->toContain('HTTP fallback also failed');
         Event::assertDispatched(SpeedtestFailed::class);
     });
 
@@ -146,7 +145,7 @@ describe('CheckForInternetConnectionJob', function () {
         $this->assertTrue($batch->cancelled());
         $result->refresh();
         expect($result->status)->toBe(ResultStatus::Failed);
-        expect($result->data['message'])->toBe('Ping command is unavailable and HTTP fallback also failed.');
+        expect($result->error_message)->toBe('Ping command is unavailable and HTTP fallback also failed.');
         Event::assertDispatched(SpeedtestFailed::class);
     });
 });
