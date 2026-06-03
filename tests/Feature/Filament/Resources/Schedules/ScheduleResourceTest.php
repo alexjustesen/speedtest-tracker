@@ -6,6 +6,7 @@ use App\Filament\Resources\Schedules\Pages\EditSchedule;
 use App\Filament\Resources\Schedules\Pages\ListSchedules;
 use App\Models\Schedule;
 use App\Models\User;
+use Filament\Actions\Testing\TestAction;
 use Livewire\Livewire;
 
 beforeEach(function () {
@@ -22,6 +23,62 @@ describe('list page', function () {
 
         Livewire::test(ListSchedules::class)
             ->assertCanSeeTableRecords($schedules);
+    });
+
+    it('renders the enabled toggle column reflecting model state', function () {
+        $enabled = Schedule::factory()->create(['enabled' => true]);
+        $disabled = Schedule::factory()->disabled()->create();
+
+        Livewire::test(ListSchedules::class)
+            ->assertTableColumnStateSet('enabled', true, record: $enabled)
+            ->assertTableColumnStateSet('enabled', false, record: $disabled);
+    });
+
+    it('shows next run at for enabled schedules', function () {
+        Schedule::factory()->create(['enabled' => true, 'schedule' => '* * * * *']);
+        $disabled = Schedule::factory()->disabled()->create(['schedule' => '* * * * *']);
+
+        $component = Livewire::test(ListSchedules::class);
+
+        $component->assertTableColumnStateSet('next_run_at', null, record: $disabled);
+    });
+
+    it('filters to only enabled schedules', function () {
+        $enabled = Schedule::factory()->create(['enabled' => true]);
+        $disabled = Schedule::factory()->disabled()->create();
+
+        Livewire::test(ListSchedules::class)
+            ->filterTable('enabled', true)
+            ->assertCanSeeTableRecords([$enabled])
+            ->assertCanNotSeeTableRecords([$disabled]);
+    });
+
+    it('filters to only disabled schedules', function () {
+        $enabled = Schedule::factory()->create(['enabled' => true]);
+        $disabled = Schedule::factory()->disabled()->create();
+
+        Livewire::test(ListSchedules::class)
+            ->filterTable('enabled', false)
+            ->assertCanSeeTableRecords([$disabled])
+            ->assertCanNotSeeTableRecords([$enabled]);
+    });
+
+    it('can disable an enabled schedule from the action group', function () {
+        $schedule = Schedule::factory()->create(['enabled' => true]);
+
+        Livewire::test(ListSchedules::class)
+            ->callAction(TestAction::make('toggleEnabled')->table($schedule));
+
+        expect($schedule->fresh()->enabled)->toBeFalse();
+    });
+
+    it('can enable a disabled schedule from the action group', function () {
+        $schedule = Schedule::factory()->disabled()->create();
+
+        Livewire::test(ListSchedules::class)
+            ->callAction(TestAction::make('toggleEnabled')->table($schedule));
+
+        expect($schedule->fresh()->enabled)->toBeTrue();
     });
 });
 

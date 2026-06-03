@@ -2,18 +2,18 @@
 
 namespace App\Filament\Resources\Schedules\Schemas;
 
-use App\Actions\ExplainCronExpression;
 use App\Actions\GetOoklaSpeedtestServers;
+use App\Actions\Schedules\ExplainCronExpression;
 use App\Models\Schedule;
 use App\Rules\Cron;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 
 class ScheduleForm
@@ -59,14 +59,14 @@ class ScheduleForm
                         Tab::make(__('schedules.tab_servers'))
                             ->icon('tabler-server')
                             ->schema([
-                                Select::make('server_mode')
+                                Radio::make('server_mode')
                                     ->label(__('schedules.server_mode'))
                                     ->options(__('schedules.server_mode_options'))
                                     ->default('auto')
-                                    ->native(false)
+                                   // ->native(false)
                                     ->live()
                                     ->saved(false)
-                                    ->afterStateHydrated(function (Select $component, Get $get) {
+                                    ->afterStateHydrated(function (Radio $component, Get $get) {
                                         if (! blank($get('servers'))) {
                                             $component->state('prefer');
                                         } elseif (! blank($get('blocked_servers'))) {
@@ -74,10 +74,6 @@ class ScheduleForm
                                         } else {
                                             $component->state('auto');
                                         }
-                                    })
-                                    ->afterStateUpdated(function (Set $set) {
-                                        $set('servers', null);
-                                        $set('blocked_servers', null);
                                     }),
 
                                 Select::make('servers')
@@ -102,16 +98,11 @@ class ScheduleForm
                                             ->mapWithKeys(fn ($value) => [$value => $labels[$value] ?? (string) $value])
                                             ->toArray();
                                     })
-                                    ->createOptionForm([
-                                        TextInput::make('server_id')
-                                            ->label(__('schedules.server_id_manual'))
-                                            ->required()
-                                            ->integer(),
-                                    ])
-                                    ->createOptionUsing(fn (array $data): string => (string) $data['server_id'])
                                     ->visible(fn (Get $get): bool => $get('server_mode') === 'prefer')
                                     ->dehydratedWhenHidden()
-                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state))
+                                    ->dehydrateStateUsing(fn (?array $state, Get $get): ?array => $get('server_mode') !== 'prefer' || blank($state)
+                                        ? null
+                                        : array_values(array_map('strval', $state))
                                     ),
 
                                 Select::make('blocked_servers')
@@ -136,16 +127,11 @@ class ScheduleForm
                                             ->mapWithKeys(fn ($value) => [$value => $labels[$value] ?? (string) $value])
                                             ->toArray();
                                     })
-                                    ->createOptionForm([
-                                        TextInput::make('server_id')
-                                            ->label(__('schedules.server_id_manual'))
-                                            ->required()
-                                            ->integer(),
-                                    ])
-                                    ->createOptionUsing(fn (array $data): string => (string) $data['server_id'])
                                     ->visible(fn (Get $get): bool => $get('server_mode') === 'block')
                                     ->dehydratedWhenHidden()
-                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state))
+                                    ->dehydrateStateUsing(fn (?array $state, Get $get): ?array => $get('server_mode') !== 'block' || blank($state)
+                                        ? null
+                                        : array_values(array_map('strval', $state))
                                     ),
                             ]),
 

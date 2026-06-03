@@ -31,14 +31,14 @@ return [
     'server_id_manual' => 'Server ID',
     'server_mode' => 'Server selection',
     'server_mode_options' => [
-        'auto' => 'Auto-select',
-        'prefer' => 'Prefer specific servers',
-        'block' => 'Block specific servers',
+        'auto' => 'Automatic server selection',
+        'prefer' => 'Only selected servers',
+        'block' => 'Exclude selected servers',
     ],
     'servers' => 'Preferred servers',
-    'servers_helper' => 'Select from nearby servers or use + to enter a custom server ID.',
+    'servers_helper' => 'Search by server name to find and select preferred servers.',
     'blocked_servers' => 'Blocked servers',
-    'blocked_servers_helper' => 'Select servers to exclude from auto-selection, or use + to enter a custom server ID.',
+    'blocked_servers_helper' => 'Search by server name to find and select servers to exclude from auto-selection.',
     'interface' => 'Network interface',
     'interface_placeholder' => 'eth0',
     'interface_helper' => 'Bind the speedtest to a specific network interface. Leave empty to use the system default.',
@@ -50,9 +50,18 @@ return [
         'name' => 'Name',
         'enabled' => 'Enabled',
         'schedule' => 'Schedule',
+        'next_run_at' => 'Next run at',
         'server_mode' => 'Server mode',
         'servers' => 'Servers',
         'interface' => 'Interface',
         'skip_ips' => 'Skip IPs',
     ],
+
+    // Table filters
+    'filter_enabled' => 'Enabled',
+    'filter_disabled' => 'Disabled',
+
+    // Table actions
+    'action_enable' => 'Enable',
+    'action_disable' => 'Disable',
 ];

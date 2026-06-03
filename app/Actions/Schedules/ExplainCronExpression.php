@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Schedules;
 
 use Cron\CronExpression;
 use Illuminate\Support\HtmlString;
