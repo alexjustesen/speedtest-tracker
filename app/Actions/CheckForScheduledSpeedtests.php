@@ -14,11 +14,11 @@ class CheckForScheduledSpeedtests
     public function handle(): void
     {
         Schedule::query()->where('enabled', true)->each(function (Schedule $schedule) {
-            RunSpeedtest::runIf(
-                $this->isSpeedtestDue(schedule: $schedule->schedule),
-                scheduled: true,
-                schedule: $schedule,
-            );
+            if (! $this->isSpeedtestDue($schedule->schedule)) {
+                return;
+            }
+
+            RunSpeedtest::run(scheduled: true, schedule: $schedule);
         });
     }
 

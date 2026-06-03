@@ -6,6 +6,7 @@ use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Schedules\ExplainCronExpression;
 use App\Models\Schedule;
 use App\Rules\Cron;
+use App\Rules\IpOrCidr;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
@@ -94,6 +95,7 @@ class ScheduleForm
                                     ->helperText(__('schedules.skip_ips_helper'))
                                     ->placeholder('1.1.1.1')
                                     ->splitKeys(['Tab', ' '])
+                                    ->rules([new IpOrCidr])
                                     ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : $state),
                             ]),
                     ]),

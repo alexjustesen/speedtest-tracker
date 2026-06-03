@@ -63,4 +63,5 @@ return [
     // Table actions
     'action_enable' => 'Enable',
     'action_disable' => 'Disable',
+
 ];

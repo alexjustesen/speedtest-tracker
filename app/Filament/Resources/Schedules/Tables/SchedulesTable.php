@@ -59,14 +59,15 @@ class SchedulesTable
                 TextColumn::make('server_mode')
                     ->label(__('schedules.columns.server_mode'))
                     ->state(fn (Schedule $record): string => match (true) {
-                        ! blank($record->servers) => __('schedules.server_mode_options.prefer'),
-                        ! blank($record->blocked_servers) => __('schedules.server_mode_options.block'),
-                        default => __('schedules.server_mode_options.auto'),
+                        ! blank($record->servers) => 'prefer',
+                        ! blank($record->blocked_servers) => 'block',
+                        default => 'auto',
                     })
+                    ->formatStateUsing(fn (string $state): string => __("schedules.server_mode_options.{$state}"))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        __('schedules.server_mode_options.prefer') => 'success',
-                        __('schedules.server_mode_options.block') => 'danger',
+                        'prefer' => 'success',
+                        'block' => 'danger',
                         default => 'gray',
                     }),
 

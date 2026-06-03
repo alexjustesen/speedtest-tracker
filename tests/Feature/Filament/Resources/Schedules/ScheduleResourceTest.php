@@ -80,6 +80,7 @@ describe('list page', function () {
 
         expect($schedule->fresh()->enabled)->toBeTrue();
     });
+
 });
 
 describe('create page', function () {
@@ -170,6 +171,7 @@ describe('create page', function () {
             ->call('create')
             ->assertHasFormErrors(['schedule' => 'unique']);
     });
+
 });
 
 describe('edit page', function () {
