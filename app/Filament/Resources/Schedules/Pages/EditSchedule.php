@@ -18,6 +18,11 @@ class EditSchedule extends EditRecord
         ];
     }
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $serverMode = $data['server_mode'] ?? 'auto';

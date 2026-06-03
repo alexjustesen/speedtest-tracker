@@ -75,57 +75,8 @@ class ScheduleForm
                                         }
                                     }),
 
-                                Select::make('servers')
-                                    ->label(__('schedules.servers'))
-                                    ->helperText(__('schedules.servers_helper'))
-                                    ->multiple()
-                                    ->searchable()
-                                    ->options(function (): array {
-                                        $servers = GetOoklaSpeedtestServers::run();
-
-                                        return isset($servers['error']) ? [] : $servers;
-                                    })
-                                    ->getSearchResultsUsing(function (string $search): array {
-                                        $servers = GetOoklaSpeedtestServers::run($search);
-
-                                        return isset($servers['error']) ? [] : $servers;
-                                    })
-                                    ->getOptionLabelsUsing(function (array $values, ?Schedule $record): array {
-                                        $labels = $record?->server_labels ?? [];
-
-                                        return collect($values)
-                                            ->mapWithKeys(fn ($value) => [$value => $labels[$value] ?? (string) $value])
-                                            ->toArray();
-                                    })
-                                    ->visible(fn (Get $get): bool => $get('server_mode') === 'prefer')
-                                    ->dehydratedWhenHidden()
-                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state))),
-
-                                Select::make('blocked_servers')
-                                    ->label(__('schedules.blocked_servers'))
-                                    ->helperText(__('schedules.blocked_servers_helper'))
-                                    ->multiple()
-                                    ->searchable()
-                                    ->options(function (): array {
-                                        $servers = GetOoklaSpeedtestServers::run();
-
-                                        return isset($servers['error']) ? [] : $servers;
-                                    })
-                                    ->getSearchResultsUsing(function (string $search): array {
-                                        $servers = GetOoklaSpeedtestServers::run($search);
-
-                                        return isset($servers['error']) ? [] : $servers;
-                                    })
-                                    ->getOptionLabelsUsing(function (array $values, ?Schedule $record): array {
-                                        $labels = $record?->server_labels ?? [];
-
-                                        return collect($values)
-                                            ->mapWithKeys(fn ($value) => [$value => $labels[$value] ?? (string) $value])
-                                            ->toArray();
-                                    })
-                                    ->visible(fn (Get $get): bool => $get('server_mode') === 'block')
-                                    ->dehydratedWhenHidden()
-                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state))),
+                                self::ServerSelection('servers', 'prefer'),
+                                self::ServerSelection('blocked_servers', 'block'),
                             ]),
 
                         Tab::make(__('schedules.tab_network'))
@@ -147,5 +98,34 @@ class ScheduleForm
                             ]),
                     ]),
             ]);
+    }
+
+    private static function ServerSelection(string $fieldName, string $mode): Select
+    {
+        return Select::make($fieldName)
+            ->label(__("schedules.{$fieldName}"))
+            ->helperText(__("schedules.{$fieldName}_helper"))
+            ->multiple()
+            ->searchable()
+            ->options(function (): array {
+                $servers = GetOoklaSpeedtestServers::run();
+
+                return isset($servers['error']) ? [] : $servers;
+            })
+            ->getSearchResultsUsing(function (string $search): array {
+                $servers = GetOoklaSpeedtestServers::run($search);
+
+                return isset($servers['error']) ? [] : $servers;
+            })
+            ->getOptionLabelsUsing(function (array $values, ?Schedule $record): array {
+                $labels = $record?->server_labels ?? [];
+
+                return collect($values)
+                    ->mapWithKeys(fn ($value) => [$value => $labels[$value] ?? (string) $value])
+                    ->toArray();
+            })
+            ->visible(fn (Get $get): bool => $get('server_mode') === $mode)
+            ->dehydratedWhenHidden()
+            ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state)));
     }
 }
