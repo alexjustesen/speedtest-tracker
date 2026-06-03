@@ -40,10 +40,9 @@ return [
     'blocked_servers' => 'Blocked servers',
     'blocked_servers_helper' => 'Search by server name to find and select servers to exclude from auto-selection.',
     'interface' => 'Network interface',
-    'interface_placeholder' => 'eth0',
     'interface_helper' => 'Bind the speedtest to a specific network interface. Leave empty to use the system default.',
     'skip_ips' => 'Skip IPs',
-    'skip_ips_helper' => 'Comma-separated IPs or CIDR ranges (e.g. 1.2.3.4,10.0.0.0/8). When the external IP matches, the scheduled test is skipped.',
+    'skip_ips_helper' => 'Comma-separated IPs or CIDR ranges (e.g. 8.8.8.8,8.8.8.0/24). When the external IP matches, the scheduled test is skipped.',
 
     // Table columns
     'columns' => [

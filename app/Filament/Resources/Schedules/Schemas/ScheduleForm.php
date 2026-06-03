@@ -9,6 +9,7 @@ use App\Rules\Cron;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Tabs;
@@ -28,15 +29,15 @@ class ScheduleForm
                         Tab::make(__('schedules.tab_general'))
                             ->icon('tabler-clock')
                             ->schema([
+                                Toggle::make('enabled')
+                                    ->label(__('schedules.enabled'))
+                                    ->default(true),
+
                                 TextInput::make('name')
                                     ->label(__('schedules.name'))
                                     ->placeholder(__('schedules.name_placeholder'))
                                     ->required()
                                     ->maxLength(255),
-
-                                Toggle::make('enabled')
-                                    ->label(__('schedules.enabled'))
-                                    ->default(true),
 
                                 TextInput::make('schedule')
                                     ->label(__('schedules.schedule'))
@@ -63,9 +64,7 @@ class ScheduleForm
                                     ->label(__('schedules.server_mode'))
                                     ->options(__('schedules.server_mode_options'))
                                     ->default('auto')
-                                   // ->native(false)
                                     ->live()
-                                    ->saved(false)
                                     ->afterStateHydrated(function (Radio $component, Get $get) {
                                         if (! blank($get('servers'))) {
                                             $component->state('prefer');
@@ -100,10 +99,7 @@ class ScheduleForm
                                     })
                                     ->visible(fn (Get $get): bool => $get('server_mode') === 'prefer')
                                     ->dehydratedWhenHidden()
-                                    ->dehydrateStateUsing(fn (?array $state, Get $get): ?array => $get('server_mode') !== 'prefer' || blank($state)
-                                        ? null
-                                        : array_values(array_map('strval', $state))
-                                    ),
+                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state))),
 
                                 Select::make('blocked_servers')
                                     ->label(__('schedules.blocked_servers'))
@@ -129,10 +125,7 @@ class ScheduleForm
                                     })
                                     ->visible(fn (Get $get): bool => $get('server_mode') === 'block')
                                     ->dehydratedWhenHidden()
-                                    ->dehydrateStateUsing(fn (?array $state, Get $get): ?array => $get('server_mode') !== 'block' || blank($state)
-                                        ? null
-                                        : array_values(array_map('strval', $state))
-                                    ),
+                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state))),
                             ]),
 
                         Tab::make(__('schedules.tab_network'))
@@ -141,33 +134,18 @@ class ScheduleForm
                                 TextInput::make('interface')
                                     ->label(__('schedules.interface'))
                                     ->helperText(__('schedules.interface_helper'))
-                                    ->placeholder(__('schedules.interface_placeholder'))
+                                    ->placeholder('eth0')
                                     ->maxLength(255)
                                     ->nullable(),
 
-                                TextInput::make('skip_ips')
+                                TagsInput::make('skip_ips')
                                     ->label(__('schedules.skip_ips'))
                                     ->helperText(__('schedules.skip_ips_helper'))
-                                    ->placeholder('1.2.3.4,10.0.0.0/8')
-                                    ->formatStateUsing(fn (?array $state): string => implode(',', $state ?? []))
-                                    ->dehydrateStateUsing(fn (?string $state): ?array => self::parseCommaSeparated($state))
-                                    ->nullable(),
+                                    ->placeholder('1.1.1.1')
+                                    ->splitKeys(['Tab', ' '])
+                                    ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : $state),
                             ]),
                     ]),
             ]);
-    }
-
-    /**
-     * @return array<string>|null
-     */
-    private static function parseCommaSeparated(?string $value): ?array
-    {
-        if (blank($value)) {
-            return null;
-        }
-
-        $items = array_values(array_filter(array_map('trim', explode(',', $value))));
-
-        return empty($items) ? null : $items;
     }
 }

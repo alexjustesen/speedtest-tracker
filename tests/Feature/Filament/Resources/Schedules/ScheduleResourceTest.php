@@ -96,7 +96,7 @@ describe('create page', function () {
                 'server_mode' => 'prefer',
                 'servers' => ['12345', '67890'],
                 'interface' => 'eth0',
-                'skip_ips' => '1.2.3.4,10.0.0.0/8',
+                'skip_ips' => ['1.2.3.4', '10.0.0.0/8'],
             ])
             ->call('create')
             ->assertHasNoFormErrors();

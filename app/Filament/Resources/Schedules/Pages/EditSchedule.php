@@ -20,6 +20,17 @@ class EditSchedule extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
+        $serverMode = $data['server_mode'] ?? 'auto';
+        unset($data['server_mode']);
+
+        if ($serverMode !== 'prefer') {
+            $data['servers'] = null;
+        }
+
+        if ($serverMode !== 'block') {
+            $data['blocked_servers'] = null;
+        }
+
         $data['server_labels'] = ResolveScheduleServerLabels::run(
             servers: $data['servers'] ?? [],
             blockedServers: $data['blocked_servers'] ?? [],
