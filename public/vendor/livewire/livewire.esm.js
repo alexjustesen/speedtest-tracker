@@ -9699,6 +9699,9 @@ var UploadManager = class {
       }
       this.component.$wire.call("_uploadErrored", name, errors, this.uploadBag.first(name).multiple);
     });
+    request.addEventListener("error", () => {
+      this.component.$wire.call("_uploadErrored", name, null, this.uploadBag.first(name).multiple);
+    });
     this.uploadBag.first(name).request = request;
     request.send(formData);
   }
@@ -14071,7 +14074,6 @@ function getMorphConfig(component) {
     added: (el) => {
       if (isntElement(el))
         return;
-      const findComponentByElId = findComponentByEl(el).id;
       trigger("morph.added", { el });
     },
     key: (el) => {
