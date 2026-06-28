@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ResultService;
 use App\Enums\ResultStatus;
 use App\Models\Traits\ResultDataAttributes;
+use App\Settings\GeneralSettings;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -45,7 +46,7 @@ class Result extends Model
      */
     public function prunable(): Builder
     {
-        return static::where('created_at', '<=', now()->subDays(config('speedtest.prune_results_older_than')));
+        return static::where('created_at', '<=', now()->subDays(app(GeneralSettings::class)->prune_results_older_than));
     }
 
     /**

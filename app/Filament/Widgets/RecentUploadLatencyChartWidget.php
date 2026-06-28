@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Enums\ResultStatus;
 use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentUploadLatencyChartWidget extends ChartWidget
@@ -28,7 +29,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
 
     public function mount(): void
     {
-        $this->filter = $this->filter ?? config('speedtest.default_chart_range', '24h');
+        $this->filter = $this->filter ?? app(GeneralSettings::class)->default_chart_range;
     }
 
     protected function getData(): array
@@ -84,7 +85,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(app(GeneralSettings::class)->display_timezone)->format(app(GeneralSettings::class)->chart_datetime_format)),
         ];
     }
 
@@ -104,7 +105,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'beginAtZero' => app(GeneralSettings::class)->chart_begin_at_zero,
                     'grace' => 2,
                 ],
             ],

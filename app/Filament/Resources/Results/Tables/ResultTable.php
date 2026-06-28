@@ -7,6 +7,7 @@ use App\Filament\Exports\ResultExporter;
 use App\Filament\Tables\Columns\ResultServerColumn;
 use App\Helpers\Number;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
@@ -120,8 +121,8 @@ class ResultTable
 
                 TextColumn::make('created_at')
                     ->label(__('general.created_at'))
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
             ])

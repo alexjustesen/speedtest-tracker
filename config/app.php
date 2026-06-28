@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => env('APP_TIMEZONE') ?? env('TZ', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -151,7 +151,7 @@ return [
 
     'datetime_format' => env('DATETIME_FORMAT', 'M. j, Y g:ia'),
 
-    'display_timezone' => env('DISPLAY_TIMEZONE', 'UTC'),
+    'display_timezone' => env('DISPLAY_TIMEZONE') ?? env('TZ', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------

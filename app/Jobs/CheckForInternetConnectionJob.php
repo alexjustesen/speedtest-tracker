@@ -7,6 +7,7 @@ use App\Enums\ResultStatus;
 use App\Events\SpeedtestChecking;
 use App\Events\SpeedtestFailed;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -82,7 +83,7 @@ class CheckForInternetConnectionJob implements ShouldQueue
      */
     protected function httpFallbackSucceeds(): bool
     {
-        $url = config('speedtest.preflight.external_ip_url');
+        $url = app(GeneralSettings::class)->speedtest_external_ip_url;
 
         try {
             $response = Http::retry(3, 100)

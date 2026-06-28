@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Results\Schemas;
 
 use App\Helpers\Number;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Carbon\Carbon;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Textarea;
@@ -31,8 +32,8 @@ class ResultForm
                                     ->label(__('general.created_at'))
                                     ->afterStateHydrated(function (TextInput $component, $state) {
                                         $component->state(Carbon::parse($state)
-                                            ->timezone(config('app.display_timezone'))
-                                            ->format(config('app.datetime_format')));
+                                            ->timezone(app(GeneralSettings::class)->display_timezone)
+                                            ->format(app(GeneralSettings::class)->datetime_format));
                                     }),
                                 TextInput::make('download')
                                     ->label(__('general.download'))

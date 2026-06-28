@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ApiTokens\Tables;
 
+use App\Settings\GeneralSettings;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -29,22 +30,22 @@ class ApiTokenTable
                     ->badge(),
                 TextColumn::make('created_at')
                     ->label(__('general.created_at'))
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('last_used_at')
                     ->label(__('api_tokens.last_used_at'))
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->alignEnd(),
                 TextColumn::make('expires_at')
                     ->label(__('api_tokens.expires_at'))
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
+                    ->dateTime(app(GeneralSettings::class)->datetime_format)
+                    ->timezone(app(GeneralSettings::class)->display_timezone)
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable()
                     ->alignEnd(),

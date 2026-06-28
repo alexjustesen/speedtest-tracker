@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Settings\GeneralSettings;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -14,7 +15,7 @@ class GetExternalIpAddress
 
     public function handle(?string $url = null): array
     {
-        $url = $url ?? config('speedtest.preflight.external_ip_url');
+        $url = $url ?? app(GeneralSettings::class)->speedtest_external_ip_url;
 
         try {
             $response = Http::retry(3, 100)

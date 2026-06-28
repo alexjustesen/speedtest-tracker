@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Settings\GeneralSettings;
 use Carbon\Carbon;
 use Cron\CronExpression;
 
@@ -23,7 +24,7 @@ class ScheduledSpeedtestService
         $cronExpression = new CronExpression($schedule);
 
         return Carbon::parse(
-            time: $cronExpression->getNextRunDate(timeZone: config('app.display_timezone'))
+            time: $cronExpression->getNextRunDate(timeZone: app(GeneralSettings::class)->display_timezone)
         );
     }
 }

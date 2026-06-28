@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Actions\Ookla\RunSpeedtest;
+use App\Settings\GeneralSettings;
 use Cron\CronExpression;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -33,7 +34,7 @@ class CheckForScheduledSpeedtests
 
         return $cron->isDue(
             currentTime: now(),
-            timeZone: config('app.display_timezone')
+            timeZone: app(GeneralSettings::class)->display_timezone
         );
     }
 }
