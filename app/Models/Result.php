@@ -46,7 +46,13 @@ class Result extends Model
      */
     public function prunable(): Builder
     {
-        return static::where('created_at', '<=', now()->subDays(app(GeneralSettings::class)->prune_results_older_than));
+        $days = app(GeneralSettings::class)->prune_results_older_than;
+
+        if ($days === 0) {
+            return static::query()->whereRaw('1 = 0');
+        }
+
+        return static::where('created_at', '<=', now()->subDays($days));
     }
 
     /**

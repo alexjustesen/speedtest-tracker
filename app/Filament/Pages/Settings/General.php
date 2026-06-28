@@ -76,6 +76,23 @@ class General extends SettingsPage
                                                     ->openUrlInNewTab()
                                             )
                                             ->required(),
+                                    ]),
+                            ])
+                            ->columnSpanFull(),
+
+                        Tab::make(__('settings/general.charts'))
+                            ->icon(Heroicon::OutlinedChartBar)
+                            ->schema([
+                                Grid::make(['default' => 1, 'md' => 2])
+                                    ->schema([
+                                        Select::make('default_chart_range')
+                                            ->label(__('settings/general.default_chart_range'))
+                                            ->options([
+                                                '24h' => __('settings/general.default_chart_range_24h'),
+                                                'week' => __('settings/general.default_chart_range_week'),
+                                                'month' => __('settings/general.default_chart_range_month'),
+                                            ])
+                                            ->required(),
                                         TextInput::make('chart_datetime_format')
                                             ->label(__('settings/general.chart_datetime_format'))
                                             ->helperText(__('settings/general.chart_datetime_format_helper_text'))
@@ -90,24 +107,6 @@ class General extends SettingsPage
                                         Toggle::make('chart_begin_at_zero')
                                             ->label(__('settings/general.chart_begin_at_zero'))
                                             ->columnSpanFull(),
-                                    ]),
-                            ])
-                            ->columnSpanFull(),
-
-                        Tab::make(__('settings/general.charts'))
-                            ->icon(Heroicon::OutlinedChartBar)
-                            ->schema([
-                                Grid::make(['default' => 1, 'md' => 2])
-                                    ->schema([
-                                        Select::make('default_chart_range')
-                                            ->label(__('settings/general.default_chart_range'))
-                                            ->native(false)
-                                            ->options([
-                                                '24h' => __('settings/general.default_chart_range_24h'),
-                                                'week' => __('settings/general.default_chart_range_week'),
-                                                'month' => __('settings/general.default_chart_range_month'),
-                                            ])
-                                            ->required(),
                                     ]),
                             ])
                             ->columnSpanFull(),

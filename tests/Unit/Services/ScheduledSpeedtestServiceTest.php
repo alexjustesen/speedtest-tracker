@@ -1,7 +1,11 @@
 <?php
 
 use App\Services\ScheduledSpeedtestService;
+use App\Settings\GeneralSettings;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 test('returns null when schedule config is null', function () {
     config()->set('speedtest.schedule', null);
@@ -37,7 +41,7 @@ test('returns Carbon instance when schedule is configured', function () {
 
 test('returns correct next scheduled time for hourly cron', function () {
     config()->set('speedtest.schedule', '0 * * * *'); // Every hour at minute 0
-    config()->set('app.display_timezone', 'UTC');
+    app(GeneralSettings::class)->fill(['display_timezone' => 'UTC'])->save();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
@@ -47,7 +51,7 @@ test('returns correct next scheduled time for hourly cron', function () {
 
 test('returns correct next scheduled time for daily cron', function () {
     config()->set('speedtest.schedule', '0 0 * * *'); // Every day at midnight
-    config()->set('app.display_timezone', 'UTC');
+    app(GeneralSettings::class)->fill(['display_timezone' => 'UTC'])->save();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
@@ -58,7 +62,7 @@ test('returns correct next scheduled time for daily cron', function () {
 
 test('returns future date for next scheduled test', function () {
     config()->set('speedtest.schedule', '*/5 * * * *'); // Every 5 minutes
-    config()->set('app.display_timezone', 'UTC');
+    app(GeneralSettings::class)->fill(['display_timezone' => 'UTC'])->save();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 

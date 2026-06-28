@@ -9,7 +9,7 @@
                             {{ __('general.last_results') }}
                         </h2>
 
-                        <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->timezone(config('app.display_timezone'))->format(config('app.datetime_format')) }}</p>
+                        <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $this->latestResult->created_at->timezone(app(\App\Settings\GeneralSettings::class)->display_timezone)->format(app(\App\Settings\GeneralSettings::class)->datetime_format) }}</p>
                     </div>
 
                     @auth
