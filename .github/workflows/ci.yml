@@ -22,7 +22,7 @@ jobs:
           php-version: '8.4'
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: vendor
           key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
@@ -48,7 +48,7 @@ jobs:
           php-version: '8.4'
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: vendor
           key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
@@ -56,7 +56,7 @@ jobs:
             composer-${{ runner.os }}-
 
       - name: Cache NPM dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.npm
           key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
