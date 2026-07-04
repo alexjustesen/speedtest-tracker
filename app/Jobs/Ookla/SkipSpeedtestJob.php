@@ -50,9 +50,7 @@ class SkipSpeedtestJob implements ShouldQueue
 
         if ($externalIp['ok'] === false) {
             $this->result->update([
-                'data->type' => 'log',
-                'data->level' => 'error',
-                'data->message' => $externalIp['body'],
+                'error_message' => $externalIp['body'],
                 'status' => ResultStatus::Failed,
             ]);
 

@@ -660,26 +660,171 @@
                     "service": {
                         "type": "string"
                     },
+                    "status": {
+                        "type": "string"
+                    },
+                    "scheduled": {
+                        "type": "boolean"
+                    },
+                    "healthy": {
+                        "type": "boolean",
+                        "nullable": true
+                    },
                     "ping": {
-                        "type": "number"
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "ping_jitter": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "ping_low": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "ping_high": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
                     },
                     "download": {
-                        "type": "integer"
-                    },
-                    "upload": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "download_bits": {
-                        "type": "integer"
-                    },
-                    "upload_bits": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "download_bits_human": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "download_bytes": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "download_bytes_human": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "download_jitter": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "download_latency_iqm": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "download_latency_low": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "download_latency_high": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "download_elapsed": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "upload": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "upload_bits": {
+                        "type": "integer",
+                        "nullable": true
                     },
                     "upload_bits_human": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "upload_bytes": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "upload_bytes_human": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "upload_jitter": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "upload_latency_iqm": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "upload_latency_low": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "upload_latency_high": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "upload_elapsed": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "packet_loss": {
+                        "type": "number",
+                        "format": "float",
+                        "nullable": true
+                    },
+                    "isp": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "ip_address": {
+                        "type": "string",
+                        "format": "ipv4",
+                        "nullable": true
+                    },
+                    "server_id": {
+                        "type": "integer",
+                        "nullable": true
+                    },
+                    "server_name": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "server_host": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "server_ip": {
+                        "type": "string",
+                        "format": "ipv4",
+                        "nullable": true
+                    },
+                    "server_country": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "server_location": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "result_url": {
+                        "type": "string",
+                        "format": "uri",
+                        "nullable": true
+                    },
+                    "error_message": {
+                        "type": "string",
+                        "nullable": true
                     },
                     "benchmarks": {
                         "type": "array",
@@ -688,194 +833,13 @@
                         },
                         "nullable": true
                     },
-                    "healthy": {
-                        "type": "boolean",
+                    "dispatched_by": {
+                        "type": "integer",
                         "nullable": true
-                    },
-                    "status": {
-                        "type": "string"
-                    },
-                    "scheduled": {
-                        "type": "boolean"
                     },
                     "comments": {
                         "type": "string",
                         "nullable": true
-                    },
-                    "data": {
-                        "description": "Nested speedtest data payload",
-                        "properties": {
-                            "isp": {
-                                "type": "string"
-                            },
-                            "ping": {
-                                "properties": {
-                                    "low": {
-                                        "type": "number",
-                                        "format": "float"
-                                    },
-                                    "high": {
-                                        "type": "number",
-                                        "format": "float"
-                                    },
-                                    "jitter": {
-                                        "type": "number",
-                                        "format": "float"
-                                    },
-                                    "latency": {
-                                        "type": "number",
-                                        "format": "float"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "type": {
-                                "type": "string"
-                            },
-                            "result": {
-                                "properties": {
-                                    "id": {
-                                        "type": "string"
-                                    },
-                                    "url": {
-                                        "type": "string",
-                                        "format": "uri"
-                                    },
-                                    "persisted": {
-                                        "type": "boolean"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "server": {
-                                "properties": {
-                                    "id": {
-                                        "type": "integer"
-                                    },
-                                    "ip": {
-                                        "type": "string",
-                                        "format": "ipv4"
-                                    },
-                                    "host": {
-                                        "type": "string"
-                                    },
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "port": {
-                                        "type": "integer"
-                                    },
-                                    "country": {
-                                        "type": "string"
-                                    },
-                                    "location": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "upload": {
-                                "properties": {
-                                    "bytes": {
-                                        "type": "integer"
-                                    },
-                                    "elapsed": {
-                                        "type": "integer"
-                                    },
-                                    "latency": {
-                                        "properties": {
-                                            "iqm": {
-                                                "type": "number",
-                                                "format": "float"
-                                            },
-                                            "low": {
-                                                "type": "number",
-                                                "format": "float"
-                                            },
-                                            "high": {
-                                                "type": "number",
-                                                "format": "float"
-                                            },
-                                            "jitter": {
-                                                "type": "number",
-                                                "format": "float"
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    "bandwidth": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "download": {
-                                "properties": {
-                                    "bytes": {
-                                        "type": "integer"
-                                    },
-                                    "elapsed": {
-                                        "type": "integer"
-                                    },
-                                    "latency": {
-                                        "properties": {
-                                            "iqm": {
-                                                "type": "number",
-                                                "format": "float"
-                                            },
-                                            "low": {
-                                                "type": "number",
-                                                "format": "float"
-                                            },
-                                            "high": {
-                                                "type": "number",
-                                                "format": "float"
-                                            },
-                                            "jitter": {
-                                                "type": "number",
-                                                "format": "float"
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    "bandwidth": {
-                                        "type": "integer"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "interface": {
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "isVpn": {
-                                        "type": "boolean"
-                                    },
-                                    "macAddr": {
-                                        "type": "string",
-                                        "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$"
-                                    },
-                                    "externalIp": {
-                                        "type": "string",
-                                        "format": "ipv4"
-                                    },
-                                    "internalIp": {
-                                        "type": "string",
-                                        "format": "ipv4"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "timestamp": {
-                                "type": "string",
-                                "format": "date-time"
-                            },
-                            "packetLoss": {
-                                "type": "number"
-                            }
-                        },
-                        "type": "object"
                     },
                     "created_at": {
                         "type": "string",
