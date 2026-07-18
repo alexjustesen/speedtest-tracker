@@ -73,7 +73,7 @@ class RecentPingChartWidget extends ChartWidget
                     'pointRadius' => 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->timestamp * 1_000),
         ];
     }
 
@@ -96,6 +96,17 @@ class RecentPingChartWidget extends ChartWidget
                     'beginAtZero' => config('app.chart_begin_at_zero'),
                     'grace' => 2,
                 ],
+                'x' => [
+                    'type' => 'time',
+                    'time' => [
+                        'round' => 'minute',
+                        'displayFormats' => [
+                            'hour' => 'MMM d - HH:MM'
+                        ],
+                        'unit' => 'hour',
+                    ],
+                    'max' => now(config('app.display_timezone'))->timestamp * 1_000,
+                ]
             ],
         ];
     }
