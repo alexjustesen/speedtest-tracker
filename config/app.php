@@ -140,6 +140,10 @@ return [
 
     'chart_datetime_format' => env('CHART_DATETIME_FORMAT', 'M. j - G:i'),
 
+    // Span gaps shorter than this in chart data. Typically caused by failed or missed tests.
+    // When Null, will attempt to calculated test schedule from cron.
+    'chart_max_span_size' => env('CHART_MAX_SPAN_SIZE', NULL),
+
     /*
     |--------------------------------------------------------------------------
     | Display Configuration

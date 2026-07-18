@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Enums\ResultStatus;
 use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Models\Result;
+use App\Services\ScheduledSpeedtestService;
 use Filament\Widgets\ChartWidget;
 
 class RecentDownloadLatencyChartWidget extends ChartWidget
@@ -90,7 +91,16 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
 
     protected function getOptions(): array
     {
+        $gapSize = config('app.chart_max_span_size');
+        if (is_null($gapSize)) {
+            $gapSize = 1.25 * ScheduledSpeedtestService::getScheduleInterval()->totalSeconds * 1_000;
+        }
+        elseif (is_int($gapSize)) {
+            $gapSize = $gapSize * 1_000;
+        }
+
         return [
+            'spanGaps' => $gapSize,
             'plugins' => [
                 'legend' => [
                     'display' => true,

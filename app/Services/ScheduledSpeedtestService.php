@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Cron\CronExpression;
 
 class ScheduledSpeedtestService
@@ -25,5 +26,25 @@ class ScheduledSpeedtestService
         return Carbon::parse(
             time: $cronExpression->getNextRunDate(timeZone: config('app.display_timezone'))
         );
+    }
+
+    public static function getScheduleInterval(): ?CarbonInterval
+    {
+        $schedule = config('speedtest.schedule');
+
+        if (blank($schedule) || $schedule === false) {
+            return null;
+        }
+
+        $cronExpression = new CronExpression($schedule);
+
+        $prev = Carbon::parse(
+            time: $cronExpression->getPreviousRunDate(timeZone: config('app.display_timezone'))
+        );
+        $next = Carbon::parse(
+            time: $cronExpression->getNextRunDate(timeZone: config('app.display_timezone'))
+        );
+
+        return $prev->diff($next, true);
     }
 }
