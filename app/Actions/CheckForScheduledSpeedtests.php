@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Actions\Ookla\RunSpeedtest;
 use Cron\CronExpression;
+use Illuminate\Support\Collection;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class CheckForScheduledSpeedtests
@@ -14,10 +15,6 @@ class CheckForScheduledSpeedtests
     {
         $schedule = config('speedtest.schedule');
 
-        if (blank($schedule) || $schedule === false) {
-            return;
-        }
-
         RunSpeedtest::runIf(
             $this->isSpeedtestDue(schedule: $schedule),
             scheduled: true,
@@ -27,13 +24,10 @@ class CheckForScheduledSpeedtests
     /**
      * Assess if a speedtest is due to run based on the schedule.
      */
-    private function isSpeedtestDue(string $schedule): bool
+    private function isSpeedtestDue(Collection $schedule): bool
     {
-        $cron = new CronExpression($schedule);
-
-        return $cron->isDue(
-            currentTime: now(),
-            timeZone: config('app.display_timezone')
-        );
+        return $schedule->map(fn ($expression) => new CronExpression($expression))
+            ->filter(fn ($cron) => $cron->isDue(currentTime: now(), timeZone: config('app.display_timezone')))
+            ->isNotEmpty();
     }
 }

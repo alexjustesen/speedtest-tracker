@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 return [
     /**
@@ -21,7 +22,10 @@ return [
     /**
      * Speedtest settings.
      */
-    'schedule' => env('SPEEDTEST_SCHEDULE', false),
+    'schedule' => match(env('SPEEDTEST_SCHEDULE')) {
+        null, false => collect(),
+        default => Str::of(env('SPEEDTEST_SCHEDULE'))->split('/\s*[|]\s*/')->unique()
+    },
 
     'servers' => env('SPEEDTEST_SERVERS'),
 

@@ -16,14 +16,9 @@ class ScheduledSpeedtestService
     {
         $schedule = config('speedtest.schedule');
 
-        if (blank($schedule) || $schedule === false) {
-            return null;
-        }
-
-        $cronExpression = new CronExpression($schedule);
-
-        return Carbon::parse(
-            time: $cronExpression->getNextRunDate(timeZone: config('app.display_timezone'))
-        );
+        return $schedule
+            ->map(fn ($expression) => Carbon::parse(time: (new CronExpression($expression))->getNextRunDate(timeZone: config('app.display_timezone'))))
+            ->sort()
+            ->first();
     }
 }
