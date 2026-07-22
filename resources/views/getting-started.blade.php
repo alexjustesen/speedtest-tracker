@@ -7,7 +7,7 @@
         <title>Getting Started - {{ config('app.name') }}</title>
 
         {{-- Fonts --}}
-        <link href="{{ asset('fonts/inter/inter.css') }}" rel="stylesheet" />
+        <link href="{{ asset('fonts/filament/filament/inter/index.css') }}" rel="stylesheet" />
 
         {{-- Styles --}}
         @filamentStyles
