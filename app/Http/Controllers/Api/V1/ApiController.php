@@ -2,13 +2,46 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\Enums\FilterOperator;
 
 abstract class ApiController
 {
+    /**
+     * Date-range filters aliasing a timestamp column.
+     *
+     * start_at -> column >= value (start of day for date-only input)
+     * end_at   -> column <= value (end of day for date-only input)
+     *
+     * @return array<int, AllowedFilter>
+     */
+    protected function dateRangeFilters(string $column = 'created_at'): array
+    {
+        return [
+            AllowedFilter::operator(
+                name: 'start_at',
+                filterOperator: FilterOperator::GREATER_THAN_OR_EQUAL,
+                internalName: $column,
+            ),
+            AllowedFilter::callback('end_at', function (Builder $query, $value) use ($column) {
+                $date = Carbon::parse($value);
+
+                // Date-only input (no time component) should include the whole day.
+                if (is_string($value) && ! str_contains($value, ':')) {
+                    $date->endOfDay();
+                }
+
+                $query->where($query->qualifyColumn($column), '<=', $date);
+            }),
+        ];
+    }
+
     /**
      * Send a response.
      *
