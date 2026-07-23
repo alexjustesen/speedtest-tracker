@@ -5,8 +5,7 @@ namespace App\Actions\Schedules;
 use Cron\CronExpression;
 use Illuminate\Support\HtmlString;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Orisai\CronExpressionExplainer\DefaultCronExpressionExplainer;
-use Orisai\CronExpressionExplainer\Exception\UnsupportedExpression;
+use Lorisleiva\CronTranslator\CronTranslator;
 
 class ExplainCronExpression
 {
@@ -19,18 +18,15 @@ class ExplainCronExpression
         }
 
         try {
-            $cron = new CronExpression($expression);
+            new CronExpression($expression);
         } catch (\InvalidArgumentException $e) {
             return new HtmlString('The cron expression is invalid.');
         }
 
         try {
-            $explainer = new DefaultCronExpressionExplainer;
-        } catch (UnsupportedExpression $e) {
-
+            return CronTranslator::translate($expression);
+        } catch (\Exception $e) {
             return new HtmlString('The cron expression is not supported.');
         }
-
-        return $explainer->explain($expression);
     }
 }
