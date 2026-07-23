@@ -29,6 +29,17 @@ describe('page', function () {
             ->assertSee('Dashboard');
     });
 
+    test('renders the notifications component on the "home" route', function () {
+        config()->set('speedtest.public_dashboard', true);
+
+        Result::factory()->create();
+
+        $response = $this->get('/');
+
+        $response->assertStatus(200)
+            ->assertSeeLivewire('notifications');
+    });
+
     test('can render "getting-started" route', function () {
         $response = $this->get('/getting-started');
 
