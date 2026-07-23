@@ -44,7 +44,7 @@ Strings — use `Str` and fluent `Str::of()` over raw PHP:
 // Incorrect
 $slug = strtolower(str_replace(' ', '-', $title));
 $short = substr($text, 0, 100) . '...';
-$class = substr(strrchr('App\Models\User', '\'), 1);
+$class = substr(strrchr('App\Models\User', '\\'), 1);
 
 // Correct
 $slug = Str::slug($title);

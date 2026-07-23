@@ -10074,6 +10074,22 @@ function dataSet(object, key, value) {
 function isNumeric(subject) {
   return !isNaN(parseInt(subject));
 }
+function dataDelete(object, key) {
+  let segments = parsePathSegments(key);
+  if (segments.length === 1) {
+    if (Array.isArray(object)) {
+      object.splice(segments[0], 1);
+    } else {
+      delete object[segments[0]];
+    }
+    return;
+  }
+  let firstSegment = segments.shift();
+  let restOfSegments = segments.join(".");
+  if (object[firstSegment] !== void 0) {
+    dataDelete(object[firstSegment], restOfSegments);
+  }
+}
 function diff(left, right, diffs = {}, path = "") {
   if (left === right)
     return diffs;
@@ -13417,16 +13433,22 @@ function whenThisLinkIsPressed(el, callback) {
   let isNotPlainEnterKey = (e) => e.which !== 13 || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey;
   el.addEventListener("click", (e) => {
     if (isProgrammaticClick(e)) {
+      if (linkShouldBeHandledNatively(el))
+        return;
       e.preventDefault();
       callback((whenReleased) => whenReleased());
       return;
     }
     if (isNotPlainLeftClick(e))
       return;
+    if (linkShouldBeHandledNatively(el))
+      return;
     e.preventDefault();
   });
   el.addEventListener("mousedown", (e) => {
     if (isNotPlainLeftClick(e))
+      return;
+    if (linkShouldBeHandledNatively(el))
       return;
     e.preventDefault();
     callback((whenReleased) => {
@@ -13442,6 +13464,8 @@ function whenThisLinkIsPressed(el, callback) {
   });
   el.addEventListener("keydown", (e) => {
     if (isNotPlainEnterKey(e))
+      return;
+    if (linkShouldBeHandledNatively(el))
       return;
     e.preventDefault();
     callback((whenReleased) => whenReleased());
@@ -13464,6 +13488,20 @@ function extractDestinationFromLink(linkEl) {
 }
 function createUrlObjectFromString2(urlString) {
   return urlString !== null && new URL(urlString, document.baseURI);
+}
+function linkShouldBeHandledNatively(linkEl, destination = extractDestinationFromLink(linkEl)) {
+  if (!destination)
+    return true;
+  if (!["http:", "https:"].includes(destination.protocol))
+    return true;
+  if (destination.origin !== window.location.origin)
+    return true;
+  if (linkEl.hasAttribute("download"))
+    return true;
+  let target = linkEl.getAttribute("target")?.trim().toLowerCase();
+  if (target && target !== "_self")
+    return true;
+  return false;
 }
 function getUriStringFromUrlObject(urlObject) {
   return urlObject.pathname + urlObject.search + urlObject.hash;
@@ -13923,7 +13961,6 @@ function ignoreAttributes(subject, attributesToRemove) {
 var enablePersist = true;
 var showProgressBar = true;
 var restoreScroll = true;
-var autofocus = false;
 function navigate_default(Alpine25) {
   Alpine25.navigate = (url, options = {}) => {
     let { preserveScroll = false } = options;
@@ -13946,7 +13983,7 @@ function navigate_default(Alpine25) {
     let preserveScroll = modifiers.includes("preserve-scroll");
     shouldPrefetchOnHover && whenThisLinkIsHoveredFor(el, 60, () => {
       let destination = extractDestinationFromLink(el);
-      if (!destination)
+      if (linkShouldBeHandledNatively(el, destination))
         return;
       prefetchHtml(destination, (html, finalDestination) => {
         storeThePrefetchedHtmlForWhenALinkIsClicked(html, destination, finalDestination);
@@ -13956,8 +13993,6 @@ function navigate_default(Alpine25) {
     });
     whenThisLinkIsPressed(el, (whenItIsReleased) => {
       let destination = extractDestinationFromLink(el);
-      if (!destination)
-        return;
       prefetchHtml(destination, (html, finalDestination) => {
         storeThePrefetchedHtmlForWhenALinkIsClicked(html, destination, finalDestination);
       }, () => {
@@ -14005,10 +14040,8 @@ function navigate_default(Alpine25) {
           swapCallbacks.forEach((callback) => callback());
           afterNewScriptsAreDoneLoading(() => {
             andAfterAllThis(() => {
-              setTimeout(() => {
-                autofocus && autofocusElementsWithTheAutofocusAttribute();
-              });
               nowInitializeAlpineOnTheNewPage(Alpine25);
+              autofocusElementsWithTheAutofocusAttribute();
               fireEventForOtherLibrariesToHookInto("alpine:navigated");
               showProgressBar && finishAndHideProgressBar();
             });
@@ -14047,6 +14080,7 @@ function navigate_default(Alpine25) {
       fireEventForOtherLibrariesToHookInto("alpine:navigating", {
         onSwap: (callback) => swapCallbacks.push(callback)
       });
+      cleanupAlpineElementsOnThePageThatArentInsideAPersistedElement();
       updateCurrentPageHtmlInSnapshotCacheForLaterBackButtonClicks(currentPageKey, currentPageUrl);
       preventAlpineFromPickingUpDomChanges(Alpine25, (andAfterAllThis) => {
         enablePersist && storePersistantElementsForLater((persistedEl) => {
@@ -14063,8 +14097,8 @@ function navigate_default(Alpine25) {
           restoreScrollPositionOrScrollToTop();
           swapCallbacks.forEach((callback) => callback());
           andAfterAllThis(() => {
-            autofocus && autofocusElementsWithTheAutofocusAttribute();
             nowInitializeAlpineOnTheNewPage(Alpine25);
+            autofocusElementsWithTheAutofocusAttribute();
             fireEventForOtherLibrariesToHookInto("alpine:navigated");
           });
         });
@@ -14229,24 +14263,24 @@ function queryStringUtils() {
       if (!search)
         return false;
       let data = fromQueryString(search, key);
-      return Object.keys(data).includes(key);
+      return dataGet(data, key) !== void 0;
     },
     get(url, key) {
       let search = url.search;
       if (!search)
         return false;
       let data = fromQueryString(search, key);
-      return data[key];
+      return dataGet(data, key);
     },
     set(url, key, value) {
       let data = fromQueryString(url.search, key);
-      data[key] = stripNulls(unwrap(value));
+      dataSet(data, key, stripNulls(unwrap(value)));
       url.search = toQueryString(data);
       return url;
     },
     remove(url, key) {
       let data = fromQueryString(url.search, key);
-      delete data[key];
+      dataDelete(data, key);
       url.search = toQueryString(data);
       return url;
     }
@@ -14301,11 +14335,11 @@ function fromQueryString(search, queryKey) {
       return;
     value = decodeURIComponent(value.replaceAll("+", "%20"));
     let decodedKey = decodeURIComponent(key);
-    let shouldBeHandledAsArray = decodedKey.includes("[") && decodedKey.startsWith(queryKey);
+    let dotNotatedKey = decodedKey.replaceAll("[", ".").replaceAll("]", "");
+    let shouldBeHandledAsArray = decodedKey.includes("[") && (dotNotatedKey === queryKey || dotNotatedKey.startsWith(`${queryKey}.`));
     if (!shouldBeHandledAsArray) {
       data[key] = value;
     } else {
-      let dotNotatedKey = decodedKey.replaceAll("[", ".").replaceAll("]", "");
       insertDotNotatedValueIntoData(dotNotatedKey, value, data);
     }
   });
