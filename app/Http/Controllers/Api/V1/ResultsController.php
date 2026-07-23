@@ -29,6 +29,8 @@ class ResultsController extends ApiController
         }
         $validator = Validator::make($request->all(), [
             'page.size' => 'integer|min:1|max:'.config('json-api-paginate.max_results'),
+            'filter.start_at' => 'sometimes|date',
+            'filter.end_at' => 'sometimes|date',
         ]);
 
         if ($validator->fails()) {
@@ -47,16 +49,7 @@ class ResultsController extends ApiController
                 AllowedFilter::exact('healthy')->nullable(),
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('scheduled'),
-                AllowedFilter::operator(
-                    name: 'start_at',
-                    internalName: 'created_at',
-                    filterOperator: FilterOperator::DYNAMIC,
-                ),
-                AllowedFilter::operator(
-                    name: 'end_at',
-                    internalName: 'created_at',
-                    filterOperator: FilterOperator::DYNAMIC,
-                ),
+                ...$this->dateRangeFilters(),
             ])
             ->allowedSorts([
                 'ping',
