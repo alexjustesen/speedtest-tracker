@@ -43,6 +43,8 @@
             @include('layouts.partials.footer')
         </main>
 
+        @livewire('notifications')
+
         {{-- Scripts --}}
         @filamentScripts
     </body>
