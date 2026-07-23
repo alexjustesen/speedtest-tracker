@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use Filament\Notifications\Livewire\Notifications;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\VerticalAlignment;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
@@ -26,5 +29,8 @@ class FilamentServiceProvider extends ServiceProvider
             PanelsRenderHook::GLOBAL_SEARCH_BEFORE,
             fn (): string => Blade::render("@livewire('topbar.actions')"),
         );
+
+        Notifications::alignment(Alignment::End);
+        Notifications::verticalAlignment(VerticalAlignment::Start);
     }
 }
