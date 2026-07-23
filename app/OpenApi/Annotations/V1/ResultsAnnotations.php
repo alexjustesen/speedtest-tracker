@@ -79,7 +79,7 @@ class ResultsAnnotations
                 in: 'query',
                 required: false,
                 schema: new OA\Schema(type: 'string', format: 'date'),
-                description: 'Filter results created on or before this date (alias for created_at<=)'
+                description: 'Filter results created on or before this date (alias for created_at<=). A date without a time includes the entire day.'
             ),
             new OA\Parameter(
                 name: 'sort',
