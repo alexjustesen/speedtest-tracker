@@ -13,7 +13,7 @@ use App\Jobs\Ookla\SelectSpeedtestServerJob;
 use App\Jobs\Ookla\SkipSpeedtestJob;
 use App\Jobs\Ookla\StartSpeedtestJob;
 use App\Models\Result;
-use App\Models\Schedule;
+use App\Models\Speedtest;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +24,7 @@ class RunSpeedtest
 {
     use AsAction;
 
-    public function handle(bool $scheduled = false, ?int $serverId = null, ?int $dispatchedBy = null, ?Schedule $schedule = null): mixed
+    public function handle(bool $scheduled = false, ?int $serverId = null, ?int $dispatchedBy = null, ?Speedtest $schedule = null): mixed
     {
         $result = Result::create([
             'data->server->id' => $serverId,
@@ -32,7 +32,7 @@ class RunSpeedtest
             'status' => ResultStatus::Waiting,
             'scheduled' => $scheduled,
             'dispatched_by' => $dispatchedBy,
-            'schedule_id' => $schedule?->id,
+            'speedtest_id' => $schedule?->id,
         ]);
 
         SpeedtestWaiting::dispatch($result);

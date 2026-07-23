@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->boolean('enabled')->default(true);
-            $table->string('schedule');
-            $table->json('servers')->nullable();
-            $table->json('blocked_servers')->nullable();
-            $table->json('server_labels')->nullable();
-            $table->string('interface')->nullable();
-            $table->json('skip_ips')->nullable();
+            $table->morphs('schedulable');
+            $table->string('type');
+            $table->text('expression');
+            $table->string('timezone')->nullable();
+            $table->timestamp('next_run_at')->nullable()->index();
+            $table->timestamp('last_run_at')->nullable();
+            $table->timestamp('disabled_at')->nullable();
             $table->timestamps();
         });
     }

@@ -50,6 +50,7 @@ return [
         'enabled' => 'Enabled',
         'schedule' => 'Schedule',
         'next_run_at' => 'Next run at',
+        'last_run_at' => 'Last ran at',
         'server_mode' => 'Server mode',
         'servers' => 'Servers',
         'interface' => 'Interface',

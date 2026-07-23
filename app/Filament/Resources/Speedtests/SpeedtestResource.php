@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Filament\Resources\Schedules;
+namespace App\Filament\Resources\Speedtests;
 
-use App\Filament\Resources\Schedules\Pages\CreateSchedule;
-use App\Filament\Resources\Schedules\Pages\EditSchedule;
-use App\Filament\Resources\Schedules\Pages\ListSchedules;
-use App\Filament\Resources\Schedules\Schemas\ScheduleForm;
-use App\Filament\Resources\Schedules\Tables\SchedulesTable;
-use App\Models\Schedule;
+use App\Filament\Resources\Speedtests\Pages\CreateSpeedtest;
+use App\Filament\Resources\Speedtests\Pages\EditSpeedtest;
+use App\Filament\Resources\Speedtests\Pages\ListSpeedtests;
+use App\Filament\Resources\Speedtests\Schemas\SpeedtestForm;
+use App\Filament\Resources\Speedtests\Tables\SpeedtestsTable;
+use App\Models\Speedtest;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 
-class ScheduleResource extends Resource
+class SpeedtestResource extends Resource
 {
-    protected static ?string $model = Schedule::class;
+    protected static ?string $model = Speedtest::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'tabler-clock';
 
@@ -51,12 +51,12 @@ class ScheduleResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return ScheduleForm::configure($schema);
+        return SpeedtestForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return SchedulesTable::configure($table);
+        return SpeedtestsTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -67,9 +67,9 @@ class ScheduleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListSchedules::route('/'),
-            'create' => CreateSchedule::route('/create'),
-            'edit' => EditSchedule::route('/{record}/edit'),
+            'index' => ListSpeedtests::route('/'),
+            'create' => CreateSpeedtest::route('/create'),
+            'edit' => EditSpeedtest::route('/{record}/edit'),
         ];
     }
 }

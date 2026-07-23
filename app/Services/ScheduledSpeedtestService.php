@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Schedule;
+use App\Models\Speedtest;
 use Carbon\Carbon;
-use Cron\CronExpression;
+use DirectoryTree\Cadence\Schedule as CadenceSchedule;
 
 class ScheduledSpeedtestService
 {
@@ -15,17 +15,12 @@ class ScheduledSpeedtestService
      */
     public static function getNextScheduledTest(): ?Carbon
     {
-        return Schedule::query()
-            ->where('enabled', true)
-            ->get()
-            ->map(function (Schedule $schedule) {
-                $cron = new CronExpression($schedule->schedule);
-
-                return Carbon::parse(
-                    time: $cron->getNextRunDate(timeZone: config('app.display_timezone'))
-                );
-            })
-            ->sort()
-            ->first();
+        return CadenceSchedule::query()
+            ->enabled()
+            ->where('schedulable_type', Speedtest::class)
+            ->whereNotNull('next_run_at')
+            ->orderBy('next_run_at')
+            ->first()
+            ?->next_run_at;
     }
 }

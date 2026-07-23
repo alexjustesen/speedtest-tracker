@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0efb586ce6643f4c82c8767463e7cd3",
+    "content-hash": "9abd1680bb621624197560028687bdb6",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -814,6 +814,87 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.3"
             },
             "time": "2024-07-08T12:26:09+00:00"
+        },
+        {
+            "name": "directorytree/cadence",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DirectoryTree/Cadence.git",
+                "reference": "3700d2bc778641f1c9a699b29efd0bfe414e7289"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DirectoryTree/Cadence/zipball/3700d2bc778641f1c9a699b29efd0bfe414e7289",
+                "reference": "3700d2bc778641f1c9a699b29efd0bfe414e7289",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^11.0|^12.0|^13.0",
+                "illuminate/database": "^11.0|^12.0|^13.0",
+                "illuminate/support": "^11.0|^12.0|^13.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "dragonmantank/cron-expression": "^3.0",
+                "laravel/pint": "^1.14",
+                "nunomaduro/collision": "^8.8",
+                "orchestra/testbench": "^8.22|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.0|^4.0",
+                "pestphp/pest-plugin-arch": "^2.0|^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0|^4.0",
+                "rlanvin/php-rrule": "^2.0",
+                "simshaun/recurr": "^5.0",
+                "spatie/laravel-ray": "^1.35"
+            },
+            "suggest": {
+                "dragonmantank/cron-expression": "Required to use the CronSchedule driver (^3.0).",
+                "rlanvin/php-rrule": "Required to use the RruleSchedule driver (^2.0).",
+                "simshaun/recurr": "Required to use the RecurrSchedule driver (^5.0)."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DirectoryTree\\Cadence\\CadenceServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DirectoryTree\\Cadence\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Steve Bauman",
+                    "email": "steven_bauman@outlook.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Model-based scheduling for Laravel",
+            "homepage": "https://github.com/directorytree/cadence",
+            "keywords": [
+                "cadence",
+                "directorytree",
+                "laravel",
+                "scheduling"
+            ],
+            "support": {
+                "issues": "https://github.com/DirectoryTree/Cadence/issues",
+                "source": "https://github.com/DirectoryTree/Cadence/tree/v1.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/directorytree",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-06-13T15:47:42+00:00"
         },
         {
             "name": "doctrine/deprecations",

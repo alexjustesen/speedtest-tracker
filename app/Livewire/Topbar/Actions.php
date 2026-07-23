@@ -4,7 +4,7 @@ namespace App\Livewire\Topbar;
 
 use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Ookla\RunSpeedtest;
-use App\Models\Schedule;
+use App\Models\Speedtest;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -43,13 +43,12 @@ class Actions extends Component implements HasActions, HasForms
                     ->label(__('results.select_server'))
                     ->helperText(__('results.select_server_helper'))
                     ->options(function (): array {
-                        $scheduleServers = Schedule::query()
-                            ->where('enabled', true)
+                        $scheduleServers = Speedtest::enabled()
                             ->whereNotNull('servers')
                             ->get()
-                            ->reduce(function (array $carry, Schedule $schedule) {
-                                foreach ($schedule->servers as $id) {
-                                    $carry[$id] = $schedule->server_labels[$id] ?? (string) $id;
+                            ->reduce(function (array $carry, Speedtest $speedtest) {
+                                foreach ($speedtest->servers as $id) {
+                                    $carry[$id] = $speedtest->server_labels[$id] ?? (string) $id;
                                 }
 
                                 return $carry;

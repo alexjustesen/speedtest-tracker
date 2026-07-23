@@ -117,7 +117,7 @@ class ResultTable
                     ->boolean()
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->alignment(Alignment::Center)
-                    ->tooltip(fn (Result $record): ?string => $record->schedule?->name),
+                    ->tooltip(fn (Result $record): ?string => $record->speedtest?->name),
 
                 TextColumn::make('created_at')
                     ->label(__('general.created_at'))
@@ -274,6 +274,7 @@ class ResultTable
             ])
             ->defaultSort('id', 'desc')
             ->paginationPageOptions([10, 25, 50])
-            ->poll('60s');
+            ->poll('60s')
+            ->reorderableColumns();
     }
 }

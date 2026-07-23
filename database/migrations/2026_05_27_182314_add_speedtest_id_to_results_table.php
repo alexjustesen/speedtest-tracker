@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('results', function (Blueprint $table) {
-            $table->foreignId('schedule_id')->nullable()->after('id')->constrained('schedules')->nullOnDelete();
+            $table->foreignId('speedtest_id')->nullable()->after('id')->constrained('speedtests')->nullOnDelete();
         });
     }
 
@@ -22,8 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('results', function (Blueprint $table) {
-            $table->dropForeignIdFor(\App\Models\Schedule::class);
-            $table->dropColumn('schedule_id');
+            $table->dropForeignIdFor(\App\Models\Speedtest::class);
+            $table->dropColumn('speedtest_id');
         });
     }
 };

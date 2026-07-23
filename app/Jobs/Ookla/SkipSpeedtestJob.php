@@ -92,7 +92,7 @@ class SkipSpeedtestJob implements ShouldQueue
      */
     private function getSkipIps(): array
     {
-        return $this->result->schedule?->skip_ips ?? [];
+        return $this->result->speedtest?->skip_ips ?? [];
     }
 
     /**

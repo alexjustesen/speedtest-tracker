@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\Schedules\Schemas;
+namespace App\Filament\Resources\Speedtests\Schemas;
 
 use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Schedules\ExplainCronExpression;
-use App\Models\Schedule;
+use App\Models\Speedtest;
 use App\Rules\Cron;
 use App\Rules\IpOrCidr;
 use Filament\Actions\Action;
@@ -17,8 +17,9 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
+use Illuminate\Validation\Rule;
 
-class ScheduleForm
+class SpeedtestForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -32,7 +33,8 @@ class ScheduleForm
                             ->schema([
                                 Toggle::make('enabled')
                                     ->label(__('schedules.enabled'))
-                                    ->default(true),
+                                    ->default(true)
+                                    ->afterStateHydrated(fn (Toggle $component, ?Speedtest $record) => $component->state($record?->isEnabled ?? true)),
 
                                 TextInput::make('name')
                                     ->label(__('schedules.name'))
@@ -51,9 +53,14 @@ class ScheduleForm
                                     )
                                     ->helperText(fn (Get $get) => ExplainCronExpression::run($get('schedule')))
                                     ->live(debounce: 500)
-                                    ->unique(ignoreRecord: true)
+                                    ->afterStateHydrated(fn (TextInput $component, ?Speedtest $record) => $component->state($record?->cronExpression))
                                     ->validationMessages(['unique' => __('schedules.schedule_overlap')])
-                                    ->rules([new Cron])
+                                    ->rules(fn (?Speedtest $record) => [
+                                        new Cron,
+                                        Rule::unique('schedules', 'expression')
+                                            ->where('type', 'cron')
+                                            ->ignore($record?->cronSchedule()?->id),
+                                    ])
                                     ->required()
                                     ->maxLength(255),
                             ]),
@@ -119,7 +126,7 @@ class ScheduleForm
 
                 return isset($servers['error']) ? [] : $servers;
             })
-            ->getOptionLabelsUsing(function (array $values, ?Schedule $record): array {
+            ->getOptionLabelsUsing(function (array $values, ?Speedtest $record): array {
                 $labels = $record?->server_labels ?? [];
 
                 return collect($values)

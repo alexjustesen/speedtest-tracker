@@ -44,7 +44,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         }
 
         // If preferred servers are set on the schedule, use that, but only if the test is scheduled.
-        $preferredServers = $this->result->schedule?->servers ?? [];
+        $preferredServers = $this->result->speedtest?->servers ?? [];
 
         if ($this->result->scheduled && ! blank($preferredServers)) {
             $this->updateServerId(
@@ -56,7 +56,7 @@ class SelectSpeedtestServerJob implements ShouldQueue
         }
 
         // If blocked servers are blank, we can skip picking a server.
-        $blockedServers = $this->result->schedule?->blocked_servers ?? [];
+        $blockedServers = $this->result->speedtest?->blocked_servers ?? [];
 
         if (blank($blockedServers)) {
             return;

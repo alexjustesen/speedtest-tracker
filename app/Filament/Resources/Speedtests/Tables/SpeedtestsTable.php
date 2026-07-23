@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\Schedules\Tables;
+namespace App\Filament\Resources\Speedtests\Tables;
 
 use App\Actions\Schedules\ExplainCronExpression;
-use App\Models\Schedule;
-use Carbon\Carbon;
-use Cron\CronExpression;
+use App\Models\Speedtest;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
@@ -16,49 +14,56 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
-class SchedulesTable
+class SpeedtestsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('schedules'))
             ->columns([
                 TextColumn::make('name')
                     ->label(__('schedules.columns.name'))
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false),
 
-                IconColumn::make('enabled')
+                IconColumn::make('is_enabled')
                     ->label(__('schedules.columns.enabled'))
+                    ->state(fn (Speedtest $record): bool => $record->isEnabled)
                     ->boolean()
-                    ->sortable(),
+                    ->sortable(false)
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('schedule')
                     ->label(__('schedules.columns.schedule'))
+                    ->state(fn (Speedtest $record): ?string => $record->cronExpression)
                     ->formatStateUsing(fn (?string $state) => ExplainCronExpression::run($state))
-                    ->sortable(),
+                    ->sortable(false)
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('next_run_at')
                     ->label(__('schedules.columns.next_run_at'))
-                    ->state(function (Schedule $record): ?Carbon {
-                        if (! $record->enabled) {
-                            return null;
-                        }
-
-                        $cron = new CronExpression($record->schedule);
-
-                        return Carbon::parse(
-                            $cron->getNextRunDate(timeZone: config('app.display_timezone'))
-                        );
-                    })
+                    ->state(fn (Speedtest $record) => $record->isEnabled ? $record->nextRunAt : null)
                     ->dateTime(config('app.datetime_format'))
                     ->timezone(config('app.display_timezone'))
                     ->placeholder('—')
-                    ->sortable(false),
+                    ->sortable(false)
+                    ->toggleable(isToggledHiddenByDefault: false),
+
+                TextColumn::make('last_run_at')
+                    ->label(__('schedules.columns.last_run_at'))
+                    ->state(fn (Speedtest $record) => $record->lastRunAt)
+                    ->dateTime(config('app.datetime_format'))
+                    ->timezone(config('app.display_timezone'))
+                    ->placeholder('—')
+                    ->sortable(false)
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('server_mode')
                     ->label(__('schedules.columns.server_mode'))
-                    ->state(fn (Schedule $record): string => match (true) {
+                    ->state(fn (Speedtest $record): string => match (true) {
                         ! blank($record->servers) => 'prefer',
                         ! blank($record->blocked_servers) => 'block',
                         default => 'auto',
@@ -69,11 +74,12 @@ class SchedulesTable
                         'prefer' => 'success',
                         'block' => 'danger',
                         default => 'gray',
-                    }),
+                    })
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('servers')
                     ->label(__('schedules.columns.servers'))
-                    ->state(function (Schedule $record): string {
+                    ->state(function (Speedtest $record): string {
                         $ids = $record->servers ?? $record->blocked_servers ?? [];
                         $labels = $record->server_labels ?? [];
 
@@ -83,16 +89,19 @@ class SchedulesTable
                             return trim(explode('(', $label)[0]);
                         }, $ids));
                     })
-                    ->placeholder('—'),
+                    ->placeholder('—')
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('interface')
                     ->label(__('schedules.columns.interface'))
-                    ->placeholder('—'),
+                    ->placeholder('—')
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('skip_ips')
                     ->label(__('schedules.columns.skip_ips'))
-                    ->state(fn (Schedule $record): string => implode(', ', $record->skip_ips ?? []))
-                    ->placeholder('—'),
+                    ->state(fn (Speedtest $record): string => implode(', ', $record->skip_ips ?? []))
+                    ->placeholder('—')
+                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->filters([
                 TernaryFilter::make('enabled')
@@ -102,25 +111,28 @@ class SchedulesTable
                     ->trueLabel(__('schedules.filter_enabled'))
                     ->falseLabel(__('schedules.filter_disabled'))
                     ->queries(
-                        true: fn ($query) => $query->where('enabled', true),
-                        false: fn ($query) => $query->where('enabled', false),
-                        blank: fn ($query) => $query,
+                        true: fn (Builder $query) => $query->enabled(),
+                        false: fn (Builder $query) => $query->disabled(),
+                        blank: fn (Builder $query) => $query,
                     ),
             ])
             ->recordActions([
                 ActionGroup::make([
                     EditAction::make(),
                     Action::make('toggleEnabled')
-                        ->label(fn (Schedule $record): string => $record->enabled
+                        ->label(fn (Speedtest $record): string => $record->isEnabled
                             ? __('schedules.action_disable')
                             : __('schedules.action_enable')
                         )
-                        ->icon(fn (Schedule $record): string => $record->enabled
+                        ->icon(fn (Speedtest $record): string => $record->isEnabled
                             ? 'tabler-player-pause'
                             : 'tabler-player-play'
                         )
-                        ->color(fn (Schedule $record): string => $record->enabled ? 'warning' : 'success')
-                        ->action(fn (Schedule $record) => $record->update(['enabled' => ! $record->enabled])),
+                        ->color(fn (Speedtest $record): string => $record->isEnabled ? 'warning' : 'success')
+                        ->action(fn (Speedtest $record) => $record->isEnabled
+                            ? $record->cronSchedule()?->disable()
+                            : $record->cronSchedule()?->enable()
+                        ),
                     DeleteAction::make(),
                 ]),
             ])
@@ -129,6 +141,9 @@ class SchedulesTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->poll('60s');
+            ->defaultSort('id', 'desc')
+            ->paginationPageOptions([10, 25, 50])
+            ->poll('60s')
+            ->reorderableColumns();
     }
 }

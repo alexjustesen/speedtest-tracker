@@ -1,7 +1,8 @@
 <?php
 
+use App\Models\Speedtest;
+use DirectoryTree\Cadence\Drivers\CronSchedule;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -20,22 +21,20 @@ return new class extends Migration
             return;
         }
 
-        // Skip if a schedule already exists to avoid duplicates on re-run.
-        if (DB::table('schedules')->exists()) {
+        // Skip if a speedtest already exists to avoid duplicates on re-run.
+        if (Speedtest::query()->exists()) {
             return;
         }
 
-        DB::table('schedules')->insert([
+        $speedtest = Speedtest::create([
             'name' => 'Default',
-            'enabled' => true,
-            'schedule' => $cronSchedule,
             'servers' => $this->parseCommaSeparated(env('SPEEDTEST_SERVERS')),
             'blocked_servers' => $this->parseCommaSeparated(env('SPEEDTEST_BLOCKED_SERVERS')),
             'interface' => env('SPEEDTEST_INTERFACE') ?: null,
             'skip_ips' => $this->parseCommaSeparated(env('SPEEDTEST_SKIP_IPS')),
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
+
+        $speedtest->addSchedule(new CronSchedule($cronSchedule, config('app.display_timezone')));
     }
 
     /**
@@ -43,13 +42,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::table('schedules')->where('name', 'Default')->delete();
+        Speedtest::where('name', 'Default')->get()->each->delete();
     }
 
     /**
-     * Parse a comma-separated env string into a JSON array, or null if blank.
+     * Parse a comma-separated env string into an array, or null if blank.
      */
-    private function parseCommaSeparated(?string $value): ?string
+    private function parseCommaSeparated(?string $value): ?array
     {
         if (blank($value)) {
             return null;
@@ -57,6 +56,6 @@ return new class extends Migration
 
         $items = array_values(array_filter(array_map('trim', explode(',', $value))));
 
-        return empty($items) ? null : json_encode($items);
+        return empty($items) ? null : $items;
     }
 };

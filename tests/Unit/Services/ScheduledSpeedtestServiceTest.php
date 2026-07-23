@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Schedule;
+use App\Models\Speedtest;
 use App\Services\ScheduledSpeedtestService;
 use Carbon\Carbon;
 
@@ -11,7 +11,7 @@ test('returns null when no schedules exist', function () {
 });
 
 test('returns null when all schedules are disabled', function () {
-    Schedule::factory()->disabled()->create(['schedule' => '0 * * * *']);
+    Speedtest::factory()->withCron('0 * * * *')->disabled()->create();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
@@ -19,7 +19,7 @@ test('returns null when all schedules are disabled', function () {
 });
 
 test('returns Carbon instance when an enabled schedule exists', function () {
-    Schedule::factory()->create(['schedule' => '*/5 * * * *']);
+    Speedtest::factory()->withCron('*/5 * * * *')->create();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
@@ -28,7 +28,7 @@ test('returns Carbon instance when an enabled schedule exists', function () {
 
 test('returns future date for next scheduled test', function () {
     config()->set('app.display_timezone', 'UTC');
-    Schedule::factory()->create(['schedule' => '*/5 * * * *']);
+    Speedtest::factory()->withCron('*/5 * * * *')->create();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
@@ -39,8 +39,8 @@ test('returns future date for next scheduled test', function () {
 test('returns the soonest next run time when multiple schedules exist', function () {
     config()->set('app.display_timezone', 'UTC');
 
-    Schedule::factory()->create(['schedule' => '0 0 * * *']); // daily at midnight
-    Schedule::factory()->create(['schedule' => '* * * * *']);  // every minute
+    Speedtest::factory()->withCron('0 0 * * *')->create(); // daily at midnight
+    Speedtest::factory()->withCron('* * * * *')->create();  // every minute
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
@@ -52,8 +52,8 @@ test('returns the soonest next run time when multiple schedules exist', function
 test('ignores disabled schedules when finding next run', function () {
     config()->set('app.display_timezone', 'UTC');
 
-    Schedule::factory()->disabled()->create(['schedule' => '* * * * *']); // disabled every-minute
-    Schedule::factory()->create(['schedule' => '0 0 * * *']);             // enabled daily at midnight
+    Speedtest::factory()->withCron('* * * * *')->disabled()->create(); // disabled every-minute
+    Speedtest::factory()->withCron('0 0 * * *')->create();             // enabled daily at midnight
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 

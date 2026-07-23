@@ -49,11 +49,11 @@ class Result extends Model
     }
 
     /**
-     * Get the schedule that triggered this speedtest.
+     * Get the speedtest configuration that triggered this run.
      */
-    public function schedule(): BelongsTo
+    public function speedtest(): BelongsTo
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->belongsTo(Speedtest::class);
     }
 
     /**

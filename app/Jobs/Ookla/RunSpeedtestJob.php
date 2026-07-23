@@ -56,7 +56,7 @@ class RunSpeedtestJob implements ShouldQueue
 
         SpeedtestRunning::dispatch($this->result);
 
-        $interface = $this->result->schedule?->interface;
+        $interface = $this->result->speedtest?->interface;
 
         $command = array_filter([
             'speedtest',
