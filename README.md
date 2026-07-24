@@ -28,5 +28,3 @@ Speedtest Tracker supports multiple languages thanks to our community translator
 **Request a new language**: Visit our [Crowdin project](https://crowdin.com/project/speedtest-tracker) and request a new language directly in crowdin.
 
 **Help translate**: Join our [Crowdin project](https://crowdin.com/project/speedtest-tracker) to contribute translations in your language. All translation levels are welcome!
-
-[![Star History Chart](https://api.star-history.com/svg?repos=alexjustesen/speedtest-tracker&type=Date)](https://star-history.com/#alexjustesen/speedtest-tracker&Date)
