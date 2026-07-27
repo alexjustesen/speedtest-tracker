@@ -6,15 +6,20 @@ use App\Actions\Schedules\ExplainCronExpression;
 use App\Models\Speedtest;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class SpeedtestsTable
 {
@@ -23,6 +28,9 @@ class SpeedtestsTable
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->with('schedules'))
             ->columns([
+                TextColumn::make('id')
+                    ->label(__('schedules.columns.id'))
+                    ->sortable(),
                 TextColumn::make('name')
                     ->label(__('schedules.columns.name'))
                     ->searchable()
@@ -95,13 +103,13 @@ class SpeedtestsTable
                 TextColumn::make('interface')
                     ->label(__('schedules.columns.interface'))
                     ->placeholder('—')
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('skip_ips')
                     ->label(__('schedules.columns.skip_ips'))
                     ->state(fn (Speedtest $record): string => implode(', ', $record->skip_ips ?? []))
                     ->placeholder('—')
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TernaryFilter::make('enabled')
@@ -114,6 +122,25 @@ class SpeedtestsTable
                         true: fn (Builder $query) => $query->enabled(),
                         false: fn (Builder $query) => $query->disabled(),
                         blank: fn (Builder $query) => $query,
+                    ),
+
+                Filter::make('server_mode')
+                    ->label(__('schedules.columns.server_mode'))
+                    ->schema([
+                        Select::make('value')
+                            ->label(__('schedules.columns.server_mode'))
+                            ->options(__('schedules.server_mode_options'))
+                            ->native(false),
+                    ])
+                    ->query(fn (Builder $query, array $data): Builder => match ($data['value'] ?? null) {
+                        'prefer' => $query->whereNotNull('servers'),
+                        'block' => $query->whereNull('servers')->whereNotNull('blocked_servers'),
+                        'auto' => $query->whereNull('servers')->whereNull('blocked_servers'),
+                        default => $query,
+                    })
+                    ->indicateUsing(fn (array $data): ?string => filled($data['value'] ?? null)
+                        ? __('schedules.columns.server_mode').': '.__("schedules.server_mode_options.{$data['value']}")
+                        : null
                     ),
             ])
             ->recordActions([
@@ -138,6 +165,22 @@ class SpeedtestsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    BulkAction::make('enable')
+                        ->label(__('schedules.action_enable'))
+                        ->icon(Heroicon::Play)
+                        ->color('success')
+                        ->action(fn (Collection $records) => $records->each(
+                            fn (Speedtest $record) => $record->cronSchedule()?->enable()
+                        ))
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('disable')
+                        ->label(__('schedules.action_disable'))
+                        ->icon(Heroicon::Pause)
+                        ->color('warning')
+                        ->action(fn (Collection $records) => $records->each(
+                            fn (Speedtest $record) => $record->cronSchedule()?->disable()
+                        ))
+                        ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),
                 ]),
             ])

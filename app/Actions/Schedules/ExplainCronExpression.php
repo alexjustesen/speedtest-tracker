@@ -14,19 +14,19 @@ class ExplainCronExpression
     public function handle(?string $expression)
     {
         if (blank($expression)) {
-            return 'No cron expression provided.';
+            return __('schedules.schedule_empty');
         }
 
         try {
             new CronExpression($expression);
         } catch (\InvalidArgumentException $e) {
-            return new HtmlString('The cron expression is invalid.');
+            return new HtmlString(__('schedules.schedule_invalid'));
         }
 
         try {
             return CronTranslator::translate($expression);
         } catch (\Exception $e) {
-            return new HtmlString('The cron expression is not supported.');
+            return new HtmlString(__('schedules.schedule_unsupported'));
         }
     }
 }
