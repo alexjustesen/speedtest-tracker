@@ -36,7 +36,7 @@ return [
         'block' => 'Exclude selected servers',
     ],
     'servers' => 'Preferred servers',
-    'servers_helper' => 'Search by server name to find and select preferred servers.',
+    'servers_helper' => 'Search by server name to find and select preferred servers. When multiple preferred servers are selected, one is chosen at random for each test.',
     'blocked_servers' => 'Blocked servers',
     'blocked_servers_helper' => 'Search by server name to find and select servers to exclude from auto-selection.',
     'interface' => 'Network interface',
