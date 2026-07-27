@@ -30,11 +30,13 @@ class SpeedtestForm
                     ->tabs([
                         Tab::make(__('schedules.tab_general'))
                             ->icon('tabler-clock')
+                            ->columns(2)
                             ->schema([
                                 Toggle::make('enabled')
                                     ->label(__('schedules.enabled'))
                                     ->default(true)
-                                    ->afterStateHydrated(fn (Toggle $component, ?Speedtest $record) => $component->state($record?->isEnabled ?? true)),
+                                    ->afterStateHydrated(fn (Toggle $component, ?Speedtest $record) => $component->state($record?->isEnabled ?? true))
+                                    ->columnSpanFull(),
 
                                 TextInput::make('name')
                                     ->label(__('schedules.name'))
@@ -89,6 +91,7 @@ class SpeedtestForm
 
                         Tab::make(__('schedules.tab_network'))
                             ->icon('tabler-network')
+                            ->columns(2)
                             ->schema([
                                 TextInput::make('interface')
                                     ->label(__('schedules.interface'))
@@ -101,7 +104,7 @@ class SpeedtestForm
                                     ->label(__('schedules.skip_ips'))
                                     ->helperText(__('schedules.skip_ips_helper'))
                                     ->placeholder('1.1.1.1')
-                                    ->splitKeys(['Tab', ' '])
+                                    ->splitKeys(['Tab', ' ', ','])
                                     ->rules([new IpOrCidr])
                                     ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : $state),
                             ]),

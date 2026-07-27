@@ -32,7 +32,7 @@ return [
     'blocked_servers' => 'Blocked servers',
     'blocked_servers_helper' => 'Search by server name to find and select servers to exclude from auto-selection.',
     'interface' => 'Network interface',
-    'interface_helper' => 'Bind the speedtest to a specific network interface. Leave empty to use the system default.',
+    'interface_helper' => 'Bind to a network interface available inside the container. Leave empty to use the system default.',
     'skip_ips' => 'Skip IPs',
     'skip_ips_helper' => 'Comma-separated IPs or CIDR ranges (e.g. 8.8.8.8,8.8.8.0/24). When the external IP matches, the scheduled test is skipped.',
 
