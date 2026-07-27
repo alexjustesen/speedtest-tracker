@@ -44,6 +44,12 @@ class GetOoklaSpeedtestServers
      */
     public static function fetch(?string $search = null): array
     {
+        $cacheKey = 'ookla_servers_'.($search !== null ? md5($search) : 'all');
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
         $query = [
             'engine' => 'js',
             'https_functional' => true,
@@ -58,7 +64,11 @@ class GetOoklaSpeedtestServers
             $response = Http::retry(3, 250)
                 ->get(url: 'https://www.speedtest.net/api/js/servers', query: $query);
 
-            return $response->json();
+            $result = $response->json();
+
+            Cache::put($cacheKey, $result, now()->addMinutes(5));
+
+            return $result;
         } catch (Throwable $e) {
             Log::error('Unable to retrieve Ookla servers.', [$e->getMessage()]);
 
