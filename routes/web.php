@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SsoController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MetricsController;
 use App\Http\Middleware\PrometheusAllowedIpMiddleware;
@@ -29,6 +30,16 @@ Route::view('/getting-started', 'getting-started')
 
 Route::redirect('/login', '/admin/login')
     ->name('login');
+
+Route::prefix('auth/sso')
+    ->name('sso.')
+    ->group(function () {
+        Route::get('{provider}/redirect', [SsoController::class, 'redirect'])
+            ->name('redirect');
+
+        Route::get('{provider}/callback', [SsoController::class, 'callback'])
+            ->name('callback');
+    });
 
 if (app()->isLocal()) {
     require __DIR__.'/test.php';

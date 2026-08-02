@@ -13,6 +13,16 @@
 
 pest()->extend(Tests\Feature\FeatureTestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->beforeEach(function () {
+        config([
+            'sso.enabled' => null,
+            'sso.provider' => null,
+            'sso.override.client_id' => null,
+            'sso.override.client_secret' => null,
+            'sso.override.base_url' => null,
+            'sso.override.scopes' => null,
+        ]);
+    })
     ->in('Feature');
 
 pest()->extend(Tests\Unit\UnitTestCase::class)
