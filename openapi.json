@@ -479,10 +479,85 @@
                     "Results"
                 ],
                 "summary": "Get the most recent result",
+                "description": "Returns the single most recent result. Combine with filters (e.g. filter[status]=completed) to get the last known good result instead of the literal latest, which may have failed.",
                 "operationId": "getLatestResult",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/AcceptHeader"
+                    },
+                    {
+                        "name": "filter[ping]",
+                        "in": "query",
+                        "description": "Filter by ping value (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "filter[download]",
+                        "in": "query",
+                        "description": "Filter by download speed (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[upload]",
+                        "in": "query",
+                        "description": "Filter by upload speed (supports operators like >=, <=, etc.)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "filter[healthy]",
+                        "in": "query",
+                        "description": "Filter by healthy status",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "filter[status]",
+                        "in": "query",
+                        "description": "Filter by status. Use \"completed\" to fetch the last known good result.",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter[scheduled]",
+                        "in": "query",
+                        "description": "Filter by scheduled status",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "filter[start_at]",
+                        "in": "query",
+                        "description": "Filter results created on or after this date (alias for created_at>=)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "filter[end_at]",
+                        "in": "query",
+                        "description": "Filter results created on or before this date (alias for created_at<=). A date without a time includes the entire day.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
                     }
                 ],
                 "responses": {
@@ -532,6 +607,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
                                 }
                             }
                         }
@@ -607,65 +692,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ValidationError"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/speedtests/list-servers": {
-            "get": {
-                "tags": [
-                    "Speedtests"
-                ],
-                "summary": "List available Ookla speedtest servers",
-                "operationId": "listSpeedtestServers",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/AcceptHeader"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ServersCollection"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/UnauthenticatedError"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ForbiddenError"
-                                },
-                                "example": {
-                                    "message": "You do not have permission to view speedtest servers."
-                                }
-                            }
-                        }
-                    },
-                    "406": {
-                        "description": "Not Acceptable - Missing or invalid Accept header",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/NotAcceptableError"
                                 }
                             }
                         }
@@ -1247,7 +1273,7 @@
         },
         {
             "name": "Speedtests",
-            "description": "Endpoints for running speedtests and listing servers."
+            "description": "Endpoints for running speedtests."
         },
         {
             "name": "Stats",
