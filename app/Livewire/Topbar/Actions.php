@@ -2,8 +2,9 @@
 
 namespace App\Livewire\Topbar;
 
+use App\Actions\DispatchSpeedtest;
 use App\Actions\GetOoklaSpeedtestServers;
-use App\Actions\Ookla\RunSpeedtest;
+use App\Enums\ResultService;
 use App\Helpers\Ookla;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -37,8 +38,12 @@ class Actions extends Component implements HasActions, HasForms
 
     public function speedtestAction(): Action
     {
+        // Nettest takes its server from the configuration, so the Ookla server
+        // list is neither shown nor fetched when Nettest is the service.
+        $selectsServer = DispatchSpeedtest::service() !== ResultService::Nettest;
+
         return Action::make('speedtest')
-            ->schema([
+            ->schema($selectsServer ? [
                 Select::make('server_id')
                     ->label(__('results.select_server'))
                     ->helperText(__('results.select_server_helper'))
@@ -49,11 +54,11 @@ class Actions extends Component implements HasActions, HasForms
                         ]);
                     })
                     ->searchable(),
-            ])
+            ] : [])
             ->action(function (array $data) {
                 $serverId = $data['server_id'] ?? null;
 
-                RunSpeedtest::run(
+                DispatchSpeedtest::run(
                     serverId: $serverId,
                     dispatchedBy: Auth::id(),
                 );

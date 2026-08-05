@@ -7,6 +7,7 @@ ARG NODE_VERSION=24
 ARG MYSQL_CLIENT="mysql-client"
 ARG POSTGRES_VERSION=17
 ARG SPEEDTEST_VERSION=1.2.0
+ARG NETTEST_VERSION=2.1.0
 
 WORKDIR /var/www/html
 
@@ -57,6 +58,9 @@ RUN apt-get update && apt-get upgrade -y \
     && curl -o /tmp/speedtest-cli.tgz -L \
          "https://install.speedtest.net/app/cli/ookla-speedtest-$SPEEDTEST_VERSION-linux-$PLATFORM.tgz" \
     && tar -xzf /tmp/speedtest-cli.tgz -C /usr/bin \
+    && curl -o /tmp/nettest.tar.gz -L \
+         "https://github.com/specure/nettest/releases/download/v$NETTEST_VERSION/nettest-linux-$PLATFORM.tar.gz" \
+    && tar -xzf /tmp/nettest.tar.gz -C /usr/bin \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

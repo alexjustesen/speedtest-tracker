@@ -21,6 +21,8 @@ return [
     /**
      * Speedtest settings.
      */
+    'service' => env('SPEEDTEST_SERVICE', 'ookla'),
+
     'schedule' => env('SPEEDTEST_SCHEDULE', false),
 
     'servers' => env('SPEEDTEST_SERVERS'),
@@ -28,6 +30,23 @@ return [
     'blocked_servers' => env('SPEEDTEST_BLOCKED_SERVERS'),
 
     'interface' => env('SPEEDTEST_INTERFACE'),
+
+    /**
+     * Nettest settings, used when the service is set to "nettest".
+     *
+     * Nettest has no public server list, so the server has to be set here.
+     */
+    'nettest' => [
+        'server' => env('NETTEST_SERVER'),
+
+        'port' => env('NETTEST_PORT'),
+
+        'threads' => env('NETTEST_THREADS'),
+
+        'tls' => env('NETTEST_TLS', false),
+
+        'websocket' => env('NETTEST_WEBSOCKET', false),
+    ],
 
     'preflight' => [
         'external_ip_url' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_EXTERNAL_IP_URL', 'https://icanhazip.com'),
