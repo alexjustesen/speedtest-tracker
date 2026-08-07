@@ -79,4 +79,18 @@ class Number extends SupportNumber
 
         return sprintf('%s %s', static::format($bits, $precision, $maxPrecision), $units[$i]);
     }
+
+    /**
+     * Calculate the percentage change from a divisor to a dividend.
+     */
+    public static function percentChange(float $dividend, float $divisor, int $precision = 0): string
+    {
+        if ($dividend == 0.0 || $divisor == 0.0) {
+            return '0';
+        }
+
+        $quotient = ($dividend - $divisor) / $divisor;
+
+        return number_format(round($quotient * 100, $precision), $precision);
+    }
 }
