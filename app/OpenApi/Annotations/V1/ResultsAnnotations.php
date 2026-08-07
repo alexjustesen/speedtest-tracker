@@ -167,10 +167,67 @@ class ResultsAnnotations
     #[OA\Get(
         path: '/api/v1/results/latest',
         summary: 'Get the most recent result',
+        description: 'Returns the single most recent result. Combine with filters (e.g. filter[status]=completed) to get the last known good result instead of the literal latest, which may have failed.',
         operationId: 'getLatestResult',
         tags: ['Results'],
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
+            new OA\Parameter(
+                name: 'filter[ping]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'number'),
+                description: 'Filter by ping value (supports operators like >=, <=, etc.)'
+            ),
+            new OA\Parameter(
+                name: 'filter[download]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer'),
+                description: 'Filter by download speed (supports operators like >=, <=, etc.)'
+            ),
+            new OA\Parameter(
+                name: 'filter[upload]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer'),
+                description: 'Filter by upload speed (supports operators like >=, <=, etc.)'
+            ),
+            new OA\Parameter(
+                name: 'filter[healthy]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'boolean'),
+                description: 'Filter by healthy status'
+            ),
+            new OA\Parameter(
+                name: 'filter[status]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string'),
+                description: 'Filter by status. Use "completed" to fetch the last known good result.'
+            ),
+            new OA\Parameter(
+                name: 'filter[scheduled]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'boolean'),
+                description: 'Filter by scheduled status'
+            ),
+            new OA\Parameter(
+                name: 'filter[start_at]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', format: 'date'),
+                description: 'Filter results created on or after this date (alias for created_at>=)'
+            ),
+            new OA\Parameter(
+                name: 'filter[end_at]',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', format: 'date'),
+                description: 'Filter results created on or before this date (alias for created_at<=). A date without a time includes the entire day.'
+            ),
         ],
         responses: [
             new OA\Response(
@@ -197,6 +254,11 @@ class ResultsAnnotations
                 response: Response::HTTP_NOT_FOUND,
                 description: 'No result found',
                 content: new OA\JsonContent(ref: '#/components/schemas/NotFoundError')
+            ),
+            new OA\Response(
+                response: Response::HTTP_UNPROCESSABLE_ENTITY,
+                description: 'Validation failed',
+                content: new OA\JsonContent(ref: '#/components/schemas/ValidationError')
             ),
         ]
     )]
