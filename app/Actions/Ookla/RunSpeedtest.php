@@ -23,6 +23,9 @@ class RunSpeedtest
 {
     use AsAction;
 
+    /**
+     * Handle the action.
+     */
     public function handle(bool $scheduled = false, ?int $serverId = null, ?int $dispatchedBy = null, int $attempt = 1): mixed
     {
         $result = Result::create([

@@ -14,7 +14,7 @@ class RetrySpeedtest
      */
     public function handle(Result $result, int $attempt): void
     {
-        $retryTimes = config('speedtest.retry_times');
+        $retryTimes = (int) config('speedtest.retry_times');
 
         // Retrying is disabled entirely.
         if ($retryTimes === 0) {
