@@ -23,6 +23,14 @@ describe('RetryUnhealthySpeedtest', function () {
         expect((new RetryUnhealthySpeedtest)->withDelay($event))->toBe(42);
     });
 
+    it('clamps a negative retry delay to zero', function () {
+        Config::set('speedtest.retry_delay', -5);
+
+        $event = new SpeedtestBenchmarkUnhealthy(Result::factory()->create(['scheduled' => true]), 1);
+
+        expect((new RetryUnhealthySpeedtest)->withDelay($event))->toBe(0);
+    });
+
     it('queues the listener with the configured delay when the event is dispatched for real', function () {
         Config::set('speedtest.retry_delay', 7);
         Config::set('speedtest.retry_times', 3);

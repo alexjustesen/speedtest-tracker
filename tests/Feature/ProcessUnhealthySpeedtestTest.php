@@ -38,6 +38,19 @@ describe('ProcessUnhealthySpeedtest', function () {
         Notification::assertNothingSentTo($user);
     });
 
+    it('does not notify when the attempt equals the retry limit', function () {
+        Config::set('speedtest.retry_times', 3);
+
+        $user = User::factory()->create();
+        $result = Result::factory()->create(['scheduled' => true]);
+        $event = new SpeedtestBenchmarkUnhealthy($result, 3);
+
+        app(ProcessUnhealthySpeedtest::class)->handle($event);
+
+        Mail::assertNothingOutgoing();
+        Notification::assertNothingSentTo($user);
+    });
+
     it('notifies on the final attempt when retries are disabled', function () {
         Config::set('speedtest.retry_times', 0);
 

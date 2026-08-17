@@ -26,6 +26,18 @@ describe('UserNotificationSubscriber::handleFailed', function () {
         Notification::assertNothingSentTo($user);
     });
 
+    it('does not notify when the attempt equals the retry limit', function () {
+        Config::set('speedtest.retry_times', 3);
+
+        $user = User::factory()->create();
+        $result = Result::factory()->create(['scheduled' => true, 'dispatched_by' => $user->id]);
+        $event = new SpeedtestFailed($result, 3);
+
+        (new UserNotificationSubscriber)->handleFailed($event);
+
+        Notification::assertNothingSentTo($user);
+    });
+
     it('notifies on the final attempt when retries are disabled', function () {
         Config::set('speedtest.retry_times', 0);
 
@@ -46,6 +58,18 @@ describe('UserNotificationSubscriber::handleBenchmarkFailed', function () {
         $user = User::factory()->create();
         $result = Result::factory()->create(['scheduled' => true, 'dispatched_by' => $user->id]);
         $event = new SpeedtestBenchmarkUnhealthy($result, 1);
+
+        (new UserNotificationSubscriber)->handleBenchmarkFailed($event);
+
+        Notification::assertNothingSentTo($user);
+    });
+
+    it('does not notify when the attempt equals the retry limit', function () {
+        Config::set('speedtest.retry_times', 3);
+
+        $user = User::factory()->create();
+        $result = Result::factory()->create(['scheduled' => true, 'dispatched_by' => $user->id]);
+        $event = new SpeedtestBenchmarkUnhealthy($result, 3);
 
         (new UserNotificationSubscriber)->handleBenchmarkFailed($event);
 

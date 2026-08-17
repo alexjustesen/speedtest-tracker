@@ -65,6 +65,16 @@ it('does not dispatch webhooks for a failed attempt that will still be retried',
     Bus::assertNotDispatched(CallWebhookJob::class);
 });
 
+it('does not dispatch webhooks for a failed attempt that equals the retry limit', function () {
+    Config::set('speedtest.retry_times', 3);
+
+    Webhook::factory()->create(['events' => [WebhookEvent::Failed->value]]);
+
+    SpeedtestFailed::dispatch(Result::factory()->create(['scheduled' => true]), 3);
+
+    Bus::assertNotDispatched(CallWebhookJob::class);
+});
+
 it('dispatches webhooks on the final failed attempt when retries are disabled', function () {
     Config::set('speedtest.retry_times', 0);
 
@@ -85,12 +95,32 @@ it('does not dispatch webhooks for a benchmark-unhealthy attempt that will still
     Bus::assertNotDispatched(CallWebhookJob::class);
 });
 
+it('does not dispatch webhooks for a benchmark-unhealthy attempt that equals the retry limit', function () {
+    Config::set('speedtest.retry_times', 3);
+
+    Webhook::factory()->create(['events' => [WebhookEvent::BenchmarkUnhealthy->value]]);
+
+    SpeedtestBenchmarkUnhealthy::dispatch(Result::factory()->create(['scheduled' => true]), 3);
+
+    Bus::assertNotDispatched(CallWebhookJob::class);
+});
+
 it('dispatches webhooks on the final benchmark-unhealthy attempt when retries are disabled', function () {
     Config::set('speedtest.retry_times', 0);
 
     Webhook::factory()->create(['events' => [WebhookEvent::BenchmarkUnhealthy->value]]);
 
     SpeedtestBenchmarkUnhealthy::dispatch(Result::factory()->create(['scheduled' => true]), 1);
+
+    Bus::assertDispatchedTimes(CallWebhookJob::class, 1);
+});
+
+it('dispatches webhooks for an attempt-less event even while retries are active', function () {
+    Config::set('speedtest.retry_times', 3);
+
+    Webhook::factory()->create(['events' => [WebhookEvent::Completed->value]]);
+
+    SpeedtestCompleted::dispatch(Result::factory()->create());
 
     Bus::assertDispatchedTimes(CallWebhookJob::class, 1);
 });

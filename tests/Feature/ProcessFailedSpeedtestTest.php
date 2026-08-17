@@ -15,6 +15,15 @@ describe('ProcessFailedSpeedtest', function () {
         expect(fn () => (new ProcessFailedSpeedtest)->handle($event))->not->toThrow(Throwable::class);
     });
 
+    it('returns early without error when the attempt equals the retry limit', function () {
+        Config::set('speedtest.retry_times', 3);
+
+        $result = Result::factory()->create(['scheduled' => true]);
+        $event = new SpeedtestFailed($result, 3);
+
+        expect(fn () => (new ProcessFailedSpeedtest)->handle($event))->not->toThrow(Throwable::class);
+    });
+
     it('returns without error on the final attempt when retries are disabled', function () {
         Config::set('speedtest.retry_times', 0);
 
