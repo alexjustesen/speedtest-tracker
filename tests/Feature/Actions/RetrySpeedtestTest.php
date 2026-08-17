@@ -43,4 +43,16 @@ describe('RetrySpeedtest', function () {
 
         Bus::assertNothingBatched();
     });
+
+    it('still dispatches when attempt exactly equals retry_times', function () {
+        Config::set('speedtest.retry_times', 2);
+
+        $result = Result::factory()->create(['scheduled' => true]);
+
+        RetrySpeedtest::run($result, 2);
+
+        Bus::assertBatched(function (PendingBatch $batch) {
+            return $batch->jobs->flatten()->first(fn ($job) => $job instanceof RunSpeedtestJob)?->attempt === 3;
+        });
+    });
 });
