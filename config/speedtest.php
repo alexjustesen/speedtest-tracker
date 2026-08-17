@@ -18,6 +18,8 @@ return [
 
     'default_chart_range' => strtolower(env('DEFAULT_CHART_RANGE', '24h')),
 
+    'chart_use_average_latency' => (bool) env('CHART_USE_AVERAGE_LATENCY', false),
+
     /**
      * Speedtest settings.
      */
