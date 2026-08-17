@@ -23,7 +23,7 @@ class RunSpeedtest
 {
     use AsAction;
 
-    public function handle(bool $scheduled = false, ?int $serverId = null, ?int $dispatchedBy = null): mixed
+    public function handle(bool $scheduled = false, ?int $serverId = null, ?int $dispatchedBy = null, int $attempt = 1): mixed
     {
         $result = Result::create([
             'data->server->id' => $serverId,
@@ -38,11 +38,11 @@ class RunSpeedtest
         Bus::batch([
             [
                 new StartSpeedtestJob($result),
-                new CheckForInternetConnectionJob($result),
-                new SkipSpeedtestJob($result),
+                new CheckForInternetConnectionJob($result, $attempt),
+                new SkipSpeedtestJob($result, $attempt),
                 new SelectSpeedtestServerJob($result),
-                new RunSpeedtestJob($result),
-                new BenchmarkSpeedtestJob($result),
+                new RunSpeedtestJob($result, $attempt),
+                new BenchmarkSpeedtestJob($result, $attempt),
                 new CompleteSpeedtestJob($result),
             ],
         ])->catch(function (Batch $batch, ?Throwable $e) {
