@@ -1,10 +1,13 @@
 <?php
 
 use App\Enums\WebhookEvent;
+use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Events\SpeedtestCompleted;
+use App\Events\SpeedtestFailed;
 use App\Models\Result;
 use App\Models\Webhook;
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Config;
 use Spatie\WebhookServer\CallWebhookJob;
 
 beforeEach(function () {
@@ -48,6 +51,46 @@ it('dispatches a signed webhook when a secret is set', function () {
     ]);
 
     SpeedtestCompleted::dispatch(Result::factory()->create());
+
+    Bus::assertDispatchedTimes(CallWebhookJob::class, 1);
+});
+
+it('does not dispatch webhooks for a failed attempt that will still be retried', function () {
+    Config::set('speedtest.retry_times', 3);
+
+    Webhook::factory()->create(['events' => [WebhookEvent::Failed->value]]);
+
+    SpeedtestFailed::dispatch(Result::factory()->create(['scheduled' => true]), 1);
+
+    Bus::assertNotDispatched(CallWebhookJob::class);
+});
+
+it('dispatches webhooks on the final failed attempt when retries are disabled', function () {
+    Config::set('speedtest.retry_times', 0);
+
+    Webhook::factory()->create(['events' => [WebhookEvent::Failed->value]]);
+
+    SpeedtestFailed::dispatch(Result::factory()->create(['scheduled' => true]), 1);
+
+    Bus::assertDispatchedTimes(CallWebhookJob::class, 1);
+});
+
+it('does not dispatch webhooks for a benchmark-unhealthy attempt that will still be retried', function () {
+    Config::set('speedtest.retry_times', 3);
+
+    Webhook::factory()->create(['events' => [WebhookEvent::BenchmarkUnhealthy->value]]);
+
+    SpeedtestBenchmarkUnhealthy::dispatch(Result::factory()->create(['scheduled' => true]), 1);
+
+    Bus::assertNotDispatched(CallWebhookJob::class);
+});
+
+it('dispatches webhooks on the final benchmark-unhealthy attempt when retries are disabled', function () {
+    Config::set('speedtest.retry_times', 0);
+
+    Webhook::factory()->create(['events' => [WebhookEvent::BenchmarkUnhealthy->value]]);
+
+    SpeedtestBenchmarkUnhealthy::dispatch(Result::factory()->create(['scheduled' => true]), 1);
 
     Bus::assertDispatchedTimes(CallWebhookJob::class, 1);
 });

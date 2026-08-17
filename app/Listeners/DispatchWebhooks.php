@@ -4,6 +4,8 @@ namespace App\Listeners;
 
 use App\Actions\Webhooks\BuildWebhookPayload;
 use App\Enums\WebhookEvent;
+use App\Events\SpeedtestBenchmarkUnhealthy;
+use App\Events\SpeedtestFailed;
 use App\Models\Webhook;
 use Illuminate\Events\Dispatcher;
 use Spatie\WebhookServer\WebhookCall;
@@ -15,6 +17,11 @@ class DispatchWebhooks
      */
     public function handle(object $event): void
     {
+        // Don't dispatch webhooks for attempts that will still be retried.
+        if (($event instanceof SpeedtestFailed || $event instanceof SpeedtestBenchmarkUnhealthy) && $event->attempt <= (int) config('speedtest.retry_times')) {
+            return;
+        }
+
         $webhookEvent = WebhookEvent::fromEventClass(get_class($event));
 
         if ($webhookEvent === null) {
