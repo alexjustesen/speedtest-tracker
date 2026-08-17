@@ -9,18 +9,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class RetryUnhealthySpeedtest implements ShouldQueue
 {
     /**
-     * The number of seconds to delay the job.
-     *
-     * @var int
+     * Determine the number of seconds before the retry should be dispatched.
      */
-    public $delay;
+    public function withDelay(SpeedtestBenchmarkUnhealthy $event): int
+    {
+        return max(0, (int) config('speedtest.retry_delay'));
+    }
 
     /**
-     * Create the event listener.
+     * Determine whether the listener should be queued.
      */
-    public function __construct()
+    public function shouldQueue(SpeedtestBenchmarkUnhealthy $event): bool
     {
-        $this->delay = config('speedtest.retry_delay');
+        return (int) config('speedtest.retry_times') > 0;
     }
 
     /**
