@@ -192,7 +192,8 @@ class Notification extends SettingsPage
                                                     ->placeholder('https://webhook.site/longstringofcharacters')
                                                     ->maxLength(2000)
                                                     ->required()
-                                                    ->url(),
+                                                    ->url()
+                                                    ->rule('url:http,https'),
                                             ]),
 
                                         Actions::make([
@@ -242,6 +243,7 @@ class Notification extends SettingsPage
                                                     ->maxLength(2000)
                                                     ->required()
                                                     ->url()
+                                                    ->rule('url:http,https')
                                                     ->rule(new ContainsString('/notify'))
                                                     ->columnSpanFull(),
                                                 Checkbox::make('apprise_verify_ssl')
@@ -338,7 +340,8 @@ class Notification extends SettingsPage
                                                             ->placeholder('http://api.pushover.net/1/messages.json')
                                                             ->maxLength(2000)
                                                             ->required()
-                                                            ->url(),
+                                                            ->url()
+                                                            ->rule('url:http,https'),
                                                         TextInput::make('user_key')
                                                             ->label('User Key')
                                                             ->placeholder('Your Pushover User Key')
@@ -392,7 +395,8 @@ class Notification extends SettingsPage
                                                             ->placeholder('https://discord.com/api/webhooks/longstringofcharacters')
                                                             ->maxLength(2000)
                                                             ->required()
-                                                            ->url(),
+                                                            ->url()
+                                                            ->rule('url:http,https'),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Actions::make([
@@ -434,7 +438,8 @@ class Notification extends SettingsPage
                                                             ->placeholder('https://example.com/message?token=<apptoken>')
                                                             ->maxLength(2000)
                                                             ->required()
-                                                            ->url(),
+                                                            ->url()
+                                                            ->rule('url:http,https'),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Actions::make([
@@ -476,7 +481,8 @@ class Notification extends SettingsPage
                                                             ->placeholder('https://hooks.slack.com/services/abc/xyz')
                                                             ->maxLength(2000)
                                                             ->required()
-                                                            ->url(),
+                                                            ->url()
+                                                            ->rule('url:http,https'),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Actions::make([
@@ -518,7 +524,8 @@ class Notification extends SettingsPage
                                                             ->maxLength(2000)
                                                             ->placeholder('Your ntfy server url')
                                                             ->required()
-                                                            ->url(),
+                                                            ->url()
+                                                            ->rule('url:http,https'),
                                                         TextInput::make('topic')
                                                             ->label('Topic')
                                                             ->placeholder('Your ntfy Topic')
@@ -575,7 +582,8 @@ class Notification extends SettingsPage
                                                             ->placeholder('https://hc-ping.com/your-uuid-here')
                                                             ->maxLength(2000)
                                                             ->required()
-                                                            ->url(),
+                                                            ->url()
+                                                            ->rule('url:http,https'),
                                                     ])
                                                     ->columnSpanFull(),
                                                 Actions::make([
