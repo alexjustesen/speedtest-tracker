@@ -45,6 +45,39 @@ it('creates a webhook through the form', function () {
     ]);
 });
 
+it('accepts HTTP and HTTPS webhook URLs', function (string $url) {
+    actingAs($this->admin);
+
+    Livewire::test(ListWebhooks::class)
+        ->callAction('create', [
+            'url' => $url,
+            'events' => [WebhookEvent::Completed->value],
+            'enabled' => true,
+        ])
+        ->assertHasNoActionErrors();
+
+    assertDatabaseHas('webhooks', ['url' => $url]);
+})->with([
+    'HTTP container hostname' => 'http://webhook-receiver:8080/hook',
+    'HTTPS loopback address' => 'https://127.0.0.1:8443/hook',
+]);
+
+it('rejects non-HTTP webhook URL protocols', function (string $url) {
+    actingAs($this->admin);
+
+    Livewire::test(ListWebhooks::class)
+        ->callAction('create', [
+            'url' => $url,
+            'events' => [WebhookEvent::Completed->value],
+            'enabled' => true,
+        ])
+        ->assertHasActionErrors(['url' => 'url']);
+})->with([
+    'FTP' => 'ftp://webhook-receiver/hook',
+    'file' => 'file:///tmp/webhook',
+    'Gopher' => 'gopher://webhook-receiver/hook',
+]);
+
 it('validates the webhook form', function () {
     actingAs($this->admin);
 

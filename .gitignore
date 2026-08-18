@@ -25,6 +25,7 @@ yarn-error.log
 # AI and Boost assets
 /.agents
 /.claude
+/.cursor
 /.github/copilot-instructions.md
 /.github/skills
 /.mcp.json
