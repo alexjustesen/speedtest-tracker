@@ -62,7 +62,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
             ],
         ];
 
-        if (! config('speedtest.chart_use_average_latency')) {
+        if (! config('speedtest.chart_only_show_avg_latency')) {
             $datasets[] = [
                 'label' => __('general.high_ms'),
                 'data' => $results->map(fn ($item) => $item->download_latency_high),
