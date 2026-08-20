@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Arr;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class Ookla
@@ -28,5 +29,33 @@ class Ookla
 
         // Remove duplicates and concatenate
         return implode(' | ', array_unique($errorMessages));
+    }
+
+    /**
+     * Clamps negative metric values the CLI sometimes returns to zero.
+     */
+    public static function clampNegativeValues(?array $output): ?array
+    {
+        if ($output === null) {
+            return null;
+        }
+
+        $paths = [
+            'ping.latency',
+            'download.bandwidth',
+            'download.bytes',
+            'upload.bandwidth',
+            'upload.bytes',
+        ];
+
+        foreach ($paths as $path) {
+            $value = Arr::get($output, $path);
+
+            if (is_numeric($value) && $value < 0) {
+                Arr::set($output, $path, 0);
+            }
+        }
+
+        return $output;
     }
 }

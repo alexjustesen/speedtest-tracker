@@ -19,16 +19,16 @@ class StatsAnnotations
         parameters: [
             new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
             new OA\Parameter(
-                name: 'start_at',
+                name: 'filter[start_at]',
                 in: 'query',
-                description: 'Filter stats from this date/time (ISO 8601)',
+                description: 'Filter stats created on or after this date/time (alias for created_at>=)',
                 required: false,
                 schema: new OA\Schema(type: 'string', format: 'date-time')
             ),
             new OA\Parameter(
-                name: 'end_at',
+                name: 'filter[end_at]',
                 in: 'query',
-                description: 'Filter stats up to this date/time (ISO 8601)',
+                description: 'Filter stats created on or before this date/time (alias for created_at<=). A date without a time includes the entire day.',
                 required: false,
                 schema: new OA\Schema(type: 'string', format: 'date-time')
             ),

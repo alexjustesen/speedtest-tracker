@@ -7,7 +7,7 @@ use OpenApi\Attributes as OA;
 
 #[OA\Tag(
     name: 'Speedtests',
-    description: 'Endpoints for running speedtests and listing servers.'
+    description: 'Endpoints for running speedtests.'
 )]
 class SpeedtestAnnotations
 {
@@ -58,40 +58,4 @@ class SpeedtestAnnotations
     {
         // Annotation placeholder for runSpeedtest
     }
-
-    #[OA\Get(
-        path: '/api/v1/speedtests/list-servers',
-        summary: 'List available Ookla speedtest servers',
-        operationId: 'listSpeedtestServers',
-        tags: ['Speedtests'],
-        parameters: [
-            new OA\Parameter(ref: '#/components/parameters/AcceptHeader'),
-        ],
-        responses: [
-            new OA\Response(
-                response: Response::HTTP_OK,
-                description: 'OK',
-                content: new OA\JsonContent(ref: '#/components/schemas/ServersCollection')
-            ),
-            new OA\Response(
-                response: Response::HTTP_UNAUTHORIZED,
-                description: 'Unauthenticated',
-                content: new OA\JsonContent(ref: '#/components/schemas/UnauthenticatedError')
-            ),
-            new OA\Response(
-                response: Response::HTTP_FORBIDDEN,
-                description: 'Forbidden',
-                content: new OA\JsonContent(
-                    ref: '#/components/schemas/ForbiddenError',
-                    example: ['message' => 'You do not have permission to view speedtest servers.']
-                )
-            ),
-            new OA\Response(
-                response: Response::HTTP_NOT_ACCEPTABLE,
-                description: 'Not Acceptable - Missing or invalid Accept header',
-                content: new OA\JsonContent(ref: '#/components/schemas/NotAcceptableError')
-            ),
-        ]
-    )]
-    public function listServers(): void {}
 }

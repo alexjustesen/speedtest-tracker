@@ -24,19 +24,6 @@ if (! function_exists('toBits')) {
     }
 }
 
-if (! function_exists('percentChange')) {
-    function percentChange(float $dividend, float $divisor, int $precision = 0): string
-    {
-        if ($dividend === 0 || $divisor === 0) {
-            return 0;
-        }
-
-        $quotient = ($dividend - $divisor) / $divisor;
-
-        return number_format(round($quotient * 100, $precision), $precision);
-    }
-}
-
 if (! function_exists('absoluteDownloadThresholdFailed')) {
     function absoluteDownloadThresholdFailed(float $threshold, float $download = 0): bool
     {
@@ -55,27 +42,5 @@ if (! function_exists('absolutePingThresholdFailed')) {
     function absolutePingThresholdFailed(float $threshold, float $ping): bool
     {
         return $ping > $threshold;
-    }
-}
-
-/**
- * Determine if the string provided is valid json.
- *
- * This function will be overwritten in php 8.3 https://wiki.php.net/rfc/json_validate
- *
- * @deprecated
- *
- * @param  string  $data
- * @return bool
- */
-if (! function_exists('json_validate')) {
-    function json_validate($data)
-    {
-        if (! empty($data)) {
-            return is_string($data) &&
-              is_array(json_decode($data, true)) ? true : false;
-        }
-
-        return false;
     }
 }
