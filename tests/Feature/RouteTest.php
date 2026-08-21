@@ -3,9 +3,11 @@
 use App\Models\Result;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Lottery;
 
 beforeEach(function () {
     Cache::flush();
+    Lottery::alwaysLose();
 });
 
 describe('auth', function () {
