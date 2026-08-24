@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\ResultStatus;
 use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
@@ -29,6 +30,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
 
         $results = Result::query()
             ->select(['id', 'data', 'created_at'])
+            ->where('status', '=', ResultStatus::Completed)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
