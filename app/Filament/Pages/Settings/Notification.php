@@ -174,6 +174,7 @@ class Notification extends SettingsPage
                                                     ->maxLength(2000)
                                                     ->required()
                                                     ->url()
+                                                    ->rule('url:http,https')
                                                     ->rule(new ContainsString('/notify'))
                                                     ->columnSpanFull(),
                                                 Checkbox::make('apprise_verify_ssl')

@@ -17,7 +17,7 @@
 @import '../../vendor/filament/infolists/resources/css/index.css';
 
 /* Required by notifications */
-/* @import '../../vendor/filament/notifications/resources/css/index.css'; */
+@import '../../vendor/filament/notifications/resources/css/index.css';
 
 /* Required by actions, infolists, forms, schemas and tables */
 @import '../../vendor/filament/schemas/resources/css/index.css';

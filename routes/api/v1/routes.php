@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AboutController;
 use App\Http\Controllers\Api\V1\OoklaController;
 use App\Http\Controllers\Api\V1\ResultsController;
 use App\Http\Controllers\Api\V1\SpeedtestController;
@@ -7,6 +8,9 @@ use App\Http\Controllers\Api\V1\StatsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->group(function () {
+    Route::get('/about', AboutController::class)
+        ->name('about');
+
     Route::get('/results', [ResultsController::class, 'list'])
         ->name('results.list');
 

@@ -88,6 +88,8 @@ class RunSpeedtestJob implements ShouldQueue
 
         $output = json_decode($process->getOutput(), true);
 
+        $output = Ookla::clampNegativeValues($output);
+
         $this->result->update([
             'ping' => Arr::get($output, 'ping.latency'),
             'download' => Arr::get($output, 'download.bandwidth'),
