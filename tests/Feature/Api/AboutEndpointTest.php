@@ -10,6 +10,21 @@ describe('about endpoint', function () {
         $response->assertUnauthorized();
     });
 
+    test('returns json 401 instead of redirecting when Accept header is not set', function () {
+        $response = $this->get(route('api.v1.about'));
+
+        $response->assertUnauthorized()
+            ->assertJson(['message' => 'Unauthenticated.']);
+    });
+
+    test('returns json 401 for an invalid bearer token without Accept header', function () {
+        $response = $this->withHeaders(['Authorization' => 'Bearer invalid-token'])
+            ->get(route('api.v1.about'));
+
+        $response->assertUnauthorized()
+            ->assertJson(['message' => 'Unauthenticated.']);
+    });
+
     test('returns application information for an authenticated token', function () {
         config()->set('app.name', 'Speedtest Tracker');
         config()->set('speedtest.build_version', 'v1.14.3');

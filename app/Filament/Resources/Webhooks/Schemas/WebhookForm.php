@@ -16,6 +16,7 @@ class WebhookForm
                 ->label(__('webhooks.url'))
                 ->placeholder('https://webhook.site/longstringofcharacters')
                 ->url()
+                ->rule('url:http,https')
                 ->required()
                 ->maxLength(2000),
 
