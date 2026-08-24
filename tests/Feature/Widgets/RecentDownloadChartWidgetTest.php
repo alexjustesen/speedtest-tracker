@@ -18,7 +18,7 @@ use function Pest\Laravel\actingAs;
 beforeEach(function () {
     actingAs(User::factory()->create());
     Carbon::setTestNow(Carbon::parse('2026-07-23 12:00:00'));
-    app(GeneralSettings::class)->fill(['default_chart_range' => '24h'])->save();
+    app(GeneralSettings::class)->fill(['default_chart_range' => 1])->save();
 });
 
 afterEach(function () {
@@ -51,7 +51,7 @@ it('only includes results within the applied custom date range', function () {
 });
 
 it('falls back to the admin-configured default window when no filter is applied', function () {
-    app(GeneralSettings::class)->fill(['default_chart_range' => 'week'])->save();
+    app(GeneralSettings::class)->fill(['default_chart_range' => 7])->save();
 
     Result::factory()->create([
         'status' => ResultStatus::Completed,

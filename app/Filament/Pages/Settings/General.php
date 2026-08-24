@@ -3,7 +3,7 @@
 namespace App\Filament\Pages\Settings;
 
 use App\Settings\GeneralSettings;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Tabs;
@@ -53,15 +53,11 @@ class General extends SettingsPage
                             ->schema([
                                 Grid::make(['default' => 1, 'md' => 2])
                                     ->schema([
-                                        Select::make('default_chart_range')
+                                        TextInput::make('default_chart_range')
                                             ->label(__('settings/general.default_chart_range'))
                                             ->helperText(__('settings/general.default_chart_range_helper_text'))
-                                            ->native(false)
-                                            ->options([
-                                                '24h' => __('settings/general.default_chart_range_24h'),
-                                                'week' => __('settings/general.default_chart_range_week'),
-                                                'month' => __('settings/general.default_chart_range_month'),
-                                            ])
+                                            ->numeric()
+                                            ->minValue(1)
                                             ->required(),
                                     ]),
                             ])

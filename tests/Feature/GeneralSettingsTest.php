@@ -42,13 +42,13 @@ describe('form', function () {
         $this->actingAs($this->admin);
 
         Livewire::test(General::class)
-            ->fillForm(['default_chart_range' => 'week'])
+            ->fillForm(['default_chart_range' => 7])
             ->call('save')
             ->assertHasNoFormErrors();
 
         app()->forgetInstance(GeneralSettings::class);
 
-        expect(app(GeneralSettings::class)->default_chart_range)->toBe('week');
+        expect(app(GeneralSettings::class)->default_chart_range)->toBe(7);
     });
 
     it('requires a default chart range', function () {

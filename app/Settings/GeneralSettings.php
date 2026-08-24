@@ -6,7 +6,7 @@ use Spatie\LaravelSettings\Settings;
 
 class GeneralSettings extends Settings
 {
-    public string $default_chart_range;
+    public int $default_chart_range;
 
     public static function group(): string
     {

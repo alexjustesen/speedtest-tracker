@@ -22,11 +22,7 @@ class DateRangeFilter extends Component implements HasForms
 
     public function mount(): void
     {
-        $this->dateFrom = (match (app(GeneralSettings::class)->default_chart_range) {
-            'week' => now()->subWeek(),
-            'month' => now()->subMonth(),
-            default => now()->subDay(),
-        })->toDateTimeString();
+        $this->dateFrom = now()->subDays(app(GeneralSettings::class)->default_chart_range)->toDateTimeString();
         $this->dateTo = now()->toDateTimeString();
 
         $this->form->fill([

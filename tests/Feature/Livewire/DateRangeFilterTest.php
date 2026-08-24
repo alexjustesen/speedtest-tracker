@@ -18,18 +18,18 @@ afterEach(function () {
 });
 
 it('mounts with the admin-configured default range and broadcasts it', function () {
-    app(GeneralSettings::class)->fill(['default_chart_range' => 'week'])->save();
+    app(GeneralSettings::class)->fill(['default_chart_range' => 7])->save();
 
     Livewire::test(DateRangeFilter::class)
         ->assertOk()
         ->assertDispatched('date-range-updated', function (string $name, array $params) {
-            return $params[0]['dateFrom'] === now()->subWeek()->toDateTimeString()
+            return $params[0]['dateFrom'] === now()->subDays(7)->toDateTimeString()
                 && $params[0]['dateTo'] === now()->toDateTimeString();
         });
 });
 
 it('broadcasts an updated range when the start date changes', function () {
-    app(GeneralSettings::class)->fill(['default_chart_range' => '24h'])->save();
+    app(GeneralSettings::class)->fill(['default_chart_range' => 1])->save();
 
     Livewire::test(DateRangeFilter::class)
         ->set('dateFrom', now()->subHours(2)->toDateTimeString())
@@ -37,7 +37,7 @@ it('broadcasts an updated range when the start date changes', function () {
 });
 
 it('normalizes the range so the end date is never before the start date', function () {
-    app(GeneralSettings::class)->fill(['default_chart_range' => '24h'])->save();
+    app(GeneralSettings::class)->fill(['default_chart_range' => 1])->save();
 
     Livewire::test(DateRangeFilter::class)
         ->set('dateFrom', now()->toDateTimeString())
