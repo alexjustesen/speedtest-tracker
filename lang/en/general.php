@@ -61,9 +61,8 @@ return [
     'role' => 'Role',
 
     // Date ranges
-    'last_24h' => 'Last 24 hours',
-    'last_week' => 'Last week',
-    'last_month' => 'Last month',
+    'start_date' => 'Start date',
+    'end_date' => 'End date',
 
     // Metrics
     'metrics' => 'Metrics',
