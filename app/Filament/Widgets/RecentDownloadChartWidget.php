@@ -7,6 +7,7 @@ use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Helpers\Average;
 use App\Helpers\Number;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentDownloadChartWidget extends ChartWidget
@@ -61,7 +62,7 @@ class RecentDownloadChartWidget extends ChartWidget
                     'pointRadius' => 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(app(GeneralSettings::class)->chart_datetime_format)),
         ];
     }
 
@@ -82,7 +83,7 @@ class RecentDownloadChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'beginAtZero' => app(GeneralSettings::class)->chart_begin_at_zero,
                     'grace' => 2,
                 ],
             ],

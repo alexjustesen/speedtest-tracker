@@ -125,21 +125,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    // TODO: move to speedtest.php configuration file
-
-    /*
-    |--------------------------------------------------------------------------
-    | Chart Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the default settings for charts used in the application.
-    |
-    */
-
-    'chart_begin_at_zero' => env('CHART_BEGIN_AT_ZERO', true),
-
-    'chart_datetime_format' => env('CHART_DATETIME_FORMAT', 'M. j - G:i'),
-
     /*
     |--------------------------------------------------------------------------
     | Display Configuration
