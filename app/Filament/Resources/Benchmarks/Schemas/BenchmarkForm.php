@@ -34,7 +34,7 @@ class BenchmarkForm
 
             TextInput::make('absolute_value')
                 ->label(__('benchmarks.absolute_value'))
-                ->hint(fn (?Benchmark $record) => $record?->metric?->unit())
+                ->suffix(fn (?Benchmark $record) => $record?->metric?->unit())
                 ->helperText(__('benchmarks.absolute_value_helper'))
                 ->numeric()
                 ->minValue(0)
@@ -47,14 +47,14 @@ class BenchmarkForm
                 ->schema([
                     TextInput::make('baseline_value')
                         ->label(__('benchmarks.baseline_value'))
-                        ->hint(fn (?Benchmark $record) => $record?->metric?->unit())
+                        ->suffix(fn (?Benchmark $record) => $record?->metric?->unit())
                         ->helperText(__('benchmarks.baseline_value_helper'))
                         ->numeric()
                         ->minValue(0)
                         ->required(fn (Get $get) => self::isType($get, BenchmarkType::Relative)),
                     TextInput::make('relative_percentage')
                         ->label(__('benchmarks.relative_percentage'))
-                        ->hint('%')
+                        ->suffix('%')
                         ->helperText(__('benchmarks.relative_percentage_helper'))
                         ->numeric()
                         ->minValue(0)
