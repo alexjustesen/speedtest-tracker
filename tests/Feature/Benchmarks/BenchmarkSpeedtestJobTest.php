@@ -1,9 +1,6 @@
 <?php
 
 use App\Enums\BenchmarkMetric;
-use App\Enums\BenchmarkState;
-use App\Events\BenchmarkAlarmsRecovered;
-use App\Events\BenchmarkAlarmsTriggered;
 use App\Events\SpeedtestBenchmarkHealthy;
 use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Jobs\Ookla\BenchmarkSpeedtestJob;
@@ -49,12 +46,11 @@ it('marks the result healthy when every enabled benchmark passes', function () {
 });
 
 it('marks the result unhealthy and includes packet loss when a benchmark fails', function () {
-    Event::fake([SpeedtestBenchmarkHealthy::class, SpeedtestBenchmarkUnhealthy::class, BenchmarkAlarmsTriggered::class]);
+    Event::fake([SpeedtestBenchmarkHealthy::class, SpeedtestBenchmarkUnhealthy::class]);
 
     Benchmark::factory()->create([
         'metric' => BenchmarkMetric::PacketLoss,
         'absolute_value' => 5,
-        'consecutive_breaches' => 1,
     ]);
 
     $result = Result::factory()->create([
@@ -71,60 +67,4 @@ it('marks the result unhealthy and includes packet loss when a benchmark fails',
         ->and($result->benchmarks['packet_loss']['unit'])->toBe('%');
 
     Event::assertDispatched(SpeedtestBenchmarkUnhealthy::class);
-    Event::assertDispatched(BenchmarkAlarmsTriggered::class);
-});
-
-it('does not fire a recovery while another benchmark is still in alarm', function () {
-    Event::fake([BenchmarkAlarmsRecovered::class]);
-
-    $download = Benchmark::factory()->inAlarm()->create([
-        'metric' => BenchmarkMetric::Download,
-        'absolute_value' => 50,
-        'consecutive_breaches' => 1,
-    ]);
-
-    $upload = Benchmark::factory()->inAlarm()->create([
-        'metric' => BenchmarkMetric::Upload,
-        'absolute_value' => 25,
-        'consecutive_breaches' => 1,
-    ]);
-
-    $result = Result::factory()->create([
-        'scheduled' => true,
-        'download' => 1_250_000, // 10 Mbit, still fails
-        'upload' => 6_250_000, // 50 Mbit, now passes
-    ]);
-
-    (new BenchmarkSpeedtestJob($result))->handle();
-
-    Event::assertNotDispatched(BenchmarkAlarmsRecovered::class);
-    expect($download->refresh()->state)->toBe(BenchmarkState::Alarm)
-        ->and($upload->refresh()->state)->toBe(BenchmarkState::Ok);
-});
-
-it('fires a recovery once every enabled benchmark is passing again', function () {
-    Event::fake([BenchmarkAlarmsRecovered::class]);
-
-    Benchmark::factory()->create([
-        'metric' => BenchmarkMetric::Download,
-        'absolute_value' => 50,
-        'consecutive_breaches' => 1,
-        'state' => BenchmarkState::Ok,
-    ]);
-
-    $upload = Benchmark::factory()->inAlarm()->create([
-        'metric' => BenchmarkMetric::Upload,
-        'absolute_value' => 25,
-        'consecutive_breaches' => 1,
-    ]);
-
-    $result = Result::factory()->create([
-        'scheduled' => true,
-        'download' => 12_500_000, // 100 Mbit, passes
-        'upload' => 6_250_000, // 50 Mbit, now passes too
-    ]);
-
-    (new BenchmarkSpeedtestJob($result))->handle();
-
-    Event::assertDispatched(BenchmarkAlarmsRecovered::class, fn (BenchmarkAlarmsRecovered $event): bool => $event->benchmarks->pluck('id')->contains($upload->id));
 });

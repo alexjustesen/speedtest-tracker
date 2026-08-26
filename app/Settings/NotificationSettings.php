@@ -12,15 +12,11 @@ class NotificationSettings extends Settings
 
     public bool $database_on_benchmark_failure;
 
-    public bool $database_on_benchmark_recovery;
-
     public bool $mail_enabled;
 
     public bool $mail_on_speedtest_run;
 
     public bool $mail_on_benchmark_failure;
-
-    public bool $mail_on_benchmark_recovery;
 
     public ?array $mail_recipients;
 
@@ -31,8 +27,6 @@ class NotificationSettings extends Settings
     public bool $apprise_on_speedtest_run;
 
     public bool $apprise_on_benchmark_failure;
-
-    public bool $apprise_on_benchmark_recovery;
 
     public bool $apprise_verify_ssl;
 

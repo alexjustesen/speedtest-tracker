@@ -39,9 +39,7 @@ return [
     'notify_on_every_speedtest_run' => 'Notify on every completed scheduled speedtest run',
     'notify_on_every_speedtest_run_helper' => 'This will send a notification for every completed scheduled speedtest run, only for healthy or unbenchmarked tests',
     'notify_on_benchmark_failures' => 'Notify on benchmark alarms for scheduled speedtests',
-    'notify_on_benchmark_failures_helper' => 'This will send a notification once a scheduled speedtest breaches a benchmark for the configured number of consecutive tests',
-    'notify_on_benchmark_recovery' => 'Notify when a benchmark recovers',
-    'notify_on_benchmark_recovery_helper' => 'This will send a notification when a scheduled speedtest passes again after a benchmark alarm',
+    'notify_on_benchmark_failures_helper' => 'This will send a notification once a scheduled speedtest breaches a benchmark',
 
     // Test notification messages
     'test_notifications' => [

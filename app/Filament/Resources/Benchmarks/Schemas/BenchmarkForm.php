@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Benchmarks\Schemas;
 
 use App\Enums\BenchmarkType;
 use App\Models\Benchmark;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -60,20 +59,6 @@ class BenchmarkForm
                         ->minValue(0)
                         ->maxValue(100)
                         ->required(fn (Get $get) => self::isType($get, BenchmarkType::Relative)),
-                ]),
-
-            Fieldset::make(__('benchmarks.debounce'))
-                ->schema([
-                    TextInput::make('consecutive_breaches')
-                        ->label(__('benchmarks.consecutive_breaches'))
-                        ->helperText(__('benchmarks.consecutive_breaches_helper'))
-                        ->numeric()
-                        ->minValue(1)
-                        ->default(1)
-                        ->required(),
-                    Checkbox::make('repeat_while_in_alarm')
-                        ->label(__('benchmarks.repeat_while_in_alarm'))
-                        ->helperText(__('benchmarks.repeat_while_in_alarm_helper')),
                 ]),
         ];
     }

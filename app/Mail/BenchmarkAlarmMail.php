@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use App\Enums\BenchmarkMetric;
-use App\Enums\BenchmarkState;
 use App\Enums\BenchmarkType;
 use App\Models\Result;
 use Illuminate\Bus\Queueable;
@@ -22,7 +21,6 @@ class BenchmarkAlarmMail extends Mailable implements ShouldQueue
      */
     public function __construct(
         public Result $result,
-        public BenchmarkState $state,
     ) {}
 
     /**
@@ -30,11 +28,7 @@ class BenchmarkAlarmMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
-        $subject = $this->state === BenchmarkState::Alarm
-            ? 'Speedtest Benchmark Alarm - #'.$this->result->id
-            : 'Speedtest Benchmark Recovered - #'.$this->result->id;
-
-        return new Envelope(subject: $subject);
+        return new Envelope(subject: 'Speedtest Benchmark Alarm - #'.$this->result->id);
     }
 
     /**
@@ -50,7 +44,6 @@ class BenchmarkAlarmMail extends Mailable implements ShouldQueue
                 'isp' => $this->result->isp,
                 'url' => url('/admin/results'),
                 'benchmarks' => $this->formatBenchmarks(),
-                'recovered' => $this->state === BenchmarkState::Ok,
             ],
         );
     }

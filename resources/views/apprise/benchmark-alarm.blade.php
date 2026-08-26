@@ -1,4 +1,4 @@
-A new speedtest on **{{ config('app.name') }}** was completed using **{{ $service }}** on **{{ $isp }}**.
+A new speedtest on **{{ config('app.name') }}** was completed using **{{ $service }}** on **{{ $isp }}** but a benchmark was breached.
 ### Benchmarks
 @foreach ($metrics as $item)
 - {{ $item['passed'] ? '✅' : '❌' }} **{{ $item['name'] }}**

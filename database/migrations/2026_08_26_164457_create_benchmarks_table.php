@@ -22,10 +22,6 @@ return new class extends Migration
             $table->float('absolute_value')->nullable();
             $table->float('baseline_value')->nullable();
             $table->float('relative_percentage')->nullable();
-            $table->unsignedInteger('consecutive_breaches')->default(1);
-            $table->boolean('repeat_while_in_alarm')->default(false);
-            $table->string('state')->default('ok');
-            $table->timestamp('state_changed_at')->nullable();
             $table->timestamps();
         });
 
@@ -86,10 +82,6 @@ return new class extends Migration
                 'absolute_value' => $row['absolute_value'],
                 'baseline_value' => null,
                 'relative_percentage' => null,
-                'consecutive_breaches' => 1,
-                'repeat_while_in_alarm' => false,
-                'state' => 'ok',
-                'state_changed_at' => null,
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);

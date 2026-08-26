@@ -46,10 +46,4 @@ return [
         'absolute' => 'Absolute',
         'relative' => 'Relative',
     ],
-
-    // Benchmark state values
-    'benchmark_state' => [
-        'ok' => 'Ok',
-        'alarm' => 'Alarm',
-    ],
 ];

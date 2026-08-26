@@ -1,11 +1,7 @@
 <x-mail::message>
-@if ($recovered)
-# Speedtest Benchmark Recovered - #{{ $id }}
-@else
 # Speedtest Benchmark Alarm - #{{ $id }}
-@endif
 
-A new speedtest was completed using **{{ $service }}** on **{{ $isp }}**. Current benchmark status:
+A new speedtest was completed using **{{ $service }}** on **{{ $isp }}**. but a benchmark was breached.:
 
 <x-mail::table>
 | **Metric** | **Type** | **Benchmark Value** | **Result Value** | **Status** |

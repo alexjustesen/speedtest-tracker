@@ -1,7 +1,6 @@
 <?php
 
 use App\Enums\BenchmarkMetric;
-use App\Enums\BenchmarkState;
 use App\Enums\BenchmarkType;
 use App\Models\Benchmark;
 use App\Models\Result;
@@ -29,7 +28,6 @@ it('casts attributes correctly', function () {
     ]);
 
     expect($benchmark->refresh()->metric)->toBe(BenchmarkMetric::Download)
-        ->and($benchmark->state)->toBe(BenchmarkState::Ok)
         ->and($benchmark->enabled)->toBeTrue()
         ->and($benchmark->absolute_value)->toBe(50.0);
 });
@@ -74,14 +72,6 @@ it('scopes to only enabled benchmarks', function () {
     Benchmark::factory()->disabled()->create();
 
     expect(Benchmark::enabled()->count())->toBe(2);
-});
-
-it('reports whether it is in alarm', function () {
-    $ok = Benchmark::factory()->create();
-    $alarm = Benchmark::factory()->inAlarm()->create();
-
-    expect($ok->isInAlarm())->toBeFalse()
-        ->and($alarm->isInAlarm())->toBeTrue();
 });
 
 it('passes an absolute download benchmark when the result meets it', function () {

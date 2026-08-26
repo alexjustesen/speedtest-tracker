@@ -3,9 +3,7 @@
 namespace App\Listeners;
 
 use App\Enums\BenchmarkMetric;
-use App\Enums\BenchmarkState;
-use App\Events\BenchmarkAlarmsRecovered;
-use App\Events\BenchmarkAlarmsTriggered;
+use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Mail\BenchmarkAlarmMail;
 use App\Models\Result;
 use App\Models\User;
@@ -13,12 +11,11 @@ use App\Notifications\Apprise\SpeedtestNotification;
 use App\Settings\NotificationSettings;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification as FilamentNotification;
-use Illuminate\Events\Dispatcher;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 
-class NotifyBenchmarkAlarmState
+class NotifyBenchmarkFailure
 {
     /**
      * Create the event listener.
@@ -28,48 +25,28 @@ class NotifyBenchmarkAlarmState
     ) {}
 
     /**
-     * Handle benchmarks entering an alarm state.
+     * Handle the event.
      */
-    public function handleTriggered(BenchmarkAlarmsTriggered $event): void
+    public function handle(SpeedtestBenchmarkUnhealthy $event): void
     {
-        $this->notify($event->result, BenchmarkState::Alarm);
-    }
+        $result = $event->result;
 
-    /**
-     * Handle benchmarks recovering from an alarm state.
-     */
-    public function handleRecovered(BenchmarkAlarmsRecovered $event): void
-    {
-        $this->notify($event->result, BenchmarkState::Ok);
-    }
-
-    /**
-     * Notify all enabled channels for the given benchmark state change.
-     */
-    private function notify(Result $result, BenchmarkState $state): void
-    {
         // Don't send notifications for unscheduled speedtests.
         if ($result->unscheduled) {
             return;
         }
 
-        $recovered = $state === BenchmarkState::Ok;
-
-        $this->notifyAppriseChannels($result, $recovered);
-        $this->notifyDatabaseChannels($recovered);
-        $this->notifyMailChannels($result, $state);
+        $this->notifyAppriseChannels($result);
+        $this->notifyDatabaseChannels();
+        $this->notifyMailChannels($result);
     }
 
     /**
      * Notify Apprise channels.
      */
-    private function notifyAppriseChannels(Result $result, bool $recovered): void
+    private function notifyAppriseChannels(Result $result): void
     {
-        $enabled = $recovered
-            ? $this->notificationSettings->apprise_on_benchmark_recovery
-            : $this->notificationSettings->apprise_on_benchmark_failure;
-
-        if (! $this->notificationSettings->apprise_enabled || ! $enabled) {
+        if (! $this->notificationSettings->apprise_enabled || ! $this->notificationSettings->apprise_on_benchmark_failure) {
             return;
         }
 
@@ -88,12 +65,9 @@ class NotifyBenchmarkAlarmState
             'metrics' => $this->formatBenchmarks($result),
             'speedtest_url' => $result->result_url,
             'url' => url('/admin/results'),
-            'recovered' => $recovered,
         ])->render();
 
-        $title = $recovered
-            ? 'Speedtest Benchmark Recovered – #'.$result->id
-            : 'Speedtest Benchmark Alarm – #'.$result->id;
+        $title = 'Speedtest Benchmark Alarm – #'.$result->id;
 
         foreach ($this->notificationSettings->apprise_channel_urls as $row) {
             $channelUrl = $row['channel_url'] ?? null;
@@ -105,7 +79,7 @@ class NotifyBenchmarkAlarmState
             }
 
             Notification::route('apprise_urls', $channelUrl)
-                ->notify(new SpeedtestNotification($title, $body, $recovered ? 'success' : 'warning', 'markdown'));
+                ->notify(new SpeedtestNotification($title, $body, 'warning', 'markdown'));
         }
     }
 
@@ -131,43 +105,31 @@ class NotifyBenchmarkAlarmState
     /**
      * Notify database channels.
      */
-    private function notifyDatabaseChannels(bool $recovered): void
+    private function notifyDatabaseChannels(): void
     {
-        $enabled = $recovered
-            ? $this->notificationSettings->database_on_benchmark_recovery
-            : $this->notificationSettings->database_on_benchmark_failure;
-
-        if (! $this->notificationSettings->database_enabled || ! $enabled) {
+        if (! $this->notificationSettings->database_enabled || ! $this->notificationSettings->database_on_benchmark_failure) {
             return;
         }
 
         foreach (User::all() as $user) {
-            $notification = FilamentNotification::make()
-                ->title($recovered ? __('results.speedtest_benchmark_recovered') : __('results.speedtest_benchmark_failed'))
+            FilamentNotification::make()
+                ->title(__('results.speedtest_benchmark_failed'))
                 ->actions([
                     Action::make('view')
                         ->label(__('general.view'))
                         ->url(route('filament.admin.resources.results.index')),
-                ]);
-
-            $recovered ? $notification->success() : $notification->warning();
-
-            $notification->sendToDatabase($user);
+                ])
+                ->warning()
+                ->sendToDatabase($user);
         }
     }
 
     /**
      * Notify mail channels.
      */
-    private function notifyMailChannels(Result $result, BenchmarkState $state): void
+    private function notifyMailChannels(Result $result): void
     {
-        $recovered = $state === BenchmarkState::Ok;
-
-        $enabled = $recovered
-            ? $this->notificationSettings->mail_on_benchmark_recovery
-            : $this->notificationSettings->mail_on_benchmark_failure;
-
-        if (! $this->notificationSettings->mail_enabled || ! $enabled) {
+        if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_benchmark_failure) {
             return;
         }
 
@@ -179,20 +141,7 @@ class NotifyBenchmarkAlarmState
 
         foreach ($this->notificationSettings->mail_recipients as $recipient) {
             Mail::to($recipient)
-                ->send(new BenchmarkAlarmMail($result, $state));
+                ->send(new BenchmarkAlarmMail($result));
         }
-    }
-
-    /**
-     * Register the listeners for the subscriber.
-     *
-     * @return array<string, string>
-     */
-    public function subscribe(Dispatcher $events): array
-    {
-        return [
-            BenchmarkAlarmsTriggered::class => 'handleTriggered',
-            BenchmarkAlarmsRecovered::class => 'handleRecovered',
-        ];
     }
 }

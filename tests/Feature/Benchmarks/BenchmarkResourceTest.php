@@ -44,16 +44,12 @@ it('edits a benchmark through the table edit action', function () {
             'enabled' => true,
             'type' => BenchmarkType::Absolute->value,
             'absolute_value' => 150,
-            'consecutive_breaches' => 3,
-            'repeat_while_in_alarm' => true,
         ])
         ->assertHasNoActionErrors();
 
     assertDatabaseHas('benchmarks', [
         'id' => $benchmark->id,
         'absolute_value' => 150,
-        'consecutive_breaches' => 3,
-        'repeat_while_in_alarm' => true,
     ]);
 });
 

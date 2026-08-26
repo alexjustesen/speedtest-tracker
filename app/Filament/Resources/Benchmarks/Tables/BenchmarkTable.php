@@ -26,16 +26,6 @@ class BenchmarkTable
 
                         return $value !== null ? $value.' '.$record->metric->unit() : '—';
                     }),
-                TextColumn::make('consecutive_breaches')
-                    ->label(__('benchmarks.consecutive_breaches')),
-                TextColumn::make('state')
-                    ->label(__('benchmarks.state'))
-                    ->badge(),
-                TextColumn::make('state_changed_at')
-                    ->label(__('benchmarks.state_changed_at'))
-                    ->dateTime(config('app.datetime_format'))
-                    ->timezone(config('app.display_timezone'))
-                    ->placeholder('—'),
                 ToggleColumn::make('enabled')
                     ->label(__('general.enable'))
                     ->disabled(fn (Benchmark $record): bool => $record->benchmarkValue() === null)

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\BenchmarkMetric;
-use App\Enums\BenchmarkState;
 use App\Enums\BenchmarkType;
 use App\Models\Benchmark;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -39,10 +38,6 @@ class BenchmarkFactory extends Factory
             'absolute_value' => fake()->randomFloat(2, 1, 500),
             'baseline_value' => null,
             'relative_percentage' => null,
-            'consecutive_breaches' => 1,
-            'repeat_while_in_alarm' => false,
-            'state' => BenchmarkState::Ok,
-            'state_changed_at' => null,
         ];
     }
 
@@ -66,17 +61,6 @@ class BenchmarkFactory extends Factory
             'absolute_value' => null,
             'baseline_value' => $baseline,
             'relative_percentage' => $percentage,
-        ]);
-    }
-
-    /**
-     * Indicate that the benchmark is currently in an alarm state.
-     */
-    public function inAlarm(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'state' => BenchmarkState::Alarm,
-            'state_changed_at' => now(),
         ]);
     }
 }

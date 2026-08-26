@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\BenchmarkMetric;
-use App\Enums\BenchmarkState;
 use App\Enums\BenchmarkType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,14 +29,10 @@ class Benchmark extends Model
         return [
             'metric' => BenchmarkMetric::class,
             'type' => BenchmarkType::class,
-            'state' => BenchmarkState::class,
             'absolute_value' => 'float',
             'baseline_value' => 'float',
             'relative_percentage' => 'float',
-            'consecutive_breaches' => 'integer',
-            'repeat_while_in_alarm' => 'boolean',
             'enabled' => 'boolean',
-            'state_changed_at' => 'datetime',
         ];
     }
 
@@ -64,14 +59,6 @@ class Benchmark extends Model
     public function scopeEnabled(Builder $query): Builder
     {
         return $query->where('enabled', true);
-    }
-
-    /**
-     * Determine if the benchmark is currently in an alarm state.
-     */
-    public function isInAlarm(): bool
-    {
-        return $this->state === BenchmarkState::Alarm;
     }
 
     /**
