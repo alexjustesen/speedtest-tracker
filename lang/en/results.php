@@ -60,6 +60,7 @@ return [
     // Notifications
     'speedtest_benchmark_passed' => 'Speedtest benchmark passed',
     'speedtest_benchmark_failed' => 'Speedtest benchmark failed',
+    'speedtest_benchmark_recovered' => 'Speedtest benchmark recovered',
     'speedtest_started' => 'Speedtest started',
     'speedtest_completed' => 'Speedtest completed',
     'speedtest_failed' => 'Speedtest failed',

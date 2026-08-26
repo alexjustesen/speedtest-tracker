@@ -38,8 +38,8 @@ return [
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Melding voor elke voltooide geplande snelheidstest',
     'notify_on_every_speedtest_run_helper' => 'Dit zal een melding sturen voor elke voltooide snelheidstest draaien, alleen voor gezonde of niet gecontroleerde tests',
-    'notify_on_threshold_failures' => 'Melding bij drempelfouten voor geplande snelheidstests',
-    'notify_on_threshold_failures_helper' => 'Dit zal een melding sturen wanneer een geplande snelheidstest elke geconfigureerde drempelwaarde mislukt',
+    'notify_on_benchmark_failures' => 'Melding bij drempelfouten voor geplande snelheidstests',
+    'notify_on_benchmark_failures_helper' => 'Dit zal een melding sturen wanneer een geplande snelheidstest elke geconfigureerde drempelwaarde mislukt',
 
     // Test notification messages
     'test_notifications' => [

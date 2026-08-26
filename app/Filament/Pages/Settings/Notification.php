@@ -79,9 +79,12 @@ class Notification extends SettingsPage
                                                 Checkbox::make('database_on_speedtest_run')
                                                     ->label(__('settings/notifications.notify_on_every_speedtest_run'))
                                                     ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper')),
-                                                Checkbox::make('database_on_threshold_failure')
-                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
-                                                    ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
+                                                Checkbox::make('database_on_benchmark_failure')
+                                                    ->label(__('settings/notifications.notify_on_benchmark_failures'))
+                                                    ->helpertext(__('settings/notifications.notify_on_benchmark_failures_helper')),
+                                                Checkbox::make('database_on_benchmark_recovery')
+                                                    ->label(__('settings/notifications.notify_on_benchmark_recovery'))
+                                                    ->helpertext(__('settings/notifications.notify_on_benchmark_recovery_helper')),
                                             ]),
 
                                         Actions::make([
@@ -112,9 +115,12 @@ class Notification extends SettingsPage
                                                 Checkbox::make('mail_on_speedtest_run')
                                                     ->label(__('settings/notifications.notify_on_every_speedtest_run'))
                                                     ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper')),
-                                                Checkbox::make('mail_on_threshold_failure')
-                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
-                                                    ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper')),
+                                                Checkbox::make('mail_on_benchmark_failure')
+                                                    ->label(__('settings/notifications.notify_on_benchmark_failures'))
+                                                    ->helpertext(__('settings/notifications.notify_on_benchmark_failures_helper')),
+                                                Checkbox::make('mail_on_benchmark_recovery')
+                                                    ->label(__('settings/notifications.notify_on_benchmark_recovery'))
+                                                    ->helpertext(__('settings/notifications.notify_on_benchmark_recovery_helper')),
                                             ]),
 
                                         Repeater::make('mail_recipients')
@@ -188,9 +194,13 @@ class Notification extends SettingsPage
                                                     ->label(__('settings/notifications.notify_on_every_speedtest_run'))
                                                     ->helpertext(__('settings/notifications.notify_on_every_speedtest_run_helper'))
                                                     ->columnSpanFull(),
-                                                Checkbox::make('apprise_on_threshold_failure')
-                                                    ->label(__('settings/notifications.notify_on_threshold_failures'))
-                                                    ->helpertext(__('settings/notifications.notify_on_threshold_failures_helper'))
+                                                Checkbox::make('apprise_on_benchmark_failure')
+                                                    ->label(__('settings/notifications.notify_on_benchmark_failures'))
+                                                    ->helpertext(__('settings/notifications.notify_on_benchmark_failures_helper'))
+                                                    ->columnSpanFull(),
+                                                Checkbox::make('apprise_on_benchmark_recovery')
+                                                    ->label(__('settings/notifications.notify_on_benchmark_recovery'))
+                                                    ->helpertext(__('settings/notifications.notify_on_benchmark_recovery_helper'))
                                                     ->columnSpanFull(),
                                             ]),
                                         Repeater::make('apprise_channel_urls')
