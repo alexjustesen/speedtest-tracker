@@ -14,6 +14,7 @@ use Filament\Notifications\Notification as FilamentNotification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class NotifyBenchmarkFailure
 {
@@ -56,13 +57,27 @@ class NotifyBenchmarkFailure
             return;
         }
 
+        if (empty($result->benchmarks)) {
+            Log::warning('Benchmark data not found, won\'t send Apprise notification.');
+
+            return;
+        }
+
+        $metrics = $this->formatBenchmarks($result);
+
+        if (! count($metrics)) {
+            Log::warning('No failed benchmarks found, won\'t send Apprise notification.');
+
+            return;
+        }
+
         $body = view('apprise.benchmark-alarm', [
             'id' => $result->id,
-            'service' => str($result->service->getLabel())->title(),
+            'service' => Str::title($result->service->getLabel()),
             'serverName' => $result->server_name,
             'serverId' => $result->server_id,
             'isp' => $result->isp,
-            'metrics' => $this->formatBenchmarks($result),
+            'metrics' => $metrics,
             'speedtest_url' => $result->result_url,
             'url' => url('/admin/results'),
         ])->render();
@@ -84,19 +99,19 @@ class NotifyBenchmarkFailure
     }
 
     /**
-     * Format every configured benchmark on the result for display, so the
-     * notification shows the full picture rather than only what changed.
+     * Format the benchmarks that failed on this result, for display in the
+     * Apprise notification.
      *
      * @return array<int, array<string, mixed>>
      */
     private function formatBenchmarks(Result $result): array
     {
         return collect($result->benchmarks ?? [])
+            ->reject(fn (array $benchmark): bool => $benchmark['passed'])
             ->map(fn (array $benchmark, string $metric): array => [
                 'name' => BenchmarkMetric::from($metric)->getLabel(),
                 'benchmark' => $benchmark['benchmark_value'].' '.$benchmark['unit'],
                 'value' => $benchmark['test_value'].' '.$benchmark['unit'],
-                'passed' => $benchmark['passed'],
             ])
             ->values()
             ->all();

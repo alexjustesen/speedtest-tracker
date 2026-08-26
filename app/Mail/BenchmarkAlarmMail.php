@@ -11,6 +11,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
 
 class BenchmarkAlarmMail extends Mailable implements ShouldQueue
 {
@@ -40,7 +41,7 @@ class BenchmarkAlarmMail extends Mailable implements ShouldQueue
             markdown: 'mail.benchmark.alarm',
             with: [
                 'id' => $this->result->id,
-                'service' => str($this->result->service->getLabel())->title(),
+                'service' => Str::title($this->result->service->getLabel()),
                 'isp' => $this->result->isp,
                 'url' => url('/admin/results'),
                 'benchmarks' => $this->formatBenchmarks(),
