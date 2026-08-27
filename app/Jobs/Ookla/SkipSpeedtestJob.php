@@ -22,6 +22,7 @@ class SkipSpeedtestJob implements ShouldQueue
      */
     public function __construct(
         public Result $result,
+        public int $attempt = 1,
     ) {}
 
     /**
@@ -56,7 +57,7 @@ class SkipSpeedtestJob implements ShouldQueue
                 'status' => ResultStatus::Failed,
             ]);
 
-            SpeedtestFailed::dispatch($this->result);
+            SpeedtestFailed::dispatch($this->result, $this->attempt);
 
             $this->batch()->cancel();
 

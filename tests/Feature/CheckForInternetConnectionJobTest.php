@@ -149,4 +149,42 @@ describe('CheckForInternetConnectionJob', function () {
         expect($result->data['message'])->toBe('Ping command is unavailable and HTTP fallback also failed.');
         Event::assertDispatched(SpeedtestFailed::class);
     });
+
+    test('constructor defaults to attempt 1 when not specified', function () {
+        $result = Result::factory()->create();
+
+        $job = new CheckForInternetConnectionJob($result);
+
+        expect($job->attempt)->toBe(1);
+    });
+
+    test('dispatches SpeedtestFailed with the current attempt number when both ping and HTTP fallback fail', function () {
+        $result = Result::factory()->create(['status' => ResultStatus::Started]);
+
+        $failedPing = PingResult::fromArray([
+            'success' => false,
+            'error' => 'hostUnreachable',
+            'host' => 'icanhazip.com',
+        ]);
+        app()->bind(PingHostname::class, fn () => new class($failedPing)
+        {
+            public function __construct(private PingResult $ping) {}
+
+            public function handle(?string $hostname = null, int $count = 1): ?PingResult
+            {
+                return $this->ping;
+            }
+        });
+
+        Http::fake([
+            '*' => Http::response('Service Unavailable', 503),
+        ]);
+
+        [$job, $batch] = (new CheckForInternetConnectionJob($result, 2))->withFakeBatch();
+        $job->handle();
+
+        Event::assertDispatched(SpeedtestFailed::class, function (SpeedtestFailed $event) {
+            return $event->attempt === 2;
+        });
+    });
 });
