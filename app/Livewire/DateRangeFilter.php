@@ -84,7 +84,6 @@ class DateRangeFilter extends Component implements HasForms
                             }),
                         ToggleButtons::make('relativeRange')
                             ->label(__('general.relative_range'))
-                            ->native(false)
                             ->options([
                                 '24h' => __('general.range_24h'),
                                 '7d' => __('general.range_7d'),
