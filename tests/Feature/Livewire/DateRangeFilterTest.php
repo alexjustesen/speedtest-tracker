@@ -75,15 +75,6 @@ it('broadcasts the last 30 days range when the 30d preset is selected', function
         });
 });
 
-it('broadcasts the last 90 days range when the 90d preset is selected', function () {
-    Livewire::test(DateRangeFilter::class)
-        ->set('relativeRange', '90d')
-        ->assertDispatched('date-range-updated', function (string $name, array $params) {
-            return $params[0]['dateFrom'] === now()->subDays(90)->toDateTimeString()
-                && $params[0]['dateTo'] === now()->toDateTimeString();
-        });
-});
-
 it('updates the date pickers to reflect the selected preset', function () {
     Livewire::test(DateRangeFilter::class)
         ->set('relativeRange', '7d')

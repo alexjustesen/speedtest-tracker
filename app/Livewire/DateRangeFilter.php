@@ -8,7 +8,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\ToggleButtons;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -82,16 +82,17 @@ class DateRangeFilter extends Component implements HasForms
                                     }
                                 }
                             }),
-                        Select::make('relativeRange')
+                        ToggleButtons::make('relativeRange')
                             ->label(__('general.relative_range'))
                             ->native(false)
                             ->options([
                                 '24h' => __('general.range_24h'),
                                 '7d' => __('general.range_7d'),
                                 '30d' => __('general.range_30d'),
-                                '90d' => __('general.range_90d'),
                             ])
+                            ->grouped()
                             ->live()
+                            ->columnSpanFull()
                             ->afterStateUpdated(function (?string $state, Set $set) {
                                 if (blank($state)) {
                                     return;
@@ -115,7 +116,6 @@ class DateRangeFilter extends Component implements HasForms
                     ->columns([
                         'default' => 1,
                         'sm' => 2,
-                        'lg' => 3,
                     ]),
             ]);
     }
@@ -144,7 +144,6 @@ class DateRangeFilter extends Component implements HasForms
             '24h' => [now()->subHours(24), now()],
             '7d' => [now()->subDays(7), now()],
             '30d' => [now()->subDays(30), now()],
-            '90d' => [now()->subDays(90), now()],
         };
     }
 

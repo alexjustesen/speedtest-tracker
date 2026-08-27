@@ -67,7 +67,6 @@ return [
     'range_24h' => 'Last 24 hours',
     'range_7d' => 'Last 7 days',
     'range_30d' => 'Last 30 days',
-    'range_90d' => 'Last 90 days',
 
     // Metrics
     'metrics' => 'Metrics',
