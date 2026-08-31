@@ -38,8 +38,8 @@ return [
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notifier à chaque exécution de test de vitesse planifiée terminée',
     'notify_on_every_speedtest_run_helper' => 'Ceci enverra une notification pour chaque test de vitesse planifié terminé, uniquement pour les tests sains ou non comparés',
-    'notify_on_threshold_failures' => 'Notifier les pannes de seuil pour les tests de vitesse programmés',
-    'notify_on_threshold_failures_helper' => 'Ceci enverra une notification lorsqu\'un test de vitesse programmé échoue à tous les seuils configurés',
+    'notify_on_benchmark_failures' => 'Notifier les pannes de seuil pour les tests de vitesse programmés',
+    'notify_on_benchmark_failures_helper' => 'Ceci enverra une notification lorsqu\'un test de vitesse programmé échoue à tous les seuils configurés',
 
     // Test notification messages
     'test_notifications' => [

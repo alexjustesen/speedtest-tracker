@@ -38,8 +38,8 @@ return [
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notificar en cada prueba de velocidad programada completada',
     'notify_on_every_speedtest_run_helper' => 'Esto enviará una notificación para cada prueba de velocidad programada completada, sólo para pruebas saludables o no benchmark',
-    'notify_on_threshold_failures' => 'Notificar fallos de umbral para pruebas de velocidad programadas',
-    'notify_on_threshold_failures_helper' => 'Esto enviará una notificación cuando una prueba de velocidad programada falle cualquier umbral configurado',
+    'notify_on_benchmark_failures' => 'Notificar fallos de umbral para pruebas de velocidad programadas',
+    'notify_on_benchmark_failures_helper' => 'Esto enviará una notificación cuando una prueba de velocidad programada falle cualquier umbral configurado',
 
     // Test notification messages
     'test_notifications' => [
