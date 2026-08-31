@@ -46,4 +46,28 @@ describe('ResolveScheduleServerLabels', function () {
 
         expect($result)->toBeEmpty();
     });
+
+    it('falls back to an existing label when the cache entry has expired', function () {
+        Cache::forget('ookla_server_label_333');
+
+        $result = ResolveScheduleServerLabels::run(
+            servers: ['333'],
+            blockedServers: [],
+            existingLabels: ['333' => 'Server C'],
+        );
+
+        expect($result)->toBe(['333' => 'Server C']);
+    });
+
+    it('prefers the fresh cache label over an existing one', function () {
+        Cache::put('ookla_server_label_444', 'Server D (fresh)', now()->addHour());
+
+        $result = ResolveScheduleServerLabels::run(
+            servers: ['444'],
+            blockedServers: [],
+            existingLabels: ['444' => 'Server D (stale)'],
+        );
+
+        expect($result)->toBe(['444' => 'Server D (fresh)']);
+    });
 });

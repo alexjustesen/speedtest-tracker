@@ -33,7 +33,7 @@ class GetOoklaSpeedtestServers
         })->toArray();
 
         foreach ($result as $id => $label) {
-            Cache::put("ookla_server_label_{$id}", $label, now()->addDays(30));
+            Cache::put("ookla_server_label_{$id}", $label, now()->addMinutes(5));
         }
 
         return $result;

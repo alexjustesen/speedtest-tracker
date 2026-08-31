@@ -43,6 +43,7 @@ trait MutatesScheduleFormData
         $data['server_labels'] = ResolveScheduleServerLabels::run(
             servers: $servers,
             blockedServers: $blockedServers,
+            existingLabels: $record?->server_labels ?? [],
         );
 
         return $data;
