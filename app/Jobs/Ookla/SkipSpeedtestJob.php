@@ -39,10 +39,12 @@ class SkipSpeedtestJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $skipIps = $this->getSkipIps();
+
         /**
          * Skip if test is not scheduled or no IPs are configured to skip.
          */
-        if ($this->result->scheduled === false || empty(config('speedtest.preflight.skip_ips'))) {
+        if ($this->result->scheduled === false || empty($skipIps)) {
             return;
         }
 
@@ -65,6 +67,7 @@ class SkipSpeedtestJob implements ShouldQueue
 
         $shouldSkip = $this->shouldSkip(
             externalIp: $externalIp['body'],
+            skipIps: $skipIps,
         );
 
         if ($shouldSkip === false) {
@@ -85,22 +88,25 @@ class SkipSpeedtestJob implements ShouldQueue
     }
 
     /**
-     * Check if the test should be skipped.
+     * @return array<string>
      */
-    private function shouldSkip(string $externalIp): bool|string
+    private function getSkipIps(): array
     {
-        $skipIPs = array_filter(
-            array_map(
-                'trim',
-                explode(',', config('speedtest.preflight.skip_ips')),
-            ),
-        );
+        return $this->result->speedtest?->skip_ips ?? [];
+    }
 
-        if (empty($skipIPs)) {
+    /**
+     * Check if the test should be skipped.
+     *
+     * @param  array<string>  $skipIps
+     */
+    private function shouldSkip(string $externalIp, array $skipIps): bool|string
+    {
+        if (empty($skipIps)) {
             return false;
         }
 
-        foreach ($skipIPs as $ip) {
+        foreach ($skipIps as $ip) {
             // Check for exact IP match
             if (filter_var($ip, FILTER_VALIDATE_IP) && $externalIp === $ip) {
                 return sprintf('"%s" was found in external IP address skip list.', $externalIp);

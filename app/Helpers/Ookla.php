@@ -58,28 +58,4 @@ class Ookla
 
         return $output;
     }
-
-    public static function getConfigServers(): ?array
-    {
-        $list = [];
-
-        if (blank(config('speedtest.servers'))) {
-            return null;
-        }
-
-        $servers = collect(array_map(
-            'trim',
-            explode(',', config('speedtest.servers'))
-        ));
-
-        if (! count($servers)) {
-            return null;
-        }
-
-        $list = $servers->mapWithKeys(function ($serverId) {
-            return [$serverId => $serverId.' (Config server)'];
-        })->sort()->toArray();
-
-        return $list;
-    }
 }

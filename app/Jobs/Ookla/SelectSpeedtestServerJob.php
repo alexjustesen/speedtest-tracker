@@ -43,23 +43,26 @@ class SelectSpeedtestServerJob implements ShouldQueue
             return;
         }
 
-        // If preferred servers are set in the config, we can use that,
-        // but only if the test is scheduled.
-        if ($this->result->scheduled && ! blank(config('speedtest.servers'))) {
+        // If preferred servers are set on the schedule, use that, but only if the test is scheduled.
+        $preferredServers = $this->result->speedtest?->servers ?? [];
+
+        if ($this->result->scheduled && ! blank($preferredServers)) {
             $this->updateServerId(
                 result: $this->result,
-                serverId: $this->getConfigServer(),
+                serverId: Arr::random($preferredServers),
             );
 
             return;
         }
 
-        // If blocked servers config is blank, we can skip picking a server.
-        if (blank(config('speedtest.blocked_servers'))) {
+        // If blocked servers are blank, we can skip picking a server.
+        $blockedServers = $this->result->speedtest?->blocked_servers ?? [];
+
+        if (blank($blockedServers)) {
             return;
         }
 
-        $serverId = $this->filterBlockedServers();
+        $serverId = $this->filterBlockedServers($blockedServers);
 
         if (blank($serverId)) {
             Log::info('Failed to select a server for Ookla speedtest, skipping blocked server filter.', [
@@ -73,53 +76,13 @@ class SelectSpeedtestServerJob implements ShouldQueue
     }
 
     /**
-     * Get a list of servers from config blocked servers.
+     * Filter servers from server list, excluding blocked ones.
+     *
+     * @param  array<int|string>  $blockedServers
      */
-    private function getConfigBlockedServers(): array
+    private function filterBlockedServers(array $blockedServers): mixed
     {
-        $blocked = config('speedtest.blocked_servers');
-
-        $blocked = array_filter(
-            array_map(
-                'trim',
-                explode(',', $blocked),
-            ),
-        );
-
-        if (blank($blocked)) {
-            return [];
-        }
-
-        return collect($blocked)->mapWithKeys(function (int $serverId) {
-            return [$serverId => $serverId];
-        })->toArray();
-    }
-
-    /**
-     * Get a server from the config servers list.
-     */
-    private function getConfigServer(): ?string
-    {
-        $servers = config('speedtest.servers');
-
-        $servers = array_filter(
-            array_map(
-                'trim',
-                explode(',', $servers),
-            ),
-        );
-
-        return count($servers) > 0
-            ? Arr::random($servers)
-            : null;
-    }
-
-    /**
-     * Filter servers from server list.
-     */
-    private function filterBlockedServers(): mixed
-    {
-        $blocked = $this->getConfigBlockedServers();
+        $blocked = collect($blockedServers)->mapWithKeys(fn ($id) => [$id => $id])->toArray();
 
         $servers = $this->listServers();
 
