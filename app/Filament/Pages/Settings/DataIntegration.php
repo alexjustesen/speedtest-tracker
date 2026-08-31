@@ -72,6 +72,8 @@ class DataIntegration extends SettingsPage
                                         TextInput::make('influxdb_v2_url')
                                             ->label(__('settings/data_integration.influxdb_v2_url'))
                                             ->placeholder(__('settings/data_integration.influxdb_v2_url_placeholder'))
+                                            ->url()
+                                            ->rule('url:http,https')
                                             ->maxLength(255)
                                             ->required(fn (Get $get) => $get('influxdb_v2_enabled') === true)
                                             ->columnSpan(['md' => 1]),

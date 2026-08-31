@@ -9,7 +9,7 @@
         <link rel="apple-touch-icon" href="{{ asset('img/speedtest-tracker-icon.png') }}">
 
         {{-- Fonts --}}
-        <link href="{{ asset('fonts/inter/inter.css') }}" rel="stylesheet" />
+        <link href="{{ asset('fonts/filament/filament/inter/inter.css') }}" rel="stylesheet" />
 
         {{-- Styles --}}
         @filamentStyles
