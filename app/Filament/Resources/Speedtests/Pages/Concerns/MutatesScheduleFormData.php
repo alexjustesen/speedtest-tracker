@@ -27,9 +27,22 @@ trait MutatesScheduleFormData
             $data['blocked_servers'] = null;
         }
 
+        $servers = $data['servers'] ?? [];
+        $blockedServers = $data['blocked_servers'] ?? [];
+
+        $record = $this->record ?? null;
+
+        if ($record
+            && $servers === ($record->servers ?? [])
+            && $blockedServers === ($record->blocked_servers ?? [])
+            && filled($record->server_labels)
+        ) {
+            return $data;
+        }
+
         $data['server_labels'] = ResolveScheduleServerLabels::run(
-            servers: $data['servers'] ?? [],
-            blockedServers: $data['blocked_servers'] ?? [],
+            servers: $servers,
+            blockedServers: $blockedServers,
         );
 
         return $data;

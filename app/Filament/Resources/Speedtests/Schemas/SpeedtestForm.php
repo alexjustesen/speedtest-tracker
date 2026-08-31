@@ -74,16 +74,7 @@ class SpeedtestForm
                                     ->label(__('schedules.server_mode'))
                                     ->options(__('schedules.server_mode_options'))
                                     ->default('auto')
-                                    ->live()
-                                    ->afterStateHydrated(function (Radio $component, Get $get) {
-                                        if (! blank($get('servers'))) {
-                                            $component->state('prefer');
-                                        } elseif (! blank($get('blocked_servers'))) {
-                                            $component->state('block');
-                                        } else {
-                                            $component->state('auto');
-                                        }
-                                    }),
+                                    ->live(),
 
                                 self::ServerSelection('servers', 'prefer'),
                                 self::ServerSelection('blocked_servers', 'block'),
@@ -119,16 +110,8 @@ class SpeedtestForm
             ->helperText(__("schedules.{$fieldName}_helper"))
             ->multiple()
             ->searchable()
-            ->options(function (): array {
-                $servers = GetOoklaSpeedtestServers::run();
-
-                return isset($servers['error']) ? [] : $servers;
-            })
-            ->getSearchResultsUsing(function (string $search): array {
-                $servers = GetOoklaSpeedtestServers::run($search);
-
-                return isset($servers['error']) ? [] : $servers;
-            })
+            ->options(fn (): array => GetOoklaSpeedtestServers::options())
+            ->getSearchResultsUsing(fn (string $search): array => GetOoklaSpeedtestServers::options($search))
             ->getOptionLabelsUsing(function (array $values, ?Speedtest $record): array {
                 $labels = $record?->server_labels ?? [];
 
@@ -137,6 +120,7 @@ class SpeedtestForm
                     ->toArray();
             })
             ->visible(fn (Get $get): bool => $get('server_mode') === $mode)
+            ->required(fn (Get $get): bool => $get('server_mode') === $mode)
             ->dehydratedWhenHidden()
             ->dehydrateStateUsing(fn (?array $state): ?array => blank($state) ? null : array_values(array_map('strval', $state)));
     }

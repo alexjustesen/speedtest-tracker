@@ -25,6 +25,17 @@ class EditSpeedtest extends EditRecord
         return $this->getResource()::getUrl('index');
     }
 
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['server_mode'] = match (true) {
+            filled($data['servers'] ?? null) => 'prefer',
+            filled($data['blocked_servers'] ?? null) => 'block',
+            default => 'auto',
+        };
+
+        return $data;
+    }
+
     protected function mutateFormDataBeforeSave(array $data): array
     {
         return $this->applyScheduleFormMutations($data);

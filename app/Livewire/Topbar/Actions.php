@@ -54,19 +54,12 @@ class Actions extends Component implements HasActions, HasForms
                                 return $carry;
                             }, []);
 
-                        $nearby = GetOoklaSpeedtestServers::run();
-                        $nearbyServers = isset($nearby['error']) ? [] : $nearby;
-
                         return array_filter([
                             __('results.schedule_servers') => $scheduleServers,
-                            __('results.nearby_servers') => $nearbyServers,
+                            __('results.nearby_servers') => GetOoklaSpeedtestServers::options(),
                         ]);
                     })
-                    ->getSearchResultsUsing(function (string $search): array {
-                        $servers = GetOoklaSpeedtestServers::run($search);
-
-                        return isset($servers['error']) ? [] : $servers;
-                    })
+                    ->getSearchResultsUsing(fn (string $search): array => GetOoklaSpeedtestServers::options($search))
                     ->searchable(),
             ])
             ->action(function (array $data) {

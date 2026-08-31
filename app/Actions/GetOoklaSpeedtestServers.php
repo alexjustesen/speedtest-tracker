@@ -79,6 +79,16 @@ class GetOoklaSpeedtestServers
     }
 
     /**
+     * For UI: return the ID => label options, with any error result suppressed.
+     */
+    public static function options(?string $search = null): array
+    {
+        $servers = self::run($search);
+
+        return isset($servers['error']) ? [] : $servers;
+    }
+
+    /**
      * For API: return array of structured server objects
      */
     public static function forApi(): array
