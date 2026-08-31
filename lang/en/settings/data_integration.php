@@ -35,10 +35,20 @@ return [
 
     // Prometheus
     'prometheus' => 'Prometheus',
+    'prometheus_scrape_section' => 'Scrape Endpoint',
     'prometheus_enabled' => 'Enable',
     'prometheus_enabled_helper_text' => 'When enabled, metrics for each new speedtest will be available at the /prometheus endpoint.',
     'prometheus_allowed_ips' => 'Allowed IP Addresses',
     'prometheus_allowed_ips_helper' => 'List of IP addresses or CIDR ranges (e.g., 192.168.1.0/24) allowed to access the metrics endpoint. Leave empty to allow all IPs.',
+
+    // Prometheus Remote Write
+    'prometheus_remote_write_section' => 'Remote Write',
+    'prometheus_remote_write_enabled' => 'Enable',
+    'prometheus_remote_write_enabled_helper' => 'When enabled, metrics are pushed to a remote write endpoint after each speedtest. Compatible with VictoriaMetrics, Grafana Cloud (Mimir), and Cortex.',
+    'prometheus_remote_write_url' => 'URL',
+    'prometheus_remote_write_url_placeholder' => 'http://prometheus:9090/api/v1/write',
+    'prometheus_remote_write_username' => 'Username',
+    'prometheus_remote_write_password' => 'Password',
 
     // Common labels
     'org' => 'Org',
