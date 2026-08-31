@@ -7,6 +7,7 @@ use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Helpers\Average;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Database\Eloquent\Collection;
 
 class RecentPingChartWidget extends ChartWidget
 {
@@ -19,35 +20,34 @@ class RecentPingChartWidget extends ChartWidget
         return __('general.ping_ms');
     }
 
+    public function getDescription(): ?string
+    {
+        $results = $this->getResults();
+
+        return __('general.average').': '.number_format(Average::averagePing($results), 2).' '.__('general.ms');
+    }
+
     protected int|string|array $columnSpan = 'full';
 
     protected ?string $maxHeight = '250px';
 
     protected ?string $pollingInterval = '60s';
 
-    public ?string $filter = null;
-
-    public function mount(): void
+    protected function getResults(): Collection
     {
-        $this->filter = $this->filter ?? config('speedtest.default_chart_range', '24h');
+        [$startDate, $endDate] = $this->resolveDateRange();
+
+        return Result::query()
+            ->select(['id', 'ping', 'created_at'])
+            ->where('status', '=', ResultStatus::Completed)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->orderBy('created_at')
+            ->get();
     }
 
     protected function getData(): array
     {
-        $results = Result::query()
-            ->select(['id', 'ping', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
-            ->when($this->filter === '24h', function ($query) {
-                $query->where('created_at', '>=', now()->subDay());
-            })
-            ->when($this->filter === 'week', function ($query) {
-                $query->where('created_at', '>=', now()->subWeek());
-            })
-            ->when($this->filter === 'month', function ($query) {
-                $query->where('created_at', '>=', now()->subMonth());
-            })
-            ->orderBy('created_at')
-            ->get();
+        $results = $this->getResults();
 
         return [
             'datasets' => [
@@ -61,16 +61,6 @@ class RecentPingChartWidget extends ChartWidget
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
-                ],
-                [
-                    'label' => __('general.average'),
-                    'data' => array_fill(0, count($results), Average::averagePing($results)),
-                    'borderColor' => 'rgb(243, 7, 6, 1)',
-                    'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
-                    'fill' => false,
-                    'cubicInterpolationMode' => 'monotone',
-                    'tension' => 0.4,
-                    'pointRadius' => 0,
                 ],
             ],
             'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),

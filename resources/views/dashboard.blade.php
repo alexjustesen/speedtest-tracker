@@ -10,6 +10,8 @@
                 {{ __('general.metrics') }}
             </h2>
 
+            <livewire:date-range-filter />
+
             @livewire(\App\Filament\Widgets\RecentDownloadChartWidget::class)
 
             @livewire(\App\Filament\Widgets\RecentUploadChartWidget::class)
