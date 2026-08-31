@@ -27,11 +27,7 @@ class EditSpeedtest extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
-        $data['server_mode'] = match (true) {
-            filled($data['servers'] ?? null) => 'prefer',
-            filled($data['blocked_servers'] ?? null) => 'block',
-            default => 'auto',
-        };
+        $data['server_mode'] = $this->record->server_mode;
 
         return $data;
     }

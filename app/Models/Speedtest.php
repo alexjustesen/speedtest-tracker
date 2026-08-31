@@ -94,6 +94,17 @@ class Speedtest extends Model implements Schedulable
         );
     }
 
+    protected function serverMode(): Attribute
+    {
+        return Attribute::make(
+            get: fn (): string => match (true) {
+                filled($this->servers) => 'prefer',
+                filled($this->blocked_servers) => 'block',
+                default => 'auto',
+            },
+        );
+    }
+
     /**
      * Create or update the attached cron schedule and set its enabled state.
      */
@@ -111,5 +122,15 @@ class Speedtest extends Model implements Schedulable
         }
 
         $enabled ? $schedule->enable() : $schedule->disable();
+    }
+
+    public function enableSchedule(): void
+    {
+        $this->cronSchedule()?->enable();
+    }
+
+    public function disableSchedule(): void
+    {
+        $this->cronSchedule()?->disable();
     }
 }

@@ -71,11 +71,7 @@ class SpeedtestsTable
 
                 TextColumn::make('server_mode')
                     ->label(__('schedules.columns.server_mode'))
-                    ->state(fn (Speedtest $record): string => match (true) {
-                        ! blank($record->servers) => 'prefer',
-                        ! blank($record->blocked_servers) => 'block',
-                        default => 'auto',
-                    })
+                    ->state(fn (Speedtest $record): string => $record->server_mode)
                     ->formatStateUsing(fn (string $state): string => __("schedules.server_mode_options.{$state}"))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -157,8 +153,8 @@ class SpeedtestsTable
                         )
                         ->color(fn (Speedtest $record): string => $record->isEnabled ? 'warning' : 'success')
                         ->action(fn (Speedtest $record) => $record->isEnabled
-                            ? $record->cronSchedule()?->disable()
-                            : $record->cronSchedule()?->enable()
+                            ? $record->disableSchedule()
+                            : $record->enableSchedule()
                         ),
                     DeleteAction::make(),
                 ]),
@@ -170,7 +166,7 @@ class SpeedtestsTable
                         ->icon(Heroicon::Play)
                         ->color('success')
                         ->action(fn (Collection $records) => $records->each(
-                            fn (Speedtest $record) => $record->cronSchedule()?->enable()
+                            fn (Speedtest $record) => $record->enableSchedule()
                         ))
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('disable')
@@ -178,7 +174,7 @@ class SpeedtestsTable
                         ->icon(Heroicon::Pause)
                         ->color('warning')
                         ->action(fn (Collection $records) => $records->each(
-                            fn (Speedtest $record) => $record->cronSchedule()?->disable()
+                            fn (Speedtest $record) => $record->disableSchedule()
                         ))
                         ->deselectRecordsAfterCompletion(),
                     DeleteBulkAction::make(),

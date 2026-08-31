@@ -17,9 +17,7 @@ class ExplainCronExpression
             return __('schedules.schedule_empty');
         }
 
-        try {
-            new CronExpression($expression);
-        } catch (\InvalidArgumentException $e) {
+        if (! CronExpression::isValidExpression($expression)) {
             return new HtmlString(__('schedules.schedule_invalid'));
         }
 
