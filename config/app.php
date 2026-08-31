@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'UTC'),
+    'timezone' => env('APP_TIMEZONE') ?? env('TZ', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -125,21 +125,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    // TODO: move to speedtest.php configuration file
-
-    /*
-    |--------------------------------------------------------------------------
-    | Chart Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the default settings for charts used in the application.
-    |
-    */
-
-    'chart_begin_at_zero' => env('CHART_BEGIN_AT_ZERO', true),
-
-    'chart_datetime_format' => env('CHART_DATETIME_FORMAT', 'M. j - G:i'),
-
     /*
     |--------------------------------------------------------------------------
     | Display Configuration
@@ -151,7 +136,7 @@ return [
 
     'datetime_format' => env('DATETIME_FORMAT', 'M. j, Y g:ia'),
 
-    'display_timezone' => env('DISPLAY_TIMEZONE', 'UTC'),
+    'display_timezone' => env('DISPLAY_TIMEZONE') ?? env('TZ', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
