@@ -202,7 +202,12 @@ class ResultTable
                             })
                             ->toArray();
                     })
-                    ->attribute('data->server->id'),
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            filled($data['values'] ?? null),
+                            fn (Builder $query) => $query->whereIn('data->server->id', array_map('intval', $data['values'])),
+                        );
+                    }),
 
                 TernaryFilter::make('scheduled')
                     ->label(__('results.scheduled'))
