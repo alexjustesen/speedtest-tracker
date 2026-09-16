@@ -13,6 +13,23 @@
 
 pest()->extend(Tests\Feature\FeatureTestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->beforeEach(function () {
+        config([
+            'services.openidconnect' => [
+                'enabled' => false,
+                'base_url' => null,
+                'client_id' => null,
+                'client_secret' => null,
+                'redirect' => null,
+                'scopes' => ['openid', 'email', 'profile'],
+                'button_label' => null,
+                'auto_provision' => false,
+                'groups_claim' => 'groups',
+                'admin_groups' => null,
+                'default_role' => 'user',
+            ],
+        ]);
+    })
     ->in('Feature');
 
 pest()->extend(Tests\Unit\UnitTestCase::class)

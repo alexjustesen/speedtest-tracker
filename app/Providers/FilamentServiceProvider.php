@@ -30,6 +30,11 @@ class FilamentServiceProvider extends ServiceProvider
             fn (): string => Blade::render("@livewire('topbar.actions')"),
         );
 
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+            fn (): string => Blade::render('@include(\'filament.auth.sso-buttons\')'),
+        );
+
         Notifications::alignment(Alignment::End);
         Notifications::verticalAlignment(VerticalAlignment::Start);
     }
