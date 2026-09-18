@@ -27,6 +27,7 @@ class BenchmarkSpeedtestJob implements ShouldQueue
      */
     public function __construct(
         public Result $result,
+        public int $attempt = 1,
     ) {}
 
     /**
@@ -72,7 +73,7 @@ class BenchmarkSpeedtestJob implements ShouldQueue
 
         $this->healthy
             ? SpeedtestBenchmarkHealthy::dispatch($this->result)
-            : SpeedtestBenchmarkUnhealthy::dispatch($this->result);
+            : SpeedtestBenchmarkUnhealthy::dispatch($this->result, $this->attempt);
     }
 
     private function benchmark(Result $result, ThresholdSettings $settings): array
