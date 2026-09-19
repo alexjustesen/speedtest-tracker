@@ -32,4 +32,18 @@ return [
         'benchmark_healthy' => 'Healthy',
         'benchmark_unhealthy' => 'Unhealthy',
     ],
+
+    // Benchmark metric values
+    'benchmark_metric' => [
+        'download' => 'Download',
+        'upload' => 'Upload',
+        'ping' => 'Ping',
+        'packet_loss' => 'Packet Loss',
+    ],
+
+    // Benchmark type values
+    'benchmark_type' => [
+        'absolute' => 'Absolute',
+        'relative' => 'Relative',
+    ],
 ];
