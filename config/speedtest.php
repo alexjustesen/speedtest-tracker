@@ -16,7 +16,14 @@ return [
 
     'public_dashboard' => env('PUBLIC_DASHBOARD', false),
 
-    'default_chart_range_days' => (int) env('DEFAULT_CHART_RANGE_DAYS', 7),
+    /**
+     * Chart settings.
+     */
+    'chart_begin_at_zero' => env('CHART_BEGIN_AT_ZERO', true),
+
+    'chart_datetime_format' => env('CHART_DATETIME_FORMAT', 'M. j - G:i'),
+
+    'chart_default_range_days' => (int) env('CHART_DEFAULT_RANGE_DAYS', 7),
 
     'chart_only_show_avg_latency' => (bool) env('CHART_ONLY_SHOW_AVG_LATENCY', false),
 
