@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8478203f5a4d86eafdc92dda8075339a",
+    "content-hash": "1615fafff475c87237ead7c0d403629f",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -1755,6 +1755,65 @@
                 "source": "https://github.com/filamentphp/filament"
             },
             "time": "2026-08-05T20:49:46+00:00"
+        },
+        {
+            "name": "flow-php/snappy",
+            "version": "0.38.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/flow-php/snappy.git",
+                "reference": "fbc0659a4092e01e6856e213402dbae7574cb8ad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/flow-php/snappy/zipball/fbc0659a4092e01e6856e213402dbae7574cb8ad",
+                "reference": "fbc0659a4092e01e6856e213402dbae7574cb8ad",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~8.3.0 || ~8.4.0 || ~8.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "polyfill.php"
+                ],
+                "psr-4": {
+                    "Flow\\": [
+                        "src/Flow"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP ETL - Google Snappy compression algorithm implementation",
+            "keywords": [
+                "Algorithm",
+                "compression",
+                "etl",
+                "extract",
+                "filter",
+                "load",
+                "snappy",
+                "transform"
+            ],
+            "support": {
+                "issues": "https://github.com/flow-php/snappy/issues",
+                "source": "https://github.com/flow-php/snappy/tree/0.38.0"
+            },
+            "funding": [
+                {
+                    "url": "https://flow-php.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/norberttech",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-05-22T09:42:49+00:00"
         },
         {
             "name": "fruitcake/php-cors",

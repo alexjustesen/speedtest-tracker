@@ -18,6 +18,7 @@
         "chrisullyott/php-filesize": "^4.2.1",
         "codewithdennis/filament-simple-alert": "^4.0.5",
         "dragonmantank/cron-expression": "^3.6.0",
+        "flow-php/snappy": "^0.38.0",
         "filament/filament": "^5.7.6",
         "filament/spatie-laravel-settings-plugin": "^5.7.6",
         "influxdata/influxdb-client-php": "^3.8",

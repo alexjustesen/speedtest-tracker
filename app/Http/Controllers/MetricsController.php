@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PrometheusMetricsService;
+use App\Services\Prometheus\PrometheusMetricsService;
 use App\Settings\DataIntegrationSettings;
 use Illuminate\Http\Response;
 

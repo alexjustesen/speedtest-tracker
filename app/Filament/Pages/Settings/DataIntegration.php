@@ -14,6 +14,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Utilities\Get;
@@ -134,21 +135,54 @@ class DataIntegration extends SettingsPage
                         Tab::make(__('settings/data_integration.prometheus'))
                             ->icon(Heroicon::OutlinedChartBar)
                             ->schema([
-                                Toggle::make('prometheus_enabled')
-                                    ->label(__('settings/data_integration.prometheus_enabled'))
-                                    ->helperText(__('settings/data_integration.prometheus_enabled_helper_text'))
-                                    ->reactive()
-                                    ->columnSpanFull(),
-                                Grid::make(['default' => 1, 'md' => 3])
-                                    ->hidden(fn (Get $get) => $get('prometheus_enabled') !== true)
+                                Section::make(__('settings/data_integration.prometheus_scrape_section'))
                                     ->schema([
-                                        TagsInput::make('prometheus_allowed_ips')
-                                            ->label(__('settings/data_integration.prometheus_allowed_ips'))
-                                            ->helperText(__('settings/data_integration.prometheus_allowed_ips_helper'))
-                                            ->placeholder('192.168.1.100')
-                                            ->splitKeys(['Tab', ',', ' '])
+                                        Toggle::make('prometheus_enabled')
+                                            ->label(__('settings/data_integration.prometheus_enabled'))
+                                            ->helperText(__('settings/data_integration.prometheus_enabled_helper_text'))
+                                            ->reactive()
                                             ->columnSpanFull(),
-                                    ]),
+                                        Grid::make(['default' => 1, 'md' => 3])
+                                            ->hidden(fn (Get $get) => $get('prometheus_enabled') !== true)
+                                            ->schema([
+                                                TagsInput::make('prometheus_allowed_ips')
+                                                    ->label(__('settings/data_integration.prometheus_allowed_ips'))
+                                                    ->helperText(__('settings/data_integration.prometheus_allowed_ips_helper'))
+                                                    ->placeholder('192.168.1.100')
+                                                    ->splitKeys(['Tab', ',', ' '])
+                                                    ->columnSpanFull(),
+                                            ]),
+                                    ])
+                                    ->columnSpanFull(),
+                                Section::make(__('settings/data_integration.prometheus_remote_write_section'))
+                                    ->schema([
+                                        Toggle::make('prometheus_remote_write_enabled')
+                                            ->label(__('settings/data_integration.prometheus_remote_write_enabled'))
+                                            ->helperText(__('settings/data_integration.prometheus_remote_write_enabled_helper'))
+                                            ->reactive()
+                                            ->columnSpanFull(),
+                                        Grid::make(['default' => 1, 'md' => 2])
+                                            ->hidden(fn (Get $get) => $get('prometheus_remote_write_enabled') !== true)
+                                            ->schema([
+                                                TextInput::make('prometheus_remote_write_url')
+                                                    ->label(__('settings/data_integration.prometheus_remote_write_url'))
+                                                    ->placeholder(__('settings/data_integration.prometheus_remote_write_url_placeholder'))
+                                                    ->url()
+                                                    ->maxLength(255)
+                                                    ->required(fn (Get $get) => $get('prometheus_remote_write_enabled') === true)
+                                                    ->columnSpanFull(),
+                                                TextInput::make('prometheus_remote_write_username')
+                                                    ->label(__('settings/data_integration.prometheus_remote_write_username'))
+                                                    ->maxLength(255)
+                                                    ->columnSpan(1),
+                                                TextInput::make('prometheus_remote_write_password')
+                                                    ->label(__('settings/data_integration.prometheus_remote_write_password'))
+                                                    ->password()
+                                                    ->maxLength(255)
+                                                    ->columnSpan(1),
+                                            ]),
+                                    ])
+                                    ->columnSpanFull(),
                             ])
                             ->columnSpanFull(),
                     ])

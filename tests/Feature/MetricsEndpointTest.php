@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Result;
-use App\Services\PrometheusMetricsService;
+use App\Services\Prometheus\PrometheusMetricsService;
 use App\Settings\DataIntegrationSettings;
 use Illuminate\Support\Facades\Cache;
 
