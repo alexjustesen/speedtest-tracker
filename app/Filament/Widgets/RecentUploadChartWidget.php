@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\ResultStatus;
 use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Helpers\Average;
 use App\Helpers\Number;
@@ -39,8 +38,7 @@ class RecentUploadChartWidget extends ChartWidget
         [$startDate, $endDate] = $this->resolveDateRange();
 
         return Result::query()
-            ->select(['id', 'upload', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
+            ->select(['id', 'upload', 'status', 'created_at'])
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
