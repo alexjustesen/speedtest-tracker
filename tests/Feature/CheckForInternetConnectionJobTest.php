@@ -5,6 +5,7 @@ use App\Enums\ResultStatus;
 use App\Events\SpeedtestFailed;
 use App\Jobs\CheckForInternetConnectionJob;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Spatie\Ping\PingResult;
@@ -90,6 +91,33 @@ describe('CheckForInternetConnectionJob', function () {
         $result->refresh();
         expect($result->status)->toBe(ResultStatus::Checking);
         Event::assertNotDispatched(SpeedtestFailed::class);
+    });
+
+    test('HTTP fallback uses the external IP URL from general settings', function () {
+        $result = Result::factory()->create(['status' => ResultStatus::Started]);
+
+        $settings = app(GeneralSettings::class);
+        $settings->external_ip_url = 'https://ifconfig.me';
+        $settings->save();
+
+        app()->bind(PingHostname::class, fn () => new class
+        {
+            public function handle(?string $hostname = null, int $count = 1): ?PingResult
+            {
+                return null;
+            }
+        });
+
+        Http::fake([
+            'ifconfig.me' => Http::response('1.2.3.4', 200),
+            '*' => Http::response('Service Unavailable', 503),
+        ]);
+
+        [$job, $batch] = (new CheckForInternetConnectionJob($result))->withFakeBatch();
+        $job->handle();
+
+        $this->assertFalse($batch->cancelled());
+        Http::assertSent(fn ($request) => $request->url() === 'https://ifconfig.me');
     });
 
     test('batch is cancelled when ping fails and HTTP fallback also fails', function () {

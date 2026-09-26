@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -15,9 +16,9 @@ class GetOoklaSpeedtestServers
     /**
      * For UI: return the ID, Sponsor, and Name to start a manual test
      */
-    public function handle(): array
+    public function handle(?string $search = null): array
     {
-        $servers = self::fetch();
+        $servers = self::fetch($search);
 
         // If the first item is not an array, treat as error or empty
         if (empty($servers) || ! is_array($servers) || (isset($servers[0]) && ! is_array($servers[0]))) {
@@ -25,29 +26,49 @@ class GetOoklaSpeedtestServers
             return ['error' => $servers[0] ?? 'Unable to retrieve servers'];
         }
 
-        return collect($servers)->mapWithKeys(function (array $item) {
+        $result = collect($servers)->mapWithKeys(function (array $item) {
             return [
                 $item['id'] => ($item['sponsor'] ?? 'Unknown').' ('.($item['name'] ?? 'Unknown').', '.$item['id'].')',
             ];
         })->toArray();
+
+        foreach ($result as $id => $label) {
+            Cache::put("ookla_server_label_{$id}", $label, now()->addMinutes(5));
+        }
+
+        return $result;
     }
 
     /**
      * Fetch the raw Ookla server array from the Ookla API.
      */
-    public static function fetch(): array
+    public static function fetch(?string $search = null): array
     {
+        $cacheKey = 'ookla_servers_'.($search !== null ? md5($search) : 'all');
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
         $query = [
             'engine' => 'js',
             'https_functional' => true,
             'limit' => 20,
         ];
 
+        if (filled($search)) {
+            $query['search'] = $search;
+        }
+
         try {
             $response = Http::retry(3, 250)
                 ->get(url: 'https://www.speedtest.net/api/js/servers', query: $query);
 
-            return $response->json();
+            $result = $response->json();
+
+            Cache::put($cacheKey, $result, now()->addMinutes(5));
+
+            return $result;
         } catch (Throwable $e) {
             Log::error('Unable to retrieve Ookla servers.', [$e->getMessage()]);
 
@@ -55,6 +76,16 @@ class GetOoklaSpeedtestServers
                 '⚠️ Unable to retrieve Ookla servers, check internet connection and see logs.',
             ];
         }
+    }
+
+    /**
+     * For UI: return the ID => label options, with any error result suppressed.
+     */
+    public static function options(?string $search = null): array
+    {
+        $servers = self::run($search);
+
+        return isset($servers['error']) ? [] : $servers;
     }
 
     /**
