@@ -34,8 +34,8 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'data', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
+            ->select(['id', 'status', 'data', 'created_at'])
+            ->whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
             ->when($this->filter === '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
             })
@@ -52,7 +52,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => __('general.average_ms'),
-                    'data' => $results->map(fn ($item) => $item->download_latency_iqm),
+                    'data' => $results->map(fn ($item) => $item->download_latency_iqm ?? ($item->status === ResultStatus::Failed ? 0 : null)),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
                     'pointBackgroundColor' => 'rgba(16, 185, 129)',
@@ -63,7 +63,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                 ],
                 [
                     'label' => __('general.high_ms'),
-                    'data' => $results->map(fn ($item) => $item->download_latency_high),
+                    'data' => $results->map(fn ($item) => $item->download_latency_high ?? ($item->status === ResultStatus::Failed ? 0 : null)),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
                     'pointBackgroundColor' => 'rgba(14, 165, 233)',
@@ -74,7 +74,7 @@ class RecentDownloadLatencyChartWidget extends ChartWidget
                 ],
                 [
                     'label' => __('general.low_ms'),
-                    'data' => $results->map(fn ($item) => $item->download_latency_low),
+                    'data' => $results->map(fn ($item) => $item->download_latency_low ?? ($item->status === ResultStatus::Failed ? 0 : null)),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
                     'pointBackgroundColor' => 'rgba(139, 92, 246)',
