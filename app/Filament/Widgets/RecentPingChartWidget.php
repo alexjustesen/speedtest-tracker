@@ -35,8 +35,8 @@ class RecentPingChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'ping', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
+            ->select(['id', 'status', 'ping', 'created_at'])
+            ->whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
             ->when($this->filter === '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
             })
@@ -53,7 +53,7 @@ class RecentPingChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => __('general.ping'),
-                    'data' => $results->map(fn ($item) => $item->ping),
+                    'data' => $results->map(fn ($item) => $item->ping ?? ($item->status === ResultStatus::Failed ? 0 : null)),
                     'borderColor' => 'rgba(16, 185, 129)',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
                     'pointBackgroundColor' => 'rgba(16, 185, 129)',
@@ -64,7 +64,7 @@ class RecentPingChartWidget extends ChartWidget
                 ],
                 [
                     'label' => __('general.average'),
-                    'data' => array_fill(0, count($results), Average::averagePing($results)),
+                    'data' => array_fill(0, count($results), Average::averagePing($results->where('status', ResultStatus::Completed))),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,

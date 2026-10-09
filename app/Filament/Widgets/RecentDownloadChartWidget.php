@@ -36,8 +36,8 @@ class RecentDownloadChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'download', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
+            ->select(['id', 'status', 'download', 'created_at'])
+            ->whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
             ->when($this->filter === '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
             })
@@ -54,7 +54,7 @@ class RecentDownloadChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => __('general.download'),
-                    'data' => $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : null),
+                    'data' => $results->map(fn ($item) => ! blank($item->download) ? Number::bitsToMagnitude(bits: $item->download_bits, precision: 2, magnitude: 'mbit') : ($item->status === ResultStatus::Failed ? 0 : null)),
                     'borderColor' => 'rgba(14, 165, 233)',
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
                     'pointBackgroundColor' => 'rgba(14, 165, 233)',
@@ -65,7 +65,7 @@ class RecentDownloadChartWidget extends ChartWidget
                 ],
                 [
                     'label' => __('general.average'),
-                    'data' => array_fill(0, count($results), Average::averageDownload($results)),
+                    'data' => array_fill(0, count($results), Average::averageDownload($results->where('status', ResultStatus::Completed))),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,

@@ -36,8 +36,8 @@ class RecentUploadChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = Result::query()
-            ->select(['id', 'upload', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
+            ->select(['id', 'status', 'upload', 'created_at'])
+            ->whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
             ->when($this->filter === '24h', function ($query) {
                 $query->where('created_at', '>=', now()->subDay());
             })
@@ -54,7 +54,7 @@ class RecentUploadChartWidget extends ChartWidget
             'datasets' => [
                 [
                     'label' => __('general.upload'),
-                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : null),
+                    'data' => $results->map(fn ($item) => ! blank($item->upload) ? Number::bitsToMagnitude(bits: $item->upload_bits, precision: 2, magnitude: 'mbit') : ($item->status === ResultStatus::Failed ? 0 : null)),
                     'borderColor' => 'rgba(139, 92, 246)',
                     'backgroundColor' => 'rgba(139, 92, 246, 0.1)',
                     'pointBackgroundColor' => 'rgba(139, 92, 246)',
@@ -65,7 +65,7 @@ class RecentUploadChartWidget extends ChartWidget
                 ],
                 [
                     'label' => __('general.average'),
-                    'data' => array_fill(0, count($results), Average::averageUpload($results)),
+                    'data' => array_fill(0, count($results), Average::averageUpload($results->where('status', ResultStatus::Completed))),
                     'borderColor' => 'rgb(243, 7, 6, 1)',
                     'pointBackgroundColor' => 'rgb(243, 7, 6, 1)',
                     'fill' => false,
