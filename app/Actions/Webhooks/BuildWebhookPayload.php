@@ -2,7 +2,7 @@
 
 namespace App\Actions\Webhooks;
 
-use App\Enums\WebhookEvent;
+use App\Enums\NotificationEvent;
 use App\Helpers\Number;
 use App\Models\Result;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -16,7 +16,7 @@ class BuildWebhookPayload
      *
      * @return array<string, mixed>
      */
-    public function handle(Result $result, WebhookEvent $event): array
+    public function handle(Result $result, NotificationEvent $event): array
     {
         $payload = [
             'event' => $event->value,
@@ -38,7 +38,7 @@ class BuildWebhookPayload
             'url' => url('/admin/results'),
         ];
 
-        if (in_array($event, [WebhookEvent::BenchmarkHealthy, WebhookEvent::BenchmarkUnhealthy], strict: true)) {
+        if ($event->includesBenchmarks()) {
             $payload['benchmarks'] = $result->benchmarks;
         }
 

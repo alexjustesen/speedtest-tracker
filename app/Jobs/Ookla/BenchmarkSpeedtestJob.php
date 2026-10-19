@@ -5,6 +5,7 @@ namespace App\Jobs\Ookla;
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestBenchmarkHealthy;
 use App\Events\SpeedtestBenchmarking;
+use App\Events\SpeedtestBenchmarkRecovered;
 use App\Events\SpeedtestBenchmarkUnhealthy;
 use App\Models\Benchmark;
 use App\Models\Result;
@@ -65,9 +66,17 @@ class BenchmarkSpeedtestJob implements ShouldQueue
             'healthy' => $this->healthy,
         ]);
 
-        $this->healthy
-            ? SpeedtestBenchmarkHealthy::dispatch($this->result)
-            : SpeedtestBenchmarkUnhealthy::dispatch($this->result);
+        if (! $this->healthy) {
+            SpeedtestBenchmarkUnhealthy::dispatch($this->result);
+
+            return;
+        }
+
+        SpeedtestBenchmarkHealthy::dispatch($this->result);
+
+        if ($this->result->recoveredFromBenchmarkFailure()) {
+            SpeedtestBenchmarkRecovered::dispatch($this->result);
+        }
     }
 
     /**

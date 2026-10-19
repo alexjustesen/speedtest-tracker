@@ -42,7 +42,7 @@ class NotifyWebhookTestResult
         }
 
         $notification = Notification::make()
-            ->title($success ? __('webhooks.test_sent') : __('webhooks.test_failed'))
+            ->title($success ? __('notification_channels.test_sent') : __('notification_channels.test_failed'))
             ->body($success ? $event->webhookUrl : ($event->errorMessage ?? $event->webhookUrl));
 
         $success ? $notification->success() : $notification->danger();

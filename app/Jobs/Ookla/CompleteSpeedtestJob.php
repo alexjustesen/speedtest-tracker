@@ -4,6 +4,7 @@ namespace App\Jobs\Ookla;
 
 use App\Enums\ResultStatus;
 use App\Events\SpeedtestCompleted;
+use App\Events\SpeedtestRecovered;
 use App\Models\Result;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,5 +42,9 @@ class CompleteSpeedtestJob implements ShouldQueue
         ]);
 
         SpeedtestCompleted::dispatch($this->result);
+
+        if ($this->result->recoveredFromFailure()) {
+            SpeedtestRecovered::dispatch($this->result);
+        }
     }
 }
