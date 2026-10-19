@@ -3,12 +3,14 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Widgets\Concerns\HasChartFilters;
+use App\Filament\Widgets\Concerns\HasTimeSeriesChart;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 
 class RecentUploadLatencyChartWidget extends ChartWidget
 {
     use HasChartFilters;
+    use HasTimeSeriesChart;
 
     protected ?string $heading = null;
 
@@ -33,6 +35,8 @@ class RecentUploadLatencyChartWidget extends ChartWidget
             ->orderBy('created_at')
             ->get();
 
+        $spanGaps = $this->gapThreshold($results);
+
         $datasets = [
             [
                 'label' => __('general.average_ms'),
@@ -43,6 +47,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                 'fill' => true,
                 'cubicInterpolationMode' => 'monotone',
                 'tension' => 0.4,
+                'spanGaps' => $spanGaps,
                 'pointRadius' => count($results) <= 24 ? 3 : 0,
             ],
         ];
@@ -57,6 +62,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                 'fill' => true,
                 'cubicInterpolationMode' => 'monotone',
                 'tension' => 0.4,
+                'spanGaps' => $spanGaps,
                 'pointRadius' => count($results) <= 24 ? 3 : 0,
             ];
 
@@ -69,13 +75,14 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                 'fill' => true,
                 'cubicInterpolationMode' => 'monotone',
                 'tension' => 0.4,
+                'spanGaps' => $spanGaps,
                 'pointRadius' => count($results) <= 24 ? 3 : 0,
             ];
         }
 
         return [
             'datasets' => $datasets,
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $this->timeLabels($results),
         ];
     }
 
@@ -94,6 +101,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
                 ],
             ],
             'scales' => [
+                'x' => $this->timeScaleOptions(),
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
                     'grace' => 2,

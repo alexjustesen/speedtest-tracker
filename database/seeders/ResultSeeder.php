@@ -22,6 +22,17 @@ class ResultSeeder extends Seeder
     private const int FAILURE_PERCENTAGE = 5;
 
     /**
+     * Periods (in hours ago) where the app was "turned off" and no results exist,
+     * these show up as gaps in the dashboard charts.
+     */
+    private const array OUTAGES = [
+        [300, 294], // 6 hour outage
+        [130, 124], // 6 hour outage
+        [80, 44],   // 1.5 day outage
+        [10, 7],    // 3 hour outage
+    ];
+
+    /**
      * Error messages used for failed results.
      */
     private const array FAILURE_MESSAGES = [
@@ -39,6 +50,7 @@ class ResultSeeder extends Seeder
         $now = Carbon::now();
 
         collect(range(0, self::HOURS - 1))
+            ->reject(fn (int $hoursAgo): bool => $this->inOutage($hoursAgo))
             ->map(function (int $hoursAgo) use ($now): array {
                 $timestamp = $now->copy()->subHours($hoursAgo);
 
@@ -46,8 +58,29 @@ class ResultSeeder extends Seeder
                     ? $this->makeFailedResult($timestamp)
                     : $this->makeResult($timestamp);
             })
+            // A burst of manual tests a few minutes apart, these shouldn't skew the gap detection.
+            ->merge(collect([3, 6, 9, 12])->map(
+                fn (int $minutes): array => [
+                    ...$this->makeResult($now->copy()->subHours(30)->addMinutes($minutes)),
+                    'scheduled' => false,
+                ],
+            ))
             ->chunk(100)
-            ->each(fn ($chunk) => Result::insert($chunk->all()));
+            ->each(fn ($chunk) => Result::insert($chunk->values()->all()));
+    }
+
+    /**
+     * Whether the given hour falls inside one of the outage periods.
+     */
+    private function inOutage(int $hoursAgo): bool
+    {
+        foreach (self::OUTAGES as [$from, $to]) {
+            if ($hoursAgo <= $from && $hoursAgo > $to) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
