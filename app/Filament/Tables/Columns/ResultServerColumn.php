@@ -19,6 +19,11 @@ class ResultServerColumn extends Column
         return $this->serverName;
     }
 
+    public function getServerLocation(): ?string
+    {
+        return $this->record->server_location;
+    }
+
     public function getServerId(): ?int
     {
         $this->serverId = $this->record->server_id;

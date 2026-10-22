@@ -22,9 +22,15 @@ class Number extends SupportNumber
 
     /**
      * Convert the given number to a specific bit order of magnitude.
+     *
+     * Returns null for a metric that was not measured, e.g. the upload of a file download test.
      */
-    public static function bitsToMagnitude(int|float $bits, int $precision = 0, string $magnitude = 'kbit'): float
+    public static function bitsToMagnitude(null|int|float $bits, int $precision = 0, string $magnitude = 'kbit'): ?float
     {
+        if (is_null($bits)) {
+            return null;
+        }
+
         $value = match ($magnitude) {
             'kbit' => $bits * 1000,
             'mbit' => $bits * pow(1000, -2),
@@ -65,8 +71,13 @@ class Number extends SupportNumber
      *
      * Reference: https://en.wikipedia.org/wiki/Bit_rate
      */
-    public static function toBitRate(int|float $bits, int $precision = 0, ?int $maxPrecision = null): string
+    public static function toBitRate(null|int|float $bits, int $precision = 0, ?int $maxPrecision = null): string
     {
+        // Not every service measures every metric, e.g. the file download has no upload.
+        if (is_null($bits)) {
+            return 'n/a';
+        }
+
         $units = ['Bps', 'Kbps', 'Mbps', 'Gbps', 'Tbps', 'Pbps', 'Ebps', 'Zbps', 'Ybps'];
 
         if ($bits === 0) {

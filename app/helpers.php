@@ -32,8 +32,13 @@ if (! function_exists('absoluteDownloadThresholdFailed')) {
 }
 
 if (! function_exists('absoluteUploadThresholdFailed')) {
-    function absoluteUploadThresholdFailed(float $threshold, float $upload = 0): bool
+    function absoluteUploadThresholdFailed(float $threshold, ?float $upload = 0): bool
     {
+        // A test that did not measure the upload can not breach the threshold.
+        if (is_null($upload)) {
+            return false;
+        }
+
         return toBits(convertSize($upload), 2) < $threshold;
     }
 }

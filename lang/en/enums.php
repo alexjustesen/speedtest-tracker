@@ -17,5 +17,9 @@ return [
     'service' => [
         'faker' => 'Faker',
         'ookla' => 'Ookla',
+        'cloudflare' => 'Cloudflare',
+        'yandex' => 'Yandex Internetometer',
+        'iperf3' => 'iPerf3',
+        'file' => 'File download',
     ],
 ];

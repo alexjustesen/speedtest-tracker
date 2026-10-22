@@ -73,6 +73,10 @@ return [
     'select_server_helper' => 'Leave empty to run the speedtest without specifying a server. Blocked servers will be skipped.',
     'manual_servers' => 'Manual servers',
     'closest_servers' => 'Closest servers',
+    'iperf3_server' => 'iPerf3 server',
+    'iperf3_server_helper' => 'Host or host:port of an iPerf3 server, the default port is 5201. Public servers run one test at a time and are often busy.',
+    'file_url' => 'File URL',
+    'file_url_helper' => 'Direct link to a large file (100 MB or more). Only the download speed and latency are measured.',
     'run_speedtest' => 'Run Speedtest',
     'start' => 'Start',
 ];

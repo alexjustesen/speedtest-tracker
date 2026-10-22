@@ -91,14 +91,19 @@
                 @endfilled
 
                 <p class="flex items-baseline gap-x-2">
-                    @php
-                        $upload = \App\Helpers\Bitrate::formatBits(\App\Helpers\Bitrate::bytesToBits($this->latestResult?->upload));
+                    {{-- Not every service measures the upload, e.g. the file download. --}}
+                    @if (blank($this->latestResult?->upload))
+                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">n/a</span>
+                    @else
+                        @php
+                            $upload = \App\Helpers\Bitrate::formatBits(\App\Helpers\Bitrate::bytesToBits($this->latestResult?->upload));
 
-                        $upload = explode(' ', $upload);
-                    @endphp
+                            $upload = explode(' ', $upload);
+                        @endphp
 
-                    <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $upload[0] }}</span>
-                    <span class="text-sm text-zinc-600 dark:text-zinc-400">{{ $upload[1].'ps' }}</span>
+                        <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ $upload[0] }}</span>
+                        <span class="text-sm text-zinc-600 dark:text-zinc-400">{{ $upload[1].'ps' }}</span>
+                    @endif
                 </p>
             </x-filament::section>
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Results\Tables;
 
+use App\Enums\ResultService;
 use App\Enums\ResultStatus;
 use App\Filament\Exports\ResultExporter;
 use App\Filament\Tables\Columns\ResultServerColumn;
@@ -48,7 +49,7 @@ class ResultTable
 
                 TextColumn::make('service')
                     ->label(__('results.service'))
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 ResultServerColumn::make('server')
                     ->label(__('general.server'))
@@ -221,6 +222,11 @@ class ResultTable
                         blank: fn (Builder $query) => $query,
                     ),
 
+                SelectFilter::make('service')
+                    ->label(__('results.service'))
+                    ->multiple()
+                    ->options(ResultService::class),
+
                 SelectFilter::make('status')
                     ->label(__('general.status'))
                     ->multiple()
@@ -246,7 +252,7 @@ class ResultTable
                         ->label(__('results.view_on_speedtest_net'))
                         ->icon('heroicon-o-link')
                         ->url(fn (Result $record): ?string => $record->result_url)
-                        ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Completed)
+                        ->hidden(fn (Result $record): bool => $record->status !== ResultStatus::Completed || blank($record->result_url))
                         ->openUrlInNewTab(),
                     Action::make('updateComments')
                         ->label(__('results.update_comments'))

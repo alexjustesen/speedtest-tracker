@@ -2,7 +2,8 @@
 
 namespace App\Actions;
 
-use App\Actions\Ookla\RunSpeedtest;
+use App\Actions\Speedtests\RunSpeedtest;
+use App\Enums\ResultService;
 use Cron\CronExpression;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -20,6 +21,7 @@ class CheckForScheduledSpeedtests
 
         RunSpeedtest::runIf(
             $this->isSpeedtestDue(schedule: $schedule),
+            service: ResultService::tryFrom((string) config('speedtest.service')) ?? ResultService::Ookla,
             scheduled: true,
         );
     }

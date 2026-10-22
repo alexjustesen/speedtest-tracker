@@ -12,6 +12,29 @@ Speedtest Tracker is a self-hosted application that monitors the performance and
 - **Notifications**: Receive notifications when your internet performance drops below a certain threshold.
 - **Multi-Language Support**: Available in multiple languages with community translations via [Crowdin](https://crowdin.com/project/speedtest-tracker).
 
+## Alternative speedtest services
+
+Besides Ookla, a speedtest can run against:
+
+| Service | What is measured | Target |
+| --- | --- | --- |
+| **Cloudflare** | download, upload, latency and latency under load against the nearest Cloudflare edge (speed.cloudflare.com) | — |
+| **Yandex Internetometer** | the same against the Yandex CDN nodes picked by yandex.ru/internet | — |
+| **iPerf3** | download (reverse run), upload, ICMP ping and packet loss with the `iperf3` CLI | `host` or `host:port` of an iPerf3 server |
+| **File download** | download and latency only, by downloading any large file | HTTP(S) URL of the file |
+
+Pick the service in the **Speedtest** dialog. Scheduled speedtests use `SPEEDTEST_SERVICE`.
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `SPEEDTEST_SERVICE` | `ookla` | Service for scheduled tests: `ookla`, `cloudflare`, `yandex`, `iperf3` or `file`. |
+| `SPEEDTEST_IPERF3_SERVERS` | | Comma separated iPerf3 servers (`host[:port]`), scheduled tests pick one at random. |
+| `SPEEDTEST_IPERF3_DURATION` | `10` | Seconds per direction. |
+| `SPEEDTEST_IPERF3_STREAMS` | `4` | Parallel streams. |
+| `SPEEDTEST_FILE_URLS` | | Comma separated file URLs, scheduled tests pick one at random. |
+| `SPEEDTEST_HTTP_DURATION` | `10` | Seconds per direction for Cloudflare, Yandex and the file download. |
+| `SPEEDTEST_HTTP_STREAMS` | `4` | Parallel connections for Cloudflare, Yandex and the file download. |
+
 ## Getting Started
 
 Speedtest Tracker is containerized so you can run it anywhere you run your containers. The image is built by LinuxServer.io, build information can be found [here](https://fleet.linuxserver.io/image?name=linuxserver/speedtest-tracker).

@@ -69,14 +69,8 @@ class PrometheusMetricsService
         );
         $downloadBytesGauge->set($result->download, $labelValues);
 
-        // Upload speed in bytes
-        $uploadBytesGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'upload_bytes',
-            'Upload speed in bytes per second',
-            $labelNames
-        );
-        $uploadBytesGauge->set($result->upload, $labelValues);
+        // Upload speed in bytes, not measured by every service
+        $this->registerGaugeIfNotNull($registry, 'upload_bytes', 'Upload speed in bytes per second', $labelNames, $labelValues, $result->upload);
 
         // Download speed in bits per second
         $downloadBitsGauge = $registry->getOrRegisterGauge(
@@ -87,14 +81,8 @@ class PrometheusMetricsService
         );
         $downloadBitsGauge->set(toBits($result->download), $labelValues);
 
-        // Upload speed in bits per second
-        $uploadBitsGauge = $registry->getOrRegisterGauge(
-            'speedtest_tracker',
-            'upload_bits',
-            'Upload speed in bits per second',
-            $labelNames
-        );
-        $uploadBitsGauge->set(toBits($result->upload), $labelValues);
+        // Upload speed in bits per second, not measured by every service
+        $this->registerGaugeIfNotNull($registry, 'upload_bits', 'Upload speed in bits per second', $labelNames, $labelValues, is_null($result->upload) ? null : toBits($result->upload));
 
         // Ping latency in milliseconds
         $pingGauge = $registry->getOrRegisterGauge(

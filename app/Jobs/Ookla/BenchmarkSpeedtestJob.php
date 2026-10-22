@@ -79,7 +79,8 @@ class BenchmarkSpeedtestJob implements ShouldQueue
     {
         $benchmarks = [];
 
-        if (! blank($settings->absolute_download) && $settings->absolute_download > 0) {
+        // Services such as the file download do not measure every metric, those are not benchmarked.
+        if (! blank($settings->absolute_download) && $settings->absolute_download > 0 && ! blank($result->download)) {
             $benchmarks = Arr::add($benchmarks, 'download', [
                 'bar' => 'min',
                 'passed' => Benchmark::bitrate($result->download, ['value' => $settings->absolute_download, 'unit' => 'mbps']),
@@ -94,7 +95,7 @@ class BenchmarkSpeedtestJob implements ShouldQueue
             }
         }
 
-        if (! blank($settings->absolute_upload) && $settings->absolute_upload > 0) {
+        if (! blank($settings->absolute_upload) && $settings->absolute_upload > 0 && ! blank($result->upload)) {
             $benchmarks = Arr::add($benchmarks, 'upload', [
                 'bar' => 'min',
                 'passed' => filter_var(Benchmark::bitrate($result->upload, ['value' => $settings->absolute_upload, 'unit' => 'mbps']), FILTER_VALIDATE_BOOLEAN),
@@ -109,7 +110,7 @@ class BenchmarkSpeedtestJob implements ShouldQueue
             }
         }
 
-        if (! blank($settings->absolute_ping) && $settings->absolute_ping > 0) {
+        if (! blank($settings->absolute_ping) && $settings->absolute_ping > 0 && ! blank($result->ping)) {
             $benchmarks = Arr::add($benchmarks, 'ping', [
                 'bar' => 'max',
                 'passed' => Benchmark::ping($result->ping, ['value' => $settings->absolute_ping]),
