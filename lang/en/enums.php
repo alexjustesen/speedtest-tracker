@@ -19,17 +19,33 @@ return [
         'ookla' => 'Ookla',
     ],
 
-    // Webhook event values
-    'webhook_event' => [
-        'started' => 'Started',
-        'waiting' => 'Waiting',
-        'checking' => 'Checking',
-        'running' => 'Running',
-        'benchmarking' => 'Benchmarking',
+    // Notification event values
+    'notification_event' => [
         'completed' => 'Completed',
         'failed' => 'Failed',
-        'skipped' => 'Skipped',
-        'benchmark_healthy' => 'Healthy',
-        'benchmark_unhealthy' => 'Unhealthy',
+        'recovered' => 'Recovered',
+        'benchmark_unhealthy' => 'Benchmark unhealthy',
+        'benchmark_recovered' => 'Benchmark recovered',
+    ],
+
+    // Notification channel type values
+    'notification_channel_type' => [
+        'mail' => 'Mail',
+        'apprise' => 'Apprise',
+        'webhook' => 'Webhook',
+    ],
+
+    // Benchmark metric values
+    'benchmark_metric' => [
+        'download' => 'Download',
+        'upload' => 'Upload',
+        'ping' => 'Ping',
+        'packet_loss' => 'Packet Loss',
+    ],
+
+    // Benchmark type values
+    'benchmark_type' => [
+        'absolute' => 'Absolute',
+        'relative' => 'Relative',
     ],
 ];
