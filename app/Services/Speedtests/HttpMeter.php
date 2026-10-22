@@ -2,6 +2,7 @@
 
 namespace App\Services\Speedtests;
 
+use App\Settings\SpeedtestSettings;
 use CurlHandle;
 use RuntimeException;
 
@@ -29,11 +30,13 @@ class HttpMeter
         protected array $headers = [],
     ) {}
 
-    public static function fromConfig(array $headers = []): static
+    public static function fromSettings(array $headers = []): static
     {
+        $settings = app(SpeedtestSettings::class);
+
         return new static(
-            streams: max((int) config('speedtest.http.streams'), 1),
-            duration: max((int) config('speedtest.http.duration'), 1),
+            streams: max($settings->http_streams, 1),
+            duration: max($settings->http_duration, 1),
             headers: $headers,
         );
     }

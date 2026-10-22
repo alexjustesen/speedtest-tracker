@@ -39,6 +39,6 @@ abstract class HttpSpeedtest implements Speedtest
 
     protected function meter(HttpPlan $plan): HttpMeter
     {
-        return HttpMeter::fromConfig($plan->headers);
+        return HttpMeter::fromSettings($plan->headers);
     }
 }

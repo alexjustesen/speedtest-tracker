@@ -6,8 +6,8 @@ use App\Actions\GetOoklaSpeedtestServers;
 use App\Actions\Speedtests\RunSpeedtest;
 use App\Enums\ResultService;
 use App\Helpers\Ookla;
-use App\Services\Speedtests\Iperf3Speedtest;
-use Closure;
+use App\Rules\Iperf3Server;
+use App\Settings\SpeedtestSettings;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -22,7 +22,6 @@ use Filament\Support\Enums\IconPosition;
 use Filament\Support\Enums\Size;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Throwable;
 
 class Actions extends Component implements HasActions, HasForms
 {
@@ -49,8 +48,8 @@ class Actions extends Component implements HasActions, HasForms
                 Select::make('service')
                     ->label(__('results.service'))
                     ->options(ResultService::selectable())
-                    ->default(fn (): string => array_key_exists((string) config('speedtest.service'), ResultService::selectable())
-                        ? config('speedtest.service')
+                    ->default(fn (): string => array_key_exists(app(SpeedtestSettings::class)->default_service, ResultService::selectable())
+                        ? app(SpeedtestSettings::class)->default_service
                         : ResultService::Ookla->value)
                     ->selectablePlaceholder(false)
                     ->required()
@@ -148,13 +147,7 @@ class Actions extends Component implements HasActions, HasForms
     {
         return match ($service) {
             ResultService::File => ['url:http,https'],
-            ResultService::Iperf3 => [
-                fn (string $attribute, mixed $value, Closure $fail) => rescue(
-                    fn () => Iperf3Speedtest::parseTarget($value),
-                    fn (Throwable $e) => $fail($e->getMessage()),
-                    report: false,
-                ),
-            ],
+            ResultService::Iperf3 => [new Iperf3Server],
             default => [],
         };
     }

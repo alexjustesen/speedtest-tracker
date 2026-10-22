@@ -15,7 +15,7 @@ class FileDownloadSpeedtest extends HttpSpeedtest
 
         if (! filter_var($url, FILTER_VALIDATE_URL) || ! in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'], true)) {
             throw new RuntimeException(blank($url)
-                ? 'No file URL was provided, set SPEEDTEST_FILE_URLS or enter a URL when starting the speedtest.'
+                ? 'No file URL was provided, add one under Settings → Speedtests or enter a URL when starting the speedtest.'
                 : sprintf('"%s" is not a valid HTTP(S) URL.', $url));
         }
 

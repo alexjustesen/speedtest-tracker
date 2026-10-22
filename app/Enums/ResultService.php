@@ -7,6 +7,7 @@ use App\Services\Speedtests\Contracts\Speedtest;
 use App\Services\Speedtests\FileDownloadSpeedtest;
 use App\Services\Speedtests\Iperf3Speedtest;
 use App\Services\Speedtests\YandexSpeedtest;
+use App\Settings\SpeedtestSettings;
 use Filament\Support\Contracts\HasLabel;
 
 enum ResultService: string implements HasLabel
@@ -50,17 +51,20 @@ enum ResultService: string implements HasLabel
     }
 
     /**
-     * Targets configured for the service, used for scheduled tests and as suggestions in the UI.
+     * Sources configured for the service in the speedtest settings, used when a test
+     * has no target and as suggestions in the UI.
      */
     public function configuredTargets(): array
     {
+        $settings = app(SpeedtestSettings::class);
+
         $targets = match ($this) {
-            self::Iperf3 => config('speedtest.iperf3.servers'),
-            self::File => config('speedtest.file.urls'),
-            default => null,
+            self::Iperf3 => $settings->iperf3_servers,
+            self::File => $settings->file_urls,
+            default => [],
         };
 
-        return array_values(array_filter(array_map('trim', explode(',', (string) $targets))));
+        return array_values(array_filter(array_map('trim', $targets)));
     }
 
     /**

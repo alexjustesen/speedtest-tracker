@@ -30,13 +30,12 @@ return [
     'interface' => env('SPEEDTEST_INTERFACE'),
 
     /**
-     * Service used for scheduled speedtests: ookla, cloudflare, yandex, iperf3 or file.
+     * Service for the SPEEDTEST_SCHEDULE schedule: ookla, cloudflare, yandex, iperf3 or file.
+     * More schedules, sources and measurement settings are managed under Settings → Speedtests,
+     * the variables below only provide their initial values.
      */
     'service' => env('SPEEDTEST_SERVICE', 'ookla'),
 
-    /**
-     * Settings for the HTTP based services (Cloudflare, Yandex and file download).
-     */
     'http' => [
         'duration' => (int) env('SPEEDTEST_HTTP_DURATION', 10),
         'streams' => (int) env('SPEEDTEST_HTTP_STREAMS', 4),

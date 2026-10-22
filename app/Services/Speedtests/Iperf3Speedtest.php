@@ -4,6 +4,7 @@ namespace App\Services\Speedtests;
 
 use App\Actions\PingHostname;
 use App\Services\Speedtests\Contracts\Speedtest;
+use App\Settings\SpeedtestSettings;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Sleep;
@@ -66,7 +67,7 @@ class Iperf3Speedtest implements Speedtest
         $target = trim((string) $target);
 
         if (blank($target)) {
-            throw new RuntimeException('No iPerf3 server was provided, set SPEEDTEST_IPERF3_SERVERS or enter a server when starting the speedtest.');
+            throw new RuntimeException('No iPerf3 server was provided, add one under Settings → Speedtests or enter a server when starting the speedtest.');
         }
 
         $host = $target;
@@ -124,7 +125,8 @@ class Iperf3Speedtest implements Speedtest
 
     protected function measure(string $host, int $port, bool $reverse): array
     {
-        $duration = max((int) config('speedtest.iperf3.duration'), 1);
+        $settings = app(SpeedtestSettings::class);
+        $duration = max($settings->iperf3_duration, 1);
 
         $command = array_values(array_filter([
             'iperf3',
@@ -132,7 +134,7 @@ class Iperf3Speedtest implements Speedtest
             '--port', (string) $port,
             '--json',
             '--time', (string) $duration,
-            '--parallel', (string) max((int) config('speedtest.iperf3.streams'), 1),
+            '--parallel', (string) max($settings->iperf3_streams, 1),
             '--omit', '1',
             '--connect-timeout', '5000',
             $reverse ? '--reverse' : null,

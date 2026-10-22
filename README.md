@@ -23,17 +23,22 @@ Besides Ookla, a speedtest can run against:
 | **iPerf3** | download (reverse run), upload, ICMP ping and packet loss with the `iperf3` CLI | `host` or `host:port` of an iPerf3 server |
 | **File download** | download and latency only, by downloading any large file | HTTP(S) URL of the file |
 
-Pick the service in the **Speedtest** dialog. Scheduled speedtests use `SPEEDTEST_SERVICE`.
+Pick the service in the **Speedtest** dialog. Everything else is managed under **Settings → Speedtests**:
+
+- **Schedules**: any number of scheduled speedtests, each with its own service, cron expression and optional target (Ookla server ID, iPerf3 server or file URL). `SPEEDTEST_SCHEDULE` keeps working next to them.
+- **Sources**: iPerf3 servers and file URLs. They are used by schedules without a target and suggested in the Speedtest dialog.
+- **Measurement**: test duration and parallel streams for the HTTP services and iPerf3.
+- **Default service** of the Speedtest dialog.
+
+These environment variables only provide the initial values of those settings:
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `SPEEDTEST_SERVICE` | `ookla` | Service for scheduled tests: `ookla`, `cloudflare`, `yandex`, `iperf3` or `file`. |
-| `SPEEDTEST_IPERF3_SERVERS` | | Comma separated iPerf3 servers (`host[:port]`), scheduled tests pick one at random. |
-| `SPEEDTEST_IPERF3_DURATION` | `10` | Seconds per direction. |
-| `SPEEDTEST_IPERF3_STREAMS` | `4` | Parallel streams. |
-| `SPEEDTEST_FILE_URLS` | | Comma separated file URLs, scheduled tests pick one at random. |
-| `SPEEDTEST_HTTP_DURATION` | `10` | Seconds per direction for Cloudflare, Yandex and the file download. |
-| `SPEEDTEST_HTTP_STREAMS` | `4` | Parallel connections for Cloudflare, Yandex and the file download. |
+| `SPEEDTEST_SERVICE` | `ookla` | Service of the `SPEEDTEST_SCHEDULE` schedule and initial default service of the dialog. |
+| `SPEEDTEST_IPERF3_SERVERS` | | Comma separated iPerf3 servers (`host[:port]`). |
+| `SPEEDTEST_FILE_URLS` | | Comma separated file URLs. |
+| `SPEEDTEST_HTTP_DURATION` / `SPEEDTEST_HTTP_STREAMS` | `10` / `4` | Seconds per direction and parallel connections for Cloudflare, Yandex and the file download. |
+| `SPEEDTEST_IPERF3_DURATION` / `SPEEDTEST_IPERF3_STREAMS` | `10` / `4` | Seconds per direction and parallel streams for iPerf3. |
 
 ## Getting Started
 
