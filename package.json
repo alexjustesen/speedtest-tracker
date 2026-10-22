@@ -6,11 +6,11 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "@tailwindcss/typography": "^0.5.10",
+        "@tailwindcss/typography": "^0.5.4",
         "@tailwindcss/vite": "^4.1.17",
         "autoprefixer": "^10.4.15",
         "laravel-vite-plugin": "^3.1.0",
         "tailwindcss": "^4.1.17",
-        "vite": "^8.0.16"
+        "vite": "^8.3.4"
     }
 }
