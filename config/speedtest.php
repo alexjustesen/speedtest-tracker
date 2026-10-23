@@ -31,6 +31,10 @@ return [
 
     'interface' => env('SPEEDTEST_INTERFACE'),
 
+    'retry_times' => (int) env('SPEEDTEST_RETRY_TIMES', 0),
+
+    'retry_delay' => (int) env('SPEEDTEST_RETRY_DELAY', 5),
+
     'preflight' => [
         'external_ip_url' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_EXTERNAL_IP_URL', 'https://icanhazip.com'),
         'internet_check_hostname' => env('SPEEDTEST_CHECKINTERNET_URL') ?? env('SPEEDTEST_INTERNET_CHECK_HOSTNAME', 'icanhazip.com'),

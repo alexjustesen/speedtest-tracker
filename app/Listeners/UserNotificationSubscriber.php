@@ -51,6 +51,11 @@ class UserNotificationSubscriber
             return;
         }
 
+        // Don't notify for attempts that will still be retried.
+        if ($event->attempt <= (int) config('speedtest.retry_times')) {
+            return;
+        }
+
         $result->loadMissing('dispatchedBy');
 
         Notification::make()
@@ -72,6 +77,11 @@ class UserNotificationSubscriber
         $result = $event->result;
 
         if (empty($result->dispatched_by)) {
+            return;
+        }
+
+        // Don't notify for attempts that will still be retried.
+        if ($event->attempt <= (int) config('speedtest.retry_times')) {
             return;
         }
 

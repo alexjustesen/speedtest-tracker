@@ -37,6 +37,11 @@ class ProcessUnhealthySpeedtest
             return;
         }
 
+        // Don't notify for attempts that will still be retried.
+        if ($event->attempt <= (int) config('speedtest.retry_times')) {
+            return;
+        }
+
         $this->notifyAppriseChannels($result);
         $this->notifyDatabaseChannels($result);
         $this->notifyMailChannels($result);
