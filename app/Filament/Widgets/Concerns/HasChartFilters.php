@@ -47,6 +47,6 @@ trait HasChartFilters
 
     protected function defaultStartDate(): Carbon
     {
-        return now()->subDays(app(GeneralSettings::class)->default_chart_range);
+        return now()->subDays(app(GeneralSettings::class)->chart_default_range);
     }
 }
