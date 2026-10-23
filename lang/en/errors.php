@@ -11,6 +11,7 @@ return [
     // Speedtest specific errors
     'ookla_error' => 'An error occurred when listing speedtest servers, check the logs.',
     'cron_invalid' => 'Invalid cron expression',
+    'ip_or_cidr_invalid' => 'Each entry must be a valid IP address or CIDR range.',
 
     // Status fix command
     'status_fix' => [

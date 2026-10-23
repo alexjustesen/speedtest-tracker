@@ -1,6 +1,5 @@
 <?php
 
-use App\Actions\CheckForScheduledSpeedtests;
 use App\Actions\VacuumDatabase;
 use Illuminate\Support\Facades\Schedule;
 
@@ -23,12 +22,11 @@ Schedule::daily()
     });
 
 /**
- * Check for scheduled speedtests.
+ * Dispatch events for due speedtest schedules.
  */
-Schedule::everyMinute()
-    ->group(function () {
-        Schedule::call(fn () => CheckForScheduledSpeedtests::run());
-    });
+Schedule::command('schedules:run')
+    ->withoutOverlapping()
+    ->everyMinute();
 
 /**
  * Weekly SQLite maintenance (no-op on other drivers).
