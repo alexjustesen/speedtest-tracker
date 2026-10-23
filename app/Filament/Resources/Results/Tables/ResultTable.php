@@ -115,8 +115,9 @@ class ResultTable
                 IconColumn::make('scheduled')
                     ->label(__('results.scheduled'))
                     ->boolean()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->alignment(Alignment::Center),
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->alignment(Alignment::Center)
+                    ->tooltip(fn (Result $record): ?string => $record->speedtest?->name),
 
                 TextColumn::make('created_at')
                     ->label(__('general.created_at'))

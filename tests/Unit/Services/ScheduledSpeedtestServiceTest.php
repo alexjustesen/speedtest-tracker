@@ -1,67 +1,63 @@
 <?php
 
+use App\Models\Speedtest;
 use App\Services\ScheduledSpeedtestService;
 use Carbon\Carbon;
 
-test('returns null when schedule config is null', function () {
-    config()->set('speedtest.schedule', null);
+test('returns null when no schedules exist', function () {
+    $result = ScheduledSpeedtestService::getNextScheduledTest();
+
+    expect($result)->toBeNull();
+});
+
+test('returns null when all schedules are disabled', function () {
+    Speedtest::factory()->withCron('0 * * * *')->disabled()->create();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
     expect($result)->toBeNull();
 });
 
-test('returns null when schedule config is false', function () {
-    config()->set('speedtest.schedule', false);
-
-    $result = ScheduledSpeedtestService::getNextScheduledTest();
-
-    expect($result)->toBeNull();
-});
-
-test('returns null when schedule config is blank string', function () {
-    config()->set('speedtest.schedule', '');
-
-    $result = ScheduledSpeedtestService::getNextScheduledTest();
-
-    expect($result)->toBeNull();
-});
-
-test('returns Carbon instance when schedule is configured', function () {
-    config()->set('speedtest.schedule', '*/5 * * * *'); // Every 5 minutes
+test('returns Carbon instance when an enabled schedule exists', function () {
+    Speedtest::factory()->withCron('*/5 * * * *')->create();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
     expect($result)->toBeInstanceOf(Carbon::class);
-});
-
-test('returns correct next scheduled time for hourly cron', function () {
-    config()->set('speedtest.schedule', '0 * * * *'); // Every hour at minute 0
-    config()->set('app.display_timezone', 'UTC');
-
-    $result = ScheduledSpeedtestService::getNextScheduledTest();
-
-    expect($result)->toBeInstanceOf(Carbon::class);
-    expect($result->minute)->toBe(0);
-});
-
-test('returns correct next scheduled time for daily cron', function () {
-    config()->set('speedtest.schedule', '0 0 * * *'); // Every day at midnight
-    config()->set('app.display_timezone', 'UTC');
-
-    $result = ScheduledSpeedtestService::getNextScheduledTest();
-
-    expect($result)->toBeInstanceOf(Carbon::class);
-    expect($result->hour)->toBe(0);
-    expect($result->minute)->toBe(0);
 });
 
 test('returns future date for next scheduled test', function () {
-    config()->set('speedtest.schedule', '*/5 * * * *'); // Every 5 minutes
     config()->set('app.display_timezone', 'UTC');
+    Speedtest::factory()->withCron('*/5 * * * *')->create();
 
     $result = ScheduledSpeedtestService::getNextScheduledTest();
 
-    expect($result)->toBeInstanceOf(Carbon::class);
-    expect($result->isFuture())->toBeTrue();
+    expect($result)->toBeInstanceOf(Carbon::class)
+        ->and($result->isFuture())->toBeTrue();
+});
+
+test('returns the soonest next run time when multiple schedules exist', function () {
+    config()->set('app.display_timezone', 'UTC');
+
+    Speedtest::factory()->withCron('0 0 * * *')->create(); // daily at midnight
+    Speedtest::factory()->withCron('* * * * *')->create();  // every minute
+
+    $result = ScheduledSpeedtestService::getNextScheduledTest();
+
+    // The every-minute schedule is always sooner, so result should be within 1 minute
+    expect($result)->toBeInstanceOf(Carbon::class)
+        ->and($result->diffInMinutes(now()))->toBeLessThanOrEqual(1);
+});
+
+test('ignores disabled schedules when finding next run', function () {
+    config()->set('app.display_timezone', 'UTC');
+
+    Speedtest::factory()->withCron('* * * * *')->disabled()->create(); // disabled every-minute
+    Speedtest::factory()->withCron('0 0 * * *')->create();             // enabled daily at midnight
+
+    $result = ScheduledSpeedtestService::getNextScheduledTest();
+
+    expect($result)->toBeInstanceOf(Carbon::class)
+        ->and($result->hour)->toBe(0)
+        ->and($result->minute)->toBe(0);
 });
