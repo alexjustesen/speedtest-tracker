@@ -38,8 +38,8 @@ return [
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Bei jedem abgeschlossenen Geschwindigkeitstest benachrichtigen',
     'notify_on_every_speedtest_run_helper' => 'Dies wird eine Benachrichtigung für jeden abgeschlossenen Geschwindigkeitstest senden, nur für gesunde oder nicht markierte Tests',
-    'notify_on_threshold_failures' => 'Benachrichtigung bei Schwellenausfällen für geplante Geschwindigkeitstests',
-    'notify_on_threshold_failures_helper' => 'Dies wird eine Benachrichtigung senden, wenn ein geplanter Geschwindigkeitstest keine konfigurierten Schwellwerte auslässt',
+    'notify_on_benchmark_failures' => 'Benachrichtigung bei Schwellenausfällen für geplante Geschwindigkeitstests',
+    'notify_on_benchmark_failures_helper' => 'Dies wird eine Benachrichtigung senden, wenn ein geplanter Geschwindigkeitstest keine konfigurierten Schwellwerte auslässt',
 
     // Test notification messages
     'test_notifications' => [

@@ -38,8 +38,8 @@ return [
     // Common notification messages
     'notify_on_every_speedtest_run' => 'Notifique após cada teste de velocidade agendado ser concluído',
     'notify_on_every_speedtest_run_helper' => 'Isso enviará uma notificação para cada execução de teste de velocidade agendada concluída, apenas para testes sem erros ou não avaliados',
-    'notify_on_threshold_failures' => 'Notificar sobre falhas nos limites de testes de velocidade agendados',
-    'notify_on_threshold_failures_helper' => 'Isso enviará uma notificação quando um teste de velocidade agendado não atingir nenhum dos limites configurados',
+    'notify_on_benchmark_failures' => 'Notificar sobre falhas nos limites de testes de velocidade agendados',
+    'notify_on_benchmark_failures_helper' => 'Isso enviará uma notificação quando um teste de velocidade agendado não atingir nenhum dos limites configurados',
 
     // Test notification messages
     'test_notifications' => [

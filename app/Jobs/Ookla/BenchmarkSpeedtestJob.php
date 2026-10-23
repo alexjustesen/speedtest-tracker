@@ -6,15 +6,13 @@ use App\Enums\ResultStatus;
 use App\Events\SpeedtestBenchmarkHealthy;
 use App\Events\SpeedtestBenchmarking;
 use App\Events\SpeedtestBenchmarkUnhealthy;
-use App\Helpers\Benchmark;
-use App\Helpers\Number;
+use App\Models\Benchmark;
 use App\Models\Result;
-use App\Settings\ThresholdSettings;
 use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
-use Illuminate\Support\Arr;
 
 class BenchmarkSpeedtestJob implements ShouldQueue
 {
@@ -44,9 +42,9 @@ class BenchmarkSpeedtestJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $settings = app(ThresholdSettings::class);
+        $benchmarks = Benchmark::enabled()->get();
 
-        if ($settings->absolute_enabled == false) {
+        if ($benchmarks->isEmpty()) {
             return;
         }
 
@@ -56,17 +54,14 @@ class BenchmarkSpeedtestJob implements ShouldQueue
 
         SpeedtestBenchmarking::dispatch($this->result);
 
-        $benchmarks = $this->benchmark(
-            result: $this->result,
-            settings: $settings,
-        );
+        $results = $this->benchmark($benchmarks);
 
-        if (! count($benchmarks)) {
+        if (! count($results)) {
             return;
         }
 
         $this->result->update([
-            'benchmarks' => $benchmarks,
+            'benchmarks' => $results,
             'healthy' => $this->healthy,
         ]);
 
@@ -75,55 +70,33 @@ class BenchmarkSpeedtestJob implements ShouldQueue
             : SpeedtestBenchmarkUnhealthy::dispatch($this->result);
     }
 
-    private function benchmark(Result $result, ThresholdSettings $settings): array
+    /**
+     * Evaluate each benchmark against the result and build the benchmarks array.
+     *
+     * @param  Collection<int, Benchmark>  $benchmarks
+     * @return array<string, mixed>
+     */
+    private function benchmark(Collection $benchmarks): array
     {
-        $benchmarks = [];
+        $results = [];
 
-        if (! blank($settings->absolute_download) && $settings->absolute_download > 0) {
-            $benchmarks = Arr::add($benchmarks, 'download', [
-                'bar' => 'min',
-                'passed' => Benchmark::bitrate($result->download, ['value' => $settings->absolute_download, 'unit' => 'mbps']),
-                'type' => 'absolute',
-                'test_value' => Number::bitsToMagnitude(bits: $result->download_bits, precision: 0, magnitude: 'mbit'),
-                'benchmark_value' => $settings->absolute_download,
-                'unit' => 'mbps',
-            ]);
+        foreach ($benchmarks as $benchmark) {
+            $passed = $benchmark->passes($this->result);
 
-            if (Arr::get($benchmarks, 'download.passed') == false) {
+            $results[$benchmark->metric->value] = [
+                'bar' => $benchmark->metric->direction(),
+                'passed' => $passed,
+                'type' => $benchmark->type->value,
+                'test_value' => $benchmark->currentValue($this->result),
+                'benchmark_value' => $benchmark->benchmarkValue(),
+                'unit' => $benchmark->metric->unit(),
+            ];
+
+            if (! $passed) {
                 $this->healthy = false;
             }
         }
 
-        if (! blank($settings->absolute_upload) && $settings->absolute_upload > 0) {
-            $benchmarks = Arr::add($benchmarks, 'upload', [
-                'bar' => 'min',
-                'passed' => filter_var(Benchmark::bitrate($result->upload, ['value' => $settings->absolute_upload, 'unit' => 'mbps']), FILTER_VALIDATE_BOOLEAN),
-                'type' => 'absolute',
-                'test_value' => Number::bitsToMagnitude(bits: $result->upload_bits, precision: 0, magnitude: 'mbit'),
-                'benchmark_value' => $settings->absolute_upload,
-                'unit' => 'mbps',
-            ]);
-
-            if (Arr::get($benchmarks, 'upload.passed') == false) {
-                $this->healthy = false;
-            }
-        }
-
-        if (! blank($settings->absolute_ping) && $settings->absolute_ping > 0) {
-            $benchmarks = Arr::add($benchmarks, 'ping', [
-                'bar' => 'max',
-                'passed' => Benchmark::ping($result->ping, ['value' => $settings->absolute_ping]),
-                'type' => 'absolute',
-                'test_value' => round($result->ping),
-                'benchmark_value' => $settings->absolute_ping,
-                'unit' => 'ms',
-            ]);
-
-            if (Arr::get($benchmarks, 'ping.passed') == false) {
-                $this->healthy = false;
-            }
-        }
-
-        return $benchmarks;
+        return $results;
     }
 }
