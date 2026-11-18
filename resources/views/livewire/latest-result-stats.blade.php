@@ -46,7 +46,7 @@
                             @else
                                 <x-tabler-alert-circle class="size-4" />
                             @endif
-                            {{ Arr::get($downloadBenchmark, 'value').' '.str(Arr::get($downloadBenchmark, 'unit'))->title() }}
+                            {{ Arr::get($downloadBenchmark, 'test_value').' '.str(Arr::get($downloadBenchmark, 'unit'))->title() }}
                         </span>
                     </x-slot>
                 @endfilled
@@ -85,7 +85,7 @@
                             @else
                                 <x-tabler-alert-triangle class="size-4" />
                             @endif
-                            {{ Arr::get($uploadBenchmark, 'value').' '.str(Arr::get($uploadBenchmark, 'unit'))->title() }}
+                            {{ Arr::get($uploadBenchmark, 'test_value').' '.str(Arr::get($uploadBenchmark, 'unit'))->title() }}
                         </span>
                     </x-slot>
                 @endfilled
@@ -124,7 +124,7 @@
                             @else
                                 <x-tabler-alert-triangle class="size-4" />
                             @endif
-                            {{ Arr::get($pingBenchmark, 'value').' '.str(Arr::get($pingBenchmark, 'unit')) }}
+                            {{ Arr::get($pingBenchmark, 'test_value').' '.str(Arr::get($pingBenchmark, 'unit')) }}
                         </span>
                     </x-slot>
                 @endfilled
@@ -139,6 +139,28 @@
                 <x-slot name="heading">
                     {{ __('results.packet_loss') }}
                 </x-slot>
+
+                @php
+                    $packetLossBenchmark = Arr::get($this->latestResult->benchmarks, 'packet_loss');
+                    $packetLossBenchmarkPassed = Arr::get($packetLossBenchmark, 'passed', false);
+                @endphp
+
+                @filled($packetLossBenchmark)
+                    <x-slot name="afterHeader">
+                        <span @class([
+                            'inline-flex items-center gap-x-1 text-xs font-medium underline decoration-dotted decoration-1 decoration-zinc-500 underline-offset-4',
+                            'text-green-500 dark:text-green-400' => $packetLossBenchmarkPassed,
+                            'text-amber-500 dark:text-amber-400' => ! $packetLossBenchmarkPassed,
+                        ]) title="Benchmark {{ $packetLossBenchmarkPassed ? 'passed' : 'failed' }}">
+                            @if ($packetLossBenchmarkPassed)
+                                <x-tabler-circle-check class="size-4" />
+                            @else
+                                <x-tabler-alert-triangle class="size-4" />
+                            @endif
+                            {{ Arr::get($packetLossBenchmark, 'test_value').' '.str(Arr::get($packetLossBenchmark, 'unit')) }}
+                        </span>
+                    </x-slot>
+                @endfilled
 
                 <p class="flex items-baseline gap-x-2">
                     <span class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">{{ round($this->latestResult?->packet_loss, 2) }}</span>

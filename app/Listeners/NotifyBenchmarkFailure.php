@@ -2,9 +2,9 @@
 
 namespace App\Listeners;
 
+use App\Enums\BenchmarkMetric;
 use App\Events\SpeedtestBenchmarkUnhealthy;
-use App\Helpers\Number;
-use App\Mail\UnhealthySpeedtestMail;
+use App\Mail\BenchmarkAlarmMail;
 use App\Models\Result;
 use App\Models\User;
 use App\Notifications\Apprise\SpeedtestNotification;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
-class ProcessUnhealthySpeedtest
+class NotifyBenchmarkFailure
 {
     /**
      * Create the event listener.
@@ -38,7 +38,7 @@ class ProcessUnhealthySpeedtest
         }
 
         $this->notifyAppriseChannels($result);
-        $this->notifyDatabaseChannels($result);
+        $this->notifyDatabaseChannels();
         $this->notifyMailChannels($result);
     }
 
@@ -47,7 +47,7 @@ class ProcessUnhealthySpeedtest
      */
     private function notifyAppriseChannels(Result $result): void
     {
-        if (! $this->notificationSettings->apprise_enabled || ! $this->notificationSettings->apprise_on_threshold_failure) {
+        if (! $this->notificationSettings->apprise_enabled || ! $this->notificationSettings->apprise_on_benchmark_failure) {
             return;
         }
 
@@ -63,41 +63,30 @@ class ProcessUnhealthySpeedtest
             return;
         }
 
-        // Build metrics array from failed benchmarks
-        $failed = [];
+        $metrics = $this->formatBenchmarks($result);
 
-        foreach ($result->benchmarks as $metric => $benchmark) {
-            if ($benchmark['passed'] === false) {
-                $failed[] = [
-                    'name' => ucfirst($metric),
-                    'threshold' => $benchmark['benchmark_value'].' '.$benchmark['unit'],
-                    'value' => $this->formatMetricValue($metric, $result),
-                ];
-            }
-        }
-
-        if (! count($failed)) {
-            Log::warning('No failed thresholds found in benchmarks, won\'t send Apprise notification.');
+        if (! count($metrics)) {
+            Log::warning('No failed benchmarks found, won\'t send Apprise notification.');
 
             return;
         }
 
-        $body = view('apprise.speedtest-threshold', [
+        $body = view('apprise.benchmark-alarm', [
             'id' => $result->id,
             'service' => Str::title($result->service->getLabel()),
             'serverName' => $result->server_name,
             'serverId' => $result->server_id,
             'isp' => $result->isp,
-            'metrics' => $failed,
+            'metrics' => $metrics,
             'speedtest_url' => $result->result_url,
             'url' => url('/admin/results'),
         ])->render();
 
-        $title = 'Speedtest Threshold Breach – #'.$result->id;
+        $title = 'Speedtest Benchmark Alarm – #'.$result->id;
 
-        // Send notification to each configured channel URL
         foreach ($this->notificationSettings->apprise_channel_urls as $row) {
             $channelUrl = $row['channel_url'] ?? null;
+
             if (! $channelUrl) {
                 Log::warning('Skipping entry with missing channel_url.');
 
@@ -110,25 +99,30 @@ class ProcessUnhealthySpeedtest
     }
 
     /**
-     * Format metric value for display in notification.
+     * Format the benchmarks that failed on this result, for display in the
+     * Apprise notification.
+     *
+     * @return array<int, array<string, mixed>>
      */
-    private function formatMetricValue(string $metric, Result $result): string
+    private function formatBenchmarks(Result $result): array
     {
-        return match ($metric) {
-            'download' => Number::toBitRate(bits: $result->download_bits, precision: 2),
-            'upload' => Number::toBitRate(bits: $result->upload_bits, precision: 2),
-            'ping' => round($result->ping, 2).' ms',
-            default => '',
-        };
+        return collect($result->benchmarks ?? [])
+            ->reject(fn (array $benchmark): bool => $benchmark['passed'])
+            ->map(fn (array $benchmark, string $metric): array => [
+                'name' => BenchmarkMetric::from($metric)->getLabel(),
+                'benchmark' => $benchmark['benchmark_value'].' '.$benchmark['unit'],
+                'value' => $benchmark['test_value'].' '.$benchmark['unit'],
+            ])
+            ->values()
+            ->all();
     }
 
     /**
      * Notify database channels.
      */
-    private function notifyDatabaseChannels(Result $result): void
+    private function notifyDatabaseChannels(): void
     {
-        // Check if database notifications are enabled.
-        if (! $this->notificationSettings->database_enabled || ! $this->notificationSettings->database_on_threshold_failure) {
+        if (! $this->notificationSettings->database_enabled || ! $this->notificationSettings->database_on_benchmark_failure) {
             return;
         }
 
@@ -140,7 +134,7 @@ class ProcessUnhealthySpeedtest
                         ->label(__('general.view'))
                         ->url(route('filament.admin.resources.results.index')),
                 ])
-                ->success()
+                ->warning()
                 ->sendToDatabase($user);
         }
     }
@@ -150,12 +144,10 @@ class ProcessUnhealthySpeedtest
      */
     private function notifyMailChannels(Result $result): void
     {
-        // Check if mail notifications are enabled.
-        if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_threshold_failure) {
+        if (! $this->notificationSettings->mail_enabled || ! $this->notificationSettings->mail_on_benchmark_failure) {
             return;
         }
 
-        // Check if mail recipients are configured.
         if (! count($this->notificationSettings->mail_recipients)) {
             Log::warning('Mail recipients not found, check mail notification channel settings.');
 
@@ -164,7 +156,7 @@ class ProcessUnhealthySpeedtest
 
         foreach ($this->notificationSettings->mail_recipients as $recipient) {
             Mail::to($recipient)
-                ->send(new UnhealthySpeedtestMail($result));
+                ->send(new BenchmarkAlarmMail($result));
         }
     }
 }

@@ -54,7 +54,7 @@ it('accepts HTTP and HTTPS Apprise server URLs', function (string $url) {
             'apprise_server_url' => $url,
             'apprise_verify_ssl' => true,
             'apprise_on_speedtest_run' => true,
-            'apprise_on_threshold_failure' => false,
+            'apprise_on_benchmark_failure' => false,
             'apprise_channel_urls' => [
                 ['channel_url' => 'discord://webhook-id/webhook-token'],
             ],
@@ -73,7 +73,7 @@ it('rejects non-HTTP Apprise server URL protocols', function (string $url) {
             'apprise_server_url' => $url,
             'apprise_verify_ssl' => true,
             'apprise_on_speedtest_run' => true,
-            'apprise_on_threshold_failure' => false,
+            'apprise_on_benchmark_failure' => false,
             'apprise_channel_urls' => [
                 ['channel_url' => 'discord://webhook-id/webhook-token'],
             ],
