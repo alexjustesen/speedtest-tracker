@@ -49,6 +49,14 @@ class Result extends Model
     }
 
     /**
+     * Get the speedtest configuration that triggered this run.
+     */
+    public function speedtest(): BelongsTo
+    {
+        return $this->belongsTo(Speedtest::class);
+    }
+
+    /**
      * Scope a query to only include completed results.
      */
     public function scopeCompleted(Builder $query): Builder

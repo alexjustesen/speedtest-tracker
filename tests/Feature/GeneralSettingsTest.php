@@ -51,6 +51,52 @@ describe('form', function () {
         expect(app(GeneralSettings::class)->default_chart_range)->toBe(7);
     });
 
+    it('loads the current connectivity settings into the form', function () {
+        $this->actingAs($this->admin);
+
+        $settings = app(GeneralSettings::class);
+
+        Livewire::test(General::class)
+            ->assertFormSet([
+                'external_ip_url' => $settings->external_ip_url,
+                'internet_check_hostname' => $settings->internet_check_hostname,
+            ]);
+    });
+
+    it('saves the updated connectivity settings to the database', function () {
+        $this->actingAs($this->admin);
+
+        Livewire::test(General::class)
+            ->fillForm([
+                'external_ip_url' => 'https://ifconfig.me',
+                'internet_check_hostname' => 'one.one.one.one',
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        app()->forgetInstance(GeneralSettings::class);
+
+        $settings = app(GeneralSettings::class);
+
+        expect($settings->external_ip_url)->toBe('https://ifconfig.me')
+            ->and($settings->internet_check_hostname)->toBe('one.one.one.one');
+    });
+
+    it('validates the connectivity settings', function () {
+        $this->actingAs($this->admin);
+
+        Livewire::test(General::class)
+            ->fillForm([
+                'external_ip_url' => 'not-a-url',
+                'internet_check_hostname' => null,
+            ])
+            ->call('save')
+            ->assertHasFormErrors([
+                'external_ip_url' => 'url',
+                'internet_check_hostname' => 'required',
+            ]);
+    });
+
     it('requires a default chart range', function () {
         $this->actingAs($this->admin);
 

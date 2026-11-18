@@ -6,6 +6,8 @@ use App\Enums\UserRole;
 use App\Listeners\DispatchWebhooks;
 use App\Models\User;
 use App\Notifications\AppriseChannel;
+use App\Schedules\CronSchedule;
+use DirectoryTree\Cadence\Cadence;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Request;
@@ -41,6 +43,8 @@ class AppServiceProvider extends ServiceProvider
         $this->registerNotificationChannels();
 
         Event::subscribe(DispatchWebhooks::class);
+
+        Cadence::register('cron', CronSchedule::class);
 
         AboutCommand::add('Speedtest Tracker', fn () => [
             'Version' => config('speedtest.build_version'),

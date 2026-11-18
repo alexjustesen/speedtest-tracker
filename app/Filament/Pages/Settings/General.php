@@ -62,6 +62,24 @@ class General extends SettingsPage
                                     ]),
                             ])
                             ->columnSpanFull(),
+
+                        Tab::make(__('settings/general.connectivity'))
+                            ->icon(Heroicon::OutlinedGlobeAlt)
+                            ->schema([
+                                Grid::make(['default' => 1, 'md' => 2])
+                                    ->schema([
+                                        TextInput::make('external_ip_url')
+                                            ->label(__('settings/general.external_ip_url'))
+                                            ->helperText(__('settings/general.external_ip_url_helper_text'))
+                                            ->url()
+                                            ->required(),
+                                        TextInput::make('internet_check_hostname')
+                                            ->label(__('settings/general.internet_check_hostname'))
+                                            ->helperText(__('settings/general.internet_check_hostname_helper_text'))
+                                            ->required(),
+                                    ]),
+                            ])
+                            ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
             ]);

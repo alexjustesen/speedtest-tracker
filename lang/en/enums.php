@@ -19,6 +19,12 @@ return [
         'ookla' => 'Ookla',
     ],
 
+    // Schedule server mode values
+    'server_mode' => [
+        'auto' => 'Automatic server selection',
+        'prefer' => 'selected servers',
+    ],
+
     // Webhook event values
     'webhook_event' => [
         'started' => 'Started',
