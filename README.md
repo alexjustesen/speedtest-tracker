@@ -4,6 +4,8 @@ Speedtest Tracker is a self-hosted application that monitors the performance and
 
 ![Dashboard](.github/screenshots/dashboard.png)
 
+[![Deploy to Railyard](https://app.railyard.run/deploy/badge)](https://app.railyard.run/deploy?repo=https://github.com/alexjustesen/speedtest-tracker)
+
 ## Features
 
 - **Automated Tests**: Schedule regular speed tests to monitor your internet connection's performance over time.
