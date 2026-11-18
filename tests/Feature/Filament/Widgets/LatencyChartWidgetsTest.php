@@ -3,6 +3,7 @@
 use App\Filament\Widgets\RecentDownloadLatencyChartWidget;
 use App\Filament\Widgets\RecentUploadLatencyChartWidget;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Livewire\Livewire;
 
 function latencyChartDatasetLabels(string $widgetClass): array
@@ -23,7 +24,7 @@ it('shows average, high, and low for download latency by default', function () {
 });
 
 it('shows only average for download latency when chart_only_show_avg_latency is enabled', function () {
-    config(['speedtest.chart_only_show_avg_latency' => true]);
+    app(GeneralSettings::class)->fill(['chart_only_show_avg_latency' => true])->save();
     Result::factory()->create();
 
     expect(latencyChartDatasetLabels(RecentDownloadLatencyChartWidget::class))
@@ -38,7 +39,7 @@ it('shows average, high, and low for upload latency by default', function () {
 });
 
 it('shows only average for upload latency when chart_only_show_avg_latency is enabled', function () {
-    config(['speedtest.chart_only_show_avg_latency' => true]);
+    app(GeneralSettings::class)->fill(['chart_only_show_avg_latency' => true])->save();
     Result::factory()->create();
 
     expect(latencyChartDatasetLabels(RecentUploadLatencyChartWidget::class))

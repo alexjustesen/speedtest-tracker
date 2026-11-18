@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Enums\ResultStatus;
 use App\Filament\Widgets\Concerns\HasChartFilters;
 use App\Models\Result;
+use App\Settings\GeneralSettings;
 use Filament\Widgets\ChartWidget;
 
 class RecentUploadLatencyChartWidget extends ChartWidget
@@ -49,7 +50,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
             ],
         ];
 
-        if (! config('speedtest.chart_only_show_avg_latency')) {
+        if (! app(GeneralSettings::class)->chart_only_show_avg_latency) {
             $datasets[] = [
                 'label' => __('general.high_ms'),
                 'data' => $results->map(fn ($item) => $item->upload_latency_high),
@@ -77,7 +78,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
 
         return [
             'datasets' => $datasets,
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(app(GeneralSettings::class)->chart_datetime_format)),
         ];
     }
 
@@ -97,7 +98,7 @@ class RecentUploadLatencyChartWidget extends ChartWidget
             ],
             'scales' => [
                 'y' => [
-                    'beginAtZero' => config('app.chart_begin_at_zero'),
+                    'beginAtZero' => app(GeneralSettings::class)->chart_begin_at_zero,
                     'grace' => 2,
                 ],
             ],

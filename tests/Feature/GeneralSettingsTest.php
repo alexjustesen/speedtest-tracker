@@ -34,7 +34,7 @@ describe('form', function () {
 
         Livewire::test(General::class)
             ->assertFormSet([
-                'default_chart_range' => $settings->default_chart_range,
+                'chart_default_range' => $settings->chart_default_range,
             ]);
     });
 
@@ -42,21 +42,64 @@ describe('form', function () {
         $this->actingAs($this->admin);
 
         Livewire::test(General::class)
-            ->fillForm(['default_chart_range' => 7])
+            ->fillForm(['chart_default_range' => 7])
             ->call('save')
             ->assertHasNoFormErrors();
 
         app()->forgetInstance(GeneralSettings::class);
 
-        expect(app(GeneralSettings::class)->default_chart_range)->toBe(7);
+        expect(app(GeneralSettings::class)->chart_default_range)->toBe(7);
     });
 
     it('requires a default chart range', function () {
         $this->actingAs($this->admin);
 
         Livewire::test(General::class)
-            ->fillForm(['default_chart_range' => null])
+            ->fillForm(['chart_default_range' => null])
             ->call('save')
-            ->assertHasFormErrors(['default_chart_range' => 'required']);
+            ->assertHasFormErrors(['chart_default_range' => 'required']);
+    });
+
+    it('loads the current chart display settings into the form', function () {
+        $this->actingAs($this->admin);
+
+        $settings = app(GeneralSettings::class);
+
+        Livewire::test(General::class)
+            ->assertFormSet([
+                'chart_begin_at_zero' => $settings->chart_begin_at_zero,
+                'chart_datetime_format' => $settings->chart_datetime_format,
+                'chart_only_show_avg_latency' => $settings->chart_only_show_avg_latency,
+            ]);
+    });
+
+    it('saves the updated chart display settings to the database', function () {
+        $this->actingAs($this->admin);
+
+        Livewire::test(General::class)
+            ->fillForm([
+                'chart_begin_at_zero' => false,
+                'chart_datetime_format' => 'Y-m-d H:i',
+                'chart_only_show_avg_latency' => true,
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        app()->forgetInstance(GeneralSettings::class);
+
+        $settings = app(GeneralSettings::class);
+
+        expect($settings->chart_begin_at_zero)->toBeFalse()
+            ->and($settings->chart_datetime_format)->toBe('Y-m-d H:i')
+            ->and($settings->chart_only_show_avg_latency)->toBeTrue();
+    });
+
+    it('requires a chart datetime format', function () {
+        $this->actingAs($this->admin);
+
+        Livewire::test(General::class)
+            ->fillForm(['chart_datetime_format' => null])
+            ->call('save')
+            ->assertHasFormErrors(['chart_datetime_format' => 'required']);
     });
 });
