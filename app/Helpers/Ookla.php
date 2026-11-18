@@ -22,6 +22,15 @@ class Ookla
             }
         }
 
+        // Some errors (e.g. rate limiting) are written as plain text, not JSON.
+        if (empty($errorMessages)) {
+            $plainTextMessage = self::getPlainTextErrorMessage($exception->getProcess()->getErrorOutput());
+
+            if ($plainTextMessage) {
+                $errorMessages[] = $plainTextMessage;
+            }
+        }
+
         // If no valid messages, use the placeholder
         if (empty($errorMessages)) {
             $errorMessages[] = 'An unexpected error occurred while running the Ookla CLI.';
@@ -29,6 +38,31 @@ class Ookla
 
         // Remove duplicates and concatenate
         return implode(' | ', array_unique($errorMessages));
+    }
+
+    /**
+     * Extracts a plain text error from the CLI error output, e.g.
+     * "[2026-11-02 02:24:05.521] [error] Limit reached: ...".
+     */
+    protected static function getPlainTextErrorMessage(string $errorOutput): ?string
+    {
+        $position = stripos($errorOutput, '[error]');
+
+        if ($position === false) {
+            return null;
+        }
+
+        $message = substr($errorOutput, $position + strlen('[error]'));
+
+        // Collapse multi-line output into a single line.
+        $message = trim(preg_replace('/\s+/', ' ', $message));
+
+        // Keep only the first sentence, e.g. "Limit reached: Too many requests received."
+        if (preg_match('/^.*?\.(?=\s|$)/', $message, $matches)) {
+            $message = $matches[0];
+        }
+
+        return $message !== '' ? $message : null;
     }
 
     /**
