@@ -3,17 +3,14 @@
 namespace App\Providers;
 
 use App\Enums\UserRole;
-use App\Listeners\DispatchWebhooks;
+use App\Listeners\DispatchNotifications;
 use App\Models\User;
-use App\Notifications\AppriseChannel;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\ChannelManager;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -38,25 +35,12 @@ class AppServiceProvider extends ServiceProvider
         $this->defineGates();
         $this->forceHttps();
         $this->setApiRateLimit();
-        $this->registerNotificationChannels();
 
-        Event::subscribe(DispatchWebhooks::class);
+        Event::subscribe(DispatchNotifications::class);
 
         AboutCommand::add('Speedtest Tracker', fn () => [
             'Version' => config('speedtest.build_version'),
         ]);
-    }
-
-    /**
-     * Register custom notification channels.
-     */
-    protected function registerNotificationChannels(): void
-    {
-        Notification::resolved(function (ChannelManager $service) {
-            $service->extend('apprise', function ($app) {
-                return new AppriseChannel;
-            });
-        });
     }
 
     /**

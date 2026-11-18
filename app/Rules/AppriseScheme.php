@@ -16,7 +16,7 @@ class AppriseScheme implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (str_starts_with(strtolower($value), 'http')) {
-            $fail(__('settings/notifications.apprise_channel_url_validation_error'));
+            $fail(__('notification_channels.apprise_channel_url_validation_error'));
         }
     }
 }

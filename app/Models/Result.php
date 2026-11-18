@@ -65,6 +65,39 @@ class Result extends Model
     }
 
     /**
+     * Determine if the most recent earlier finished result failed. Skipped
+     * and in-progress results are ignored.
+     */
+    public function recoveredFromFailure(): bool
+    {
+        $previous = static::query()
+            ->where('id', '<', $this->id)
+            ->whereIn('status', [ResultStatus::Completed, ResultStatus::Failed])
+            ->latest('id')
+            ->value('status');
+
+        return $previous === ResultStatus::Failed;
+    }
+
+    /**
+     * Determine if this healthy result follows an unhealthy benchmarked result.
+     */
+    public function recoveredFromBenchmarkFailure(): bool
+    {
+        if ($this->healthy !== true) {
+            return false;
+        }
+
+        $previous = static::query()
+            ->where('id', '<', $this->id)
+            ->whereNotNull('healthy')
+            ->latest('id')
+            ->value('healthy');
+
+        return $previous === false;
+    }
+
+    /**
      * Determine if the result was unscheduled.
      */
     protected function unscheduled(): Attribute
