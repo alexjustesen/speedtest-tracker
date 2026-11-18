@@ -83,3 +83,22 @@ it('mounts without error', function (string $widgetClass) {
     RecentDownloadLatencyChartWidget::class,
     RecentUploadLatencyChartWidget::class,
 ]);
+
+it('shows failed results on the chart but excludes them from the average', function () {
+    Result::factory()->create([
+        'status' => ResultStatus::Completed,
+        'download' => 12_500_000,
+        'created_at' => now()->subHours(2),
+    ]);
+
+    Result::factory()->create([
+        'status' => ResultStatus::Failed,
+        'download' => null,
+        'created_at' => now()->subHour(),
+    ]);
+
+    $widget = invade(Livewire::test(RecentDownloadChartWidget::class)->instance());
+
+    expect($widget->getData()['datasets'][0]['data']->all())->toBe([100.0, null])
+        ->and($widget->getDescription())->toContain('100.00');
+});

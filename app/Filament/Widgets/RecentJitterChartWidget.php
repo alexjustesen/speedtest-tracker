@@ -2,14 +2,15 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\ResultStatus;
 use App\Filament\Widgets\Concerns\HasChartFilters;
+use App\Filament\Widgets\Concerns\HasTimeSeriesChart;
 use App\Models\Result;
 use Filament\Widgets\ChartWidget;
 
 class RecentJitterChartWidget extends ChartWidget
 {
     use HasChartFilters;
+    use HasTimeSeriesChart;
 
     protected ?string $heading = null;
 
@@ -30,10 +31,11 @@ class RecentJitterChartWidget extends ChartWidget
 
         $results = Result::query()
             ->select(['id', 'data', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
+
+        $spanGaps = $this->gapThreshold($results);
 
         return [
             'datasets' => [
@@ -46,6 +48,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'spanGaps' => $spanGaps,
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
@@ -57,6 +60,7 @@ class RecentJitterChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'spanGaps' => $spanGaps,
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
                 [
@@ -68,10 +72,11 @@ class RecentJitterChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'spanGaps' => $spanGaps,
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $this->timeLabels($results),
         ];
     }
 
@@ -90,6 +95,7 @@ class RecentJitterChartWidget extends ChartWidget
                 ],
             ],
             'scales' => [
+                'x' => $this->timeScaleOptions(),
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
                 ],

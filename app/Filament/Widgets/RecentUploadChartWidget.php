@@ -2,8 +2,8 @@
 
 namespace App\Filament\Widgets;
 
-use App\Enums\ResultStatus;
 use App\Filament\Widgets\Concerns\HasChartFilters;
+use App\Filament\Widgets\Concerns\HasTimeSeriesChart;
 use App\Helpers\Average;
 use App\Helpers\Number;
 use App\Models\Result;
@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Collection;
 class RecentUploadChartWidget extends ChartWidget
 {
     use HasChartFilters;
+    use HasTimeSeriesChart;
 
     protected ?string $heading = null;
 
@@ -39,8 +40,7 @@ class RecentUploadChartWidget extends ChartWidget
         [$startDate, $endDate] = $this->resolveDateRange();
 
         return Result::query()
-            ->select(['id', 'upload', 'created_at'])
-            ->where('status', '=', ResultStatus::Completed)
+            ->select(['id', 'upload', 'status', 'created_at'])
             ->whereBetween('created_at', [$startDate, $endDate])
             ->orderBy('created_at')
             ->get();
@@ -49,6 +49,8 @@ class RecentUploadChartWidget extends ChartWidget
     protected function getData(): array
     {
         $results = $this->getResults();
+
+        $spanGaps = $this->gapThreshold($results);
 
         return [
             'datasets' => [
@@ -61,10 +63,11 @@ class RecentUploadChartWidget extends ChartWidget
                     'fill' => true,
                     'cubicInterpolationMode' => 'monotone',
                     'tension' => 0.4,
+                    'spanGaps' => $spanGaps,
                     'pointRadius' => count($results) <= 24 ? 3 : 0,
                 ],
             ],
-            'labels' => $results->map(fn ($item) => $item->created_at->timezone(config('app.display_timezone'))->format(config('app.chart_datetime_format'))),
+            'labels' => $this->timeLabels($results),
         ];
     }
 
@@ -83,6 +86,7 @@ class RecentUploadChartWidget extends ChartWidget
                 ],
             ],
             'scales' => [
+                'x' => $this->timeScaleOptions(),
                 'y' => [
                     'beginAtZero' => config('app.chart_begin_at_zero'),
                     'grace' => 2,
