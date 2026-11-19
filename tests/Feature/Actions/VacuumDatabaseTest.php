@@ -12,6 +12,7 @@ describe('VacuumDatabase', function () {
         $connection->shouldNotReceive('transactionLevel');
         $connection->shouldNotReceive('statement');
         DB::shouldReceive('connection')->andReturn($connection);
+        DB::shouldReceive('getConnections')->andReturn([]);
 
         Log::spy();
 
